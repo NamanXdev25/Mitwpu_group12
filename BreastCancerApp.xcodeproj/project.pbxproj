@@ -8,6 +8,7 @@
 
 /* Begin PBXFileReference section */
 		64E778AE2ECE2D6600B7826F /* BreastCancerApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BreastCancerApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		64E778EA2ECE372300B7826F /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -45,6 +46,7 @@
 		64E778A52ECE2D6600B7826F = {
 			isa = PBXGroup;
 			children = (
+				64E778EA2ECE372300B7826F /* .gitignore */,
 				64E778B02ECE2D6600B7826F /* BreastCancerApp */,
 				64E778AF2ECE2D6600B7826F /* Products */,
 			);
@@ -147,6 +149,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BreastCancerApp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BreastCancer;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -174,6 +178,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BreastCancerApp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BreastCancer;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

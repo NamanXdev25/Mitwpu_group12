@@ -1,0 +1,49 @@
+# Xcode
+DerivedData/
+build/
+*.xcuserstate
+*.xcuserdata/
+*.moved-aside
+*.xccheckout
+*.xcscmblueprint
+
+# Swift Package Manager
+.swiftpm/
+.build/
+Package.resolved
+
+# CocoaPods
+Pods/
+Podfile.lock
+
+# Carthage
+Carthage/Build/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# Files that may appear on external disks
+.Spotlight-V100
+.Trashes
+
+# Temporary files
+*.swp
+*.tmp
+*.lock
+*.log
+
+# Unit test files (optional)
+*.xctest
+
+# Workspace
+*.xcworkspace
