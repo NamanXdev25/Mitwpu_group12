@@ -2,8 +2,6 @@
 //  JournalDataSource.swift
 //  journalTrial
 //
-//  Created by Shivani Dinesh on 24/11/25.
-//
 
 import UIKit
 
@@ -18,7 +16,7 @@ class JournalDataSource {
     private var streak: Int
     private var thisWeekCount: Int
 
-    // MARK: - NEW ACTIONS DATA
+    // MARK: - ACTIONS DATA MODEL
     struct JournalAction: Hashable {
         let id = UUID()
         let title: String
@@ -39,7 +37,6 @@ class JournalDataSource {
         )
     ]
 
-    // MARK: - Init
     init(collectionView: UICollectionView, entries: [JournalEntry], streak: Int, thisWeekCount: Int) {
         self.collectionView = collectionView
         self.entries = entries
@@ -49,7 +46,6 @@ class JournalDataSource {
         configureDataSource()
     }
 
-    // MARK: - Configure DataSource
     private func configureDataSource() {
         guard let collectionView = collectionView else { return }
 
@@ -60,64 +56,88 @@ class JournalDataSource {
 
             switch section {
 
-            // -------------------- STREAK CELL --------------------
             case .streak:
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: JournalStreakCell.reuseIdentifier,
                     for: indexPath
                 ) as! JournalStreakCell
-
+                
                 cell.configure(streak: self.streak)
                 return cell
 
-            // -------------------- STATS CELL ---------------------
             case .stats:
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: JournalStatsCell.reuseIdentifier,
                     for: indexPath
                 ) as! JournalStatsCell
-
-                cell.configure(
-                    total: self.entries.count,
-                    thisWeek: self.thisWeekCount
-                )
+                
+                cell.configure(total: self.entries.count, thisWeek: self.thisWeekCount)
                 return cell
 
-            // -------------------- ACTION CELL --------------------
             case .actions:
                 let action = self.actions[indexPath.item]
-
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: JournalActionCell.reuseIdentifier,
                     for: indexPath
                 ) as! JournalActionCell
-
+                
                 cell.configure(
                     title: action.title,
                     subtitle: action.subtitle,
                     icon: UIImage(systemName: action.iconName) ?? UIImage()
                 )
                 return cell
+
+            case .recents:
+                let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: RecentJournalCell.reuseIdentifier,
+                    for: indexPath
+                ) as! RecentJournalCell
+                
+                let entry = self.entries[indexPath.item]
+                cell.configure(with: entry)
+                return cell
             }
         }
+        
+        dataSource.supplementaryViewProvider = { collectionView, kind, indexPath in
+            guard kind == UICollectionView.elementKindSectionHeader else { return nil }
+            guard let section = Section(rawValue: indexPath.section) else { return nil }
+
+            let header = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: "header_cell",
+                for: indexPath
+            ) as! JournalSectionHeaderView
+
+            switch section {
+            case .actions:
+                header.configure(title: "Start Writing", showButton: false)
+
+            case .recents:
+                header.configure(title: "Recent", showButton: true)
+
+            default:
+                header.configure(title: "", showButton: false)
+            }
+
+            return header
+        }
+
     }
 
-    // MARK: - Snapshot
-    func applySnapshot() {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, UUID>()
-
+    func applySnapshot() { var snapshot = NSDiffableDataSourceSnapshot<Section, UUID>()
         // 1. Add sections
-        snapshot.appendSections([.streak, .stats, .actions])
-
+        snapshot.appendSections([.streak, .stats, .actions, .recents])
         // 2. Add items
-        snapshot.appendItems([UUID()], toSection: .streak)    // streak cell
-        snapshot.appendItems([UUID()], toSection: .stats)     // stats cell
-
+        snapshot.appendItems([UUID()], toSection: .streak)
+        // streak cell
+        snapshot.appendItems([UUID()], toSection: .stats)
+        // stats cell
         // Two Action items → Blank Journal + Guided Reflection
         snapshot.appendItems([UUID(), UUID()], toSection: .actions)
-
+        // recents cell
+        snapshot.appendItems(entries.map { _ in UUID() }, toSection: .recents)
         // 3. Apply
-        dataSource.apply(snapshot, animatingDifferences: false)
-    }
-
+        dataSource.apply(snapshot, animatingDifferences: false) }
 }

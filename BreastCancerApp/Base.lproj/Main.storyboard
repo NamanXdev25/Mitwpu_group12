@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="HRQ-D5-VuG">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Ae8-hh-Rgp">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
@@ -9,16 +9,16 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Journal View Controller-->
+        <!--Journal-->
         <scene sceneID="GJS-Qj-JZw">
             <objects>
-                <viewController id="HRQ-D5-VuG" customClass="JournalViewController" customModule="journalTrial" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="HRQ-D5-VuG" customClass="JournalViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ZPu-ei-uRw">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="uwZ-dY-hTB">
-                                <rect key="frame" x="0.0" y="118" width="393" height="666"/>
+                                <rect key="frame" x="0.0" y="172" width="393" height="612"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="uHH-bN-JNs">
                                     <size key="itemSize" width="265" height="234"/>
@@ -52,11 +52,30 @@
                             <constraint firstItem="jR0-Yy-lXx" firstAttribute="trailing" secondItem="uwZ-dY-hTB" secondAttribute="trailing" id="wsD-vu-2LM"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" title="Journal" id="HR0-9L-2xX"/>
                     <connections>
                         <outlet property="collectionView" destination="uwZ-dY-hTB" id="tBc-IE-feR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gVZ-IX-aX6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1187.0229007633586" y="933.80281690140851"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="kWJ-cz-ABF">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Ae8-hh-Rgp" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="btS-JT-hxD">
+                        <rect key="frame" x="0.0" y="118" width="393" height="54"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="HRQ-D5-VuG" kind="relationship" relationship="rootViewController" id="QSc-u4-syp"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="spS-xO-Zdg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="260.30534351145036" y="933.80281690140851"/>
         </scene>

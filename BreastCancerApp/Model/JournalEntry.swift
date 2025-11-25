@@ -32,3 +32,16 @@ struct JournalEntry: Hashable, Identifiable {
         self.thumbnail = thumbnail
     }
 }
+
+extension JournalEntry {
+    var content: String {
+        return body
+    }
+
+    var dateFormatted: String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        return formatter.string(from: date)
+    }
+}
+

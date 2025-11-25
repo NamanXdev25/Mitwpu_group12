@@ -15,6 +15,7 @@ class JournalViewController: UIViewController {
         case streak
         case stats
         case actions
+        case recents
     }
 
     private var journalDataSource: JournalDataSource!
@@ -27,9 +28,9 @@ class JournalViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = UIColor.systemGroupedBackground
+        view.backgroundColor = UIColor(named: "BackgroundColor")
         navigationItem.title = "Journal"
-        collectionView.backgroundColor = UIColor.systemGroupedBackground
+        collectionView.backgroundColor = UIColor(named: "BackgroundColor")
 
         setupCollectionView()
 
@@ -73,7 +74,6 @@ extension JournalViewController {
                     subitems: [item]
                 )
 
-                // Only 8
                 group.contentInsets = .init(top: 8, leading: 16, bottom: 0, trailing: 16)
 
                 let section = NSCollectionLayoutSection(group: group)
@@ -82,20 +82,20 @@ extension JournalViewController {
 
 
             // -----------------------
-            // 2️⃣ STATS (Your XIB defines the two cards)
+            // 2️⃣ STATS
             // -----------------------
             case .stats:
                 let item = NSCollectionLayoutItem(
                     layoutSize: .init(
                         widthDimension: .fractionalWidth(1),
-                        heightDimension: .estimated(120)
+                        heightDimension: .estimated(105)
                     )
                 )
 
                 let group = NSCollectionLayoutGroup.vertical(
                     layoutSize: .init(
                         widthDimension: .fractionalWidth(1),
-                        heightDimension: .estimated(120)
+                        heightDimension: .estimated(105)
                     ),
                     subitems: [item]
                 )
@@ -108,7 +108,7 @@ extension JournalViewController {
 
 
             // -----------------------
-            // 3️⃣ ACTION ROWS (each row is 92)
+            // 3️⃣ ACTIONS (with header)
             // -----------------------
             case .actions:
                 let item = NSCollectionLayoutItem(
@@ -132,11 +132,67 @@ extension JournalViewController {
                 let section = NSCollectionLayoutSection(group: group)
                 section.interGroupSpacing = 8
                 section.contentInsets = .init(top: 4, leading: 0, bottom: 4, trailing: 0)
+
+
+                let headerSize = NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1.0),
+                    heightDimension: .absolute(44)
+                )
+
+                let header = NSCollectionLayoutBoundarySupplementaryItem(
+                    layoutSize: headerSize,
+                    elementKind: UICollectionView.elementKindSectionHeader,
+                    alignment: .top
+                )
+
+                section.boundarySupplementaryItems = [header]
+
                 return section
+
+
+
+            // -----------------------
+            // 4️⃣ RECENTS (with header)
+            // -----------------------
+            case .recents:
+                let item = NSCollectionLayoutItem(
+                    layoutSize: .init(
+                        widthDimension: .fractionalWidth(1),
+                        heightDimension: .estimated(140)
+                    )
+                )
+
+                let group = NSCollectionLayoutGroup.vertical(
+                    layoutSize: .init(
+                        widthDimension: .fractionalWidth(1),
+                        heightDimension: .estimated(140)
+                    ),
+                    subitems: [item]
+                )
+
+                group.interItemSpacing = .fixed(8)
+                group.contentInsets = .init(top: 0, leading: 16, bottom: 8, trailing: 16)
+
+                let section = NSCollectionLayoutSection(group: group)
+
+
+                let headerSize = NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1.0),
+                    heightDimension: .absolute(44)
+                )
+
+                let header = NSCollectionLayoutBoundarySupplementaryItem(
+                    layoutSize: headerSize,
+                    elementKind: UICollectionView.elementKindSectionHeader,
+                    alignment: .top
+                )
+
+                section.boundarySupplementaryItems = [header]
+
+                return section
+
             }
         }
-
-
 
         collectionView.setCollectionViewLayout(layout, animated: false)
 
@@ -155,5 +211,19 @@ extension JournalViewController {
             UINib(nibName: "JournalActionCell", bundle: nil),
             forCellWithReuseIdentifier: JournalActionCell.reuseIdentifier
         )
+        
+        collectionView.register(
+            UINib(nibName: "RecentJournalCell", bundle: nil),
+            forCellWithReuseIdentifier: RecentJournalCell.reuseIdentifier
+        )
+        
+        collectionView.register(
+            UINib(nibName: "JournalSectionHeaderView", bundle: nil),
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: "header_cell"
+        )
+
+        
     }
 }
+
