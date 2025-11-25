@@ -17,13 +17,13 @@
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Iwi-e5-lqm">
-                        <rect key="frame" x="16" y="8" width="196" height="120"/>
+                        <rect key="frame" x="0.0" y="0.0" width="228" height="136"/>
                         <subviews>
                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zn8-SP-s0g">
-                                <rect key="frame" x="0.0" y="0.0" width="94" height="120"/>
+                                <rect key="frame" x="0.0" y="0.0" width="110" height="136"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="eqq-0g-4dh">
-                                        <rect key="frame" x="12" y="30" width="101.33333333333333" height="60"/>
+                                        <rect key="frame" x="12" y="38" width="101.33333333333333" height="60"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="24" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oH5-cW-MlM">
                                                 <rect key="frame" x="0.0" y="0.0" width="101.33333333333333" height="40.666666666666664"/>
@@ -52,10 +52,10 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wBY-cK-vjV">
-                                <rect key="frame" x="102" y="0.0" width="94" height="120"/>
+                                <rect key="frame" x="118" y="0.0" width="110" height="136"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="l4Z-yf-D5v">
-                                        <rect key="frame" x="12" y="30" width="75.333333333333329" height="60"/>
+                                        <rect key="frame" x="12" y="38" width="75.333333333333329" height="60"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HWu-tA-GZB">
                                                 <rect key="frame" x="0.0" y="0.0" width="75.333333333333329" height="40.666666666666664"/>
@@ -89,10 +89,10 @@
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <constraints>
-                <constraint firstItem="Iwi-e5-lqm" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="8" id="0Qo-xo-hZf"/>
-                <constraint firstItem="Iwi-e5-lqm" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="QG3-ls-6Nv"/>
-                <constraint firstAttribute="bottom" secondItem="Iwi-e5-lqm" secondAttribute="bottom" constant="8" id="UwL-Ja-iR8"/>
-                <constraint firstAttribute="trailing" secondItem="Iwi-e5-lqm" secondAttribute="trailing" constant="16" id="xzZ-32-OhA"/>
+                <constraint firstItem="Iwi-e5-lqm" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="0Qo-xo-hZf"/>
+                <constraint firstItem="Iwi-e5-lqm" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="QG3-ls-6Nv"/>
+                <constraint firstAttribute="bottom" secondItem="Iwi-e5-lqm" secondAttribute="bottom" id="UwL-Ja-iR8"/>
+                <constraint firstAttribute="trailing" secondItem="Iwi-e5-lqm" secondAttribute="trailing" id="xzZ-32-OhA"/>
             </constraints>
             <size key="customSize" width="228" height="136"/>
             <userDefinedRuntimeAttributes>
