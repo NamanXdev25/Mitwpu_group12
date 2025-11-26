@@ -28,6 +28,9 @@
                     <color key="tintColor" name="PrimaryColor"/>
                     <state key="normal" title="Button"/>
                     <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                    <connections>
+                        <action selector="seeAllButtonTapped:" destination="U6b-Vx-4bR" eventType="touchUpInside" id="zlf-K6-76C"/>
+                    </connections>
                 </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="VXr-Tz-HHm"/>

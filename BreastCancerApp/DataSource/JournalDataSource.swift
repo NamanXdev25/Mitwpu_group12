@@ -2,21 +2,20 @@
 //  JournalDataSource.swift
 //  journalTrial
 //
-
 import UIKit
 
 class JournalDataSource {
 
-    typealias Section = JournalViewController.Section
+    // MARK: - Sections for BOTH SCREENS
+    enum Section: Int, CaseIterable {
+        case streak
+        case stats
+        case actions
+        case recents
+        case all
+    }
 
-    private weak var collectionView: UICollectionView?
-    private(set) var dataSource: UICollectionViewDiffableDataSource<Section, UUID>!
-
-    private var entries: [JournalEntry]
-    private var streak: Int
-    private var thisWeekCount: Int
-
-    // MARK: - ACTIONS DATA MODEL
+    // MARK: - Cell Types
     struct JournalAction: Hashable {
         let id = UUID()
         let title: String
@@ -24,82 +23,123 @@ class JournalDataSource {
         let iconName: String
     }
 
+    // MARK: - Properties
+    private weak var collectionView: UICollectionView?
+    private(set) var dataSource: UICollectionViewDiffableDataSource<Section, UUID>!
+
+    private var entries: [JournalEntry]
+    private var streak: Int
+    private var thisWeekCount: Int
+
+    var didTapSeeAll: (() -> Void)?
+    
+    private var mode: Mode
+
+    // MARK: - Modes
+    enum Mode {
+        case mainScreen
+        case allJournals
+    }
+
+    // MARK: - Actions
     let actions: [JournalAction] = [
-        JournalAction(
-            title: "Blank Journal",
-            subtitle: "Express yourselves freely with a blank canvas",
-            iconName: "pencil.and.scribble"
-        ),
-        JournalAction(
-            title: "Guided Reflection",
-            subtitle: "Use thoughtful prompts to guide your journey",
-            iconName: "sparkles"
-        )
+        JournalAction(title: "Blank Journal", subtitle: "Express yourself freely", iconName: "pencil.and.scribble"),
+        JournalAction(title: "Guided Reflection", subtitle: "Thoughtful prompts for clarity", iconName: "sparkles")
     ]
 
-    init(collectionView: UICollectionView, entries: [JournalEntry], streak: Int, thisWeekCount: Int) {
+    // MARK: - Init
+    init(
+        collectionView: UICollectionView,
+        mode: Mode,
+        entries: [JournalEntry],
+        streak: Int = 0,
+        thisWeekCount: Int = 0
+    ) {
         self.collectionView = collectionView
         self.entries = entries
         self.streak = streak
         self.thisWeekCount = thisWeekCount
+        self.mode = mode
 
         configureDataSource()
     }
 
+    // MARK: - Configure Datasource
     private func configureDataSource() {
         guard let collectionView = collectionView else { return }
 
-        dataSource = UICollectionViewDiffableDataSource<Section, UUID>(collectionView: collectionView) {
-            (collectionView, indexPath, id) -> UICollectionViewCell? in
+        dataSource = UICollectionViewDiffableDataSource<Section, UUID>(collectionView: collectionView) { collectionView, indexPath, id in
 
-            guard let section = Section(rawValue: indexPath.section) else { return nil }
+            switch self.mode {
 
-            switch section {
+            // ---------------------------------------------------
+            // MARK: MAIN JOURNAL SCREEN
+            // ---------------------------------------------------
+            case .mainScreen:
 
-            case .streak:
-                let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: JournalStreakCell.reuseIdentifier,
-                    for: indexPath
-                ) as! JournalStreakCell
-                
-                cell.configure(streak: self.streak)
-                return cell
+                guard let section = Section(rawValue: indexPath.section) else { return nil }
 
-            case .stats:
-                let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: JournalStatsCell.reuseIdentifier,
-                    for: indexPath
-                ) as! JournalStatsCell
-                
-                cell.configure(total: self.entries.count, thisWeek: self.thisWeekCount)
-                return cell
+                switch section {
 
-            case .actions:
-                let action = self.actions[indexPath.item]
-                let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: JournalActionCell.reuseIdentifier,
-                    for: indexPath
-                ) as! JournalActionCell
-                
-                cell.configure(
-                    title: action.title,
-                    subtitle: action.subtitle,
-                    icon: UIImage(systemName: action.iconName) ?? UIImage()
-                )
-                return cell
+                case .streak:
+                    let cell = collectionView.dequeueReusableCell(
+                        withReuseIdentifier: JournalStreakCell.reuseIdentifier,
+                        for: indexPath
+                    ) as! JournalStreakCell
+                    cell.configure(streak: self.streak)
+                    return cell
 
-            case .recents:
+                case .stats:
+                    let cell = collectionView.dequeueReusableCell(
+                        withReuseIdentifier: JournalStatsCell.reuseIdentifier,
+                        for: indexPath
+                    ) as! JournalStatsCell
+                    cell.configure(total: self.entries.count, thisWeek: self.thisWeekCount)
+                    return cell
+
+                case .actions:
+                    let actionItem = self.actions[indexPath.item]
+                    let cell = collectionView.dequeueReusableCell(
+                        withReuseIdentifier: JournalActionCell.reuseIdentifier,
+                        for: indexPath
+                    ) as! JournalActionCell
+                    cell.configure(
+                        title: actionItem.title,
+                        subtitle: actionItem.subtitle,
+                        icon: UIImage(systemName: actionItem.iconName) ?? UIImage()
+                    )
+                    return cell
+
+                case .recents:
+                    let cell = collectionView.dequeueReusableCell(
+                        withReuseIdentifier: RecentJournalCell.reuseIdentifier,
+                        for: indexPath
+                    ) as! RecentJournalCell
+                    let entry = self.entries[indexPath.item]
+                    cell.configure(with: entry)
+                    return cell
+
+                default:
+                    return nil
+                }
+
+            // ---------------------------------------------------
+            // MARK: ALL JOURNALS SCREEN
+            // ---------------------------------------------------
+            case .allJournals:
+
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: RecentJournalCell.reuseIdentifier,
                     for: indexPath
                 ) as! RecentJournalCell
-                
+
                 let entry = self.entries[indexPath.item]
                 cell.configure(with: entry)
                 return cell
             }
         }
-        
+
+        // MARK: - Headers
         dataSource.supplementaryViewProvider = { collectionView, kind, indexPath in
             guard kind == UICollectionView.elementKindSectionHeader else { return nil }
             guard let section = Section(rawValue: indexPath.section) else { return nil }
@@ -110,34 +150,61 @@ class JournalDataSource {
                 for: indexPath
             ) as! JournalSectionHeaderView
 
-            switch section {
-            case .actions:
-                header.configure(title: "Start Writing", showButton: false)
+            switch self.mode {
 
-            case .recents:
+            case .mainScreen:
+                switch section {
+                case .actions:
+                    header.configure(title: "Start Writing", showButton: false)
+                case .recents:
+                    header.configure(title: "Recent", showButton: true)
+                default:
+                    header.configure(title: "", showButton: false)
+                }
+
+            case .allJournals:
+                header.configure(title: "All Journals", showButton: false)
+            }
+            
+            if section == .recents {
                 header.configure(title: "Recent", showButton: true)
+                header.seeAllTapped = { [weak self] in
+                    self?.didTapSeeAll?()
+                }
 
-            default:
-                header.configure(title: "", showButton: false)
             }
 
             return header
         }
-
     }
 
-    func applySnapshot() { var snapshot = NSDiffableDataSourceSnapshot<Section, UUID>()
-        // 1. Add sections
-        snapshot.appendSections([.streak, .stats, .actions, .recents])
-        // 2. Add items
-        snapshot.appendItems([UUID()], toSection: .streak)
-        // streak cell
-        snapshot.appendItems([UUID()], toSection: .stats)
-        // stats cell
-        // Two Action items → Blank Journal + Guided Reflection
-        snapshot.appendItems([UUID(), UUID()], toSection: .actions)
-        // recents cell
-        snapshot.appendItems(entries.map { _ in UUID() }, toSection: .recents)
-        // 3. Apply
-        dataSource.apply(snapshot, animatingDifferences: false) }
+    // MARK: - Snapshots
+    func applySnapshot() {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, UUID>()
+
+        switch mode {
+
+        // MAIN SCREEN SNAPSHOT
+        case .mainScreen:
+            snapshot.appendSections([.streak, .stats, .actions, .recents])
+
+            snapshot.appendItems([UUID()], toSection: .streak)
+            snapshot.appendItems([UUID()], toSection: .stats)
+            snapshot.appendItems(actions.map { _ in UUID() }, toSection: .actions)
+            snapshot.appendItems(entries.map { _ in UUID() }, toSection: .recents)
+
+        // ALL JOURNALS SNAPSHOT
+        case .allJournals:
+            snapshot.appendSections([.all])
+            snapshot.appendItems(entries.map { _ in UUID() }, toSection: .all)
+        }
+
+        dataSource.apply(snapshot, animatingDifferences: false)
+    }
+
+    // MARK: - Item Lookup
+    func item(for indexPath: IndexPath) -> JournalEntry? {
+        guard indexPath.item < entries.count else { return nil }
+        return entries[indexPath.item]
+    }
 }

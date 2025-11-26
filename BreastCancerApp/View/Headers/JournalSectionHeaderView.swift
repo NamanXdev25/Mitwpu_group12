@@ -9,6 +9,8 @@ import UIKit
 
 class JournalSectionHeaderView: UICollectionReusableView {
 
+    var seeAllTapped: (() -> Void)?
+    
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var actionButton: UIButton!
 
@@ -21,6 +23,9 @@ class JournalSectionHeaderView: UICollectionReusableView {
         actionButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .medium)
     }
 
+    @IBAction func seeAllButtonTapped(_ sender: UIButton) {
+        seeAllTapped?()
+    }
     func configure(title: String, showButton: Bool, buttonTitle: String = "See All") {
         titleLabel.text = title
 

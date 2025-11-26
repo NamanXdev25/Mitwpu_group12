@@ -36,13 +36,35 @@ class JournalViewController: UIViewController {
 
         journalDataSource = JournalDataSource(
             collectionView: collectionView,
+            mode: .mainScreen,
             entries: entries,
             streak: streak,
             thisWeekCount: thisWeekCount
         )
+        
+        journalDataSource.didTapSeeAll = { [weak self] in
+            self?.openAllJournals()
+        }
+
+
+        journalDataSource.applySnapshot()
+
 
         journalDataSource.applySnapshot()
     }
+    
+    func openAllJournals() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(
+            withIdentifier: "AllJournalsViewController"
+        ) as! AllJournalsViewController
+
+        // pass the full list
+        vc.entries = SampleJournalData.all
+
+        navigationController?.pushViewController(vc, animated: true)
+    }
+
 }
 
 extension JournalViewController {
@@ -55,9 +77,7 @@ extension JournalViewController {
 
             switch section {
 
-            // -----------------------
-            // 1️⃣ STREAK
-            // -----------------------
+            // 1. STREAK
             case .streak:
                 let item = NSCollectionLayoutItem(
                     layoutSize: .init(
@@ -81,9 +101,7 @@ extension JournalViewController {
                 return section
 
 
-            // -----------------------
-            // 2️⃣ STATS
-            // -----------------------
+            // 2. STATS
             case .stats:
                 let item = NSCollectionLayoutItem(
                     layoutSize: .init(
@@ -107,9 +125,7 @@ extension JournalViewController {
                 return section
 
 
-            // -----------------------
-            // 3️⃣ ACTIONS (with header)
-            // -----------------------
+            // 3. ACTIONS
             case .actions:
                 let item = NSCollectionLayoutItem(
                     layoutSize: .init(
@@ -151,9 +167,7 @@ extension JournalViewController {
 
 
 
-            // -----------------------
-            // 4️⃣ RECENTS (with header)
-            // -----------------------
+            // 4. RECENTS
             case .recents:
                 let item = NSCollectionLayoutItem(
                     layoutSize: .init(

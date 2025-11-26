@@ -13,23 +13,23 @@ struct JournalEntry: Hashable, Identifiable {
     var title: String
     var body: String
     var date: Date
-    var mood: String?
-    var thumbnail: UIImage?
+    //var mood: String?
+    //var thumbnail: UIImage?
 
     init(
         id: UUID = UUID(),
         title: String,
         body: String,
         date: Date = Date(),
-        mood: String? = nil,
-        thumbnail: UIImage? = nil
+        //mood: String? = nil,
+        //thumbnail: UIImage? = nil
     ) {
         self.id = id
         self.title = title
         self.body = body
         self.date = date
-        self.mood = mood
-        self.thumbnail = thumbnail
+        //self.mood = mood
+        //self.thumbnail = thumbnail
     }
 }
 
