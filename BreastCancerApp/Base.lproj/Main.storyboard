@@ -1,32 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="cMh-Zi-Lvn">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
-        <scene sceneID="tne-QT-ifu">
+        <!--Medication-->
+        <scene sceneID="P0b-c1-afE">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                <viewController id="WZJ-gG-xcI" customClass="MedicationViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="0b9-DH-8W4">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="j6E-PH-Lde">
+                                <rect key="frame" x="0.0" y="172" width="393" height="612"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="3Ye-oQ-1sA">
+                                    <size key="itemSize" width="291" height="213"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="med_item" id="DaX-dB-6fh">
+                                        <rect key="frame" x="51" y="0.0" width="291" height="213"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="4Gd-3c-Has">
+                                            <rect key="frame" x="0.0" y="0.0" width="291" height="213"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </collectionViewCellContentView>
+                                        <size key="customSize" width="291" height="213"/>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="csv-E4-54W"/>
+                        <color key="backgroundColor" red="0.9677734375" green="0.9482421875" blue="0.9560546875" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <constraints>
+                            <constraint firstItem="j6E-PH-Lde" firstAttribute="top" secondItem="csv-E4-54W" secondAttribute="top" id="rvq-V2-Ark"/>
+                            <constraint firstItem="j6E-PH-Lde" firstAttribute="leading" secondItem="csv-E4-54W" secondAttribute="leading" id="ttj-HL-1e8"/>
+                            <constraint firstItem="csv-E4-54W" firstAttribute="trailing" secondItem="j6E-PH-Lde" secondAttribute="trailing" id="uhm-Pm-w4N"/>
+                            <constraint firstItem="csv-E4-54W" firstAttribute="bottom" secondItem="j6E-PH-Lde" secondAttribute="bottom" id="xco-lr-IQL"/>
+                        </constraints>
                     </view>
+                    <navigationItem key="navigationItem" title="Medication" largeTitleDisplayMode="never" id="MFc-oM-rue">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="calendar.badge.plus" catalog="system" id="9v2-21-h49"/>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="collectionView" destination="j6E-PH-Lde" id="O8T-Rb-r0k"/>
+                    </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yUN-e9-XeF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3437" y="-163"/>
+            <point key="canvasLocation" x="-1701.5267175572519" y="-163.38028169014086"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="2mH-tG-ifq">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="cMh-Zi-Lvn" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="6ii-PL-A2f">
+                        <rect key="frame" x="0.0" y="118" width="393" height="54"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="WZJ-gG-xcI" kind="relationship" relationship="rootViewController" id="NNI-C5-QDH"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NJC-Gp-4UN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2628.2442748091603" y="-163.38028169014086"/>
         </scene>
     </scenes>
     <resources>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
+        <image name="calendar.badge.plus" catalog="system" width="128" height="109"/>
     </resources>
 </document>
