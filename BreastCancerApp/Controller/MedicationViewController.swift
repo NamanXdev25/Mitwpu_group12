@@ -58,7 +58,7 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
         let med = todaysMedications[indexPath.row]
         cell.configureCell(with: med)
 
-        // IMPORTANT: capture index for toggling
+        // IMPORTANT: capture index for toggling(cell has a closure)
         cell.onCircleTapped = { [weak self] in
             guard let self = self else { return }
             
@@ -73,7 +73,7 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
     }
 
 
-    // MARK: - Header
+    // MARK: - Loads Header(can be used to set date dynamically)
     func collectionView(_ collectionView: UICollectionView,
                         viewForSupplementaryElementOfKind kind: String,
                         at indexPath: IndexPath) -> UICollectionReusableView {
