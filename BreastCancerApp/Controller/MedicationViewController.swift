@@ -84,7 +84,7 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
             for: indexPath
         ) as! MedicationHeaderView
 
-        header.configure(with: "Sun 20 Apr")
+        header.configure(with: "Thur 27 Nov")
         return header
     }
 
