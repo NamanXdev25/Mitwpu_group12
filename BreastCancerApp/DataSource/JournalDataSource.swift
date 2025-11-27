@@ -2,6 +2,7 @@
 //  JournalDataSource.swift
 //  journalTrial
 //
+
 import UIKit
 
 class JournalDataSource {
@@ -33,6 +34,10 @@ class JournalDataSource {
 
     var didTapSeeAll: (() -> Void)?
     
+    var didTapBlankJournal: (() -> Void)?
+    var didTapGuidedJournal: (() -> Void)?
+
+    
     private var mode: Mode
 
     // MARK: - Modes
@@ -43,7 +48,7 @@ class JournalDataSource {
 
     // MARK: - Actions
     let actions: [JournalAction] = [
-        JournalAction(title: "Blank Journal", subtitle: "Express yourself freely", iconName: "pencil.and.scribble"),
+        JournalAction(title: "New Journal", subtitle: "Express yourself freely with a blank canvas", iconName: "pencil.and.scribble"),
         JournalAction(title: "Guided Reflection", subtitle: "Thoughtful prompts for clarity", iconName: "sparkles")
     ]
 
@@ -72,9 +77,7 @@ class JournalDataSource {
 
             switch self.mode {
 
-            // ---------------------------------------------------
             // MARK: MAIN JOURNAL SCREEN
-            // ---------------------------------------------------
             case .mainScreen:
 
                 guard let section = Section(rawValue: indexPath.section) else { return nil }
@@ -103,12 +106,25 @@ class JournalDataSource {
                         withReuseIdentifier: JournalActionCell.reuseIdentifier,
                         for: indexPath
                     ) as! JournalActionCell
+                    
                     cell.configure(
                         title: actionItem.title,
                         subtitle: actionItem.subtitle,
                         icon: UIImage(systemName: actionItem.iconName) ?? UIImage()
                     )
+
+                    cell.didTap = {
+                        [weak self] in
+                        if indexPath.item == 0 {  // Blank Journal
+                            self?.didTapBlankJournal?()
+                        }
+                        if indexPath.item == 1 {  // Gided Journal
+                            self?.didTapGuidedJournal?()
+                        }
+                    }
+
                     return cell
+
 
                 case .recents:
                     let cell = collectionView.dequeueReusableCell(
@@ -123,9 +139,7 @@ class JournalDataSource {
                     return nil
                 }
 
-            // ---------------------------------------------------
             // MARK: ALL JOURNALS SCREEN
-            // ---------------------------------------------------
             case .allJournals:
 
                 let cell = collectionView.dequeueReusableCell(

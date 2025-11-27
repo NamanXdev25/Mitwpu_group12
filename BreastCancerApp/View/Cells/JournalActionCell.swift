@@ -11,6 +11,8 @@ class JournalActionCell: UICollectionViewCell {
 
     static let reuseIdentifier = "JournalActionCell"
     
+    var didTap: (() -> Void)?
+    
     @IBOutlet weak var iconView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var subtitleLabel: UILabel!
@@ -29,5 +31,15 @@ class JournalActionCell: UICollectionViewCell {
             subtitleLabel.text = subtitle
             iconView.image = icon
     }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        didTap?()
+    }
+    
+    @IBAction func buttonTapped(_ sender: UIButton) {
+        didTap?()
+    }
+
+    
 
 }

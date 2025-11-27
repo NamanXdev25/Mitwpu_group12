@@ -8,32 +8,32 @@
 import UIKit
 
 class JournalViewController: UIViewController {
-
+    
     @IBOutlet weak var collectionView: UICollectionView!
-
+    
     enum Section: Int, CaseIterable {
         case streak
         case stats
         case actions
         case recents
     }
-
+    
     private var journalDataSource: JournalDataSource!
-
+    
     // Replace with real data later
     private var entries: [JournalEntry] = SampleJournalData.recent
     private var streak: Int = 7
     private var thisWeekCount: Int = 3
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         view.backgroundColor = UIColor(named: "BackgroundColor")
         navigationItem.title = "Journal"
         collectionView.backgroundColor = UIColor(named: "BackgroundColor")
-
+        
         setupCollectionView()
-
+        
         journalDataSource = JournalDataSource(
             collectionView: collectionView,
             mode: .mainScreen,
@@ -45,26 +45,58 @@ class JournalViewController: UIViewController {
         journalDataSource.didTapSeeAll = { [weak self] in
             self?.openAllJournals()
         }
-
-
+        
+        journalDataSource.didTapBlankJournal = { [weak self] in
+            self?.openBlankJournal()
+        }
+        
+        journalDataSource.didTapGuidedJournal = { [weak self] in
+            self?.openGuidedJournal()
+        }
+        
+        
         journalDataSource.applySnapshot()
-
-
+        
         journalDataSource.applySnapshot()
+        
     }
-    
-    func openAllJournals() {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = storyboard.instantiateViewController(
-            withIdentifier: "AllJournalsViewController"
-        ) as! AllJournalsViewController
-
-        // pass the full list
-        vc.entries = SampleJournalData.all
-
-        navigationController?.pushViewController(vc, animated: true)
-    }
-
+        
+            
+        
+        func openBlankJournal() {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            
+            let vc = storyboard.instantiateViewController(
+                withIdentifier: "BlankJournalViewController"
+            ) as! BlankJournalViewController
+            
+            navigationController?.pushViewController(vc, animated: true)
+        }
+        
+        func openGuidedJournal() {
+            let storyboard = UIStoryboard(name: "JournalMain", bundle: nil)
+            let vc = storyboard.instantiateViewController(withIdentifier: "GuidedJournalViewController") as! GuidedJournalViewController
+            
+            vc.categoryText = "MIND • SELF-AWARENESS"
+            vc.questionText = "What thought has been taking up too much space in your mind lately?"
+            
+            navigationController?.pushViewController(vc, animated: true)
+        }
+        
+        
+        
+        func openAllJournals() {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let vc = storyboard.instantiateViewController(
+                withIdentifier: "AllJournalsViewController"
+            ) as! AllJournalsViewController
+            
+            // pass the full list
+            vc.entries = SampleJournalData.all
+            
+            navigationController?.pushViewController(vc, animated: true)
+        }
+        
 }
 
 extension JournalViewController {
