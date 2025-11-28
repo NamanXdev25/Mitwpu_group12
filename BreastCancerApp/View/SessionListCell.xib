@@ -10,7 +10,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="SessionListCell" customModule="BreastCancerApp" customModuleProvider="target">
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ListCell" id="gTV-IL-0wX" customClass="SessionListCell" customModule="BreastCancerApp" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="393" height="90"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -28,12 +28,12 @@
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="12"/>
+                                        <integer key="value" value="20"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="play.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Tnk-5s-dik">
-                                <rect key="frame" x="173" y="33.333333333333329" width="15" height="16"/>
+                                <rect key="frame" x="27" y="33" width="27" height="16.333333333333336"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LlP-uF-k82">
@@ -45,6 +45,9 @@
                                 <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="heart" catalog="system"/>
+                                <connections>
+                                    <action selector="likeButtonTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="TQR-WG-swl"/>
+                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Medication 15min" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sFt-Bh-r5S">
                                 <rect key="frame" x="88" y="43" width="114" height="17"/>
@@ -65,11 +68,14 @@
                             <constraint firstItem="y5W-4L-OS9" firstAttribute="top" secondItem="jTA-Wi-lTh" secondAttribute="top" constant="24" id="1ZG-GR-6wn"/>
                             <constraint firstItem="LlP-uF-k82" firstAttribute="centerY" secondItem="jTA-Wi-lTh" secondAttribute="centerY" id="1nJ-TB-nu3"/>
                             <constraint firstAttribute="trailing" secondItem="LlP-uF-k82" secondAttribute="trailing" constant="16" id="Eq8-c6-OQN"/>
-                            <constraint firstItem="Tnk-5s-dik" firstAttribute="centerY" secondItem="jTA-Wi-lTh" secondAttribute="centerY" id="FJW-qD-sKY"/>
                             <constraint firstItem="iVv-ze-cD9" firstAttribute="leading" secondItem="jTA-Wi-lTh" secondAttribute="leading" constant="12" id="Pwy-Ay-cpJ"/>
+                            <constraint firstItem="Tnk-5s-dik" firstAttribute="centerY" secondItem="jTA-Wi-lTh" secondAttribute="centerY" id="WP0-Nd-avD"/>
+                            <constraint firstItem="Tnk-5s-dik" firstAttribute="centerY" secondItem="iVv-ze-cD9" secondAttribute="centerY" id="a7t-r7-crc"/>
+                            <constraint firstItem="y5W-4L-OS9" firstAttribute="leading" secondItem="Tnk-5s-dik" secondAttribute="trailing" constant="32" id="brd-in-7GU"/>
                             <constraint firstItem="iVv-ze-cD9" firstAttribute="centerY" secondItem="jTA-Wi-lTh" secondAttribute="centerY" id="crA-cz-RfR"/>
                             <constraint firstItem="y5W-4L-OS9" firstAttribute="leading" secondItem="iVv-ze-cD9" secondAttribute="trailing" constant="14" id="e6N-FO-0aa"/>
-                            <constraint firstItem="Tnk-5s-dik" firstAttribute="centerX" secondItem="jTA-Wi-lTh" secondAttribute="centerX" id="n1q-UZ-sqN"/>
+                            <constraint firstItem="Tnk-5s-dik" firstAttribute="top" secondItem="jTA-Wi-lTh" secondAttribute="top" constant="30.666666666666671" id="kIx-4N-oid"/>
+                            <constraint firstItem="Tnk-5s-dik" firstAttribute="leading" secondItem="jTA-Wi-lTh" secondAttribute="leading" constant="27" id="t04-Dr-1Ej"/>
                             <constraint firstItem="sFt-Bh-r5S" firstAttribute="leading" secondItem="iVv-ze-cD9" secondAttribute="trailing" constant="16" id="wQn-IB-IXZ"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>

@@ -1,8 +1,7 @@
 //
 //  BreathingViewController.swift
-//  ChemoCompanion
+//  Created by Shloka on 28/11/2025
 //
-//  Created by ChemoCompanion Dev on 28/11/25.
 //
 
 import UIKit
@@ -18,6 +17,7 @@ class BreathingViewController: UIViewController {
     var favoriteSessions: [BreathingSession] = []
     var filterTags: [String] = []
     var allSessions: [BreathingSession] = []
+    var filteredSessions: [BreathingSession] = []
     
     // Track selected filter (Defaults to first one "All")
     var selectedFilterIndex: Int = 0
@@ -30,11 +30,22 @@ class BreathingViewController: UIViewController {
         filterTags = dataManager.getFilterTags()
         allSessions = dataManager.getAllSessions()
         
+        //  INITIALIZE FILTERED LIST (Start by showing everything)
+                filteredSessions = allSessions
+        
         // B. Register Cells
         registerCells()
         
         // C. Setup Data Source (We will add the extension in Step 8)
         collectionView.dataSource = self
+        collectionView.delegate = self
+        
+        
+        collectionView.setCollectionViewLayout(generateLayout(), animated: false)
+        // NOTE: I commented this out so the app doesn't crash until we add the function in Step 9.
+      
+            }
+        
         
         // D. Setup Layout (We will add the function in Step 9)
         func generateLayout() -> UICollectionViewCompositionalLayout {
@@ -47,27 +58,43 @@ class BreathingViewController: UIViewController {
                     // ---------------------------------------------------------
                     // SECTION 0: FAVORITES (Large Horizontal Cards)
                     // ---------------------------------------------------------
-                    if sectionIndex == 0 {
-                        
-                        // Item
-                        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
-                        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-                        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 8)
-                        
-                        // Group (Width 75% of screen so you can see the next card peeking)
-                        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.75), heightDimension: .absolute(320))
-                        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-                        
-                        // Section
-                        let section = NSCollectionLayoutSection(group: group)
-                        section.orthogonalScrollingBehavior = .groupPagingCentered // Snaps to center
-                        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 20, trailing: 0)
-                        
-                        // Add Header
-                        section.boundarySupplementaryItems = [header]
-                        return section
-                        
-                    }
+                    // ---------------------------------------------------------
+                                // SECTION 0: FAVORITES
+                                // ---------------------------------------------------------
+                                if sectionIndex == 0 {
+                                    
+                                    // CHECK: Is the list empty?
+                                    if self.favoriteSessions.isEmpty {
+                                        // --- SMALL LAYOUT (For "No Favorites" Message) ---
+                                        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
+                                        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                                        
+                                        // Height: 120 (Small and snug!)
+                                        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(120))
+                                        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+                                        
+                                        let section = NSCollectionLayoutSection(group: group)
+                                        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 16, bottom: 20, trailing: 16)
+                                        section.boundarySupplementaryItems = [header]
+                                        return section
+                                        
+                                    } else {
+                                        // --- BIG LAYOUT (For Real Cards) ---
+                                        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
+                                        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                                        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 8)
+                                        
+                                        // Height: 320 (Big for images)
+                                        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.75), heightDimension: .absolute(320))
+                                        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+                                        
+                                        let section = NSCollectionLayoutSection(group: group)
+                                        section.orthogonalScrollingBehavior = .groupPagingCentered
+                                        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 20, trailing: 0)
+                                        section.boundarySupplementaryItems = [header]
+                                        return section
+                                    }
+                                }
                     // ---------------------------------------------------------
                     // SECTION 1: FILTERS (Small Horizontal Pills)
                     // ---------------------------------------------------------
@@ -114,27 +141,24 @@ class BreathingViewController: UIViewController {
                         return section
                     }
                 }
-            }
-        
-        
-        
-        collectionView.setCollectionViewLayout(generateLayout(), animated: false)
-        // NOTE: I commented this out so the app doesn't crash until we add the function in Step 9.
     }
     
     func registerCells() {
-        // Section 0: Large Cards
-        collectionView.register(UINib(nibName: "FavoriteSessionCell", bundle: nil), forCellWithReuseIdentifier: "FavoriteCell")
-        
-        // Section 1: Filter Pills
-        collectionView.register(UINib(nibName: "FilterCell", bundle: nil), forCellWithReuseIdentifier: "FilterCell")
-        
-        // Section 2: List Rows
-        collectionView.register(UINib(nibName: "SessionListCell", bundle: nil), forCellWithReuseIdentifier: "ListCell")
-        
-        // Headers
-        collectionView.register(UINib(nibName: "HeaderView", bundle: nil), forSupplementaryViewOfKind: "header", withReuseIdentifier: "HeaderView")
-    }
+            // Section 0: Large Cards
+            collectionView.register(UINib(nibName: "FavoriteSessionCell", bundle: nil), forCellWithReuseIdentifier: "FavoriteSessionCell")
+            
+            // Section 1: Filter Pills
+            collectionView.register(UINib(nibName: "FilterCell", bundle: nil), forCellWithReuseIdentifier: "FilterCell")
+            
+            // Section 2: List Rows
+            collectionView.register(UINib(nibName: "SessionListCell", bundle: nil), forCellWithReuseIdentifier: "ListCell")
+            
+            // --- ADD THIS LINE IF MISSING ---
+            collectionView.register(UINib(nibName: "EmptyStateCell", bundle: nil), forCellWithReuseIdentifier: "EmptyStateCell")
+            
+            // Headers
+            collectionView.register(UINib(nibName: "HeaderView", bundle: nil), forSupplementaryViewOfKind: "header", withReuseIdentifier: "HeaderView")
+        }
 }
 
 extension BreathingViewController: UICollectionViewDataSource {
@@ -146,25 +170,35 @@ extension BreathingViewController: UICollectionViewDataSource {
     
     // 2. How many items in each section?
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if section == 0 {
-            return favoriteSessions.count // Top Cards
-        } else if section == 1 {
-            return filterTags.count       // Filter Pills
-        } else {
-            return allSessions.count      // Vertical List
+            if section == 0 {
+                return favoriteSessions.isEmpty ? 1 : favoriteSessions.count
+            } else if section == 1 {
+                return filterTags.count
+            } else {
+                // CHANGE THIS LINE:
+                return filteredSessions.count
+            }
         }
-    }
     
     // 3. Create the specific cell for each section
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         if indexPath.section == 0 {
-            // SECTION 0: FAVORITE CARDS
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FavoriteCell", for: indexPath) as! FavoriteSessionCell
-            cell.configureCell(session: favoriteSessions[indexPath.row])
-            return cell
-            
-        } else if indexPath.section == 1 {
+                    
+                    // CHECK: Is the list empty?
+                    if favoriteSessions.isEmpty {
+                        // Show the Empty Note
+                        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EmptyStateCell", for: indexPath) as! EmptyStateCell
+                        return cell
+                    } else {
+                        // Show the Real Card
+                        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FavoriteSessionCell", for: indexPath) as! FavoriteSessionCell
+                        cell.delegate = self
+                        cell.configureCell(session: favoriteSessions[indexPath.row])
+                        return cell
+                    }
+                    
+                } else if indexPath.section == 1 {
             // SECTION 1: FILTER PILLS
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FilterCell", for: indexPath) as! FilterCell
             let tagText = filterTags[indexPath.row]
@@ -175,27 +209,118 @@ extension BreathingViewController: UICollectionViewDataSource {
             
             return cell
             
-        } else {
-            // SECTION 2: LIST ROWS
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ListCell", for: indexPath) as! SessionListCell
-            cell.configureCell(session: allSessions[indexPath.row])
-            return cell
-        }
+                } else {
+                            // SECTION 2: LIST ROWS
+                            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ListCell", for: indexPath) as! SessionListCell
+                            cell.delegate = self
+                            
+                            //  use filteredSessions:
+                            cell.configureCell(session: filteredSessions[indexPath.row])
+                            
+                            return cell
+                        }
     }
     
     // 4. Create the Headers ("Favourites", "Explore Sessions")
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        
+            
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: "header", withReuseIdentifier: "HeaderView", for: indexPath) as! HeaderView
-        
-        if indexPath.section == 0 {
-            header.configureHeader(text: "Favourites")
-        } else if indexPath.section == 1 {
-            header.configureHeader(text: "Explore Sessions")
-        } else {
-            header.configureHeader(text: "") // No header for the list part
+                
+                if indexPath.section == 0 {
+                    // CHANGED THIS: Always show "Favourites" now,
+                    // because even if empty, we show the "No Favorites" box below it.
+                    header.configureHeader(text: "Favourites")
+                    
+                } else if indexPath.section == 1 {
+                    header.configureHeader(text: "Explore Sessions")
+                } else {
+                    header.configureHeader(text: "") // No header for the list part
+                }
+                
+                return header
+            }
+}
+
+extension BreathingViewController: SessionCellDelegate {
+    
+    func didTapLikeButton(on cell: UICollectionViewCell) {
+            
+            guard let indexPath = collectionView.indexPath(for: cell) else { return }
+            
+            // CASE A: Removing from Top Section (Favorites)
+            if indexPath.section == 0 {
+                
+                let sessionToRemove = favoriteSessions[indexPath.row]
+                
+                // We need to find the matching item in the list to update its heart color later
+                var indexInMainList: Int? = nil
+                if let index = allSessions.firstIndex(where: { $0.title == sessionToRemove.title }) {
+                    indexInMainList = index
+                }
+                
+                // START THE BATCH UPDATE (Prevents the crash)
+                collectionView.performBatchUpdates {
+                    
+                    // 1. Update the Data Arrays INSIDE the batch
+                    favoriteSessions.remove(at: indexPath.row)
+                    
+                    if let mainIndex = indexInMainList {
+                        allSessions[mainIndex].isFavorite = false
+                        // Reload the list row immediately
+                        collectionView.reloadItems(at: [IndexPath(item: mainIndex, section: 2)])
+                    }
+                    
+                    // 2. Handle the Top Section UI
+                    if favoriteSessions.isEmpty {
+                        // Transition: Real Card -> Empty State Cell
+                        // Since count is technically 1 -> 1 (Real -> Empty), we reload the section
+                        collectionView.reloadSections(IndexSet(integer: 0))
+                    } else {
+                        // Normal deletion
+                        collectionView.deleteItems(at: [indexPath])
+                    }
+                }
+            }
+            
+        collectionView.setCollectionViewLayout(generateLayout(), animated: false)
+        // NOTE: I commented this out so the app doesn't crash until we add the function in Step 9.
+            }
         }
+
+
+extension BreathingViewController: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        return header
+        // Check if the tap happened in the Filter Section (Section 1)
+        if indexPath.section == 1 {
+            
+            // 1. Update the "Pink Pill" Selection variable
+            selectedFilterIndex = indexPath.row
+            
+            // 2. Get the name of the selected filter (e.g., "Sleep")
+            let selectedCategory = filterTags[indexPath.row]
+            
+            // 3. Perform the Filtering logic
+            if selectedCategory == "All" {
+                // If "All", show everything
+                filteredSessions = allSessions
+            } else {
+                // Otherwise, search the master list for matches
+                filteredSessions = allSessions.filter { session in
+                    return session.category == selectedCategory
+                }
+            }
+            
+            // 4. Update the UI
+            // We use performBatchUpdates for smooth animation
+            collectionView.performBatchUpdates {
+                // Reload Section 1 (to move the pink color to the new button)
+                collectionView.reloadSections(IndexSet(integer: 1))
+                
+                // Reload Section 2 (to show the new filtered items)
+                collectionView.reloadSections(IndexSet(integer: 2))
+            }
+        }
     }
 }
