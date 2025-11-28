@@ -139,6 +139,7 @@ extension AllJournalsViewController: UICollectionViewDelegate {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
 
         switch entry.type {
+
         case .regular:
             let vc = storyboard.instantiateViewController(
                 withIdentifier: "BlankJournalViewController"
@@ -152,7 +153,7 @@ extension AllJournalsViewController: UICollectionViewDelegate {
                 withIdentifier: "GuidedJournalViewController"
             ) as! GuidedJournalViewController
 
-            vc.existingEntry = entry   // you'll add this property just like BlankJournalVC
+            vc.existingEntry = entry
             navigationController?.pushViewController(vc, animated: true)
         }
     }

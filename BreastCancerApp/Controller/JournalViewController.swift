@@ -123,13 +123,39 @@ class JournalViewController: UIViewController {
             navigationController?.pushViewController(vc, animated: true)
         }
     
-    
+        /*
         func openEntry(_ entry: JournalEntry) {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let vc = storyboard.instantiateViewController(withIdentifier: "BlankJournalViewController") as! BlankJournalViewController
             vc.existingEntry = entry
             navigationController?.pushViewController(vc, animated: true)
         }
+         */
+    
+    
+        func openEntry(_ entry: JournalEntry) {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+
+            switch entry.type {
+
+            case .regular:
+                let vc = storyboard.instantiateViewController(
+                    withIdentifier: "BlankJournalViewController"
+                ) as! BlankJournalViewController
+
+                vc.existingEntry = entry
+                navigationController?.pushViewController(vc, animated: true)
+
+            case .guided:
+                let vc = storyboard.instantiateViewController(
+                    withIdentifier: "GuidedJournalViewController"
+                ) as! GuidedJournalViewController
+
+                vc.existingEntry = entry
+                navigationController?.pushViewController(vc, animated: true)
+            }
+        }
+
         
 }
 
