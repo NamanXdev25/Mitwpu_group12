@@ -78,7 +78,7 @@ class BlankJournalViewController: UIViewController {
                 id: old.id,
                 title: title,
                 body: body,
-                date: Date(),
+                date: old.date,
                 type: old.type,
                 question: old.question,
                 category: old.category

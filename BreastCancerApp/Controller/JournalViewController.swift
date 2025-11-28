@@ -9,6 +9,7 @@ import UIKit
 
 class JournalViewController: UIViewController {
     
+    //IBOutlets
     @IBOutlet weak var collectionView: UICollectionView!
     
     enum Section: Int, CaseIterable {
@@ -19,21 +20,13 @@ class JournalViewController: UIViewController {
     }
     
     private var journalDataSource: JournalDataSource!
-    
-    // Replace with real data later
     var entries: [JournalEntry] {
         JournalStore.shared.entries
     }
-
-    /*
-    private var streak: Int { JournalStore.shared.entries.count }
-    private var thisWeekCount: Int { JournalStore.shared.entries.count }
-    */
-     
+    //for streak & stats
     private var streak: Int {
         JournalStore.shared.entries.streakCount
     }
-
     private var thisWeekCount: Int {
         JournalStore.shared.entries.journalsThisWeek
     }
@@ -42,12 +35,12 @@ class JournalViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // UI (color/screen-title)
         view.backgroundColor = UIColor(named: "BackgroundColor")
         navigationItem.title = "Journal"
         collectionView.backgroundColor = UIColor(named: "BackgroundColor")
         
-        setupCollectionView()
-        
+        // initialising data source
         journalDataSource = JournalDataSource(
             collectionView: collectionView,
             mode: .mainScreen,
@@ -56,6 +49,7 @@ class JournalViewController: UIViewController {
             thisWeekCount: thisWeekCount
         )
         
+        // journalDataSource callbacks
         journalDataSource.didTapSeeAll = { [weak self] in
             self?.openAllJournals()
         }
@@ -67,65 +61,37 @@ class JournalViewController: UIViewController {
         journalDataSource.didTapGuidedJournal = { [weak self] in
             self?.handleGuidedJournalTap()
         }
-
-        
         journalDataSource.didTapDelete = { [weak self] entry in
             JournalStore.shared.delete(entry)
             self?.reloadData()
         }
-
         
         journalDataSource.applySnapshot()
         
+        // function calls
+        setupCollectionView()
+        
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        reloadData()
+    }
+
+    func reloadData() {
+        journalDataSource.update(
+            entries: entries,
+            streak: streak,
+            thisWeekCount: thisWeekCount
+        )
+    }
+/*
     func reloadData() {
         let updatedEntries = JournalStore.shared.entries
         journalDataSource.entries = updatedEntries
         journalDataSource.applySnapshot()
-    }
-
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        // refresh entries from storage
-        
-        /*
-        let updatedEntries = JournalStore.shared.entries
-
-        journalDataSource.entries = updatedEntries
-        journalDataSource.applySnapshot()
-        */
-        
-        journalDataSource = JournalDataSource(
-            collectionView: collectionView,
-            mode: .mainScreen,
-            entries: JournalStore.shared.entries,
-            streak: entries.streakCount,
-            thisWeekCount: entries.journalsThisWeek
-        )
-
-        journalDataSource.didTapSeeAll = { [weak self] in self?.openAllJournals() }
-        journalDataSource.didTapBlankJournal = { [weak self] in self?.openBlankJournal() }
-        journalDataSource.didTapGuidedJournal = { [weak self] in
-            self?.handleGuidedJournalTap()
-        }
-
-
-        journalDataSource.didTapEdit = { [weak self] entry in
-            self?.openEntry(entry)
-        }
-
-        journalDataSource.didTapDelete = { [weak self] entry in
-            JournalStore.shared.delete(entry)
-            self?.reloadData()
-        }
-
-
-        journalDataSource.applySnapshot()
-
-    }
+    }*/
         
     func handleGuidedJournalTap() {
         if let todayEntry = JournalStore.shared.entries.todayGuidedEntry() {
@@ -167,16 +133,6 @@ class JournalViewController: UIViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
 
-    /*
-    func openEntry(_ entry: JournalEntry) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = storyboard.instantiateViewController(withIdentifier: "BlankJournalViewController") as! BlankJournalViewController
-        vc.existingEntry = entry
-        navigationController?.pushViewController(vc, animated: true)
-    }
-     */
-
-    
     func openEntry(_ entry: JournalEntry) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
 

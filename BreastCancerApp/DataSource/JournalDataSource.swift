@@ -235,7 +235,7 @@ class JournalDataSource {
             let recent3 = Array(entries.prefix(3))
             snapshot.appendItems(recent3.map { $0.id }, toSection: .recents)
 
-
+            snapshot.reconfigureItems(recent3.map { $0.id })
 
         // ALL JOURNALS SNAPSHOT
         case .allJournals:
@@ -261,5 +261,12 @@ class JournalDataSource {
         let id = dataSource.itemIdentifier(for: indexPath)
         return entries.first(where: { $0.id == id })
     }
-
+    
+    func update(entries: [JournalEntry], streak: Int, thisWeekCount: Int) {
+        self.entries = entries
+        self.streak = streak
+        self.thisWeekCount = thisWeekCount
+        applySnapshot()
+    }
+    
 }
