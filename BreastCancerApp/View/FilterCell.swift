@@ -27,11 +27,11 @@ class FilterCell: UICollectionViewCell {
         
         if isSelected {
             // Active Style (Pink)
-            containerView.backgroundColor = UIColor(red: 236/255, green: 112/255, blue: 138/255, alpha: 1.0) // A nice pink
+            containerView.backgroundColor = UIColor(named: "primary_color") // A nice pink
             titleLabel.textColor = .white
         } else {
             // Inactive Style (Light Gray)
-            containerView.backgroundColor = UIColor.systemGray6
+            containerView.backgroundColor = UIColor(named: "filter_buttons")
             titleLabel.textColor = .darkGray
         }
     }
