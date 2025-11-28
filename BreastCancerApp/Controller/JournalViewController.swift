@@ -25,8 +25,8 @@ class JournalViewController: UIViewController {
         JournalStore.shared.entries
     }
 
-    private var streak: Int = 7
-    private var thisWeekCount: Int = 3
+    private var streak: Int { JournalStore.shared.entries.count }
+    private var thisWeekCount: Int { JournalStore.shared.entries.count }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,9 +57,6 @@ class JournalViewController: UIViewController {
             self?.openGuidedJournal()
         }
         
-        
-        journalDataSource.applySnapshot()
-        
         journalDataSource.applySnapshot()
         
     }
@@ -68,10 +65,28 @@ class JournalViewController: UIViewController {
         super.viewWillAppear(animated)
 
         // refresh entries from storage
+        
+        /*
         let updatedEntries = JournalStore.shared.entries
 
         journalDataSource.entries = updatedEntries
         journalDataSource.applySnapshot()
+        */
+        
+        journalDataSource = JournalDataSource(
+            collectionView: collectionView,
+            mode: .mainScreen,
+            entries: JournalStore.shared.entries,
+            streak: streak,
+            thisWeekCount: thisWeekCount
+        )
+
+        journalDataSource.didTapSeeAll = { [weak self] in self?.openAllJournals() }
+        journalDataSource.didTapBlankJournal = { [weak self] in self?.openBlankJournal() }
+        journalDataSource.didTapGuidedJournal = { [weak self] in self?.openGuidedJournal() }
+
+        journalDataSource.applySnapshot()
+
     }
         
             

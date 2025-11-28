@@ -206,14 +206,18 @@ class JournalDataSource {
             snapshot.appendItems([UUID()], toSection: .stats)
             snapshot.appendItems(actions.map { _ in UUID() }, toSection: .actions)
             //snapshot.appendItems(entries.map { _ in UUID() }, toSection: .recents)
-            snapshot.appendItems(entries.map { $0.id }, toSection: .recents)
+            //snapshot.appendItems(entries.map { $0.id }, toSection: .recents)
+            snapshot.appendItems(JournalStore.shared.entries.map { $0.id }, toSection: .recents)
+
 
 
         // ALL JOURNALS SNAPSHOT
         case .allJournals:
             snapshot.appendSections([.all])
             //snapshot.appendItems(entries.map { _ in UUID() }, toSection: .all)
-            snapshot.appendItems(entries.map { $0.id }, toSection: .all)
+            //snapshot.appendItems(entries.map { $0.id }, toSection: .all)
+            snapshot.appendItems(JournalStore.shared.entries.map { $0.id }, toSection: .all)
+
 
         }
 

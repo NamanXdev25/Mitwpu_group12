@@ -32,8 +32,9 @@ class JournalStore {
             let decoded = try JSONDecoder().decode([JournalEntry].self, from: data)
             self.entries = decoded
         } catch {
-            print("No saved file yet or failed to load → starting fresh.")
-            self.entries = []
+            print("No saved file yet → loading sample data")
+            self.entries = SampleJournalData.all
+            save()
         }
     }
 

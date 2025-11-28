@@ -84,17 +84,30 @@ class GuidedJournalViewController: UIViewController {
 
     
     @IBAction func submitTapped(_ sender: UIBarButtonItem) {
-
+        
         let body = textView.text.trimmingCharacters(in: .whitespacesAndNewlines)
-
+        /*
         if var entry = existingEntry {
             entry.body = body
             entry.date = Date()
             JournalStore.shared.update(entry)
-
+        }
+        */
+        if let old = existingEntry {
+            let updated = JournalEntry(
+                id: old.id,
+                title: old.title,  // keep title same (guided uses the question as title)
+                body: body,
+                date: Date(),
+                type: old.type,
+                question: old.question,
+                category: old.category
+            )
+            
+            JournalStore.shared.update(updated)
         } else {
             let newEntry = JournalEntry(
-                title: categoryLabel.text ?? "Guided Reflection",
+                title: questionLabel.text ?? "Guided Reflection",
                 body: body,
                 date: Date(),
                 type: .guided,

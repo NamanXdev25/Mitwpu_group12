@@ -88,11 +88,19 @@ class AllJournalsViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        let updatedEntries = JournalStore.shared.entries
+//        dataSource.entries = JournalStore.shared.entries
+//        dataSource.applySnapshot()
+        
+        dataSource = JournalDataSource(
+                collectionView: collectionView,
+                mode: .allJournals,
+                entries: JournalStore.shared.entries
+            )
 
-        dataSource.entries = updatedEntries
-        dataSource.applySnapshot()
+            dataSource.applySnapshot()
+
     }
+
 
     
     private func configureDataSource() {

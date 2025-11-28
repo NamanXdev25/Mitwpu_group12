@@ -63,16 +63,29 @@ class BlankJournalViewController: UIViewController {
             navigationController?.popViewController(animated: true)
             return
         }
-
+        /*
         if var entry = existingEntry {
-            // UPDATE
             entry.title = title
             entry.body = body
             entry.date = Date()
 
             JournalStore.shared.update(entry)
+         */
+            
+        if let old = existingEntry {
+            let updated = JournalEntry(
+                id: old.id,
+                title: title,
+                body: body,
+                date: Date(),
+                type: old.type,
+                question: old.question,
+                category: old.category
+            )
+            
+            JournalStore.shared.update(updated)
+                
         } else {
-            // NEW
             let newEntry = JournalEntry(
                 title: title.isEmpty ? "Untitled" : title,
                 body: body,
