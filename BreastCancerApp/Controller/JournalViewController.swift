@@ -68,9 +68,22 @@ class JournalViewController: UIViewController {
             self?.openGuidedJournal()
         }
         
+        journalDataSource.didTapDelete = { [weak self] entry in
+            JournalStore.shared.delete(entry)
+            self?.reloadData()
+        }
+
+        
         journalDataSource.applySnapshot()
         
     }
+    
+    func reloadData() {
+        let updatedEntries = JournalStore.shared.entries
+        journalDataSource.entries = updatedEntries
+        journalDataSource.applySnapshot()
+    }
+
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -95,6 +108,15 @@ class JournalViewController: UIViewController {
         journalDataSource.didTapSeeAll = { [weak self] in self?.openAllJournals() }
         journalDataSource.didTapBlankJournal = { [weak self] in self?.openBlankJournal() }
         journalDataSource.didTapGuidedJournal = { [weak self] in self?.openGuidedJournal() }
+        journalDataSource.didTapEdit = { [weak self] entry in
+            self?.openEntry(entry)
+        }
+
+        journalDataSource.didTapDelete = { [weak self] entry in
+            JournalStore.shared.delete(entry)
+            self?.reloadData()
+        }
+
 
         journalDataSource.applySnapshot()
 

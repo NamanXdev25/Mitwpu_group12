@@ -36,6 +36,10 @@ class JournalDataSource {
     
     var didTapBlankJournal: (() -> Void)?
     var didTapGuidedJournal: (() -> Void)?
+    
+    var didTapDelete: ((JournalEntry)->Void)?
+    var didTapEdit: ((JournalEntry)->Void)?
+
 
     
     private var mode: Mode
@@ -131,9 +135,21 @@ class JournalDataSource {
                         withReuseIdentifier: RecentJournalCell.reuseIdentifier,
                         for: indexPath
                     ) as! RecentJournalCell
+
                     let entry = self.entries[indexPath.item]
-                    cell.configure(with: entry)
+
+                    cell.configure(
+                        with: entry,
+                        onEdit: { [weak self] entry in
+                            self?.didTapEdit?(entry)
+                        },
+                        onDelete: { [weak self] entry in
+                            self?.didTapDelete?(entry)
+                        }
+                    )
+
                     return cell
+
 
                 default:
                     return nil
@@ -148,7 +164,16 @@ class JournalDataSource {
                 ) as! RecentJournalCell
 
                 let entry = self.entries[indexPath.item]
-                cell.configure(with: entry)
+                cell.configure(
+                    with: entry,
+                    onEdit: { [weak self] entry in
+                        self?.didTapEdit?(entry)
+                    },
+                    onDelete: { [weak self] entry in
+                        self?.didTapDelete?(entry)
+                    }
+                )
+
                 return cell
             }
         }
