@@ -25,6 +25,7 @@ class BlankJournalViewController: UIViewController {
         view.backgroundColor = UIColor(named: "BackgroundColor")
         navigationItem.title = "New Journal"
         
+        titleField.delegate = self
         textView.delegate = self
         setupPlaceholder()
         
@@ -143,7 +144,32 @@ class BlankJournalViewController: UIViewController {
 
 }
 
-extension BlankJournalViewController: UITextViewDelegate {
+
+extension BlankJournalViewController: UITextFieldDelegate, UITextViewDelegate {
+
+    // MARK: - TextField Limit
+    func textField(_ textField: UITextField,
+                   shouldChangeCharactersIn range: NSRange,
+                   replacementString string: String) -> Bool {
+
+        let maxTitleLength = 60
+        let current = textField.text ?? ""
+        let newLength = current.count + string.count - range.length
+        return newLength <= maxTitleLength
+    }
+
+    // MARK: - TextView Limit
+    func textView(_ textView: UITextView,
+                  shouldChangeTextIn range: NSRange,
+                  replacementText text: String) -> Bool {
+
+        let maxBodyLength = 1500
+        let current = textView.text ?? ""
+        let newLength = current.count + text.count - range.length
+        return newLength <= maxBodyLength
+    }
+
+    // MARK: - Placeholder Logic
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == placeholderText {
             textView.text = ""

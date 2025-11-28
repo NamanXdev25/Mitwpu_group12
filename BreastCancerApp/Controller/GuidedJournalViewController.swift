@@ -156,6 +156,7 @@ class GuidedJournalViewController: UIViewController {
 
 extension GuidedJournalViewController: UITextViewDelegate {
 
+    // MARK: - Placeholder
     func setupPlaceholder() {
         guard existingEntry == nil else { return }
         textView.text = placeholder
@@ -163,15 +164,28 @@ extension GuidedJournalViewController: UITextViewDelegate {
     }
 
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.text == placeholder {
+        if existingEntry == nil && textView.text == placeholder {
             textView.text = ""
             textView.textColor = .label
         }
     }
 
     func textViewDidEndEditing(_ textView: UITextView) {
-        if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+        if existingEntry == nil &&
+            textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+
             setupPlaceholder()
         }
+    }
+
+    // MARK: - Character Limit
+    func textView(_ textView: UITextView,
+                  shouldChangeTextIn range: NSRange,
+                  replacementText text: String) -> Bool {
+
+        let maxBodyLength = 1500
+        let current = textView.text ?? ""
+        let newLength = current.count + text.count - range.length
+        return newLength <= maxBodyLength
     }
 }
