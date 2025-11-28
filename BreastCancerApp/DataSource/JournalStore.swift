@@ -26,6 +26,14 @@ class JournalStore {
     }
 
     // MARK: - LOAD
+    
+    func load() {
+        // Always start fresh with sample data
+        self.entries = SampleJournalData.all
+    }
+    
+    // LOAD WITH PERSISTENCE
+    /*
     func load() {
         do {
             let data = try Data(contentsOf: fileURL)
@@ -37,15 +45,20 @@ class JournalStore {
             save()
         }
     }
+     */
 
     // MARK: - SAVE
     func save() {
+        
+        // SAVE FOR PERSISTANCE
+        /*
         do {
             let data = try JSONEncoder().encode(entries)
             try data.write(to: fileURL, options: [.atomic])
         } catch {
             print("Error saving journals: \(error)")
         }
+         */
     }
 
     // MARK: - ADD
