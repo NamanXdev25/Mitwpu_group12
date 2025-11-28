@@ -9,8 +9,11 @@ import UIKit
 
 class BlankJournalViewController: UIViewController {
 
+    @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var toolbarBottomConstraint: NSLayoutConstraint!
+
+    var existingEntry: JournalEntry?
 
 
     private let placeholderText = "Start writing what’s on your mind today..."
@@ -26,37 +29,69 @@ class BlankJournalViewController: UIViewController {
         setupPlaceholder()
         
         NotificationCenter.default.addObserver(
-                self,
-                selector: #selector(keyboardWillShow),
-                name: UIResponder.keyboardWillShowNotification,
-                object: nil
-            )
-            NotificationCenter.default.addObserver(
-                self,
-                selector: #selector(keyboardWillHide),
-                name: UIResponder.keyboardWillHideNotification,
-                object: nil
-            )
+            self,
+            selector: #selector(keyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillHide),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
+        
+        if let entry = existingEntry {
+            // Editing mode
+            navigationItem.title = "Edit Journal"
+            titleField.text = entry.title
+            textView.text = entry.body
+            textView.textColor = .label
+        }
+        
+        
+
     }
     
     
     @IBAction func doneTapped(_ sender: UIBarButtonItem) {
-        print("Submit Tapped")
-        // add submit + save logic here
-        /*
-        let entry = JournalEntry(
-            title: userProvidedTitle,
-            body: userProvidedBody,
-            date: Date(),
-            type: .regular
-        )
 
-        JournalDataSource.shared.addEntry(entry)
-         */
+        let title = titleField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let body = textView.text.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        guard !title.isEmpty || !body.isEmpty else {
+            navigationController?.popViewController(animated: true)
+            return
+        }
+
+        if var entry = existingEntry {
+            // UPDATE
+            entry.title = title
+            entry.body = body
+            entry.date = Date()
+
+            JournalStore.shared.update(entry)
+        } else {
+            // NEW
+            let newEntry = JournalEntry(
+                title: title.isEmpty ? "Untitled" : title,
+                body: body,
+                date: Date(),
+                type: .regular,
+                question: nil,
+                category: nil
+            )
+
+            JournalStore.shared.add(newEntry)
+        }
+
+        navigationController?.popViewController(animated: true)
     }
+
 
     
     private func setupPlaceholder() {
+        guard existingEntry == nil else { return }
         textView.text = placeholderText
         textView.textColor = UIColor.systemGray3
     }

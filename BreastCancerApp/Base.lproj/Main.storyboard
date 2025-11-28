@@ -118,8 +118,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Title" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UBY-jI-2x4">
+                                <rect key="frame" x="24" y="188" width="345" height="36"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Start writing what's on your mind today..." textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="S1a-mO-l37">
-                                <rect key="frame" x="16" y="188" width="361" height="552"/>
+                                <rect key="frame" x="24" y="248" width="345" height="492"/>
                                 <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -192,12 +197,15 @@
                         <viewLayoutGuide key="safeArea" id="8Xn-uX-s12"/>
                         <color key="backgroundColor" name="BackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="8Xn-uX-s12" firstAttribute="trailing" secondItem="S1a-mO-l37" secondAttribute="trailing" constant="16" id="43v-sQ-rJt"/>
+                            <constraint firstItem="S1a-mO-l37" firstAttribute="top" secondItem="UBY-jI-2x4" secondAttribute="bottom" constant="24" id="1aT-Xe-H90"/>
+                            <constraint firstItem="S1a-mO-l37" firstAttribute="leading" secondItem="8Xn-uX-s12" secondAttribute="leading" constant="24" id="L4G-CP-c8E"/>
+                            <constraint firstItem="8Xn-uX-s12" firstAttribute="trailing" secondItem="S1a-mO-l37" secondAttribute="trailing" constant="24" id="Np2-oR-ohM"/>
                             <constraint firstItem="s5g-0t-jTf" firstAttribute="bottom" secondItem="8Xn-uX-s12" secondAttribute="bottom" constant="16" id="Ru7-u4-Kb0"/>
-                            <constraint firstItem="S1a-mO-l37" firstAttribute="leading" secondItem="8Xn-uX-s12" secondAttribute="leading" constant="16" id="XOY-A2-QjM"/>
+                            <constraint firstItem="UBY-jI-2x4" firstAttribute="leading" secondItem="8Xn-uX-s12" secondAttribute="leading" constant="24" id="ZMK-oF-zfO"/>
+                            <constraint firstItem="UBY-jI-2x4" firstAttribute="top" secondItem="gr0-ph-iSO" secondAttribute="top" constant="188" id="kx9-67-CpL"/>
                             <constraint firstItem="s5g-0t-jTf" firstAttribute="leading" secondItem="8Xn-uX-s12" secondAttribute="leading" constant="16" id="pXL-r9-Wyk"/>
                             <constraint firstItem="8Xn-uX-s12" firstAttribute="trailing" secondItem="s5g-0t-jTf" secondAttribute="trailing" constant="16" id="qQS-PC-crC"/>
-                            <constraint firstItem="S1a-mO-l37" firstAttribute="top" secondItem="8Xn-uX-s12" secondAttribute="top" constant="16" id="xao-e0-tTb"/>
+                            <constraint firstItem="8Xn-uX-s12" firstAttribute="trailing" secondItem="UBY-jI-2x4" secondAttribute="trailing" constant="24" id="vZ7-9O-awH"/>
                             <constraint firstItem="s5g-0t-jTf" firstAttribute="top" secondItem="S1a-mO-l37" secondAttribute="bottom" constant="8" id="zBp-Ek-ruU"/>
                         </constraints>
                     </view>
@@ -213,12 +221,13 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="textView" destination="S1a-mO-l37" id="E3s-Rc-qUJ"/>
+                        <outlet property="titleField" destination="UBY-jI-2x4" id="wD4-2y-0z1"/>
                         <outlet property="toolbarBottomConstraint" destination="Ru7-u4-Kb0" id="uVj-Dy-mIB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ebV-JJ-GCq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2007" y="1642"/>
+            <point key="canvasLocation" x="2006.8702290076335" y="1641.549295774648"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="HmR-ED-8mN">
@@ -311,19 +320,19 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MIND • SELF-AWARENESS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OL0-4k-d4u">
-                                <rect key="frame" x="24" y="208" width="345" height="14.333333333333343"/>
+                                <rect key="frame" x="24" y="188" width="345" height="14.333333333333343"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                                 <color key="textColor" systemColor="systemGrayColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="1000" text="What thought has been taking up too much space in your mind lately?" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4b2-yR-bdn">
-                                <rect key="frame" x="24" y="230.33333333333331" width="345" height="143.33333333333331"/>
+                                <rect key="frame" x="24" y="210.33333333333331" width="345" height="143.33333333333331"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Start Typing..." textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="UPF-EG-w6V">
-                                <rect key="frame" x="24" y="397.66666666666669" width="353" height="160.00000000000006"/>
+                                <rect key="frame" x="24" y="377.66666666666669" width="353" height="160.00000000000006"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="160" id="d0J-6j-xAy"/>
                                 </constraints>
@@ -345,7 +354,7 @@
                             <constraint firstItem="ME1-Lf-jZ8" firstAttribute="leading" secondItem="Wp7-S8-C87" secondAttribute="leading" constant="24" id="fkM-kk-QCJ"/>
                             <constraint firstItem="4b2-yR-bdn" firstAttribute="top" secondItem="OL0-4k-d4u" secondAttribute="bottom" constant="8" id="j5g-0Z-4MA"/>
                             <constraint firstItem="ME1-Lf-jZ8" firstAttribute="bottom" secondItem="Wp7-S8-C87" secondAttribute="bottom" constant="16" id="nky-Xh-f25"/>
-                            <constraint firstItem="OL0-4k-d4u" firstAttribute="top" secondItem="Wp7-S8-C87" secondAttribute="top" constant="36" id="qC4-HM-Ro7"/>
+                            <constraint firstItem="OL0-4k-d4u" firstAttribute="top" secondItem="Wp7-S8-C87" secondAttribute="top" constant="16" id="qC4-HM-Ro7"/>
                             <constraint firstItem="Wp7-S8-C87" firstAttribute="trailing" secondItem="OL0-4k-d4u" secondAttribute="trailing" constant="24" id="tT5-gc-Nye"/>
                         </constraints>
                     </view>

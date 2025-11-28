@@ -13,12 +13,12 @@ enum JournalType: String, Codable {
     case guided
 }
 
-struct JournalEntry: Hashable, Identifiable {
+struct JournalEntry: Hashable, Identifiable, Codable {
     let id: UUID
     var title: String
     var body: String
     var date: Date
-    /*
+    
     var type: JournalType
     //var mood: String?
     //var thumbnail: UIImage?
@@ -26,30 +26,30 @@ struct JournalEntry: Hashable, Identifiable {
     // for guided reflections
     var question: String?
     var category: String?
-    */
+    
 
     init(
         id: UUID = UUID(),
         title: String,
         body: String,
         date: Date = Date(),
-        /*
+        
         type: JournalType,
         //mood: String? = nil,
         //thumbnail: UIImage? = nil
-        question: String,
-        category: String */
+        question: String? = nil,
+        category: String? = nil
     ) {
         self.id = id
         self.title = title
         self.body = body
         self.date = date
-        /*
+        
         self.type = type
         //self.mood = mood
         //self.thumbnail = thumbnail
         self.question = question
-        self.category = category */
+        self.category = category
     }
 }
 

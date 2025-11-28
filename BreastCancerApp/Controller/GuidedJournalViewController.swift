@@ -14,6 +14,8 @@ class GuidedJournalViewController: UIViewController {
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var toolbarBottomConstraint: NSLayoutConstraint!
     
+    var existingEntry: JournalEntry?
+    
     private let placeholder = "Start Typing..."
     
     var categoryText: String = ""
@@ -52,6 +54,15 @@ class GuidedJournalViewController: UIViewController {
         if let question = GuidedReflectionDataSource.shared.getTodaysQuestion() {
             updateUI(with: question)
         }
+        
+        if let entry = existingEntry {
+            navigationItem.title = "Edit Reflection"
+            categoryLabel.text = entry.category?.uppercased()
+            questionLabel.text = entry.question
+            textView.text = entry.body
+            textView.textColor = .label
+        }
+
     }
     
     func updateUI(with question: GuidedReflectionQuestion) {
@@ -73,20 +84,30 @@ class GuidedJournalViewController: UIViewController {
 
     
     @IBAction func submitTapped(_ sender: UIBarButtonItem) {
-        print("Submitted guided Journal")
-        /*
-        let entry = JournalEntry(
-            title: question.category.rawValue.uppercased(),    // or "Guided Reflection"
-            body: answerText,
-            date: Date(),
-            type: .guided,
-            question: question.question,
-            category: question.category.rawValue
-        )
 
-        JournalDataSource.shared.addEntry(entry)
-         */
+        let body = textView.text.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        if var entry = existingEntry {
+            entry.body = body
+            entry.date = Date()
+            JournalStore.shared.update(entry)
+
+        } else {
+            let newEntry = JournalEntry(
+                title: categoryLabel.text ?? "Guided Reflection",
+                body: body,
+                date: Date(),
+                type: .guided,
+                question: questionLabel.text,
+                category: categoryLabel.text
+            )
+
+            JournalStore.shared.add(newEntry)
+        }
+
+        navigationController?.popViewController(animated: true)
     }
+
     
     @objc func keyboardWillShow(_ notification: Notification) {
         if let frame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
@@ -123,6 +144,7 @@ class GuidedJournalViewController: UIViewController {
 extension GuidedJournalViewController: UITextViewDelegate {
 
     func setupPlaceholder() {
+        guard existingEntry == nil else { return }
         textView.text = placeholder
         textView.textColor = .systemGray3
     }

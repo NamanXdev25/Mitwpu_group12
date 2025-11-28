@@ -21,7 +21,10 @@ class JournalViewController: UIViewController {
     private var journalDataSource: JournalDataSource!
     
     // Replace with real data later
-    private var entries: [JournalEntry] = SampleJournalData.recent
+    var entries: [JournalEntry] {
+        JournalStore.shared.entries
+    }
+
     private var streak: Int = 7
     private var thisWeekCount: Int = 3
     
@@ -60,6 +63,16 @@ class JournalViewController: UIViewController {
         journalDataSource.applySnapshot()
         
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        // refresh entries from storage
+        let updatedEntries = JournalStore.shared.entries
+
+        journalDataSource.entries = updatedEntries
+        journalDataSource.applySnapshot()
+    }
         
             
         
@@ -91,9 +104,15 @@ class JournalViewController: UIViewController {
                 withIdentifier: "AllJournalsViewController"
             ) as! AllJournalsViewController
             
-            // pass the full list
-            vc.entries = SampleJournalData.all
             
+            navigationController?.pushViewController(vc, animated: true)
+        }
+    
+    
+        func openEntry(_ entry: JournalEntry) {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let vc = storyboard.instantiateViewController(withIdentifier: "BlankJournalViewController") as! BlankJournalViewController
+            vc.existingEntry = entry
             navigationController?.pushViewController(vc, animated: true)
         }
         
@@ -271,5 +290,16 @@ extension JournalViewController {
 
         
     }
+    
 }
+
+extension JournalViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let entry = journalDataSource.item(for: indexPath),
+           indexPath.section == Section.recents.rawValue {
+            openEntry(entry)
+        }
+    }
+}
+
 

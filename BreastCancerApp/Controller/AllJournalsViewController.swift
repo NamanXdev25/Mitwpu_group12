@@ -18,7 +18,9 @@ class AllJournalsViewController: UIViewController {
     private var dataSource: JournalDataSource!
     private var layout: UICollectionViewLayout!
     //private var entries: [JournalEntry] = SampleJournalData.all
-    var entries: [JournalEntry] = []
+    var entries: [JournalEntry] {
+        JournalStore.shared.entries
+    }
 
     
     
@@ -83,6 +85,14 @@ class AllJournalsViewController: UIViewController {
         )
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        let updatedEntries = JournalStore.shared.entries
+
+        dataSource.entries = updatedEntries
+        dataSource.applySnapshot()
+    }
 
     
     private func configureDataSource() {
@@ -114,9 +124,30 @@ class AllJournalsViewController: UIViewController {
 extension AllJournalsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let entry = dataSource.item(for: indexPath) else { return }
-        // push detail view controller
-
-
-            // TODO: Push detail VC
+        openEntry(entry)
     }
+    
+    private func openEntry(_ entry: JournalEntry) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+
+        switch entry.type {
+        case .regular:
+            let vc = storyboard.instantiateViewController(
+                withIdentifier: "BlankJournalViewController"
+            ) as! BlankJournalViewController
+
+            vc.existingEntry = entry
+            navigationController?.pushViewController(vc, animated: true)
+
+        case .guided:
+            let vc = storyboard.instantiateViewController(
+                withIdentifier: "GuidedJournalViewController"
+            ) as! GuidedJournalViewController
+
+            vc.existingEntry = entry   // you'll add this property just like BlankJournalVC
+            navigationController?.pushViewController(vc, animated: true)
+        }
+    }
+
+
 }
