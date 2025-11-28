@@ -84,6 +84,11 @@ class AllJournalsViewController: UIViewController {
             withReuseIdentifier: "header_cell"
         )
     }
+    
+    private func refreshList() {
+        dataSource.entries = JournalStore.shared.entries
+        dataSource.applySnapshot()
+    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -96,8 +101,17 @@ class AllJournalsViewController: UIViewController {
                 mode: .allJournals,
                 entries: JournalStore.shared.entries
             )
+        
+        dataSource.didTapEdit = { [weak self] entry in
+                self?.openEntry(entry)
+            }
 
-            dataSource.applySnapshot()
+        dataSource.didTapDelete = { [weak self] entry in
+            JournalStore.shared.delete(entry)
+            self?.refreshList()
+        }
+
+        dataSource.applySnapshot()
 
     }
 
@@ -109,6 +123,15 @@ class AllJournalsViewController: UIViewController {
             mode: .allJournals,
             entries: entries   // Pass same entries
         )
+        
+        dataSource.didTapEdit = { [weak self] entry in
+            self?.openEntry(entry)
+        }
+
+        dataSource.didTapDelete = { [weak self] entry in
+            JournalStore.shared.delete(entry)
+            self?.refreshList()
+        }
         
 
         dataSource.applySnapshot()
