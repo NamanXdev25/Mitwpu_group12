@@ -25,8 +25,19 @@ class JournalViewController: UIViewController {
         JournalStore.shared.entries
     }
 
+    /*
     private var streak: Int { JournalStore.shared.entries.count }
     private var thisWeekCount: Int { JournalStore.shared.entries.count }
+    */
+     
+    private var streak: Int {
+        JournalStore.shared.entries.streakCount
+    }
+
+    private var thisWeekCount: Int {
+        JournalStore.shared.entries.journalsThisWeek
+    }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,8 +88,8 @@ class JournalViewController: UIViewController {
             collectionView: collectionView,
             mode: .mainScreen,
             entries: JournalStore.shared.entries,
-            streak: streak,
-            thisWeekCount: thisWeekCount
+            streak: entries.streakCount,
+            thisWeekCount: entries.journalsThisWeek
         )
 
         journalDataSource.didTapSeeAll = { [weak self] in self?.openAllJournals() }

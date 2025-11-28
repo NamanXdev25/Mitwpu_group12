@@ -207,7 +207,8 @@ class JournalDataSource {
             snapshot.appendItems(actions.map { _ in UUID() }, toSection: .actions)
             //snapshot.appendItems(entries.map { _ in UUID() }, toSection: .recents)
             //snapshot.appendItems(entries.map { $0.id }, toSection: .recents)
-            snapshot.appendItems(JournalStore.shared.entries.map { $0.id }, toSection: .recents)
+            let recent3 = Array(entries.prefix(3))
+            snapshot.appendItems(recent3.map { $0.id }, toSection: .recents)
 
 
 
