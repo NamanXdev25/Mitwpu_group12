@@ -65,8 +65,9 @@ class JournalViewController: UIViewController {
         }
         
         journalDataSource.didTapGuidedJournal = { [weak self] in
-            self?.openGuidedJournal()
+            self?.handleGuidedJournalTap()
         }
+
         
         journalDataSource.didTapDelete = { [weak self] entry in
             JournalStore.shared.delete(entry)
@@ -107,7 +108,11 @@ class JournalViewController: UIViewController {
 
         journalDataSource.didTapSeeAll = { [weak self] in self?.openAllJournals() }
         journalDataSource.didTapBlankJournal = { [weak self] in self?.openBlankJournal() }
-        journalDataSource.didTapGuidedJournal = { [weak self] in self?.openGuidedJournal() }
+        journalDataSource.didTapGuidedJournal = { [weak self] in
+            self?.handleGuidedJournalTap()
+        }
+
+
         journalDataSource.didTapEdit = { [weak self] entry in
             self?.openEntry(entry)
         }
@@ -122,72 +127,78 @@ class JournalViewController: UIViewController {
 
     }
         
-            
+    func handleGuidedJournalTap() {
+        if let todayEntry = JournalStore.shared.entries.todayGuidedEntry() {
+            openEntry(todayEntry)
+        } else {
+            openGuidedJournal()
+        }
+    }
+    
+    func openBlankJournal() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
         
-        func openBlankJournal() {
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            
+        let vc = storyboard.instantiateViewController(
+            withIdentifier: "BlankJournalViewController"
+        ) as! BlankJournalViewController
+        
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func openGuidedJournal() {
+        let storyboard = UIStoryboard(name: "JournalMain", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "GuidedJournalViewController") as! GuidedJournalViewController
+        
+        vc.categoryText = "MIND • SELF-AWARENESS"
+        vc.questionText = "What thought has been taking up too much space in your mind lately?"
+        
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    
+    
+    func openAllJournals() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(
+            withIdentifier: "AllJournalsViewController"
+        ) as! AllJournalsViewController
+        
+        
+        navigationController?.pushViewController(vc, animated: true)
+    }
+
+    /*
+    func openEntry(_ entry: JournalEntry) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "BlankJournalViewController") as! BlankJournalViewController
+        vc.existingEntry = entry
+        navigationController?.pushViewController(vc, animated: true)
+    }
+     */
+
+    
+    func openEntry(_ entry: JournalEntry) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+
+        switch entry.type {
+
+        case .regular:
             let vc = storyboard.instantiateViewController(
                 withIdentifier: "BlankJournalViewController"
             ) as! BlankJournalViewController
-            
+
+            vc.existingEntry = entry
             navigationController?.pushViewController(vc, animated: true)
-        }
-        
-        func openGuidedJournal() {
-            let storyboard = UIStoryboard(name: "JournalMain", bundle: nil)
-            let vc = storyboard.instantiateViewController(withIdentifier: "GuidedJournalViewController") as! GuidedJournalViewController
-            
-            vc.categoryText = "MIND • SELF-AWARENESS"
-            vc.questionText = "What thought has been taking up too much space in your mind lately?"
-            
-            navigationController?.pushViewController(vc, animated: true)
-        }
-        
-        
-        
-        func openAllJournals() {
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+
+        case .guided:
             let vc = storyboard.instantiateViewController(
-                withIdentifier: "AllJournalsViewController"
-            ) as! AllJournalsViewController
-            
-            
-            navigationController?.pushViewController(vc, animated: true)
-        }
-    
-        /*
-        func openEntry(_ entry: JournalEntry) {
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let vc = storyboard.instantiateViewController(withIdentifier: "BlankJournalViewController") as! BlankJournalViewController
+                withIdentifier: "GuidedJournalViewController"
+            ) as! GuidedJournalViewController
+
             vc.existingEntry = entry
             navigationController?.pushViewController(vc, animated: true)
         }
-         */
-    
-    
-        func openEntry(_ entry: JournalEntry) {
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-
-            switch entry.type {
-
-            case .regular:
-                let vc = storyboard.instantiateViewController(
-                    withIdentifier: "BlankJournalViewController"
-                ) as! BlankJournalViewController
-
-                vc.existingEntry = entry
-                navigationController?.pushViewController(vc, animated: true)
-
-            case .guided:
-                let vc = storyboard.instantiateViewController(
-                    withIdentifier: "GuidedJournalViewController"
-                ) as! GuidedJournalViewController
-
-                vc.existingEntry = entry
-                navigationController?.pushViewController(vc, animated: true)
-            }
-        }
+    }
 
         
 }

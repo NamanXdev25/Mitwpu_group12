@@ -131,3 +131,12 @@ extension Collection where Element == JournalEntry {
     }
 }
 
+extension Array where Element == JournalEntry {
+    func todayGuidedEntry() -> JournalEntry? {
+        let calendar = Calendar.current
+        return self.first {
+            $0.type == .guided && calendar.isDateInToday($0.date)
+        }
+    }
+}
+
