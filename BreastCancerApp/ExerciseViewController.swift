@@ -105,7 +105,7 @@ class ExerciseViewController: UIViewController, UICollectionViewDataSource, UICo
     
     // Section 0: Today's Plan (Vertical List)
     func createListSection() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(80))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(70))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         // No spacing between items to make it look like one card
         item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
