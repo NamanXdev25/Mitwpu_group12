@@ -1,0 +1,149 @@
+//
+//  SelfExamineViewController.swift
+//  BreastCancerApp
+//
+
+import UIKit
+
+class SelfExamineViewController: UIViewController {
+
+    @IBOutlet weak var collectionView: UICollectionView!
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        // SAFE BACKGROUND COLOR (fallback if asset missing)
+        let bg = UIColor(named: "BGPink") ??
+                 UIColor(red: 0.98, green: 0.95, blue: 0.96, alpha: 1)
+
+        view.backgroundColor = bg
+        collectionView.backgroundColor = .clear   // must be clear to show bg
+
+        collectionView.delegate = self
+        collectionView.dataSource = self
+
+        // Register cells
+        collectionView.register(UINib(nibName: "GuidesCardCell", bundle: nil),
+                                forCellWithReuseIdentifier: "GuidesCardCell")
+
+        collectionView.register(UINib(nibName: "SectionTitleCell", bundle: nil),
+                                forCellWithReuseIdentifier: "SectionTitleCell")
+        collectionView.register(UINib(nibName: "SelfExamCardsContainerCell", bundle: nil),
+                                forCellWithReuseIdentifier: "SelfExamCardsContainerCell")
+        collectionView.register(UINib(nibName: "ActionsContainerCell", bundle: nil),
+                                forCellWithReuseIdentifier: "ActionsContainerCell")
+
+        // CollectionView Layout
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 16
+        layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        collectionView.setCollectionViewLayout(layout, animated: false)
+
+        // NavigationBar title
+        navigationController?.navigationBar.prefersLargeTitles = false
+        let titleLabel = UILabel()
+        titleLabel.text = "Self-Exam"
+        titleLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        titleLabel.textAlignment = .center
+        navigationItem.titleView = titleLabel
+
+        // Navigation bar background must match pink
+        let navBarAppearance = UINavigationBarAppearance()
+        navBarAppearance.configureWithTransparentBackground()
+        navBarAppearance.backgroundColor = bg
+        navigationController?.navigationBar.standardAppearance = navBarAppearance
+        navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
+
+        collectionView.reloadData()
+    }
+}
+
+// MARK: - UICollectionViewDataSource
+extension SelfExamineViewController: UICollectionViewDataSource {
+
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
+        return 4  // Guides + Title + Horizontal Cards + Actions
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+
+        switch indexPath.item {
+        case 0:
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "GuidesCardCell",
+                for: indexPath
+            ) as! GuidesCardCell
+
+            cell.backgroundColor = .clear
+            cell.contentView.backgroundColor = .clear
+
+            cell.titleLabel.text = "Guides"
+            cell.row1Label.text = "Video Guide"
+            cell.row2Label.text = "Audio Guide"
+            return cell
+
+
+        case 1: // Section Title
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "SectionTitleCell",
+                for: indexPath
+            ) as! SectionTitleCell
+
+            cell.backgroundColor = .clear
+            cell.contentView.backgroundColor = .clear
+            cell.titleLabel.text = "How to Self-Examine?"
+            return cell
+
+        case 2: // Horizontal Cards Container
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "SelfExamCardsContainerCell",
+                for: indexPath
+            ) as! SelfExamCardsContainerCell
+
+            cell.backgroundColor = .clear
+            cell.contentView.backgroundColor = .clear
+            return cell
+
+        case 3: // Actions (Log + View past tests)
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "ActionsContainerCell",
+                for: indexPath
+            ) as! ActionsContainerCell
+
+            cell.backgroundColor = .clear
+            cell.contentView.backgroundColor = .clear
+            return cell
+
+        default:
+            return UICollectionViewCell()
+        }
+    }
+}
+
+// MARK: - UICollectionViewDelegateFlowLayout
+extension SelfExamineViewController: UICollectionViewDelegateFlowLayout {
+
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+
+        let fullWidth = collectionView.frame.width - 32
+
+        switch indexPath.item {
+        case 0:
+            return CGSize(width: fullWidth, height: 180)
+        case 1:
+            return CGSize(width: fullWidth, height: 44)
+        case 2:
+            return CGSize(width: fullWidth, height: 200)
+        case 3:
+            return CGSize(width: fullWidth, height: 140)
+        default:
+            return CGSize(width: fullWidth, height: 60)
+        }
+    }
+}
