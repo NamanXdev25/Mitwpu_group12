@@ -217,12 +217,12 @@ class JournalDataSource {
         }
     }
 
-    // MARK: - Snapshots
+    // SNAPSHOTS
     func applySnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, UUID>()
 
         switch mode {
-
+            
         // MAIN SCREEN SNAPSHOT
         case .mainScreen:
             snapshot.appendSections([.streak, .stats, .actions, .recents])
@@ -230,33 +230,20 @@ class JournalDataSource {
             snapshot.appendItems([UUID()], toSection: .streak)
             snapshot.appendItems([UUID()], toSection: .stats)
             snapshot.appendItems(actions.map { _ in UUID() }, toSection: .actions)
-            //snapshot.appendItems(entries.map { _ in UUID() }, toSection: .recents)
-            //snapshot.appendItems(entries.map { $0.id }, toSection: .recents)
             let recent3 = Array(entries.prefix(3))
             snapshot.appendItems(recent3.map { $0.id }, toSection: .recents)
-
             snapshot.reconfigureItems(recent3.map { $0.id })
 
         // ALL JOURNALS SNAPSHOT
         case .allJournals:
             snapshot.appendSections([.all])
-            //snapshot.appendItems(entries.map { _ in UUID() }, toSection: .all)
-            //snapshot.appendItems(entries.map { $0.id }, toSection: .all)
             snapshot.appendItems(JournalStore.shared.entries.map { $0.id }, toSection: .all)
-
-
         }
-
+        
         dataSource.apply(snapshot, animatingDifferences: false)
     }
 
-    // MARK: - Item Lookup
-    /*
-    func item(for indexPath: IndexPath) -> JournalEntry? {
-        guard indexPath.item < entries.count else { return nil }
-        return entries[indexPath.item]
-    }
-     */
+    // ITEM LOOKUP
     func item(for indexPath: IndexPath) -> JournalEntry? {
         let id = dataSource.itemIdentifier(for: indexPath)
         return entries.first(where: { $0.id == id })

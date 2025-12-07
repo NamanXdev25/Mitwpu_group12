@@ -17,7 +17,6 @@ class AllJournalsViewController: UIViewController {
     
     private var dataSource: JournalDataSource!
     private var layout: UICollectionViewLayout!
-    //private var entries: [JournalEntry] = SampleJournalData.all
     var entries: [JournalEntry] {
         JournalStore.shared.entries
     }
@@ -27,8 +26,6 @@ class AllJournalsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
-        
         navigationItem.title = "All Journals"
         
         configureCollectionView()
@@ -36,14 +33,12 @@ class AllJournalsViewController: UIViewController {
     }
     
     private func configureCollectionView() {
-        // 1) Layout: one item per vertical group, then set interGroupSpacing
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .estimated(120)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
-        // optional: add content insets inside the item so cell content has horizontal padding
         item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
 
         let groupSize = NSCollectionLayoutSize(
@@ -55,29 +50,23 @@ class AllJournalsViewController: UIViewController {
             subitems: [ item ]
         )
 
-        // add horizontal insets for the group (left/right padding)
         group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16)
 
         let section = NSCollectionLayoutSection(group: group)
 
-        // <-- THIS is the vertical spacing between each "card"
-        section.interGroupSpacing = 0   // change to 8 / 12 / 16 as you like
+        section.interGroupSpacing = 0
 
-        // optional: section top/bottom padding
         section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 0, bottom: 16, trailing: 0)
 
-        // Build layout
         let layout = UICollectionViewCompositionalLayout(section: section)
         collectionView.collectionViewLayout = layout
 
-        // 2) delegate & registration (same as before)
         collectionView.delegate = self
         collectionView.register(
             UINib(nibName: "RecentJournalCell", bundle: nil),
             forCellWithReuseIdentifier: RecentJournalCell.reuseIdentifier
         )
 
-        // register header if you need
         collectionView.register(
             UINib(nibName: "JournalSectionHeaderView", bundle: nil),
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
@@ -92,9 +81,6 @@ class AllJournalsViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
-//        dataSource.entries = JournalStore.shared.entries
-//        dataSource.applySnapshot()
         
         dataSource = JournalDataSource(
                 collectionView: collectionView,
@@ -118,10 +104,11 @@ class AllJournalsViewController: UIViewController {
 
     
     private func configureDataSource() {
+        
         dataSource = JournalDataSource(
             collectionView: collectionView,
             mode: .allJournals,
-            entries: entries   // Pass same entries
+            entries: entries
         )
         
         dataSource.didTapEdit = { [weak self] entry in
@@ -132,23 +119,9 @@ class AllJournalsViewController: UIViewController {
             JournalStore.shared.delete(entry)
             self?.refreshList()
         }
-        
-
         dataSource.applySnapshot()
-
+        
     }
-    
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
 

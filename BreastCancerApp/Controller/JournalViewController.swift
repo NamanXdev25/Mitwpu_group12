@@ -30,7 +30,6 @@ class JournalViewController: UIViewController {
     private var thisWeekCount: Int {
         JournalStore.shared.entries.journalsThisWeek
     }
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,9 +65,10 @@ class JournalViewController: UIViewController {
             self?.reloadData()
         }
         
+        // create initial snapshot
         journalDataSource.applySnapshot()
         
-        // function calls
+        // build layout & register cells (XIBs)
         setupCollectionView()
         
     }
@@ -86,24 +86,19 @@ class JournalViewController: UIViewController {
             thisWeekCount: thisWeekCount
         )
     }
-/*
-    func reloadData() {
-        let updatedEntries = JournalStore.shared.entries
-        journalDataSource.entries = updatedEntries
-        journalDataSource.applySnapshot()
-    }*/
         
     func handleGuidedJournalTap() {
         if let todayEntry = JournalStore.shared.entries.todayGuidedEntry() {
+            // if already wrote today's guided journal
             openEntry(todayEntry)
         } else {
+            // if first time today
             openGuidedJournal()
         }
     }
     
     func openBlankJournal() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        
         let vc = storyboard.instantiateViewController(
             withIdentifier: "BlankJournalViewController"
         ) as! BlankJournalViewController
@@ -112,7 +107,7 @@ class JournalViewController: UIViewController {
     }
     
     func openGuidedJournal() {
-        let storyboard = UIStoryboard(name: "JournalMain", bundle: nil)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "GuidedJournalViewController") as! GuidedJournalViewController
         
         vc.categoryText = "MIND • SELF-AWARENESS"
@@ -121,36 +116,27 @@ class JournalViewController: UIViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    
-    
     func openAllJournals() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(
             withIdentifier: "AllJournalsViewController"
         ) as! AllJournalsViewController
-        
-        
         navigationController?.pushViewController(vc, animated: true)
     }
 
     func openEntry(_ entry: JournalEntry) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-
         switch entry.type {
-
         case .regular:
             let vc = storyboard.instantiateViewController(
                 withIdentifier: "BlankJournalViewController"
             ) as! BlankJournalViewController
-
             vc.existingEntry = entry
             navigationController?.pushViewController(vc, animated: true)
-
         case .guided:
             let vc = storyboard.instantiateViewController(
                 withIdentifier: "GuidedJournalViewController"
             ) as! GuidedJournalViewController
-
             vc.existingEntry = entry
             navigationController?.pushViewController(vc, animated: true)
         }
@@ -163,13 +149,11 @@ extension JournalViewController {
 
     private func setupCollectionView() {
 
-        // MARK: Compositional Layout for All Sections
+        // Compositional Layout for all sections
         let layout = UICollectionViewCompositionalLayout { sectionIndex, environment -> NSCollectionLayoutSection? in
             guard let section = Section(rawValue: sectionIndex) else { return nil }
 
             switch section {
-
-            // 1. STREAK
             case .streak:
                 let item = NSCollectionLayoutItem(
                     layoutSize: .init(
@@ -192,8 +176,6 @@ extension JournalViewController {
                 section.contentInsets = .init(top: 0, leading: 0, bottom: 4, trailing: 0)
                 return section
 
-
-            // 2. STATS
             case .stats:
                 let item = NSCollectionLayoutItem(
                     layoutSize: .init(
@@ -216,8 +198,6 @@ extension JournalViewController {
                 section.contentInsets = .init(top: 4, leading: 0, bottom: 4, trailing: 0)
                 return section
 
-
-            // 3. ACTIONS
             case .actions:
                 let item = NSCollectionLayoutItem(
                     layoutSize: .init(
@@ -257,9 +237,6 @@ extension JournalViewController {
 
                 return section
 
-
-
-            // 4. RECENTS
             case .recents:
                 let item = NSCollectionLayoutItem(
                     layoutSize: .init(
@@ -328,10 +305,7 @@ extension JournalViewController {
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: "header_cell"
         )
-
-        
     }
-    
 }
 
 extension JournalViewController: UICollectionViewDelegate {

@@ -12,16 +12,13 @@ class BlankJournalViewController: UIViewController {
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var toolbarBottomConstraint: NSLayoutConstraint!
-
     var existingEntry: JournalEntry?
-
 
     private let placeholderText = "Start writing what’s on your mind today..."
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
         view.backgroundColor = UIColor(named: "BackgroundColor")
         navigationItem.title = "New Journal"
         
@@ -43,15 +40,11 @@ class BlankJournalViewController: UIViewController {
         )
         
         if let entry = existingEntry {
-            // Editing mode
             navigationItem.title = "Edit Journal"
             titleField.text = entry.title
             textView.text = entry.body
             textView.textColor = .label
         }
-        
-        
-
     }
     
     
@@ -64,14 +57,6 @@ class BlankJournalViewController: UIViewController {
             navigationController?.popViewController(animated: true)
             return
         }
-        /*
-        if var entry = existingEntry {
-            entry.title = title
-            entry.body = body
-            entry.date = Date()
-
-            JournalStore.shared.update(entry)
-         */
             
         if let old = existingEntry {
             let updated = JournalEntry(
@@ -102,8 +87,6 @@ class BlankJournalViewController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
 
-
-    
     private func setupPlaceholder() {
         guard existingEntry == nil else { return }
         textView.text = placeholderText
@@ -127,27 +110,13 @@ class BlankJournalViewController: UIViewController {
     @IBAction func tableTapped(_ sender: UIButton) {}
     @IBAction func attachTapped(_ sender: UIButton) {}
     @IBAction func alignmentTapped(_ sender: UIButton) {}
-    
-    
-    
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
 
 
 extension BlankJournalViewController: UITextFieldDelegate, UITextViewDelegate {
 
-    // MARK: - TextField Limit
+    // character limit
     func textField(_ textField: UITextField,
                    shouldChangeCharactersIn range: NSRange,
                    replacementString string: String) -> Bool {
@@ -157,8 +126,7 @@ extension BlankJournalViewController: UITextFieldDelegate, UITextViewDelegate {
         let newLength = current.count + string.count - range.length
         return newLength <= maxTitleLength
     }
-
-    // MARK: - TextView Limit
+    
     func textView(_ textView: UITextView,
                   shouldChangeTextIn range: NSRange,
                   replacementText text: String) -> Bool {
@@ -169,7 +137,7 @@ extension BlankJournalViewController: UITextFieldDelegate, UITextViewDelegate {
         return newLength <= maxBodyLength
     }
 
-    // MARK: - Placeholder Logic
+    // placeholder text
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == placeholderText {
             textView.text = ""

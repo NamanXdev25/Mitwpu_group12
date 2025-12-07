@@ -26,7 +26,6 @@ class GuidedJournalViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
         view.backgroundColor = UIColor(named: "BackgroundColor")
         textView.delegate = self
         
@@ -86,17 +85,11 @@ class GuidedJournalViewController: UIViewController {
     @IBAction func submitTapped(_ sender: UIBarButtonItem) {
         
         let body = textView.text.trimmingCharacters(in: .whitespacesAndNewlines)
-        /*
-        if var entry = existingEntry {
-            entry.body = body
-            entry.date = Date()
-            JournalStore.shared.update(entry)
-        }
-        */
+        
         if let old = existingEntry {
             let updated = JournalEntry(
                 id: old.id,
-                title: old.title,  // keep title same (guided uses the question as title)
+                title: old.title,
                 body: body,
                 date: old.date,
                 type: old.type,
@@ -120,7 +113,6 @@ class GuidedJournalViewController: UIViewController {
 
         navigationController?.popViewController(animated: true)
     }
-
     
     @objc func keyboardWillShow(_ notification: Notification) {
         if let frame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
@@ -134,29 +126,17 @@ class GuidedJournalViewController: UIViewController {
         view.layoutIfNeeded()
     }
     
-    
     @IBAction func textFormatTapped(_ sender: UIButton) {}
     @IBAction func bulletTapped(_ sender: UIButton) {}
     @IBAction func tableTapped(_ sender: UIButton) {}
     @IBAction func attachTapped(_ sender: UIButton) {}
     @IBAction func alignmentTapped(_ sender: UIButton) {}
 
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
 
 extension GuidedJournalViewController: UITextViewDelegate {
 
-    // MARK: - Placeholder
+    // placeholder text
     func setupPlaceholder() {
         guard existingEntry == nil else { return }
         textView.text = placeholder
@@ -178,7 +158,7 @@ extension GuidedJournalViewController: UITextViewDelegate {
         }
     }
 
-    // MARK: - Character Limit
+    // Character limit
     func textView(_ textView: UITextView,
                   shouldChangeTextIn range: NSRange,
                   replacementText text: String) -> Bool {
