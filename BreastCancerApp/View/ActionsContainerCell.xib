@@ -32,21 +32,24 @@
                                 <buttonConfiguration key="configuration" style="tinted" title="Log Self-Exam">
                                     <color key="baseBackgroundColor" name="pink"/>
                                 </buttonConfiguration>
+                                <connections>
+                                    <action selector="logButtonTapped:" destination="gTV-IL-0wX" eventType="primaryActionTriggered" id="qfJ-Hx-hgy"/>
+                                </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="View past tests" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JnD-y3-god">
-                                <rect key="frame" x="118" y="68" width="116" height="74"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" name="pink"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L6s-Y3-B6M">
+                                <rect key="frame" x="107" y="88" width="140" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="View past tests"/>
+                                <connections>
+                                    <action selector="pastButtonTapped:" destination="gTV-IL-0wX" eventType="primaryActionTriggered" id="mq2-UV-eUg"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" name="bg"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="JnD-y3-god" secondAttribute="bottom" constant="12" id="23s-dz-hsN"/>
-                            <constraint firstItem="JnD-y3-god" firstAttribute="centerX" secondItem="06V-qK-fL1" secondAttribute="centerX" id="9be-Gd-x74"/>
                             <constraint firstItem="06V-qK-fL1" firstAttribute="top" secondItem="kSy-t4-3Wg" secondAttribute="top" constant="12" id="QDL-Q7-Ll7"/>
                             <constraint firstItem="06V-qK-fL1" firstAttribute="centerX" secondItem="kSy-t4-3Wg" secondAttribute="centerX" id="eEx-rF-c5h"/>
-                            <constraint firstItem="JnD-y3-god" firstAttribute="top" secondItem="06V-qK-fL1" secondAttribute="bottom" constant="8" id="v33-1M-hI0"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -60,8 +63,8 @@
             </constraints>
             <size key="customSize" width="352" height="154"/>
             <connections>
-                <outlet property="logButton" destination="06V-qK-fL1" id="3KS-Jb-ypy"/>
-                <outlet property="pastLabel" destination="JnD-y3-god" id="5Ht-aH-CZY"/>
+                <outlet property="logButton" destination="06V-qK-fL1" id="bYz-be-Ixm"/>
+                <outlet property="pastButton" destination="L6s-Y3-B6M" id="jFl-j6-irN"/>
             </connections>
             <point key="canvasLocation" x="145.03816793893128" y="56.338028169014088"/>
         </collectionViewCell>

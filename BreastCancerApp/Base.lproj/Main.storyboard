@@ -56,11 +56,80 @@
                     <navigationItem key="navigationItem" title="self-Exam" id="3LE-NG-Q9e"/>
                     <connections>
                         <outlet property="collectionView" destination="hUO-FT-pM5" id="mto-Kh-8Iy"/>
+                        <segue destination="WZH-rO-Ma5" kind="show" identifier="showObservations" id="ewu-Ia-oYs"/>
+                        <segue destination="Ln4-ga-Pct" kind="show" identifier="showTestHistory" id="UTf-Wm-fab"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="932.06106870229007" y="-2.1126760563380285"/>
+        </scene>
+        <!--Observations View Controller-->
+        <scene sceneID="3fl-RO-qaU">
+            <objects>
+                <viewController storyboardIdentifier="ObservationsViewController" id="WZH-rO-Ma5" customClass="ObservationsViewController" customModule="BreastCancerApp" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="gwK-2p-cYm">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Jqh-iE-kCk">
+                                <rect key="frame" x="0.0" y="162" width="393" height="622"/>
+                                <color key="backgroundColor" name="bg"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="XWj-nG-5WI">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="lmp-cV-MuV">
+                                        <rect key="frame" x="0.0" y="0.0" width="127.99999999999997" height="128"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="qFy-ad-CqQ">
+                                            <rect key="frame" x="0.0" y="0.0" width="127.99999999999997" height="128"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </collectionViewCellContentView>
+                                    </collectionViewCell>
+                                </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="WZH-rO-Ma5" id="4jF-IA-TCN"/>
+                                    <outlet property="delegate" destination="WZH-rO-Ma5" id="BrB-ls-fTb"/>
+                                </connections>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="lfM-Zp-ij5"/>
+                        <color key="backgroundColor" name="bg"/>
+                        <constraints>
+                            <constraint firstItem="lfM-Zp-ij5" firstAttribute="trailing" secondItem="Jqh-iE-kCk" secondAttribute="trailing" id="Ofp-Dg-SVH"/>
+                            <constraint firstItem="lfM-Zp-ij5" firstAttribute="bottom" secondItem="Jqh-iE-kCk" secondAttribute="bottom" id="ZIa-Q7-EbP"/>
+                            <constraint firstItem="Jqh-iE-kCk" firstAttribute="top" secondItem="lfM-Zp-ij5" secondAttribute="top" id="pMe-4r-1Qx"/>
+                            <constraint firstItem="Jqh-iE-kCk" firstAttribute="leading" secondItem="lfM-Zp-ij5" secondAttribute="leading" id="zxZ-rd-8Lt"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="9fU-Jo-1Dj"/>
+                    <connections>
+                        <outlet property="collectionView" destination="Jqh-iE-kCk" id="kA3-DR-Bhi"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8Ci-K2-dcV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1640" y="-2"/>
+        </scene>
+        <!--Test History View Controller-->
+        <scene sceneID="MjY-a6-2Az">
+            <objects>
+                <viewController storyboardIdentifier="TestHistoryVC" id="Ln4-ga-Pct" customClass="TestHistoryViewController" customModule="BreastCancerApp" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Hd0-w5-YUv">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="VFd-4B-g0C"/>
+                        <color key="backgroundColor" name="bg"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="ABZ-HZ-PvP"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SAG-66-18z" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2448" y="-15"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="PXC-Hw-3rn">

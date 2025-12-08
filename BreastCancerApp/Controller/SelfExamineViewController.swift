@@ -1,8 +1,3 @@
-//
-//  SelfExamineViewController.swift
-//  BreastCancerApp
-//
-
 import UIKit
 
 class SelfExamineViewController: UIViewController {
@@ -57,6 +52,17 @@ class SelfExamineViewController: UIViewController {
         navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
 
         collectionView.reloadData()
+    }
+
+    // Prepare segue if you want to pass data later
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showObservations" {
+            // future: pass model or selected data to ObservationsViewController
+            // let dest = segue.destination as? ObservationsViewController
+        } else if segue.identifier == "showTestHistory" {
+            // future: pass saved tests array or selected index to TestHistoryViewController
+            // let dest = segue.destination as? TestHistoryViewController
+        }
     }
 }
 
@@ -116,6 +122,9 @@ extension SelfExamineViewController: UICollectionViewDataSource {
 
             cell.backgroundColor = .clear
             cell.contentView.backgroundColor = .clear
+
+            // IMPORTANT: wire delegate so button tap triggers segue
+            cell.delegate = self
             return cell
 
         default:
@@ -145,5 +154,18 @@ extension SelfExamineViewController: UICollectionViewDelegateFlowLayout {
         default:
             return CGSize(width: fullWidth, height: 60)
         }
+    }
+}
+
+// MARK: - ActionsContainerCellDelegate
+extension SelfExamineViewController: ActionsContainerCellDelegate {
+    func didTapLogSelfExam(from cell: ActionsContainerCell) {
+        // perform the segue created in storyboard
+        performSegue(withIdentifier: "showObservations", sender: cell)
+    }
+
+    func didTapViewPastTests(from cell: ActionsContainerCell) {
+        // perform segue to Test History screen (segue id must match storyboard)
+        performSegue(withIdentifier: "showTestHistory", sender: cell)
     }
 }
