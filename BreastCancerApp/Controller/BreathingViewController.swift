@@ -1,8 +1,7 @@
 //
 //  BreathingViewController.swift
-//  ChemoCompanion
 //
-//  Created by ChemoCompanion Dev on 28/11/25.
+//  Created by Shloka on 28/11/25.
 //
 
 import UIKit
@@ -253,9 +252,7 @@ extension BreathingViewController: SessionCellDelegate {
         
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
         
-        // ==========================================================
         // CASE A: Removing from Favorites (Top Section)
-        // ==========================================================
         if indexPath.section == 0 {
             
             let sessionToRemove = favoriteSessions[indexPath.row]
@@ -300,9 +297,8 @@ extension BreathingViewController: SessionCellDelegate {
             }
         }
         
-        // ==========================================================
+
         // CASE B: Tapping inside Main List (Section 2)
-        // ==========================================================
         else if indexPath.section == 2 {
             
             // 1. Get from FILTERED list (what the user sees)

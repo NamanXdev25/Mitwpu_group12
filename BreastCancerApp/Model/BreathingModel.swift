@@ -8,21 +8,20 @@
 import Foundation
 import UIKit
 
-// 1. The Blueprint for a single session
+
 struct BreathingSession {
-    let title: String       // e.g., "Calmer Mind"
-    let category: String    // e.g., "Stress Relief"
-    let duration: String    // e.g., "8 min"
-    let imageName: String   // Name of image in Assets
-    var isFavorite: Bool    // For the heart icon
+    let title: String
+    let category: String
+    let duration: String
+    let imageName: String
+    var isFavorite: Bool
 }
 
-// 2. The Data Manager (Acts like your 'DestinationsResponse')
 class BreathingDataManager {
     
     // SECTION 0: Start empty!
     func getFavoriteSessions() -> [BreathingSession] {
-        return [] // No favorites initially
+        return []
     }
     
     // SECTION 1: Filter Tags (Keep as is)
@@ -31,7 +30,6 @@ class BreathingDataManager {
     }
     
     // SECTION 2: Vertical List
-    // IMPORTANT: Set 'isFavorite: false' for everyone so the hearts start empty
     func getAllSessions() -> [BreathingSession] {
         return [
             BreathingSession(title: "Gentle Focus", category: "Meditation", duration: "15 min", imageName: "gentle_focus", isFavorite: false),
