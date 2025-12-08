@@ -1,24 +1,187 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="yhm-rH-LML">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
-        <scene sceneID="tne-QT-ifu">
+        <!--Mindfulness-->
+        <scene sceneID="8or-29-lZB">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                <viewController storyboardIdentifier="MindfulnessViewController" title="Mindfulness" id="kVY-jb-wJq" customClass="MindfulnessViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Ldc-47-xIG">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Gemini_Generated_Image_ro22cyro22cyro22" translatesAutoresizingMaskIntoConstraints="NO" id="Is0-w0-Njm">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="250"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="250" id="lPf-J7-tqb"/>
+                                </constraints>
+                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GHu-We-3Pg" userLabel="EmotionPickerView">
+                                <rect key="frame" x="16" y="266" width="361" height="160"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="How are you feeling today?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="294-Xm-epA">
+                                        <rect key="frame" x="0.0" y="8" width="361" height="22"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="22" id="zaj-QJ-e9z"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="Vgv-P7-1wH">
+                                        <rect key="frame" x="0.0" y="38" width="361" height="80"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="kJu-M5-DTs">
+                                                <rect key="frame" x="0.0" y="0.0" width="81.333333333333329" height="80"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O7y-05-fGI">
+                                                        <rect key="frame" x="0.0" y="0.0" width="81.333333333333329" height="59.666666666666664"/>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" image="Adobe Express - file (13)"/>
+                                                    </button>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Happy" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="szt-ZW-PA6">
+                                                        <rect key="frame" x="0.0" y="59.666666666666693" width="81.333333333333329" height="20.333333333333336"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="3Ax-bW-ziy">
+                                                <rect key="frame" x="93.333333333333343" y="0.0" width="81.333333333333343" height="80"/>
+                                                <subviews>
+                                                    <button opaque="NO" tag="1" contentMode="scaleToFill" verticalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KGF-mx-MPk">
+                                                        <rect key="frame" x="0.0" y="0.0" width="81.333333333333329" height="59.666666666666664"/>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" image="Adobe Express - file (14)" title="Button"/>
+                                                    </button>
+                                                    <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sad" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HTa-Vv-KlS">
+                                                        <rect key="frame" x="0.0" y="59.666666666666693" width="81.333333333333329" height="20.333333333333336"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="jzu-Tf-YhD">
+                                                <rect key="frame" x="186.66666666666666" y="0.0" width="80.999999999999972" height="80"/>
+                                                <subviews>
+                                                    <button opaque="NO" tag="2" contentMode="scaleToFill" verticalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YPn-sD-Q2l">
+                                                        <rect key="frame" x="0.0" y="0.0" width="81" height="59.666666666666664"/>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" image="Adobe Express - file (15)" title="Button"/>
+                                                    </button>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Anxious" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5ck-vK-yxC">
+                                                        <rect key="frame" x="0.0" y="59.666666666666693" width="81" height="20.333333333333336"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="1lr-JF-nbc">
+                                                <rect key="frame" x="279.66666666666669" y="0.0" width="81.333333333333314" height="80"/>
+                                                <subviews>
+                                                    <button opaque="NO" tag="3" contentMode="scaleToFill" verticalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Iea-HH-Dxo">
+                                                        <rect key="frame" x="0.0" y="0.0" width="81.333333333333329" height="59.666666666666664"/>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" image="Adobe Express - file (16)" title="Button"/>
+                                                    </button>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tired" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vBM-4z-cdV">
+                                                        <rect key="frame" x="0.0" y="59.666666666666693" width="81.333333333333329" height="20.333333333333336"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="80" id="RHM-cb-6tU"/>
+                                        </constraints>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="294-Xm-epA" firstAttribute="leading" secondItem="GHu-We-3Pg" secondAttribute="leading" id="0JQ-Lj-CH7"/>
+                                    <constraint firstItem="294-Xm-epA" firstAttribute="top" secondItem="GHu-We-3Pg" secondAttribute="top" constant="8" id="AUl-G1-DEn"/>
+                                    <constraint firstAttribute="trailing" secondItem="294-Xm-epA" secondAttribute="trailing" id="MUB-Mq-26y"/>
+                                    <constraint firstItem="Vgv-P7-1wH" firstAttribute="leading" secondItem="GHu-We-3Pg" secondAttribute="leading" id="V3v-LJ-sx1"/>
+                                    <constraint firstItem="Vgv-P7-1wH" firstAttribute="top" secondItem="294-Xm-epA" secondAttribute="bottom" constant="8" id="bRd-bO-LoC"/>
+                                    <constraint firstAttribute="trailing" secondItem="Vgv-P7-1wH" secondAttribute="trailing" id="eo8-hV-OVU"/>
+                                    <constraint firstAttribute="height" constant="160" id="s0U-iO-3Wo"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="13"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nxc-tL-NhG">
+                                <rect key="frame" x="16" y="442" width="361" height="160"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="160" id="g3M-VZ-Url"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="nUf-IF-Hjt"/>
+                        <color key="backgroundColor" name="BgColor"/>
+                        <constraints>
+                            <constraint firstItem="Is0-w0-Njm" firstAttribute="top" secondItem="Ldc-47-xIG" secondAttribute="top" id="ADe-FQ-5Dm"/>
+                            <constraint firstItem="Is0-w0-Njm" firstAttribute="leading" secondItem="nUf-IF-Hjt" secondAttribute="leading" id="K5k-oX-XD5"/>
+                            <constraint firstItem="GHu-We-3Pg" firstAttribute="top" secondItem="Is0-w0-Njm" secondAttribute="bottom" constant="16" id="NOt-jS-VOX"/>
+                            <constraint firstItem="nUf-IF-Hjt" firstAttribute="trailing" secondItem="Is0-w0-Njm" secondAttribute="trailing" id="WbR-n5-KbJ"/>
+                            <constraint firstItem="GHu-We-3Pg" firstAttribute="leading" secondItem="nUf-IF-Hjt" secondAttribute="leading" constant="16" id="bJH-W1-kbf"/>
+                            <constraint firstItem="nUf-IF-Hjt" firstAttribute="trailing" secondItem="GHu-We-3Pg" secondAttribute="trailing" constant="16" id="e4I-9x-jtG"/>
+                            <constraint firstItem="nUf-IF-Hjt" firstAttribute="trailing" secondItem="nxc-tL-NhG" secondAttribute="trailing" constant="16" id="o88-I5-vTF"/>
+                            <constraint firstItem="nxc-tL-NhG" firstAttribute="top" secondItem="GHu-We-3Pg" secondAttribute="bottom" constant="16" id="t21-vD-7gQ"/>
+                            <constraint firstItem="nxc-tL-NhG" firstAttribute="leading" secondItem="nUf-IF-Hjt" secondAttribute="leading" constant="16" id="xRu-kN-EsG"/>
+                        </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="uEE-t7-XIy"/>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Gv6-JE-QRF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="1765.6488549618321" y="84.507042253521135"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="ucG-sI-QAI">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="yhm-rH-LML" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="qSv-km-Cqc">
+                        <rect key="frame" x="0.0" y="118" width="393" height="54"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="kVY-jb-wJq" kind="relationship" relationship="rootViewController" id="8dz-B8-WzZ"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="U9T-iQ-4dD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="838.93129770992368" y="84.507042253521135"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Adobe Express - file (13)" width="1056" height="992"/>
+        <image name="Adobe Express - file (14)" width="1056" height="992"/>
+        <image name="Adobe Express - file (15)" width="1056" height="992"/>
+        <image name="Adobe Express - file (16)" width="1056" height="992"/>
+        <image name="Gemini_Generated_Image_ro22cyro22cyro22" width="1024" height="1024"/>
+        <namedColor name="BgColor">
+            <color red="0.97254901960784312" green="0.94901960784313721" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>
