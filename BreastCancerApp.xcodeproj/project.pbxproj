@@ -6,9 +6,14 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		79AE03A32EE7F1CD008DA195 /* breathingsesh.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 79AE03A22EE7F1CD008DA195 /* breathingsesh.mp4 */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		64E778AE2ECE2D6600B7826F /* BreastCancerApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BreastCancerApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		64E778EA2ECE372300B7826F /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		79AE03A22EE7F1CD008DA195 /* breathingsesh.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = breathingsesh.mp4; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -49,6 +54,7 @@
 				64E778EA2ECE372300B7826F /* .gitignore */,
 				64E778B02ECE2D6600B7826F /* BreastCancerApp */,
 				64E778AF2ECE2D6600B7826F /* Products */,
+				79AE03A22EE7F1CD008DA195 /* breathingsesh.mp4 */,
 			);
 			sourceTree = "<group>";
 		};
@@ -124,6 +130,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				79AE03A32EE7F1CD008DA195 /* breathingsesh.mp4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

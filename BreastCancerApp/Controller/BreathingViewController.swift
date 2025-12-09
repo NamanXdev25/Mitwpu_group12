@@ -222,12 +222,13 @@ extension BreathingViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        // Handle Filter Taps
+        // ---------------------------------------------------------
+        // SECTION 1: FILTERS (Existing Logic)
+        // ---------------------------------------------------------
         if indexPath.section == 1 {
             selectedFilterIndex = indexPath.row
             let selectedCategory = filterTags[indexPath.row]
             
-            // Filter Logic
             if selectedCategory == "All" {
                 filteredSessions = allSessions
             } else {
@@ -236,10 +237,50 @@ extension BreathingViewController: UICollectionViewDelegate {
                 }
             }
             
-            // Update UI
             collectionView.performBatchUpdates {
-                collectionView.reloadSections(IndexSet(integer: 1)) // Update Pill Colors
-                collectionView.reloadSections(IndexSet(integer: 2)) // Update List Items
+                collectionView.reloadSections(IndexSet(integer: 1))
+                collectionView.reloadSections(IndexSet(integer: 2))
+            }
+        }
+        
+        // ---------------------------------------------------------
+        // SECTION 0 & 2: NAVIGATION (New Logic)
+        // ---------------------------------------------------------
+        else {
+            // 1. Figure out which session was tapped
+            var selectedSession: BreathingSession?
+            
+            if indexPath.section == 0 {
+                // Favorites Section
+                // Safety check: Don't click the "No Favorites" placeholder
+                if !favoriteSessions.isEmpty {
+                    selectedSession = favoriteSessions[indexPath.row]
+                }
+            } else if indexPath.section == 2 {
+                // List Section
+                selectedSession = filteredSessions[indexPath.row]
+            }
+            
+            // 2. Perform Navigation if we found a session
+            if let session = selectedSession {
+                
+                // A. Load the Player Screen from Storyboard
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                if let playerVC = storyboard.instantiateViewController(withIdentifier: "BreathingPlayerVC") as? BreathingPlayerViewController {
+                    
+                    // B. Pass the Data
+                    playerVC.session = session
+                    
+                    // C. Show the Screen
+                    // If we are inside a Navigation Controller, push it (Slide animation)
+                    if let nav = self.navigationController {
+                        nav.pushViewController(playerVC, animated: true)
+                    } else {
+                        // Otherwise, present it modally (Pop up from bottom)
+                        playerVC.modalPresentationStyle = .fullScreen
+                        self.present(playerVC, animated: true, completion: nil)
+                    }
+                }
             }
         }
     }
