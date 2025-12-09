@@ -5,7 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -17,136 +17,40 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Gemini_Generated_Image_ro22cyro22cyro22" translatesAutoresizingMaskIntoConstraints="NO" id="Is0-w0-Njm">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="250"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="250" id="lPf-J7-tqb"/>
-                                </constraints>
-                            </imageView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GHu-We-3Pg" userLabel="EmotionPickerView">
-                                <rect key="frame" x="16" y="266" width="361" height="160"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="How are you feeling today?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="294-Xm-epA">
-                                        <rect key="frame" x="0.0" y="8" width="361" height="22"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="22" id="zaj-QJ-e9z"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="Vgv-P7-1wH">
-                                        <rect key="frame" x="0.0" y="38" width="361" height="80"/>
-                                        <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="kJu-M5-DTs">
-                                                <rect key="frame" x="0.0" y="0.0" width="81.333333333333329" height="80"/>
-                                                <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O7y-05-fGI">
-                                                        <rect key="frame" x="0.0" y="0.0" width="81.333333333333329" height="59.666666666666664"/>
-                                                        <state key="normal" title="Button"/>
-                                                        <buttonConfiguration key="configuration" style="plain" image="Adobe Express - file (13)"/>
-                                                    </button>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Happy" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="szt-ZW-PA6">
-                                                        <rect key="frame" x="0.0" y="59.666666666666693" width="81.333333333333329" height="20.333333333333336"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                        <nil key="textColor"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                </subviews>
-                                            </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="3Ax-bW-ziy">
-                                                <rect key="frame" x="93.333333333333343" y="0.0" width="81.333333333333343" height="80"/>
-                                                <subviews>
-                                                    <button opaque="NO" tag="1" contentMode="scaleToFill" verticalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KGF-mx-MPk">
-                                                        <rect key="frame" x="0.0" y="0.0" width="81.333333333333329" height="59.666666666666664"/>
-                                                        <state key="normal" title="Button"/>
-                                                        <buttonConfiguration key="configuration" style="plain" image="Adobe Express - file (14)" title="Button"/>
-                                                    </button>
-                                                    <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sad" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HTa-Vv-KlS">
-                                                        <rect key="frame" x="0.0" y="59.666666666666693" width="81.333333333333329" height="20.333333333333336"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                        <nil key="textColor"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                </subviews>
-                                            </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="jzu-Tf-YhD">
-                                                <rect key="frame" x="186.66666666666666" y="0.0" width="80.999999999999972" height="80"/>
-                                                <subviews>
-                                                    <button opaque="NO" tag="2" contentMode="scaleToFill" verticalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YPn-sD-Q2l">
-                                                        <rect key="frame" x="0.0" y="0.0" width="81" height="59.666666666666664"/>
-                                                        <state key="normal" title="Button"/>
-                                                        <buttonConfiguration key="configuration" style="plain" image="Adobe Express - file (15)" title="Button"/>
-                                                    </button>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Anxious" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5ck-vK-yxC">
-                                                        <rect key="frame" x="0.0" y="59.666666666666693" width="81" height="20.333333333333336"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                        <nil key="textColor"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                </subviews>
-                                            </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="1lr-JF-nbc">
-                                                <rect key="frame" x="279.66666666666669" y="0.0" width="81.333333333333314" height="80"/>
-                                                <subviews>
-                                                    <button opaque="NO" tag="3" contentMode="scaleToFill" verticalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Iea-HH-Dxo">
-                                                        <rect key="frame" x="0.0" y="0.0" width="81.333333333333329" height="59.666666666666664"/>
-                                                        <state key="normal" title="Button"/>
-                                                        <buttonConfiguration key="configuration" style="plain" image="Adobe Express - file (16)" title="Button"/>
-                                                    </button>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tired" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vBM-4z-cdV">
-                                                        <rect key="frame" x="0.0" y="59.666666666666693" width="81.333333333333329" height="20.333333333333336"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                        <nil key="textColor"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                </subviews>
-                                            </stackView>
-                                        </subviews>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="80" id="RHM-cb-6tU"/>
-                                        </constraints>
-                                    </stackView>
-                                </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstItem="294-Xm-epA" firstAttribute="leading" secondItem="GHu-We-3Pg" secondAttribute="leading" id="0JQ-Lj-CH7"/>
-                                    <constraint firstItem="294-Xm-epA" firstAttribute="top" secondItem="GHu-We-3Pg" secondAttribute="top" constant="8" id="AUl-G1-DEn"/>
-                                    <constraint firstAttribute="trailing" secondItem="294-Xm-epA" secondAttribute="trailing" id="MUB-Mq-26y"/>
-                                    <constraint firstItem="Vgv-P7-1wH" firstAttribute="leading" secondItem="GHu-We-3Pg" secondAttribute="leading" id="V3v-LJ-sx1"/>
-                                    <constraint firstItem="Vgv-P7-1wH" firstAttribute="top" secondItem="294-Xm-epA" secondAttribute="bottom" constant="8" id="bRd-bO-LoC"/>
-                                    <constraint firstAttribute="trailing" secondItem="Vgv-P7-1wH" secondAttribute="trailing" id="eo8-hV-OVU"/>
-                                    <constraint firstAttribute="height" constant="160" id="s0U-iO-3Wo"/>
-                                </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="13"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nxc-tL-NhG">
-                                <rect key="frame" x="16" y="442" width="361" height="160"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="160" id="g3M-VZ-Url"/>
-                                </constraints>
-                            </view>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="qmv-rY-yBY">
+                                <rect key="frame" x="0.0" y="172" width="393" height="612"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="wC7-kz-4uc">
+                                    <size key="itemSize" width="353" height="357"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="L9L-IS-iFI">
+                                        <rect key="frame" x="20" y="0.0" width="353" height="357"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="fDd-l7-xNu">
+                                            <rect key="frame" x="0.0" y="0.0" width="353" height="357"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </collectionViewCellContentView>
+                                        <size key="customSize" width="353" height="357"/>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="nUf-IF-Hjt"/>
                         <color key="backgroundColor" name="BgColor"/>
                         <constraints>
-                            <constraint firstItem="Is0-w0-Njm" firstAttribute="top" secondItem="Ldc-47-xIG" secondAttribute="top" id="ADe-FQ-5Dm"/>
-                            <constraint firstItem="Is0-w0-Njm" firstAttribute="leading" secondItem="nUf-IF-Hjt" secondAttribute="leading" id="K5k-oX-XD5"/>
-                            <constraint firstItem="GHu-We-3Pg" firstAttribute="top" secondItem="Is0-w0-Njm" secondAttribute="bottom" constant="16" id="NOt-jS-VOX"/>
-                            <constraint firstItem="nUf-IF-Hjt" firstAttribute="trailing" secondItem="Is0-w0-Njm" secondAttribute="trailing" id="WbR-n5-KbJ"/>
-                            <constraint firstItem="GHu-We-3Pg" firstAttribute="leading" secondItem="nUf-IF-Hjt" secondAttribute="leading" constant="16" id="bJH-W1-kbf"/>
-                            <constraint firstItem="nUf-IF-Hjt" firstAttribute="trailing" secondItem="GHu-We-3Pg" secondAttribute="trailing" constant="16" id="e4I-9x-jtG"/>
-                            <constraint firstItem="nUf-IF-Hjt" firstAttribute="trailing" secondItem="nxc-tL-NhG" secondAttribute="trailing" constant="16" id="o88-I5-vTF"/>
-                            <constraint firstItem="nxc-tL-NhG" firstAttribute="top" secondItem="GHu-We-3Pg" secondAttribute="bottom" constant="16" id="t21-vD-7gQ"/>
-                            <constraint firstItem="nxc-tL-NhG" firstAttribute="leading" secondItem="nUf-IF-Hjt" secondAttribute="leading" constant="16" id="xRu-kN-EsG"/>
+                            <constraint firstItem="qmv-rY-yBY" firstAttribute="top" secondItem="nUf-IF-Hjt" secondAttribute="top" id="5TH-YI-UP9"/>
+                            <constraint firstItem="nUf-IF-Hjt" firstAttribute="bottom" secondItem="qmv-rY-yBY" secondAttribute="bottom" id="9FQ-23-Mt1"/>
+                            <constraint firstItem="qmv-rY-yBY" firstAttribute="leading" secondItem="nUf-IF-Hjt" secondAttribute="leading" id="Plb-nT-rPe"/>
+                            <constraint firstItem="nUf-IF-Hjt" firstAttribute="trailing" secondItem="qmv-rY-yBY" secondAttribute="trailing" id="sSc-pO-xLU"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="uEE-t7-XIy"/>
+                    <connections>
+                        <outlet property="collectionView" destination="qmv-rY-yBY" id="xd4-4p-Mjx"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Gv6-JE-QRF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -172,16 +76,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Adobe Express - file (13)" width="1056" height="992"/>
-        <image name="Adobe Express - file (14)" width="1056" height="992"/>
-        <image name="Adobe Express - file (15)" width="1056" height="992"/>
-        <image name="Adobe Express - file (16)" width="1056" height="992"/>
-        <image name="Gemini_Generated_Image_ro22cyro22cyro22" width="1024" height="1024"/>
         <namedColor name="BgColor">
             <color red="0.97254901960784312" green="0.94901960784313721" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
     </resources>
 </document>
