@@ -34,6 +34,20 @@ class MindfulnessViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        title = "Mindfulness"
+
+        // 1. Allow the nav bar to show large titles
+        navigationController?.navigationBar.prefersLargeTitles = true
+
+        // 2. Tell THIS screen to always use large titles
+        navigationItem.largeTitleDisplayMode = .always
+        
+        collectionView.setCollectionViewLayout(createCompositionalLayout(), animated: false)
+        
+        collectionView.contentInsetAdjustmentBehavior = .automatic
+        //collectionView.contentInset = UIEdgeInsets(top: 16, left: 0, bottom: 0, right: 0)
+        
+        
         collectionView.dataSource = self
         collectionView.delegate = self
 
@@ -50,6 +64,16 @@ class MindfulnessViewController: UIViewController {
                                 forCellWithReuseIdentifier: "ExploreCell")
         
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        print(">>> nav:", navigationController)
+        print(">>> titleAppear:", navigationController?.navigationBar.prefersLargeTitles)
+        print(">>> mode:", navigationItem.largeTitleDisplayMode.rawValue)
+    }
+
+
 
     private func handleEmotionTap(_ index: Int) {
         selectedEmotionIndex = index
@@ -209,6 +233,101 @@ class MindfulnessViewController: UIViewController {
             slides = []
         }
     }
+    
+    private func createCompositionalLayout() -> UICollectionViewCompositionalLayout {
+
+        return UICollectionViewCompositionalLayout { sectionIndex, environment -> NSCollectionLayoutSection? in
+            
+            guard let section = Section(rawValue: sectionIndex) else { return nil }
+
+            switch section {
+
+            case .header:
+                let item = NSCollectionLayoutItem(
+                    layoutSize: .init(
+                        widthDimension: .fractionalWidth(1),
+                        heightDimension: .estimated(220)
+                    )
+                )
+
+                let group = NSCollectionLayoutGroup.vertical(
+                    layoutSize: .init(
+                        widthDimension: .fractionalWidth(1),
+                        heightDimension: .estimated(220)
+                    ),
+                    subitems: [item]
+                )
+
+                let section = NSCollectionLayoutSection(group: group)
+                section.contentInsets = .init(top: 16, leading: 0, bottom: 16, trailing: 0)
+                return section
+
+
+
+            case .explore:
+                let item = NSCollectionLayoutItem(
+                    layoutSize: .init(
+                        widthDimension: .fractionalWidth(1),
+                        heightDimension: .absolute(130)
+                    )
+                )
+
+                let group = NSCollectionLayoutGroup.vertical(
+                    layoutSize: .init(
+                        widthDimension: .fractionalWidth(1),
+                        heightDimension: .estimated(260)
+                    ),
+                    subitems: [item]
+                )
+
+                group.interItemSpacing = .fixed(12)
+
+                let section = NSCollectionLayoutSection(group: group)
+                section.contentInsets = .init(top: 12, leading: 0, bottom: 12, trailing: 0)
+                section.interGroupSpacing = 12
+                return section
+
+            case .emotions:
+                // Temporary layout — will refine later
+                let item = NSCollectionLayoutItem(
+                    layoutSize: .init(
+                        widthDimension: .fractionalWidth(1),
+                        heightDimension: .absolute(232)
+                    )
+                )
+                let group = NSCollectionLayoutGroup.vertical(
+                    layoutSize: .init(
+                        widthDimension: .fractionalWidth(1),
+                        heightDimension: .absolute(232)
+                    ),
+                    subitems: [item]
+                )
+                return NSCollectionLayoutSection(group: group)
+
+            case .slideCard:
+                // Temporary layout — will refine later
+                let item = NSCollectionLayoutItem(
+                    layoutSize: .init(
+                        widthDimension: .fractionalWidth(1),
+                        heightDimension: .absolute(232)
+                    )
+                )
+                let group = NSCollectionLayoutGroup.vertical(
+                    layoutSize: .init(
+                        widthDimension: .fractionalWidth(1),
+                        heightDimension: .absolute(232)
+                    ),
+                    subitems: [item]
+                )
+                return NSCollectionLayoutSection(group: group)
+
+            default:
+                return nil   // <- Now this will never be hit
+
+            }
+        }
+    }
+
 }
 
 
@@ -272,30 +391,8 @@ extension MindfulnessViewController: UICollectionViewDataSource {
     }
 }
 
-
-extension MindfulnessViewController: UICollectionViewDelegateFlowLayout {
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-
-        let width = collectionView.bounds.width
-
-        switch Section(rawValue: indexPath.section)! {
-
-        case .header:
-            return CGSize(width: width, height: 200)
-
-        case .emotions:
-            return CGSize(width: width, height: 232)
-
-        case .slideCard:
-            return CGSize(width: width, height: 232)
-
-        case .explore:
-            return CGSize(width: width, height: 130)
-        }
-    }
+extension MindfulnessViewController: UICollectionViewDelegate {
+    // put willDisplay + didEndDisplaying here
     
     func collectionView(_ collectionView: UICollectionView,
                         willDisplay cell: UICollectionViewCell,
@@ -304,11 +401,9 @@ extension MindfulnessViewController: UICollectionViewDelegateFlowLayout {
         guard Section(rawValue: indexPath.section) == .slideCard else { return }
         guard let slideCell = cell as? SlideCardCell else { return }
 
-        // Attach PageViewController to the host view in the cell
         attachPageViewController(to: slideCell.pageHostView,
                                  pageControl: slideCell.pageControl)
     }
-
 
     func collectionView(_ collectionView: UICollectionView,
                         didEndDisplaying cell: UICollectionViewCell,
@@ -323,8 +418,9 @@ extension MindfulnessViewController: UICollectionViewDelegateFlowLayout {
         }
     }
 
-
+    
 }
+
 
 extension MindfulnessViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {}
 
