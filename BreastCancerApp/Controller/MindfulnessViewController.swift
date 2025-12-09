@@ -209,9 +209,6 @@ class MindfulnessViewController: UIViewController {
             slides = []
         }
     }
-
-
-
 }
 
 
@@ -287,38 +284,45 @@ extension MindfulnessViewController: UICollectionViewDelegateFlowLayout {
         switch Section(rawValue: indexPath.section)! {
 
         case .header:
-            return CGSize(width: width, height: 220)
+            return CGSize(width: width, height: 200)
 
         case .emotions:
-            return CGSize(width: width, height: 160)
+            return CGSize(width: width, height: 232)
 
         case .slideCard:
-            return CGSize(width: width, height: 260)
+            return CGSize(width: width, height: 232)
 
         case .explore:
             return CGSize(width: width, height: 130)
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView,
+                        willDisplay cell: UICollectionViewCell,
+                        forItemAt indexPath: IndexPath) {
+
         guard Section(rawValue: indexPath.section) == .slideCard else { return }
         guard let slideCell = cell as? SlideCardCell else { return }
 
-        // make sure slides are populated (selectedEmotionIndex should decide slides)
-        // call setupSlides(for:) if needed (you probably already have this function)
-        // attach pageVC to the slideCell.host
-        attachPageViewController(to: slideCell.pageHostView, pageControl: slideCell.pageControl)
+        // Attach PageViewController to the host view in the cell
+        attachPageViewController(to: slideCell.pageHostView,
+                                 pageControl: slideCell.pageControl)
     }
 
-    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        // if the slideCard cell ended displaying, detach (safe)
-        if Section(rawValue: indexPath.section) == .slideCard, let slideCell = cell as? SlideCardCell {
-            // detach only if this was attached host
+
+    func collectionView(_ collectionView: UICollectionView,
+                        didEndDisplaying cell: UICollectionViewCell,
+                        forItemAt indexPath: IndexPath) {
+
+        if Section(rawValue: indexPath.section) == .slideCard,
+           let slideCell = cell as? SlideCardCell {
+
             if pageVCAttachedToHost === slideCell.pageHostView {
                 detachPageViewController(from: slideCell.pageHostView)
             }
         }
     }
+
 
 }
 

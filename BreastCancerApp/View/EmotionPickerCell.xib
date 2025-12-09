@@ -17,27 +17,27 @@
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nvc-O2-Et1">
-                        <rect key="frame" x="8" y="8" width="484" height="284"/>
+                        <rect key="frame" x="16" y="16" width="468" height="200"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="How are you feeling today?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Z8Y-GC-HlU">
-                                <rect key="frame" x="0.0" y="7.9999999999999982" width="484" height="20.333333333333329"/>
+                                <rect key="frame" x="0.0" y="7.9999999999999982" width="468" height="20.333333333333329"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="dY5-B1-KwY" userLabel="HorizontalStack">
-                                <rect key="frame" x="0.0" y="36.333333333333329" width="484" height="239.66666666666669"/>
+                                <rect key="frame" x="16" y="36.333333333333329" width="436" height="155.66666666666669"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="2hJ-AT-Bx2" userLabel="HappyStack">
-                                        <rect key="frame" x="0.0" y="85" width="112" height="70"/>
+                                        <rect key="frame" x="0.0" y="43" width="100" height="70"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ywX-5e-u3G">
-                                                <rect key="frame" x="0.0" y="0.0" width="112" height="35"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="100" height="35"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="Adobe Express - file (13)" title="Button"/>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Happy" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Ng-np-b9I">
-                                                <rect key="frame" x="0.0" y="35" width="112" height="35"/>
+                                                <rect key="frame" x="0.0" y="35.000000000000014" width="100" height="35"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -48,15 +48,15 @@
                                         </constraints>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="B0Q-4H-IEg" userLabel="SadStack">
-                                        <rect key="frame" x="124" y="85" width="112" height="70"/>
+                                        <rect key="frame" x="112" y="43" width="100" height="70"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eCU-2D-7Zs">
-                                                <rect key="frame" x="0.0" y="0.0" width="112" height="35"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="100" height="35"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="Adobe Express - file (14)" title="Button"/>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sad" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MHq-IR-Tbj">
-                                                <rect key="frame" x="0.0" y="35" width="112" height="35"/>
+                                                <rect key="frame" x="0.0" y="35.000000000000014" width="100" height="35"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -67,15 +67,15 @@
                                         </constraints>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="8r7-PR-w1b" userLabel="AnxiousStack">
-                                        <rect key="frame" x="248" y="85" width="112" height="70"/>
+                                        <rect key="frame" x="224" y="43" width="100" height="70"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="trl-rM-fLr">
-                                                <rect key="frame" x="0.0" y="0.0" width="112" height="35"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="100" height="35"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="Adobe Express - file (15)" title="Button"/>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Anxious" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="018-5v-cVK">
-                                                <rect key="frame" x="0.0" y="35" width="112" height="35"/>
+                                                <rect key="frame" x="0.0" y="35.000000000000014" width="100" height="35"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -86,15 +86,15 @@
                                         </constraints>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="egs-Of-2jL" userLabel="TiredStack">
-                                        <rect key="frame" x="372" y="85" width="112" height="70"/>
+                                        <rect key="frame" x="336" y="43" width="100" height="70"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KAI-uQ-c3i">
-                                                <rect key="frame" x="0.0" y="0.0" width="112" height="35"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="100" height="35"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="Adobe Express - file (16)" title="Button"/>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tired" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4S3-uj-QfU">
-                                                <rect key="frame" x="0.0" y="35" width="112" height="35"/>
+                                                <rect key="frame" x="0.0" y="35.000000000000014" width="100" height="35"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -109,13 +109,14 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="dY5-B1-KwY" firstAttribute="leading" secondItem="Nvc-O2-Et1" secondAttribute="leading" id="Aur-pC-ykC"/>
+                            <constraint firstItem="dY5-B1-KwY" firstAttribute="leading" secondItem="Nvc-O2-Et1" secondAttribute="leading" constant="16" id="Aur-pC-ykC"/>
                             <constraint firstAttribute="trailing" secondItem="Z8Y-GC-HlU" secondAttribute="trailing" id="FYO-oF-r7K"/>
                             <constraint firstItem="Z8Y-GC-HlU" firstAttribute="top" secondItem="Nvc-O2-Et1" secondAttribute="top" constant="8" id="GIa-c4-bGP"/>
-                            <constraint firstAttribute="trailing" secondItem="dY5-B1-KwY" secondAttribute="trailing" id="H8Q-9R-KnN"/>
+                            <constraint firstAttribute="trailing" secondItem="dY5-B1-KwY" secondAttribute="trailing" constant="16" id="H8Q-9R-KnN"/>
                             <constraint firstItem="dY5-B1-KwY" firstAttribute="top" secondItem="Z8Y-GC-HlU" secondAttribute="bottom" constant="8" id="Ohy-2y-DFc"/>
                             <constraint firstItem="Z8Y-GC-HlU" firstAttribute="leading" secondItem="Nvc-O2-Et1" secondAttribute="leading" id="SzX-UB-2Dk"/>
                             <constraint firstAttribute="bottom" secondItem="dY5-B1-KwY" secondAttribute="bottom" constant="8" id="iWL-G4-5qf"/>
+                            <constraint firstAttribute="height" constant="200" id="qHc-gl-aFM"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -127,10 +128,9 @@
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="Nvc-O2-Et1" secondAttribute="bottom" constant="8" id="HX9-6l-f4E"/>
-                <constraint firstItem="Nvc-O2-Et1" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="8" id="bG4-ef-c0f"/>
-                <constraint firstItem="Nvc-O2-Et1" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="8" id="bYc-w9-jV5"/>
-                <constraint firstAttribute="trailing" secondItem="Nvc-O2-Et1" secondAttribute="trailing" constant="8" id="vDe-oE-XAu"/>
+                <constraint firstItem="Nvc-O2-Et1" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="16" id="Vm1-x2-3Kz"/>
+                <constraint firstItem="Nvc-O2-Et1" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="bG4-ef-c0f"/>
+                <constraint firstAttribute="trailing" secondItem="Nvc-O2-Et1" secondAttribute="trailing" constant="16" id="vDe-oE-XAu"/>
             </constraints>
             <size key="customSize" width="341" height="154"/>
             <connections>
