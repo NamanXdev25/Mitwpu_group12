@@ -21,29 +21,34 @@
             <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="huI-eN-hzL">
-                    <rect key="frame" x="16" y="400.33333333333331" width="361" height="101.66666666666669"/>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="huI-eN-hzL">
+                    <rect key="frame" x="16" y="126" width="361" height="79"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vOx-ZG-IAI" userLabel="TitleLabel">
-                            <rect key="frame" x="0.66666666666665719" y="0.0" width="360" height="24"/>
+                            <rect key="frame" x="0.66666666666665719" y="0.0" width="360" height="30"/>
                             <constraints>
+                                <constraint firstAttribute="height" constant="30" id="RTP-Tq-PGk"/>
                                 <constraint firstAttribute="width" constant="360" id="ggL-ky-Opv"/>
                             </constraints>
-                            <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jFH-0I-AyP" userLabel="DescriptionLabel">
-                            <rect key="frame" x="0.66666666666665719" y="36" width="360" height="19.333333333333329"/>
+                            <rect key="frame" x="0.66666666666665719" y="30" width="360" height="17"/>
                             <constraints>
+                                <constraint firstAttribute="height" constant="60" id="1z6-Jb-fMK"/>
                                 <constraint firstAttribute="width" constant="360" id="XpN-ty-lsM"/>
                             </constraints>
-                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                            <fontDescription key="fontDescription" type="system" weight="light" pointSize="14"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a8h-cy-ukq">
-                            <rect key="frame" x="143" y="67.333333333333371" width="75" height="34.333333333333343"/>
+                            <rect key="frame" x="143" y="47" width="75" height="32"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="32" id="TZP-hC-VhT"/>
+                            </constraints>
                             <color key="tintColor" name="PrimaryColor"/>
                             <state key="normal" title="Button"/>
                             <buttonConfiguration key="configuration" style="filled" title="Button"/>
@@ -56,7 +61,8 @@
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <constraints>
-                <constraint firstItem="huI-eN-hzL" firstAttribute="centerY" secondItem="fnl-2z-Ty3" secondAttribute="centerY" id="kaU-hu-LUh"/>
+                <constraint firstItem="huI-eN-hzL" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="8" id="HCa-fh-9AD"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="huI-eN-hzL" secondAttribute="bottom" constant="32" id="TeT-M6-BYq"/>
                 <constraint firstItem="huI-eN-hzL" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="16" id="lfZ-ww-ITt"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="huI-eN-hzL" secondAttribute="trailing" constant="16" id="zRa-gg-NXM"/>
             </constraints>

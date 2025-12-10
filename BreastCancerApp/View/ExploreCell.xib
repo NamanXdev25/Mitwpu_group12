@@ -19,35 +19,38 @@
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZMg-1a-aeU" userLabel="CardView">
-                        <rect key="frame" x="0.0" y="8" width="302" height="66"/>
+                        <rect key="frame" x="16" y="0.0" width="270" height="74"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Adobe Express - file (11)" translatesAutoresizingMaskIntoConstraints="NO" id="aDz-2E-ALt">
-                                <rect key="frame" x="16" y="5" width="56" height="56"/>
+                                <rect key="frame" x="16" y="-7" width="88" height="88"/>
                                 <color key="tintColor" name="PrimaryColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="56" id="6sT-U9-aoc"/>
-                                    <constraint firstAttribute="height" constant="56" id="c1Z-gA-LuQ"/>
+                                    <constraint firstAttribute="width" constant="88" id="6sT-U9-aoc"/>
+                                    <constraint firstAttribute="height" constant="88" id="c1Z-gA-LuQ"/>
                                 </constraints>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="Mua-A5-rvB" userLabel="TextStack">
-                                <rect key="frame" x="84" y="11.333333333333332" width="172" height="43.333333333333343"/>
+                                <rect key="frame" x="116" y="16.000000000000004" width="108" height="42.333333333333343"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BOo-w6-ri8" userLabel="TitleLabel">
-                                        <rect key="frame" x="0.0" y="0.0" width="49" height="24"/>
-                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
-                                        <nil key="textColor"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="43.333333333333336" height="28"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                        <color key="textColor" name="PrimaryColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WDZ-54-pNo" userLabel="SubtitleLabel">
-                                        <rect key="frame" x="0.0" y="24.000000000000007" width="39.666666666666664" height="19.333333333333336"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <rect key="frame" x="0.0" y="27.999999999999996" width="30.666666666666668" height="14.333333333333332"/>
+                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="12"/>
                                         <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstItem="WDZ-54-pNo" firstAttribute="top" secondItem="Mua-A5-rvB" secondAttribute="top" constant="28" id="MXB-Yp-3Nt"/>
+                                </constraints>
                             </stackView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="ahl-d5-j5S">
-                                <rect key="frame" x="272" y="25" width="14" height="16.333333333333329"/>
+                                <rect key="frame" x="240" y="29" width="14" height="16.333333333333329"/>
                                 <color key="tintColor" systemColor="systemGrayColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="C3j-CM-llH"/>
@@ -77,9 +80,9 @@
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <constraints>
-                <constraint firstItem="ZMg-1a-aeU" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="7gG-tF-LsD"/>
-                <constraint firstAttribute="trailing" secondItem="ZMg-1a-aeU" secondAttribute="trailing" id="7r1-m7-40Q"/>
-                <constraint firstItem="ZMg-1a-aeU" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="8" id="eG2-NV-bzX"/>
+                <constraint firstItem="ZMg-1a-aeU" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="7gG-tF-LsD"/>
+                <constraint firstAttribute="trailing" secondItem="ZMg-1a-aeU" secondAttribute="trailing" constant="16" id="7r1-m7-40Q"/>
+                <constraint firstItem="ZMg-1a-aeU" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="eG2-NV-bzX"/>
                 <constraint firstAttribute="bottom" secondItem="ZMg-1a-aeU" secondAttribute="bottom" constant="8" id="rbw-qr-ijU"/>
             </constraints>
             <size key="customSize" width="302" height="82"/>
@@ -93,7 +96,7 @@
         </collectionViewCell>
     </objects>
     <resources>
-        <image name="Adobe Express - file (11)" width="1024" height="1024"/>
+        <image name="Adobe Express - file (11)" width="623" height="695"/>
         <image name="chevron.right" catalog="system" width="97" height="128"/>
         <namedColor name="PrimaryColor">
             <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

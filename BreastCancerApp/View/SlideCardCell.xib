@@ -18,21 +18,20 @@
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CVV-53-7gu">
-                        <rect key="frame" x="16" y="16" width="260" height="200"/>
+                        <rect key="frame" x="16" y="16" width="260" height="180"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cb8-Fq-d9F" userLabel="PageHostView">
-                                <rect key="frame" x="8" y="8" width="244" height="184"/>
+                                <rect key="frame" x="8" y="8" width="244" height="164"/>
                                 <subviews>
                                     <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="4" translatesAutoresizingMaskIntoConstraints="NO" id="m3U-t7-GrE">
-                                        <rect key="frame" x="-8" y="150.33333333333334" width="260" height="25.666666666666657"/>
+                                        <rect key="frame" x="76.666666666666657" y="138.33333333333334" width="90.666666666666657" height="25.666666666666657"/>
                                         <color key="pageIndicatorTintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <color key="currentPageIndicatorTintColor" systemColor="labelColor"/>
                                     </pageControl>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="m3U-t7-GrE" firstAttribute="centerX" secondItem="cb8-Fq-d9F" secondAttribute="centerX" id="AMh-Ys-f8q"/>
-                                    <constraint firstAttribute="bottom" secondItem="m3U-t7-GrE" secondAttribute="bottom" constant="8" id="JbK-cI-aRi"/>
-                                    <constraint firstItem="m3U-t7-GrE" firstAttribute="leading" secondItem="cb8-Fq-d9F" secondAttribute="leading" constant="-8" id="hCT-tp-YtX"/>
+                                    <constraint firstAttribute="bottom" secondItem="m3U-t7-GrE" secondAttribute="bottom" id="JbK-cI-aRi"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -41,7 +40,7 @@
                             <constraint firstAttribute="bottom" secondItem="cb8-Fq-d9F" secondAttribute="bottom" constant="8" id="6zo-K4-PUL"/>
                             <constraint firstItem="cb8-Fq-d9F" firstAttribute="top" secondItem="CVV-53-7gu" secondAttribute="top" constant="8" id="Xks-MA-vVI"/>
                             <constraint firstItem="cb8-Fq-d9F" firstAttribute="leading" secondItem="CVV-53-7gu" secondAttribute="leading" constant="8" id="ddL-0W-XCf"/>
-                            <constraint firstAttribute="height" constant="200" id="m1e-Cd-cI0"/>
+                            <constraint firstAttribute="height" constant="180" id="m1e-Cd-cI0"/>
                             <constraint firstAttribute="trailing" secondItem="cb8-Fq-d9F" secondAttribute="trailing" constant="8" id="zmX-Xi-dbR"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>

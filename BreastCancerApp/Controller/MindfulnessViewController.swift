@@ -11,7 +11,6 @@ class MindfulnessViewController: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var gradientView: UIView!
-    @IBOutlet weak var headerImageView: UIImageView!
 
 
     
@@ -56,7 +55,7 @@ class MindfulnessViewController: UIViewController {
         
         collectionView.contentInsetAdjustmentBehavior = .never
         //collectionView.contentInsetAdjustmentBehavior = .automatic
-        collectionView.contentInset = UIEdgeInsets(top: 172, left: 0, bottom: 0, right: 0)
+        collectionView.contentInset = UIEdgeInsets(top: 132, left: 0, bottom: 0, right: 0)
 
         //collectionView.contentInset = UIEdgeInsets(top: 16, left: 0, bottom: 0, right: 0)
         
@@ -66,6 +65,10 @@ class MindfulnessViewController: UIViewController {
 
         //collectionView.register(UINib(nibName: "HeaderCell", bundle: nil), forCellWithReuseIdentifier: "HeaderCell")
 
+        collectionView.register(
+            UINib(nibName: "ExploreLabelCell", bundle: nil),
+            forCellWithReuseIdentifier: "ExploreLabelCell"
+        )
         collectionView.register(UINib(nibName: "EmotionPickerCell", bundle: nil),
                                 forCellWithReuseIdentifier: "EmotionPickerCell")
 
@@ -82,23 +85,6 @@ class MindfulnessViewController: UIViewController {
         applyFadeGradient()
         
     }
-
-//    private func applyFadeGradient() {
-//        let gradient = CAGradientLayer()
-//        gradient.frame = gradientView.bounds
-//
-//        gradient.colors = [
-//            UIColor.clear.cgColor,                 // keep image visible
-//            UIColor(named: "BgColor")!.cgColor     // fade into BG
-//        ]
-//
-//        gradient.locations = [0.6, 1.0]   // fade later → smooth cut
-//        gradient.startPoint = CGPoint(x: 0.5, y: 0)
-//        gradient.endPoint   = CGPoint(x: 0.5, y: 1)
-//
-//        gradientView.layer.sublayers?.removeAll()
-//        gradientView.layer.addSublayer(gradient)
-//    }
     
     private func applyFadeGradient() {
 
@@ -115,7 +101,7 @@ class MindfulnessViewController: UIViewController {
             UIColor.black.cgColor,        // fully visible (image)
             UIColor.clear.cgColor         // fades out
         ]
-        maskLayer.locations = [0.6, 1.0]
+        maskLayer.locations = [0.68, 1.0]
 
         imageLayer.mask = maskLayer
 
@@ -271,13 +257,13 @@ class MindfulnessViewController: UIViewController {
                                  description: "Let’s take a small step to feel better.",
                                  buttonText: "Next"),
                 MindfulnessSlide(title: "Gentle Breathing",
-                                 description: "Try a 3-minute calming session.",
+                                 description: "Try a 3-minute calming session to reset your breathing and relax your body.",
                                  buttonText: "Begin"),
                 MindfulnessSlide(title: "Reflect Through Journaling",
-                                 description: "Write what's on your mind.",
+                                 description: "Write down what’s been weighing on your mind today it can help clear your head.",
                                  buttonText: "Begin"),
                 MindfulnessSlide(title: "Try Color Your Feelings",
-                                 description: "Draw something joyful.",
+                                 description: "Draw something joyful like the sun, flowers Let the colors brighten your mood.",
                                  buttonText: "Add Photo")
             ]
 
@@ -327,26 +313,28 @@ class MindfulnessViewController: UIViewController {
 
 
             case .explore:
-                let item = NSCollectionLayoutItem(
-                    layoutSize: .init(
-                        widthDimension: .fractionalWidth(1),
-                        heightDimension: .absolute(130)
-                    )
+                // label item
+                let labelItem = NSCollectionLayoutItem(
+                    layoutSize: .init(widthDimension: .fractionalWidth(1),
+                                      heightDimension: .absolute(40))
                 )
 
+                // card item
+                let cardItem = NSCollectionLayoutItem(
+                    layoutSize: .init(widthDimension: .fractionalWidth(1),
+                                      heightDimension: .absolute(130))
+                )
+
+                // group = vertical: label + the two cards
                 let group = NSCollectionLayoutGroup.vertical(
-                    layoutSize: .init(
-                        widthDimension: .fractionalWidth(1),
-                        heightDimension: .estimated(260)
-                    ),
-                    subitems: [item]
+                    layoutSize: .init(widthDimension: .fractionalWidth(1),
+                                      heightDimension: .estimated(300)),
+                    subitems: [labelItem, cardItem, cardItem]
                 )
-
-                group.interItemSpacing = .fixed(12)
 
                 let section = NSCollectionLayoutSection(group: group)
-                section.contentInsets = .init(top: 12, leading: 0, bottom: 12, trailing: 0)
                 section.interGroupSpacing = 12
+                section.contentInsets = .init(top: 12, leading: 0, bottom: 12, trailing: 0)
                 return section
 
             case .emotions:
@@ -354,13 +342,13 @@ class MindfulnessViewController: UIViewController {
                 let item = NSCollectionLayoutItem(
                     layoutSize: .init(
                         widthDimension: .fractionalWidth(1),
-                        heightDimension: .absolute(232)
+                        heightDimension: .absolute(200)
                     )
                 )
                 let group = NSCollectionLayoutGroup.vertical(
                     layoutSize: .init(
                         widthDimension: .fractionalWidth(1),
-                        heightDimension: .absolute(232)
+                        heightDimension: .absolute(200)
                     ),
                     subitems: [item]
                 )
@@ -371,13 +359,13 @@ class MindfulnessViewController: UIViewController {
                 let item = NSCollectionLayoutItem(
                     layoutSize: .init(
                         widthDimension: .fractionalWidth(1),
-                        heightDimension: .absolute(232)
+                        heightDimension: .absolute(200)
                     )
                 )
                 let group = NSCollectionLayoutGroup.vertical(
                     layoutSize: .init(
                         widthDimension: .fractionalWidth(1),
-                        heightDimension: .absolute(232)
+                        heightDimension: .absolute(200)
                     ),
                     subitems: [item]
                 )
@@ -415,7 +403,7 @@ extension MindfulnessViewController: UICollectionViewDataSource {
             return selectedEmotionIndex == nil ? 0 : 1  // show when emotion selected
 
         case .explore:
-            return 2  // breathing + journaling
+            return 3  // label + breathing + journaling
         }
     }
 
@@ -446,9 +434,36 @@ extension MindfulnessViewController: UICollectionViewDataSource {
             return cell
 
         case .explore:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ExploreCell", for: indexPath) as! ExploreCell
-            // We will configure explore items later (step 4)
-            return cell
+            if indexPath.item == 0 {
+                let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: "ExploreLabelCell",
+                    for: indexPath
+                ) as! ExploreLabelCell
+                cell.titleLabel.text = "Explore"
+                return cell
+            } else {
+                let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: "ExploreCell",
+                    for: indexPath
+                ) as! ExploreCell
+                
+                if indexPath.item == 1 {
+                    cell.configure(
+                        title: "Breathing Sessions",
+                        subtitle: "Short guided sessions to help you relax and manage anxiety",
+                        icon: UIImage(named: "Breathing")!
+                    )
+                } else {
+                    cell.configure(
+                        title: "Journaling",
+                        subtitle: "A space to write, reflect, and understand your day",
+                        icon: UIImage(named: "Journal")!
+                    )
+                }
+                
+                return cell
+            }
+
         }
     }
 }
@@ -483,6 +498,4 @@ extension MindfulnessViewController: UICollectionViewDelegate {
     
 }
 
-
 extension MindfulnessViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {}
-

@@ -39,9 +39,9 @@
                                 </cells>
                             </collectionView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ENV-cK-Pfs">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="340"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="300"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="340" id="E2B-m9-0EO"/>
+                                    <constraint firstAttribute="height" constant="300" id="E2B-m9-0EO"/>
                                 </constraints>
                             </view>
                         </subviews>

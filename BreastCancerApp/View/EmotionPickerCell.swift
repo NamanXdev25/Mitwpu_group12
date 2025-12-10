@@ -4,37 +4,46 @@
 //
 //  Created by Shivani Dinesh on 09/12/25.
 //
+
 import UIKit
 
 class EmotionPickerCell: UICollectionViewCell {
-    // container card view
+
     @IBOutlet weak var cardView: UIView!
 
-    // connect four buttons (or UIControls) and labels
-    @IBOutlet weak var emotionButton0: UIButton!
-    @IBOutlet weak var emotionButton1: UIButton!
-    @IBOutlet weak var emotionButton2: UIButton!
-    @IBOutlet weak var emotionButton3: UIButton!
+    // These are UIStackViews in your XIB
+    @IBOutlet weak var happyStack: UIStackView!
+    @IBOutlet weak var sadStack: UIStackView!
+    @IBOutlet weak var anxiousStack: UIStackView!
+    @IBOutlet weak var tiredStack: UIStackView!
 
-    // callback to view controller
     var didSelectEmotion: ((Int) -> Void)?
 
     override func awakeFromNib() {
-        super.awakeFromNib()     
+        super.awakeFromNib()
 
-        // wire buttons to a common action
-        emotionButton0.tag = 0
-        emotionButton1.tag = 1
-        emotionButton2.tag = 2
-        emotionButton3.tag = 3
+        // Enable touch
+        happyStack.isUserInteractionEnabled = true
+        sadStack.isUserInteractionEnabled = true
+        anxiousStack.isUserInteractionEnabled = true
+        tiredStack.isUserInteractionEnabled = true
 
-        emotionButton0.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
-        emotionButton1.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
-        emotionButton2.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
-        emotionButton3.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+        // Add gestures
+        happyStack.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
+        sadStack.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
+        anxiousStack.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
+        tiredStack.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
     }
 
-    @objc private func buttonTapped(_ sender: UIButton) {
-        didSelectEmotion?(sender.tag)
+    @objc private func handleTap(_ sender: UITapGestureRecognizer) {
+        guard let view = sender.view else { return }
+
+        switch view {
+        case happyStack:   didSelectEmotion?(0)
+        case sadStack:     didSelectEmotion?(1)
+        case anxiousStack: didSelectEmotion?(2)
+        case tiredStack:   didSelectEmotion?(3)
+        default: break
+        }
     }
 }

@@ -17,92 +17,88 @@
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nvc-O2-Et1">
-                        <rect key="frame" x="16" y="16" width="468" height="200"/>
+                        <rect key="frame" x="16" y="16" width="468" height="180"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="How are you feeling today?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Z8Y-GC-HlU">
-                                <rect key="frame" x="0.0" y="7.9999999999999982" width="468" height="20.333333333333329"/>
+                                <rect key="frame" x="0.0" y="15.999999999999998" width="468" height="20.333333333333329"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="dY5-B1-KwY" userLabel="HorizontalStack">
-                                <rect key="frame" x="16" y="36.333333333333329" width="436" height="155.66666666666669"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="dY5-B1-KwY" userLabel="HorizontalStack">
+                                <rect key="frame" x="16" y="44.333333333333336" width="436" height="111.66666666666666"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="2hJ-AT-Bx2" userLabel="HappyStack">
-                                        <rect key="frame" x="0.0" y="43" width="100" height="70"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="-10" translatesAutoresizingMaskIntoConstraints="NO" id="2hJ-AT-Bx2" userLabel="HappyStack">
+                                        <rect key="frame" x="0.0" y="0.6666666666666643" width="103" height="110.33333333333334"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ywX-5e-u3G">
-                                                <rect key="frame" x="0.0" y="0.0" width="100" height="35"/>
-                                                <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain" image="Adobe Express - file (13)" title="Button"/>
-                                            </button>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Adobe Express - file (13)" translatesAutoresizingMaskIntoConstraints="NO" id="0Sq-EB-2L0">
+                                                <rect key="frame" x="1.6666666666666643" y="0.0" width="100" height="100"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="100" id="Yi3-iA-Svb"/>
+                                                    <constraint firstAttribute="width" constant="100" id="gqq-f5-ppm"/>
+                                                </constraints>
+                                            </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Happy" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Ng-np-b9I">
-                                                <rect key="frame" x="0.0" y="35.000000000000014" width="100" height="35"/>
+                                                <rect key="frame" x="26.666666666666668" y="90" width="49.666666666666657" height="20.333333333333329"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="70" id="Mg7-4X-zxg"/>
-                                        </constraints>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="B0Q-4H-IEg" userLabel="SadStack">
-                                        <rect key="frame" x="112" y="43" width="100" height="70"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="-10" translatesAutoresizingMaskIntoConstraints="NO" id="eAP-AD-PXQ" userLabel="SadStack">
+                                        <rect key="frame" x="111" y="0.6666666666666643" width="103" height="110.33333333333334"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eCU-2D-7Zs">
-                                                <rect key="frame" x="0.0" y="0.0" width="100" height="35"/>
-                                                <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain" image="Adobe Express - file (14)" title="Button"/>
-                                            </button>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sad" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MHq-IR-Tbj">
-                                                <rect key="frame" x="0.0" y="35.000000000000014" width="100" height="35"/>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Adobe Express - file (14)" translatesAutoresizingMaskIntoConstraints="NO" id="QJW-Wg-VbE">
+                                                <rect key="frame" x="1.6666666666666572" y="0.0" width="100" height="100"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="100" id="dpV-Kk-Xcd"/>
+                                                    <constraint firstAttribute="height" constant="100" id="oR0-n6-VvZ"/>
+                                                </constraints>
+                                            </imageView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sad" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W8A-yA-t5N">
+                                                <rect key="frame" x="36.666666666666657" y="90" width="29.666666666666671" height="20.333333333333329"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="70" id="WDj-Hs-xJP"/>
-                                        </constraints>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="8r7-PR-w1b" userLabel="AnxiousStack">
-                                        <rect key="frame" x="224" y="43" width="100" height="70"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="-10" translatesAutoresizingMaskIntoConstraints="NO" id="jAo-dr-tp4" userLabel="AnxiousStack">
+                                        <rect key="frame" x="222" y="0.6666666666666643" width="103" height="110.33333333333334"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="trl-rM-fLr">
-                                                <rect key="frame" x="0.0" y="0.0" width="100" height="35"/>
-                                                <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain" image="Adobe Express - file (15)" title="Button"/>
-                                            </button>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Anxious" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="018-5v-cVK">
-                                                <rect key="frame" x="0.0" y="35.000000000000014" width="100" height="35"/>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Adobe Express - file (15)" translatesAutoresizingMaskIntoConstraints="NO" id="gEp-lz-OLQ">
+                                                <rect key="frame" x="1.6666666666666572" y="0.0" width="100" height="100"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="100" id="PHz-Pz-7if"/>
+                                                    <constraint firstAttribute="width" constant="100" id="TG9-zE-bzy"/>
+                                                </constraints>
+                                            </imageView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Anxious" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iKY-fe-ivI">
+                                                <rect key="frame" x="21.333333333333318" y="90" width="60.333333333333343" height="20.333333333333329"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="70" id="4d0-AY-jwO"/>
-                                        </constraints>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="egs-Of-2jL" userLabel="TiredStack">
-                                        <rect key="frame" x="336" y="43" width="100" height="70"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="-10" translatesAutoresizingMaskIntoConstraints="NO" id="xC9-0u-9Do" userLabel="TiredStack">
+                                        <rect key="frame" x="333" y="0.6666666666666643" width="103" height="110.33333333333334"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KAI-uQ-c3i">
-                                                <rect key="frame" x="0.0" y="0.0" width="100" height="35"/>
-                                                <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain" image="Adobe Express - file (16)" title="Button"/>
-                                            </button>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tired" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4S3-uj-QfU">
-                                                <rect key="frame" x="0.0" y="35.000000000000014" width="100" height="35"/>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Adobe Express - file (16)" translatesAutoresizingMaskIntoConstraints="NO" id="FOX-g2-DaU">
+                                                <rect key="frame" x="1.6666666666666856" y="0.0" width="100" height="100"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="100" id="WlD-Hf-AKm"/>
+                                                    <constraint firstAttribute="height" constant="100" id="iF5-GB-nyn"/>
+                                                </constraints>
+                                            </imageView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tired" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m2s-A7-hjY">
+                                                <rect key="frame" x="32" y="90" width="39.333333333333343" height="20.333333333333329"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="70" id="BwM-zL-aMU"/>
-                                        </constraints>
                                     </stackView>
                                 </subviews>
                             </stackView>
@@ -111,12 +107,12 @@
                         <constraints>
                             <constraint firstItem="dY5-B1-KwY" firstAttribute="leading" secondItem="Nvc-O2-Et1" secondAttribute="leading" constant="16" id="Aur-pC-ykC"/>
                             <constraint firstAttribute="trailing" secondItem="Z8Y-GC-HlU" secondAttribute="trailing" id="FYO-oF-r7K"/>
-                            <constraint firstItem="Z8Y-GC-HlU" firstAttribute="top" secondItem="Nvc-O2-Et1" secondAttribute="top" constant="8" id="GIa-c4-bGP"/>
+                            <constraint firstItem="Z8Y-GC-HlU" firstAttribute="top" secondItem="Nvc-O2-Et1" secondAttribute="top" constant="16" id="GIa-c4-bGP"/>
                             <constraint firstAttribute="trailing" secondItem="dY5-B1-KwY" secondAttribute="trailing" constant="16" id="H8Q-9R-KnN"/>
                             <constraint firstItem="dY5-B1-KwY" firstAttribute="top" secondItem="Z8Y-GC-HlU" secondAttribute="bottom" constant="8" id="Ohy-2y-DFc"/>
                             <constraint firstItem="Z8Y-GC-HlU" firstAttribute="leading" secondItem="Nvc-O2-Et1" secondAttribute="leading" id="SzX-UB-2Dk"/>
-                            <constraint firstAttribute="bottom" secondItem="dY5-B1-KwY" secondAttribute="bottom" constant="8" id="iWL-G4-5qf"/>
-                            <constraint firstAttribute="height" constant="200" id="qHc-gl-aFM"/>
+                            <constraint firstAttribute="bottom" secondItem="dY5-B1-KwY" secondAttribute="bottom" constant="24" id="iWL-G4-5qf"/>
+                            <constraint firstAttribute="height" constant="180" id="qHc-gl-aFM"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -134,11 +130,11 @@
             </constraints>
             <size key="customSize" width="341" height="154"/>
             <connections>
+                <outlet property="anxiousStack" destination="jAo-dr-tp4" id="c0r-jn-aru"/>
                 <outlet property="cardView" destination="Nvc-O2-Et1" id="GRK-Zz-1uC"/>
-                <outlet property="emotionButton0" destination="ywX-5e-u3G" id="KDq-nP-Ll3"/>
-                <outlet property="emotionButton1" destination="eCU-2D-7Zs" id="74g-O7-OEb"/>
-                <outlet property="emotionButton2" destination="trl-rM-fLr" id="Jww-EI-a4g"/>
-                <outlet property="emotionButton3" destination="KAI-uQ-c3i" id="i04-Ei-Nls"/>
+                <outlet property="happyStack" destination="2hJ-AT-Bx2" id="5bu-Xo-tGH"/>
+                <outlet property="sadStack" destination="eAP-AD-PXQ" id="fB1-7Z-ReO"/>
+                <outlet property="tiredStack" destination="xC9-0u-9Do" id="YWJ-4y-uSx"/>
             </connections>
             <point key="canvasLocation" x="917" y="275"/>
         </collectionViewCell>
