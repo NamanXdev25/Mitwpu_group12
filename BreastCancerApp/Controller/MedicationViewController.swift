@@ -25,7 +25,7 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
         collectionView.setCollectionViewLayout(generateLayout(), animated: false)
     }
 
-    // MARK: - Navigation / Segue
+    // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let addVC = segue.destination as? AddMedicationViewController {
             addVC.delegate = self
@@ -94,63 +94,60 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
         return UICollectionReusableView()
     }
 
-    // MARK: - Layout Generation (With Swipe Actions)
-    // MARK: - Layout Generation (With Swipe Actions)
-        func generateLayout() -> UICollectionViewLayout {
+    // MARK: - Layout Generation (With Edit & Delete)
+    func generateLayout() -> UICollectionViewLayout {
+        
+        var config = UICollectionLayoutListConfiguration(appearance: .plain)
+        config.showsSeparators = false
+        config.headerMode = .supplementary
+        
+        config.trailingSwipeActionsConfigurationProvider = { [weak self] indexPath in
             
-            // 1. Create List Configuration
-            var config = UICollectionLayoutListConfiguration(appearance: .plain)
-            config.showsSeparators = false
-            config.headerMode = .supplementary
-            
-            // 2. Define Swipe Actions
-            config.trailingSwipeActionsConfigurationProvider = { [weak self] indexPath in
-                
-                // --- ACTION 1: DELETE (Red) ---
-                let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { action, view, completion in
-                    self?.confirmDelete(at: indexPath, completion: completion)
-                }
-                deleteAction.image = UIImage(systemName: "trash.fill")
-                deleteAction.backgroundColor = .systemRed
-
-                // --- ACTION 2: EDIT (Blue) ---
-                let editAction = UIContextualAction(style: .normal, title: "Edit") { action, view, completion in
-                    
-                    // [FIX STARTS HERE] ---------------------------------
-                    // 1. Get the data for the row we swiped
-                    let selectedMed = self?.todaysMedications[indexPath.row]
-                    
-                    // 2. Instantiate the Add Screen
-                    // MAKE SURE your Storyboard ID for the pink screen is set to "AddMedicationViewController"
-                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                    if let addVC = storyboard.instantiateViewController(withIdentifier: "AddMedicationViewController") as? AddMedicationViewController {
-                        
-                        // 3. Pass the data to the screen
-                        addVC.medicationToEdit = selectedMed
-                        addVC.indexToEdit = indexPath.row
-                        addVC.delegate = self
-                        
-                        // 4. Present it
-                        self?.present(addVC, animated: true)
-                    }
-                    // [FIX ENDS HERE] -----------------------------------
-                    
-                    completion(true) // Close swipe
-                }
-                editAction.image = UIImage(systemName: "pencil")
-                editAction.backgroundColor = .systemBlue
-                
-                // 3. Combine Actions
-                let swipeConfig = UISwipeActionsConfiguration(actions: [deleteAction, editAction])
-                swipeConfig.performsFirstActionWithFullSwipe = true
-                
-                return swipeConfig
+            // --- ACTION 1: DELETE (Red) ---
+            let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { action, view, completion in
+                self?.confirmDelete(at: indexPath, completion: completion)
             }
+            deleteAction.image = UIImage(systemName: "trash.fill")
+            deleteAction.backgroundColor = .systemRed
+
+            // --- ACTION 2: EDIT (Blue) ---
+            let editAction = UIContextualAction(style: .normal, title: "Edit") { action, view, completion in
+                
+                // 1. Check if we can find the Storyboard
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                
+                // 2. Try to find the View Controller safely
+                // This ID ("AddMedicationViewController") MUST match what you typed in Step 1
+                if let addVC = storyboard.instantiateViewController(withIdentifier: "AddMedicationViewController") as? AddMedicationViewController {
+                    
+                    // 3. Pass data
+                    let selectedMed = self?.todaysMedications[indexPath.row]
+                    addVC.medicationToEdit = selectedMed
+                    addVC.indexToEdit = indexPath.row
+                    addVC.delegate = self
+                    
+                    // 4. Open Screen
+                    self?.present(addVC, animated: true)
+                    
+                } else {
+                    print("ERROR: Could not find 'AddMedicationViewController' in Storyboard.")
+                }
+                
+                completion(true)
+            }
+            editAction.image = UIImage(systemName: "pencil")
+            editAction.backgroundColor = .systemBlue
             
-            return UICollectionViewCompositionalLayout.list(using: config)
+            let swipeConfig = UISwipeActionsConfiguration(actions: [deleteAction, editAction])
+            swipeConfig.performsFirstActionWithFullSwipe = true
+            
+            return swipeConfig
         }
+        
+        return UICollectionViewCompositionalLayout.list(using: config)
+    }
     
-    // MARK: - Helper: Delete Confirmation
+    // MARK: - Delete Confirmation
     func confirmDelete(at indexPath: IndexPath, completion: @escaping (Bool) -> Void) {
         
         let medName = todaysMedications[indexPath.row].name
@@ -161,35 +158,26 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
             preferredStyle: .alert
         )
         
-        // Delete Action
         let deleteBtn = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
-            // 1. Remove Data
             self?.todaysMedications.remove(at: indexPath.row)
-            
-            // 2. Remove Row from Screen
             self?.collectionView.deleteItems(at: [indexPath])
-            
-            // 3. Tell swipe gesture it was successful
             completion(true)
         }
         
-        // Cancel Action
         let cancelBtn = UIAlertAction(title: "Cancel", style: .cancel) { _ in
-            // Tell swipe gesture we cancelled
             completion(false)
         }
         
         alert.addAction(deleteBtn)
         alert.addAction(cancelBtn)
-        
         present(alert, animated: true)
     }
 }
 
-// MARK: - AddMedicationDelegate Extension
+// MARK: - Delegate Extension
 extension MedicationViewController: AddMedicationDelegate {
     
-    // Existing Add Function
+    // Add New
     func didAddMedication(name: String, time: String, repeatOption: String, note: String) {
         let subtitle = note.isEmpty ? repeatOption : note
         let newPill = Medication(name: name, note: subtitle, time: time, isTaken: false)
@@ -197,18 +185,18 @@ extension MedicationViewController: AddMedicationDelegate {
         collectionView.reloadData()
     }
     
-    // NEW: Edit Function
+    // Edit Existing
+    // NOTE: This now uses 'index' instead of 'id' to be consistent.
+    // Make sure your AddMedicationViewController protocol says 'index' too!
     func didEditMedication(index: Int, name: String, time: String, repeatOption: String, note: String) {
         
-        // 1. Create updated object
         let subtitle = note.isEmpty ? repeatOption : note
         let updatedPill = Medication(name: name, note: subtitle, time: time, isTaken: false)
         
-        // 2. Replace the old one in the array
         todaysMedications[index] = updatedPill
         
-        // 3. Reload just that row (efficient)
         let indexPath = IndexPath(row: index, section: 0)
         collectionView.reloadItems(at: [indexPath])
     }
 }
+

@@ -110,7 +110,7 @@
         <!--Add Medication View Controller-->
         <scene sceneID="5Gs-4e-l1C">
             <objects>
-                <viewController storyboardIdentifier="AddExerciseViewController" id="Ksl-lW-ScL" customClass="AddMedicationViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AddMedicationViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Ksl-lW-ScL" customClass="AddMedicationViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="hLR-DJ-pVd">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="793"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
