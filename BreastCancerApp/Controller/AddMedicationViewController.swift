@@ -44,6 +44,7 @@ class AddMedicationViewController: UIViewController, UIPickerViewDelegate, UIPic
         repeatPicker.delegate = self
         repeatPicker.dataSource = self
         descriptionTextView.delegate = self
+        self.title = "Edit Details"
         
         // Setup Time Picker
         timePicker.datePickerMode = .time
@@ -81,7 +82,7 @@ class AddMedicationViewController: UIViewController, UIPickerViewDelegate, UIPic
         if let med = medicationToEdit {
             // Update Title and Button
             // (If you have a navigation bar, you can set title = "Edit Medication")
-            saveButton.setTitle("Update Medication", for: .normal)
+            saveButton.setTitle("", for: .normal)
             
             // Fill Fields
             nameTextField.text = med.name
