@@ -38,6 +38,12 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="HeaderImage" translatesAutoresizingMaskIntoConstraints="NO" id="a6A-ZG-NC7">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="300"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="300" id="tSB-fI-SWa"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="nUf-IF-Hjt"/>
                         <color key="backgroundColor" name="BgColor"/>
@@ -45,6 +51,9 @@
                             <constraint firstItem="qmv-rY-yBY" firstAttribute="top" secondItem="nUf-IF-Hjt" secondAttribute="top" id="5TH-YI-UP9"/>
                             <constraint firstItem="nUf-IF-Hjt" firstAttribute="bottom" secondItem="qmv-rY-yBY" secondAttribute="bottom" id="9FQ-23-Mt1"/>
                             <constraint firstItem="qmv-rY-yBY" firstAttribute="leading" secondItem="nUf-IF-Hjt" secondAttribute="leading" id="Plb-nT-rPe"/>
+                            <constraint firstItem="a6A-ZG-NC7" firstAttribute="top" secondItem="Ldc-47-xIG" secondAttribute="top" id="XTL-w7-Irb"/>
+                            <constraint firstItem="a6A-ZG-NC7" firstAttribute="leading" secondItem="Ldc-47-xIG" secondAttribute="leading" id="kmU-w8-jXG"/>
+                            <constraint firstAttribute="trailing" secondItem="a6A-ZG-NC7" secondAttribute="trailing" id="rUG-wF-O5d"/>
                             <constraint firstItem="nUf-IF-Hjt" firstAttribute="trailing" secondItem="qmv-rY-yBY" secondAttribute="trailing" id="sSc-pO-xLU"/>
                         </constraints>
                     </view>
@@ -77,6 +86,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="HeaderImage" width="1024" height="1024"/>
         <namedColor name="BgColor">
             <color red="0.97254901960784312" green="0.94901960784313721" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

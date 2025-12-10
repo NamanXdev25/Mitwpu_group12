@@ -12,7 +12,7 @@ class MindfulnessViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     
     enum Section: Int, CaseIterable {
-        case header
+        //case header
         case emotions
         case slideCard
         case explore
@@ -34,25 +34,33 @@ class MindfulnessViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Mindfulness"
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithTransparentBackground()
+        appearance.backgroundColor = .clear
+        appearance.shadowColor = .clear
 
-        // 1. Allow the nav bar to show large titles
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        navigationController?.navigationBar.compactAppearance = appearance
+
         navigationController?.navigationBar.prefersLargeTitles = true
-
-        // 2. Tell THIS screen to always use large titles
         navigationItem.largeTitleDisplayMode = .always
+
+        title = "Mindfulness"
         
         collectionView.setCollectionViewLayout(createCompositionalLayout(), animated: false)
         
-        collectionView.contentInsetAdjustmentBehavior = .automatic
+        collectionView.contentInsetAdjustmentBehavior = .never
+        //collectionView.contentInsetAdjustmentBehavior = .automatic
+        collectionView.contentInset = UIEdgeInsets(top: 132, left: 0, bottom: 0, right: 0)
+
         //collectionView.contentInset = UIEdgeInsets(top: 16, left: 0, bottom: 0, right: 0)
         
         
         collectionView.dataSource = self
         collectionView.delegate = self
 
-        collectionView.register(UINib(nibName: "HeaderCell", bundle: nil),
-                                forCellWithReuseIdentifier: "HeaderCell")
+        //collectionView.register(UINib(nibName: "HeaderCell", bundle: nil), forCellWithReuseIdentifier: "HeaderCell")
 
         collectionView.register(UINib(nibName: "EmotionPickerCell", bundle: nil),
                                 forCellWithReuseIdentifier: "EmotionPickerCell")
@@ -65,13 +73,14 @@ class MindfulnessViewController: UIViewController {
         
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
 
-        print(">>> nav:", navigationController)
-        print(">>> titleAppear:", navigationController?.navigationBar.prefersLargeTitles)
-        print(">>> mode:", navigationItem.largeTitleDisplayMode.rawValue)
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.largeTitleDisplayMode = .always
+        title = "Mindfulness"
     }
+
 
 
 
@@ -242,25 +251,25 @@ class MindfulnessViewController: UIViewController {
 
             switch section {
 
-            case .header:
-                let item = NSCollectionLayoutItem(
-                    layoutSize: .init(
-                        widthDimension: .fractionalWidth(1),
-                        heightDimension: .estimated(220)
-                    )
-                )
-
-                let group = NSCollectionLayoutGroup.vertical(
-                    layoutSize: .init(
-                        widthDimension: .fractionalWidth(1),
-                        heightDimension: .estimated(220)
-                    ),
-                    subitems: [item]
-                )
-
-                let section = NSCollectionLayoutSection(group: group)
-                section.contentInsets = .init(top: 16, leading: 0, bottom: 16, trailing: 0)
-                return section
+//            case .header:
+//                let item = NSCollectionLayoutItem(
+//                    layoutSize: .init(
+//                        widthDimension: .fractionalWidth(1),
+//                        heightDimension: .estimated(380)
+//                    )
+//                )
+//
+//                let group = NSCollectionLayoutGroup.vertical(
+//                    layoutSize: .init(
+//                        widthDimension: .fractionalWidth(1),
+//                        heightDimension: .estimated(380)
+//                    ),
+//                    subitems: [item]
+//                )
+//
+//                let section = NSCollectionLayoutSection(group: group)
+//                section.contentInsets = .init(top: 16, leading: 0, bottom: 16, trailing: 0)
+//                return section
 
 
 
@@ -343,8 +352,8 @@ extension MindfulnessViewController: UICollectionViewDataSource {
         let sec = Section(rawValue: section)!
 
         switch sec {
-        case .header:
-            return 1
+//        case .header:
+//            return 1
 
         case .emotions:
             return selectedEmotionIndex == nil ? 1 : 0  // hide when emotion selected
@@ -364,10 +373,10 @@ extension MindfulnessViewController: UICollectionViewDataSource {
 
         switch sec {
 
-        case .header:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HeaderCell", for: indexPath) as! HeaderCell
-            cell.imageView.image = UIImage(named: "HeaderImage")
-            return cell
+//        case .header:
+//            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HeaderCell", for: indexPath) as! HeaderCell
+//            cell.imageView.image = UIImage(named: "HeaderImage")
+//            return cell
 
         case .emotions:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EmotionPickerCell", for: indexPath) as! EmotionPickerCell
