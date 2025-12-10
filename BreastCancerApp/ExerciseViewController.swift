@@ -270,5 +270,32 @@ class ExerciseViewController: UIViewController, UICollectionViewDataSource, UICo
         return header
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        // 1. Check if the tap is in the "Explore" section (Section 2)
+        // (Section 0 is Plan, Section 1 is Warning, Section 2 is Explore Cards)
+        if indexPath.section == 2 {
+            
+            // 2. Get the data for the item that was tapped
+            let item = model.exploreItems[indexPath.row]
+            
+            // 3. Load the Storyboard
+            let storyboard = UIStoryboard(name: "Exercise", bundle: nil)
+            
+            // 4. Create the Detail Screen
+            // Make sure the Storyboard ID is set to "ExerciseDetailViewController"
+            if let detailVC = storyboard.instantiateViewController(withIdentifier: "ExerciseDetailViewController") as? ExerciseDetailViewController {
+                
+                // 5. PASS THE DATA (This sets the Title!)
+                detailVC.pageTitle = item.title
+                
+                // 6. Navigate
+                // This pushes the new screen onto the stack.
+                // The "Back" button is created automatically by the Navigation Controller.
+                self.navigationController?.pushViewController(detailVC, animated: true)
+            }
+        }
+    }
+    
     }
 

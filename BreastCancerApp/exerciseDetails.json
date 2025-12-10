@@ -1,0 +1,278 @@
+{
+  "Chest Mobility": [
+    {
+      "title": "Low Energy",
+      "exercises": [
+        {
+          "title": "Wall Climb Stretch",
+          "subtitle": "Chest Mobility • Low",
+          "time": "1 min",
+          "imageName": "girl_stretch"
+        },
+        {
+          "title": "Shoulder Rolls",
+          "subtitle": "Chest Mobility • Low",
+          "time": "1 min",
+          "imageName": "arm_lift"
+        },
+        {
+          "title": "Chest-Opening Breaths",
+          "subtitle": "Chest Mobility • Low",
+          "time": "1 min",
+          "imageName": "chest_open"
+        }
+      ]
+    },
+    {
+      "title": "Medium Energy",
+      "exercises": [
+        {
+          "title": "Corner Stretch",
+          "subtitle": "Chest Mobility • Medium",
+          "time": "2 min",
+          "imageName": "girl_stretch"
+        },
+        {
+          "title": "Scapular Retractions",
+          "subtitle": "Chest Mobility • Medium",
+          "time": "2 min",
+          "imageName": "arm_lift"
+        }
+      ]
+    },
+    {
+      "title": "High Energy",
+      "exercises": [
+        {
+          "title": "Dynamic Open-Close",
+          "subtitle": "Chest Mobility • High",
+          "time": "1 min",
+          "imageName": "chest_open"
+        }
+      ]
+    }
+  ],
+  "Arm Flexibility": [
+    {
+      "title": "Low Energy",
+      "exercises": [
+        {
+          "title": "Wrist Circles",
+          "subtitle": "Arm Flexibility • Low",
+          "time": "1 min",
+          "imageName": "arm_lift"
+        },
+        {
+          "title": "Gentle Arm Swings",
+          "subtitle": "Arm Flexibility • Low",
+          "time": "1 min",
+          "imageName": "girl_stretch"
+        }
+      ]
+    },
+    {
+      "title": "Medium Energy",
+      "exercises": [
+        {
+          "title": "Overhead Reach",
+          "subtitle": "Arm Flexibility • Medium",
+          "time": "2 min",
+          "imageName": "chest_open"
+        },
+        {
+          "title": "Cross-Body Stretch",
+          "subtitle": "Arm Flexibility • Medium",
+          "time": "2 min",
+          "imageName": "arm_lift"
+        }
+      ]
+    },
+    {
+      "title": "High Energy",
+      "exercises": [
+        {
+          "title": "Tricep Stretch",
+          "subtitle": "Arm Flexibility • High",
+          "time": "3 min",
+          "imageName": "girl_stretch"
+        }
+      ]
+    }
+  ],
+  "Posture Recovery": [
+    {
+      "title": "Low Energy",
+      "exercises": [
+        {
+          "title": "Chin Tucks",
+          "subtitle": "Posture • Low",
+          "time": "1 min",
+          "imageName": "girl_stretch"
+        },
+        {
+          "title": "Shoulder Shrugs",
+          "subtitle": "Posture • Low",
+          "time": "1 min",
+          "imageName": "arm_lift"
+        }
+      ]
+    },
+    {
+      "title": "Medium Energy",
+      "exercises": [
+        {
+          "title": "Wall Angels",
+          "subtitle": "Posture • Medium",
+          "time": "3 min",
+          "imageName": "girl_stretch"
+        },
+        {
+          "title": "Seated T-Spine Rotation",
+          "subtitle": "Posture • Medium",
+          "time": "2 min",
+          "imageName": "arm_lift"
+        }
+      ]
+    },
+    {
+      "title": "High Energy",
+      "exercises": [
+        {
+          "title": "Plank (Modified)",
+          "subtitle": "Posture • High",
+          "time": "1 min",
+          "imageName": "girl_stretch"
+        }
+      ]
+    }
+  ],
+  "Lymphedema-Safe": [
+    {
+      "title": "Low Energy",
+      "exercises": [
+        {
+          "title": "Deep Breathing",
+          "subtitle": "Lymphedema • Low",
+          "time": "2 min",
+          "imageName": "chest_open"
+        },
+        {
+          "title": "Hand Clenches",
+          "subtitle": "Lymphedema • Low",
+          "time": "1 min",
+          "imageName": "arm_lift"
+        }
+      ]
+    },
+    {
+      "title": "Medium Energy",
+      "exercises": [
+        {
+          "title": "Elbow Flexion",
+          "subtitle": "Lymphedema • Medium",
+          "time": "2 min",
+          "imageName": "girl_stretch"
+        }
+      ]
+    },
+    {
+      "title": "High Energy",
+      "exercises": [
+        {
+          "title": "Pole Walking",
+          "subtitle": "Lymphedema • High",
+          "time": "5 min",
+          "imageName": "chest_open"
+        }
+      ]
+    }
+  ],
+  "Relaxation & Breathing": [
+    {
+      "title": "Low Energy",
+      "exercises": [
+        {
+          "title": "Box Breathing",
+          "subtitle": "Relaxation • Low",
+          "time": "3 min",
+          "imageName": "girl_stretch"
+        },
+        {
+          "title": "Guided Visualization",
+          "subtitle": "Relaxation • Low",
+          "time": "5 min",
+          "imageName": "chest_open"
+        }
+      ]
+    },
+    {
+      "title": "Medium Energy",
+      "exercises": [
+        {
+          "title": "Progressive Muscle Relaxation",
+          "subtitle": "Relaxation • Medium",
+          "time": "5 min",
+          "imageName": "girl_stretch"
+        }
+      ]
+    },
+    {
+      "title": "High Energy",
+      "exercises": [
+        {
+          "title": "Yoga Flow (Gentle)",
+          "subtitle": "Relaxation • High",
+          "time": "10 min",
+          "imageName": "chest_open"
+        }
+      ]
+    }
+  ],
+  "Core & Back Support": [
+    {
+      "title": "Low Energy",
+      "exercises": [
+        {
+          "title": "Pelvic Tilts",
+          "subtitle": "Core • Low",
+          "time": "2 min",
+          "imageName": "chest_open"
+        },
+        {
+          "title": "Knee Rolls",
+          "subtitle": "Core • Low",
+          "time": "2 min",
+          "imageName": "girl_stretch"
+        }
+      ]
+    },
+    {
+      "title": "Medium Energy",
+      "exercises": [
+        {
+          "title": "Bridge",
+          "subtitle": "Core • Medium",
+          "time": "1 min",
+          "imageName": "chest_open"
+        },
+        {
+          "title": "Bird-Dog",
+          "subtitle": "Core • Medium",
+          "time": "1 min",
+          "imageName": "arm_lift"
+        }
+      ]
+    },
+    {
+      "title": "High Energy",
+      "exercises": [
+        {
+          "title": "Dead Bug",
+          "subtitle": "Core • High",
+          "time": "2 min",
+          "imageName": "girl_stretch"
+        }
+      ]
+    }
+  ]
+}
