@@ -10,6 +10,10 @@ import UIKit
 class MindfulnessViewController: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var gradientView: UIView!
+    @IBOutlet weak var headerImageView: UIImageView!
+
+
     
     enum Section: Int, CaseIterable {
         //case header
@@ -52,7 +56,7 @@ class MindfulnessViewController: UIViewController {
         
         collectionView.contentInsetAdjustmentBehavior = .never
         //collectionView.contentInsetAdjustmentBehavior = .automatic
-        collectionView.contentInset = UIEdgeInsets(top: 132, left: 0, bottom: 0, right: 0)
+        collectionView.contentInset = UIEdgeInsets(top: 172, left: 0, bottom: 0, right: 0)
 
         //collectionView.contentInset = UIEdgeInsets(top: 16, left: 0, bottom: 0, right: 0)
         
@@ -72,6 +76,55 @@ class MindfulnessViewController: UIViewController {
                                 forCellWithReuseIdentifier: "ExploreCell")
         
     }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        applyFadeGradient()
+        
+    }
+
+//    private func applyFadeGradient() {
+//        let gradient = CAGradientLayer()
+//        gradient.frame = gradientView.bounds
+//
+//        gradient.colors = [
+//            UIColor.clear.cgColor,                 // keep image visible
+//            UIColor(named: "BgColor")!.cgColor     // fade into BG
+//        ]
+//
+//        gradient.locations = [0.6, 1.0]   // fade later → smooth cut
+//        gradient.startPoint = CGPoint(x: 0.5, y: 0)
+//        gradient.endPoint   = CGPoint(x: 0.5, y: 1)
+//
+//        gradientView.layer.sublayers?.removeAll()
+//        gradientView.layer.addSublayer(gradient)
+//    }
+    
+    private func applyFadeGradient() {
+
+        let image = UIImage(named: "HeaderImage")!.cgImage!
+
+        let imageLayer = CALayer()
+        imageLayer.frame = gradientView.bounds
+        imageLayer.contents = image
+        imageLayer.contentsGravity = .resizeAspectFill
+
+        let maskLayer = CAGradientLayer()
+        maskLayer.frame = gradientView.bounds
+        maskLayer.colors = [
+            UIColor.black.cgColor,        // fully visible (image)
+            UIColor.clear.cgColor         // fades out
+        ]
+        maskLayer.locations = [0.6, 1.0]
+
+        imageLayer.mask = maskLayer
+
+        gradientView.layer.sublayers?.removeAll()
+        gradientView.layer.addSublayer(imageLayer)
+    }
+
+
+
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
