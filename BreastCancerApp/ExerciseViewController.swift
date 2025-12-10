@@ -89,7 +89,7 @@ class ExerciseViewController: UIViewController, UICollectionViewDataSource, UICo
         collectionView.register(UINib(nibName: "PlanCell", bundle: nil), forCellWithReuseIdentifier: "PlanCell")
         collectionView.register(UINib(nibName: "WarningCell", bundle: nil), forCellWithReuseIdentifier: "WarningCell")
         // Using ExploreCell for the bottom list
-        collectionView.register(UINib(nibName: "ExploreCell", bundle: nil), forCellWithReuseIdentifier: "ExploreCell")
+        collectionView.register(UINib(nibName: "ExerciseExploreCell", bundle: nil), forCellWithReuseIdentifier: "ExerciseExploreCell")
     }
 
     // --- COMPOSITIONAL LAYOUT ---
@@ -246,7 +246,7 @@ class ExerciseViewController: UIViewController, UICollectionViewDataSource, UICo
             
         default:
             // --- Explore Cards (Small Squares) ---
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ExploreCell", for: indexPath) as! ExploreCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ExerciseExploreCell", for: indexPath) as! ExerciseExploreCell
             let item = model.exploreItems[indexPath.row]
             
             // Using String name for SF Symbols or Assets
