@@ -11,7 +11,6 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
         Medication(name: "Pill 3", note: "Before Bed", time: "9:00 PM", isTaken: false)
     ]
 
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -20,6 +19,16 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
         collectionView.setCollectionViewLayout(generateLayout(), animated: true)
         collectionView.dataSource = self
         collectionView.delegate = self
+    }
+
+    // MARK: - 1. Prepare for Segue (The Connection)
+    // This function runs automatically when you click the Pink "+" Button
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // We check if the destination is the Add Screen
+        if let addVC = segue.destination as? AddMedicationViewController {
+            // We tell the Add Screen: "I am your boss. Report back to me."
+            addVC.delegate = self
+        }
     }
 
     // MARK: - Register Cell + Header XIBs
@@ -58,7 +67,7 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
         let med = todaysMedications[indexPath.row]
         cell.configureCell(with: med)
 
-        // IMPORTANT: capture index for toggling(cell has a closure)
+        // IMPORTANT: capture index for toggling (cell has a closure)
         cell.onCircleTapped = { [weak self] in
             guard let self = self else { return }
             
@@ -73,7 +82,7 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
     }
 
 
-    // MARK: - Loads Header(can be used to set date dynamically)
+    // MARK: - Loads Header
     func collectionView(_ collectionView: UICollectionView,
                         viewForSupplementaryElementOfKind kind: String,
                         at indexPath: IndexPath) -> UICollectionReusableView {
@@ -126,13 +135,32 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
             // ---- SECTION ----
             let section = NSCollectionLayoutSection(group: group)
             section.boundarySupplementaryItems = [headerItem]
-            section.interGroupSpacing = 12   //  for the gap between the cells
+            section.interGroupSpacing = 12   //  gap between cells
             section.contentInsets = NSDirectionalEdgeInsets(
                 top: 8, leading: 8, bottom: 20, trailing: 8
             )
 
-
             return section
         }
+    }
+}
+
+// MARK: - 2. Handle the New Data (The Delegate)
+// This adds the functionality to receive the data from the other screen
+extension MedicationViewController: AddMedicationDelegate {
+    
+    func didAddMedication(name: String, time: String, repeatOption: String, note: String) {
+        
+        // 1. Create a new Medication object
+        // (If the user didn't write a note, we use the repeat option as the subtitle, e.g. "Every Day")
+        let subtitle = note.isEmpty ? repeatOption : note
+        
+        let newPill = Medication(name: name, note: subtitle, time: time, isTaken: false)
+        
+        // 2. Add it to our list
+        todaysMedications.append(newPill)
+        
+        // 3. Refresh the screen to show the new pill
+        collectionView.reloadData()
     }
 }

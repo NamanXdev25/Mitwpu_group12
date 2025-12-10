@@ -1,116 +1,148 @@
-//
-//  AddMedicationViewController.swift
-//  BreastCancerApp
-//
-//  Created by SDC-USER on 27/11/25.
-//
-
 import UIKit
 
-class AddMedicationViewController: UIViewController,
-                                   UICollectionViewDataSource,
-                                   UICollectionViewDelegate,
-                                   UICollectionViewDelegateFlowLayout {
+// This protocol allows us to send the new pill data back to the List Screen
+protocol AddMedicationDelegate: AnyObject {
+    func didAddMedication(name: String, time: String, repeatOption: String, note: String)
+}
+
+class AddMedicationViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate, UITextViewDelegate {
+
+    // --- OUTLETS ---
+    @IBOutlet weak var CloseButton: UIButton!
+    @IBOutlet weak var nameTextField: UITextField!
+    @IBOutlet weak var repeatTextField: UITextField!
+    @IBOutlet weak var timeTextField: UITextField!
+    @IBOutlet weak var reminderSwitch: UISwitch!
+    @IBOutlet weak var descriptionTextView: UITextView!
+    @IBOutlet weak var saveButton: UIButton!
     
-    @IBOutlet weak var collectionView: UICollectionView!
+    // --- PICKER OUTLETS ---
+    @IBOutlet weak var pickerOverlay: UIView!
+    @IBOutlet weak var pickerCard: UIView!
+    @IBOutlet weak var repeatPicker: UIPickerView!
+    @IBOutlet weak var timePicker: UIDatePicker!
+    
+    weak var delegate: AddMedicationDelegate?
+    
+    let weekDays = ["Every Mon", "Every Tue", "Every Wed", "Every Thu", "Every Fri", "Every Sat", "Every Sun", "Every Day"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
         
-        collectionView.dataSource = self
-        collectionView.delegate = self
+        // Delegates
+        nameTextField.delegate = self
+        repeatTextField.delegate = self
+        timeTextField.delegate = self
+        repeatPicker.delegate = self
+        repeatPicker.dataSource = self
+        descriptionTextView.delegate = self
         
-        collectionView.register(
-            UINib(nibName: "HeaderCell", bundle: nil),
-            forCellWithReuseIdentifier: "HeaderCell"
-        )
+        // Setup Time Picker
+        timePicker.datePickerMode = .time
+        timePicker.preferredDatePickerStyle = .wheels
         
-        collectionView.register(
-            UINib(nibName: "DetailsHeaderCell", bundle: nil),
-            forCellWithReuseIdentifier: "DetailsHeaderCell"
-        )
+        // Setup Pickers (Hidden initially)
+        pickerOverlay.isHidden = true
         
-        collectionView.register(
-            UINib(nibName: "NameRowCell", bundle: nil),
-            forCellWithReuseIdentifier: "NameRowCell"
-        )
+        // Add Tap to Dismiss Overlay
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissPopup))
+        pickerOverlay.addGestureRecognizer(tapGesture)
+        
+        // Add Chevrons
+        addChevron(to: repeatTextField)
+        addChevron(to: timeTextField)
+    }
+    
+    func setupUI() {
+        saveButton.layer.cornerRadius = saveButton.frame.height / 2
+        pickerCard.layer.cornerRadius = 16
+        descriptionTextView.layer.cornerRadius = 12
+        descriptionTextView.backgroundColor = UIColor.systemGray6
+        descriptionTextView.text = "Add a note"
+        descriptionTextView.textColor = .lightGray
+        descriptionTextView.textContainerInset = UIEdgeInsets(top: 15, left: 10, bottom: 10, right: 10)
+    }
 
+    // --- LOGIC TO SHOW PICKERS ---
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        if textField == repeatTextField {
+            view.endEditing(true)
+            pickerOverlay.isHidden = false
+            repeatPicker.isHidden = false
+            timePicker.isHidden = true
+            return false
+        } else if textField == timeTextField {
+            view.endEditing(true)
+            pickerOverlay.isHidden = false
+            repeatPicker.isHidden = true
+            timePicker.isHidden = false
+            return false
+        }
+        return true
     }
     
-    // MARK: - Sections
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 3  // Section 0 = Header, Section 1 = Details header , Section 2 = NameRow
+    @objc func dismissPopup() {
+        if !repeatPicker.isHidden {
+            let row = repeatPicker.selectedRow(inComponent: 0)
+            repeatTextField.text = weekDays[row]
+        } else if !timePicker.isHidden {
+            let formatter = DateFormatter()
+            formatter.timeStyle = .short
+            timeTextField.text = formatter.string(from: timePicker.date)
+        }
+        pickerOverlay.isHidden = true
     }
     
-    func collectionView(_ collectionView: UICollectionView,
-                        numberOfItemsInSection section: Int) -> Int {
-        return 1   // each section has only 1 cell for now
+    // --- ACTIONS ---
+    @IBAction func closeTapped(_ sender: Any) {
+        self.dismiss(animated: true)
     }
     
-    // MARK: - Cells
-    
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    @IBAction func saveTapped(_ sender: Any) {
+        // 1. Get the data
+        guard let name = nameTextField.text, !name.isEmpty else { return }
+        let time = timeTextField.text ?? "10:00 AM"
+        let repeatOption = repeatTextField.text ?? "Every Day"
+        let note = (descriptionTextView.text == "Add a note") ? "" : descriptionTextView.text
         
-        if indexPath.section == 0 {
-            // SECTION 0 = HEADER
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "HeaderCell",
-                for: indexPath
-            ) as! HeaderCell
-            return cell
-        }
+        // 2. Send it to the List Screen
+        delegate?.didAddMedication(name: name, time: time, repeatOption: repeatOption, note: note ?? "")
         
-        // SECTION 1 = DETAILS HEADER
-        if indexPath.section == 1 {
-            
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "DetailsHeaderCell",
-                for: indexPath
-            ) as! DetailsHeaderCell
-            
-            cell.titleLabel.text = "Details"
-            return cell
-        }
-    
-        
-        // Section 2 → Name cell
-        let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: "NameRowCell",
-            for: indexPath
-        ) as! NameRowCell
-        return cell
-        
+        // 3. Close the Modal
+        self.dismiss(animated: true)
     }
     
-    // MARK: - Sizes
+    // --- HELPERS ---
+    func numberOfComponents(in pickerView: UIPickerView) -> Int { 1 }
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int { weekDays.count }
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? { weekDays[row] }
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        repeatTextField.text = weekDays[row]
+    }
     
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        if indexPath.section == 0 {
-            return CGSize(width: collectionView.frame.width, height: 120)
+    func addChevron(to textField: UITextField) {
+        let iconView = UIImageView(image: UIImage(systemName: "chevron.down"))
+        iconView.tintColor = .lightGray
+        iconView.frame = CGRect(x: 0, y: 0, width: 30, height: 20)
+        iconView.contentMode = .scaleAspectFit
+        let container = UIView(frame: CGRect(x: 0, y: 0, width: 30, height: 20))
+        container.addSubview(iconView)
+        textField.rightView = container
+        textField.rightViewMode = .always
+    }
+    
+    // TextView Placeholder Logic
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == .lightGray {
+            textView.text = nil
+            textView.textColor = .black
         }
-        if indexPath.section == 1 {
-            return CGSize(width: collectionView.frame.width, height: 60)
+    }
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "Add a note"
+            textView.textColor = .lightGray
         }
-        
-        
-        return CGSize(width: collectionView.frame.width, height: 60)
-        
-        
-        
-        /*
-         // MARK: - Navigation
-         
-         // In a storyboard-based application, you will often want to do a little preparation before navigation
-         override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-         // Get the new view controller using segue.destination.
-         // Pass the selected object to the new view controller.
-         }
-         */
-        
     }
 }

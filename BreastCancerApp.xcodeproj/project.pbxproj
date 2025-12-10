@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		196C0A672ED6BB9800C0FAB4 /* BreastCancerApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BreastCancerApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		64E778AE2ECE2D6600B7826F /* BreastCancerApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BreastCancerApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		64E778EA2ECE372300B7826F /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -48,8 +48,16 @@
 			children = (
 				64E778EA2ECE372300B7826F /* .gitignore */,
 				64E778B02ECE2D6600B7826F /* BreastCancerApp */,
-				196C0A672ED6BB9800C0FAB4 /* BreastCancerApp.app */,
+				64E778AF2ECE2D6600B7826F /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		64E778AF2ECE2D6600B7826F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				64E778AE2ECE2D6600B7826F /* BreastCancerApp.app */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -74,7 +82,7 @@
 			packageProductDependencies = (
 			);
 			productName = BreastCancerApp;
-			productReference = 196C0A672ED6BB9800C0FAB4 /* BreastCancerApp.app */;
+			productReference = 64E778AE2ECE2D6600B7826F /* BreastCancerApp.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -102,7 +110,7 @@
 			mainGroup = 64E778A52ECE2D6600B7826F;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 64E778A52ECE2D6600B7826F;
+			productRefGroup = 64E778AF2ECE2D6600B7826F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
