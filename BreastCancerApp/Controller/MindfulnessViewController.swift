@@ -12,6 +12,7 @@ class MindfulnessViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var gradientView: UIView!
 
+    private var dataSource: MindfulnessDataSource!
 
     
     enum Section: Int, CaseIterable {
@@ -25,7 +26,7 @@ class MindfulnessViewController: UIViewController {
     
     // Page view controller & slides state
     private var pageVC: UIPageViewController?
-    private var slides: [MindfulnessSlide] = []
+    var slides: [MindfulnessSlide] = []
     private var currentPageIndex = 0
 
     // Track whether pageVC has been attached to cell host
@@ -60,7 +61,9 @@ class MindfulnessViewController: UIViewController {
         //collectionView.contentInset = UIEdgeInsets(top: 16, left: 0, bottom: 0, right: 0)
         
         
-        collectionView.dataSource = self
+        dataSource = MindfulnessDataSource(viewController: self)
+        collectionView.dataSource = dataSource
+
         collectionView.delegate = self
 
         //collectionView.register(UINib(nibName: "HeaderCell", bundle: nil), forCellWithReuseIdentifier: "HeaderCell")
@@ -123,7 +126,7 @@ class MindfulnessViewController: UIViewController {
 
 
 
-    private func handleEmotionTap(_ index: Int) {
+    func handleEmotionTap(_ index: Int) {
         selectedEmotionIndex = index
         setupSlides(for: index)     // <-- REQUIRED
 
@@ -380,93 +383,6 @@ class MindfulnessViewController: UIViewController {
 
 }
 
-
-extension MindfulnessViewController: UICollectionViewDataSource {
-
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return Section.allCases.count
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        numberOfItemsInSection section: Int) -> Int {
-        
-        let sec = Section(rawValue: section)!
-
-        switch sec {
-//        case .header:
-//            return 1
-
-        case .emotions:
-            return selectedEmotionIndex == nil ? 1 : 0  // hide when emotion selected
-
-        case .slideCard:
-            return selectedEmotionIndex == nil ? 0 : 1  // show when emotion selected
-
-        case .explore:
-            return 3  // label + breathing + journaling
-        }
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let sec = Section(rawValue: indexPath.section)!
-
-        switch sec {
-
-//        case .header:
-//            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HeaderCell", for: indexPath) as! HeaderCell
-//            cell.imageView.image = UIImage(named: "HeaderImage")
-//            return cell
-
-        case .emotions:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EmotionPickerCell", for: indexPath) as! EmotionPickerCell
-            
-            cell.didSelectEmotion = { [weak self] index in
-                self?.handleEmotionTap(index)
-            }
-            return cell
-
-        case .slideCard:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SlideCardCell", for: indexPath) as! SlideCardCell
-            cell.configure(initialSlidesCount: 4)
-            // We'll attach the PageViewController in Step 3
-            return cell
-
-        case .explore:
-            if indexPath.item == 0 {
-                let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: "ExploreLabelCell",
-                    for: indexPath
-                ) as! ExploreLabelCell
-                cell.titleLabel.text = "Explore"
-                return cell
-            } else {
-                let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: "ExploreCell",
-                    for: indexPath
-                ) as! ExploreCell
-                
-                if indexPath.item == 1 {
-                    cell.configure(
-                        title: "Breathing Sessions",
-                        subtitle: "Short guided sessions to help you relax and manage anxiety",
-                        icon: UIImage(named: "Breathing")!
-                    )
-                } else {
-                    cell.configure(
-                        title: "Journaling",
-                        subtitle: "A space to write, reflect, and understand your day",
-                        icon: UIImage(named: "Journal")!
-                    )
-                }
-                
-                return cell
-            }
-
-        }
-    }
-}
 
 extension MindfulnessViewController: UICollectionViewDelegate {
     // put willDisplay + didEndDisplaying here

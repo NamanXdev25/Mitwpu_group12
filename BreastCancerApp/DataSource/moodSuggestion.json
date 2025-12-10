@@ -1,0 +1,180 @@
+{
+  "moods": {
+    "happy": {
+      "intro": {
+        "title": "Nice day to notice the small wins",
+        "description": "You don't need huge things to feel better. Take a moment to notice one small win today.",
+        "buttonText": "Next"
+      },
+      "breathing": [
+        {"title":"Gentle 3-breath reset","description":"Slowly inhale for 3, hold 1, exhale 4 — repeat 6 times.","buttonText":"Begin"},
+        {"title":"Box breathing","description":"4 seconds inhale, 4 hold, 4 exhale, 4 hold — 3 rounds.","buttonText":"Begin"},
+        {"title":"Counting breaths","description":"Breathe in/out naturally, count breaths to 10 then start again.","buttonText":"Begin"},
+        {"title":"Sigh it out","description":"Take a deep breath and sigh fully — repeat 5 times.","buttonText":"Begin"},
+        {"title":"Balloon belly","description":"Place hands on belly, inhale to expand belly, exhale to soften — 5 rounds.","buttonText":"Begin"},
+        {"title":"Focus on exhale","description":"Make exhale slightly longer than inhale for 2 minutes.","buttonText":"Begin"},
+        {"title":"4-7-8 mini break","description":"Inhale 4, hold 7, exhale 8 — 4 cycles.","buttonText":"Begin"},
+        {"title":"Wakeful breathing","description":"Sit tall — breathe slow and notice sensations for 2 minutes.","buttonText":"Begin"},
+        {"title":"Shoulder release","description":"On inhale raise shoulders, on exhale drop them — 6 times.","buttonText":"Begin"},
+        {"title":"Visual breath","description":"Imagine breathing in calm color, breathing out tension — 2 minutes.","buttonText":"Begin"}
+      ],
+      "journaling": [
+        {"title":"Gratitude 3","description":"Write three small things that went well today — even tiny wins count.","buttonText":"Begin"},
+        {"title":"Highlight of the day","description":"Describe one moment you enjoyed and why it felt good.","buttonText":"Begin"},
+        {"title":"What made me smile","description":"List small events that made you smile this week.","buttonText":"Begin"},
+        {"title":"Kindness note","description":"Write a short encouraging note to yourself.","buttonText":"Begin"},
+        {"title":"Morning intention","description":"Write one thing you want to notice today.","buttonText":"Begin"},
+        {"title":"Mini success log","description":"Note a thing you did well today and how it helped.","buttonText":"Begin"},
+        {"title":"Sensory check-in","description":"Describe 3 sensory details you noticed recently.","buttonText":"Begin"},
+        {"title":"Favorite memory","description":"Jot down a small happy memory & what made it nice.","buttonText":"Begin"},
+        {"title":"Compliment list","description":"Write 2 compliments you genuinely mean to yourself.","buttonText":"Begin"},
+        {"title":"Small future plan","description":"Write one tiny plan that will add joy this week.","buttonText":"Begin"}
+      ],
+      "hobby": [
+        {"title":"Sketch for 5 mins","description":"Draw a simple flower or shape — no pressure for perfection.","buttonText":"Try"},
+        {"title":"Play a happy tune","description":"Open a song you love and play/sing along for 2 songs.","buttonText":"Try"},
+        {"title":"Make a quick photo","description":"Take one nice phone photo of something pretty nearby.","buttonText":"Try"},
+        {"title":"10-minute walk","description":"Move outside or around the house and notice the sky.","buttonText":"Try"},
+        {"title":"Try a quick recipe","description":"Make a simple snack — focus on smells and tastes.","buttonText":"Try"},
+        {"title":"Color something","description":"Fill a small doodle with color for 10 minutes.","buttonText":"Try"},
+        {"title":"1-song dance","description":"Put on a track and dance like nobody’s watching.","buttonText":"Try"},
+        {"title":"Tidy one corner","description":"Clear a small corner — quick wins boost mood.","buttonText":"Try"},
+        {"title":"Listen to a podcast clip","description":"Find a calming short clip (5–10 min).","buttonText":"Try"},
+        {"title":"Call a friend for 3 min","description":"Send a voice note or quick hello to someone you like.","buttonText":"Try"}
+      ]
+    },
+
+    "sad": {
+      "intro": {
+        "title": "It's okay to have days like this",
+        "description": "Let’s take a small step to feel a bit lighter.",
+        "buttonText": "Next"
+      },
+      "breathing": [
+        {"title":"Gentle Breathing","description":"Try a 3-minute calming session.","buttonText":"Begin"},
+        {"title":"Long exhale","description":"Make exhale longer than inhale for 2 minutes.","buttonText":"Begin"},
+        {"title":"Counting calming breaths","description":"Count each breath to keep you grounded.","buttonText":"Begin"},
+        {"title":"Hand on chest","description":"Breathe with hand on chest to feel the rise and fall.","buttonText":"Begin"},
+        {"title":"Soothing rhythm","description":"Inhale 3, exhale 5 — repeat 8 times.","buttonText":"Begin"},
+        {"title":"Breath + body scan","description":"Breathe slowly then scan and soften tense spots.","buttonText":"Begin"},
+        {"title":"Box breathing (gentle)","description":"4-4-4-4 but at a relaxed pace.","buttonText":"Begin"},
+        {"title":"Rescue breath","description":"Deep inhale, slow exhale — 5 rounds.","buttonText":"Begin"},
+        {"title":"Warm breath imagery","description":"Imagine warmth on exhale — calm down.","buttonText":"Begin"},
+        {"title":"Ocean breath","description":"Use a soft ‘shh’ on the exhale — repeat 6 times.","buttonText":"Begin"}
+      ],
+      "journaling": [
+        {"title":"Name the feeling","description":"Write the emotion in one word and why you think it's here.","buttonText":"Begin"},
+        {"title":"Small comfort","description":"Write one comforting thing you can do right now.","buttonText":"Begin"},
+        {"title":"What helps before bed","description":"List 3 things that make nights easier for you.","buttonText":"Begin"},
+        {"title":"Letter to self","description":"Write a short compassionate letter to yourself.","buttonText":"Begin"},
+        {"title":"Unload list","description":"Pour out whatever’s on your mind for 5 minutes.","buttonText":"Begin"},
+        {"title":"Track one trigger","description":"Note what event preceded the sadness.","buttonText":"Begin"},
+        {"title":"Tiny step plan","description":"Write one tiny action that may ease the mood.","buttonText":"Begin"},
+        {"title":"Memory of comfort","description":"Describe a memory that felt safe or warm.","buttonText":"Begin"},
+        {"title":"If I could say to a friend","description":"Write what you'd tell a friend in your situation.","buttonText":"Begin"},
+        {"title":"Mood temperature","description":"Rate how heavy the feeling is 1–10 and what would move it 1 pt.","buttonText":"Begin"}
+      ],
+      "hobby": [
+        {"title":"Make a cup of tea","description":"Focus on smell and warmth for 5 minutes.","buttonText":"Try"},
+        {"title":"Look at old photos","description":"Browse a few photos that feel safe or funny.","buttonText":"Try"},
+        {"title":"Short walk near greenery","description":"Move outside if possible — notice air and sounds.","buttonText":"Try"},
+        {"title":"Listen to a comfort song","description":"Play a track that soothes you for 5–10 minutes.","buttonText":"Try"},
+        {"title":"Simple craft","description":"Fold paper, arrange flowers, make something small.","buttonText":"Try"},
+        {"title":"Cook a tiny recipe","description":"Follow one simple recipe — focus on senses.","buttonText":"Try"},
+        {"title":"Gentle stretching","description":"Do 5 minutes of slow stretches.","buttonText":"Try"},
+        {"title":"Coloring page","description":"Color a pre-made shape — no need to finish.","buttonText":"Try"},
+        {"title":"Warm bath or shower","description":"Use warm water and a simple scent if available.","buttonText":"Try"},
+        {"title":"Short call to a kind person","description":"Reach out briefly — you don’t need to explain everything.","buttonText":"Try"}
+      ]
+    },
+
+    "anxious": {
+      "intro": {
+        "title": "Small steps when worry is loud",
+        "description": "Focus on grounding: a single tiny action can change your state.",
+        "buttonText": "Next"
+      },
+      "breathing": [
+        {"title":"Grounding breath","description":"Inhale 4, hold 2, exhale 6 — repeat 6 times.","buttonText":"Begin"},
+        {"title":"4-4-4 calming","description":"Steady rhythm counting for 2 minutes.","buttonText":"Begin"},
+        {"title":"Alternate nostril (gentle)","description":"4 cycles— only if feels comfortable.","buttonText":"Begin"},
+        {"title":"Progressive breath","description":"Combine breath with progressive muscle relax.","buttonText":"Begin"},
+        {"title":"Slow breathe with focus","description":"Count breaths while paying attention to feet on ground.","buttonText":"Begin"},
+        {"title":"Exhale with hiss","description":"Short inhale — long hiss exhale — 6 times.","buttonText":"Begin"},
+        {"title":"Box breathing short","description":"4 seconds each side — 3 rounds.","buttonText":"Begin"},
+        {"title":"Mindful inhale","description":"Notice where air passes in body on inhale/exhale.","buttonText":"Begin"},
+        {"title":"Relax shoulders","description":"On exhale drop and relax shoulders — repeat 8 times.","buttonText":"Begin"},
+        {"title":"Breathe + anchor word","description":"On exhale say a calming word silently.","buttonText":"Begin"}
+      ],
+      "journaling": [
+        {"title":"Worry list","description":"Write each worry for 2 minutes then close the list.","buttonText":"Begin"},
+        {"title":"What’s realistic?","description":"Pick a worry and write one action to reduce it.","buttonText":"Begin"},
+        {"title":"Five senses anchor","description":"Describe 1 thing from each sense right now.","buttonText":"Begin"},
+        {"title":"If this worry had advice","description":"Write what the worry would say, then reply kindly.","buttonText":"Begin"},
+        {"title":"Small planning","description":"Write the next tiny step for any problem — one line.","buttonText":"Begin"},
+        {"title":"Success evidence","description":"List times you handled similar worry before.","buttonText":"Begin"},
+        {"title":"Unhook from thoughts","description":"Write ‘I am having the thought that...’ and finish one sentence.","buttonText":"Begin"},
+        {"title":"Time-box worry","description":"Schedule 10 minutes later and jot what you’ll focus on then.","buttonText":"Begin"},
+        {"title":"Breath log","description":"Note how breathing changed after 2 minutes of calm breath.","buttonText":"Begin"},
+        {"title":"Gratitude micro","description":"Name one small thing that’s okay in this moment.","buttonText":"Begin"}
+      ],
+      "hobby": [
+        {"title":"Quick grounding walk","description":"Notice three things you can see and two you can touch.","buttonText":"Try"},
+        {"title":"Squeeze stress ball","description":"5 squeezes and slow release — repeat a couple times.","buttonText":"Try"},
+        {"title":"Make a small snack","description":"Focus on simple steps of making it, no rush.","buttonText":"Try"},
+        {"title":"Gentle yoga sequence","description":"Try 5 gentle poses to release tension.","buttonText":"Try"},
+        {"title":"Listen to a focused soundscape","description":"Find a 5-minute calming sound and listen fully.","buttonText":"Try"},
+        {"title":"Organize a tiny space","description":"Clear one drawer or shelf for a sense of control.","buttonText":"Try"},
+        {"title":"Short creative prompt","description":"Write one silly line of creative text and stop.","buttonText":"Try"},
+        {"title":"Play with a pet or plant","description":"Give attention without pressure.","buttonText":"Try"},
+        {"title":"Mindful tea/coffee","description":"Slowly prepare and sip while noticing details.","buttonText":"Try"},
+        {"title":"Breath + doodle","description":"Breathe calmly and draw a repeating pattern for 5 minutes.","buttonText":"Try"}
+      ]
+    },
+
+    "tired": {
+      "intro": {
+        "title": "Gentle care when you’re drained",
+        "description": "Small, simple choices can restore a little energy — let’s try one.",
+        "buttonText": "Next"
+      },
+      "breathing": [
+        {"title":"Slow belly breaths","description":"5 slow belly breaths to soften the body.","buttonText":"Begin"},
+        {"title":"Short energizing breath","description":"3 quick breaths then a long exhale — repeat 3 times.","buttonText":"Begin"},
+        {"title":"Yawning breath","description":"Fake yawn to trigger relaxing reflex, then breathe easy.","buttonText":"Begin"},
+        {"title":"Wakeful stretch + breath","description":"Stretch arms on inhale, lower on exhale — 6 times.","buttonText":"Begin"},
+        {"title":"Gentle 2-minute reset","description":"Soft inhale/exhale rhythm while seated tall.","buttonText":"Begin"},
+        {"title":"Soft counting","description":"Breathe in 4 out 6 — focus on slowing down.","buttonText":"Begin"},
+        {"title":"Shoulder roll + breath","description":"Roll shoulders with slow breaths — 5 times.","buttonText":"Begin"},
+        {"title":"Cooling breath","description":"Open mouth exhale softly, imagine cool air return.","buttonText":"Begin"},
+        {"title":"Refresh inhale","description":"Deep inhale through nose, hold a second, exhale slowly.","buttonText":"Begin"},
+        {"title":"Seated grounding","description":"Feet planted, breathe and notice points of contact.","buttonText":"Begin"}
+      ],
+      "journaling": [
+        {"title":"Rest list","description":"Write 3 small restful things you can do right now.","buttonText":"Begin"},
+        {"title":"Two-minute brain dump","description":"Empty your head on paper without editing.","buttonText":"Begin"},
+        {"title":"Gratitude for rest","description":"Name one restful experience from today or yesterday.","buttonText":"Begin"},
+        {"title":"Energy check","description":"Note what saps and what mildly restores you.","buttonText":"Begin"},
+        {"title":"Short plan to recharge","description":"Write one tiny thing that will help you feel less tired.","buttonText":"Begin"},
+        {"title":"Sleep friendly note","description":"List one habit that could make sleep better tonight.","buttonText":"Begin"},
+        {"title":"Mini mindfulness","description":"Describe your breath for 1 minute on paper.","buttonText":"Begin"},
+        {"title":"Favorite cozy moment","description":"Write the last time you felt cozy and why.","buttonText":"Begin"},
+        {"title":"Tiny boundary","description":"Write one thing you can say No to today for energy.","buttonText":"Begin"},
+        {"title":"Small win log","description":"Write something you did that didn’t drain you today.","buttonText":"Begin"}
+      ],
+      "hobby": [
+        {"title":"Short gentle stretch","description":"5 minutes of light stretching to wake the body.","buttonText":"Try"},
+        {"title":"Listen to calming music","description":"Sit and listen to a short track while closing eyes.","buttonText":"Try"},
+        {"title":"Easy sipping ritual","description":"Make a warm drink and sip slowly noticing warmth.","buttonText":"Try"},
+        {"title":"Light walk outdoors","description":"Short slow walk to bring gentle movement.","buttonText":"Try"},
+        {"title":"Look at a favorite picture","description":"Spend 2 minutes looking at a pleasant photo.","buttonText":"Try"},
+        {"title":"Read a 1-page story","description":"Pick a short excerpt that’s soothing.","buttonText":"Try"},
+        {"title":"Do nothing for 3 minutes","description":"Set a timer and sit quietly without intention.","buttonText":"Try"},
+        {"title":"Put on comfy clothes","description":"Change into something that helps you relax.","buttonText":"Try"},
+        {"title":"Simple craft (5 min)","description":"Do an easy, low-effort creative task.","buttonText":"Try"},
+        {"title":"Gentle breath + music","description":"Combine soft breath with a calming tune for 3 min.","buttonText":"Try"}
+      ]
+    }
+  }
+}
+
