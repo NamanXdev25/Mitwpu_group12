@@ -11,25 +11,25 @@ class MindfulnessViewController: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var gradientView: UIView!
+    
+    private let moodKeys = ["happy", "sad", "anxious", "tired"]
+    private var mindfulnessData = MindfulnessDataLoader.shared
 
     private var dataSource: MindfulnessDataSource!
 
     
     enum Section: Int, CaseIterable {
-        //case header
         case emotions
         case slideCard
         case explore
     }
 
-    var selectedEmotionIndex: Int? = nil   // nil means emotion picker visible
+    var selectedEmotionIndex: Int? = nil
     
-    // Page view controller & slides state
     private var pageVC: UIPageViewController?
     var slides: [MindfulnessSlide] = []
     private var currentPageIndex = 0
 
-    // Track whether pageVC has been attached to cell host
     private var pageVCAttachedToHost: UIView? = nil
 
     private var attachedPageControl: UIPageControl?
@@ -58,7 +58,6 @@ class MindfulnessViewController: UIViewController {
         //collectionView.contentInsetAdjustmentBehavior = .automatic
         collectionView.contentInset = UIEdgeInsets(top: 132, left: 0, bottom: 0, right: 0)
 
-        //collectionView.contentInset = UIEdgeInsets(top: 16, left: 0, bottom: 0, right: 0)
         
         
         dataSource = MindfulnessDataSource(viewController: self)
@@ -66,7 +65,6 @@ class MindfulnessViewController: UIViewController {
 
         collectionView.delegate = self
 
-        //collectionView.register(UINib(nibName: "HeaderCell", bundle: nil), forCellWithReuseIdentifier: "HeaderCell")
 
         collectionView.register(
             UINib(nibName: "ExploreLabelCell", bundle: nil),
@@ -101,8 +99,8 @@ class MindfulnessViewController: UIViewController {
         let maskLayer = CAGradientLayer()
         maskLayer.frame = gradientView.bounds
         maskLayer.colors = [
-            UIColor.black.cgColor,        // fully visible (image)
-            UIColor.clear.cgColor         // fades out
+            UIColor.black.cgColor,
+            UIColor.clear.cgColor 
         ]
         maskLayer.locations = [0.68, 1.0]
 
@@ -128,7 +126,7 @@ class MindfulnessViewController: UIViewController {
 
     func handleEmotionTap(_ index: Int) {
         selectedEmotionIndex = index
-        setupSlides(for: index)     // <-- REQUIRED
+        setupSlides(for: index)
 
         collectionView.performBatchUpdates {
             collectionView.reloadSections(IndexSet(integer: Section.emotions.rawValue))
@@ -141,7 +139,7 @@ class MindfulnessViewController: UIViewController {
         guard index >= 0, index < slides.count else { return nil }
         let vc = SlideContentViewController(nibName: "SlideContentViewController", bundle: nil)
         vc.slide = slides[index]
-        vc.pageIndex = index   // add pageIndex property to SlideContentViewController
+        vc.pageIndex = index
         vc.didTapButton = { [weak self] in
             self?.handleSlideButtonTap(index: index)
         }
@@ -149,15 +147,13 @@ class MindfulnessViewController: UIViewController {
     }
     
     private func attachPageViewController(to hostView: UIView, pageControl: UIPageControl) {
-        // if already attached to same host, do nothing
+        
         if pageVCAttachedToHost === hostView { return }
 
-        // remove from old host (if any)
         if let old = pageVCAttachedToHost {
             detachPageViewController(from: old)
         }
 
-        // create pageVC if not exists
         if pageVC == nil {
             pageVC = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
             pageVC?.dataSource = self
@@ -248,13 +244,11 @@ class MindfulnessViewController: UIViewController {
     }
     
     private func setupSlides(for emotionIndex: Int) {
-        switch emotionIndex {
-        case 0: // Happy
-            slides = [
-                /* your happy slides */
-            ]
+        slides.removeAll()
 
-        case 1: // Sad
+        let moodKey = (0 ..< moodKeys.count).contains(emotionIndex) ? moodKeys[emotionIndex] : moodKeys[0]
+        guard let moodContent = mindfulnessData.moodContent(for: moodKey) else {
+            // fallback: simple default
             slides = [
                 MindfulnessSlide(title: "It's okay to have days like this",
                                  description: "Let’s take a small step to feel better.",
@@ -269,20 +263,22 @@ class MindfulnessViewController: UIViewController {
                                  description: "Draw something joyful like the sun, flowers Let the colors brighten your mood.",
                                  buttonText: "Add Photo")
             ]
-
-        case 2: // Anxious
-            slides = [
-                /* your anxious slides */
-            ]
-
-        case 3: // Tired
-            slides = [
-                /* your tired slides */
-            ]
-
-        default:
-            slides = []
+            return
         }
+
+        // build slides:
+        let intro = moodContent.intro
+        // pick a random breathing / journaling / hobby item (or pick index 0 if you want deterministic)
+        let breathe = moodContent.breathing.randomElement() ?? moodContent.breathing.first!
+        let journal = moodContent.journaling.randomElement() ?? moodContent.journaling.first!
+        let hobby = moodContent.hobby.randomElement() ?? moodContent.hobby.first!
+
+        slides = [
+            MindfulnessSlide(title: intro.title, description: intro.description, buttonText: intro.buttonText ?? "Next"),
+            MindfulnessSlide(title: breathe.title, description: breathe.description, buttonText: breathe.buttonText ?? "Begin"),
+            MindfulnessSlide(title: journal.title, description: journal.description, buttonText: journal.buttonText ?? "Begin"),
+            MindfulnessSlide(title: hobby.title, description: hobby.description, buttonText: hobby.buttonText ?? "Try")
+        ]
     }
     
     private func createCompositionalLayout() -> UICollectionViewCompositionalLayout {
@@ -415,3 +411,32 @@ extension MindfulnessViewController: UICollectionViewDelegate {
 }
 
 extension MindfulnessViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {}
+
+class MindfulnessDataLoader {
+    static let shared = MindfulnessDataLoader()
+
+    private(set) var root: MindfulnessJSONRoot?
+
+    private init() {
+        load()
+    }
+
+    private func load() {
+        guard let url = Bundle.main.url(forResource: "moodSuggestion", withExtension: "json"),
+              let data = try? Data(contentsOf: url) else {
+            print("Mindfulness JSON not found")
+            return
+        }
+
+        do {
+            let dec = JSONDecoder()
+            root = try dec.decode(MindfulnessJSONRoot.self, from: data)
+        } catch {
+            print("JSON decode error:", error)
+        }
+    }
+
+    func moodContent(for moodKey: String) -> MoodContent? {
+        return root?.moods[moodKey]
+    }
+}
