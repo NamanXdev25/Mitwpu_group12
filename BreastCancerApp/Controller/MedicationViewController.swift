@@ -2,44 +2,43 @@ import UIKit
 
 class MedicationViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
 
+    // MARK: - Outlets
     @IBOutlet weak var collectionView: UICollectionView!
 
-    // SAMPLE DATA
+    // MARK: - Data Source
     var todaysMedications: [Medication] = [
         Medication(name: "Pill 1", note: "Before Breakfast", time: "8:00 AM", isTaken: false),
         Medication(name: "Pill 2", note: "After Lunch", time: "1:00 PM", isTaken: false),
         Medication(name: "Pill 3", note: "Before Bed", time: "9:00 PM", isTaken: false)
     ]
 
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // 1. Setup Collection View
         registerCells()
-
-        collectionView.setCollectionViewLayout(generateLayout(), animated: true)
         collectionView.dataSource = self
         collectionView.delegate = self
+        
+        // 2. Apply the Layout with Swipe Actions
+        collectionView.setCollectionViewLayout(generateLayout(), animated: false)
     }
 
-    // MARK: - 1. Prepare for Segue (The Connection)
-    // This function runs automatically when you click the Pink "+" Button
+    // MARK: - Navigation / Segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // We check if the destination is the Add Screen
         if let addVC = segue.destination as? AddMedicationViewController {
-            // We tell the Add Screen: "I am your boss. Report back to me."
             addVC.delegate = self
         }
     }
 
-    // MARK: - Register Cell + Header XIBs
+    // MARK: - Cell Registration
     func registerCells() {
-        // Medication Row Cell
         collectionView.register(
             UINib(nibName: "MedicationItemCell", bundle: nil),
             forCellWithReuseIdentifier: "med_item"
         )
 
-        // Header
         collectionView.register(
             UINib(nibName: "MedicationHeaderView", bundle: nil),
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
@@ -49,118 +48,167 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
 
     // MARK: - UICollectionViewDataSource
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1   // Only 1 section for today's meds
+        return 1
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return todaysMedications.count
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
-        let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: "med_item",
-            for: indexPath
-        ) as! MedicationItemCell
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "med_item", for: indexPath) as? MedicationItemCell else {
+            return UICollectionViewCell()
+        }
 
         let med = todaysMedications[indexPath.row]
         cell.configureCell(with: med)
 
-        // IMPORTANT: capture index for toggling (cell has a closure)
+        // Handle the "Taken" circle tap
         cell.onCircleTapped = { [weak self] in
             guard let self = self else { return }
             
-            // toggle the value
-            self.todaysMedications[indexPath.row].isTaken.toggle()
-            
-            // reload just this cell (smooth)
-            self.collectionView.reloadItems(at: [indexPath])
+            // Safety check
+            if indexPath.row < self.todaysMedications.count {
+                self.todaysMedications[indexPath.row].isTaken.toggle()
+                self.collectionView.reloadItems(at: [indexPath])
+            }
         }
 
         return cell
     }
 
-
-    // MARK: - Loads Header
-    func collectionView(_ collectionView: UICollectionView,
-                        viewForSupplementaryElementOfKind kind: String,
-                        at indexPath: IndexPath) -> UICollectionReusableView {
-
-        let header = collectionView.dequeueReusableSupplementaryView(
-            ofKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: "med_header",
-            for: indexPath
-        ) as! MedicationHeaderView
-
-        header.configure(with: "Thur 27 Nov")
-        return header
+    // MARK: - Header Configuration
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        
+        if kind == UICollectionView.elementKindSectionHeader {
+            let header = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: "med_header",
+                for: indexPath
+            ) as! MedicationHeaderView
+            
+            header.configure(with: "Today's Plan")
+            return header
+        }
+        return UICollectionReusableView()
     }
 
-    // MARK: - Compositional Layout
-    func generateLayout() -> UICollectionViewCompositionalLayout {
-        return UICollectionViewCompositionalLayout { section, env in
+    // MARK: - Layout Generation (With Swipe Actions)
+    // MARK: - Layout Generation (With Swipe Actions)
+        func generateLayout() -> UICollectionViewLayout {
+            
+            // 1. Create List Configuration
+            var config = UICollectionLayoutListConfiguration(appearance: .plain)
+            config.showsSeparators = false
+            config.headerMode = .supplementary
+            
+            // 2. Define Swipe Actions
+            config.trailingSwipeActionsConfigurationProvider = { [weak self] indexPath in
+                
+                // --- ACTION 1: DELETE (Red) ---
+                let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { action, view, completion in
+                    self?.confirmDelete(at: indexPath, completion: completion)
+                }
+                deleteAction.image = UIImage(systemName: "trash.fill")
+                deleteAction.backgroundColor = .systemRed
 
-            // ---- HEADER ----
-            let headerSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1.0),
-                heightDimension: .absolute(44)
-            )
-
-            let headerItem = NSCollectionLayoutBoundarySupplementaryItem(
-                layoutSize: headerSize,
-                elementKind: UICollectionView.elementKindSectionHeader,
-                alignment: .top
-            )
-
-            // ---- CELL ITEM ----
-            let itemSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1.0),
-                heightDimension: .estimated(80)
-            )
-
-            let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-            // ---- GROUP ----
-            let groupSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1.0),
-                heightDimension: .estimated(80)
-            )
-
-            let group = NSCollectionLayoutGroup.vertical(
-                layoutSize: groupSize,
-                subitems: [item]
-            )
-
-            // ---- SECTION ----
-            let section = NSCollectionLayoutSection(group: group)
-            section.boundarySupplementaryItems = [headerItem]
-            section.interGroupSpacing = 12   //  gap between cells
-            section.contentInsets = NSDirectionalEdgeInsets(
-                top: 8, leading: 8, bottom: 20, trailing: 8
-            )
-
-            return section
+                // --- ACTION 2: EDIT (Blue) ---
+                let editAction = UIContextualAction(style: .normal, title: "Edit") { action, view, completion in
+                    
+                    // [FIX STARTS HERE] ---------------------------------
+                    // 1. Get the data for the row we swiped
+                    let selectedMed = self?.todaysMedications[indexPath.row]
+                    
+                    // 2. Instantiate the Add Screen
+                    // MAKE SURE your Storyboard ID for the pink screen is set to "AddMedicationViewController"
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    if let addVC = storyboard.instantiateViewController(withIdentifier: "AddMedicationViewController") as? AddMedicationViewController {
+                        
+                        // 3. Pass the data to the screen
+                        addVC.medicationToEdit = selectedMed
+                        addVC.indexToEdit = indexPath.row
+                        addVC.delegate = self
+                        
+                        // 4. Present it
+                        self?.present(addVC, animated: true)
+                    }
+                    // [FIX ENDS HERE] -----------------------------------
+                    
+                    completion(true) // Close swipe
+                }
+                editAction.image = UIImage(systemName: "pencil")
+                editAction.backgroundColor = .systemBlue
+                
+                // 3. Combine Actions
+                let swipeConfig = UISwipeActionsConfiguration(actions: [deleteAction, editAction])
+                swipeConfig.performsFirstActionWithFullSwipe = true
+                
+                return swipeConfig
+            }
+            
+            return UICollectionViewCompositionalLayout.list(using: config)
         }
+    
+    // MARK: - Helper: Delete Confirmation
+    func confirmDelete(at indexPath: IndexPath, completion: @escaping (Bool) -> Void) {
+        
+        let medName = todaysMedications[indexPath.row].name
+        
+        let alert = UIAlertController(
+            title: "Delete Medication?",
+            message: "Are you sure you want to delete '\(medName)'?",
+            preferredStyle: .alert
+        )
+        
+        // Delete Action
+        let deleteBtn = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+            // 1. Remove Data
+            self?.todaysMedications.remove(at: indexPath.row)
+            
+            // 2. Remove Row from Screen
+            self?.collectionView.deleteItems(at: [indexPath])
+            
+            // 3. Tell swipe gesture it was successful
+            completion(true)
+        }
+        
+        // Cancel Action
+        let cancelBtn = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+            // Tell swipe gesture we cancelled
+            completion(false)
+        }
+        
+        alert.addAction(deleteBtn)
+        alert.addAction(cancelBtn)
+        
+        present(alert, animated: true)
     }
 }
 
-// MARK: - 2. Handle the New Data (The Delegate)
-// This adds the functionality to receive the data from the other screen
+// MARK: - AddMedicationDelegate Extension
 extension MedicationViewController: AddMedicationDelegate {
     
+    // Existing Add Function
     func didAddMedication(name: String, time: String, repeatOption: String, note: String) {
-        
-        // 1. Create a new Medication object
-        // (If the user didn't write a note, we use the repeat option as the subtitle, e.g. "Every Day")
         let subtitle = note.isEmpty ? repeatOption : note
-        
         let newPill = Medication(name: name, note: subtitle, time: time, isTaken: false)
-        
-        // 2. Add it to our list
         todaysMedications.append(newPill)
-        
-        // 3. Refresh the screen to show the new pill
         collectionView.reloadData()
+    }
+    
+    // NEW: Edit Function
+    func didEditMedication(index: Int, name: String, time: String, repeatOption: String, note: String) {
+        
+        // 1. Create updated object
+        let subtitle = note.isEmpty ? repeatOption : note
+        let updatedPill = Medication(name: name, note: subtitle, time: time, isTaken: false)
+        
+        // 2. Replace the old one in the array
+        todaysMedications[index] = updatedPill
+        
+        // 3. Reload just that row (efficient)
+        let indexPath = IndexPath(row: index, section: 0)
+        collectionView.reloadItems(at: [indexPath])
     }
 }

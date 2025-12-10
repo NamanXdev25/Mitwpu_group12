@@ -3,6 +3,9 @@ import UIKit
 // This protocol allows us to send the new pill data back to the List Screen
 protocol AddMedicationDelegate: AnyObject {
     func didAddMedication(name: String, time: String, repeatOption: String, note: String)
+    
+    // NEW: Function to handle updates
+    func didEditMedication(index: Int, name: String, time: String, repeatOption: String, note: String)
 }
 
 class AddMedicationViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate, UITextViewDelegate {
@@ -25,6 +28,10 @@ class AddMedicationViewController: UIViewController, UIPickerViewDelegate, UIPic
     weak var delegate: AddMedicationDelegate?
     
     let weekDays = ["Every Mon", "Every Tue", "Every Wed", "Every Thu", "Every Fri", "Every Sat", "Every Sun", "Every Day"]
+    
+    // --- NEW VARIABLES FOR EDITING ---
+    var medicationToEdit: Medication?
+    var indexToEdit: Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,6 +59,9 @@ class AddMedicationViewController: UIViewController, UIPickerViewDelegate, UIPic
         // Add Chevrons
         addChevron(to: repeatTextField)
         addChevron(to: timeTextField)
+        
+        // --- NEW: PRE-FILL DATA IF EDITING ---
+        checkForEditMode()
     }
     
     func setupUI() {
@@ -59,9 +69,37 @@ class AddMedicationViewController: UIViewController, UIPickerViewDelegate, UIPic
         pickerCard.layer.cornerRadius = 16
         descriptionTextView.layer.cornerRadius = 12
         descriptionTextView.backgroundColor = UIColor.systemGray6
+        
+        // Default State
         descriptionTextView.text = "Add a note"
         descriptionTextView.textColor = .lightGray
         descriptionTextView.textContainerInset = UIEdgeInsets(top: 15, left: 10, bottom: 10, right: 10)
+    }
+
+    // --- NEW: POPULATE FIELDS ---
+    func checkForEditMode() {
+        if let med = medicationToEdit {
+            // Update Title and Button
+            // (If you have a navigation bar, you can set title = "Edit Medication")
+            saveButton.setTitle("Update Medication", for: .normal)
+            
+            // Fill Fields
+            nameTextField.text = med.name
+            timeTextField.text = med.time
+            
+            // Handle Description/Note
+            // (We check if the note is essentially a Repeat Option or a real note)
+            if weekDays.contains(med.note) {
+                repeatTextField.text = med.note
+                // Reset description to placeholder
+                descriptionTextView.text = "Add a note"
+                descriptionTextView.textColor = .lightGray
+            } else {
+                repeatTextField.text = "Every Day" // Default fallback
+                descriptionTextView.text = med.note
+                descriptionTextView.textColor = .black // Set to valid text color
+            }
+        }
     }
 
     // --- LOGIC TO SHOW PICKERS ---
@@ -104,10 +142,16 @@ class AddMedicationViewController: UIViewController, UIPickerViewDelegate, UIPic
         guard let name = nameTextField.text, !name.isEmpty else { return }
         let time = timeTextField.text ?? "10:00 AM"
         let repeatOption = repeatTextField.text ?? "Every Day"
-        let note = (descriptionTextView.text == "Add a note") ? "" : descriptionTextView.text
+        let note = (descriptionTextView.text == "Add a note") ? "" : descriptionTextView.text ?? ""
         
-        // 2. Send it to the List Screen
-        delegate?.didAddMedication(name: name, time: time, repeatOption: repeatOption, note: note ?? "")
+        // 2. CHECK: ARE WE EDITING OR ADDING?
+        if let index = indexToEdit {
+            // We are EDITING
+            delegate?.didEditMedication(index: index, name: name, time: time, repeatOption: repeatOption, note: note)
+        } else {
+            // We are ADDING
+            delegate?.didAddMedication(name: name, time: time, repeatOption: repeatOption, note: note)
+        }
         
         // 3. Close the Modal
         self.dismiss(animated: true)
