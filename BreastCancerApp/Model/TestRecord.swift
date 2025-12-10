@@ -1,30 +1,24 @@
-//
-//  TestRecord.swift
-//  BreastCancerApp
-//
-//  Created by Gayatri Goundadkar on 08/12/25.
-//
-
 import Foundation
 
+struct ObservationItem: Codable {
+    let title: String
+    let value: String
+}
+
 struct TestRecord: Codable {
-  let id: UUID
-  let date: Date
-  let lumps: Bool
-  let skinChanges: String?
-  let nippleChanges: String?
-  let sizeChange: Bool
-  let pain: String?
+    let id: UUID
+    let date: Date
+    let observations: [ObservationItem]
 }
 
-extension UserDefaults {
-  private static let key = "testRecords.v1"
-  static func loadTestRecords() -> [TestRecord] {
-    guard let d = standard.data(forKey: key) else { return [] }
-    return (try? JSONDecoder().decode([TestRecord].self, from: d)) ?? []
-  }
-  static func saveTestRecords(_ r:[TestRecord]) {
-    let d = try? JSONEncoder().encode(r); standard.set(d, forKey: key)
-  }
+enum Persistence {
+    static let key = "com.yourapp.testRecords"
+    static func save(_ records: [TestRecord]) throws {
+        let data = try JSONEncoder().encode(records)
+        UserDefaults.standard.set(data, forKey: key)
+    }
+    static func load() -> [TestRecord] {
+        guard let d = UserDefaults.standard.data(forKey: key) else { return [] }
+        return (try? JSONDecoder().decode([TestRecord].self, from: d)) ?? []
+    }
 }
-

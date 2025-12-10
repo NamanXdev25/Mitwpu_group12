@@ -12,7 +12,7 @@ class SelfExamineViewController: UIViewController {
                  UIColor(red: 0.98, green: 0.95, blue: 0.96, alpha: 1)
 
         view.backgroundColor = bg
-        collectionView.backgroundColor = .clear   // must be clear to show bg
+        collectionView.backgroundColor = .clear
 
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -20,7 +20,6 @@ class SelfExamineViewController: UIViewController {
         // Register cells
         collectionView.register(UINib(nibName: "GuidesCardCell", bundle: nil),
                                 forCellWithReuseIdentifier: "GuidesCardCell")
-
         collectionView.register(UINib(nibName: "SectionTitleCell", bundle: nil),
                                 forCellWithReuseIdentifier: "SectionTitleCell")
         collectionView.register(UINib(nibName: "SelfExamCardsContainerCell", bundle: nil),
@@ -44,24 +43,36 @@ class SelfExamineViewController: UIViewController {
         titleLabel.textAlignment = .center
         navigationItem.titleView = titleLabel
 
-        // Navigation bar background must match pink
-        let navBarAppearance = UINavigationBarAppearance()
-        navBarAppearance.configureWithTransparentBackground()
-        navBarAppearance.backgroundColor = bg
-        navigationController?.navigationBar.standardAppearance = navBarAppearance
-        navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
+        // REMOVE NAVIGATION BAR HAIRLINE COMPLETELY
+        let nav = navigationController?.navigationBar
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = bg
+
+        // remove shadow / line and images
+        appearance.shadowColor = .clear
+        appearance.backgroundImage = UIImage()
+        appearance.shadowImage = UIImage()
+
+        nav?.standardAppearance = appearance
+        nav?.scrollEdgeAppearance = appearance
+        nav?.compactAppearance = appearance
+
+        // additional removal for all iOS versions
+        nav?.setBackgroundImage(UIImage(), for: .default)
+        nav?.shadowImage = UIImage()
+        nav?.isTranslucent = false
 
         collectionView.reloadData()
     }
 
-    // Prepare segue if you want to pass data later
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showObservations" {
-            // future: pass model or selected data to ObservationsViewController
-            // let dest = segue.destination as? ObservationsViewController
+            // pass if needed
         } else if segue.identifier == "showTestHistory" {
-            // future: pass saved tests array or selected index to TestHistoryViewController
-            // let dest = segue.destination as? TestHistoryViewController
+            // pass if needed
+        } else if segue.identifier == "ShowVideoGuide" {
+            // pass if needed
         }
     }
 }
@@ -90,10 +101,10 @@ extension SelfExamineViewController: UICollectionViewDataSource {
             cell.titleLabel.text = "Guides"
             cell.row1Label.text = "Video Guide"
             cell.row2Label.text = "Audio Guide"
+            cell.delegate = self // assign delegate for per-row taps
             return cell
 
-
-        case 1: // Section Title
+        case 1:
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "SectionTitleCell",
                 for: indexPath
@@ -104,7 +115,7 @@ extension SelfExamineViewController: UICollectionViewDataSource {
             cell.titleLabel.text = "How to Self-Examine?"
             return cell
 
-        case 2: // Horizontal Cards Container
+        case 2:
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "SelfExamCardsContainerCell",
                 for: indexPath
@@ -114,7 +125,7 @@ extension SelfExamineViewController: UICollectionViewDataSource {
             cell.contentView.backgroundColor = .clear
             return cell
 
-        case 3: // Actions (Log + View past tests)
+        case 3:
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "ActionsContainerCell",
                 for: indexPath
@@ -122,8 +133,6 @@ extension SelfExamineViewController: UICollectionViewDataSource {
 
             cell.backgroundColor = .clear
             cell.contentView.backgroundColor = .clear
-
-            // IMPORTANT: wire delegate so button tap triggers segue
             cell.delegate = self
             return cell
 
@@ -143,29 +152,36 @@ extension SelfExamineViewController: UICollectionViewDelegateFlowLayout {
         let fullWidth = collectionView.frame.width - 32
 
         switch indexPath.item {
-        case 0:
-            return CGSize(width: fullWidth, height: 180)
-        case 1:
-            return CGSize(width: fullWidth, height: 44)
-        case 2:
-            return CGSize(width: fullWidth, height: 200)
-        case 3:
-            return CGSize(width: fullWidth, height: 140)
-        default:
-            return CGSize(width: fullWidth, height: 60)
+        case 0: return CGSize(width: fullWidth, height: 180)
+        case 1: return CGSize(width: fullWidth, height: 44)
+        case 2: return CGSize(width: fullWidth, height: 200)
+        case 3: return CGSize(width: fullWidth, height: 140)
+        default: return CGSize(width: fullWidth, height: 60)
         }
+    }
+}
+
+// NOTE: whole-card tap removed to avoid accidental navigation
+
+// MARK: - GuidesCardCellDelegate
+extension SelfExamineViewController: GuidesCardCellDelegate {
+    func guidesCellDidTapVideo(_ cell: GuidesCardCell) {
+        performSegue(withIdentifier: "ShowVideoGuide", sender: cell)
+    }
+
+    func guidesCellDidTapAudio(_ cell: GuidesCardCell) {
+        // currently no-op; implement audio screen later
     }
 }
 
 // MARK: - ActionsContainerCellDelegate
 extension SelfExamineViewController: ActionsContainerCellDelegate {
+
     func didTapLogSelfExam(from cell: ActionsContainerCell) {
-        // perform the segue created in storyboard
         performSegue(withIdentifier: "showObservations", sender: cell)
     }
 
     func didTapViewPastTests(from cell: ActionsContainerCell) {
-        // perform segue to Test History screen (segue id must match storyboard)
         performSegue(withIdentifier: "showTestHistory", sender: cell)
     }
 }

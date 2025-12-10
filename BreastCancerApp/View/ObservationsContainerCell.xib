@@ -19,10 +19,10 @@
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MfM-dV-oNW">
-                        <rect key="frame" x="4" y="24" width="398" height="443"/>
+                        <rect key="frame" x="0.0" y="24" width="402" height="443"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="oJf-qR-LDQ">
-                                <rect key="frame" x="0.0" y="0.0" width="398" height="443"/>
+                                <rect key="frame" x="4" y="0.0" width="398" height="443"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="PHM-7V-HlZ">
                                         <rect key="frame" x="0.0" y="0.0" width="398" height="173"/>
@@ -176,7 +176,7 @@
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="oJf-qR-LDQ" secondAttribute="trailing" id="ElQ-dM-tOZ"/>
                             <constraint firstAttribute="bottom" secondItem="oJf-qR-LDQ" secondAttribute="bottom" id="bKu-d9-yM8"/>
-                            <constraint firstItem="oJf-qR-LDQ" firstAttribute="leading" secondItem="MfM-dV-oNW" secondAttribute="leading" id="trm-gh-v9e"/>
+                            <constraint firstItem="oJf-qR-LDQ" firstAttribute="leading" secondItem="MfM-dV-oNW" secondAttribute="leading" constant="4" id="trm-gh-v9e"/>
                             <constraint firstItem="oJf-qR-LDQ" firstAttribute="top" secondItem="MfM-dV-oNW" secondAttribute="top" id="vAv-BF-408"/>
                         </constraints>
                     </view>
@@ -185,7 +185,7 @@
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <color key="backgroundColor" name="bg"/>
             <constraints>
-                <constraint firstItem="MfM-dV-oNW" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="4" id="QMn-mo-Ape"/>
+                <constraint firstItem="MfM-dV-oNW" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="QMn-mo-Ape"/>
                 <constraint firstItem="MfM-dV-oNW" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="24" id="YOE-BP-MJI"/>
                 <constraint firstAttribute="bottom" secondItem="MfM-dV-oNW" secondAttribute="bottom" id="mOc-oj-oGO"/>
                 <constraint firstAttribute="trailing" secondItem="MfM-dV-oNW" secondAttribute="trailing" constant="4" id="pQd-7K-MZ3"/>

@@ -7,6 +7,11 @@ class ObservationsContainerCell: UICollectionViewCell {
     @IBOutlet weak var painButton: UIButton!
     @IBOutlet weak var sizeSwitch: UISwitch!
 
+    // Stored selection properties
+    var selectedSkinChange: String?
+    var selectedNippleChange: String?
+    var selectedPainLevel: String?
+
     private let skinOptions = [
         "None",
         "Dimpling/puckering",
@@ -42,6 +47,10 @@ class ObservationsContainerCell: UICollectionViewCell {
         let savedSize = (dict["sizeChange"] as? Bool) ?? false
         let savedLumps = (dict["lumps"] as? Bool) ?? false
 
+        selectedSkinChange = savedSkin
+        selectedNippleChange = savedNipple
+        selectedPainLevel = savedPain
+
         skinChangesButton.setTitle(savedSkin, for: .normal)
         skinChangesButton.setTitleColor(UIColor(named: "mutedText") ?? .systemGray, for: .normal)
 
@@ -57,7 +66,7 @@ class ObservationsContainerCell: UICollectionViewCell {
         configureMenus()
     }
 
-    // MARK: - Switch actions (connect Value Changed)
+    // MARK: - Switch actions
     @IBAction func lumpsSwitchChanged(_ sender: UISwitch) {
         saveObservation(key: "lumps", value: sender.isOn)
     }
@@ -66,9 +75,7 @@ class ObservationsContainerCell: UICollectionViewCell {
         saveObservation(key: "sizeChange", value: sender.isOn)
     }
 
-    // optional fallback IBActions (connect Touch Up Inside if you prefer)
     @IBAction func skinChangesTapped(_ sender: UIButton) {
-        // UIMenu shows automatically on iOS14+, fallback to action sheet for older OS
         presentActionSheet(title: "Skin Changes", options: skinOptions) { [weak self] v in
             self?.applySkinSelection(v)
         }
@@ -88,24 +95,27 @@ class ObservationsContainerCell: UICollectionViewCell {
 
     // MARK: - Apply selections
     private func applySkinSelection(_ option: String) {
+        selectedSkinChange = option
         skinChangesButton.setTitle(option, for: .normal)
         skinChangesButton.setTitleColor(UIColor(named: "pink") ?? .systemPink, for: .normal)
         saveObservation(key: "skinChanges", value: option)
     }
 
     private func applyNippleSelection(_ option: String) {
+        selectedNippleChange = option
         nippleChangesButton.setTitle(option, for: .normal)
         nippleChangesButton.setTitleColor(UIColor(named: "pink") ?? .systemPink, for: .normal)
         saveObservation(key: "nippleChanges", value: option)
     }
 
     private func applyPainSelection(_ option: String) {
+        selectedPainLevel = option
         painButton.setTitle(option, for: .normal)
         painButton.setTitleColor(UIColor(named: "pink") ?? .systemPink, for: .normal)
         saveObservation(key: "pain", value: option)
     }
 
-    // MARK: - UIMenu configuration (native dropdown)
+    // MARK: - UIMenu configuration
     private func configureMenus() {
         if #available(iOS 14.0, *) {
             skinChangesButton.menu = UIMenu(title: "", children: skinOptions.map { option in
@@ -154,5 +164,30 @@ class ObservationsContainerCell: UICollectionViewCell {
             responder = responder?.next
         }
         return nil
+    }
+
+    // Provide a dictionary snapshot for controller
+    func currentObservationSnapshot() -> [String: Any] {
+        return [
+            "lumps": lumpsSwitch.isOn,
+            "skinChanges": selectedSkinChange ?? skinChangesButton.title(for: .normal) ?? "None",
+            "nippleChanges": selectedNippleChange ?? nippleChangesButton.title(for: .normal) ?? "None",
+            "sizeChange": sizeSwitch.isOn,
+            "pain": selectedPainLevel ?? painButton.title(for: .normal) ?? "None"
+        ]
+    }
+}
+
+// MARK: - ObservationsCollector
+extension ObservationsContainerCell: ObservationsCollector {
+    func collectObservations() -> [ObservationItem] {
+        let snap = currentObservationSnapshot()
+        return [
+            ObservationItem(title: "Lumps/Thickening", value: (snap["lumps"] as? Bool) == true ? "Yes" : "No"),
+            ObservationItem(title: "Size/shape changes", value: (snap["sizeChange"] as? Bool) == true ? "Yes" : "No"),
+            ObservationItem(title: "Skin changes", value: snap["skinChanges"] as? String ?? "None"),
+            ObservationItem(title: "Nipple changes", value: snap["nippleChanges"] as? String ?? "None"),
+            ObservationItem(title: "Pain/Tenderness", value: snap["pain"] as? String ?? "None")
+        ]
     }
 }
