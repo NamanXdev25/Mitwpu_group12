@@ -10,8 +10,6 @@ import UIKit
 class EmotionPickerCell: UICollectionViewCell {
 
     @IBOutlet weak var cardView: UIView!
-
-    // These are UIStackViews in your XIB
     @IBOutlet weak var happyStack: UIStackView!
     @IBOutlet weak var sadStack: UIStackView!
     @IBOutlet weak var anxiousStack: UIStackView!
@@ -22,13 +20,11 @@ class EmotionPickerCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        // Enable touch
         happyStack.isUserInteractionEnabled = true
         sadStack.isUserInteractionEnabled = true
         anxiousStack.isUserInteractionEnabled = true
         tiredStack.isUserInteractionEnabled = true
 
-        // Add gestures
         happyStack.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
         sadStack.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
         anxiousStack.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))

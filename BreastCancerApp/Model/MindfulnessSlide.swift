@@ -10,4 +10,3 @@ struct MindfulnessSlide {
     let description: String
     let buttonText: String
 }
-

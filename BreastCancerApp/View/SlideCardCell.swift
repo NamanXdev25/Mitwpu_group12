@@ -11,10 +11,9 @@ class SlideCardCell: UICollectionViewCell {
 
     @IBOutlet weak var cardView: UIView!
     @IBOutlet weak var pageHostView: UIView!
-    @IBOutlet weak var pageControl: UIPageControl!    // optional: you can update this from cell
+    @IBOutlet weak var pageControl: UIPageControl!
 
-    // callbacks for actions inside slides (optional)
-    var didTapSlideButton: ((Int) -> Void)?  // slide index
+    var didTapSlideButton: ((Int) -> Void)?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -22,7 +21,6 @@ class SlideCardCell: UICollectionViewCell {
         cardView.clipsToBounds = true
     }
 
-    // We'll provide a setup method later to attach a UIPageViewController into pageHostView
     func configure(initialSlidesCount: Int) {
         pageControl.numberOfPages = initialSlidesCount
         pageControl.currentPage = 0

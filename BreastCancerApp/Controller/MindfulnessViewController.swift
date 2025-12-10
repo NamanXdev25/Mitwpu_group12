@@ -162,13 +162,11 @@ class MindfulnessViewController: UIViewController {
 
         guard let pageVC = pageVC else { return }
 
-        // set initial controller
         if let first = slideVC(at: 0) {
             pageVC.setViewControllers([first], direction: .forward, animated: false, completion: nil)
             currentPageIndex = 0
         }
 
-        // add as child to this view controller
         addChild(pageVC)
         pageVC.view.translatesAutoresizingMaskIntoConstraints = false
         hostView.addSubview(pageVC.view)
@@ -182,14 +180,11 @@ class MindfulnessViewController: UIViewController {
 
         pageVC.didMove(toParent: self)
 
-        // remember host for cleanup
         pageVCAttachedToHost = hostView
 
-        // wire pageControl
         pageControl.numberOfPages = slides.count
         pageControl.currentPage = 0
 
-        // keep a reference to the cell's pageControl to update in delegate callbacks
         self.attachedPageControl = pageControl
     }
 
@@ -202,12 +197,8 @@ class MindfulnessViewController: UIViewController {
         pageVC.removeFromParent()
         pageVCAttachedToHost = nil
 
-        // if you want to completely destroy pageVC to free memory, set nil:
-        // self.pageVC = nil
-        // self.attachedPageControl = nil
     }
     
-    // Data source
     func pageViewController(_ pvc: UIPageViewController, viewControllerBefore vc: UIViewController) -> UIViewController? {
         guard let s = vc as? SlideContentViewController, let idx = s.pageIndex else { return nil }
         return slideVC(at: idx - 1)
@@ -218,7 +209,6 @@ class MindfulnessViewController: UIViewController {
         return slideVC(at: idx + 1)
     }
 
-    // Delegate
     func pageViewController(_ pvc: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         guard completed,
               let current = pvc.viewControllers?.first as? SlideContentViewController,
@@ -240,7 +230,6 @@ class MindfulnessViewController: UIViewController {
             }
             return
         }
-        // handle Begin/Add Photo...
     }
     
     private func setupSlides(for emotionIndex: Int) {
@@ -248,7 +237,7 @@ class MindfulnessViewController: UIViewController {
 
         let moodKey = (0 ..< moodKeys.count).contains(emotionIndex) ? moodKeys[emotionIndex] : moodKeys[0]
         guard let moodContent = mindfulnessData.moodContent(for: moodKey) else {
-            // fallback: simple default
+            // fallback: default
             slides = [
                 MindfulnessSlide(title: "It's okay to have days like this",
                                  description: "Let’s take a small step to feel better.",
@@ -266,9 +255,7 @@ class MindfulnessViewController: UIViewController {
             return
         }
 
-        // build slides:
         let intro = moodContent.intro
-        // pick a random breathing / journaling / hobby item (or pick index 0 if you want deterministic)
         let breathe = moodContent.breathing.randomElement() ?? moodContent.breathing.first!
         let journal = moodContent.journaling.randomElement() ?? moodContent.journaling.first!
         let hobby = moodContent.hobby.randomElement() ?? moodContent.hobby.first!
@@ -289,42 +276,17 @@ class MindfulnessViewController: UIViewController {
 
             switch section {
 
-//            case .header:
-//                let item = NSCollectionLayoutItem(
-//                    layoutSize: .init(
-//                        widthDimension: .fractionalWidth(1),
-//                        heightDimension: .estimated(380)
-//                    )
-//                )
-//
-//                let group = NSCollectionLayoutGroup.vertical(
-//                    layoutSize: .init(
-//                        widthDimension: .fractionalWidth(1),
-//                        heightDimension: .estimated(380)
-//                    ),
-//                    subitems: [item]
-//                )
-//
-//                let section = NSCollectionLayoutSection(group: group)
-//                section.contentInsets = .init(top: 16, leading: 0, bottom: 16, trailing: 0)
-//                return section
-
-
-
             case .explore:
-                // label item
                 let labelItem = NSCollectionLayoutItem(
                     layoutSize: .init(widthDimension: .fractionalWidth(1),
                                       heightDimension: .absolute(40))
                 )
 
-                // card item
                 let cardItem = NSCollectionLayoutItem(
                     layoutSize: .init(widthDimension: .fractionalWidth(1),
                                       heightDimension: .absolute(130))
                 )
 
-                // group = vertical: label + the two cards
                 let group = NSCollectionLayoutGroup.vertical(
                     layoutSize: .init(widthDimension: .fractionalWidth(1),
                                       heightDimension: .estimated(300)),
@@ -337,7 +299,6 @@ class MindfulnessViewController: UIViewController {
                 return section
 
             case .emotions:
-                // Temporary layout — will refine later
                 let item = NSCollectionLayoutItem(
                     layoutSize: .init(
                         widthDimension: .fractionalWidth(1),
@@ -354,7 +315,6 @@ class MindfulnessViewController: UIViewController {
                 return NSCollectionLayoutSection(group: group)
 
             case .slideCard:
-                // Temporary layout — will refine later
                 let item = NSCollectionLayoutItem(
                     layoutSize: .init(
                         widthDimension: .fractionalWidth(1),
@@ -369,10 +329,6 @@ class MindfulnessViewController: UIViewController {
                     subitems: [item]
                 )
                 return NSCollectionLayoutSection(group: group)
-
-            default:
-                return nil   // <- Now this will never be hit
-
             }
         }
     }
@@ -381,8 +337,6 @@ class MindfulnessViewController: UIViewController {
 
 
 extension MindfulnessViewController: UICollectionViewDelegate {
-    // put willDisplay + didEndDisplaying here
-    
     func collectionView(_ collectionView: UICollectionView,
                         willDisplay cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {

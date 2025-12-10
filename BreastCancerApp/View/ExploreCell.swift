@@ -21,7 +21,6 @@ class ExploreCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
         chevronView.image = UIImage(systemName: "chevron.right")
         chevronView.tintColor = .systemGray3
     }
@@ -36,8 +35,5 @@ class ExploreCell: UICollectionViewCell {
         didTap?()
     }
     
-    @IBAction func buttonTapped(_ sender: UIButton) {
-        didTap?()
-    }
 
 }
