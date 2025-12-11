@@ -222,9 +222,7 @@ extension BreathingViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        // ---------------------------------------------------------
         // SECTION 1: FILTERS (Existing Logic)
-        // ---------------------------------------------------------
         if indexPath.section == 1 {
             selectedFilterIndex = indexPath.row
             let selectedCategory = filterTags[indexPath.row]
@@ -242,10 +240,9 @@ extension BreathingViewController: UICollectionViewDelegate {
                 collectionView.reloadSections(IndexSet(integer: 2))
             }
         }
-        
-        // ---------------------------------------------------------
+ 
         // SECTION 0 & 2: NAVIGATION (New Logic)
-        // ---------------------------------------------------------
+  
         else {
             // 1. Figure out which session was tapped
             var selectedSession: BreathingSession?
@@ -265,7 +262,7 @@ extension BreathingViewController: UICollectionViewDelegate {
             if let session = selectedSession {
                 
                 // A. Load the Player Screen from Storyboard
-                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let storyboard = UIStoryboard(name: "BreathingSessions", bundle: nil)
                 if let playerVC = storyboard.instantiateViewController(withIdentifier: "BreathingPlayerVC") as? BreathingPlayerViewController {
                     
                     // B. Pass the Data

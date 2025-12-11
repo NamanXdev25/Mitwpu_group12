@@ -14,7 +14,7 @@
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Section Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o6R-cY-O2M">
-                    <rect key="frame" x="16.000000000000007" y="13" width="117.66666666666669" height="24"/>
+                    <rect key="frame" x="0.0" y="13" width="118" height="24"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
@@ -22,7 +22,7 @@
             </subviews>
             <viewLayoutGuide key="safeArea" id="VXr-Tz-HHm"/>
             <constraints>
-                <constraint firstItem="o6R-cY-O2M" firstAttribute="leading" secondItem="VXr-Tz-HHm" secondAttribute="leading" constant="16" id="C2e-Tx-vC1"/>
+                <constraint firstItem="o6R-cY-O2M" firstAttribute="leading" secondItem="VXr-Tz-HHm" secondAttribute="leading" id="C2e-Tx-vC1"/>
                 <constraint firstItem="o6R-cY-O2M" firstAttribute="centerY" secondItem="U6b-Vx-4bR" secondAttribute="centerY" id="ouR-Fn-wZk"/>
             </constraints>
             <connections>
