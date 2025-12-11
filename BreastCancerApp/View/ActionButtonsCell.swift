@@ -10,7 +10,7 @@ import UIKit
 class ActionButtonsCell: UICollectionViewCell {
     
     @IBOutlet weak var addToPlanButton: UIButton!
-    @IBOutlet weak var setReminderButton: UIButton!
+   // @IBOutlet weak var setReminderButton: UIButton!
     
     // ✅ THESE ARE THE CLOSURES
     var onAddToPlan: (() -> Void)?
@@ -30,13 +30,13 @@ class ActionButtonsCell: UICollectionViewCell {
         addToPlanButton.setTitle("Add to Plan", for: .normal)
         
         // Set Reminder - White with subtle border
-        setReminderButton.backgroundColor = .white
-        setReminderButton.setTitleColor(.black, for: .normal)
-        setReminderButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
-        setReminderButton.layer.cornerRadius = 28
-        setReminderButton.layer.borderWidth = 1
-        setReminderButton.layer.borderColor = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1.0).cgColor
-        setReminderButton.setTitle("Set Reminder", for: .normal)
+      //  setReminderButton.backgroundColor = .white
+        //setReminderButton.setTitleColor(.black, for: .normal)
+       // setReminderButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
+       // setReminderButton.layer.cornerRadius = 28
+        //setReminderButton.layer.borderWidth = 1
+      //  setReminderButton.layer.borderColor = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1.0).cgColor
+       // setReminderButton.setTitle("Set Reminder", for: .normal)
     }
     
     // ✅ THESE ARE THE IBACTIONS
@@ -45,10 +45,10 @@ class ActionButtonsCell: UICollectionViewCell {
         onAddToPlan?()  // Call the closure
     }
     
-    @IBAction func setReminderTapped(_ sender: Any) {
-        animateButton(setReminderButton)
-        onSetReminder?()  // Call the closure
-    }
+  //  @IBAction func setReminderTapped(_ sender: Any) {
+       // animateButton(setReminderButton)
+        // onSetReminder?()  // Call the closure
+  //  }
     
     func animateButton(_ button: UIButton) {
         UIView.animate(withDuration: 0.1, animations: {

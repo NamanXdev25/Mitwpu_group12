@@ -15,7 +15,7 @@ class PlanCell: UICollectionViewCell {
     @IBOutlet weak var checkButton: UIButton!
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var separatorView: UIView!
-    @IBOutlet weak var chevronButton: UIButton!
+  //  @IBOutlet weak var chevronButton: UIButton!
     
     // --- NEW OUTLET ---
     @IBOutlet weak var clockIcon: UIImageView!
@@ -41,18 +41,18 @@ class PlanCell: UICollectionViewCell {
         clockIcon.contentMode = .scaleAspectFit
         
         // 4. Chevron Style
-        let config = UIImage.SymbolConfiguration(pointSize: 14, weight: .semibold)
-        chevronButton.setImage(UIImage(systemName: "chevron.right", withConfiguration: config), for: .normal)
-        chevronButton.tintColor = .systemGray3
+        //let config = UIImage.SymbolConfiguration(pointSize: 14, weight: .semibold)
+       // chevronButton.setImage(UIImage(systemName: "chevron.right", withConfiguration: config), for: .normal)
+        //chevronButton.tintColor = .systemGray3
     }
 
     @IBAction func checkButtonTapped(_ sender: Any) {
         onToggle?()
     }
     
-    @IBAction func chevronTapped(_ sender: Any) {
-        onNavigate?()
-    }
+    //@IBAction func chevronTapped(_ sender: Any) {
+       // onNavigate?()
+   // }
     
     func configure(with item: PlanItem) {
         titleLabel.text = item.title
