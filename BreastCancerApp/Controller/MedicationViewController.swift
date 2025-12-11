@@ -88,7 +88,7 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
                 for: indexPath
             ) as! MedicationHeaderView
             
-            header.configure(with: "Today's Plan")
+            header.configure(with: "Today's Medications")
             return header
         }
         return UICollectionReusableView()
