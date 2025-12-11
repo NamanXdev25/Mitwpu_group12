@@ -167,14 +167,40 @@ class AddMedicationViewController: UIViewController, UIPickerViewDelegate, UIPic
     }
     
     func addChevron(to textField: UITextField) {
-        let iconView = UIImageView(image: UIImage(systemName: "chevron.down"))
-        iconView.tintColor = .lightGray
-        iconView.frame = CGRect(x: 0, y: 0, width: 30, height: 20)
+        // Create a small container view for the icon
+        let iconContainer = UIView(frame: CGRect(x: 0, y: 0, width: 30, height: 20))
+        
+        // Create the image view
+        let iconView = UIImageView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        iconView.image = UIImage(systemName: "chevron.up.chevron.down") // Or just "chevron.down"
         iconView.contentMode = .scaleAspectFit
-        let container = UIView(frame: CGRect(x: 0, y: 0, width: 30, height: 20))
-        container.addSubview(iconView)
-        textField.rightView = container
+        iconView.tintColor = .lightGray
+        
+        iconContainer.addSubview(iconView)
+        
+        // Add tap gesture to the container to ensure tapping the icon opens the picker
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(chevronTapped(_:)))
+        iconContainer.addGestureRecognizer(tapGesture)
+        iconContainer.isUserInteractionEnabled = true
+        
+        // Store reference to text field in the container's tag or accessibilityIdentifier if needed,
+        // but since we are inside a closure-like scope, we can just use the textField reference if we were defining the action here.
+        // Instead, we will attach the text field to the gesture recognizer's view via a simple associated object trick or just rely on the fact that rightView touches often pass through.
+        // A cleaner way is to make the icon container pass touches to the text field.
+        
+        // Set it as the right view of the text field
+        textField.rightView = iconContainer
         textField.rightViewMode = .always
+        
+        // Associate the text field with the gesture logic
+        iconContainer.accessibilityElements = [textField]
+    }
+    
+    @objc func chevronTapped(_ sender: UITapGestureRecognizer) {
+        // Find which text field this chevron belongs to
+        if let container = sender.view, let textField = container.accessibilityElements?.first as? UITextField {
+            textField.becomeFirstResponder()
+        }
     }
     
     // TextView Placeholder Logic
