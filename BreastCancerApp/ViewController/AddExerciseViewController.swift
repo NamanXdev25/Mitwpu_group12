@@ -90,15 +90,6 @@ class AddExerciseViewController: UIViewController, UIPickerViewDelegate, UIPicke
         descriptionTextView.textColor = .lightGray
         descriptionTextView.delegate = self // Delegate is handled in extension below
         descriptionTextView.textContainerInset = UIEdgeInsets(top: 15, left: 10, bottom: 10, right: 10)
-        
-        // allow slight font scaling instead of ellipsis for the value field
-        nameTextField.adjustsFontSizeToFitWidth = true
-        nameTextField.minimumFontSize = 13
-
-        // Make the text field flexible so the left label ("Name") doesn't get truncated
-        nameTextField.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        nameTextField.setContentHuggingPriority(.defaultLow, for: .horizontal)
-
 
     }
 
