@@ -29,7 +29,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <slider opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="ml2-WQ-iSs">
-                        <rect key="frame" x="20" y="30.333333333333329" width="353" height="34"/>
+                        <rect key="frame" x="20" y="23.333333333333329" width="353" height="34"/>
                         <connections>
                             <action selector="sliderChanged:" destination="gTV-IL-0wX" eventType="valueChanged" id="7Ao-Lx-PpI"/>
                             <action selector="sliderTouchDown:" destination="gTV-IL-0wX" eventType="valueChanged" id="DFb-2y-FTw"/>
@@ -37,7 +37,7 @@
                         </connections>
                     </slider>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ge0-pb-NHt">
-                        <rect key="frame" x="160.66666666666666" y="67.333333333333329" width="72" height="71.999999999999986"/>
+                        <rect key="frame" x="160.66666666666666" y="60.333333333333343" width="72" height="72"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="72" id="4v3-El-xmY"/>
                             <constraint firstAttribute="height" constant="72" id="SXB-Ld-bJj"/>
@@ -49,7 +49,7 @@
                         </connections>
                     </button>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fe3-ap-VKe">
-                        <rect key="frame" x="20" y="67.333333333333329" width="72" height="71.999999999999986"/>
+                        <rect key="frame" x="20" y="60.333333333333343" width="72" height="72"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="72" id="FrI-e7-ZMq"/>
                             <constraint firstAttribute="height" constant="72" id="cch-ag-hEu"/>
@@ -61,7 +61,7 @@
                         </connections>
                     </button>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ae4-UG-8Oe">
-                        <rect key="frame" x="301" y="67.333333333333329" width="72" height="71.999999999999986"/>
+                        <rect key="frame" x="301" y="60.333333333333343" width="72" height="72"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="72" id="5aE-VN-7AF"/>
                             <constraint firstAttribute="height" constant="72" id="RyT-xN-Em7"/>
@@ -82,8 +82,9 @@
                 <constraint firstAttribute="trailing" secondItem="ml2-WQ-iSs" secondAttribute="trailing" constant="20" id="GAf-8d-Khp"/>
                 <constraint firstItem="ml2-WQ-iSs" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="20" id="HFL-eh-yMg"/>
                 <constraint firstAttribute="trailing" secondItem="dDg-xE-lo0" secondAttribute="trailing" constant="20" id="JZw-el-gGN"/>
-                <constraint firstItem="ml2-WQ-iSs" firstAttribute="top" secondItem="EBy-Gv-jtC" secondAttribute="bottom" constant="8" id="LIA-6T-46I"/>
+                <constraint firstItem="ml2-WQ-iSs" firstAttribute="top" secondItem="EBy-Gv-jtC" secondAttribute="bottom" constant="1" id="LIA-6T-46I"/>
                 <constraint firstItem="Ge0-pb-NHt" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="N82-WP-OpK"/>
+                <constraint firstItem="dDg-xE-lo0" firstAttribute="centerY" secondItem="EBy-Gv-jtC" secondAttribute="centerY" id="NV1-og-oq0"/>
                 <constraint firstItem="fe3-ap-VKe" firstAttribute="top" secondItem="ml2-WQ-iSs" secondAttribute="bottom" constant="3" id="Rti-lx-yTX"/>
                 <constraint firstItem="dDg-xE-lo0" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="8" id="WHC-82-rMG"/>
                 <constraint firstItem="Ge0-pb-NHt" firstAttribute="top" secondItem="ml2-WQ-iSs" secondAttribute="bottom" constant="3" id="iVg-js-9nY"/>

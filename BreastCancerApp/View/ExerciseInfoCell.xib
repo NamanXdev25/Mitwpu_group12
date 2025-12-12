@@ -3,6 +3,7 @@
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -40,8 +41,21 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gcd-GZ-Zqk">
+                        <rect key="frame" x="20" y="85.333333333333329" width="72" height="23"/>
+                        <color key="backgroundColor" name="More_Exercise"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="72" id="X27-1v-QVC"/>
+                            <constraint firstAttribute="height" constant="23" id="rhX-2P-dht"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="12"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2dW-Db-j7e">
-                        <rect key="frame" x="20" y="89.333333333333329" width="37" height="59.666666666666671"/>
+                        <rect key="frame" x="29" y="89.333333333333329" width="37" height="59.666666666666671"/>
                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -56,7 +70,9 @@
                 <constraint firstItem="IAB-zp-cmZ" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="16" id="J2Z-37-B2X"/>
                 <constraint firstItem="IAB-zp-cmZ" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="20" id="K17-YH-U2K"/>
                 <constraint firstAttribute="trailing" secondItem="M1j-4e-BtK" secondAttribute="trailing" constant="20" id="UsV-0Y-DPu"/>
-                <constraint firstItem="2dW-Db-j7e" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="20" id="aOu-Bj-Hep"/>
+                <constraint firstItem="Gcd-GZ-Zqk" firstAttribute="top" secondItem="api-xJ-yxF" secondAttribute="bottom" constant="8" id="ViE-sC-KSz"/>
+                <constraint firstItem="2dW-Db-j7e" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="29" id="aOu-Bj-Hep"/>
+                <constraint firstItem="Gcd-GZ-Zqk" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="20" id="e8X-OF-TfR"/>
                 <constraint firstAttribute="bottom" secondItem="2dW-Db-j7e" secondAttribute="bottom" constant="16" id="fCG-bS-uxf"/>
                 <constraint firstItem="M1j-4e-BtK" firstAttribute="centerY" secondItem="IAB-zp-cmZ" secondAttribute="centerY" id="hh3-yM-nh1"/>
                 <constraint firstAttribute="trailing" secondItem="api-xJ-yxF" secondAttribute="trailing" constant="36" id="ole-up-F1d"/>
@@ -65,10 +81,16 @@
             <connections>
                 <outlet property="descriptionLabel" destination="api-xJ-yxF" id="OKm-Mb-ZLY"/>
                 <outlet property="infoButton" destination="M1j-4e-BtK" id="4ot-hV-6w1"/>
+                <outlet property="levelBackgroundView" destination="Gcd-GZ-Zqk" id="gMn-JK-yj9"/>
                 <outlet property="levelLabel" destination="2dW-Db-j7e" id="cxX-nR-LgS"/>
                 <outlet property="titleLabel" destination="IAB-zp-cmZ" id="g0D-LJ-zdl"/>
             </connections>
             <point key="canvasLocation" x="113.74045801526717" y="83.450704225352112"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <namedColor name="More_Exercise">
+            <color red="0.9100000262260437" green="0.63899999856948853" blue="0.69800001382827759" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
 </document>

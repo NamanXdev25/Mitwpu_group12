@@ -69,6 +69,7 @@ class ExerciseInfoCell: UICollectionViewCell {
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var levelLabel: UILabel!
     
+    @IBOutlet weak var levelBackgroundView: UIView!
     // NEW: closure that the controller will set to handle info taps.
     // Passes the button so the controller can anchor popover to it.
     var onInfoTap: ((_ infoButton: UIButton) -> Void)?
@@ -94,8 +95,13 @@ class ExerciseInfoCell: UICollectionViewCell {
         descriptionLabel.numberOfLines = 0
         
         // Level badge - Subtle, darker text
-        levelLabel.font = .systemFont(ofSize: 14, weight: .semibold)
-        levelLabel.textColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1.0)
+        levelLabel.font = .systemFont(ofSize: 12, weight: .semibold)
+        levelLabel.textColor = .beginner
+        
+        // The view you added behind the label (connect as outlet: levelBackgroundView)
+           levelBackgroundView.backgroundColor = UIColor(red: 1.0, green: 0.90, blue: 0.93, alpha: 1.0) // soft pink
+           levelBackgroundView.layer.cornerRadius = 10
+           levelBackgroundView.layer.masksToBounds = true
     }
     
     func configure(title: String, description: String, level: String) {
