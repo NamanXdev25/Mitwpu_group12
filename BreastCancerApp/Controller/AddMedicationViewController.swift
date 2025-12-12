@@ -1,3 +1,9 @@
+//
+//  CalendarViewController.swift
+//  BreastCancerApp
+//
+//  Created by Shloka Shetty on 3/12/25.
+//
 import UIKit
 
 // This protocol allows us to send the new pill data back to the List Screen
@@ -10,7 +16,7 @@ protocol AddMedicationDelegate: AnyObject {
 
 class AddMedicationViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate, UITextViewDelegate {
 
-    // --- OUTLETS ---
+    //Mark:- --- OUTLETS ---
     @IBOutlet weak var CloseButton: UIButton!
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var repeatTextField: UITextField!
@@ -50,7 +56,7 @@ class AddMedicationViewController: UIViewController, UIPickerViewDelegate, UIPic
         timePicker.datePickerMode = .time
         timePicker.preferredDatePickerStyle = .wheels
         
-        // Setup Pickers (Hidden initially)
+        // Setup Pickers (Hidden initially)≠≠≠≠
         pickerOverlay.isHidden = true
         
         // Add Tap to Dismiss Overlay
@@ -79,29 +85,31 @@ class AddMedicationViewController: UIViewController, UIPickerViewDelegate, UIPic
 
     // --- NEW: POPULATE FIELDS ---
     func checkForEditMode() {
-        if let med = medicationToEdit {
-            // Update Title and Button
-            // (If you have a navigation bar, you can set title = "Edit Medication")
-            saveButton.setTitle("", for: .normal)
-            
-            // Fill Fields
-            nameTextField.text = med.name
-            timeTextField.text = med.time
-            
-            // Handle Description/Note
-            // (We check if the note is essentially a Repeat Option or a real note)
-            if weekDays.contains(med.note) {
-                repeatTextField.text = med.note
-                // Reset description to placeholder
-                descriptionTextView.text = "Add a note"
-                descriptionTextView.textColor = .lightGray
-            } else {
-                repeatTextField.text = "Every Day" // Default fallback
-                descriptionTextView.text = med.note
-                descriptionTextView.textColor = .black // Set to valid text color
+            if let med = medicationToEdit {
+                // 1. Update Title
+                self.title = "Edit Details"
+                
+                // 2. Update Pink Button (Arrow Only)
+                saveButton.setTitle("", for: .normal) // Remove text
+                saveButton.setImage(UIImage(systemName: "arrow.right"), for: .normal) // Add Arrow
+                saveButton.tintColor = .white // Make arrow white
+                
+                // 3. Fill Fields
+                nameTextField.text = med.name
+                timeTextField.text = med.time
+                
+                // 4. Handle Description/Note
+                if weekDays.contains(med.note) {
+                    repeatTextField.text = med.note
+                    descriptionTextView.text = "Add a note"
+                    descriptionTextView.textColor = .lightGray
+                } else {
+                    repeatTextField.text = "Every Day"
+                    descriptionTextView.text = med.note
+                    descriptionTextView.textColor = .black
+                }
             }
         }
-    }
 
     // --- LOGIC TO SHOW PICKERS ---
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
