@@ -59,4 +59,25 @@ class ActionButtonsCell: UICollectionViewCell {
             }
         }
     }
+
+    // MARK: - Appearance Toggle
+    func setAdded(_ added: Bool) {
+        if added {
+            // Show "Remove" style: white bg + pink border + pink text
+            addToPlanButton.setTitle("Remove", for: .normal)
+            addToPlanButton.backgroundColor = .white
+            let pink = UIColor(red: 0.95, green: 0.45, blue: 0.55, alpha: 1.0)
+            addToPlanButton.setTitleColor(pink, for: .normal)
+            addToPlanButton.layer.borderWidth = 1
+            addToPlanButton.layer.borderColor = pink.cgColor
+        } else {
+            // Restore "Add to Plan" pink filled look
+            let pinkColor = UIColor(red: 0.95, green: 0.45, blue: 0.55, alpha: 1.0)
+            addToPlanButton.setTitle("Add to Plan", for: .normal)
+            addToPlanButton.backgroundColor = pinkColor
+            addToPlanButton.setTitleColor(.white, for: .normal)
+            addToPlanButton.layer.borderWidth = 0
+            addToPlanButton.layer.borderColor = nil
+        }
+    }
 }

@@ -9,6 +9,7 @@ import Foundation
 
 // 1. Represents a single exercise row (Item)
 struct DetailExerciseItem: Codable {
+    let id: String         // NEW: stable identifier
     let title: String
     let subtitle: String
     let time: String

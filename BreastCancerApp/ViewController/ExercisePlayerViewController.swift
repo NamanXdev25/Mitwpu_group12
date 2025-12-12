@@ -9,7 +9,7 @@ import UIKit
 import AVKit
 import AVFoundation
 
-class ExercisePlayerViewController: UIViewController {
+class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
     
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -40,9 +40,12 @@ class ExercisePlayerViewController: UIViewController {
         setupCollectionView()
         
         view.backgroundColor = UIColor(red: 0.96, green: 0.95, blue: 0.94, alpha: 1.0)
-        
-        // 🎮 ADD TEST BUTTON (Optional - for live testing)
-       // addHeightTestButton()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // Reload the buttons section to reflect latest plan membership
+        collectionView.reloadSections(IndexSet(integer: 3))
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -63,46 +66,6 @@ class ExercisePlayerViewController: UIViewController {
         
         let barItem = UIBarButtonItem(customView: button)
         navigationItem.rightBarButtonItem = barItem
-    }
-    
-    // 🎮 OPTIONAL: Add test button to try different heights
-    func addHeightTestButton() {
-        let testButton = UIButton(type: .system)
-        testButton.setTitle("📏 Test Height", for: .normal)
-        testButton.backgroundColor = .systemBlue
-        testButton.setTitleColor(.white, for: .normal)
-        testButton.layer.cornerRadius = 8
-        testButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(testButton)
-        
-        NSLayoutConstraint.activate([
-            testButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
-            testButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            testButton.widthAnchor.constraint(equalToConstant: 140),
-            testButton.heightAnchor.constraint(equalToConstant: 44)
-        ])
-        
-        testButton.addTarget(self, action: #selector(testNextHeight), for: .touchUpInside)
-    }
-    
-    @objc func testNextHeight() {
-        // Cycle through heights: 400 → 450 → 500 → 550 → 600 → 400
-        let heights: [CGFloat] = [400, 450, 500, 550, 600]
-        
-        if let currentIndex = heights.firstIndex(of: currentVideoHeight) {
-            let nextIndex = (currentIndex + 1) % heights.count
-            currentVideoHeight = heights[nextIndex]
-        } else {
-            currentVideoHeight = 500
-        }
-        
-        print("📏 New video height: \(currentVideoHeight)")
-        
-        // Show alert with current height
-        let alert = UIAlertController(title: "Video Height", message: "Current: \(Int(currentVideoHeight))px", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
     }
     
     @objc func calendarButtonTapped() {
@@ -197,6 +160,60 @@ class ExercisePlayerViewController: UIViewController {
         
         return section
     }
+    
+    // MARK: - AddExerciseDelegate
+    func didAddExercise(_ exercise: PlanItem) {
+        // Add to shared model
+        ExerciseManager.shared.addPlanItem(exercise)
+        
+        // Refresh the Buttons section so button text toggles
+        collectionView.reloadSections(IndexSet(integer: 3))
+        
+        // Show toast
+        showToast(message: "Exercise added to plan")
+    }
+    
+    // Lightweight toast
+    func showToast(message: String, duration: TimeInterval = 1.2) {
+        let toastLabel = UILabel()
+        toastLabel.text = message
+        toastLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+        toastLabel.textAlignment = .center
+        toastLabel.alpha = 0
+        toastLabel.numberOfLines = 0
+
+        // Style
+        toastLabel.backgroundColor = UIColor(white: 0.12, alpha: 0.88)
+        toastLabel.textColor = .white
+        toastLabel.layer.cornerRadius = 14
+        toastLabel.layer.masksToBounds = true
+
+        // Size & add
+        let padding: CGFloat = 16
+        let maxWidth = view.bounds.width - 60
+        let targetSize = CGSize(width: maxWidth - padding*2, height: CGFloat.greatestFiniteMagnitude)
+        var labelSize = toastLabel.sizeThatFits(targetSize)
+        labelSize.width += padding*2
+        labelSize.height += 12
+
+        toastLabel.frame = CGRect(x: (view.bounds.width - labelSize.width)/2,
+                                  y: view.bounds.height - (labelSize.height + 140),
+                                  width: labelSize.width,
+                                  height: labelSize.height)
+        toastLabel.alpha = 0.0
+        view.addSubview(toastLabel)
+
+        // Animate in/out
+        UIView.animate(withDuration: 0.18, animations: {
+            toastLabel.alpha = 1.0
+        }) { _ in
+            UIView.animate(withDuration: 0.18, delay: duration, options: [], animations: {
+                toastLabel.alpha = 0.0
+            }) { _ in
+                toastLabel.removeFromSuperview()
+            }
+        }
+    }
 }
 
 extension ExercisePlayerViewController: UICollectionViewDataSource, UICollectionViewDelegate {
@@ -253,12 +270,37 @@ extension ExercisePlayerViewController: UICollectionViewDataSource, UICollection
             return cell
             
         case 3:
-            // Action Buttons Cell
+            // Action Buttons Cell - UPDATED LOGIC (ID-based)
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ActionButtonsCell", for: indexPath) as! ActionButtonsCell
             
-            // ✅ CORRECT CALLBACKS
+            // Determine if already present (use shared model & id)
+            let alreadyAdded = (exerciseData != nil) ? ExerciseManager.shared.containsExercise(id: exerciseData!.id) : false
+            cell.setAdded(alreadyAdded)
+            
+            // Callbacks
             cell.onAddToPlan = { [weak self] in
-                self?.addToPlan()
+                guard let self = self, let detail = self.exerciseData else { return }
+                
+                if ExerciseManager.shared.containsExercise(id: detail.id) {
+                    // Currently present -> remove by id
+                    ExerciseManager.shared.removeExercisesById(detail.id)
+                    self.collectionView.reloadSections(IndexSet(integer: 3))
+                    self.showToast(message: "Exercise removed from plan")
+                } else {
+                    // Not present -> present AddExerciseViewController prefilled (carry id)
+                    let storyboard = UIStoryboard(name: "Exercise", bundle: nil)
+                    if let addVC = storyboard.instantiateViewController(withIdentifier: "AddExerciseViewController") as? AddExerciseViewController {
+                        addVC.delegate = self // So didAddExercise is called when Save tapped
+                        addVC.initialName = detail.title
+                        addVC.initialID = detail.id           // <<< important: carry the id
+                        addVC.modalPresentationStyle = .pageSheet
+                        if let sheet = addVC.sheetPresentationController {
+                            sheet.detents = [.large()]
+                            sheet.prefersGrabberVisible = true
+                        }
+                        self.present(addVC, animated: true, completion: nil)
+                    }
+                }
             }
             
             cell.onSetReminder = { [weak self] in
@@ -307,7 +349,7 @@ extension ExercisePlayerViewController: UICollectionViewDataSource, UICollection
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
         
-        // TODO: Actually add to plan data
+        // Note: actual add logic is handled via didAddExercise (delegate) or direct model calls above
     }
     
     func setReminder() {

@@ -11,7 +11,7 @@ class ExerciseViewController: UIViewController, UICollectionViewDataSource, UICo
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var floatingAddButton: UIButton!
     
-    var model = ExerciseManager()
+    var model = ExerciseManager.shared
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -296,6 +296,12 @@ class ExerciseViewController: UIViewController, UICollectionViewDataSource, UICo
             }
         }
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        collectionView.reloadSections(IndexSet(integer: 0))
+    }
+
     
     }
 

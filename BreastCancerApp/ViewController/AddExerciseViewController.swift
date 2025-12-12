@@ -5,7 +5,6 @@
 //  Created by Naman Bhansali on 29/11/25.
 //
 
-
 import UIKit
 
 protocol AddExerciseDelegate: AnyObject {
@@ -30,6 +29,11 @@ class AddExerciseViewController: UIViewController, UIPickerViewDelegate, UIPicke
     @IBOutlet weak var timePicker: UIDatePicker!   // Channel 2
     
     weak var delegate: AddExerciseDelegate?
+    
+    // New property: Prefill the name field when presenting from the player
+    var initialName: String?
+    // New property: carry the id of the detail exercise (if presenting from player)
+    var initialID: String?
     
     let weekDays = ["Every Mon", "Every Tue", "Every Wed", "Every Thu", "Every Fri", "Every Sat", "Every Sun", "Every Day"]
     
@@ -59,6 +63,14 @@ class AddExerciseViewController: UIViewController, UIPickerViewDelegate, UIPicke
         // 3. Add Tap Gesture to background (to close popup)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissPopup))
         pickerOverlay.addGestureRecognizer(tapGesture)
+        
+        // Prefill name if provided
+        if let name = initialName, !name.isEmpty {
+            nameTextField.text = name
+            nameTextField.textColor = .black
+            // Optionally lock the name so user doesn't accidentally change identity — comment this line if you want editable
+            // nameTextField.isEnabled = false
+        }
     }
     
     func setupUI() {
@@ -78,6 +90,16 @@ class AddExerciseViewController: UIViewController, UIPickerViewDelegate, UIPicke
         descriptionTextView.textColor = .lightGray
         descriptionTextView.delegate = self // Delegate is handled in extension below
         descriptionTextView.textContainerInset = UIEdgeInsets(top: 15, left: 10, bottom: 10, right: 10)
+        
+        // allow slight font scaling instead of ellipsis for the value field
+        nameTextField.adjustsFontSizeToFitWidth = true
+        nameTextField.minimumFontSize = 13
+
+        // Make the text field flexible so the left label ("Name") doesn't get truncated
+        nameTextField.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        nameTextField.setContentHuggingPriority(.defaultLow, for: .horizontal)
+
+
     }
 
     func addChevron(to textField: UITextField) {
@@ -96,11 +118,6 @@ class AddExerciseViewController: UIViewController, UIPickerViewDelegate, UIPicke
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(chevronTapped(_:)))
         iconContainer.addGestureRecognizer(tapGesture)
         iconContainer.isUserInteractionEnabled = true
-        
-        // Store reference to text field in the container's tag or accessibilityIdentifier if needed,
-        // but since we are inside a closure-like scope, we can just use the textField reference if we were defining the action here.
-        // Instead, we will attach the text field to the gesture recognizer's view via a simple associated object trick or just rely on the fact that rightView touches often pass through.
-        // A cleaner way is to make the icon container pass touches to the text field.
         
         // Set it as the right view of the text field
         textField.rightView = iconContainer
@@ -162,21 +179,21 @@ class AddExerciseViewController: UIViewController, UIPickerViewDelegate, UIPicke
     
     @objc func dismissPopup() {
         // --- FIX: UPDATE TEXT FIELDS ON DISMISS ---
-                // This ensures the value is set even if the user didn't scroll
-                
-                if !repeatPicker.isHidden {
-                    // Get current selected row from Repeat Picker
-                    let selectedRow = repeatPicker.selectedRow(inComponent: 0)
-                    repeatTextField.text = weekDays[selectedRow]
-                }
-                else if !timePicker.isHidden {
-                    // Get current date from Time Picker
-                    let formatter = DateFormatter()
-                    formatter.timeStyle = .short
-                    timeTextField.text = formatter.string(from: timePicker.date)
-                }
-                
-                pickerOverlay.isHidden = true
+        // This ensures the value is set even if the user didn't scroll
+        
+        if !repeatPicker.isHidden {
+            // Get current selected row from Repeat Picker
+            let selectedRow = repeatPicker.selectedRow(inComponent: 0)
+            repeatTextField.text = weekDays[selectedRow]
+        }
+        else if !timePicker.isHidden {
+            // Get current date from Time Picker
+            let formatter = DateFormatter()
+            formatter.timeStyle = .short
+            timeTextField.text = formatter.string(from: timePicker.date)
+        }
+        
+        pickerOverlay.isHidden = true
     }
 
     // --- PICKER DELEGATE (Repeat) ---
@@ -197,8 +214,11 @@ class AddExerciseViewController: UIViewController, UIPickerViewDelegate, UIPicke
         guard let name = nameTextField.text, !name.isEmpty else { return }
         let time = timeTextField.text ?? "10:00 AM"
         let repeatText = repeatTextField.text ?? "Every Mon"
-        
-        let newPlanItem = PlanItem(id: UUID().uuidString, title: name, subtitle: repeatText, time: time, isCompleted: false)
+
+        // Use initialID if present (this preserves identity), otherwise create a new UUID
+        let planId = initialID ?? UUID().uuidString
+
+        let newPlanItem = PlanItem(id: planId, title: name, subtitle: repeatText, time: time, isCompleted: false)
         delegate?.didAddExercise(newPlanItem)
         self.dismiss(animated: true, completion: nil)
     }
