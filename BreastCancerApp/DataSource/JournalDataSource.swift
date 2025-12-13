@@ -7,7 +7,7 @@ import UIKit
 
 class JournalDataSource {
 
-    // MARK: - Sections for BOTH SCREENS
+    // Sections
     enum Section: Int, CaseIterable {
         case streak
         case stats
@@ -16,7 +16,7 @@ class JournalDataSource {
         case all
     }
 
-    // MARK: - Cell Types
+    // Action Cell
     struct JournalAction: Hashable {
         let id = UUID()
         let title: String
@@ -24,7 +24,7 @@ class JournalDataSource {
         let iconName: String
     }
 
-    // MARK: - Properties
+    // Variables
     private weak var collectionView: UICollectionView?
     private(set) var dataSource: UICollectionViewDiffableDataSource<Section, UUID>!
 
@@ -41,22 +41,21 @@ class JournalDataSource {
     var didTapEdit: ((JournalEntry)->Void)?
 
 
-    
+    // Modes
     private var mode: Mode
-
-    // MARK: - Modes
+    
     enum Mode {
         case mainScreen
         case allJournals
     }
 
-    // MARK: - Actions
+    // Actions
     let actions: [JournalAction] = [
         JournalAction(title: "New Journal", subtitle: "Express yourself freely with a blank canvas", iconName: "pencil.and.scribble"),
         JournalAction(title: "Guided Reflection", subtitle: "Thoughtful prompts for clarity", iconName: "sparkles")
     ]
 
-    // MARK: - Init
+    // Init
     init(
         collectionView: UICollectionView,
         mode: Mode,
@@ -73,7 +72,7 @@ class JournalDataSource {
         configureDataSource()
     }
 
-    // MARK: - Configure Datasource
+    // Configure datasource
     private func configureDataSource() {
         guard let collectionView = collectionView else { return }
 
@@ -81,7 +80,7 @@ class JournalDataSource {
 
             switch self.mode {
 
-            // MARK: MAIN JOURNAL SCREEN
+            // Main screen
             case .mainScreen:
 
                 guard let section = Section(rawValue: indexPath.section) else { return nil }
@@ -193,6 +192,8 @@ class JournalDataSource {
 
             case .mainScreen:
                 switch section {
+                case .streak:
+                    header.configure(title: "Stats", showButton: false)
                 case .actions:
                     header.configure(title: "Start Writing", showButton: false)
                 case .recents:

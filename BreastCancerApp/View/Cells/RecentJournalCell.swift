@@ -38,7 +38,25 @@ class RecentJournalCell: UICollectionViewCell {
             dateLabel.text = entry.dateFormatted
     }
      */
-    
+    func formattedJournalDate(_ date: Date) -> String {
+        let calendar = Calendar.current
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+
+        // If same year
+        let thisYear = calendar.component(.year, from: Date())
+        let entryYear = calendar.component(.year, from: date)
+
+        if thisYear == entryYear {
+            formatter.setLocalizedDateFormatFromTemplate("EEE, MMM d")        // Fri, Dec 12
+            return formatter.string(from: date)
+        }
+
+        // If previous year
+        formatter.setLocalizedDateFormatFromTemplate("MMM d, yyyy")      // Dec 12, 2024
+        return formatter.string(from: date)
+    }
+
     func configure(
         with entry: JournalEntry,
         onEdit: @escaping (JournalEntry) -> Void,
@@ -50,7 +68,7 @@ class RecentJournalCell: UICollectionViewCell {
 
         titleLabel.text = entry.title
         descriptionLabel.text = entry.content
-        dateLabel.text = entry.dateFormatted
+        dateLabel.text = formattedJournalDate(entry.date)
 
         // Build menu
         let edit = UIAction(title: "Edit", image: UIImage(systemName: "pencil")) { _ in

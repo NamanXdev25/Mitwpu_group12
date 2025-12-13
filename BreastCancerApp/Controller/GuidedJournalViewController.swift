@@ -55,7 +55,8 @@ class GuidedJournalViewController: UIViewController {
         }
         
         if let entry = existingEntry {
-            navigationItem.title = "Edit Reflection"
+            navigationItem.title = formattedJournalDate(entry.date)
+
             categoryLabel.text = entry.category?.uppercased()
             questionLabel.text = entry.question
             textView.text = entry.body
@@ -80,6 +81,26 @@ class GuidedJournalViewController: UIViewController {
 
         return "\(categoryText) • \(tagsText)"
     }
+    
+    func formattedJournalDate(_ date: Date) -> String {
+        let calendar = Calendar.current
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+
+        // If same year
+        let thisYear = calendar.component(.year, from: Date())
+        let entryYear = calendar.component(.year, from: date)
+
+        if thisYear == entryYear {
+            formatter.setLocalizedDateFormatFromTemplate("EEE, MMM d")
+            return formatter.string(from: date)
+        }
+
+        // If previous year
+        formatter.setLocalizedDateFormatFromTemplate("MMM d, yyyy")
+        return formatter.string(from: date)
+    }
+
 
     
     @IBAction func submitTapped(_ sender: UIBarButtonItem) {

@@ -137,12 +137,12 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Title" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vrl-HE-tT4">
-                                <rect key="frame" x="24" y="188" width="345" height="36"/>
+                                <rect key="frame" x="24" y="0.0" width="345" height="36"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Start writing what's on your mind today..." textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="RfZ-0f-CST">
-                                <rect key="frame" x="24" y="248" width="345" height="492"/>
+                                <rect key="frame" x="24" y="52" width="345" height="688"/>
                                 <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -216,10 +216,10 @@
                         <color key="backgroundColor" name="BackgroundColor"/>
                         <constraints>
                             <constraint firstItem="zb1-dS-e0n" firstAttribute="top" secondItem="RfZ-0f-CST" secondAttribute="bottom" constant="8" id="7kW-GH-Nlk"/>
-                            <constraint firstItem="vrl-HE-tT4" firstAttribute="top" secondItem="G9j-dD-XQs" secondAttribute="top" constant="188" id="9YT-03-gYb"/>
+                            <constraint firstItem="vrl-HE-tT4" firstAttribute="top" secondItem="G9j-dD-XQs" secondAttribute="top" id="9YT-03-gYb"/>
                             <constraint firstItem="S7r-u1-C4I" firstAttribute="trailing" secondItem="RfZ-0f-CST" secondAttribute="trailing" constant="24" id="Hgi-6A-P4V"/>
                             <constraint firstItem="zb1-dS-e0n" firstAttribute="bottom" secondItem="S7r-u1-C4I" secondAttribute="bottom" constant="16" id="KHP-qh-XNV"/>
-                            <constraint firstItem="RfZ-0f-CST" firstAttribute="top" secondItem="vrl-HE-tT4" secondAttribute="bottom" constant="24" id="MoI-Dc-1wD"/>
+                            <constraint firstItem="RfZ-0f-CST" firstAttribute="top" secondItem="vrl-HE-tT4" secondAttribute="bottom" constant="16" id="MoI-Dc-1wD"/>
                             <constraint firstItem="vrl-HE-tT4" firstAttribute="leading" secondItem="S7r-u1-C4I" secondAttribute="leading" constant="24" id="Ryj-Jy-5ZF"/>
                             <constraint firstItem="S7r-u1-C4I" firstAttribute="trailing" secondItem="zb1-dS-e0n" secondAttribute="trailing" constant="16" id="VNr-pu-eYs"/>
                             <constraint firstItem="zb1-dS-e0n" firstAttribute="leading" secondItem="S7r-u1-C4I" secondAttribute="leading" constant="16" id="bIW-qm-awe"/>

@@ -64,6 +64,10 @@ class JournalViewController: UIViewController {
             JournalStore.shared.delete(entry)
             self?.reloadData()
         }
+        journalDataSource.didTapEdit = { [weak self] entry in
+            self?.openEntry(entry)
+        }
+
         
         // create initial snapshot
         journalDataSource.applySnapshot()
@@ -165,15 +169,29 @@ extension JournalViewController {
                 let group = NSCollectionLayoutGroup.horizontal(
                     layoutSize: .init(
                         widthDimension: .fractionalWidth(1),
-                        heightDimension: .absolute(120)
+                        heightDimension: .absolute(105)
                     ),
                     subitems: [item]
                 )
 
-                group.contentInsets = .init(top: 8, leading: 16, bottom: 0, trailing: 16)
+                group.contentInsets = .init(top: 0, leading: 16, bottom: 0, trailing: 16)
 
                 let section = NSCollectionLayoutSection(group: group)
                 section.contentInsets = .init(top: 0, leading: 0, bottom: 4, trailing: 0)
+                
+                let headerSize = NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1.0),
+                    heightDimension: .absolute(44)
+                )
+
+                let header = NSCollectionLayoutBoundarySupplementaryItem(
+                    layoutSize: headerSize,
+                    elementKind: UICollectionView.elementKindSectionHeader,
+                    alignment: .top
+                )
+
+                section.boundarySupplementaryItems = [header]
+                
                 return section
 
             case .stats:
@@ -195,7 +213,7 @@ extension JournalViewController {
                 group.contentInsets = .init(top: 0, leading: 16, bottom: 0, trailing: 16)
 
                 let section = NSCollectionLayoutSection(group: group)
-                section.contentInsets = .init(top: 4, leading: 0, bottom: 4, trailing: 0)
+                section.contentInsets = .init(top: 4, leading: 0, bottom: 16, trailing: 0)
                 return section
 
             case .actions:
@@ -219,7 +237,7 @@ extension JournalViewController {
 
                 let section = NSCollectionLayoutSection(group: group)
                 section.interGroupSpacing = 8
-                section.contentInsets = .init(top: 4, leading: 0, bottom: 4, trailing: 0)
+                section.contentInsets = .init(top: 4, leading: 0, bottom: 16, trailing: 0)
 
 
                 let headerSize = NSCollectionLayoutSize(

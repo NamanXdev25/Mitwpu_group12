@@ -40,12 +40,33 @@ class BlankJournalViewController: UIViewController {
         )
         
         if let entry = existingEntry {
-            navigationItem.title = "Edit Journal"
+            navigationItem.title = formattedJournalDate(entry.date)
+
             titleField.text = entry.title
             textView.text = entry.body
             textView.textColor = .label
         }
     }
+    
+    func formattedJournalDate(_ date: Date) -> String {
+        let calendar = Calendar.current
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+
+        // If same year
+        let thisYear = calendar.component(.year, from: Date())
+        let entryYear = calendar.component(.year, from: date)
+
+        if thisYear == entryYear {
+            formatter.setLocalizedDateFormatFromTemplate("EEE, MMM d")        // Fri, Dec 12
+            return formatter.string(from: date)
+        }
+
+        // If previous year
+        formatter.setLocalizedDateFormatFromTemplate("MMM d, yyyy")      // Dec 12, 2024
+        return formatter.string(from: date)
+    }
+
     
     
     @IBAction func doneTapped(_ sender: UIBarButtonItem) {
