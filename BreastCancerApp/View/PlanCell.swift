@@ -71,3 +71,6 @@ class PlanCell: UICollectionViewCell {
         }
     }
 }
+
+
+

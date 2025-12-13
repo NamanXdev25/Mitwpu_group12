@@ -15,6 +15,7 @@ struct PlanItem: Codable {
     var subtitle: String
     var time: String
     var isCompleted: Bool
+    var description: String? // --- NEW: Added description field
 }
 
 struct ExerciseItem: Codable {
@@ -84,7 +85,8 @@ class ExerciseManager {
             title: exercise.title,
             subtitle: exercise.category,
             time: "5 min",
-            isCompleted: false
+            isCompleted: false,
+            description: nil // Default nil for generic explore items
         )
         todaysPlan.insert(newItem, at: 0)
         saveTodaysPlan()
@@ -120,7 +122,8 @@ class ExerciseManager {
             title: detail.title,
             subtitle: detail.subtitle,
             time: detail.time,
-            isCompleted: false
+            isCompleted: false,
+            description: nil // Default nil, can be updated later by editing
         )
         // Avoid duplicates (if same id already exists, remove first)
         if containsExercise(id: detail.id) {

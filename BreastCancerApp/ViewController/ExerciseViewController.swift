@@ -4,6 +4,7 @@
 //
 //  Created by Naman Bhansali on 26/11/25.
 //
+
 import UIKit
 
 class ExerciseViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, AddExerciseDelegate {
@@ -94,28 +95,119 @@ class ExerciseViewController: UIViewController, UICollectionViewDataSource, UICo
 
     // --- COMPOSITIONAL LAYOUT ---
     func createLayout() -> UICollectionViewLayout {
+        // IMPORTANT: We pass 'env' to use it for the List Section configuration
         return UICollectionViewCompositionalLayout { (sectionIndex, env) -> NSCollectionLayoutSection? in
             switch sectionIndex {
-            case 0: return self.createListSection()    // Today's Plan
+            case 0: return self.createListSection(layoutEnvironment: env) // Modified to allow Swipes
             case 1: return self.createWarningSection() // Warning Banner
             default: return self.createExploreSection() // Explore Cards
             }
         }
     }
     
-    // Section 0: Today's Plan (Vertical List)
-    func createListSection() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(70))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        // No spacing between items to make it look like one card
-        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+    // Section 0: Today's Plan (Updated to List Configuration)
+    // This looks identical to the previous version but enables Swipe Actions
+    func createListSection(layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, subitems: [item])
-        let section = NSCollectionLayoutSection(group: group)
+        // 1. Create a "Plain" list config
+        // "Plain" allows us to maintain our custom white card look without the system forcing grouping styles.
+        var configuration = UICollectionLayoutListConfiguration(appearance: .plain)
+        
+        // 2. Remove default system separators and backgrounds
+        configuration.showsSeparators = false
+        configuration.backgroundColor = .clear
+        
+        // 3. Define the Swipe Actions
+        configuration.trailingSwipeActionsConfigurationProvider = { [weak self] indexPath in
+            return self?.swipeActions(for: indexPath)
+        }
+        
+        // 4. Create the Section
+        let section = NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: layoutEnvironment)
+        
+        // FIX: Remove interGroupSpacing so cells touch and form "One Big Card"
+        // section.interGroupSpacing = 10  <-- REMOVED
+        
+        // 5. Apply the EXACT same insets as before to keep layout identical
         section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 20, trailing: 20)
         
-        addHeader(to: section)
+        // FIX 2: Manually Configure Header for Alignment
+        // List sections can sometimes ignore 'followsContentInsets' depending on configuration.
+        // We manually create the header and force the padding to match the section (20).
+        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(40))
+        let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+        
+        // Disable automatic following and set manual insets to ensure it aligns with "Explore"
+        section.supplementariesFollowContentInsets = false
+        header.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
+        
+        section.boundarySupplementaryItems = [header]
+        
         return section
+    }
+    
+    // --- NEW: Handle Swipe Actions ---
+    func swipeActions(for indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        // 1. Get the item
+        let item = model.todaysPlan[indexPath.row]
+        
+        // 2. DELETE Action
+        let deleteAction = UIContextualAction(style: .destructive, title: nil) { [weak self] _, _, completion in
+            guard let self = self else { return }
+            
+            // Remove from data source
+            self.model.removeExercisesById(item.id)
+            
+            // Remove from UI
+            self.collectionView.deleteItems(at: [indexPath])
+            
+            // Force reload section slightly later to re-calculate corner rounding (Top/Bottom corners)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                self.collectionView.reloadSections(IndexSet(integer: 0))
+            }
+            
+            completion(true)
+        }
+        deleteAction.image = UIImage(systemName: "trash")
+        deleteAction.backgroundColor = .systemRed
+        
+        // 3. EDIT Action
+        let editAction = UIContextualAction(style: .normal, title: nil) { [weak self] _, _, completion in
+            guard let self = self else { return }
+            
+            // Open Edit Screen
+            self.openEditScreen(for: item)
+            
+            completion(true)
+        }
+        editAction.image = UIImage(systemName: "pencil")
+        editAction.backgroundColor = .systemBlue // Or UIColor(red: 0.85, green: 0.4, blue: 0.5, alpha: 1.0)
+        
+        return UISwipeActionsConfiguration(actions: [deleteAction, editAction])
+    }
+    
+    func openEditScreen(for item: PlanItem) {
+        let storyboard = UIStoryboard(name: "Exercise", bundle: nil)
+        
+        if let addVC = storyboard.instantiateViewController(withIdentifier: "AddExerciseViewController") as? AddExerciseViewController {
+            
+            addVC.delegate = self
+            
+            // PASS DATA TO PREFILL
+            addVC.initialID = item.id
+            addVC.initialName = item.title
+            addVC.initialSubtitle = item.subtitle
+            addVC.initialTime = item.time
+            addVC.initialDescription = item.description // --- NEW: Pass description
+            
+            addVC.modalPresentationStyle = .pageSheet
+            if let sheet = addVC.sheetPresentationController {
+                sheet.detents = [.large()]
+                sheet.prefersGrabberVisible = true
+            }
+            
+            self.present(addVC, animated: true, completion: nil)
+        }
     }
     
     // Section 1: Warning Banner
@@ -125,7 +217,7 @@ class ExerciseViewController: UIViewController, UICollectionViewDataSource, UICo
         
         let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 20, bottom: 15, trailing: 20)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 15, trailing: 20)
         
         addHeader(to: section) // "Explore" Header
         return section
@@ -155,8 +247,18 @@ class ExerciseViewController: UIViewController, UICollectionViewDataSource, UICo
     }
     
     func didAddExercise(_ exercise: PlanItem) {
-        // Add to model
-        model.addPlanItem(exercise)
+        // --- UPDATED LOGIC FOR EDITING ---
+        // Check if this item ID already exists. If so, update it in place.
+        // If not, add it to the top.
+        
+        if let index = model.todaysPlan.firstIndex(where: { $0.id == exercise.id }) {
+            // Update existing (Edit Mode)
+            model.todaysPlan[index] = exercise
+            model.saveTodaysPlan()
+        } else {
+            // Add new (Create Mode)
+            model.addPlanItem(exercise)
+        }
         
         // Refresh the specific section (Today's Plan is Section 0)
         collectionView.reloadSections(IndexSet(integer: 0))
@@ -206,6 +308,7 @@ class ExerciseViewController: UIViewController, UICollectionViewDataSource, UICo
             cell.configure(with: item)
             
             // Single Card Logic (Rounding Corners)
+            // NOTE: We keep this logic because we are using a "Plain" list which doesn't auto-group
             let totalRows = collectionView.numberOfItems(inSection: 0)
             
             // Reset defaults
@@ -272,9 +375,22 @@ class ExerciseViewController: UIViewController, UICollectionViewDataSource, UICo
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
+        // --- NEW: Section 0 Selection (Show Description) ---
+        if indexPath.section == 0 {
+            let item = model.todaysPlan[indexPath.row]
+            // Show Alert with Description
+            let descriptionContent = (item.description != nil && !item.description!.isEmpty) ? item.description! : "No description available."
+            let message = "Description: \(descriptionContent)"
+            
+            let alert = UIAlertController(title: item.title, message: message, preferredStyle: .alert)
+            // Changed style to .destructive to make button red
+            alert.addAction(UIAlertAction(title: "Close", style: .destructive))
+            self.present(alert, animated: true)
+        }
+        
         // 1. Check if the tap is in the "Explore" section (Section 2)
         // (Section 0 is Plan, Section 1 is Warning, Section 2 is Explore Cards)
-        if indexPath.section == 2 {
+        else if indexPath.section == 2 {
             
             // 2. Get the data for the item that was tapped
             let item = model.exploreItems[indexPath.row]
@@ -303,5 +419,4 @@ class ExerciseViewController: UIViewController, UICollectionViewDataSource, UICo
     }
 
     
-    }
-
+}

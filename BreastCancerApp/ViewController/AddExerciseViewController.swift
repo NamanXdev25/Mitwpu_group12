@@ -5,6 +5,7 @@
 //  Created by Naman Bhansali on 29/11/25.
 //
 
+
 import UIKit
 
 protocol AddExerciseDelegate: AnyObject {
@@ -35,6 +36,11 @@ class AddExerciseViewController: UIViewController, UIPickerViewDelegate, UIPicke
     // New property: carry the id of the detail exercise (if presenting from player)
     var initialID: String?
     
+    // --- NEW: Edit Mode properties ---
+    var initialSubtitle: String? // For "Repeat" (e.g., "Every Mon")
+    var initialTime: String?     // For "Time" (e.g., "10:00 AM")
+    var initialDescription: String? // For Description
+    
     let weekDays = ["Every Mon", "Every Tue", "Every Wed", "Every Thu", "Every Fri", "Every Sat", "Every Sun", "Every Day"]
     
     override func viewDidLoad() {
@@ -64,12 +70,30 @@ class AddExerciseViewController: UIViewController, UIPickerViewDelegate, UIPicke
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissPopup))
         pickerOverlay.addGestureRecognizer(tapGesture)
         
-        // Prefill name if provided
+        // --- PREFILL DATA (Edit Mode) ---
         if let name = initialName, !name.isEmpty {
             nameTextField.text = name
             nameTextField.textColor = .black
-            // Optionally lock the name so user doesn't accidentally change identity — comment this line if you want editable
-            // nameTextField.isEnabled = false
+        }
+        
+        if let sub = initialSubtitle, !sub.isEmpty {
+            repeatTextField.text = sub
+        }
+        
+        if let t = initialTime, !t.isEmpty {
+            timeTextField.text = t
+            // Try to sync picker to current time string
+            let formatter = DateFormatter()
+            formatter.dateFormat = "h:mm a" // Match format used in saveTapped
+            if let date = formatter.date(from: t) {
+                timePicker.date = date
+            }
+        }
+        
+        // --- NEW: Prefill Description ---
+        if let desc = initialDescription, !desc.isEmpty {
+            descriptionTextView.text = desc
+            descriptionTextView.textColor = .black
         }
     }
     
@@ -208,8 +232,14 @@ class AddExerciseViewController: UIViewController, UIPickerViewDelegate, UIPicke
 
         // Use initialID if present (this preserves identity), otherwise create a new UUID
         let planId = initialID ?? UUID().uuidString
+        
+        // --- NEW: Capture Description ---
+        var description = descriptionTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
+        if description == "Add a description" {
+            description = ""
+        }
 
-        let newPlanItem = PlanItem(id: planId, title: name, subtitle: repeatText, time: time, isCompleted: false)
+        let newPlanItem = PlanItem(id: planId, title: name, subtitle: repeatText, time: time, isCompleted: false, description: description)
         delegate?.didAddExercise(newPlanItem)
         self.dismiss(animated: true, completion: nil)
     }
