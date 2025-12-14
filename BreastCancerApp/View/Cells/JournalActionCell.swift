@@ -21,7 +21,7 @@ class JournalActionCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        
         chevronView.image = UIImage(systemName: "chevron.right")
         chevronView.tintColor = .systemGray3
     }
@@ -39,7 +39,4 @@ class JournalActionCell: UICollectionViewCell {
     @IBAction func buttonTapped(_ sender: UIButton) {
         didTap?()
     }
-
-    
-
 }

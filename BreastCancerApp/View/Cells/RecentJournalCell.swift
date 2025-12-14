@@ -17,7 +17,6 @@ class RecentJournalCell: UICollectionViewCell {
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var moreButton: UIButton!
     
-    // callbacks to be set by datasource
     private var onEdit: ((JournalEntry) -> Void)?
     private var onDelete: ((JournalEntry) -> Void)?
     private var currentEntry: JournalEntry?
@@ -30,14 +29,8 @@ class RecentJournalCell: UICollectionViewCell {
         
         moreButton.showsMenuAsPrimaryAction = true
     }
-    
-    /*
-    func configure(with entry: JournalEntry) {
-            titleLabel.text = entry.title
-            descriptionLabel.text = entry.content
-            dateLabel.text = entry.dateFormatted
-    }
-     */
+
+    // formatted date
     func formattedJournalDate(_ date: Date) -> String {
         let calendar = Calendar.current
         let formatter = DateFormatter()

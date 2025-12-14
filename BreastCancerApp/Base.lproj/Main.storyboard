@@ -168,7 +168,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YSz-h2-W3T">
-                                                <rect key="frame" x="73" y="3" width="51" height="34.333333333333336"/>
+                                                <rect key="frame" x="71" y="3" width="51" height="34.333333333333336"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="list.bullet" catalog="system"/>
                                                 <connections>
@@ -176,19 +176,19 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v1k-Eb-661">
-                                                <rect key="frame" x="143.33333333333334" y="3" width="54.666666666666657" height="34.333333333333336"/>
+                                                <rect key="frame" x="139.66666666666666" y="3" width="56" height="34.333333333333336"/>
                                                 <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain" image="tablecells" catalog="system"/>
+                                                <buttonConfiguration key="configuration" style="plain" image="photo.on.rectangle" catalog="system"/>
                                                 <connections>
-                                                    <action selector="tableTapped:" destination="gTx-pe-oMd" eventType="touchUpInside" id="10K-lC-WWC"/>
+                                                    <action selector="imageTapped:" destination="gTx-pe-oMd" eventType="touchUpInside" id="10K-lC-WWC"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D1T-RE-H9k">
-                                                <rect key="frame" x="217.33333333333334" y="3" width="49.333333333333343" height="34.333333333333336"/>
+                                                <rect key="frame" x="213" y="3" width="55.666666666666686" height="34.333333333333336"/>
                                                 <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain" image="paperclip" catalog="system"/>
+                                                <buttonConfiguration key="configuration" style="plain" image="camera" catalog="system"/>
                                                 <connections>
-                                                    <action selector="attachTapped:" destination="gTx-pe-oMd" eventType="touchUpInside" id="cpJ-Ym-XZe"/>
+                                                    <action selector="cameraTapped:" destination="gTx-pe-oMd" eventType="touchUpInside" id="cpJ-Ym-XZe"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7pG-KM-S2W">
@@ -243,6 +243,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="textView" destination="9hR-Fo-3KB" id="bMj-6L-HjF"/>
                         <outlet property="titleField" destination="AFR-7R-gID" id="oWJ-M7-FB8"/>
@@ -276,7 +277,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LIf-He-rOO">
-                                                <rect key="frame" x="71" y="3" width="51" height="34.333333333333336"/>
+                                                <rect key="frame" x="69" y="3" width="51" height="34.333333333333336"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="list.bullet" catalog="system"/>
                                                 <connections>
@@ -284,17 +285,17 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JWe-zf-hvh">
-                                                <rect key="frame" x="139.33333333333334" y="3" width="54.666666666666657" height="34.333333333333336"/>
+                                                <rect key="frame" x="135.66666666666666" y="3" width="56" height="34.333333333333336"/>
                                                 <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain" image="tablecells" catalog="system"/>
+                                                <buttonConfiguration key="configuration" style="plain" image="photo.on.rectangle" catalog="system"/>
                                                 <connections>
                                                     <action selector="tableTapped:" destination="6pI-eZ-aLx" eventType="touchUpInside" id="rE1-FI-UrH"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gs0-to-EJP">
-                                                <rect key="frame" x="211.33333333333334" y="3" width="49.333333333333343" height="34.333333333333336"/>
+                                                <rect key="frame" x="207" y="3" width="55.666666666666686" height="34.333333333333336"/>
                                                 <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain" image="paperclip" catalog="system"/>
+                                                <buttonConfiguration key="configuration" style="plain" image="camera" catalog="system"/>
                                                 <connections>
                                                     <action selector="attachTapped:" destination="6pI-eZ-aLx" eventType="touchUpInside" id="KlY-iX-9nq"/>
                                                 </connections>
@@ -337,7 +338,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Start Typing..." textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="xhp-c5-1R3">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Start Writing..." textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="xhp-c5-1R3">
                                 <rect key="frame" x="24" y="296.33333333333331" width="353" height="160"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="160" id="Psa-aw-naz"/>
@@ -396,23 +397,23 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sce-1k-vc0">
                                 <rect key="frame" x="16" y="172" width="361" height="413"/>
                                 <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z2s-hz-wKX">
+                                        <rect key="frame" x="101" y="23" width="39.666666666666657" height="15"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="15" id="xUZ-oc-1X6"/>
+                                        </constraints>
+                                        <color key="tintColor" name="PrimaryColor"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="chevron.right" catalog="system"/>
+                                    </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Apr 2025" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zNZ-YF-4Yy">
                                         <rect key="frame" x="20" y="20" width="81" height="21"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z2s-hz-wKX">
-                                        <rect key="frame" x="101" y="23" width="24" height="15"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="15" id="xUZ-oc-1X6"/>
-                                        </constraints>
-                                        <color key="tintColor" name="PrimaryColor"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain"/>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nJd-gE-zcw">
-                                        <rect key="frame" x="15" y="20" width="199.33333333333334" height="21"/>
+                                        <rect key="frame" x="15" y="20" width="168" height="21"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="21" id="2Ys-9r-hbA"/>
@@ -425,19 +426,19 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cWb-if-D8S">
-                                        <rect key="frame" x="329" y="23.666666666666657" width="24" height="14"/>
+                                        <rect key="frame" x="313.33333333333331" y="13.333333333333343" width="39.666666666666686" height="34.333333333333336"/>
                                         <color key="tintColor" name="PrimaryColor"/>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="chevron.right" catalog="system"/>
                                         <connections>
                                             <action selector="nextMonth:" destination="ITY-QN-qmW" eventType="touchUpInside" id="Btg-0Z-OKV"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RfO-yf-u8B">
-                                        <rect key="frame" x="300" y="23.666666666666657" width="24" height="14"/>
+                                        <rect key="frame" x="268.66666666666669" y="12.333333333333343" width="39.666666666666686" height="36.333333333333336"/>
                                         <color key="tintColor" name="PrimaryColor"/>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="chevron.left" catalog="system"/>
                                         <connections>
                                             <action selector="previousMonth:" destination="ITY-QN-qmW" eventType="touchUpInside" id="TO8-iK-d9G"/>
                                         </connections>
@@ -516,7 +517,7 @@
                                         </cells>
                                     </collectionView>
                                     <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T17-4B-uC5">
-                                        <rect key="frame" x="0.0" y="50.666666666666657" width="361" height="352"/>
+                                        <rect key="frame" x="0.0" y="61" width="361" height="352"/>
                                         <subviews>
                                             <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="913-kb-Rdx">
                                                 <rect key="frame" x="0.0" y="0.0" width="361" height="352"/>
@@ -657,9 +658,11 @@
     </scenes>
     <resources>
         <image name="calendar" catalog="system" width="128" height="107"/>
+        <image name="camera" catalog="system" width="128" height="93"/>
+        <image name="chevron.left" catalog="system" width="97" height="128"/>
+        <image name="chevron.right" catalog="system" width="97" height="128"/>
         <image name="list.bullet" catalog="system" width="128" height="87"/>
-        <image name="paperclip" catalog="system" width="121" height="128"/>
-        <image name="tablecells" catalog="system" width="128" height="93"/>
+        <image name="photo.on.rectangle" catalog="system" width="128" height="98"/>
         <image name="text.justify" catalog="system" width="128" height="101"/>
         <image name="textformat.size" catalog="system" width="128" height="79"/>
         <namedColor name="BackgroundColor">
@@ -675,7 +678,7 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGrayColor">
-            <color red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

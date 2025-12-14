@@ -9,23 +9,36 @@ import UIKit
 
 class BlankJournalViewController: UIViewController {
 
+    // IBOutlets
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var toolbarBottomConstraint: NSLayoutConstraint!
+    
+    // variables
     var existingEntry: JournalEntry?
-
     private let placeholderText = "Start writing what’s on your mind today..."
     
+    // viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // UI
         view.backgroundColor = UIColor(named: "BackgroundColor")
         navigationItem.title = "New Journal"
         
+        if let entry = existingEntry {
+            navigationItem.title = formattedJournalDate(entry.date)
+
+            titleField.text = entry.title
+            textView.text = entry.body
+            textView.textColor = .label
+        }
+        
+        // delegates
         titleField.delegate = self
         textView.delegate = self
-        setupPlaceholder()
         
+        // keyboard
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(keyboardWillShow),
@@ -39,15 +52,11 @@ class BlankJournalViewController: UIViewController {
             object: nil
         )
         
-        if let entry = existingEntry {
-            navigationItem.title = formattedJournalDate(entry.date)
-
-            titleField.text = entry.title
-            textView.text = entry.body
-            textView.textColor = .label
-        }
+        // function calls
+        setupPlaceholder()
     }
     
+    // date formatting
     func formattedJournalDate(_ date: Date) -> String {
         let calendar = Calendar.current
         let formatter = DateFormatter()
@@ -58,7 +67,7 @@ class BlankJournalViewController: UIViewController {
         let entryYear = calendar.component(.year, from: date)
 
         if thisYear == entryYear {
-            formatter.setLocalizedDateFormatFromTemplate("EEE, MMM d")        // Fri, Dec 12
+            formatter.setLocalizedDateFormatFromTemplate("EEE, MMM d")   // Fri, Dec 12
             return formatter.string(from: date)
         }
 
@@ -66,19 +75,37 @@ class BlankJournalViewController: UIViewController {
         formatter.setLocalizedDateFormatFromTemplate("MMM d, yyyy")      // Dec 12, 2024
         return formatter.string(from: date)
     }
-
     
+    // placeholder function
+    private func setupPlaceholder() {
+        guard existingEntry == nil else { return }
+        textView.text = placeholderText
+        textView.textColor = UIColor.systemGray3
+    }
     
+    // keyboard functions
+    @objc func keyboardWillShow(_ notification: Notification) {
+        if let frame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+            toolbarBottomConstraint.constant = frame.height + 8
+            view.layoutIfNeeded()
+        }
+    }
+    @objc func keyboardWillHide(_ notification: Notification) {
+        toolbarBottomConstraint.constant = 16
+        view.layoutIfNeeded()
+    }
+    
+    // IBActions
     @IBAction func doneTapped(_ sender: UIBarButtonItem) {
-
+        // text setup
         let title = titleField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         let body = textView.text.trimmingCharacters(in: .whitespacesAndNewlines)
-
         guard !title.isEmpty || !body.isEmpty else {
             navigationController?.popViewController(animated: true)
             return
         }
-            
+        
+        // existing entry
         if let old = existingEntry {
             let updated = JournalEntry(
                 id: old.id,
@@ -89,9 +116,9 @@ class BlankJournalViewController: UIViewController {
                 question: old.question,
                 category: old.category
             )
-            
             JournalStore.shared.update(updated)
-                
+             
+        // new entry
         } else {
             let newEntry = JournalEntry(
                 title: title.isEmpty ? "Untitled" : title,
@@ -101,42 +128,20 @@ class BlankJournalViewController: UIViewController {
                 question: nil,
                 category: nil
             )
-
             JournalStore.shared.add(newEntry)
         }
-
         navigationController?.popViewController(animated: true)
     }
-
-    private func setupPlaceholder() {
-        guard existingEntry == nil else { return }
-        textView.text = placeholderText
-        textView.textColor = UIColor.systemGray3
-    }
     
-    @objc func keyboardWillShow(_ notification: Notification) {
-        if let frame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
-            toolbarBottomConstraint.constant = frame.height + 8
-            view.layoutIfNeeded()
-        }
-    }
-
-    @objc func keyboardWillHide(_ notification: Notification) {
-        toolbarBottomConstraint.constant = 16
-        view.layoutIfNeeded()
-    }
-    
+    // toolbar buttons
     @IBAction func textFormatTapped(_ sender: UIButton) {}
     @IBAction func bulletTapped(_ sender: UIButton) {}
-    @IBAction func tableTapped(_ sender: UIButton) {}
-    @IBAction func attachTapped(_ sender: UIButton) {}
+    @IBAction func imageTapped(_ sender: UIButton) {}
+    @IBAction func cameraTapped(_ sender: UIButton) {}
     @IBAction func alignmentTapped(_ sender: UIButton) {}
-
 }
 
-
 extension BlankJournalViewController: UITextFieldDelegate, UITextViewDelegate {
-
     // character limit
     func textField(_ textField: UITextField,
                    shouldChangeCharactersIn range: NSRange,
@@ -147,7 +152,6 @@ extension BlankJournalViewController: UITextFieldDelegate, UITextViewDelegate {
         let newLength = current.count + string.count - range.length
         return newLength <= maxTitleLength
     }
-    
     func textView(_ textView: UITextView,
                   shouldChangeTextIn range: NSRange,
                   replacementText text: String) -> Bool {
@@ -158,14 +162,13 @@ extension BlankJournalViewController: UITextFieldDelegate, UITextViewDelegate {
         return newLength <= maxBodyLength
     }
 
-    // placeholder text
+    // text view before & after typing/editing
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == placeholderText {
             textView.text = ""
             textView.textColor = .label
         }
     }
-
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             setupPlaceholder()

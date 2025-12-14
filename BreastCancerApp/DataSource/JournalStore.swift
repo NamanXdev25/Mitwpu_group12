@@ -18,29 +18,25 @@ class JournalStore {
     private(set) var entries: [JournalEntry] = []
 
 
-    // MARK: - LOAD
+    // load
     func load() {
         self.entries = SampleJournalData.all
     }
-
-    // MARK: - ADD
+    // add
     func add(_ entry: JournalEntry) {
         entries.insert(entry, at: 0)
     }
-
-    // MARK: - UPDATE
+    // update
     func update(_ entry: JournalEntry) {
         if let index = entries.firstIndex(where: { $0.id == entry.id }) {
             entries[index] = entry
         }
     }
-
-    // MARK: - DELETE
+    // delete
     func delete(_ entry: JournalEntry) {
         entries.removeAll(where: { $0.id == entry.id })
     }
 }
-
 
 extension Collection where Element == JournalEntry {
 
@@ -49,7 +45,7 @@ extension Collection where Element == JournalEntry {
         Calendar.current.startOfDay(for: date)
     }
 
-    // MARK: - Streak Calculation
+    // streak calculation
     var streakCount: Int {
         guard count >= 2 else { return 0 }
 
@@ -63,7 +59,6 @@ extension Collection where Element == JournalEntry {
         let today = calendar.startOfDay(for: Date())
         let yesterday = calendar.date(byAdding: .day, value: -1, to: today)!
 
-        // ❗ Must start today or yesterday
         guard dates[0] == today || dates[0] == yesterday else {
             return 0
         }
@@ -81,19 +76,11 @@ extension Collection where Element == JournalEntry {
             }
         }
 
-        // ❗ Enforce minimum streak length = 2
+        // Enforce minimum streak length = 2
         return streak >= 2 ? streak : 0
     }
 
-
-    
-    var activeStreakCount: Int {
-        streakCount
-    }
-
-
-
-    // MARK: - Journals This Week
+    // week's journal count
     var journalsThisWeek: Int {
         let calendar = Calendar.current
         let now = Date()
@@ -107,7 +94,7 @@ extension Collection where Element == JournalEntry {
 
     }
     
-    /// All dates (normalized) where at least one journal exists
+    // All dates (normalized) where at least one journal exists
     var journalDays: Set<Date> {
         let calendar = Calendar.current
         return Set(
@@ -117,9 +104,7 @@ extension Collection where Element == JournalEntry {
         )
     }
 
-
-
-    /// Journals for a specific day
+    // Journals for a specific day
     func journals(on date: Date) -> [JournalEntry] {
         let calendar = Calendar.current
         let target = calendar.startOfDay(for: date)

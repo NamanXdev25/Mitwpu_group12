@@ -18,25 +18,16 @@ struct JournalEntry: Hashable, Identifiable, Codable {
     var title: String
     var body: String
     var date: Date
-    
     var type: JournalType
-    //var mood: String?
-    //var thumbnail: UIImage?
-    
-    // for guided reflections
     var question: String?
     var category: String?
     
-
     init(
         id: UUID = UUID(),
         title: String,
         body: String,
         date: Date = Date(),
-        
         type: JournalType,
-        //mood: String? = nil,
-        //thumbnail: UIImage? = nil
         question: String? = nil,
         category: String? = nil
     ) {
@@ -44,10 +35,7 @@ struct JournalEntry: Hashable, Identifiable, Codable {
         self.title = title
         self.body = body
         self.date = date
-        
         self.type = type
-        //self.mood = mood
-        //self.thumbnail = thumbnail
         self.question = question
         self.category = category
     }

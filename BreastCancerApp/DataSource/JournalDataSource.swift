@@ -10,7 +10,6 @@ class JournalDataSource {
     // Sections
     enum Section: Int, CaseIterable {
         case streak
-        //case stats
         case actions
         case recents
         case all
@@ -32,6 +31,7 @@ class JournalDataSource {
     private var streak: Int
     private var thisWeekCount: Int
 
+    // buttons
     var didTapSeeAll: (() -> Void)?
     
     var didTapBlankJournal: (() -> Void)?
@@ -51,7 +51,6 @@ class JournalDataSource {
 
     // Actions
     let actions: [JournalAction] = [
-        //JournalAction(title: "New Journal", subtitle: "Express yourself freely with a blank canvas", iconName: "pencil.and.scribble"),
         JournalAction(title: "Guided Reflection", subtitle: "Prompts for everyday journaling", iconName: "sparkles")
     ]
 
@@ -71,6 +70,9 @@ class JournalDataSource {
 
         configureDataSource()
     }
+    
+    
+    
 
     // Configure datasource
     private func configureDataSource() {
@@ -79,84 +81,63 @@ class JournalDataSource {
         dataSource = UICollectionViewDiffableDataSource<Section, UUID>(collectionView: collectionView) { collectionView, indexPath, id in
 
             switch self.mode {
-
             // Main screen
             case .mainScreen:
-
                 guard let section = Section(rawValue: indexPath.section) else { return nil }
-
                 switch section {
+                    case .streak:
+                        let cell = collectionView.dequeueReusableCell(
+                            withReuseIdentifier: JournalStreakCell.reuseIdentifier,
+                            for: indexPath
+                        ) as! JournalStreakCell
+                        cell.configure(streak: self.streak)
+                        return cell
 
-                case .streak:
-                    let cell = collectionView.dequeueReusableCell(
-                        withReuseIdentifier: JournalStreakCell.reuseIdentifier,
-                        for: indexPath
-                    ) as! JournalStreakCell
-                    cell.configure(streak: self.streak)
-                    return cell
+                    case .actions:
+                        let actionItem = self.actions[indexPath.item]
+                        let cell = collectionView.dequeueReusableCell(
+                            withReuseIdentifier: JournalActionCell.reuseIdentifier,
+                            for: indexPath
+                        ) as! JournalActionCell
+                        
+                        cell.configure(
+                            title: actionItem.title,
+                            subtitle: actionItem.subtitle,
+                            icon: UIImage(systemName: actionItem.iconName) ?? UIImage()
+                        )
+                        cell.didTap = {
+                            [weak self] in
+                            if indexPath.item == 0 {  // Guided Journal
+                                self?.didTapGuidedJournal?()
+                            }
+                        }
+                        return cell
 
-//                case .stats:
-//                    let cell = collectionView.dequeueReusableCell(
-//                        withReuseIdentifier: JournalStatsCell.reuseIdentifier,
-//                        for: indexPath
-//                    ) as! JournalStatsCell
-//                    cell.configure(total: self.entries.count, thisWeek: self.thisWeekCount)
-//                    return cell
+                    case .recents:
+                        let cell = collectionView.dequeueReusableCell(
+                            withReuseIdentifier: RecentJournalCell.reuseIdentifier,
+                            for: indexPath
+                        ) as! RecentJournalCell
 
-                case .actions:
-                    let actionItem = self.actions[indexPath.item]
-                    let cell = collectionView.dequeueReusableCell(
-                        withReuseIdentifier: JournalActionCell.reuseIdentifier,
-                        for: indexPath
-                    ) as! JournalActionCell
+                        let entry = self.entries[indexPath.item]
+
+                        cell.configure(
+                            with: entry,
+                            onEdit: { [weak self] entry in
+                                self?.didTapEdit?(entry)
+                            },
+                            onDelete: { [weak self] entry in
+                                self?.didTapDelete?(entry)
+                            }
+                        )
+                        return cell
                     
-                    cell.configure(
-                        title: actionItem.title,
-                        subtitle: actionItem.subtitle,
-                        icon: UIImage(systemName: actionItem.iconName) ?? UIImage()
-                    )
-
-                    cell.didTap = {
-                        [weak self] in
-//                        if indexPath.item == 0 {  // Blank Journal
-//                            self?.didTapBlankJournal?()
-//                        }
-                        if indexPath.item == 0 {  // Guided Journal
-                            self?.didTapGuidedJournal?()
-                        }
-                    }
-
-                    return cell
-
-
-                case .recents:
-                    let cell = collectionView.dequeueReusableCell(
-                        withReuseIdentifier: RecentJournalCell.reuseIdentifier,
-                        for: indexPath
-                    ) as! RecentJournalCell
-
-                    let entry = self.entries[indexPath.item]
-
-                    cell.configure(
-                        with: entry,
-                        onEdit: { [weak self] entry in
-                            self?.didTapEdit?(entry)
-                        },
-                        onDelete: { [weak self] entry in
-                            self?.didTapDelete?(entry)
-                        }
-                    )
-
-                    return cell
-
-
-                default:
-                    return nil
+                    default:
+                        return nil
                 }
 
-            // MARK: ALL JOURNALS SCREEN
+            // All journals screen
             case .allJournals:
-
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: RecentJournalCell.reuseIdentifier,
                     for: indexPath
@@ -177,7 +158,7 @@ class JournalDataSource {
             }
         }
 
-        // MARK: - Headers
+        // Headers
         dataSource.supplementaryViewProvider = { collectionView, kind, indexPath in
             guard kind == UICollectionView.elementKindSectionHeader else { return nil }
             guard let section = Section(rawValue: indexPath.section) else { return nil }
@@ -197,21 +178,16 @@ class JournalDataSource {
                 case .actions:
                     header.configure(title: "Tools", showButton: false)
                 case .recents:
-                    header.configure(title: "Recent", showButton: true)
+                    header.configure(title: "Recents", showButton: true)
+                    header.seeAllTapped = { [weak self] in
+                        self?.didTapSeeAll?()
+                    }
                 default:
                     header.configure(title: "", showButton: false)
                 }
 
             case .allJournals:
                 header.configure(title: "All Journals", showButton: false)
-            }
-            
-            if section == .recents {
-                header.configure(title: "Recent", showButton: true)
-                header.seeAllTapped = { [weak self] in
-                    self?.didTapSeeAll?()
-                }
-
             }
 
             return header
@@ -226,11 +202,9 @@ class JournalDataSource {
             
         // MAIN SCREEN SNAPSHOT
         case .mainScreen:
-            //snapshot.appendSections([.streak, .stats, .actions, .recents])
             snapshot.appendSections([.streak, .actions, .recents])
 
             snapshot.appendItems([UUID()], toSection: .streak)
-            //snapshot.appendItems([UUID()], toSection: .stats)
             snapshot.appendItems(actions.map { _ in UUID() }, toSection: .actions)
             let recent3 = Array(entries.prefix(3))
             snapshot.appendItems(recent3.map { $0.id }, toSection: .recents)
