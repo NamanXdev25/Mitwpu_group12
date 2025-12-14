@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="HeaderCell" customModule="BreastCancerApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="300"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="393" height="300"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LogsHomescreen" translatesAutoresizingMaskIntoConstraints="NO" id="WBC-rB-rIv">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="300"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="300" id="YIW-Ut-M7m"/>
+                            <constraint firstAttribute="width" constant="393" id="kfc-lz-8Jg"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Logs" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FQ8-h0-1mQ">
+                        <rect key="frame" x="17" y="100" width="77" height="41"/>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="34"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mon 20 Apr" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6XH-73-xGW">
+                        <rect key="frame" x="17" y="145" width="82" height="18"/>
+                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstItem="FQ8-h0-1mQ" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="100" id="8MA-7k-b8F"/>
+                <constraint firstAttribute="trailing" secondItem="WBC-rB-rIv" secondAttribute="trailing" id="90E-TR-WVa"/>
+                <constraint firstItem="WBC-rB-rIv" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="Bdc-6x-zvN"/>
+                <constraint firstItem="WBC-rB-rIv" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="Sty-WA-fdc"/>
+                <constraint firstItem="FQ8-h0-1mQ" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="17" id="fuS-3u-z8W"/>
+                <constraint firstItem="6XH-73-xGW" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="17" id="mK8-Lk-Bf6"/>
+                <constraint firstAttribute="bottom" secondItem="WBC-rB-rIv" secondAttribute="bottom" id="neW-E6-CM0"/>
+                <constraint firstItem="6XH-73-xGW" firstAttribute="top" secondItem="FQ8-h0-1mQ" secondAttribute="bottom" constant="4" id="tIk-ZA-qZM"/>
+            </constraints>
+            <size key="customSize" width="393" height="298"/>
+            <connections>
+                <outlet property="backgroundImageView" destination="WBC-rB-rIv" id="f7y-uF-XKg"/>
+                <outlet property="dateLabel" destination="6XH-73-xGW" id="Fw8-Tr-m1B"/>
+                <outlet property="titleLabel" destination="FQ8-h0-1mQ" id="j4C-4o-VCW"/>
+            </connections>
+            <point key="canvasLocation" x="138.1679389312977" y="170.42253521126761"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="LogsHomescreen" width="1024" height="1024"/>
+    </resources>
+</document>

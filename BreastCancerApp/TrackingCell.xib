@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="TrackingCell" customModule="BreastCancerApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="110"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="393" height="110"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2vf-9K-d4u">
+                        <rect key="frame" x="17" y="5" width="359" height="100"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="list.bullet.clipboard" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Avw-Df-tPc">
+                                <rect key="frame" x="25" y="27.666666666666671" width="40" height="43"/>
+                                <color key="tintColor" name="TabBarcolour"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="jW7-vD-BHe"/>
+                                    <constraint firstAttribute="width" constant="40" id="twb-9i-6n7"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last: 2 Days ago" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4uo-gm-Awy">
+                                <rect key="frame" x="81" y="49" width="107" height="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" systemColor="systemGray2Color"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Io7-mm-HfA">
+                                <rect key="frame" x="331" y="40" width="12" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="GO9-8b-3XW"/>
+                                    <constraint firstAttribute="width" constant="12" id="g68-Cs-LLo"/>
+                                </constraints>
+                                <color key="tintColor" systemColor="systemGray2Color"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="chevron.right" catalog="system"/>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Track Your Symptoms" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AM6-7V-2Ft">
+                                <rect key="frame" x="81.000000000000014" y="26" width="171.33333333333337" height="20.333333333333329"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="4uo-gm-Awy" firstAttribute="leading" secondItem="Avw-Df-tPc" secondAttribute="trailing" constant="16" id="Bql-oi-hGu"/>
+                            <constraint firstAttribute="trailing" secondItem="Io7-mm-HfA" secondAttribute="trailing" constant="16" id="ERG-uf-hoe"/>
+                            <constraint firstItem="AM6-7V-2Ft" firstAttribute="top" secondItem="2vf-9K-d4u" secondAttribute="top" constant="26" id="IGL-oy-lER"/>
+                            <constraint firstItem="4uo-gm-Awy" firstAttribute="top" secondItem="AM6-7V-2Ft" secondAttribute="bottom" constant="2.6699999999999999" id="OME-7r-v3L"/>
+                            <constraint firstItem="Avw-Df-tPc" firstAttribute="centerY" secondItem="2vf-9K-d4u" secondAttribute="centerY" id="WXv-CU-l88"/>
+                            <constraint firstItem="Io7-mm-HfA" firstAttribute="centerY" secondItem="2vf-9K-d4u" secondAttribute="centerY" id="dic-da-45P"/>
+                            <constraint firstItem="Avw-Df-tPc" firstAttribute="leading" secondItem="2vf-9K-d4u" secondAttribute="leading" constant="25" id="f4u-el-dfA"/>
+                            <constraint firstItem="AM6-7V-2Ft" firstAttribute="leading" secondItem="Avw-Df-tPc" secondAttribute="trailing" constant="16" id="v0t-mG-VDL"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="16"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="2vf-9K-d4u" secondAttribute="bottom" constant="5" id="2rL-st-UJA"/>
+                <constraint firstItem="2vf-9K-d4u" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="5" id="6er-13-Qe8"/>
+                <constraint firstAttribute="trailing" secondItem="2vf-9K-d4u" secondAttribute="trailing" constant="17" id="Ral-ua-GyJ"/>
+                <constraint firstItem="2vf-9K-d4u" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="17" id="iyy-ky-4P1"/>
+            </constraints>
+            <size key="customSize" width="393" height="113"/>
+            <connections>
+                <outlet property="chevronButton" destination="Io7-mm-HfA" id="fYR-2D-ehj"/>
+                <outlet property="containerView" destination="2vf-9K-d4u" id="Zs3-yM-lrL"/>
+                <outlet property="iconImageView" destination="Avw-Df-tPc" id="KsI-c8-TNr"/>
+                <outlet property="subtitleLabel" destination="4uo-gm-Awy" id="9XK-bs-JsL"/>
+                <outlet property="titleLabel" destination="AM6-7V-2Ft" id="bFF-Qb-Yc1"/>
+            </connections>
+            <point key="canvasLocation" x="64.885496183206101" y="120.77464788732395"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="chevron.right" catalog="system" width="97" height="128"/>
+        <image name="list.bullet.clipboard" catalog="system" width="98" height="128"/>
+        <namedColor name="TabBarcolour">
+            <color red="0.9100000262260437" green="0.41600000858306885" blue="0.57300001382827759" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray2Color">
+            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>
