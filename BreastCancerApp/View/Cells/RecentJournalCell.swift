@@ -59,8 +59,8 @@ class RecentJournalCell: UICollectionViewCell {
 
     func configure(
         with entry: JournalEntry,
-        onEdit: @escaping (JournalEntry) -> Void,
-        onDelete: @escaping (JournalEntry) -> Void
+        onEdit: ((JournalEntry) -> Void)? = nil,
+        onDelete: ((JournalEntry) -> Void)? = nil
     ) {
         currentEntry = entry
         self.onEdit = onEdit
@@ -72,13 +72,13 @@ class RecentJournalCell: UICollectionViewCell {
 
         // Build menu
         let edit = UIAction(title: "Edit", image: UIImage(systemName: "pencil")) { _ in
-            onEdit(entry)
+            onEdit?(entry)
         }
         
         let delete = UIAction(title: "Delete",
                               image: UIImage(systemName: "trash"),
                               attributes: .destructive) { _ in
-            onDelete(entry)
+            onDelete?(entry)
         }
 
         moreButton.menu = UIMenu(children: [edit, delete])

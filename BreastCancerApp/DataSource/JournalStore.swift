@@ -51,21 +51,29 @@ extension Collection where Element == JournalEntry {
 
     // MARK: - Streak Calculation
     var streakCount: Int {
-        guard !self.isEmpty else { return 0 }
+        guard count >= 2 else { return 0 }
 
-        // Get all unique days the user journaled
-        let dates = self
-            .map { Calendar.current.startOfDay(for: $0.date) }
-            .sorted(by: >)
+        let calendar = Calendar.current
+        let dates = Set(
+            map { calendar.startOfDay(for: $0.date) }
+        ).sorted(by: >)
+
+        guard dates.count >= 2 else { return 0 }
+
+        let today = calendar.startOfDay(for: Date())
+        let yesterday = calendar.date(byAdding: .day, value: -1, to: today)!
+
+        // ❗ Must start today or yesterday
+        guard dates[0] == today || dates[0] == yesterday else {
+            return 0
+        }
 
         var streak = 1
         var prev = dates[0]
 
         for i in 1..<dates.count {
             let current = dates[i]
-            // If the next day is exactly 1 day apart → streak continues
-            if let diff = Calendar.current.dateComponents([.day], from: current, to: prev).day,
-               diff == 1 {
+            if calendar.dateComponents([.day], from: current, to: prev).day == 1 {
                 streak += 1
                 prev = current
             } else {
@@ -73,8 +81,17 @@ extension Collection where Element == JournalEntry {
             }
         }
 
-        return streak
+        // ❗ Enforce minimum streak length = 2
+        return streak >= 2 ? streak : 0
     }
+
+
+    
+    var activeStreakCount: Int {
+        streakCount
+    }
+
+
 
     // MARK: - Journals This Week
     var journalsThisWeek: Int {
@@ -85,8 +102,30 @@ extension Collection where Element == JournalEntry {
         }
 
         return self.filter {
-            $0.date >= weekStart
+            calendar.isDate($0.date, equalTo: now, toGranularity: .weekOfYear)
         }.count
+
+    }
+    
+    /// All dates (normalized) where at least one journal exists
+    var journalDays: Set<Date> {
+        let calendar = Calendar.current
+        return Set(
+            self.map {
+                calendar.startOfDay(for: $0.date)
+            }
+        )
+    }
+
+
+
+    /// Journals for a specific day
+    func journals(on date: Date) -> [JournalEntry] {
+        let calendar = Calendar.current
+        let target = calendar.startOfDay(for: date)
+        return self.filter {
+            calendar.startOfDay(for: $0.date) == target
+        }
     }
 }
 
@@ -98,4 +137,5 @@ extension Array where Element == JournalEntry {
         }
     }
 }
+
 

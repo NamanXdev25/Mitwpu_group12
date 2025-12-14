@@ -14,6 +14,7 @@ class JournalStreakCell: UICollectionViewCell {
     @IBOutlet weak var daysLabel: UILabel!
     @IBOutlet weak var flameImageView: UIImageView!
     @IBOutlet weak var containerView: UIView!
+    @IBOutlet weak var inactiveLabel: UILabel!
     
     
     static let reuseIdentifier = "JournalStreakCell"
@@ -28,10 +29,23 @@ class JournalStreakCell: UICollectionViewCell {
     }
     
     func configure(streak: Int) {
+        if streak == 0 {
+            titleLabel.isHidden = true
+            countLabel.isHidden = true
+            daysLabel.isHidden = true
+            flameImageView.isHidden = true
+            inactiveLabel.isHidden = false
+        } else {
             titleLabel.text = "Current Streak"
             countLabel.text = "\(streak)"
             daysLabel.text = "days"
-            flameImageView.image = UIImage(systemName: "flame.fill")
+            titleLabel.isHidden = false
+            countLabel.isHidden = false
+            daysLabel.isHidden = false
+            flameImageView.isHidden = false
+            inactiveLabel.isHidden = true
+        }
     }
+
 
 }

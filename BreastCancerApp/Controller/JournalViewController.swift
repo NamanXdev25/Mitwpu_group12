@@ -14,7 +14,7 @@ class JournalViewController: UIViewController {
     
     enum Section: Int, CaseIterable {
         case streak
-        case stats
+        //case stats
         case actions
         case recents
     }
@@ -25,8 +25,9 @@ class JournalViewController: UIViewController {
     }
     //for streak & stats
     private var streak: Int {
-        JournalStore.shared.entries.streakCount
+        JournalStore.shared.entries.activeStreakCount
     }
+
     private var thisWeekCount: Int {
         JournalStore.shared.entries.journalsThisWeek
     }
@@ -34,6 +35,7 @@ class JournalViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupFloatingAddButton()
         // UI (color/screen-title)
         view.backgroundColor = UIColor(named: "BackgroundColor")
         navigationItem.title = "Journal"
@@ -145,8 +147,56 @@ class JournalViewController: UIViewController {
             navigationController?.pushViewController(vc, animated: true)
         }
     }
+    
+    private var addButton: UIButton!
 
+    func setupFloatingAddButton() {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = UIColor(named: "PrimaryColor")
+        button.tintColor = .white
+        button.setImage(UIImage(systemName: "plus"), for: .normal)
+        button.layer.cornerRadius = 28
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowOpacity = 0.2
+        button.layer.shadowRadius = 6
+        button.layer.shadowOffset = CGSize(width: 0, height: 4)
         
+        button.addTarget(self, action: #selector(addJournalTapped), for: .touchUpInside)
+        
+        view.addSubview(button)
+        
+        NSLayoutConstraint.activate([
+            button.widthAnchor.constraint(equalToConstant: 56),
+            button.heightAnchor.constraint(equalToConstant: 56),
+            button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            button.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
+        ])
+        
+        self.addButton = button
+    }
+    
+    @IBAction func calendarTapped(_ sender: UIBarButtonItem) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let nav = storyboard.instantiateViewController(
+            withIdentifier: "CalendarNavController"
+        )
+        nav.modalPresentationStyle = .pageSheet
+        present(nav, animated: true)
+    }
+    
+    @objc func addJournalTapped() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        // Decide what you want "+" to do
+        // Option 1: Open Blank Journal
+        let vc = storyboard.instantiateViewController(
+            withIdentifier: "BlankJournalViewController"
+        ) as! BlankJournalViewController
+        
+        navigationController?.pushViewController(vc, animated: true)
+    }
+
 }
 
 extension JournalViewController {
@@ -169,7 +219,7 @@ extension JournalViewController {
                 let group = NSCollectionLayoutGroup.horizontal(
                     layoutSize: .init(
                         widthDimension: .fractionalWidth(1),
-                        heightDimension: .absolute(105)
+                        heightDimension: .absolute(104)
                     ),
                     subitems: [item]
                 )
@@ -177,7 +227,7 @@ extension JournalViewController {
                 group.contentInsets = .init(top: 0, leading: 16, bottom: 0, trailing: 16)
 
                 let section = NSCollectionLayoutSection(group: group)
-                section.contentInsets = .init(top: 0, leading: 0, bottom: 4, trailing: 0)
+                section.contentInsets = .init(top: 0, leading: 0, bottom: 16, trailing: 0)
                 
                 let headerSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1.0),
@@ -193,7 +243,7 @@ extension JournalViewController {
                 section.boundarySupplementaryItems = [header]
                 
                 return section
-
+/*
             case .stats:
                 let item = NSCollectionLayoutItem(
                     layoutSize: .init(
@@ -215,7 +265,7 @@ extension JournalViewController {
                 let section = NSCollectionLayoutSection(group: group)
                 section.contentInsets = .init(top: 4, leading: 0, bottom: 16, trailing: 0)
                 return section
-
+*/
             case .actions:
                 let item = NSCollectionLayoutItem(
                     layoutSize: .init(

@@ -20,8 +20,6 @@ class AllJournalsViewController: UIViewController {
     var entries: [JournalEntry] {
         JournalStore.shared.entries
     }
-
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()

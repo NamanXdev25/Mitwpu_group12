@@ -10,7 +10,7 @@ class JournalDataSource {
     // Sections
     enum Section: Int, CaseIterable {
         case streak
-        case stats
+        //case stats
         case actions
         case recents
         case all
@@ -51,8 +51,8 @@ class JournalDataSource {
 
     // Actions
     let actions: [JournalAction] = [
-        JournalAction(title: "New Journal", subtitle: "Express yourself freely with a blank canvas", iconName: "pencil.and.scribble"),
-        JournalAction(title: "Guided Reflection", subtitle: "Thoughtful prompts for clarity", iconName: "sparkles")
+        //JournalAction(title: "New Journal", subtitle: "Express yourself freely with a blank canvas", iconName: "pencil.and.scribble"),
+        JournalAction(title: "Guided Reflection", subtitle: "Prompts for everyday journaling", iconName: "sparkles")
     ]
 
     // Init
@@ -95,13 +95,13 @@ class JournalDataSource {
                     cell.configure(streak: self.streak)
                     return cell
 
-                case .stats:
-                    let cell = collectionView.dequeueReusableCell(
-                        withReuseIdentifier: JournalStatsCell.reuseIdentifier,
-                        for: indexPath
-                    ) as! JournalStatsCell
-                    cell.configure(total: self.entries.count, thisWeek: self.thisWeekCount)
-                    return cell
+//                case .stats:
+//                    let cell = collectionView.dequeueReusableCell(
+//                        withReuseIdentifier: JournalStatsCell.reuseIdentifier,
+//                        for: indexPath
+//                    ) as! JournalStatsCell
+//                    cell.configure(total: self.entries.count, thisWeek: self.thisWeekCount)
+//                    return cell
 
                 case .actions:
                     let actionItem = self.actions[indexPath.item]
@@ -118,10 +118,10 @@ class JournalDataSource {
 
                     cell.didTap = {
                         [weak self] in
-                        if indexPath.item == 0 {  // Blank Journal
-                            self?.didTapBlankJournal?()
-                        }
-                        if indexPath.item == 1 {  // Gided Journal
+//                        if indexPath.item == 0 {  // Blank Journal
+//                            self?.didTapBlankJournal?()
+//                        }
+                        if indexPath.item == 0 {  // Guided Journal
                             self?.didTapGuidedJournal?()
                         }
                     }
@@ -193,9 +193,9 @@ class JournalDataSource {
             case .mainScreen:
                 switch section {
                 case .streak:
-                    header.configure(title: "Stats", showButton: false)
+                    header.configure(title: "Streaks", showButton: false)
                 case .actions:
-                    header.configure(title: "Start Writing", showButton: false)
+                    header.configure(title: "Tools", showButton: false)
                 case .recents:
                     header.configure(title: "Recent", showButton: true)
                 default:
@@ -226,10 +226,11 @@ class JournalDataSource {
             
         // MAIN SCREEN SNAPSHOT
         case .mainScreen:
-            snapshot.appendSections([.streak, .stats, .actions, .recents])
+            //snapshot.appendSections([.streak, .stats, .actions, .recents])
+            snapshot.appendSections([.streak, .actions, .recents])
 
             snapshot.appendItems([UUID()], toSection: .streak)
-            snapshot.appendItems([UUID()], toSection: .stats)
+            //snapshot.appendItems([UUID()], toSection: .stats)
             snapshot.appendItems(actions.map { _ in UUID() }, toSection: .actions)
             let recent3 = Array(entries.prefix(3))
             snapshot.appendItems(recent3.map { $0.id }, toSection: .recents)
