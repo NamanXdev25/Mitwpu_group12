@@ -71,9 +71,6 @@ class JournalDataSource {
         configureDataSource()
     }
     
-    
-    
-
     // Configure datasource
     private func configureDataSource() {
         guard let collectionView = collectionView else { return }
@@ -203,9 +200,9 @@ class JournalDataSource {
         // MAIN SCREEN SNAPSHOT
         case .mainScreen:
             snapshot.appendSections([.streak, .actions, .recents])
-
+            
             snapshot.appendItems([UUID()], toSection: .streak)
-            snapshot.appendItems(actions.map { _ in UUID() }, toSection: .actions)
+            snapshot.appendItems(actions.map { $0.id }, toSection: .actions)
             let recent3 = Array(entries.prefix(3))
             snapshot.appendItems(recent3.map { $0.id }, toSection: .recents)
             snapshot.reconfigureItems(recent3.map { $0.id })
@@ -213,9 +210,8 @@ class JournalDataSource {
         // ALL JOURNALS SNAPSHOT
         case .allJournals:
             snapshot.appendSections([.all])
-            snapshot.appendItems(JournalStore.shared.entries.map { $0.id }, toSection: .all)
+            snapshot.appendItems(entries.map { $0.id }, toSection: .all)
         }
-        
         dataSource.apply(snapshot, animatingDifferences: false)
     }
 

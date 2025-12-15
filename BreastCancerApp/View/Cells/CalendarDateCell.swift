@@ -16,12 +16,6 @@ class CalendarDateCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Default style
-        selectionLayer.backgroundColor = .clear
-        dayLabel.textColor = .black
-        
-        dotView.layer.cornerRadius = 3
-        dotView.isHidden = true
     }
     
     override func layoutSubviews() {
@@ -49,16 +43,15 @@ class CalendarDateCell: UICollectionViewCell {
         // Reset
         selectionLayer.backgroundColor = .clear
         dotView.isHidden = true
-        dayLabel.textColor = .black
         
         guard !day.isEmpty else { return }
         
-        // Show dot if journal exists
+        // showing dot if journal exists
         if hasJournal {
             dotView.isHidden = false
         }
         
-        // Soft highlight for selected date
+        // highlight selected date
         if isSelected {
             selectionLayer.backgroundColor =
             UIColor(named: "PrimaryColor")?.withAlphaComponent(0.2)

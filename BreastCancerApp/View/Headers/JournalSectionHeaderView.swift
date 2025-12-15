@@ -20,7 +20,6 @@ class JournalSectionHeaderView: UICollectionReusableView {
         super.awakeFromNib()
 
         actionButton.isHidden = true
-        actionButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .medium)
     }
 
     @IBAction func seeAllButtonTapped(_ sender: UIButton) {
@@ -28,7 +27,6 @@ class JournalSectionHeaderView: UICollectionReusableView {
     }
     func configure(title: String, showButton: Bool, buttonTitle: String = "See All") {
         titleLabel.text = title
-
         actionButton.isHidden = !showButton
         actionButton.setTitle(buttonTitle, for: .normal)
     }

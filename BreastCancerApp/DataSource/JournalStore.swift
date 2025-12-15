@@ -17,7 +17,6 @@ class JournalStore {
 
     private(set) var entries: [JournalEntry] = []
 
-
     // load
     func load() {
         self.entries = SampleJournalData.all

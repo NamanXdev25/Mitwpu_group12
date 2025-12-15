@@ -33,11 +33,6 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // UI
-        navigationItem.title = "Journal Calendar"
-        journalsCollectionView.backgroundColor = .clear
-        journalsCollectionView.backgroundView = nil
-
         // setup calendar collection view layout
         let layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -210,12 +205,12 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
             // hide picker & show calendar
             pickerContainerView.isHidden = true
             collectionView.isHidden = false
-            monthLabel.textColor = .black
+            monthLabel.textColor = .label
             UIView.animate(withDuration: 0.3) {
                 self.chevronButton.transform = .identity    // point right
             }
         } else {
-            // how picker & hide calendar
+            // show picker & hide calendar
             pickerContainerView.isHidden = false
             collectionView.isHidden = true
             monthLabel.textColor = UIColor(named : "PrimaryColor")

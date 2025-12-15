@@ -22,10 +22,6 @@ class JournalStreakCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        
-        containerView.layer.cornerRadius = 16
-        containerView.layer.masksToBounds = true
-    
     }
     
     func configure(streak: Int) {
@@ -36,9 +32,7 @@ class JournalStreakCell: UICollectionViewCell {
             flameImageView.isHidden = true
             inactiveLabel.isHidden = false
         } else {
-            titleLabel.text = "Current Streak"
             countLabel.text = "\(streak)"
-            daysLabel.text = "days"
             titleLabel.isHidden = false
             countLabel.isHidden = false
             daysLabel.isHidden = false

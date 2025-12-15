@@ -11,7 +11,6 @@ class RecentJournalCell: UICollectionViewCell {
     
     static let reuseIdentifier: String = "RecentJournalCell"
     
-    
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
@@ -23,10 +22,6 @@ class RecentJournalCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-    
-        descriptionLabel.numberOfLines = 2
-        descriptionLabel.lineBreakMode = .byTruncatingTail
-        
         moreButton.showsMenuAsPrimaryAction = true
     }
 

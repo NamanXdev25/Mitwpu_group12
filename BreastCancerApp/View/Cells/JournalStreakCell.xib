@@ -11,7 +11,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="JournalStreakCell" id="gTV-IL-0wX" customClass="JournalStreakCell" customModule="JournalRedesign" customModuleProvider="target">
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="JournalStreakCell" id="gTV-IL-0wX" customClass="JournalStreakCell" customModule="BreastCancerApp" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="308" height="149"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -84,6 +84,11 @@
                 <constraint firstAttribute="bottom" secondItem="cVc-I6-3Ni" secondAttribute="bottom" id="Wsd-9m-Mul"/>
             </constraints>
             <size key="customSize" width="308" height="149"/>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                    <integer key="value" value="13"/>
+                </userDefinedRuntimeAttribute>
+            </userDefinedRuntimeAttributes>
             <connections>
                 <outlet property="containerView" destination="cVc-I6-3Ni" id="h9u-3d-dxG"/>
                 <outlet property="countLabel" destination="rTe-2b-Fd5" id="ffT-U0-MkI"/>

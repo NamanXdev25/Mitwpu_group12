@@ -43,7 +43,6 @@ class GuidedJournalViewController: UIViewController {
             textView.text = entry.body
         }
         
-        GuidedReflectionDataSource.shared.refreshIfNeeded()
         setupPlaceholder()
     }
     
@@ -76,8 +75,8 @@ class GuidedJournalViewController: UIViewController {
                 question: old.question,
                 category: old.category
             )
-            
             JournalStore.shared.update(updated)
+            
         } else {
             let newEntry = JournalEntry(
                 title: questionLabel.text ?? "Guided Reflection",

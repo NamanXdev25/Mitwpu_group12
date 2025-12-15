@@ -18,12 +18,8 @@ class JournalActionCell: UICollectionViewCell {
     @IBOutlet weak var subtitleLabel: UILabel!
     @IBOutlet weak var chevronView: UIImageView!
     
-    
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-        chevronView.image = UIImage(systemName: "chevron.right")
-        chevronView.tintColor = .systemGray3
     }
     
     func configure(title: String, subtitle: String, icon: UIImage) {
