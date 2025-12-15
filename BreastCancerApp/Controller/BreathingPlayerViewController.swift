@@ -8,7 +8,8 @@ class BreathingPlayerViewController: UIViewController {
     
     // --- Outlets ---
     @IBOutlet weak var backgroundImageView: UIImageView!
-    @IBOutlet weak var videoContainerView: UIView!
+
+    @IBOutlet weak var videoContainerView: VideoPlayerContainerView!
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var timerView: CircularTimerView!
     
@@ -24,7 +25,7 @@ class BreathingPlayerViewController: UIViewController {
     var totalSessionDuration = 300
     var isTimerRunning = false
 
-    // MARK: - 🛑 Navigation Bar Configuration 🛑
+    // MARK: - Navigation Bar Configuration
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -76,26 +77,14 @@ class BreathingPlayerViewController: UIViewController {
         setupData()
         prepareVideo()
         setupTapGesture()
-        
-//        // 3. Layer Management
-//        if let vContainer = videoContainerView {
-//            view.sendSubviewToBack(vContainer)
-//        }
-//        if let bgImage = backgroundImageView {
-//            view.sendSubviewToBack(bgImage)
-//        }
-//        if let pButton = playButton {
-//            view.bringSubviewToFront(pButton)
-//        }
-        
         timerView.reset()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        guard let playerLayer = playerLayer else { return }
-        playerLayer.frame = videoContainerView.bounds
-    }
+//    override func viewDidLayoutSubviews() {
+//        super.viewDidLayoutSubviews()
+//        guard let playerLayer = playerLayer else { return }
+//        playerLayer.frame = videoContainerView.bounds
+//    }
 
     // MARK: - Setup
     func setupData() {
@@ -127,9 +116,7 @@ class BreathingPlayerViewController: UIViewController {
         playerLayer = AVPlayerLayer(player: player)
         playerLayer?.videoGravity = .resizeAspectFill
         
-        if let vContainer = videoContainerView {
-            vContainer.layer.addSublayer(playerLayer!)
-        }
+        videoContainerView.playerLayer = playerLayer
 
         NotificationCenter.default.addObserver(self, selector: #selector(loopVideo), name: .AVPlayerItemDidPlayToEndTime, object: player?.currentItem)
     }
@@ -139,17 +126,7 @@ class BreathingPlayerViewController: UIViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(screenTapped))
         view.addGestureRecognizer(tapGesture)
     }
-    
-//    func addTopGradient() {
-//        let gradientOverlay = UIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 150))
-//        gradientOverlay.isUserInteractionEnabled = false
-//        let gradient = CAGradientLayer()
-//        gradient.frame = gradientOverlay.bounds
-//        gradient.colors = [UIColor(red: 0.6, green: 0.2, blue: 0.3, alpha: 0.85).cgColor, UIColor.clear.cgColor]
-//        gradientOverlay.layer.addSublayer(gradient)
-//        view.addSubview(gradientOverlay)
-//    }
-//    
+      
     // MARK: - Interaction Logic
     
     @objc func screenTapped() {
@@ -200,7 +177,10 @@ class BreathingPlayerViewController: UIViewController {
             let config = UIImage.SymbolConfiguration(pointSize: 60)
             playButton.setImage(UIImage(systemName: "play.fill", withConfiguration: config), for: .normal)
             
-            UIView.animate(withDuration: 0.3) { self.backgroundImageView.alpha = 1 }
+//            UIView.animate(withDuration: 0.3) { self.backgroundImageView.alpha = 1 }
+
+            showBackground()
+
         } else {
             // RESUME
             player?.play()
@@ -213,7 +193,9 @@ class BreathingPlayerViewController: UIViewController {
             // 2. HIDE Play Button
             playButton.isHidden = true
             
-            UIView.animate(withDuration: 0.5) { self.backgroundImageView.alpha = 0 }
+//            UIView.animate(withDuration: 0.5) { self.backgroundImageView.alpha = 0 }
+            hideBackground()
+
         }
     }
     
@@ -273,4 +255,19 @@ class BreathingPlayerViewController: UIViewController {
         player?.seek(to: .zero)
         player?.play()
     }
+    
+    // MARK: - View State Updates
+
+    func showBackground() {
+        UIView.animate(withDuration: 0.3) {
+            self.backgroundImageView.alpha = 1
+        }
+    }
+
+    func hideBackground() {
+        UIView.animate(withDuration: 0.5) {
+            self.backgroundImageView.alpha = 0
+        }
+    }
+
 }
