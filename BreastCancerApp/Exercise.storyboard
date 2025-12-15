@@ -478,7 +478,7 @@
                                 </constraints>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" image="arrow.up" catalog="system">
+                                <buttonConfiguration key="configuration" style="plain" image="checkmark" catalog="system">
                                     <backgroundConfiguration key="background" cornerRadius="60"/>
                                 </buttonConfiguration>
                                 <connections>
@@ -772,7 +772,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="arrow.up" catalog="system" width="118" height="128"/>
+        <image name="checkmark" catalog="system" width="128" height="114"/>
         <image name="chevron.left" catalog="system" width="97" height="128"/>
         <image name="chevron.right" catalog="system" width="97" height="128"/>
         <image name="plus" catalog="system" width="128" height="113"/>
