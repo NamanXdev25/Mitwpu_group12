@@ -36,52 +36,6 @@ class AllJournalsViewController: UIViewController {
         configureDataSource()
     }
     
-    // setup collection view (using compositional layout)
-    private func configureCollectionView() {
-        
-        // item
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(120)
-        )
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-
-        // group
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(120)
-        )
-        let group = NSCollectionLayoutGroup.vertical(
-            layoutSize: groupSize,
-            subitems: [ item ]
-        )
-        group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16)
-
-        // section
-        let section = NSCollectionLayoutSection(group: group)
-        section.interGroupSpacing = 0
-        section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 0, bottom: 16, trailing: 0)
-
-        // layout
-        let layout = UICollectionViewCompositionalLayout(section: section)
-        collectionView.collectionViewLayout = layout
-        
-        // delegate
-        collectionView.delegate = self
-        
-        // registrer XIBs (nib files)
-        collectionView.register(
-            UINib(nibName: "RecentJournalCell", bundle: nil),
-            forCellWithReuseIdentifier: RecentJournalCell.reuseIdentifier
-        )
-        collectionView.register(
-            UINib(nibName: "JournalSectionHeaderView", bundle: nil),
-            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: "header_cell"
-        )
-    }
-    
     // viewWillAppear (after editing a journal)
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -112,6 +66,46 @@ class AllJournalsViewController: UIViewController {
             self?.refreshList()
         }
         dataSource.applySnapshot()
+    }
+    
+    // setup collection view (using compositional layout)
+    private func configureCollectionView() {
+        
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(120)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let group = NSCollectionLayoutGroup.vertical(
+            layoutSize: itemSize,
+            subitems: [item]
+        )
+
+        let section = NSCollectionLayoutSection(group: group)
+        section.interGroupSpacing = 0
+        section.contentInsets = NSDirectionalEdgeInsets(
+            top: 8,
+            leading: 16,
+            bottom: 16,
+            trailing: 16
+        )
+
+        collectionView.collectionViewLayout =
+            UICollectionViewCompositionalLayout(section: section)
+
+        collectionView.delegate = self
+        
+        // registrer XIBs (nib files)
+        collectionView.register(
+            UINib(nibName: "RecentJournalCell", bundle: nil),
+            forCellWithReuseIdentifier: RecentJournalCell.reuseIdentifier
+        )
+        collectionView.register(
+            UINib(nibName: "JournalSectionHeaderView", bundle: nil),
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: "header_cell"
+        )
     }
 }
 
