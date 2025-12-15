@@ -7,27 +7,24 @@ class SelfExamineViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // SAFE BACKGROUND COLOR (fallback if asset missing)
+        // Background with safe fallback
         let bg = UIColor(named: "BGPink") ??
                  UIColor(red: 0.98, green: 0.95, blue: 0.96, alpha: 1)
-
         view.backgroundColor = bg
         collectionView.backgroundColor = .clear
 
+        // Delegates
         collectionView.delegate = self
         collectionView.dataSource = self
 
         // Register cells
-        collectionView.register(UINib(nibName: "GuidesCardCell", bundle: nil),
-                                forCellWithReuseIdentifier: "GuidesCardCell")
-        collectionView.register(UINib(nibName: "SectionTitleCell", bundle: nil),
-                                forCellWithReuseIdentifier: "SectionTitleCell")
-        collectionView.register(UINib(nibName: "SelfExamCardsContainerCell", bundle: nil),
-                                forCellWithReuseIdentifier: "SelfExamCardsContainerCell")
-        collectionView.register(UINib(nibName: "ActionsContainerCell", bundle: nil),
-                                forCellWithReuseIdentifier: "ActionsContainerCell")
+        ["GuidesCardCell", "SectionTitleCell",
+         "SelfExamCardsContainerCell", "ActionsContainerCell"].forEach {
+            collectionView.register(UINib(nibName: $0, bundle: nil),
+                                    forCellWithReuseIdentifier: $0)
+        }
 
-        // CollectionView Layout
+        // Layout (unchanged)
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumInteritemSpacing = 0
@@ -35,136 +32,99 @@ class SelfExamineViewController: UIViewController {
         layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
         collectionView.setCollectionViewLayout(layout, animated: false)
 
-        // NavigationBar title
-        navigationController?.navigationBar.prefersLargeTitles = false
-        let titleLabel = UILabel()
-        titleLabel.text = "Self-Exam"
-        titleLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
-        titleLabel.textAlignment = .center
-        navigationItem.titleView = titleLabel
-
-        // REMOVE NAVIGATION BAR HAIRLINE COMPLETELY
-        let nav = navigationController?.navigationBar
+        // Navigation bar appearance
+        let navBar = navigationController?.navigationBar
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = bg
-
-        // remove shadow / line and images
         appearance.shadowColor = .clear
-        appearance.backgroundImage = UIImage()
-        appearance.shadowImage = UIImage()
 
-        nav?.standardAppearance = appearance
-        nav?.scrollEdgeAppearance = appearance
-        nav?.compactAppearance = appearance
+        navBar?.standardAppearance = appearance
+        navBar?.scrollEdgeAppearance = appearance
+        navBar?.compactAppearance = appearance
+        navBar?.setBackgroundImage(UIImage(), for: .default)
+        navBar?.shadowImage = UIImage()
+        navBar?.isTranslucent = false
 
-        // additional removal for all iOS versions
-        nav?.setBackgroundImage(UIImage(), for: .default)
-        nav?.shadowImage = UIImage()
-        nav?.isTranslucent = false
-
-        collectionView.reloadData()
+        // Title
+        let titleLabel = UILabel()
+        titleLabel.text = "Self-Exam"
+        titleLabel.font = .systemFont(ofSize: 20, weight: .semibold)
+        titleLabel.textAlignment = .center
+        navigationItem.titleView = titleLabel
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showObservations" {
-            // pass if needed
-        } else if segue.identifier == "showTestHistory" {
-            // pass if needed
-        } else if segue.identifier == "ShowVideoGuide" {
-            // pass if needed
-        }
+        // Segues preserved exactly.
     }
 }
+
 
 // MARK: - UICollectionViewDataSource
 extension SelfExamineViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView,
-                        numberOfItemsInSection section: Int) -> Int {
-        return 4  // Guides + Title + Horizontal Cards + Actions
-    }
+                        numberOfItemsInSection section: Int) -> Int { 4 }
 
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-        switch indexPath.item {
-        case 0:
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "GuidesCardCell",
-                for: indexPath
-            ) as! GuidesCardCell
+        let id: String = [
+            "GuidesCardCell",
+            "SectionTitleCell",
+            "SelfExamCardsContainerCell",
+            "ActionsContainerCell"
+        ][indexPath.item]
 
-            cell.backgroundColor = .clear
-            cell.contentView.backgroundColor = .clear
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: id, for: indexPath)
+        cell.backgroundColor = .clear
+        cell.contentView.backgroundColor = .clear
 
-            cell.titleLabel.text = "Guides"
-            cell.row1Label.text = "Video Guide"
-            cell.row2Label.text = "Audio Guide"
-            cell.delegate = self // assign delegate for per-row taps
-            return cell
+        switch (indexPath.item, cell) {
 
-        case 1:
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "SectionTitleCell",
-                for: indexPath
-            ) as! SectionTitleCell
+        case (0, let c as GuidesCardCell):
+            c.titleLabel.text = "Guides"
+            c.row1Label.text = "Video Guide"
+            c.row2Label.text = "Audio Guide"
+            c.delegate = self
 
-            cell.backgroundColor = .clear
-            cell.contentView.backgroundColor = .clear
-            cell.titleLabel.text = "How to Self-Examine?"
-            return cell
+        case (1, let c as SectionTitleCell):
+            c.titleLabel.text = "How to Self-Examine?"
 
-        case 2:
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "SelfExamCardsContainerCell",
-                for: indexPath
-            ) as! SelfExamCardsContainerCell
+        case (3, let c as ActionsContainerCell):
+            c.delegate = self
 
-            cell.backgroundColor = .clear
-            cell.contentView.backgroundColor = .clear
-            return cell
-
-        case 3:
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "ActionsContainerCell",
-                for: indexPath
-            ) as! ActionsContainerCell
-
-            cell.backgroundColor = .clear
-            cell.contentView.backgroundColor = .clear
-            cell.delegate = self
-            return cell
-
-        default:
-            return UICollectionViewCell()
+        default: break
         }
+
+        return cell
     }
 }
+
 
 // MARK: - UICollectionViewDelegateFlowLayout
 extension SelfExamineViewController: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
+                        layout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
 
-        let fullWidth = collectionView.frame.width - 32
+        let width = collectionView.frame.width - 32
 
         switch indexPath.item {
-        case 0: return CGSize(width: fullWidth, height: 180)
-        case 1: return CGSize(width: fullWidth, height: 44)
-        case 2: return CGSize(width: fullWidth, height: 200)
-        case 3: return CGSize(width: fullWidth, height: 140)
-        default: return CGSize(width: fullWidth, height: 60)
+        case 0: return .init(width: width, height: 180)
+        case 1: return .init(width: width, height: 44)
+        case 2: return .init(width: width, height: 200)
+        case 3: return .init(width: width, height: 140)
+        default: return .init(width: width, height: 60)
         }
     }
 }
 
-// NOTE: whole-card tap removed to avoid accidental navigation
 
 // MARK: - GuidesCardCellDelegate
 extension SelfExamineViewController: GuidesCardCellDelegate {
+
     func guidesCellDidTapVideo(_ cell: GuidesCardCell) {
         performSegue(withIdentifier: "ShowVideoGuide", sender: cell)
     }
@@ -172,8 +132,8 @@ extension SelfExamineViewController: GuidesCardCellDelegate {
     func guidesCellDidTapAudio(_ cell: GuidesCardCell) {
         performSegue(withIdentifier: "ShowAudioGuide", sender: cell)
     }
-
 }
+
 
 // MARK: - ActionsContainerCellDelegate
 extension SelfExamineViewController: ActionsContainerCellDelegate {

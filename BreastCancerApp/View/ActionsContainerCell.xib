@@ -32,6 +32,11 @@
                                 <buttonConfiguration key="configuration" style="tinted" title="Log Self-Exam">
                                     <color key="baseBackgroundColor" name="pink"/>
                                 </buttonConfiguration>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="Layer.cornerRadius">
+                                        <integer key="value" value="24"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="logButtonTapped:" destination="gTV-IL-0wX" eventType="primaryActionTriggered" id="qfJ-Hx-hgy"/>
                                 </connections>
@@ -41,6 +46,7 @@
                                 <constraints>
                                     <constraint firstAttribute="width" constant="140" id="yI1-7X-2IV"/>
                                 </constraints>
+                                <color key="tintColor" name="pink"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="View past Logs"/>
                                 <connections>

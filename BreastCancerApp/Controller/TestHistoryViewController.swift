@@ -1,48 +1,54 @@
 import UIKit
 
-class TestHistoryViewController: UIViewController,
-                                 UICollectionViewDataSource,
-                                 UICollectionViewDelegate {
+final class TestHistoryViewController: UIViewController,
+                                       UICollectionViewDataSource,
+                                       UICollectionViewDelegate {
 
+    // MARK: - Outlets
     @IBOutlet weak var collectionView: UICollectionView!
+
+    // MARK: - Data
     private var records: [TestRecord] = []
     private var expandedIndexSet = Set<Int>()
 
+    // Pink background (centralized).
     private var bgColor: UIColor {
-        return UIColor(named: "BGPink") ?? UIColor(red: 0.98, green: 0.95, blue: 0.96, alpha: 1)
+        UIColor(named: "BGPink") ?? UIColor(red: 0.98, green: 0.95, blue: 0.96, alpha: 1)
     }
 
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationController?.navigationBar.prefersLargeTitles = false
-        let titleLabel = UILabel()
-        titleLabel.text = "Test History"
-        titleLabel.font = .systemFont(ofSize: 17, weight: .semibold)
-        titleLabel.textAlignment = .center
-        navigationItem.titleView = titleLabel
+        // Navigation title
+        let lbl = UILabel()
+        lbl.text = "Log History"
+        lbl.font = .systemFont(ofSize: 17, weight: .semibold)
+        lbl.textAlignment = .center
+        navigationItem.titleView = lbl
 
-        // layout + appearance
+        // Collection setup
         collectionView.collectionViewLayout = generateLayout()
-        collectionView.alwaysBounceVertical = true
         collectionView.dataSource = self
         collectionView.delegate = self
+        collectionView.alwaysBounceVertical = true
 
-        // FORCE pink background everywhere (collection + view)
+        // Background
         view.backgroundColor = bgColor
         collectionView.backgroundColor = bgColor
-        collectionView.backgroundView = nil
 
-        // Register nib (keep reuse identifier "TestRecordCell")
-        let nib = UINib(nibName: "TestRecordCell", bundle: nil)
-        collectionView.register(nib, forCellWithReuseIdentifier: "TestRecordCell")
+        // Register cell
+        collectionView.register(UINib(nibName: "TestRecordCell", bundle: nil),
+                                forCellWithReuseIdentifier: "TestRecordCell")
 
+        // Load and refresh
         records = Persistence.load()
         updateEmptyState()
         collectionView.reloadData()
 
+        // Listen for new records
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(testRecordAdded(_:)),
+                                               selector: #selector(testRecordAdded),
                                                name: .testRecordAdded,
                                                object: nil)
     }
@@ -54,9 +60,10 @@ class TestHistoryViewController: UIViewController,
     }
 
     deinit {
-        NotificationCenter.default.removeObserver(self, name: .testRecordAdded, object: nil)
+        NotificationCenter.default.removeObserver(self)
     }
 
+    // Add a record to the top
     func appendRecord(_ record: TestRecord) {
         records.insert(record, at: 0)
         try? Persistence.save(records)
@@ -66,129 +73,152 @@ class TestHistoryViewController: UIViewController,
 
     // MARK: - Empty State
     private func updateEmptyState() {
-        // always keep pink background; only show placeholder when empty
-        if records.isEmpty {
-            let lbl = UILabel()
-            lbl.text = "Your test records will appear here."
-            lbl.font = .systemFont(ofSize: 16, weight: .regular)
-            lbl.textAlignment = .center
-            lbl.numberOfLines = 0
-            lbl.translatesAutoresizingMaskIntoConstraints = false
-
-            let container = UIView(frame: collectionView.bounds)
-            container.backgroundColor = .clear
-            container.addSubview(lbl)
-            NSLayoutConstraint.activate([
-                lbl.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-                lbl.centerYAnchor.constraint(equalTo: container.centerYAnchor),
-                lbl.leadingAnchor.constraint(greaterThanOrEqualTo: container.leadingAnchor, constant: 24),
-                lbl.trailingAnchor.constraint(lessThanOrEqualTo: container.trailingAnchor, constant: -24)
-            ])
-            collectionView.backgroundView = container
-            collectionView.backgroundColor = bgColor
-        } else {
+        guard records.isEmpty else {
             collectionView.backgroundView = nil
             collectionView.backgroundColor = bgColor
+            return
         }
-        view.backgroundColor = bgColor
+
+        let lbl = UILabel()
+        lbl.text = "Your log records will appear here."
+        lbl.font = .systemFont(ofSize: 16)
+        lbl.textAlignment = .center
+        lbl.numberOfLines = 0
+        lbl.translatesAutoresizingMaskIntoConstraints = false
+
+        let container = UIView(frame: collectionView.bounds)
+        container.addSubview(lbl)
+
+        NSLayoutConstraint.activate([
+            lbl.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            lbl.centerYAnchor.constraint(equalTo: container.centerYAnchor),
+            lbl.leadingAnchor.constraint(greaterThanOrEqualTo: container.leadingAnchor, constant: 24),
+            lbl.trailingAnchor.constraint(lessThanOrEqualTo: container.trailingAnchor, constant: -24)
+        ])
+
+        collectionView.backgroundView = container
     }
 
-    // MARK: - DataSource
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return records.count
-    }
+    // MARK: - Data Source
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int { records.count }
 
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TestRecordCell", for: indexPath) as? TestRecordCell else {
+        guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "TestRecordCell",
+                for: indexPath) as? TestRecordCell else {
             fatalError("TestRecordCell not registered")
         }
 
-        // enforce transparency for list-layout cells
+        // Transparent background for list appearance
         cell.backgroundConfiguration = .clear()
-        cell.backgroundColor = .clear
         cell.contentView.backgroundColor = .clear
-        cell.selectedBackgroundView = UIView()
-        cell.selectedBackgroundView?.backgroundColor = .clear
 
         let rec = records[indexPath.item]
         let isExpanded = expandedIndexSet.contains(indexPath.item)
-        let details = isExpanded ? rec.observations : nil
-        cell.configureDate(rec.date, details: details)
 
-        cell.onChevronTap = { [weak self, weak collectionView, weak cell] in
-            guard let self = self, let cv = collectionView, let cell = cell, let realIndex = cv.indexPath(for: cell) else { return }
-            if self.expandedIndexSet.contains(realIndex.item) { self.expandedIndexSet.remove(realIndex.item) }
-            else { self.expandedIndexSet.insert(realIndex.item) }
-            DispatchQueue.main.async {
-                cv.performBatchUpdates(nil) { _ in cv.reloadItems(at: [realIndex]) }
-            }
+        // Configure cell
+        cell.configureDate(rec.date,
+                           details: isExpanded ? rec.observations : nil)
+
+        // Toggle expansion via chevron
+        cell.onChevronTap = { [weak self, weak cell] in
+            guard
+                let self = self,
+                let index = self.collectionView.indexPath(for: cell!) else { return }
+
+            self.toggleExpansion(at: index)
         }
 
+        // Delete request from cell
         cell.onRequestDelete = { [weak self] in
-            guard let self = self else { return }
-            self.confirmDelete(at: indexPath) { _ in }
+            self?.confirmDelete(at: indexPath) { _ in }
         }
 
         return cell
     }
 
-    // MARK: - Delegate (expand on select)
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if expandedIndexSet.contains(indexPath.item) { expandedIndexSet.remove(indexPath.item) }
-        else { expandedIndexSet.insert(indexPath.item) }
-        collectionView.performBatchUpdates(nil) { _ in collectionView.reloadItems(at: [indexPath]) }
+    // MARK: - Delegate
+    func collectionView(_ collectionView: UICollectionView,
+                        didSelectItemAt indexPath: IndexPath) {
+        toggleExpansion(at: indexPath)
     }
 
-    // MARK: - Layout + Swipe Actions
-    func generateLayout() -> UICollectionViewLayout {
+    // MARK: - Expansion Logic
+    private func toggleExpansion(at indexPath: IndexPath) {
+        expandedIndexSet.formSymmetricDifference([indexPath.item])
+        collectionView.performBatchUpdates {
+            collectionView.reloadItems(at: [indexPath])
+        }
+    }
+
+    // MARK: - Layout + Swipe
+    private func generateLayout() -> UICollectionViewLayout {
         var config = UICollectionLayoutListConfiguration(appearance: .plain)
         config.showsSeparators = false
+        config.backgroundColor = .clear
         config.headerMode = .none
 
-        // IMPORTANT: make the list background transparent so collectionView bg shows
-        config.backgroundColor = .clear
-
+        // Swipe-to-delete
         config.trailingSwipeActionsConfigurationProvider = { [weak self] indexPath in
             guard let self = self else { return nil }
-            let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { action, view, completion in
+
+            let delete = UIContextualAction(style: .destructive, title: "Delete") {
+                _, _, completion in
                 self.confirmDelete(at: indexPath, completion: completion)
             }
-            deleteAction.image = UIImage(systemName: "trash.fill")
-            deleteAction.backgroundColor = .systemRed
-            let s = UISwipeActionsConfiguration(actions: [deleteAction])
-            s.performsFirstActionWithFullSwipe = false
-            return s
+
+            delete.image = UIImage(systemName: "trash.fill")
+            delete.backgroundColor = .systemRed
+
+            let swipe = UISwipeActionsConfiguration(actions: [delete])
+            swipe.performsFirstActionWithFullSwipe = false
+            return swipe
         }
 
         return UICollectionViewCompositionalLayout.list(using: config)
     }
 
-    // MARK: - Delete Confirm
-    func confirmDelete(at indexPath: IndexPath, completion: @escaping (Bool) -> Void) {
-        guard indexPath.item < records.count else { completion(false); return }
+    // MARK: - Delete
+    func confirmDelete(at indexPath: IndexPath,
+                       completion: @escaping (Bool) -> Void) {
+
+        guard indexPath.item < records.count else {
+            completion(false)
+            return
+        }
+
         let alert = UIAlertController(title: "Delete Record?",
                                       message: "Are you sure you want to delete this record?",
                                       preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { _ in completion(false) })
+
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { _ in
+            completion(false)
+        })
+
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
             guard let self = self else { completion(false); return }
+
+            // Remove and save
             self.records.remove(at: indexPath.item)
             try? Persistence.save(self.records)
+
+            // Fix expanded indexes
             self.expandedIndexSet = Set(self.expandedIndexSet
-                .filter { $0 != indexPath.item }
-                .map { $0 > indexPath.item ? $0 - 1 : $0 })
-            DispatchQueue.main.async {
-                self.collectionView.performBatchUpdates({
-                    self.collectionView.deleteItems(at: [indexPath])
-                }, completion: { _ in
-                    self.updateEmptyState()
-                    self.collectionView.reloadData()
-                    completion(true)
-                })
-            }
+                .compactMap { $0 == indexPath.item ? nil : ($0 > indexPath.item ? $0 - 1 : $0) })
+
+            // Animate delete
+            self.collectionView.performBatchUpdates({
+                self.collectionView.deleteItems(at: [indexPath])
+            }, completion: { _ in
+                self.updateEmptyState()
+                self.collectionView.reloadData()
+                completion(true)
+            })
         })
+
         present(alert, animated: true)
     }
 }

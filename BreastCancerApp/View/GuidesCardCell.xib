@@ -22,13 +22,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="435" height="262"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="fmR-be-m7X">
-                                <rect key="frame" x="12" y="12" width="389" height="238"/>
+                                <rect key="frame" x="12" y="12" width="407" height="238"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Uln-lU-gu5">
-                                        <rect key="frame" x="0.0" y="0.0" width="389" height="110"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="407" height="110"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Guides" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2ll-Yd-xV0">
-                                                <rect key="frame" x="8" y="45" width="373" height="20.333333333333329"/>
+                                                <rect key="frame" x="8" y="45" width="391" height="20.333333333333329"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -42,16 +42,16 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IFr-48-K14">
-                                        <rect key="frame" x="0.0" y="118" width="389" height="56"/>
+                                        <rect key="frame" x="0.0" y="118" width="407" height="56"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Video Guide" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FuO-3x-MOt">
-                                                <rect key="frame" x="8" y="18" width="373" height="20.333333333333329"/>
+                                                <rect key="frame" x="8" y="18" width="391" height="20.333333333333329"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="n2t-8l-Jmb">
-                                                <rect key="frame" x="365" y="20" width="12" height="16.333333333333329"/>
+                                                <rect key="frame" x="395" y="20" width="12" height="16.333333333333329"/>
                                                 <color key="tintColor" name="gray"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="12" id="AaU-kG-xYJ"/>
@@ -59,7 +59,7 @@
                                                 </constraints>
                                             </imageView>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="i2C-ah-RA8">
-                                                <rect key="frame" x="8" y="0.0" width="349" height="1"/>
+                                                <rect key="frame" x="8" y="0.0" width="379" height="1"/>
                                                 <color key="backgroundColor" name="gray"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="efX-5m-ldl"/>
@@ -70,7 +70,7 @@
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="FuO-3x-MOt" secondAttribute="trailing" constant="8" id="6QK-2i-d8Q"/>
                                             <constraint firstItem="i2C-ah-RA8" firstAttribute="top" secondItem="IFr-48-K14" secondAttribute="top" id="Cjp-5f-kOi"/>
-                                            <constraint firstAttribute="trailing" secondItem="n2t-8l-Jmb" secondAttribute="trailing" constant="12" id="DAj-wU-5fO"/>
+                                            <constraint firstAttribute="trailing" secondItem="n2t-8l-Jmb" secondAttribute="trailing" id="DAj-wU-5fO"/>
                                             <constraint firstAttribute="height" constant="56" id="WQB-yJ-xv2"/>
                                             <constraint firstItem="n2t-8l-Jmb" firstAttribute="leading" secondItem="i2C-ah-RA8" secondAttribute="trailing" constant="8" id="bbN-Xw-Yb7"/>
                                             <constraint firstItem="i2C-ah-RA8" firstAttribute="leading" secondItem="IFr-48-K14" secondAttribute="leading" constant="8" id="d0H-Qy-Aoo"/>
@@ -80,16 +80,16 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rlD-zu-7EH">
-                                        <rect key="frame" x="0.0" y="182" width="389" height="56"/>
+                                        <rect key="frame" x="0.0" y="182" width="407" height="56"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Audio Guide" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lga-40-Usx">
-                                                <rect key="frame" x="8" y="18" width="373" height="20.333333333333329"/>
+                                                <rect key="frame" x="8" y="18" width="391" height="20.333333333333329"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="p51-Ve-ZVL">
-                                                <rect key="frame" x="365" y="20" width="12" height="16.333333333333329"/>
+                                                <rect key="frame" x="395" y="20" width="12" height="16.333333333333329"/>
                                                 <color key="tintColor" name="gray"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="20" id="f44-gC-BDd"/>
@@ -97,7 +97,7 @@
                                                 </constraints>
                                             </imageView>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FPQ-2F-guf">
-                                                <rect key="frame" x="8" y="0.0" width="349" height="1"/>
+                                                <rect key="frame" x="8" y="0.0" width="379" height="1"/>
                                                 <color key="backgroundColor" name="gray"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="7I7-h2-2eS"/>
@@ -108,7 +108,7 @@
                                         <constraints>
                                             <constraint firstItem="p51-Ve-ZVL" firstAttribute="centerY" secondItem="rlD-zu-7EH" secondAttribute="centerY" id="Adw-fB-i5a"/>
                                             <constraint firstAttribute="trailing" secondItem="Lga-40-Usx" secondAttribute="trailing" constant="8" id="LIw-DL-TMU"/>
-                                            <constraint firstAttribute="trailing" secondItem="p51-Ve-ZVL" secondAttribute="trailing" constant="12" id="QU0-7l-037"/>
+                                            <constraint firstAttribute="trailing" secondItem="p51-Ve-ZVL" secondAttribute="trailing" id="QU0-7l-037"/>
                                             <constraint firstItem="p51-Ve-ZVL" firstAttribute="leading" secondItem="FPQ-2F-guf" secondAttribute="trailing" constant="8" id="gye-qT-vpo"/>
                                             <constraint firstAttribute="height" constant="56" id="kR5-hx-YMZ"/>
                                             <constraint firstItem="FPQ-2F-guf" firstAttribute="leading" secondItem="rlD-zu-7EH" secondAttribute="leading" constant="8" id="nCH-cd-KEt"/>
@@ -122,7 +122,7 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="fmR-be-m7X" secondAttribute="trailing" constant="34" id="QKk-Qu-YTt"/>
+                            <constraint firstAttribute="trailing" secondItem="fmR-be-m7X" secondAttribute="trailing" constant="16" id="QKk-Qu-YTt"/>
                             <constraint firstItem="fmR-be-m7X" firstAttribute="leading" secondItem="5et-n4-1yI" secondAttribute="leading" constant="12" id="THC-FI-gEG"/>
                             <constraint firstAttribute="bottom" secondItem="fmR-be-m7X" secondAttribute="bottom" constant="12" id="ph3-vh-59N"/>
                             <constraint firstItem="fmR-be-m7X" firstAttribute="top" secondItem="5et-n4-1yI" secondAttribute="top" constant="12" id="s0C-TZ-3tt"/>

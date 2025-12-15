@@ -1,5 +1,6 @@
 import UIKit
 
+// Delegate for action callbacks
 protocol ActionsContainerCellDelegate: AnyObject {
     func didTapLogSelfExam(from cell: ActionsContainerCell)
     func didTapViewPastTests(from cell: ActionsContainerCell)
@@ -14,21 +15,19 @@ class ActionsContainerCell: UICollectionViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        configureUI()
+    }
 
-        contentView.backgroundColor = .clear
+    private func configureUI() {
+        let pink = UIColor(named: "pink") ?? .systemPink
 
-        // Log Self-Exam button
         logButton.setTitle("Log Self-Exam", for: .normal)
-        logButton.backgroundColor = UIColor(named: "pink") ?? .systemPink
-        logButton.layer.cornerRadius = 24
-        logButton.clipsToBounds = true
-        logButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         logButton.setTitleColor(.white, for: .normal)
+        logButton.backgroundColor = pink
+        logButton.titleLabel?.font = .systemFont(ofSize: 18, weight: .semibold)
 
-        // View Past Tests button
-        //pastButton.setTitle("View past tests", for: .normal)
-        pastButton.setTitleColor(UIColor(named: "pink") ?? .systemPink, for: .normal)
-        pastButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        pastButton.setTitleColor(pink, for: .normal)
+        pastButton.titleLabel?.font = .systemFont(ofSize: 14, weight: .regular)
         pastButton.backgroundColor = .clear
     }
 

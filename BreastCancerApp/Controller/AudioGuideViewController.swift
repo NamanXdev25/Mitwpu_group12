@@ -3,7 +3,7 @@ import AVFoundation
 
 class AudioGuideViewController: UIViewController {
 
-    // MARK: - Outlets
+    // UI connections
     @IBOutlet weak var artworkImageView: UIImageView!
     @IBOutlet weak var playPauseButton: UIButton!
     @IBOutlet weak var back5Button: UIButton!
@@ -12,92 +12,83 @@ class AudioGuideViewController: UIViewController {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var logSelfExamButton: UIButton!
 
-    // MARK: - Audio
+    // Audio engine
     private var player: AVAudioPlayer?
     private var timer: Timer?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        navigationItem.title = "Audio Guide"
-        titleLabel.text = "Audio Guide"
-
-        setupAudio()
+        navigationItem.title = titleLabel.text
+        loadAudio()
     }
 
-    private func setupAudio() {
-        guard let url = Bundle.main.url(forResource: "audio_guide", withExtension: "mp3") else {
-            print("ERROR: audio file not found")
-            return
-        }
-
-        do {
-            player = try AVAudioPlayer(contentsOf: url)
-            player?.prepareToPlay()
-            progressSlider.minimumValue = 0
-            progressSlider.maximumValue = Float(player?.duration ?? 0)
-        } catch {
-            print("ERROR loading audio:", error)
-        }
+    // Load bundled audio file
+    private func loadAudio() {
+        guard let url = Bundle.main.url(forResource: "audio_guide", withExtension: "mp3"),
+              let p = try? AVAudioPlayer(contentsOf: url) else { return }
+        player = p
+        p.prepareToPlay()
+        progressSlider.minimumValue = 0
+        progressSlider.maximumValue = Float(p.duration)
     }
 
-    private func startTimer() {
-        timer?.invalidate()
-        timer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true) { _ in
-            self.updateUI()
-        }
-    }
-
-    private func updateUI() {
+    // Update slider as audio plays
+    private func tick() {
         guard let p = player else { return }
         progressSlider.value = Float(p.currentTime)
-
-        if !p.isPlaying {
-            timer?.invalidate()
-        }
+        if !p.isPlaying { timer?.invalidate() }
     }
 
-    // MARK: - Actions
+    // Toggle play/pause
+    // Toggle play/pause
     @IBAction func playPauseTapped(_ sender: UIButton) {
-        guard let p = player else { return }
+        guard let p = player else {
+            print("PLAYER NIL")
+            return
+        }
 
         if p.isPlaying {
             p.pause()
+            print("PAUSED")
         } else {
             p.play()
             startTimer()
+            print("PLAYING")
         }
     }
 
+
+
+    // Start periodic UI updates
+    private func startTimer() {
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true) { _ in self.tick() }
+    }
+
+    // Seek backward 5s
     @IBAction func back5Tapped(_ sender: UIButton) {
         guard let p = player else { return }
         p.currentTime = max(0, p.currentTime - 5)
-        updateUI()
+        tick()
     }
 
+    // Seek forward 5s
     @IBAction func forward5Tapped(_ sender: UIButton) {
         guard let p = player else { return }
         p.currentTime = min(p.duration, p.currentTime + 5)
-        updateUI()
+        tick()
     }
 
+    // Manual slider scrub
     @IBAction func sliderValueChanged(_ sender: UISlider) {
         player?.currentTime = TimeInterval(sender.value)
-        updateUI()
+        tick()
     }
 
+    // Navigate to Observations screen
     @IBAction func logSelfExamTapped(_ sender: UIButton) {
-        let sb = UIStoryboard(name: "Main", bundle: nil)
-        // try two common IDs, fallback to a helpful log
-        if let obs = sb.instantiateViewController(withIdentifier: "ObservationsViewController") as? ObservationsViewController {
-            navigationController?.pushViewController(obs, animated: true)
-            return
-        }
-        if let obs = sb.instantiateViewController(withIdentifier: "ObservationsVC") as? ObservationsViewController {
-            navigationController?.pushViewController(obs, animated: true)
-            return
-        }
-        assertionFailure("Observations VC storyboard ID not found. Set ID to ObservationsViewController in Main.storyboard.")
+        let vc = UIStoryboard(name: "Main", bundle: nil)
+            .instantiateViewController(withIdentifier: "ObservationsViewController")
+        navigationController?.pushViewController(vc, animated: true)
     }
-
 }

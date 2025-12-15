@@ -9,6 +9,7 @@ protocol ObservationsCollector {
 }
 
 class ObservationsViewController: UIViewController {
+
     @IBOutlet weak var collectionView: UICollectionView!
 
     // ---------- NEW: outlet for storyboard bar button ----------
@@ -51,11 +52,6 @@ class ObservationsViewController: UIViewController {
             UIColor(red: 0.98, green: 0.95, blue: 0.96, alpha: 1.0)
         view.backgroundColor = pagePink
 
-        // ---------- NOTE ----------
-        // The previous programmatic tick-button creation has been removed.
-        // A UIBarButtonItem is now added in the storyboard and connected to
-        // the `doneBarButton` outlet. Its action (see below) calls `doneTapped()`.
-
         // ---------- Collection View ----------
         collectionView.backgroundColor = .clear
         collectionView.contentInsetAdjustmentBehavior = .automatic
@@ -63,6 +59,7 @@ class ObservationsViewController: UIViewController {
 
         let nib = UINib(nibName: "ObservationsContainerCell", bundle: nil)
         collectionView.register(nib, forCellWithReuseIdentifier: "ObservationsContainerCell")
+
         collectionView.dataSource = self
         collectionView.delegate = self
 
@@ -82,6 +79,7 @@ class ObservationsViewController: UIViewController {
 
     // ---------- Done Action (unchanged) ----------
     @objc func doneTapped() {
+
         var observations: [ObservationItem] = []
 
         if let cell = collectionView.visibleCells.first,
@@ -103,8 +101,8 @@ class ObservationsViewController: UIViewController {
         var all = Persistence.load()
         all.insert(new, at: 0)
         try? Persistence.save(all)
-        NotificationCenter.default.post(name: .testRecordAdded, object: nil)
 
+        NotificationCenter.default.post(name: .testRecordAdded, object: nil)
         navigationController?.popViewController(animated: true)
     }
 }
@@ -128,6 +126,6 @@ extension ObservationsViewController: UICollectionViewDataSource, UICollectionVi
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
 
         let width = collectionView.bounds.width - 40
-        return CGSize(width: width, height: 260)
+        return CGSize(width: width, height: 360)
     }
 }
