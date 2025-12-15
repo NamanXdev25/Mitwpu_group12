@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SlideCardCell: UICollectionViewCell {
+class MindfulnessSlideCardCell: UICollectionViewCell {
 
     @IBOutlet weak var cardView: UIView!
     @IBOutlet weak var pageHostView: UIView!

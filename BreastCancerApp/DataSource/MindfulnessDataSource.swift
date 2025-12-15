@@ -57,9 +57,9 @@ class MindfulnessDataSource: NSObject, UICollectionViewDataSource {
 
         case .slideCard:
             let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "SlideCardCell",
+                withReuseIdentifier: "MindfulnessSlideCardCell",
                 for: indexPath
-            ) as! SlideCardCell
+            ) as! MindfulnessSlideCardCell
 
             cell.configure(initialSlidesCount: vc.slides.count)
             return cell
@@ -67,15 +67,15 @@ class MindfulnessDataSource: NSObject, UICollectionViewDataSource {
         case .explore:
             if indexPath.item == 0 {
                 let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: "ExploreLabelCell",
+                    withReuseIdentifier: "MindfulnessExploreLabelCell",
                     for: indexPath
-                ) as! ExploreLabelCell
+                ) as! MindfulnessExploreLabelCell
                 return cell
             } else {
                 let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: "ExploreCell",
+                    withReuseIdentifier: "MindfulnessExploreCell",
                     for: indexPath
-                ) as! ExploreCell
+                ) as! MindfulnessExploreCell
 
                 if indexPath.item == 1 {
                     cell.configure(

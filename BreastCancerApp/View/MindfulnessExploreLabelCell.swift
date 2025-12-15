@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ExploreLabelCell: UICollectionViewCell {
+class MindfulnessExploreLabelCell: UICollectionViewCell {
 
     @IBOutlet weak var titleLabel: UILabel!
     

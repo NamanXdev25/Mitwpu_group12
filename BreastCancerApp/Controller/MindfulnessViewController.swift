@@ -48,17 +48,17 @@ class MindfulnessViewController: UIViewController {
 
         // register cell XIBs
         collectionView.register(
-            UINib(nibName: "ExploreLabelCell", bundle: nil),
-            forCellWithReuseIdentifier: "ExploreLabelCell"
+            UINib(nibName: "MindfulnessExploreLabelCell", bundle: nil),
+            forCellWithReuseIdentifier: "MindfulnessExploreLabelCell"
         )
         collectionView.register(UINib(nibName: "EmotionPickerCell", bundle: nil),
                                 forCellWithReuseIdentifier: "EmotionPickerCell")
 
-        collectionView.register(UINib(nibName: "SlideCardCell", bundle: nil),
-                                forCellWithReuseIdentifier: "SlideCardCell")
+        collectionView.register(UINib(nibName: "MindfulnessSlideCardCell", bundle: nil),
+                                forCellWithReuseIdentifier: "MindfulnessSlideCardCell")
 
-        collectionView.register(UINib(nibName: "ExploreCell", bundle: nil),
-                                forCellWithReuseIdentifier: "ExploreCell")
+        collectionView.register(UINib(nibName: "MindfulnessExploreCell", bundle: nil),
+                                forCellWithReuseIdentifier: "MindfulnessExploreCell")
         
     }
     
@@ -71,7 +71,7 @@ class MindfulnessViewController: UIViewController {
     private func applyFadeGradient() {
         if gradientImageLayer == nil {
             let imageLayer = CALayer()
-            imageLayer.contents = UIImage(named: "HeaderImage")!.cgImage
+            imageLayer.contents = UIImage(named: "MindfulnessHeaderImage")!.cgImage
             imageLayer.contentsGravity = .resizeAspectFill
 
             let maskLayer = CAGradientLayer()
@@ -249,7 +249,7 @@ class MindfulnessViewController: UIViewController {
             MindfulnessSlide(
                 title: hobby.title,
                 description: hobby.description,
-                buttonText: hobby.buttonText ?? "Try",
+                buttonText: hobby.buttonText ?? "Add Photo",
                 action: .addPhoto
             )
         ]
@@ -327,7 +327,7 @@ extension MindfulnessViewController: UICollectionViewDelegate {
                         forItemAt indexPath: IndexPath) {
 
         guard Section(rawValue: indexPath.section) == .slideCard else { return }
-        guard let slideCell = cell as? SlideCardCell else { return }
+        guard let slideCell = cell as? MindfulnessSlideCardCell else { return }
 
         attachPageViewController(to: slideCell.pageHostView,
                                  pageControl: slideCell.pageControl)
@@ -335,7 +335,7 @@ extension MindfulnessViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if Section(rawValue: indexPath.section) == .slideCard,
-           let slideCell = cell as? SlideCardCell {
+           let slideCell = cell as? MindfulnessSlideCardCell {
             if pageVCAttachedToHost === slideCell.pageHostView {
                 detachPageViewController(from: slideCell.pageHostView)
             }

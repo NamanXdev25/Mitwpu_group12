@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ExploreCell: UICollectionViewCell {
+class MindfulnessExploreCell: UICollectionViewCell {
 
     var didTap: (() -> Void)?
     
