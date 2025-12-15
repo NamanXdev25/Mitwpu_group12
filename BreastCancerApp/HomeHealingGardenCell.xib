@@ -54,15 +54,29 @@
                                 <color key="tintColor" systemColor="systemGray2Color"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="chevron.right" catalog="system"/>
+                                <connections>
+                                    <action selector="ChevronTapped:" destination="UFQ-Kk-BQu" eventType="touchUpInside" id="pSR-wH-UsE"/>
+                                </connections>
                             </button>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="hCQ-xQ-MRK">
                                 <rect key="frame" x="16" y="90" width="327" height="4"/>
                                 <color key="progressTintColor" name="TabBarcolour"/>
                             </progressView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="5200 / 6000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NSW-al-AX9">
-                                <rect key="frame" x="282" y="75" width="61" height="12"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="6000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uVT-wR-3tt">
+                                <rect key="frame" x="317" y="76.666666666666671" width="26" height="12"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="/" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gti-kT-Rpv">
+                                <rect key="frame" x="313" y="76" width="4" height="12"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="253" verticalHuggingPriority="251" text="5200" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NSW-al-AX9">
+                                <rect key="frame" x="285" y="76.666666666666671" width="28" height="12"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="10"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -72,20 +86,27 @@
                             <constraint firstItem="3cU-cF-dqs" firstAttribute="top" secondItem="RKn-vI-0tw" secondAttribute="bottom" constant="5" id="0kx-sX-TCG"/>
                             <constraint firstAttribute="bottom" secondItem="hCQ-xQ-MRK" secondAttribute="bottom" constant="16" id="1IZ-K5-Lq5"/>
                             <constraint firstItem="RKn-vI-0tw" firstAttribute="top" secondItem="8Fw-iX-FRF" secondAttribute="top" constant="16" id="1ut-GL-vyD"/>
+                            <constraint firstAttribute="trailing" secondItem="uVT-wR-3tt" secondAttribute="trailing" constant="16" id="1xr-G7-3i2"/>
                             <constraint firstItem="lU9-yM-bls" firstAttribute="top" secondItem="RKn-vI-0tw" secondAttribute="bottom" constant="5" id="3Z6-8b-eOv"/>
+                            <constraint firstItem="uVT-wR-3tt" firstAttribute="top" secondItem="lUW-em-8lu" secondAttribute="bottom" constant="40" id="4wZ-I2-wS7"/>
+                            <constraint firstItem="NSW-al-AX9" firstAttribute="centerY" secondItem="uVT-wR-3tt" secondAttribute="centerY" id="6uq-SH-8DF"/>
                             <constraint firstItem="tvi-KQ-Wn9" firstAttribute="top" secondItem="RKn-vI-0tw" secondAttribute="bottom" constant="5" id="BeJ-Dw-bsM"/>
+                            <constraint firstItem="Gti-kT-Rpv" firstAttribute="top" secondItem="8Fw-iX-FRF" secondAttribute="top" constant="76" id="FsW-qY-2qa"/>
                             <constraint firstItem="RKn-vI-0tw" firstAttribute="leading" secondItem="8Fw-iX-FRF" secondAttribute="leading" constant="16" id="Gmy-D1-bqe"/>
                             <constraint firstAttribute="trailing" secondItem="hCQ-xQ-MRK" secondAttribute="trailing" constant="16" id="Lbv-d3-oG3"/>
                             <constraint firstAttribute="trailing" secondItem="lUW-em-8lu" secondAttribute="trailing" constant="16" id="LjP-l2-yNp"/>
                             <constraint firstItem="hCQ-xQ-MRK" firstAttribute="leading" secondItem="8Fw-iX-FRF" secondAttribute="leading" constant="16" id="Lpn-FR-jDs"/>
+                            <constraint firstItem="uVT-wR-3tt" firstAttribute="leading" secondItem="Gti-kT-Rpv" secondAttribute="trailing" id="MYH-PK-Vbg"/>
                             <constraint firstItem="tvi-KQ-Wn9" firstAttribute="leading" secondItem="8Fw-iX-FRF" secondAttribute="leading" constant="16" id="VLd-Ga-ej7"/>
                             <constraint firstItem="lUW-em-8lu" firstAttribute="centerY" secondItem="RKn-vI-0tw" secondAttribute="centerY" id="aMj-0z-ahH"/>
                             <constraint firstItem="3cU-cF-dqs" firstAttribute="leading" secondItem="lU9-yM-bls" secondAttribute="trailing" constant="3" id="bRr-F0-gjw"/>
                             <constraint firstItem="lU9-yM-bls" firstAttribute="leading" secondItem="8Fw-iX-FRF" secondAttribute="leading" constant="46" id="fYt-s1-Q2h"/>
+                            <constraint firstItem="NSW-al-AX9" firstAttribute="leading" secondItem="8Fw-iX-FRF" secondAttribute="leading" constant="285" id="ojG-5m-pLa"/>
+                            <constraint firstItem="Gti-kT-Rpv" firstAttribute="leading" secondItem="NSW-al-AX9" secondAttribute="trailing" id="v2s-C2-po6"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius ">
-                                <integer key="value" value="16"/>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="13"/>
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </view>
@@ -100,9 +121,16 @@
             </constraints>
             <size key="customSize" width="393" height="110"/>
             <connections>
-                <outlet property="containerView" destination="8Fw-iX-FRF" id="BmP-2y-3uj"/>
-                <outlet property="doctorNameLabel" destination="tvi-KQ-Wn9" id="nfz-iP-znE"/>
-                <outlet property="titleLabel" destination="RKn-vI-0tw" id="Ehc-f5-9vd"/>
+                <outlet property="ChevronButton" destination="lUW-em-8lu" id="brf-34-2cN"/>
+                <outlet property="containerView" destination="8Fw-iX-FRF" id="lxU-OZ-oHA"/>
+                <outlet property="currentProgressLabel" destination="NSW-al-AX9" id="0gd-fu-blY"/>
+                <outlet property="flowerLabel" destination="lU9-yM-bls" id="FGK-dj-PBu"/>
+                <outlet property="levelLabel" destination="3cU-cF-dqs" id="jZp-lx-nFH"/>
+                <outlet property="pointsLabel" destination="tvi-KQ-Wn9" id="Rny-FC-5C4"/>
+                <outlet property="progressView" destination="hCQ-xQ-MRK" id="tJJ-iu-6Ss"/>
+                <outlet property="separatorLabel" destination="Gti-kT-Rpv" id="iW9-LQ-AGx"/>
+                <outlet property="titleLabel" destination="RKn-vI-0tw" id="EgD-q0-gfm"/>
+                <outlet property="totalGoalLabel" destination="uVT-wR-3tt" id="0E2-Kf-949"/>
             </connections>
             <point key="canvasLocation" x="267.93893129770993" y="107.74647887323944"/>
         </collectionViewCell>
