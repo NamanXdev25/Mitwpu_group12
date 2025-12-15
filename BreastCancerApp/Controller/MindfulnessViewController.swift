@@ -40,28 +40,13 @@ class MindfulnessViewController: UIViewController {
         appearance.configureWithTransparentBackground()
         appearance.backgroundColor = .clear
         appearance.shadowColor = .clear
-
-        navigationController?.navigationBar.standardAppearance = appearance
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        navigationController?.navigationBar.compactAppearance = appearance
-
-        navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.largeTitleDisplayMode = .always
-
-        title = "Mindfulness"
         
         collectionView.setCollectionViewLayout(createCompositionalLayout(), animated: false)
-        
-        collectionView.contentInsetAdjustmentBehavior = .never
-        collectionView.contentInset = UIEdgeInsets(top: 132, left: 0, bottom: 0, right: 0)
-
-        
         
         dataSource = MindfulnessDataSource(viewController: self)
         collectionView.dataSource = dataSource
 
         collectionView.delegate = self
-
 
         collectionView.register(
             UINib(nibName: "ExploreLabelCell", bundle: nil),
@@ -270,7 +255,6 @@ class MindfulnessViewController: UIViewController {
         return UICollectionViewCompositionalLayout { sectionIndex, environment -> NSCollectionLayoutSection? in
             
             guard let section = Section(rawValue: sectionIndex) else { return nil }
-
             switch section {
 
             case .explore:
@@ -357,8 +341,6 @@ extension MindfulnessViewController: UICollectionViewDelegate {
             }
         }
     }
-
-    
 }
 
 extension MindfulnessViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {}

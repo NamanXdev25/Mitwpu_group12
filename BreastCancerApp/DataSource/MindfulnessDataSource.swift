@@ -77,7 +77,6 @@ class MindfulnessDataSource: NSObject, UICollectionViewDataSource {
                     withReuseIdentifier: "ExploreLabelCell",
                     for: indexPath
                 ) as! ExploreLabelCell
-                cell.titleLabel.text = "Explore"
                 return cell
             } else {
                 let cell = collectionView.dequeueReusableCell(

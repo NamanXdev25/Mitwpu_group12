@@ -16,5 +16,4 @@ class ExploreLabelCell: UICollectionViewCell {
         // Initialization code
         
     }
-
 }

@@ -9,15 +9,12 @@ import UIKit
 
 class ExploreCell: UICollectionViewCell {
 
-    static let reuseIdentifier = "ExploreCell"
-    
     var didTap: (() -> Void)?
     
     @IBOutlet weak var iconView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var subtitleLabel: UILabel!
     @IBOutlet weak var chevronView: UIImageView!
-    
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -34,6 +31,4 @@ class ExploreCell: UICollectionViewCell {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         didTap?()
     }
-    
-
 }

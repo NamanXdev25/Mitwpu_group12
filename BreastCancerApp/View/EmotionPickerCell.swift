@@ -35,11 +35,16 @@ class EmotionPickerCell: UICollectionViewCell {
         guard let view = sender.view else { return }
 
         switch view {
-        case happyStack:   didSelectEmotion?(0)
-        case sadStack:     didSelectEmotion?(1)
-        case anxiousStack: didSelectEmotion?(2)
-        case tiredStack:   didSelectEmotion?(3)
-        default: break
+        case happyStack:
+            didSelectEmotion?(0)
+        case sadStack:
+            didSelectEmotion?(1)
+        case anxiousStack:
+            didSelectEmotion?(2)
+        case tiredStack:
+            didSelectEmotion?(3)
+        default:
+            break
         }
     }
 }
