@@ -31,7 +31,7 @@ class TestRecordDetailViewController: UIViewController {
         record?.observations.forEach { obs in
             let hStack = UIStackView()
             hStack.axis = .horizontal
-            hStack.spacing = 8
+            hStack.spacing = 0
             hStack.distribution = .fillProportionally
 
             let left = UILabel()

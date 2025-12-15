@@ -170,8 +170,9 @@ extension SelfExamineViewController: GuidesCardCellDelegate {
     }
 
     func guidesCellDidTapAudio(_ cell: GuidesCardCell) {
-        // currently no-op; implement audio screen later
+        performSegue(withIdentifier: "ShowAudioGuide", sender: cell)
     }
+
 }
 
 // MARK: - ActionsContainerCellDelegate

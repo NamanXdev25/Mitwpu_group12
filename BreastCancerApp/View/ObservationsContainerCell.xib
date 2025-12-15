@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -25,34 +24,34 @@
                                 <rect key="frame" x="4" y="0.0" width="398" height="443"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="PHM-7V-HlZ">
-                                        <rect key="frame" x="0.0" y="0.0" width="398" height="173"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="398" height="179"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Observations" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TYg-Bx-Ihr">
-                                                <rect key="frame" x="0.0" y="73.333333333333329" width="398" height="26.333333333333329"/>
-                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="22"/>
+                                                <rect key="frame" x="0.0" y="79.333333333333329" width="398" height="20.333333333333329"/>
+                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
                                     </stackView>
                                     <view contentMode="scaleToFill" verticalHuggingPriority="999" horizontalCompressionResistancePriority="999" verticalCompressionResistancePriority="999" translatesAutoresizingMaskIntoConstraints="NO" id="o4h-5T-1Xk">
-                                        <rect key="frame" x="0.0" y="183" width="398" height="1"/>
-                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <rect key="frame" x="0.0" y="189" width="398" height="1"/>
+                                        <color key="backgroundColor" name="gray"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="1" id="lzK-Bd-nxR"/>
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="iUq-vH-qQE">
-                                        <rect key="frame" x="0.0" y="194" width="398" height="31"/>
+                                        <rect key="frame" x="0.0" y="200" width="398" height="28"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lumps / Thickening?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gSQ-sl-ij3">
-                                                <rect key="frame" x="0.0" y="6" width="341" height="19.333333333333332"/>
+                                                <rect key="frame" x="0.0" y="4.3333333333333428" width="329" height="19.333333333333332"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gBM-Ya-aiT">
-                                                <rect key="frame" x="349" y="0.0" width="51" height="31"/>
+                                                <rect key="frame" x="337" y="0.0" width="63" height="28"/>
                                                 <color key="onTintColor" name="pink"/>
                                                 <connections>
                                                     <action selector="lumpsSwitchChanged:" destination="gTV-IL-0wX" eventType="valueChanged" id="DVb-D0-BAz"/>
@@ -61,14 +60,14 @@
                                         </subviews>
                                     </stackView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bGo-Oa-V1A">
-                                        <rect key="frame" x="0.0" y="235" width="398" height="1"/>
-                                        <color key="backgroundColor" systemColor="opaqueSeparatorColor"/>
+                                        <rect key="frame" x="0.0" y="238" width="398" height="1"/>
+                                        <color key="backgroundColor" name="gray"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="1" id="UWr-t1-g6A"/>
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="3ZU-OP-tmy">
-                                        <rect key="frame" x="0.0" y="246.00000000000003" width="398" height="34.333333333333343"/>
+                                        <rect key="frame" x="0.0" y="249.00000000000003" width="398" height="34.333333333333343"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Skin Changes" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Pn-Dg-nxp">
                                                 <rect key="frame" x="0.0" y="7.6666666666666838" width="325.33333333333331" height="19.333333333333329"/>
@@ -89,14 +88,14 @@
                                         </subviews>
                                     </stackView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m3T-sn-Ohm">
-                                        <rect key="frame" x="0.0" y="290.33333333333331" width="398" height="1"/>
-                                        <color key="backgroundColor" systemColor="opaqueSeparatorColor"/>
+                                        <rect key="frame" x="0.0" y="293.33333333333331" width="398" height="1"/>
+                                        <color key="backgroundColor" name="gray"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="1" id="LCW-iw-LrO"/>
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="rZw-af-mK2">
-                                        <rect key="frame" x="0.0" y="301.33333333333331" width="398" height="34.333333333333314"/>
+                                        <rect key="frame" x="0.0" y="304.33333333333331" width="398" height="34.333333333333314"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nipple changes" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uFS-fZ-EMw">
                                                 <rect key="frame" x="0.0" y="7.6666666666666838" width="325.33333333333331" height="19.333333333333329"/>
@@ -117,23 +116,23 @@
                                         </subviews>
                                     </stackView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Raq-im-3bM">
-                                        <rect key="frame" x="0.0" y="345.66666666666669" width="398" height="1"/>
-                                        <color key="backgroundColor" systemColor="opaqueSeparatorColor"/>
+                                        <rect key="frame" x="0.0" y="348.66666666666669" width="398" height="1"/>
+                                        <color key="backgroundColor" name="gray"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="1" id="6Pq-dx-a7Z"/>
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DKH-02-IOG">
-                                        <rect key="frame" x="0.0" y="356.66666666666669" width="398" height="31"/>
+                                        <rect key="frame" x="0.0" y="359.66666666666669" width="398" height="28"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Size / shape changes?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Vf-Q4-ka7">
-                                                <rect key="frame" x="0.0" y="0.0" width="349" height="31"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="337" height="28"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NXi-49-yp5">
-                                                <rect key="frame" x="349" y="0.0" width="51" height="31"/>
+                                                <rect key="frame" x="337" y="0.0" width="63" height="28"/>
                                                 <color key="onTintColor" name="pink"/>
                                                 <connections>
                                                     <action selector="sizeSwitchChanged:" destination="gTV-IL-0wX" eventType="valueChanged" id="BoL-ye-wEh"/>
@@ -143,7 +142,7 @@
                                     </stackView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xmV-Zg-UHu">
                                         <rect key="frame" x="0.0" y="397.66666666666669" width="398" height="1"/>
-                                        <color key="backgroundColor" systemColor="opaqueSeparatorColor"/>
+                                        <color key="backgroundColor" name="gray"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="1" id="xWU-pN-KoX"/>
                                         </constraints>
@@ -211,8 +210,5 @@
         <namedColor name="pink">
             <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
-        <systemColor name="opaqueSeparatorColor">
-            <color red="0.77647058823529413" green="0.77647058823529413" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
     </resources>
 </document>

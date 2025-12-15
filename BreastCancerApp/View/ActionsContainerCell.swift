@@ -26,7 +26,7 @@ class ActionsContainerCell: UICollectionViewCell {
         logButton.setTitleColor(.white, for: .normal)
 
         // View Past Tests button
-        pastButton.setTitle("View past tests", for: .normal)
+        //pastButton.setTitle("View past tests", for: .normal)
         pastButton.setTitleColor(UIColor(named: "pink") ?? .systemPink, for: .normal)
         pastButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         pastButton.backgroundColor = .clear

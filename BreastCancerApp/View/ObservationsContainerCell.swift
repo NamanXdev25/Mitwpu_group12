@@ -1,6 +1,12 @@
+//
+// ObservationsContainerCell.swift
+//
+
 import UIKit
 
 class ObservationsContainerCell: UICollectionViewCell {
+    // Connect these outlets in your XIB
+    @IBOutlet weak var headerLabel: UILabel?       // optional; connect if present in nib
     @IBOutlet weak var lumpsSwitch: UISwitch!
     @IBOutlet weak var skinChangesButton: UIButton!
     @IBOutlet weak var nippleChangesButton: UIButton!
@@ -37,9 +43,18 @@ class ObservationsContainerCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        lumpsSwitch.accessibilityLabel = "Lumps or thickening"
+        // --- Make entire cell transparent so the pink page shows through ---
+        backgroundColor = .clear
+        contentView.backgroundColor = .clear
 
-        // restore saved values (safe defaults)
+        // Keep a neat header if present
+        if let header = headerLabel {
+            header.font = .systemFont(ofSize: 17, weight: .semibold)
+            header.text = "Observations"
+            header.textColor = UIColor(named: "mutedHeader") ?? UIColor.gray
+        }
+
+        // Restore saved/default values
         let dict = UserDefaults.standard.dictionary(forKey: "latestObservations") ?? [:]
         let savedSkin = (dict["skinChanges"] as? String) ?? "None"
         let savedNipple = (dict["nippleChanges"] as? String) ?? "None"
@@ -63,6 +78,7 @@ class ObservationsContainerCell: UICollectionViewCell {
         lumpsSwitch.isOn = savedLumps
         sizeSwitch.isOn = savedSize
 
+        // Ensure buttons show their menus (UIMenu)
         configureMenus()
     }
 

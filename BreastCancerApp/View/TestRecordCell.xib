@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -43,7 +43,6 @@
                                 <rect key="frame" x="0.0" y="41" width="345" height="296"/>
                             </stackView>
                         </subviews>
-                        <color key="backgroundColor" name="bg"/>
                         <constraints>
                             <constraint firstItem="Jrd-7c-k79" firstAttribute="centerY" secondItem="4Ug-OA-62G" secondAttribute="centerY" id="8E7-vD-bl7"/>
                             <constraint firstAttribute="trailing" secondItem="4Ug-OA-62G" secondAttribute="trailing" constant="12" id="8Qy-w8-7xv"/>
@@ -65,6 +64,7 @@
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <color key="tintColor" name="bg"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="4HU-N6-Yfk" secondAttribute="bottom" constant="8" id="HSP-gg-yFZ"/>
                 <constraint firstAttribute="trailing" secondItem="4HU-N6-Yfk" secondAttribute="trailing" constant="16" id="NXQ-Ez-MF6"/>

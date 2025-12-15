@@ -1,12 +1,12 @@
-// TestRecordCell.swift
 import UIKit
 
 class TestRecordCell: UICollectionViewCell {
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var chevronButton: UIButton!
-    @IBOutlet weak var itemsStack: UIStackView!          // vertical; holds detailsContainer when expanded
+    @IBOutlet weak var itemsStack: UIStackView!
 
     var onChevronTap: (() -> Void)?
+    var onRequestDelete: (() -> Void)?
 
     private weak var detailsContainer: UIView?
     private weak var detailsStack: UIStackView?
@@ -14,6 +14,15 @@ class TestRecordCell: UICollectionViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
+
+        // CELL MUST BE TRANSPARENT (pink background shows through)
+        backgroundColor = .clear
+        contentView.backgroundColor = .clear
+        isOpaque = false
+        backgroundView = nil
+        let sbg = UIView()
+        sbg.backgroundColor = .clear
+        selectedBackgroundView = sbg
 
         itemsStack.axis = .vertical
         itemsStack.spacing = 8
@@ -24,7 +33,6 @@ class TestRecordCell: UICollectionViewCell {
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
         chevronButton.translatesAutoresizingMaskIntoConstraints = false
 
-        // Divider under each date row
         let sep = UIView()
         sep.translatesAutoresizingMaskIntoConstraints = false
         sep.backgroundColor = UIColor(white: 0.93, alpha: 1)
@@ -32,44 +40,53 @@ class TestRecordCell: UICollectionViewCell {
         self.separator = sep
 
         NSLayoutConstraint.activate([
-            // TIGHT TOP SPACING
-            dateLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            dateLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
             dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
 
             chevronButton.centerYAnchor.constraint(equalTo: dateLabel.centerYAnchor),
             chevronButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             dateLabel.trailingAnchor.constraint(lessThanOrEqualTo: chevronButton.leadingAnchor, constant: -8),
 
-            // SHRINKED GAP LIKE FIGMA
-            itemsStack.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 4),
+            itemsStack.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 6),
             itemsStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             itemsStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            itemsStack.bottomAnchor.constraint(lessThanOrEqualTo: sep.topAnchor, constant: -4),
+            itemsStack.bottomAnchor.constraint(lessThanOrEqualTo: sep.topAnchor, constant: -8),
 
-            // Divider
             sep.heightAnchor.constraint(equalToConstant: 1),
             sep.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             sep.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             sep.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
 
-        // Chevron color from Assets (template)
         if let img = chevronButton.image(for: .normal)?.withRenderingMode(.alwaysTemplate) {
             chevronButton.setImage(img, for: .normal)
         }
         chevronButton.tintColor = UIColor(named: "ChevronGray") ?? .systemGray
 
+        // Swipe-to-delete gesture (controller handles delete)
+        let swipe = UISwipeGestureRecognizer(target: self, action: #selector(didSwipeLeft(_:)))
+        swipe.direction = .left
+        contentView.addGestureRecognizer(swipe)
+
         clearDetails()
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        clearDetails()
+        chevronButton.transform = .identity
     }
 
     private func clearDetails() {
         detailsContainer?.removeFromSuperview()
         detailsContainer = nil
         detailsStack = nil
+        itemsStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
     }
 
     func configureDate(_ date: Date, details: [ObservationItem]? = nil) {
-        let df = DateFormatter(); df.dateStyle = .medium
+        let df = DateFormatter()
+        df.dateStyle = .medium
         dateLabel.text = df.string(from: date)
 
         clearDetails()
@@ -79,15 +96,14 @@ class TestRecordCell: UICollectionViewCell {
             return
         }
 
-        // container card
         let container = UIView()
         container.backgroundColor = .white
+        container.layer.cornerRadius = 12
+        container.layer.cornerCurve = .continuous
         container.translatesAutoresizingMaskIntoConstraints = false
 
         let vstack = UIStackView()
         vstack.axis = .vertical
-        vstack.alignment = .fill
-        vstack.distribution = .fill
         vstack.spacing = 0
         vstack.translatesAutoresizingMaskIntoConstraints = false
 
@@ -102,77 +118,51 @@ class TestRecordCell: UICollectionViewCell {
         for (i, obs) in details.enumerated() {
             let row = UIStackView()
             row.axis = .horizontal
-            row.alignment = .center
-            row.distribution = .fill
             row.spacing = 8
-            row.translatesAutoresizingMaskIntoConstraints = false
 
             let left = UILabel()
             left.text = obs.title
             left.font = .systemFont(ofSize: 16)
-            left.numberOfLines = 1
-            left.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
 
             let right = UILabel()
             right.text = obs.value
             right.font = .systemFont(ofSize: 16)
-            right.numberOfLines = 1
             right.textAlignment = .right
-            right.setContentCompressionResistancePriority(.required, for: .horizontal)
 
             row.addArrangedSubview(left)
             row.addArrangedSubview(right)
-
-            // consistent row height
             row.heightAnchor.constraint(equalToConstant: 44).isActive = true
 
             vstack.addArrangedSubview(row)
 
             if i < details.count - 1 {
-                let divider = UIView()
-                divider.translatesAutoresizingMaskIntoConstraints = false
-                divider.heightAnchor.constraint(equalToConstant: 1).isActive = true
-                divider.backgroundColor = UIColor(white: 0.93, alpha: 1)
-                vstack.addArrangedSubview(divider)
+                let d = UIView()
+                d.backgroundColor = UIColor(white: 0.93, alpha: 1)
+                d.heightAnchor.constraint(equalToConstant: 1).isActive = true
+                vstack.addArrangedSubview(d)
             }
         }
 
-        // add container to itemsStack so ordering remains; pin container to contentView to control full width (8pt insets)
         itemsStack.addArrangedSubview(container)
-        NSLayoutConstraint.activate([
-            container.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
-            container.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8)
-        ])
-
-        // ensure corner rendering after layout
-        contentView.layoutIfNeeded()
-        container.layer.cornerCurve = .continuous
-        container.layer.cornerRadius = 12
-        container.layer.masksToBounds = true
-        container.clipsToBounds = true
-
         detailsContainer = container
         detailsStack = vstack
 
         rotateChevron(down: true, animated: false)
-        contentView.setNeedsLayout()
-        contentView.layoutIfNeeded()
     }
 
     private func rotateChevron(down: Bool, animated: Bool) {
-        let transform = down ? CGAffineTransform(rotationAngle: .pi / 2) : .identity
-        if animated {
-            UIView.animate(withDuration: 0.22) { [weak self] in
-                self?.chevronButton.transform = transform
-            }
-        } else {
-            chevronButton.transform = transform
-        }
+        let transform = down ? CGAffineTransform(rotationAngle: .pi/2) : .identity
+        if animated { UIView.animate(withDuration: 0.22) { self.chevronButton.transform = transform } }
+        else { chevronButton.transform = transform }
     }
 
     @IBAction func chevronTapped(_ sender: UIButton) {
         let isDown = sender.transform != .identity
         rotateChevron(down: !isDown, animated: true)
         onChevronTap?()
+    }
+
+    @objc private func didSwipeLeft(_ g: UISwipeGestureRecognizer) {
+        onRequestDelete?()
     }
 }

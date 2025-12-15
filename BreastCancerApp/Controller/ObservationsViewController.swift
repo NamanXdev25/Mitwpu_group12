@@ -1,4 +1,7 @@
+//
 // ObservationsViewController.swift
+//
+
 import UIKit
 
 protocol ObservationsCollector {
@@ -8,51 +11,84 @@ protocol ObservationsCollector {
 class ObservationsViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
 
+    // ---------- NEW: outlet for storyboard bar button ----------
+    @IBOutlet weak var doneBarButton: UIBarButtonItem!
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Title
+        // ---------- Transparent Navigation Bar ----------
+        if let navBar = navigationController?.navigationBar {
+            if #available(iOS 13.0, *) {
+                let appearance = UINavigationBarAppearance()
+                appearance.configureWithTransparentBackground()
+                appearance.backgroundColor = .clear
+                appearance.backgroundEffect = nil
+                appearance.shadowColor = .clear
+
+                navBar.standardAppearance = appearance
+                navBar.scrollEdgeAppearance = appearance
+                navBar.compactAppearance = appearance
+            } else {
+                navBar.setBackgroundImage(UIImage(), for: .default)
+                navBar.shadowImage = UIImage()
+                navBar.isTranslucent = true
+                navBar.backgroundColor = .clear
+            }
+
+            navBar.isTranslucent = true
+        }
+
+        // ---------- Title ----------
         let titleLabel = UILabel()
         titleLabel.text = "Your Observations"
         titleLabel.font = .systemFont(ofSize: 17, weight: .semibold)
         titleLabel.textAlignment = .center
         navigationItem.titleView = titleLabel
 
-        // Done button
-        let doneBtn = UIButton(type: .custom)
-        doneBtn.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
-        doneBtn.layer.cornerRadius = 22
-        doneBtn.backgroundColor = UIColor(named: "pink") ?? .systemPink
-        doneBtn.setImage(UIImage(systemName: "checkmark"), for: .normal)
-        doneBtn.tintColor = .white
-        doneBtn.addTarget(self, action: #selector(doneTapped), for: .touchUpInside)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: doneBtn)
+        // ---------- Background ----------
+        let pagePink = UIColor(named: "BGPink") ??
+            UIColor(red: 0.98, green: 0.95, blue: 0.96, alpha: 1.0)
+        view.backgroundColor = pagePink
 
-        // Cell registration
+        // ---------- NOTE ----------
+        // The previous programmatic tick-button creation has been removed.
+        // A UIBarButtonItem is now added in the storyboard and connected to
+        // the `doneBarButton` outlet. Its action (see below) calls `doneTapped()`.
+
+        // ---------- Collection View ----------
+        collectionView.backgroundColor = .clear
+        collectionView.contentInsetAdjustmentBehavior = .automatic
+        collectionView.alwaysBounceVertical = true
+
         let nib = UINib(nibName: "ObservationsContainerCell", bundle: nil)
         collectionView.register(nib, forCellWithReuseIdentifier: "ObservationsContainerCell")
         collectionView.dataSource = self
         collectionView.delegate = self
 
         if let flow = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            flow.sectionInset = UIEdgeInsets(top: 24, left: 4, bottom: 0, right: 4)
-            flow.minimumInteritemSpacing = 0
+            flow.sectionInset = UIEdgeInsets(top: 12, left: 20, bottom: 0, right: 20)
             flow.minimumLineSpacing = 0
-            collectionView.collectionViewLayout.invalidateLayout()
+            flow.minimumInteritemSpacing = 0
+            flow.invalidateLayout()
         }
     }
 
+    // ---------- IBAction wired from storyboard ----------
+    @IBAction func doneBarButtonTapped(_ sender: UIBarButtonItem) {
+        // keep same behavior; reuse the existing function
+        doneTapped()
+    }
+
+    // ---------- Done Action (unchanged) ----------
     @objc func doneTapped() {
-        // Try to extract observations from the visible cell
         var observations: [ObservationItem] = []
 
-        if let cell = collectionView.visibleCells.first {
-            if let collector = cell as? ObservationsCollector {
-                observations = collector.collectObservations()
-            }
+        if let cell = collectionView.visibleCells.first,
+           let collector = cell as? ObservationsCollector {
+            observations = collector.collectObservations()
         }
 
-        // Fallback safe defaults if collector not available or returned empty
         if observations.isEmpty {
             observations = [
                 ObservationItem(title: "Lumps/Thickening", value: "No"),
@@ -63,19 +99,19 @@ class ObservationsViewController: UIViewController {
             ]
         }
 
-        // Persist and notify
         let new = TestRecord(id: UUID(), date: Date(), observations: observations)
         var all = Persistence.load()
         all.insert(new, at: 0)
         try? Persistence.save(all)
         NotificationCenter.default.post(name: .testRecordAdded, object: nil)
 
-        // Return to previous screen
         navigationController?.popViewController(animated: true)
     }
 }
 
+// ---------- Collection ----------
 extension ObservationsViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int { 1 }
 
     func collectionView(_ collectionView: UICollectionView,
@@ -91,7 +127,7 @@ extension ObservationsViewController: UICollectionViewDataSource, UICollectionVi
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
 
-        let width = collectionView.bounds.width - 8
-        return CGSize(width: width, height: 390)
+        let width = collectionView.bounds.width - 40
+        return CGSize(width: width, height: 260)
     }
 }
