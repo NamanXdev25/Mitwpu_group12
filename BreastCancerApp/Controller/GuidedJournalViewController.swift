@@ -13,7 +13,6 @@ class GuidedJournalViewController: UIViewController {
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var questionLabel: UILabel!
     @IBOutlet weak var textView: UITextView!
-    @IBOutlet weak var toolbarBottomConstraint: NSLayoutConstraint!
     
     // variables
     var existingEntry: JournalEntry?
@@ -32,32 +31,16 @@ class GuidedJournalViewController: UIViewController {
         textView.delegate = self
         categoryLabel.text = categoryText
         questionLabel.text = questionText
-
-        // keyboard
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillShow),
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil
-        )
-
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillHide),
-            name: UIResponder.keyboardWillHideNotification,
-            object: nil
-        )
         
         if let question = GuidedReflectionDataSource.shared.getTodaysQuestion() {
             updateUI(with: question)
         }
         
         if let entry = existingEntry {
-            navigationItem.title = formattedJournalDate(entry.date)
+            navigationItem.title = entry.formattedDateTitle
             categoryLabel.text = entry.category?.uppercased()
             questionLabel.text = entry.question
             textView.text = entry.body
-            textView.textColor = .label
         }
         
         GuidedReflectionDataSource.shared.refreshIfNeeded()
@@ -76,41 +59,8 @@ class GuidedJournalViewController: UIViewController {
         guard let tags = question.tags, !tags.isEmpty else {
             return categoryText
         }
-
         let tagsText = tags.map { $0.uppercased() }.joined(separator: ", ")
         return "\(categoryText) • \(tagsText)"
-    }
-    
-    // formatted date
-    func formattedJournalDate(_ date: Date) -> String {
-        let calendar = Calendar.current
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-
-        // If same year
-        let thisYear = calendar.component(.year, from: Date())
-        let entryYear = calendar.component(.year, from: date)
-
-        if thisYear == entryYear {
-            formatter.setLocalizedDateFormatFromTemplate("EEE, MMM d")
-            return formatter.string(from: date)
-        }
-
-        // If previous year
-        formatter.setLocalizedDateFormatFromTemplate("MMM d, yyyy")
-        return formatter.string(from: date)
-    }
-
-    // keyboard functions
-    @objc func keyboardWillShow(_ notification: Notification) {
-        if let frame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
-            toolbarBottomConstraint.constant = frame.height + 8
-            view.layoutIfNeeded()
-        }
-    }
-    @objc func keyboardWillHide(_ notification: Notification) {
-        toolbarBottomConstraint.constant = 16
-        view.layoutIfNeeded()
     }
     
     // IBActions
@@ -139,17 +89,8 @@ class GuidedJournalViewController: UIViewController {
             )
             JournalStore.shared.add(newEntry)
         }
-
         navigationController?.popViewController(animated: true)
     }
-    
-    // toolbar buttons
-    @IBAction func textFormatTapped(_ sender: UIButton) {}
-    @IBAction func bulletTapped(_ sender: UIButton) {}
-    @IBAction func tableTapped(_ sender: UIButton) {}
-    @IBAction func attachTapped(_ sender: UIButton) {}
-    @IBAction func alignmentTapped(_ sender: UIButton) {}
-
 }
 
 extension GuidedJournalViewController: UITextViewDelegate {
@@ -180,7 +121,6 @@ extension GuidedJournalViewController: UITextViewDelegate {
     func textView(_ textView: UITextView,
                   shouldChangeTextIn range: NSRange,
                   replacementText text: String) -> Bool {
-
         let maxBodyLength = 1500
         let current = textView.text ?? ""
         let newLength = current.count + text.count - range.length

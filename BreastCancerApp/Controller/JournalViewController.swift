@@ -11,10 +11,10 @@ class JournalViewController: UIViewController {
     
     //IBOutlets
     @IBOutlet weak var collectionView: UICollectionView!
-    
+    @IBOutlet weak var addButton: UIButton!
+
     enum Section: Int, CaseIterable {
         case streak
-        //case stats
         case actions
         case recents
     }
@@ -32,17 +32,17 @@ class JournalViewController: UIViewController {
         JournalStore.shared.entries.journalsThisWeek
     }
     
-    private var addButton: UIButton!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        setupFloatingAddButton()
+
         // UI (color/screen-title)
         view.backgroundColor = UIColor(named: "BackgroundColor")
         navigationItem.title = "Journal"
         collectionView.backgroundColor = UIColor(named: "BackgroundColor")
         
+        // build layout & register cells (XIBs)
+        setupCollectionView()
+
         // initialising data source
         journalDataSource = JournalDataSource(
             collectionView: collectionView,
@@ -51,8 +51,21 @@ class JournalViewController: UIViewController {
             streak: streak,
             thisWeekCount: thisWeekCount
         )
+
+        setupDataSourceCallbacks()
         
-        // journalDataSource callbacks
+        // create initial snapshot
+        journalDataSource.applySnapshot()
+    }
+    
+    // viewWillAppear
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        refreshSnapshot()
+    }
+    
+    private func setupDataSourceCallbacks() {
         journalDataSource.didTapSeeAll = { [weak self] in
             self?.openAllJournals()
         }
@@ -66,28 +79,14 @@ class JournalViewController: UIViewController {
         }
         journalDataSource.didTapDelete = { [weak self] entry in
             JournalStore.shared.delete(entry)
-            self?.reloadData()
+            self?.refreshSnapshot()
         }
         journalDataSource.didTapEdit = { [weak self] entry in
             self?.openEntry(entry)
         }
-        
-        // create initial snapshot
-        journalDataSource.applySnapshot()
-        
-        // build layout & register cells (XIBs)
-        setupCollectionView()
-        
-    }
-    
-    // viewWillAppear
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        reloadData()
     }
 
-    func reloadData() {
+    func refreshSnapshot() {
         journalDataSource.update(
             entries: entries,
             streak: streak,
@@ -97,11 +96,9 @@ class JournalViewController: UIViewController {
         
     func handleGuidedJournalTap() {
         if let todayEntry = JournalStore.shared.entries.todayGuidedEntry() {
-            // if already wrote today's guided journal
-            openEntry(todayEntry)
+            openEntry(todayEntry)   // if already wrote today's guided journal
         } else {
-            // if first time today
-            openGuidedJournal()
+            openGuidedJournal()     // if first time today
         }
     }
     
@@ -149,31 +146,6 @@ class JournalViewController: UIViewController {
             navigationController?.pushViewController(vc, animated: true)
         }
     }
-
-    func setupFloatingAddButton() {
-        let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = UIColor(named: "PrimaryColor")
-        button.tintColor = .white
-        button.setImage(UIImage(systemName: "plus"), for: .normal)
-        button.layer.cornerRadius = 28
-        button.layer.shadowColor = UIColor.black.cgColor
-        button.layer.shadowOpacity = 0.2
-        button.layer.shadowRadius = 6
-        button.layer.shadowOffset = CGSize(width: 0, height: 4)
-        
-        button.addTarget(self, action: #selector(addJournalTapped), for: .touchUpInside)
-        view.addSubview(button)
-        
-        NSLayoutConstraint.activate([
-            button.widthAnchor.constraint(equalToConstant: 56),
-            button.heightAnchor.constraint(equalToConstant: 56),
-            button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            button.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
-        ])
-        
-        self.addButton = button
-    }
     
     @IBAction func calendarTapped(_ sender: UIBarButtonItem) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -184,17 +156,12 @@ class JournalViewController: UIViewController {
         present(nav, animated: true)
     }
     
-    @objc func addJournalTapped() {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = storyboard.instantiateViewController(
-            withIdentifier: "BlankJournalViewController"
-        ) as! BlankJournalViewController
-        navigationController?.pushViewController(vc, animated: true)
+    @IBAction func addJournalTapped() {
+        openBlankJournal()
     }
 }
 
 extension JournalViewController {
-
     private func setupCollectionView() {
 
         // Compositional Layout for all sections
@@ -297,23 +264,17 @@ extension JournalViewController {
                 group.contentInsets = .init(top: 0, leading: 16, bottom: 8, trailing: 16)
 
                 let section = NSCollectionLayoutSection(group: group)
-
-
                 let headerSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1.0),
                     heightDimension: .absolute(44)
                 )
-
                 let header = NSCollectionLayoutBoundarySupplementaryItem(
                     layoutSize: headerSize,
                     elementKind: UICollectionView.elementKindSectionHeader,
                     alignment: .top
                 )
-
                 section.boundarySupplementaryItems = [header]
-
                 return section
-
             }
         }
 
@@ -324,22 +285,18 @@ extension JournalViewController {
             UINib(nibName: "JournalStreakCell", bundle: nil),
             forCellWithReuseIdentifier: JournalStreakCell.reuseIdentifier
         )
-        
         collectionView.register(
             UINib(nibName: "JournalStatsCell", bundle: nil),
             forCellWithReuseIdentifier: JournalStatsCell.reuseIdentifier
         )
-        
         collectionView.register(
             UINib(nibName: "JournalActionCell", bundle: nil),
             forCellWithReuseIdentifier: JournalActionCell.reuseIdentifier
         )
-        
         collectionView.register(
             UINib(nibName: "RecentJournalCell", bundle: nil),
             forCellWithReuseIdentifier: RecentJournalCell.reuseIdentifier
         )
-        
         collectionView.register(
             UINib(nibName: "JournalSectionHeaderView", bundle: nil),
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
@@ -356,5 +313,3 @@ extension JournalViewController: UICollectionViewDelegate {
         }
     }
 }
-
-

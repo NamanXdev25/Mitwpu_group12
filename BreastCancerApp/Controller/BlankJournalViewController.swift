@@ -12,7 +12,6 @@ class BlankJournalViewController: UIViewController {
     // IBOutlets
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var textView: UITextView!
-    @IBOutlet weak var toolbarBottomConstraint: NSLayoutConstraint!
     
     // variables
     var existingEntry: JournalEntry?
@@ -27,8 +26,7 @@ class BlankJournalViewController: UIViewController {
         navigationItem.title = "New Journal"
         
         if let entry = existingEntry {
-            navigationItem.title = formattedJournalDate(entry.date)
-
+            navigationItem.title = entry.formattedDateTitle
             titleField.text = entry.title
             textView.text = entry.body
             textView.textColor = .label
@@ -38,42 +36,8 @@ class BlankJournalViewController: UIViewController {
         titleField.delegate = self
         textView.delegate = self
         
-        // keyboard
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillShow),
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillHide),
-            name: UIResponder.keyboardWillHideNotification,
-            object: nil
-        )
-        
         // function calls
         setupPlaceholder()
-    }
-    
-    // date formatting
-    func formattedJournalDate(_ date: Date) -> String {
-        let calendar = Calendar.current
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-
-        // If same year
-        let thisYear = calendar.component(.year, from: Date())
-        let entryYear = calendar.component(.year, from: date)
-
-        if thisYear == entryYear {
-            formatter.setLocalizedDateFormatFromTemplate("EEE, MMM d")   // Fri, Dec 12
-            return formatter.string(from: date)
-        }
-
-        // If previous year
-        formatter.setLocalizedDateFormatFromTemplate("MMM d, yyyy")      // Dec 12, 2024
-        return formatter.string(from: date)
     }
     
     // placeholder function
@@ -81,18 +45,6 @@ class BlankJournalViewController: UIViewController {
         guard existingEntry == nil else { return }
         textView.text = placeholderText
         textView.textColor = UIColor.systemGray3
-    }
-    
-    // keyboard functions
-    @objc func keyboardWillShow(_ notification: Notification) {
-        if let frame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
-            toolbarBottomConstraint.constant = frame.height + 8
-            view.layoutIfNeeded()
-        }
-    }
-    @objc func keyboardWillHide(_ notification: Notification) {
-        toolbarBottomConstraint.constant = 16
-        view.layoutIfNeeded()
     }
     
     // IBActions
@@ -132,13 +84,6 @@ class BlankJournalViewController: UIViewController {
         }
         navigationController?.popViewController(animated: true)
     }
-    
-    // toolbar buttons
-    @IBAction func textFormatTapped(_ sender: UIButton) {}
-    @IBAction func bulletTapped(_ sender: UIButton) {}
-    @IBAction func imageTapped(_ sender: UIButton) {}
-    @IBAction func cameraTapped(_ sender: UIButton) {}
-    @IBAction func alignmentTapped(_ sender: UIButton) {}
 }
 
 extension BlankJournalViewController: UITextFieldDelegate, UITextViewDelegate {

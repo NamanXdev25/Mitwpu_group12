@@ -51,5 +51,20 @@ extension JournalEntry {
         formatter.dateStyle = .medium
         return formatter.string(from: date)
     }
-}
+    
+    var formattedDateTitle: String {
+        let calendar = Calendar.current
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
 
+        let thisYear = calendar.component(.year, from: Date())
+        let entryYear = calendar.component(.year, from: date)
+
+        if thisYear == entryYear {
+            formatter.setLocalizedDateFormatFromTemplate("EEE, MMM d")
+        } else {
+            formatter.setLocalizedDateFormatFromTemplate("MMM d, yyyy")
+        }
+        return formatter.string(from: date)
+    }
+}
