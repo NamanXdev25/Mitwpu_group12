@@ -1,10 +1,3 @@
-//
-//  VideoPlayerCell.swift
-//  BreastCancerApp
-//
-//  Created by Naman Bhansali on 09/12/25.
-//
-
 import UIKit
 
 class VideoPlayerCell: UICollectionViewCell {

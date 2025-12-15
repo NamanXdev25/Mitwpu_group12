@@ -1,10 +1,3 @@
-//
-//  ExerciseDetailModel.swift
-//  BreastCancerApp
-//
-//  Created by Naman Bhansali on 08/12/25.
-//
-
 import Foundation
 
 // 1. Represents a single exercise row (Item)

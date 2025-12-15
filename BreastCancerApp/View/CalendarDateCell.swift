@@ -1,10 +1,3 @@
-//
-//  CalendarDateCell.swift
-//  BreastCancerApp
-//
-//  Created by Naman Bhansali on 27/11/25.
-//
-
 import UIKit
 
 class CalendarDateCell: UICollectionViewCell {

@@ -1,11 +1,3 @@
-//
-//  AddExerciseViewController.swift
-//  BreastCancerApp
-//
-//  Created by Naman Bhansali on 29/11/25.
-//
-
-
 import UIKit
 
 protocol AddExerciseDelegate: AnyObject {

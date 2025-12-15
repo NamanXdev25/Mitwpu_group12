@@ -1,10 +1,3 @@
-//
-//  WarningCell.swift
-//  BreastCancerApp
-//
-//  Created by Naman Bhansali on 26/11/25.
-//
-
 import UIKit
 
 class WarningCell: UICollectionViewCell {

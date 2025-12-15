@@ -1,10 +1,3 @@
-//
-//  ExerciseCell.swift
-//  xyz
-//
-//  Created by Naman Bhansali on 26/11/25.
-//
-
 import UIKit
 
 class ExerciseCell: UICollectionViewCell {

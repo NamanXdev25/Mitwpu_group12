@@ -1,10 +1,3 @@
-//
-//  PlanCell.swift
-//  BreastCancerApp
-//
-//  Created by Naman Bhansali on 26/11/25.
-//
-
 import UIKit
 
 class PlanCell: UICollectionViewCell {
@@ -15,7 +8,6 @@ class PlanCell: UICollectionViewCell {
     @IBOutlet weak var checkButton: UIButton!
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var separatorView: UIView!
-  //  @IBOutlet weak var chevronButton: UIButton!
     
     // --- NEW OUTLET ---
     @IBOutlet weak var clockIcon: UIImageView!
@@ -39,20 +31,12 @@ class PlanCell: UICollectionViewCell {
         // 3. Clock Icon Style
         clockIcon.tintColor = .systemGray
         clockIcon.contentMode = .scaleAspectFit
-        
-        // 4. Chevron Style
-        //let config = UIImage.SymbolConfiguration(pointSize: 14, weight: .semibold)
-       // chevronButton.setImage(UIImage(systemName: "chevron.right", withConfiguration: config), for: .normal)
-        //chevronButton.tintColor = .systemGray3
     }
 
     @IBAction func checkButtonTapped(_ sender: Any) {
         onToggle?()
     }
     
-    //@IBAction func chevronTapped(_ sender: Any) {
-       // onNavigate?()
-   // }
     
     func configure(with item: PlanItem) {
         titleLabel.text = item.title
