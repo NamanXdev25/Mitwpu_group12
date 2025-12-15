@@ -8,10 +8,7 @@
 import UIKit
 
 class MindfulnessDataSource: NSObject, UICollectionViewDataSource {
-
     weak var viewController: MindfulnessViewController?
-    
-
 
     init(viewController: MindfulnessViewController) {
         self.viewController = viewController
@@ -39,16 +36,12 @@ class MindfulnessDataSource: NSObject, UICollectionViewDataSource {
         }
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath)
-        -> UICollectionViewCell {
-
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let vc = viewController else {
             fatalError("Missing VC")
         }
 
         let sec = MindfulnessViewController.Section(rawValue: indexPath.section)!
-
         switch sec {
 
         case .emotions:
@@ -57,8 +50,8 @@ class MindfulnessDataSource: NSObject, UICollectionViewDataSource {
                 for: indexPath
             ) as! EmotionPickerCell
 
-            cell.didSelectEmotion = { index in
-                vc.handleEmotionTap(index)
+            cell.didSelectEmotion = { [weak vc] index in
+                vc?.handleEmotionTap(index)
             }
             return cell
 
@@ -90,7 +83,6 @@ class MindfulnessDataSource: NSObject, UICollectionViewDataSource {
                         subtitle: "Short guided sessions to help you relax and manage anxiety",
                         icon: UIImage(named: "Breathing")!
                     )
-
                 } else {
                     cell.configure(
                         title: "Journaling",
@@ -98,7 +90,6 @@ class MindfulnessDataSource: NSObject, UICollectionViewDataSource {
                         icon: UIImage(named: "Journal")!
                     )
                 }
-
                 return cell
             }
         }

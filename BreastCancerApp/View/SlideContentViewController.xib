@@ -22,7 +22,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="huI-eN-hzL">
-                    <rect key="frame" x="16" y="126" width="361" height="79"/>
+                    <rect key="frame" x="16" y="126" width="361" height="124.33333333333331"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vOx-ZG-IAI" userLabel="TitleLabel">
                             <rect key="frame" x="0.66666666666665719" y="0.0" width="360" height="30"/>
@@ -35,7 +35,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jFH-0I-AyP" userLabel="DescriptionLabel">
-                            <rect key="frame" x="0.66666666666665719" y="30" width="360" height="17"/>
+                            <rect key="frame" x="0.66666666666665719" y="30" width="360" height="60"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="60" id="1z6-Jb-fMK"/>
                                 <constraint firstAttribute="width" constant="360" id="XpN-ty-lsM"/>
@@ -45,7 +45,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a8h-cy-ukq">
-                            <rect key="frame" x="143" y="47" width="75" height="32"/>
+                            <rect key="frame" x="143" y="90" width="75" height="34.333333333333343"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="32" id="TZP-hC-VhT"/>
                             </constraints>

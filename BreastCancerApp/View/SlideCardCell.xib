@@ -58,6 +58,11 @@
                 <constraint firstItem="CVV-53-7gu" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="16" id="ae2-Fs-xhB"/>
             </constraints>
             <size key="customSize" width="292" height="214"/>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                    <integer key="value" value="13"/>
+                </userDefinedRuntimeAttribute>
+            </userDefinedRuntimeAttributes>
             <connections>
                 <outlet property="cardView" destination="CVV-53-7gu" id="bYx-pQ-i9O"/>
                 <outlet property="pageControl" destination="m3U-t7-GrE" id="MYK-4J-YR9"/>

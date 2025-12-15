@@ -17,8 +17,6 @@ class SlideCardCell: UICollectionViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        cardView.layer.cornerRadius = 16
-        cardView.clipsToBounds = true
     }
 
     func configure(initialSlidesCount: Int) {
