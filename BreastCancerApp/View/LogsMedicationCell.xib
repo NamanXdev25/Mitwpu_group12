@@ -11,7 +11,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="MedicationCell" customModule="BreastCancerApp" customModuleProvider="target">
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="LogsMedicationCell" id="gTV-IL-0wX" customClass="LogsMedicationCell" customModule="BreastCancerApp" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="393" height="90"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -63,7 +63,7 @@
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                <integer key="value" value="16"/>
+                                <integer key="value" value="13"/>
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </view>
@@ -90,7 +90,7 @@
     <resources>
         <image name="circle" catalog="system" width="128" height="123"/>
         <namedColor name="StatsRowCellColor">
-            <color red="0.43137254901960786" green="0.43137254901960786" blue="0.45098039215686275" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.4309999942779541" green="0.4309999942779541" blue="0.45100000500679016" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

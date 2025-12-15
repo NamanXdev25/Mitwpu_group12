@@ -1,10 +1,3 @@
-//
-//  HomeTodaysGoalCell.swift
-//  BreastCancerApp
-//
-//  Created by Naman Bhansali on 15/12/25.
-//
-
 import UIKit
 
 class HomeTodaysGoalCell: UICollectionViewCell {
@@ -14,7 +7,7 @@ class HomeTodaysGoalCell: UICollectionViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var pointsLabel: UILabel!
     @IBOutlet weak var checkmarkImageView: UIImageView!
-    @IBOutlet weak var chevronButton: UIButton! // Changed from UIImageView to UIButton
+    @IBOutlet weak var chevronButton: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()

@@ -29,6 +29,11 @@
                                     <constraint firstAttribute="width" constant="68" id="l6o-Lm-EIY"/>
                                     <constraint firstAttribute="height" constant="68" id="vwQ-u9-ml6"/>
                                 </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Complete Hydration" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iSm-qD-sfY">
                                 <rect key="frame" x="91.999999999999986" y="26" width="156.66666666666663" height="21"/>

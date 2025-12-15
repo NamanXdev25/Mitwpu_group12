@@ -1,10 +1,3 @@
-//
-//  HomeHeaderCell.swift
-//  BreastCancerApp
-//
-//  Created by Naman Bhansali on 14/12/25.
-//
-
 import UIKit
 
 class HomeHeaderCell: UICollectionViewCell {
@@ -17,7 +10,6 @@ class HomeHeaderCell: UICollectionViewCell {
     @IBOutlet weak var greetingLabel: UILabel!
     @IBOutlet weak var subGreetingLabel: UILabel!
     
-    // Removed quoteContainerView outlet
     @IBOutlet weak var quoteLabel: UILabel!
     
     private var gradientLayer: CAGradientLayer?
