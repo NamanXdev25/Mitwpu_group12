@@ -18,7 +18,7 @@ class HomeTodaysGoalCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        containerView.layer.cornerRadius = 16
+        containerView.layer.cornerRadius = 13
         
         // Ensure the icon has rounded corners
         iconImageView.layer.cornerRadius = 8

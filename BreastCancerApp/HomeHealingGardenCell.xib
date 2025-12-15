@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="UFQ-Kk-BQu" customClass="HomeHealingGardenCell" customModule="BreastCancerApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="120"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="393" height="120"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Fw-iX-FRF">
+                        <rect key="frame" x="17" y="5" width="359" height="110"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Healing Garden" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RKn-vI-0tw">
+                                <rect key="frame" x="16.000000000000007" y="16" width="120.66666666666669" height="21"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="800" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tvi-KQ-Wn9">
+                                <rect key="frame" x="16" y="42" width="31" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" systemColor="systemGray2Color"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text=" ✿" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lU9-yM-bls">
+                                <rect key="frame" x="46" y="42" width="19" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" name="TabBarcolour"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="to Level 2" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3cU-cF-dqs">
+                                <rect key="frame" x="68" y="42" width="74" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" systemColor="systemGray2Color"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lUW-em-8lu">
+                                <rect key="frame" x="331" y="16.666666666666668" width="12" height="20.000000000000004"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="CDC-cN-DbT"/>
+                                    <constraint firstAttribute="width" constant="12" id="Ulr-5r-9xI"/>
+                                </constraints>
+                                <color key="tintColor" systemColor="systemGray2Color"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="chevron.right" catalog="system"/>
+                            </button>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="hCQ-xQ-MRK">
+                                <rect key="frame" x="16" y="90" width="327" height="4"/>
+                                <color key="progressTintColor" name="TabBarcolour"/>
+                            </progressView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="5200 / 6000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NSW-al-AX9">
+                                <rect key="frame" x="282" y="75" width="61" height="12"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="3cU-cF-dqs" firstAttribute="top" secondItem="RKn-vI-0tw" secondAttribute="bottom" constant="5" id="0kx-sX-TCG"/>
+                            <constraint firstAttribute="bottom" secondItem="hCQ-xQ-MRK" secondAttribute="bottom" constant="16" id="1IZ-K5-Lq5"/>
+                            <constraint firstItem="RKn-vI-0tw" firstAttribute="top" secondItem="8Fw-iX-FRF" secondAttribute="top" constant="16" id="1ut-GL-vyD"/>
+                            <constraint firstItem="lU9-yM-bls" firstAttribute="top" secondItem="RKn-vI-0tw" secondAttribute="bottom" constant="5" id="3Z6-8b-eOv"/>
+                            <constraint firstItem="tvi-KQ-Wn9" firstAttribute="top" secondItem="RKn-vI-0tw" secondAttribute="bottom" constant="5" id="BeJ-Dw-bsM"/>
+                            <constraint firstItem="RKn-vI-0tw" firstAttribute="leading" secondItem="8Fw-iX-FRF" secondAttribute="leading" constant="16" id="Gmy-D1-bqe"/>
+                            <constraint firstAttribute="trailing" secondItem="hCQ-xQ-MRK" secondAttribute="trailing" constant="16" id="Lbv-d3-oG3"/>
+                            <constraint firstAttribute="trailing" secondItem="lUW-em-8lu" secondAttribute="trailing" constant="16" id="LjP-l2-yNp"/>
+                            <constraint firstItem="hCQ-xQ-MRK" firstAttribute="leading" secondItem="8Fw-iX-FRF" secondAttribute="leading" constant="16" id="Lpn-FR-jDs"/>
+                            <constraint firstItem="tvi-KQ-Wn9" firstAttribute="leading" secondItem="8Fw-iX-FRF" secondAttribute="leading" constant="16" id="VLd-Ga-ej7"/>
+                            <constraint firstItem="lUW-em-8lu" firstAttribute="centerY" secondItem="RKn-vI-0tw" secondAttribute="centerY" id="aMj-0z-ahH"/>
+                            <constraint firstItem="3cU-cF-dqs" firstAttribute="leading" secondItem="lU9-yM-bls" secondAttribute="trailing" constant="3" id="bRr-F0-gjw"/>
+                            <constraint firstItem="lU9-yM-bls" firstAttribute="leading" secondItem="8Fw-iX-FRF" secondAttribute="leading" constant="46" id="fYt-s1-Q2h"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius ">
+                                <integer key="value" value="16"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="TBc-k3-KyT"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="8Fw-iX-FRF" secondAttribute="bottom" constant="5" id="4Qh-6Z-9Ui"/>
+                <constraint firstAttribute="trailing" secondItem="8Fw-iX-FRF" secondAttribute="trailing" constant="17" id="H01-G6-cfe"/>
+                <constraint firstItem="8Fw-iX-FRF" firstAttribute="top" secondItem="UFQ-Kk-BQu" secondAttribute="top" constant="5" id="lD9-DP-yqs"/>
+                <constraint firstItem="8Fw-iX-FRF" firstAttribute="leading" secondItem="UFQ-Kk-BQu" secondAttribute="leading" constant="17" id="zkD-Q1-tON"/>
+            </constraints>
+            <size key="customSize" width="393" height="110"/>
+            <connections>
+                <outlet property="containerView" destination="8Fw-iX-FRF" id="BmP-2y-3uj"/>
+                <outlet property="doctorNameLabel" destination="tvi-KQ-Wn9" id="nfz-iP-znE"/>
+                <outlet property="titleLabel" destination="RKn-vI-0tw" id="Ehc-f5-9vd"/>
+            </connections>
+            <point key="canvasLocation" x="267.93893129770993" y="107.74647887323944"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="chevron.right" catalog="system" width="97" height="128"/>
+        <namedColor name="TabBarcolour">
+            <color red="0.9100000262260437" green="0.41600000858306885" blue="0.57300001382827759" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray2Color">
+            <color red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

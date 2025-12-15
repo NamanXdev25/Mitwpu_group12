@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Complete Hydration",
+    "points": "Get 10 points",
+    "iconName": "icon_water",
+    "isCompleted": true
+  },
+  {
+    "title": "Complete Exercise goal",
+    "points": "Get 20 points",
+    "iconName": "icon_exercise",
+    "isCompleted": true
+  },
+  {
+    "title": "Practice Mindfulness",
+    "points": "Get 15 points",
+    "iconName": "icon_yoga",
+    "isCompleted": false
+  }
+]
