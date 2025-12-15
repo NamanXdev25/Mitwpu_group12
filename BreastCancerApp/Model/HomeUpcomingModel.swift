@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct HomeUpcomingModel {
+struct HomeUpcomingModel: Codable {
     let title: String
     let doctorName: String
     let date: String

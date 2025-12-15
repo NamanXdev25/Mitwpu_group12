@@ -57,17 +57,17 @@
             </objects>
             <point key="canvasLocation" x="-1257" y="228"/>
         </scene>
-        <!--View Controller-->
+        <!--Home View Controller-->
         <scene sceneID="L1v-8g-lQk">
             <objects>
-                <viewController id="ogF-rp-Q1l" sceneMemberID="viewController">
+                <viewController id="ogF-rp-Q1l" customClass="HomeViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="QyX-p6-82h">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="stz-oS-E5S">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="backgroundColor" name="logsbgcolor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="KCb-cA-JXR">
                                     <size key="itemSize" width="128" height="128"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -95,10 +95,13 @@
                             <constraint firstAttribute="trailing" secondItem="stz-oS-E5S" secondAttribute="trailing" id="vx3-07-Txv"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="collectionView" destination="stz-oS-E5S" id="BiA-Mt-47l"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9N6-oe-tdf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-266.41221374045801" y="233.80281690140845"/>
+            <point key="canvasLocation" x="-25" y="227"/>
         </scene>
     </scenes>
     <resources>

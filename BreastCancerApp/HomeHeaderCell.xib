@@ -16,7 +16,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="393" height="300"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="HomeScreenPhoto" translatesAutoresizingMaskIntoConstraints="NO" id="YXu-mZ-hOa">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="HomescreenImage" translatesAutoresizingMaskIntoConstraints="NO" id="YXu-mZ-hOa">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="300"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="393" id="4ff-Hu-9P6"/>
@@ -50,6 +50,11 @@
                             <constraint firstAttribute="height" constant="40" id="g6w-0w-3No"/>
                             <constraint firstAttribute="width" constant="40" id="t2D-9c-K40"/>
                         </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="20"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
                     </imageView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Foe-oN-ynv">
                         <rect key="frame" x="336" y="100" width="40" height="40"/>
@@ -59,6 +64,11 @@
                         </constraints>
                         <state key="normal" title="Button"/>
                         <buttonConfiguration key="configuration" style="plain"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="20"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
                         <connections>
                             <action selector="profileTapped:" destination="Fnx-X0-bPa" eventType="touchUpInside" id="QuQ-6I-RKa"/>
                         </connections>
@@ -95,7 +105,7 @@
         </collectionViewCell>
     </objects>
     <resources>
-        <image name="HomeScreenPhoto" width="1024" height="649"/>
+        <image name="HomescreenImage" width="793" height="685"/>
         <image name="ProfilePhoto" width="496" height="468"/>
     </resources>
 </document>

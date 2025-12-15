@@ -4,103 +4,6 @@
 //
 //  Created by Naman Bhansali on 14/12/25.
 //
-/*
-import UIKit
-
-class HeaderCell: UICollectionViewCell {
-    // 1. We need this identifier for the Controller to find the cell
-    static let identifier = "HeaderCell"
-    
-    // 2. Renamed to standard camelCase (matches previous Controller code)
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var dateLabel: UILabel!
-    @IBOutlet weak var backgroundImageView: UIImageView!
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-    
-    // 3. Your configure function (Excellent practice!)
-    func configure(title: String, date: String) {
-        titleLabel.text = title
-        dateLabel.text = date
-    }
-}
-*/
-
-//
-//  HeaderCell.swift
-//  BreastCancerApp
-//
-//  Created by Naman Bhansali on 14/12/25.
-//
-/*
-import UIKit
-
-class HeaderCell: UICollectionViewCell {
-    // 1. We need this identifier for the Controller to find the cell
-    static let identifier = "HeaderCell"
-    
-    // 2. Renamed to standard camelCase (matches previous Controller code)
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var dateLabel: UILabel!
-    @IBOutlet weak var backgroundImageView: UIImageView!
-    
-    private var gradientLayer: CAGradientLayer?
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Run the gradient setup
-        addBottomGradient()
-    }
-    
-    // 3. Your configure function (Excellent practice!)
-    func configure(title: String, date: String) {
-        titleLabel.text = title
-        dateLabel.text = date
-    }
-    
-    // --- GRADIENT LOGIC ---
-    private func addBottomGradient() {
-        // Remove existing gradient if any
-        gradientLayer?.removeFromSuperlayer()
-        
-        // Create a gradient layer
-        let gradient = CAGradientLayer()
-        
-        // Colors: Clear (top) -> White (bottom)
-        gradient.colors = [
-            UIColor.clear.cgColor,
-            UIColor.white.withAlphaComponent(0.3).cgColor,
-            UIColor.white.cgColor
-        ]
-        
-        // Locations: Start fading at 60% down, solid at 100%
-        gradient.locations = [0.0, 0.7, 1.0]
-        
-        // Add to the image view's layer
-        if let imageView = backgroundImageView {
-            imageView.layer.addSublayer(gradient)
-            gradientLayer = gradient
-        }
-    }
-    
-    // Ensure gradient resizes with the cell
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        // Update gradient frame to match image view bounds
-        gradientLayer?.frame = backgroundImageView?.bounds ?? .zero
-    }
-}
-*/
-
-//
-//  HeaderCell.swift
-//  BreastCancerApp
-//
-//  Created by Naman Bhansali on 14/12/25.
-//
 
 import UIKit
 
@@ -118,8 +21,6 @@ class HeaderCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Ensure the image view clips to bounds is OFF so gradient can extend
-        backgroundImageView?.clipsToBounds = false
         // Add the gradient when cell is created
         addBottomGradient()
     }

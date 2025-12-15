@@ -28,8 +28,8 @@ class TrackingCell: UICollectionViewCell {
         let chevronImage = UIImage(systemName: "chevron.right", withConfiguration: config)
         
         // Apply to button
-        chevronButton.setImage(chevronImage, for: .normal)
-      //  chevronButton.tintColor = .black
-        chevronButton.setTitle("", for: .normal)
+//        chevronButton.setImage(chevronImage, for: .normal)
+//      //  chevronButton.tintColor = .black
+//        chevronButton.setTitle("", for: .normal)
     }
 }

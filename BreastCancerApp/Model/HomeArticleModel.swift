@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct HomeArticleModel {
+struct HomeArticleModel: Codable {
     let title: String
     let subtitle: String
     let imageName: String

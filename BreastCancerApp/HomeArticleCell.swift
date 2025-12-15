@@ -16,10 +16,6 @@ class HomeArticleCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        containerView.layer.cornerRadius = 16
-        containerView.clipsToBounds = true
-        articleImageView.contentMode = .scaleAspectFill
-        articleImageView.clipsToBounds = true
     }
     
     func configure(with model: HomeArticleModel) {

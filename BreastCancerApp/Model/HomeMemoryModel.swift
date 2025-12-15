@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct HomeMemoryModel {
+struct HomeMemoryModel: Codable{
     let imageName: String
     let date: String
     let description: String

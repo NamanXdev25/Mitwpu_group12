@@ -19,20 +19,8 @@
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZcV-R9-zIG">
-                        <rect key="frame" x="16" y="5" width="200" height="236"/>
+                        <rect key="frame" x="16" y="5" width="208" height="236"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nag-Hu-PRZ">
-                                <rect key="frame" x="12" y="12" width="176" height="140"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="140" id="uaf-8V-GbU"/>
-                                    <constraint firstAttribute="width" constant="176" id="xyB-dx-Zbx"/>
-                                </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="13"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pDK-1v-LFT">
                                 <rect key="frame" x="12" y="166" width="33" height="16"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
@@ -45,16 +33,28 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nag-Hu-PRZ">
+                                <rect key="frame" x="12" y="12" width="184" height="140"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="140" id="3f8-nc-jyC"/>
+                                    <constraint firstAttribute="width" constant="184" id="awi-Yc-zaG"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="13"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="nag-Hu-PRZ" secondAttribute="trailing" constant="12" id="0qd-uB-j9G"/>
                             <constraint firstItem="pDK-1v-LFT" firstAttribute="leading" secondItem="ZcV-R9-zIG" secondAttribute="leading" constant="12" id="FTB-rn-C90"/>
-                            <constraint firstItem="pDK-1v-LFT" firstAttribute="top" secondItem="nag-Hu-PRZ" secondAttribute="bottom" constant="14" id="WMY-Cy-gfb"/>
+                            <constraint firstItem="nag-Hu-PRZ" firstAttribute="leading" secondItem="ZcV-R9-zIG" secondAttribute="leading" constant="12" id="Sku-7q-Rhu"/>
+                            <constraint firstAttribute="trailing" secondItem="nag-Hu-PRZ" secondAttribute="trailing" constant="12" id="Z32-k2-eWi"/>
                             <constraint firstItem="Lig-d4-Tjd" firstAttribute="top" secondItem="pDK-1v-LFT" secondAttribute="bottom" constant="14" id="Z5H-d0-y5h"/>
-                            <constraint firstItem="nag-Hu-PRZ" firstAttribute="leading" secondItem="ZcV-R9-zIG" secondAttribute="leading" constant="12" id="Zy8-Dl-8SF"/>
+                            <constraint firstItem="pDK-1v-LFT" firstAttribute="top" secondItem="nag-Hu-PRZ" secondAttribute="bottom" constant="14" id="bcZ-PO-fwQ"/>
+                            <constraint firstItem="nag-Hu-PRZ" firstAttribute="top" secondItem="ZcV-R9-zIG" secondAttribute="top" constant="12" id="pzD-f7-qqy"/>
                             <constraint firstItem="Lig-d4-Tjd" firstAttribute="leading" secondItem="ZcV-R9-zIG" secondAttribute="leading" constant="12" id="tOF-DV-gMn"/>
-                            <constraint firstItem="nag-Hu-PRZ" firstAttribute="top" secondItem="ZcV-R9-zIG" secondAttribute="top" constant="12" id="x9m-sT-Gdo"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -69,7 +69,7 @@
                 <constraint firstItem="ZcV-R9-zIG" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="CUl-Ry-5LU"/>
                 <constraint firstAttribute="bottom" secondItem="ZcV-R9-zIG" secondAttribute="bottom" constant="5" id="VRY-y6-bsy"/>
                 <constraint firstItem="ZcV-R9-zIG" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="5" id="hxE-hR-UA2"/>
-                <constraint firstAttribute="trailing" secondItem="ZcV-R9-zIG" secondAttribute="trailing" constant="8" id="iYc-WC-vwI"/>
+                <constraint firstAttribute="trailing" secondItem="ZcV-R9-zIG" secondAttribute="trailing" id="iYc-WC-vwI"/>
             </constraints>
             <size key="customSize" width="224" height="246"/>
             <connections>
@@ -78,12 +78,12 @@
                 <outlet property="subtitleLabel" destination="Lig-d4-Tjd" id="yR7-bF-nzc"/>
                 <outlet property="titleLabel" destination="pDK-1v-LFT" id="ldS-ie-jWy"/>
             </connections>
-            <point key="canvasLocation" x="48.854961832061065" y="146.83098591549296"/>
+            <point key="canvasLocation" x="48.854961832061065" y="146.47887323943664"/>
         </collectionViewCell>
     </objects>
     <resources>
         <namedColor name="Memorycolor">
-            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.23499999940395355" green="0.23499999940395355" blue="0.2630000114440918" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

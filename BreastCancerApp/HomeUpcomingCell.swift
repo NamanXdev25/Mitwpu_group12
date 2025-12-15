@@ -21,6 +21,14 @@ class HomeUpcomingCell: UICollectionViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        containerView.layer.cornerRadius = 13
     }
+    
+    func configure(with model: HomeUpcomingModel) {
+            titleLabel.text = model.title
+            doctorNameLabel.text = model.doctorName
+            dateLabel.text = model.date
+            timeLabel.text = model.time
+        }
+    
+    
 }

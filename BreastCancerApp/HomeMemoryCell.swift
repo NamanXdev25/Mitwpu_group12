@@ -17,13 +17,6 @@ class HomeMemoryCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        // Style the image view
-        memoryImageView.layer.cornerRadius = 12
-        memoryImageView.clipsToBounds = true
-        memoryImageView.contentMode = .scaleAspectFill
-        
-        // Optional: Style container if needed
-        // containerView.layer.cornerRadius = 12
     }
     
     func configure(with model: HomeMemoryModel) {

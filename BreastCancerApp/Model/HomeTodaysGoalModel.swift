@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - The Model
 // In MVC, the Model is a standalone entity that knows nothing about the View or the Controller.
-struct HomeTodaysGoalModel {
+struct HomeTodaysGoalModel: Codable{
     let title: String
     let points: String
     let iconName: String

@@ -18,31 +18,6 @@ class HomeTodaysGoalCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        containerView.layer.cornerRadius = 13
-        
-        // Ensure the icon has rounded corners
-        iconImageView.layer.cornerRadius = 8
-        iconImageView.clipsToBounds = true
-        
-        // Setup the checkmark style
-        if checkmarkImageView.image == nil {
-            checkmarkImageView.image = UIImage(systemName: "checkmark")
-        }
-        checkmarkImageView.tintColor = .systemPink
-        
-        // --- Setup Chevron Button Look ---
-        // 1. Use the system 'chevron.right' symbol
-        // 2. Add a font configuration to make it slightly bold
-        // 3. Set tint color to light gray
-        let chevronConfig = UIImage.SymbolConfiguration(weight: .semibold)
-        let chevronImage = UIImage(systemName: "chevron.right", withConfiguration: chevronConfig)
-        
-        chevronButton.setImage(chevronImage, for: .normal)
-        chevronButton.tintColor = .systemGray3
-        
-        // Optional: If you want the whole cell to handle the tap, disable user interaction on this specific button
-        // so it doesn't "eat" the touch event. If you want a specific action on the arrow only, remove this line.
-        chevronButton.isUserInteractionEnabled = false
     }
     
     func configure(title: String, points: String, imageName: String, isCompleted: Bool = false) {
