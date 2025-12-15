@@ -18,17 +18,17 @@ class ExploreCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        chevronView.image = UIImage(systemName: "chevron.right")
-        chevronView.tintColor = .systemGray3
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tapped))
+        contentView.addGestureRecognizer(tap)
+    }
+
+    @objc private func tapped() {
+        didTap?()
     }
     
     func configure(title: String, subtitle: String, icon: UIImage) {
             titleLabel.text = title
             subtitleLabel.text = subtitle
             iconView.image = icon
-    }
-    
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        didTap?()
     }
 }
