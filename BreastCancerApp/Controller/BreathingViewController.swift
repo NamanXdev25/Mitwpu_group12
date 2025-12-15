@@ -59,6 +59,8 @@ class BreathingViewController: UIViewController {
             let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(50))
             let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: "header", alignment: .top)
             
+            header.extendsBoundary = true
+            
             // ---------------------------------------------------------
             // SECTION 0: FAVORITES
             // ---------------------------------------------------------
@@ -91,7 +93,7 @@ class BreathingViewController: UIViewController {
                     
                     let section = NSCollectionLayoutSection(group: group)
                     section.orthogonalScrollingBehavior = .groupPagingCentered
-                    section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 20, trailing: 0)
+                    section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 16, bottom: 20, trailing: 16)
                     section.boundarySupplementaryItems = [header]
                     return section
                 }

@@ -52,7 +52,7 @@
                         <rect key="frame" x="80" y="260" width="120" height="40"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Calmer Mind" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4YB-2m-geW">
-                                <rect key="frame" x="24" y="13" width="72" height="15"/>
+                                <rect key="frame" x="24" y="12.666666666666686" width="72" height="15"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <color key="textColor" systemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -60,12 +60,18 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="4YB-2m-geW" firstAttribute="top" secondItem="8cc-Ol-Dh9" secondAttribute="top" constant="13" id="BDC-kd-UMF"/>
-                            <constraint firstItem="4YB-2m-geW" firstAttribute="leading" secondItem="8cc-Ol-Dh9" secondAttribute="leading" constant="24" id="kSQ-hn-s4H"/>
+                            <constraint firstItem="4YB-2m-geW" firstAttribute="centerX" secondItem="8cc-Ol-Dh9" secondAttribute="centerX" id="bvz-Sz-pNn"/>
+                            <constraint firstItem="4YB-2m-geW" firstAttribute="centerY" secondItem="8cc-Ol-Dh9" secondAttribute="centerY" id="oms-dw-asa"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                <integer key="value" value="20"/>
+                                <integer key="value" value="15"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="size" keyPath="layer.shadowOffset">
+                                <size key="value" width="0.0" height="2"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.shadowRadius">
+                                <integer key="value" value="4"/>
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </view>
@@ -114,7 +120,7 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemRedColor">
-            <color red="1" green="0.2196078431372549" blue="0.23529411764705882" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
