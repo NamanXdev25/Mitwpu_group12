@@ -9,6 +9,7 @@ import UIKit
 
 class MindfulnessViewController: UIViewController {
     
+    // IBOutlets
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var gradientView: UIView!
     
@@ -16,7 +17,6 @@ class MindfulnessViewController: UIViewController {
     private var mindfulnessData = MindfulnessDataLoader.shared
 
     private var dataSource: MindfulnessDataSource!
-
     
     enum Section: Int, CaseIterable {
         case emotions
@@ -29,9 +29,7 @@ class MindfulnessViewController: UIViewController {
     private var pageVC: UIPageViewController?
     var slides: [MindfulnessSlide] = []
     private var currentPageIndex = 0
-
     private var pageVCAttachedToHost: UIView? = nil
-
     private var attachedPageControl: UIPageControl?
 
     
@@ -55,7 +53,6 @@ class MindfulnessViewController: UIViewController {
         collectionView.setCollectionViewLayout(createCompositionalLayout(), animated: false)
         
         collectionView.contentInsetAdjustmentBehavior = .never
-        //collectionView.contentInsetAdjustmentBehavior = .automatic
         collectionView.contentInset = UIEdgeInsets(top: 132, left: 0, bottom: 0, right: 0)
 
         
@@ -284,7 +281,7 @@ class MindfulnessViewController: UIViewController {
 
                 let cardItem = NSCollectionLayoutItem(
                     layoutSize: .init(widthDimension: .fractionalWidth(1),
-                                      heightDimension: .absolute(130))
+                                      heightDimension: .absolute(116))
                 )
 
                 let group = NSCollectionLayoutGroup.vertical(
