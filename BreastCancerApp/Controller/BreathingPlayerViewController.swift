@@ -93,11 +93,10 @@ class BreathingPlayerViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        if let vContainer = videoContainerView {
-             playerLayer?.frame = vContainer.bounds
-        }
+        guard let playerLayer = playerLayer else { return }
+        playerLayer.frame = videoContainerView.bounds
     }
-    
+
     // MARK: - Setup
     func setupData() {
         guard let session = session else { return }
@@ -129,10 +128,9 @@ class BreathingPlayerViewController: UIViewController {
         playerLayer?.videoGravity = .resizeAspectFill
         
         if let vContainer = videoContainerView {
-            playerLayer?.frame = vContainer.bounds
             vContainer.layer.addSublayer(playerLayer!)
         }
-        
+
         NotificationCenter.default.addObserver(self, selector: #selector(loopVideo), name: .AVPlayerItemDidPlayToEndTime, object: player?.currentItem)
     }
     
