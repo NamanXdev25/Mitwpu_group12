@@ -77,16 +77,17 @@ class BreathingPlayerViewController: UIViewController {
         prepareVideo()
         setupTapGesture()
         
-        // 3. Layer Management
-        if let vContainer = videoContainerView {
-            view.sendSubviewToBack(vContainer)
-        }
-        if let bgImage = backgroundImageView {
-            view.sendSubviewToBack(bgImage)
-        }
-        if let pButton = playButton {
-            view.bringSubviewToFront(pButton)
-        }
+//        // 3. Layer Management
+//        if let vContainer = videoContainerView {
+//            view.sendSubviewToBack(vContainer)
+//        }
+//        if let bgImage = backgroundImageView {
+//            view.sendSubviewToBack(bgImage)
+//        }
+//        if let pButton = playButton {
+//            view.bringSubviewToFront(pButton)
+//        }
+//
         
         timerView.reset()
     }

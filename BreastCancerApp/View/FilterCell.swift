@@ -1,5 +1,4 @@
-//
-//  FilterCell.swift
+//FilterCell.swift
 //  ChemoCompanion
 //
 //  Created by Shloka on 28/11/25.
