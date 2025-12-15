@@ -56,7 +56,7 @@
             </objects>
             <point key="canvasLocation" x="1912.2137404580151" y="161.97183098591549"/>
         </scene>
-        <!--Breathing Player View Controller-->
+        <!--Gentle Focus-->
         <scene sceneID="Xqq-GF-EzA">
             <objects>
                 <viewController storyboardIdentifier="BreathingPlayerVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="f1b-uT-ZIG" customClass="BreathingPlayerViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
@@ -107,7 +107,7 @@
                             <constraint firstItem="Y4l-mU-GY8" firstAttribute="trailing" secondItem="qkg-xf-LXH" secondAttribute="trailing" id="xjg-c7-TaC"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="VXJ-aY-Ney"/>
+                    <navigationItem key="navigationItem" title="Gentle Focus" id="VXJ-aY-Ney"/>
                     <connections>
                         <outlet property="backgroundImageView" destination="Y4l-mU-GY8" id="Vgm-Ah-iH9"/>
                         <outlet property="playButton" destination="n20-O2-vXr" id="56c-0y-peo"/>
@@ -127,6 +127,9 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="6wT-uF-hjw">
                         <rect key="frame" x="0.0" y="118" width="393" height="54"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -145,6 +148,9 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ycn-qa-H7T">
                         <rect key="frame" x="0.0" y="118" width="393" height="54"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>

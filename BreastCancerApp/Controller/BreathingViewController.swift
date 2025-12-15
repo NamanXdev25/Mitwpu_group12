@@ -49,6 +49,7 @@ class BreathingViewController: UIViewController {
         // D. Setup Layout
         collectionView.setCollectionViewLayout(generateLayout(), animated: false)
     }
+
     
     // MARK: - Layout Generation
     // MOVED OUTSIDE viewDidLoad (Crucial Fix)

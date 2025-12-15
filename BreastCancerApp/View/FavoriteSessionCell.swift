@@ -19,7 +19,7 @@ class FavoriteSessionCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        self.layer.cornerRadius = 20
+        self.layer.cornerRadius = 13
         self.layer.masksToBounds = true
         
         titleContainerView.layer.cornerRadius = titleContainerView.frame.height / 2
