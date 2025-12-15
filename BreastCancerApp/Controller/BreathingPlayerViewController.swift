@@ -24,7 +24,7 @@ class BreathingPlayerViewController: UIViewController {
     var totalSessionDuration = 300
     var isTimerRunning = false
 
-    // MARK: -  Navigation Bar Configuration
+    // MARK: - 🛑 Navigation Bar Configuration 🛑
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -69,25 +69,24 @@ class BreathingPlayerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // 1. UI Setup
-        addTopGradient()
+//        // 1. UI Setup
+//        addTopGradient()
         
         // 2. Data Setup
         setupData()
         prepareVideo()
         setupTapGesture()
         
-        // 3. Layer Management
-        if let vContainer = videoContainerView {
-            view.sendSubviewToBack(vContainer)
-        }
-        if let bgImage = backgroundImageView {
-            view.sendSubviewToBack(bgImage)
-        }
-        if let pButton = playButton {
-            view.bringSubviewToFront(pButton)
-        }
-
+//        // 3. Layer Management
+//        if let vContainer = videoContainerView {
+//            view.sendSubviewToBack(vContainer)
+//        }
+//        if let bgImage = backgroundImageView {
+//            view.sendSubviewToBack(bgImage)
+//        }
+//        if let pButton = playButton {
+//            view.bringSubviewToFront(pButton)
+//        }
         
         timerView.reset()
     }
@@ -143,16 +142,16 @@ class BreathingPlayerViewController: UIViewController {
         view.addGestureRecognizer(tapGesture)
     }
     
-    func addTopGradient() {
-        let gradientOverlay = UIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 150))
-        gradientOverlay.isUserInteractionEnabled = false
-        let gradient = CAGradientLayer()
-        gradient.frame = gradientOverlay.bounds
-        gradient.colors = [UIColor(red: 0.6, green: 0.2, blue: 0.3, alpha: 0.85).cgColor, UIColor.clear.cgColor]
-        gradientOverlay.layer.addSublayer(gradient)
-        view.addSubview(gradientOverlay)
-    }
-    
+//    func addTopGradient() {
+//        let gradientOverlay = UIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 150))
+//        gradientOverlay.isUserInteractionEnabled = false
+//        let gradient = CAGradientLayer()
+//        gradient.frame = gradientOverlay.bounds
+//        gradient.colors = [UIColor(red: 0.6, green: 0.2, blue: 0.3, alpha: 0.85).cgColor, UIColor.clear.cgColor]
+//        gradientOverlay.layer.addSublayer(gradient)
+//        view.addSubview(gradientOverlay)
+//    }
+//    
     // MARK: - Interaction Logic
     
     @objc func screenTapped() {

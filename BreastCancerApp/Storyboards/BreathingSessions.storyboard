@@ -71,6 +71,13 @@
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gc8-Uh-bXj" customClass="TopGradientView" customModule="BreastCancerApp" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="150"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="150" id="7qw-SP-mwx"/>
+                                </constraints>
+                            </view>
                             <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kdr-96-W4q" userLabel="CircularTimerView" customClass="CircularTimerView" customModule="BreastCancerApp">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -93,6 +100,8 @@
                         <constraints>
                             <constraint firstItem="Kdr-96-W4q" firstAttribute="leading" secondItem="qkg-xf-LXH" secondAttribute="leading" id="6fa-BF-awM"/>
                             <constraint firstAttribute="bottom" secondItem="Y4l-mU-GY8" secondAttribute="bottom" id="IOK-C3-Tlm"/>
+                            <constraint firstItem="Gc8-Uh-bXj" firstAttribute="trailing" secondItem="qkg-xf-LXH" secondAttribute="trailing" id="JDW-M0-Edl"/>
+                            <constraint firstItem="Gc8-Uh-bXj" firstAttribute="leading" secondItem="qkg-xf-LXH" secondAttribute="leading" id="OQ5-zb-ZqD"/>
                             <constraint firstItem="n20-O2-vXr" firstAttribute="centerX" secondItem="BZc-z9-lrp" secondAttribute="centerX" id="QJn-Zp-vwF"/>
                             <constraint firstItem="Y4l-mU-GY8" firstAttribute="leading" secondItem="qkg-xf-LXH" secondAttribute="leading" id="UQ1-kP-Tno"/>
                             <constraint firstItem="Kdr-96-W4q" firstAttribute="trailing" secondItem="qkg-xf-LXH" secondAttribute="trailing" id="Ul3-Ig-enr"/>
@@ -103,6 +112,7 @@
                             <constraint firstItem="Kdr-96-W4q" firstAttribute="top" secondItem="BZc-z9-lrp" secondAttribute="top" id="lTb-QO-fV9"/>
                             <constraint firstItem="n20-O2-vXr" firstAttribute="centerY" secondItem="BZc-z9-lrp" secondAttribute="centerY" id="ps5-1A-fgn"/>
                             <constraint firstItem="CSi-py-koH" firstAttribute="top" secondItem="BZc-z9-lrp" secondAttribute="top" id="rWo-3T-Sjl"/>
+                            <constraint firstItem="Gc8-Uh-bXj" firstAttribute="top" secondItem="BZc-z9-lrp" secondAttribute="top" id="sy3-Zr-5lv"/>
                             <constraint firstAttribute="bottom" secondItem="Kdr-96-W4q" secondAttribute="bottom" id="wEp-AR-Qza"/>
                             <constraint firstItem="Y4l-mU-GY8" firstAttribute="trailing" secondItem="qkg-xf-LXH" secondAttribute="trailing" id="xjg-c7-TaC"/>
                         </constraints>
