@@ -59,8 +59,10 @@ class PlanCell: UICollectionViewCell {
         subtitleLabel.text = item.subtitle
         timeLabel.text = item.time
         
+        let checkcolor = UIColor(named: "plusbuttoncolor")!
+        
         if item.isCompleted {
-            checkButton.backgroundColor = .systemPink
+            checkButton.backgroundColor = checkcolor
             checkButton.layer.borderWidth = 0
             checkButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
             checkButton.tintColor = .white
