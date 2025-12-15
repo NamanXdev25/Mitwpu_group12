@@ -18,7 +18,7 @@ class ActionsContainerCell: UICollectionViewCell {
         configureUI()
     }
 
-    private func configureUI() {
+   private func configureUI() {
         let pink = UIColor(named: "pink") ?? .systemPink
 
         logButton.setTitle("Log Self-Exam", for: .normal)

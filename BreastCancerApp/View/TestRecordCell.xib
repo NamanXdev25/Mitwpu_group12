@@ -5,6 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -21,18 +22,19 @@
                         <rect key="frame" x="16" y="8" width="345" height="345"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="20 Apr 2025" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jrd-7c-k79">
-                                <rect key="frame" x="12" y="12" width="100" height="21"/>
+                                <rect key="frame" x="12" y="12" width="100" height="316"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Ug-OA-62G">
-                                <rect key="frame" x="305" y="8.6666666666666679" width="28" height="28.000000000000004"/>
+                                <rect key="frame" x="305" y="156" width="28" height="28"/>
                                 <accessibility key="accessibilityConfiguration" label="open details"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="28" id="5Y8-RX-oss"/>
                                     <constraint firstAttribute="width" constant="28" id="jGJ-6A-AJx"/>
                                 </constraints>
+                                <color key="tintColor" name="gray"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="chevron.right" catalog="system"/>
                                 <connections>
@@ -40,7 +42,17 @@
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Bw7-Gr-MMs">
-                                <rect key="frame" x="0.0" y="41" width="345" height="296"/>
+                                <rect key="frame" x="0.0" y="336" width="345" height="1"/>
+                                <subviews>
+                                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MbQ-bo-kE9">
+                                        <rect key="frame" x="0.0" y="0.0" width="345" height="1"/>
+                                        <color key="backgroundColor" systemColor="systemGray2Color"/>
+                                        <color key="tintColor" name="gray"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="1" id="UGf-Kq-dWm"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
                             </stackView>
                         </subviews>
                         <constraints>
@@ -76,6 +88,7 @@
                 <outlet property="chevronButton" destination="4Ug-OA-62G" id="Hed-uj-f7r"/>
                 <outlet property="dateLabel" destination="Jrd-7c-k79" id="jRR-dD-jsD"/>
                 <outlet property="itemsStack" destination="Bw7-Gr-MMs" id="nvz-Lt-aPG"/>
+                <outlet property="separator" destination="MbQ-bo-kE9" id="6ZU-kD-LKo"/>
             </connections>
             <point key="canvasLocation" x="135.1145038167939" y="129.22535211267606"/>
         </collectionViewCell>
@@ -85,5 +98,11 @@
         <namedColor name="bg">
             <color red="0.97254901960784312" green="0.94901960784313721" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
+        <namedColor name="gray">
+            <color red="0.7686274509803922" green="0.7686274509803922" blue="0.7803921568627451" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+        <systemColor name="systemGray2Color">
+            <color red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

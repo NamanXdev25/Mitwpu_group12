@@ -322,7 +322,7 @@
                             <constraint firstItem="eZo-Si-by8" firstAttribute="centerX" secondItem="5re-gf-jeL" secondAttribute="centerX" id="sRn-8N-LvS"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="68o-M5-wOg"/>
+                    <navigationItem key="navigationItem" title="Video Guide" id="68o-M5-wOg"/>
                     <connections>
                         <outlet property="actualVideoView" destination="IhS-b7-GGo" id="AtE-Jr-1fy"/>
                         <outlet property="logSelfExamButton" destination="eZo-Si-by8" id="IgB-sV-2wi"/>
@@ -335,7 +335,7 @@
             </objects>
             <point key="canvasLocation" x="4121" y="-18"/>
         </scene>
-        <!--Audio Guide View Controller-->
+        <!--Audio Guide-->
         <scene sceneID="cdQ-LN-3zL">
             <objects>
                 <viewController storyboardIdentifier="AudioGuideVC" id="PQH-ic-cIt" customClass="AudioGuideViewController" customModule="BreastCancerApp" sceneMemberID="viewController">
@@ -417,7 +417,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kV4-xi-PG9">
-                                <rect key="frame" x="86.666666666666686" y="644.33333333332848" width="220" height="52"/>
+                                <rect key="frame" x="86.666666666666686" y="644.33333333333337" width="220" height="52"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="52" id="TjN-JD-r3j"/>
                                     <constraint firstAttribute="width" constant="220" id="rMz-0Z-pMx"/>
@@ -454,7 +454,7 @@
                             <constraint firstItem="epQ-pg-8yq" firstAttribute="centerX" secondItem="nHo-JK-KhX" secondAttribute="centerX" id="xds-Uy-aps"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="hT2-ea-sTG"/>
+                    <navigationItem key="navigationItem" title="Audio Guide" id="hT2-ea-sTG"/>
                     <connections>
                         <outlet property="artworkImageView" destination="8kA-L5-FYN" id="aSM-Kp-ovA"/>
                         <outlet property="back5Button" destination="Ivh-61-EU1" id="cUf-hO-s1x"/>

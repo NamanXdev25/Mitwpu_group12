@@ -20,21 +20,7 @@ class VideoGuideViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        addCenteredTitle()        // ONLY ADDITION
-        configureUI()
         setupPlayer()
-    }
-
-    private func addCenteredTitle() {
-        let label = UILabel()
-        label.text = "Video Guide"
-        label.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
-        label.textAlignment = .center
-        label.textColor = .black
-        navigationItem.titleView = label
-
-        navigationController?.navigationBar.prefersLargeTitles = false
-        navigationItem.largeTitleDisplayMode = .never
     }
 
     deinit {
@@ -89,22 +75,6 @@ class VideoGuideViewController: UIViewController {
         pl.frame = actualVideoView.bounds
         pl.position = CGPoint(x: actualVideoView.bounds.midX, y: actualVideoView.bounds.midY)
         CATransaction.commit()
-    }
-
-    private func configureUI() {
-        playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
-        playPauseButton.tintColor = .white
-        playPauseButton.backgroundColor = UIColor(white: 0, alpha: 0.35)
-        playPauseButton.layer.cornerRadius = 32
-        playPauseButton.clipsToBounds = true
-
-        progressSlider.minimumValue = 0
-        progressSlider.maximumValue = 1
-        progressSlider.value = 0
-
-        playPauseButton.isUserInteractionEnabled = true
-        progressSlider.isUserInteractionEnabled = true
-        logSelfExamButton.isUserInteractionEnabled = true
     }
 
     @IBAction func playPauseTapped(_ sender: UIButton) {

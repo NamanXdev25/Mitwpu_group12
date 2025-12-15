@@ -1,73 +1,30 @@
 import UIKit
 
 class TestRecordCell: UICollectionViewCell {
+    
+    // MARK: - Outlets
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var chevronButton: UIButton!
     @IBOutlet weak var itemsStack: UIStackView!
+    @IBOutlet weak var separator: UIView!
 
+    // MARK: - Callbacks
     var onChevronTap: (() -> Void)?
     var onRequestDelete: (() -> Void)?
 
+    // MARK: - Private Properties
     private weak var detailsContainer: UIView?
     private weak var detailsStack: UIStackView?
-    private var separator: UIView?
+    
+    private let containerCornerRadius: CGFloat = 12
+    private let containerInsets = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
+    private let rowHeight: CGFloat = 44
 
+    // MARK: - Lifecycle
     override func awakeFromNib() {
         super.awakeFromNib()
-
-        // CELL MUST BE TRANSPARENT (pink background shows through)
-        backgroundColor = .clear
-        contentView.backgroundColor = .clear
-        isOpaque = false
-        backgroundView = nil
-        let sbg = UIView()
-        sbg.backgroundColor = .clear
-        selectedBackgroundView = sbg
-
-        itemsStack.axis = .vertical
-        itemsStack.spacing = 8
-        itemsStack.alignment = .fill
-        itemsStack.distribution = .fill
-        itemsStack.translatesAutoresizingMaskIntoConstraints = false
-
-        dateLabel.translatesAutoresizingMaskIntoConstraints = false
-        chevronButton.translatesAutoresizingMaskIntoConstraints = false
-
-        let sep = UIView()
-        sep.translatesAutoresizingMaskIntoConstraints = false
-        sep.backgroundColor = UIColor(white: 0.93, alpha: 1)
-        contentView.addSubview(sep)
-        self.separator = sep
-
-        NSLayoutConstraint.activate([
-            dateLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
-            dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-
-            chevronButton.centerYAnchor.constraint(equalTo: dateLabel.centerYAnchor),
-            chevronButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            dateLabel.trailingAnchor.constraint(lessThanOrEqualTo: chevronButton.leadingAnchor, constant: -8),
-
-            itemsStack.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 6),
-            itemsStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            itemsStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            itemsStack.bottomAnchor.constraint(lessThanOrEqualTo: sep.topAnchor, constant: -8),
-
-            sep.heightAnchor.constraint(equalToConstant: 1),
-            sep.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            sep.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            sep.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        ])
-
-        if let img = chevronButton.image(for: .normal)?.withRenderingMode(.alwaysTemplate) {
-            chevronButton.setImage(img, for: .normal)
-        }
-        chevronButton.tintColor = UIColor(named: "ChevronGray") ?? .systemGray
-
-        // Swipe-to-delete gesture (controller handles delete)
-        let swipe = UISwipeGestureRecognizer(target: self, action: #selector(didSwipeLeft(_:)))
-        swipe.direction = .left
-        contentView.addGestureRecognizer(swipe)
-
+        setupSeparator()
+        setupGestures()
         clearDetails()
     }
 
@@ -77,6 +34,31 @@ class TestRecordCell: UICollectionViewCell {
         chevronButton.transform = .identity
     }
 
+    // MARK: - Setup
+    private func setupSeparator() {
+        separator.backgroundColor = UIColor(white: 0.85, alpha: 1)
+        separator.isHidden = false
+        
+        // Debug: Print separator frame to see if it has size
+        print("Separator frame: \(separator.frame)")
+        print("Separator constraints: \(separator.constraints)")
+        
+        // Force a height if no height constraint exists
+        if !separator.constraints.contains(where: { $0.firstAttribute == .height }) {
+            separator.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        }
+        
+        // Ensure it's not transparent
+        separator.alpha = 1.0
+        separator.clipsToBounds = false
+    }
+    
+    private func setupGestures() {
+        let swipe = UISwipeGestureRecognizer(target: self, action: #selector(didSwipeLeft))
+        swipe.direction = .left
+        contentView.addGestureRecognizer(swipe)
+    }
+
     private func clearDetails() {
         detailsContainer?.removeFromSuperview()
         detailsContainer = nil
@@ -84,11 +66,9 @@ class TestRecordCell: UICollectionViewCell {
         itemsStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
     }
 
-    func configureDate(_ date: Date, details: [ObservationItem]? = nil) {
-        let df = DateFormatter()
-        df.dateStyle = .medium
-        dateLabel.text = df.string(from: date)
-
+    // MARK: - Configuration
+    func configure(date: Date, details: [ObservationItem]? = nil) {
+        dateLabel.text = formatDate(date)
         clearDetails()
 
         guard let details = details, !details.isEmpty else {
@@ -96,73 +76,120 @@ class TestRecordCell: UICollectionViewCell {
             return
         }
 
-        let container = UIView()
-        container.backgroundColor = .white
-        container.layer.cornerRadius = 12
-        container.layer.cornerCurve = .continuous
-        container.translatesAutoresizingMaskIntoConstraints = false
-
-        let vstack = UIStackView()
-        vstack.axis = .vertical
-        vstack.spacing = 0
-        vstack.translatesAutoresizingMaskIntoConstraints = false
-
-        container.addSubview(vstack)
-        NSLayoutConstraint.activate([
-            vstack.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 12),
-            vstack.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -12),
-            vstack.topAnchor.constraint(equalTo: container.topAnchor, constant: 8),
-            vstack.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -8)
-        ])
-
-        for (i, obs) in details.enumerated() {
-            let row = UIStackView()
-            row.axis = .horizontal
-            row.spacing = 8
-
-            let left = UILabel()
-            left.text = obs.title
-            left.font = .systemFont(ofSize: 16)
-
-            let right = UILabel()
-            right.text = obs.value
-            right.font = .systemFont(ofSize: 16)
-            right.textAlignment = .right
-
-            row.addArrangedSubview(left)
-            row.addArrangedSubview(right)
-            row.heightAnchor.constraint(equalToConstant: 44).isActive = true
-
-            vstack.addArrangedSubview(row)
-
-            if i < details.count - 1 {
-                let d = UIView()
-                d.backgroundColor = UIColor(white: 0.93, alpha: 1)
-                d.heightAnchor.constraint(equalToConstant: 1).isActive = true
-                vstack.addArrangedSubview(d)
-            }
-        }
-
-        itemsStack.addArrangedSubview(container)
-        detailsContainer = container
-        detailsStack = vstack
-
+        addDetailsView(with: details)
         rotateChevron(down: true, animated: false)
     }
 
-    private func rotateChevron(down: Bool, animated: Bool) {
-        let transform = down ? CGAffineTransform(rotationAngle: .pi/2) : .identity
-        if animated { UIView.animate(withDuration: 0.22) { self.chevronButton.transform = transform } }
-        else { chevronButton.transform = transform }
+    private func addDetailsView(with details: [ObservationItem]) {
+        let container = createDetailsContainer()
+        let stack = createDetailsStack()
+        
+        setupContainerConstraints(container: container, stack: stack)
+        populateDetails(stack: stack, with: details)
+        
+        itemsStack.addArrangedSubview(container)
+        detailsContainer = container
+        detailsStack = stack
     }
 
+    // MARK: - Date Formatting
+    private func formatDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        return formatter.string(from: date)
+    }
+
+    // MARK: - Details Container Creation
+    private func createDetailsContainer() -> UIView {
+        let container = UIView()
+        container.backgroundColor = .white
+        container.layer.cornerRadius = containerCornerRadius
+        container.layer.cornerCurve = .continuous
+        container.translatesAutoresizingMaskIntoConstraints = false
+        return container
+    }
+
+    private func createDetailsStack() -> UIStackView {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = 0
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }
+
+    private func setupContainerConstraints(container: UIView, stack: UIStackView) {
+        container.addSubview(stack)
+        NSLayoutConstraint.activate([
+            stack.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: containerInsets.left),
+            stack.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -containerInsets.right),
+            stack.topAnchor.constraint(equalTo: container.topAnchor, constant: containerInsets.top),
+            stack.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -containerInsets.bottom)
+        ])
+    }
+
+    // MARK: - Details Population
+    private func populateDetails(stack: UIStackView, with details: [ObservationItem]) {
+        for (index, item) in details.enumerated() {
+            let row = createDetailRow(title: item.title, value: item.value)
+            stack.addArrangedSubview(row)
+            
+            if index < details.count - 1 {
+                stack.addArrangedSubview(createDivider())
+            }
+        }
+    }
+
+    private func createDetailRow(title: String, value: String) -> UIStackView {
+        let row = UIStackView()
+        row.axis = .horizontal
+        row.spacing = 8
+        
+        let titleLabel = createLabel(text: title, alignment: .left)
+        let valueLabel = createLabel(text: value, alignment: .right)
+        
+        row.addArrangedSubview(titleLabel)
+        row.addArrangedSubview(valueLabel)
+        row.heightAnchor.constraint(equalToConstant: rowHeight).isActive = true
+        
+        return row
+    }
+
+    private func createLabel(text: String, alignment: NSTextAlignment) -> UILabel {
+        let label = UILabel()
+        label.text = text
+        label.font = .systemFont(ofSize: 16)
+        label.textAlignment = alignment
+        return label
+    }
+
+    private func createDivider() -> UIView {
+        let divider = UIView()
+        divider.backgroundColor = UIColor(white: 0.93, alpha: 1)
+        divider.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        return divider
+    }
+
+    // MARK: - Chevron Animation
+    private func rotateChevron(down: Bool, animated: Bool) {
+        let transform = down ? CGAffineTransform(rotationAngle: .pi / 2) : .identity
+        
+        if animated {
+            UIView.animate(withDuration: 0.22) {
+                self.chevronButton.transform = transform
+            }
+        } else {
+            chevronButton.transform = transform
+        }
+    }
+
+    // MARK: - Actions
     @IBAction func chevronTapped(_ sender: UIButton) {
-        let isDown = sender.transform != .identity
-        rotateChevron(down: !isDown, animated: true)
+        let isExpanded = sender.transform != .identity
+        rotateChevron(down: !isExpanded, animated: true)
         onChevronTap?()
     }
 
-    @objc private func didSwipeLeft(_ g: UISwipeGestureRecognizer) {
+    @objc private func didSwipeLeft(_ gesture: UISwipeGestureRecognizer) {
         onRequestDelete?()
     }
 }

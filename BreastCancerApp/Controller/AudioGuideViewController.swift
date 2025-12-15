@@ -3,7 +3,7 @@ import AVFoundation
 
 class AudioGuideViewController: UIViewController {
 
-    // UI connections
+    //Outlets
     @IBOutlet weak var artworkImageView: UIImageView!
     @IBOutlet weak var playPauseButton: UIButton!
     @IBOutlet weak var back5Button: UIButton!
@@ -12,83 +12,99 @@ class AudioGuideViewController: UIViewController {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var logSelfExamButton: UIButton!
 
-    // Audio engine
+    // MARK: - Private Properties
     private var player: AVAudioPlayer?
     private var timer: Timer?
+    
+    private let timerInterval: TimeInterval = 0.3
+    private let seekInterval: TimeInterval = 5.0
 
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = titleLabel.text
-        loadAudio()
+        setupAudioPlayer()
     }
 
-    // Load bundled audio file
-    private func loadAudio() {
-        guard let url = Bundle.main.url(forResource: "audio_guide", withExtension: "mp3"),
-              let p = try? AVAudioPlayer(contentsOf: url) else { return }
-        player = p
-        p.prepareToPlay()
+    // MARK: - Audio Setup
+    private func setupAudioPlayer() {
+        guard let audioURL = Bundle.main.url(forResource: "audio_guide", withExtension: "mp3") else {
+            print("Audio file not found")
+            return
+        }
+        
+        do {
+            let audioPlayer = try AVAudioPlayer(contentsOf: audioURL)
+            audioPlayer.prepareToPlay()
+            player = audioPlayer
+            configureSlider(duration: audioPlayer.duration)
+        } catch {
+            print("Failed to load audio: \(error)")
+        }
+    }
+
+    private func configureSlider(duration: TimeInterval) {
         progressSlider.minimumValue = 0
-        progressSlider.maximumValue = Float(p.duration)
+        progressSlider.maximumValue = Float(duration)
+        progressSlider.value = 0
     }
 
-    // Update slider as audio plays
-    private func tick() {
-        guard let p = player else { return }
-        progressSlider.value = Float(p.currentTime)
-        if !p.isPlaying { timer?.invalidate() }
+    // MARK: - Timer Management
+    private func startTimer() {
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(
+            withTimeInterval: timerInterval,
+            repeats: true
+        ) { [weak self] _ in
+            self?.updateProgress()
+        }
     }
 
-    // Toggle play/pause
-    // Toggle play/pause
+    private func updateProgress() {
+        guard let player = player else { return }
+        progressSlider.value = Float(player.currentTime)
+        
+        if !player.isPlaying {
+            timer?.invalidate()
+        }
+    }
+
+    // MARK: - Actions
     @IBAction func playPauseTapped(_ sender: UIButton) {
-        guard let p = player else {
-            print("PLAYER NIL")
+        guard let player = player else {
+            print("Player not initialized")
             return
         }
 
-        if p.isPlaying {
-            p.pause()
-            print("PAUSED")
+        if player.isPlaying {
+            player.pause()
         } else {
-            p.play()
+            player.play()
             startTimer()
-            print("PLAYING")
         }
     }
 
-
-
-    // Start periodic UI updates
-    private func startTimer() {
-        timer?.invalidate()
-        timer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true) { _ in self.tick() }
-    }
-
-    // Seek backward 5s
     @IBAction func back5Tapped(_ sender: UIButton) {
-        guard let p = player else { return }
-        p.currentTime = max(0, p.currentTime - 5)
-        tick()
+        guard let player = player else { return }
+        player.currentTime = max(0, player.currentTime - seekInterval)
+        updateProgress()
     }
 
-    // Seek forward 5s
     @IBAction func forward5Tapped(_ sender: UIButton) {
-        guard let p = player else { return }
-        p.currentTime = min(p.duration, p.currentTime + 5)
-        tick()
+        guard let player = player else { return }
+        player.currentTime = min(player.duration, player.currentTime + seekInterval)
+        updateProgress()
     }
 
-    // Manual slider scrub
     @IBAction func sliderValueChanged(_ sender: UISlider) {
         player?.currentTime = TimeInterval(sender.value)
-        tick()
+        updateProgress()
     }
 
-    // Navigate to Observations screen
     @IBAction func logSelfExamTapped(_ sender: UIButton) {
-        let vc = UIStoryboard(name: "Main", bundle: nil)
-            .instantiateViewController(withIdentifier: "ObservationsViewController")
-        navigationController?.pushViewController(vc, animated: true)
+        guard let observationsVC = UIStoryboard(name: "Main", bundle: nil)
+            .instantiateViewController(withIdentifier: "ObservationsViewController") as? UIViewController else {
+            return
+        }
+        navigationController?.pushViewController(observationsVC, animated: true)
     }
 }

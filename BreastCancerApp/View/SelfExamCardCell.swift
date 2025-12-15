@@ -1,9 +1,3 @@
-//
-//  SelfExamCardCell.swift
-//  BreastCancerApp
-//
-//  Created by Gayatri Goundadkar on 06/12/25.
-//
 import UIKit
 
 class SelfExamCardCell: UICollectionViewCell {
@@ -14,7 +8,10 @@ class SelfExamCardCell: UICollectionViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        cardView.layer.cornerRadius = 12
+        setupViews()
+    }
+    
+    private func setupViews() {
         cardView.clipsToBounds = true
         thumbnailImageView.contentMode = .scaleAspectFill
     }
