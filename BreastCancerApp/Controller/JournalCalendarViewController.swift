@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CalendarViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIPickerViewDataSource, UIPickerViewDelegate {
+class JournalCalendarViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIPickerViewDataSource, UIPickerViewDelegate {
     @IBOutlet weak var monthLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var journalsCollectionView: UICollectionView!
@@ -51,7 +51,7 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
         journalsCollectionView.delegate = self
         
         // register cell XIBs / nib files
-        collectionView.register(UINib(nibName: "CalendarDateCell", bundle: nil), forCellWithReuseIdentifier: "CalendarDateCell")
+        collectionView.register(UINib(nibName: "JournalCalendarDateCell", bundle: nil), forCellWithReuseIdentifier: "JournalCalendarDateCell")
         journalsCollectionView.register(
             UINib(nibName: "RecentJournalCell", bundle: nil),
             forCellWithReuseIdentifier: "RecentJournalCell"
@@ -88,9 +88,9 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
         // CALENDAR GRID
         if collectionView == self.collectionView {
             let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "CalendarDateCell",
+                withReuseIdentifier: "JournalCalendarDateCell",
                 for: indexPath
-            ) as! CalendarDateCell
+            ) as! JournalCalendarDateCell
 
             let dayString = totalSquares[indexPath.item]
             var hasJournal = false

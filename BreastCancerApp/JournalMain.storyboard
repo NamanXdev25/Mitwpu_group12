@@ -272,7 +272,7 @@
         <!--Journal Calendar-->
         <scene sceneID="lDJ-3Z-RAt">
             <objects>
-                <viewController storyboardIdentifier="CalendarViewController" id="DL5-4a-vgs" customClass="CalendarViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CalendarViewController" id="DL5-4a-vgs" customClass="JournalCalendarViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="twd-PD-pxy">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
