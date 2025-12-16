@@ -23,6 +23,7 @@ class AudioGuideViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupAudioPlayer()
+        updatePlayPauseButton()
     }
 
     // MARK: - Audio Setup
@@ -35,6 +36,7 @@ class AudioGuideViewController: UIViewController {
         do {
             let audioPlayer = try AVAudioPlayer(contentsOf: audioURL)
             audioPlayer.prepareToPlay()
+            audioPlayer.delegate = self
             player = audioPlayer
             configureSlider(duration: audioPlayer.duration)
         } catch {
@@ -67,6 +69,16 @@ class AudioGuideViewController: UIViewController {
             timer?.invalidate()
         }
     }
+    
+    // MARK: - UI Updates
+    private func updatePlayPauseButton() {
+        guard let player = player else { return }
+        
+      
+        let imageName = player.isPlaying ? "pause.fill" : "play.fill"
+        playPauseButton.setImage(UIImage(systemName: imageName), for: .normal)
+        
+    }
 
     // MARK: - Actions
     @IBAction func playPauseTapped(_ sender: UIButton) {
@@ -77,10 +89,13 @@ class AudioGuideViewController: UIViewController {
 
         if player.isPlaying {
             player.pause()
+            timer?.invalidate()
         } else {
             player.play()
             startTimer()
         }
+        
+        updatePlayPauseButton()
     }
 
     @IBAction func back5Tapped(_ sender: UIButton) {
@@ -101,10 +116,19 @@ class AudioGuideViewController: UIViewController {
     }
 
     @IBAction func logSelfExamTapped(_ sender: UIButton) {
-        guard let observationsVC = UIStoryboard(name: "selfexam", bundle: nil)
+        guard let observationsVC = UIStoryboard(name: "Main", bundle: nil)
             .instantiateViewController(withIdentifier: "ObservationsViewController") as? UIViewController else {
             return
         }
         navigationController?.pushViewController(observationsVC, animated: true)
+    }
+}
+
+// MARK: - AVAudioPlayerDelegate
+extension AudioGuideViewController: AVAudioPlayerDelegate {
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        timer?.invalidate()
+        updatePlayPauseButton()
+        progressSlider.value = 0
     }
 }
