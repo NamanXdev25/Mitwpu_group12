@@ -35,11 +35,11 @@ class SelfExamCardsContainerCell: UICollectionViewCell,
         innerCollectionView.showsHorizontalScrollIndicator = false
         innerCollectionView.backgroundColor = .clear
 
-        // Register card cell XIB (keep if using XIB) or ensure prototype cell exists
+       
         let nib = UINib(nibName: "SelfExamCardCell", bundle: nil)
         innerCollectionView.register(nib, forCellWithReuseIdentifier: "SelfExamCardCell")
 
-        // Configure horizontal layout: 8pt gap, 16pt side insets
+    
         if let layout = innerCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.scrollDirection = .horizontal
             layout.minimumLineSpacing = 8

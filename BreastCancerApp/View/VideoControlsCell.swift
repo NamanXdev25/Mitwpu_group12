@@ -21,7 +21,7 @@ class VideoControlsCell: UICollectionViewCell {
     var currentSeconds: Int = 9
     var totalSeconds: Int = 240
     
-    // 🔥 NEW: Track if user is dragging
+  
     var isDragging = false
     var wasPlayingBeforeDrag = false
     
@@ -38,21 +38,7 @@ class VideoControlsCell: UICollectionViewCell {
         updateLoopButtonAppearance()
     }
     
-  /*  func setupButton(_ button: UIButton, icon: String, size: CGFloat) {
-        let config = UIImage.SymbolConfiguration(pointSize: size, weight: .medium)
-        button.setImage(UIImage(systemName: icon, withConfiguration: config), for: .normal)
-        button.tintColor = UIColor(red: 0.95, green: 0.45, blue: 0.55, alpha: 1.0)
-        button.backgroundColor = .clear
-    }
-   */
-   /*
-    func setupPlayButton() {
-        let config = UIImage.SymbolConfiguration(pointSize: 56, weight: .thin)
-        playButton.setImage(UIImage(systemName: "play.circle.fill", withConfiguration: config), for: .normal)
-        playButton.tintColor = UIColor(red: 0.95, green: 0.45, blue: 0.55, alpha: 1.0)
-        playButton.backgroundColor = .clear
-    }
-*/
+  
     
     func updateLoopButtonAppearance() {
         let config = UIImage.SymbolConfiguration(pointSize: 28, weight: .medium)
@@ -70,18 +56,7 @@ class VideoControlsCell: UICollectionViewCell {
         }
     }
     
-//    func createThumbImage() -> UIImage {
-//        let size = CGSize(width: 20, height: 20)
-//        let renderer = UIGraphicsImageRenderer(size: size)
-//        
-//        return renderer.image { context in
-//            let pinkColor = UIColor(red: 0.95, green: 0.45, blue: 0.55, alpha: 1.0)
-//            pinkColor.setFill()
-//            
-//            let circle = UIBezierPath(ovalIn: CGRect(origin: .zero, size: size))
-//            circle.fill()
-//        }
-//    }
+
     
     func configure(currentTime: Int, totalTime: Int) {
         self.currentSeconds = currentTime
@@ -92,7 +67,7 @@ class VideoControlsCell: UICollectionViewCell {
     }
     
     func updateProgress() {
-        // Don't update slider if user is dragging
+      
         if !isDragging {
             let progress = Float(currentSeconds) / Float(totalSeconds)
             progressSlider.value = progress
@@ -188,7 +163,7 @@ class VideoControlsCell: UICollectionViewCell {
         showLoopToast(message: message)
     }
     
-    // 🔥 NEW: Slider touch DOWN - User started dragging
+   
     @IBAction func sliderTouchDown(_ sender: UISlider) {
         print("👆 User started dragging slider")
         isDragging = true
@@ -200,7 +175,7 @@ class VideoControlsCell: UICollectionViewCell {
         }
     }
     
-    // 🔥 UPDATED: Slider value changed - User is dragging
+   
     @IBAction func sliderChanged(_ sender: UISlider) {
         // Update time display as user drags
         currentSeconds = Int(sender.value * Float(totalSeconds))
@@ -209,7 +184,7 @@ class VideoControlsCell: UICollectionViewCell {
         print("🎯 Slider at: \(formatTime(currentSeconds))")
     }
     
-    // 🔥 NEW: Slider touch UP - User finished dragging
+   
     @IBAction func sliderTouchUp(_ sender: UISlider) {
         print("✋ User finished dragging slider")
         isDragging = false

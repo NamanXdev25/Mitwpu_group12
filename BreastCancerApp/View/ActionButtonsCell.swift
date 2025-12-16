@@ -4,7 +4,7 @@ class ActionButtonsCell: UICollectionViewCell {
     
     @IBOutlet weak var addToPlanButton: UIButton!
     
-    // ✅ THESE ARE THE CLOSURES
+    
     var onAddToPlan: (() -> Void)?
     var onSetReminder: (() -> Void)?
     
@@ -13,7 +13,7 @@ class ActionButtonsCell: UICollectionViewCell {
         
     }
     
-    // ✅ THESE ARE THE IBACTIONS
+
     @IBAction func addToPlanTapped(_ sender: Any) {
         animateButton(addToPlanButton)
         onAddToPlan?()  // Call the closure

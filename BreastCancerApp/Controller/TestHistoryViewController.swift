@@ -163,11 +163,11 @@ final class TestHistoryViewController: UIViewController,
         config.backgroundColor = .clear
         config.headerMode = .none
         
-        // Remove the first divider line at the top
+        
         config.itemSeparatorHandler = { [weak self] indexPath, sectionSeparatorConfiguration in
             var configuration = sectionSeparatorConfiguration
             
-            // Hide separator for the first item
+         
             if indexPath.item == 0 {
                 configuration.topSeparatorVisibility = .hidden
             }

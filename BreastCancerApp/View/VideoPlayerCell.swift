@@ -28,7 +28,7 @@ class VideoPlayerCell: UICollectionViewCell {
         isMuted = false
         updateSpeakerIcon()
         
-        //applyDynamicHeight()
+        
     }
     
     func updateSpeakerIcon() {

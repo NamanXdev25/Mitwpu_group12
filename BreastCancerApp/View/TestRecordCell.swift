@@ -39,16 +39,16 @@ class TestRecordCell: UICollectionViewCell {
         separator.backgroundColor = UIColor(white: 0.85, alpha: 1)
         separator.isHidden = false
         
-        // Debug: Print separator frame to see if it has size
+       
         print("Separator frame: \(separator.frame)")
         print("Separator constraints: \(separator.constraints)")
         
-        // Force a height if no height constraint exists
+        
         if !separator.constraints.contains(where: { $0.firstAttribute == .height }) {
             separator.heightAnchor.constraint(equalToConstant: 1).isActive = true
         }
         
-        // Ensure it's not transparent
+      
         separator.alpha = 1.0
         separator.clipsToBounds = false
     }
