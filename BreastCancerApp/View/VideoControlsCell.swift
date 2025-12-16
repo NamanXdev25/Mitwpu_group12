@@ -18,7 +18,7 @@ class VideoControlsCell: UICollectionViewCell {
     var isPlaying = false
     var isLooping = false
     var progressTimer: Timer?
-    var currentSeconds: Int = 9
+    var currentSeconds: Int = 0
     var totalSeconds: Int = 240
     
   

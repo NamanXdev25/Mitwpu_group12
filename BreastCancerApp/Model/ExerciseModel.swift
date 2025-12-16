@@ -1,7 +1,5 @@
 import UIKit
 
-// DATA STRUCTURES 
-
 struct PlanItem: Codable {
     var id: String
     var title: String
@@ -17,16 +15,12 @@ struct ExerciseItem: Codable {
     var imageName: String
 }
 
-// History Structure
 struct DailyProgress: Codable {
     let total: Int
     let completed: Int
 }
 
-
-
 class ExerciseManager {
-    
     
     static let shared = ExerciseManager()
     
@@ -37,7 +31,6 @@ class ExerciseManager {
     var myExercises: [ExerciseItem] = []
     var exploreItems: [ExerciseItem] = []
     
-   
     var history: [String: DailyProgress] = [:]
     
     init() {
@@ -52,7 +45,6 @@ class ExerciseManager {
         self.exploreItems = loadJSON(filename: "explore")
     }
     
-    
     func loadJSON<T: Codable>(filename: String) -> [T] {
         guard let url = Bundle.main.url(forResource: filename, withExtension: "json") else { return [] }
         do {
@@ -64,10 +56,19 @@ class ExerciseManager {
         }
     }
     
-   
+    var currentDayPlan: [PlanItem] {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "E"
+        let todayShort = dateFormatter.string(from: Date())
+        let todayMatch = "Every \(todayShort)"
+        
+        return todaysPlan.filter { item in
+            item.subtitle == "Every Day" || item.subtitle == todayMatch
+        }
+    }
     
-    func togglePlanItem(at index: Int) {
-        if index < todaysPlan.count {
+    func togglePlanItem(id: String) {
+        if let index = todaysPlan.firstIndex(where: { $0.id == id }) {
             todaysPlan[index].isCompleted.toggle()
             saveTodaysPlan()
             updateHistoryForToday()
@@ -103,33 +104,31 @@ class ExerciseManager {
         return removed
     }
     
-    
-    
     func saveTodaysPlan() {
         do {
             let data = try JSONEncoder().encode(todaysPlan)
             UserDefaults.standard.set(data, forKey: todaysPlanStorageKey)
-        } catch { print("Error saving plan: \(error)") }
+        } catch {
+            print("Error saving plan: \(error)")
+        }
     }
     
     func loadSavedPlan() {
         guard let data = UserDefaults.standard.data(forKey: todaysPlanStorageKey) else { return }
         do {
             self.todaysPlan = try JSONDecoder().decode([PlanItem].self, from: data)
-        } catch { print("Error loading plan: \(error)") }
+        } catch {
+            print("Error loading plan: \(error)")
+        }
     }
-    
-   
     
     func updateHistoryForToday() {
         let key = getTodayDateString()
-        let total = todaysPlan.count
-        let completed = todaysPlan.filter { $0.isCompleted }.count
-        
-        
+        let dailyPlan = self.currentDayPlan
+        let total = dailyPlan.count
+        let completed = dailyPlan.filter { $0.isCompleted }.count
         let progress = DailyProgress(total: total, completed: completed)
         history[key] = progress
-        
         saveHistory()
     }
     
@@ -137,17 +136,20 @@ class ExerciseManager {
         do {
             let data = try JSONEncoder().encode(history)
             UserDefaults.standard.set(data, forKey: historyStorageKey)
-        } catch { print("Error saving history: \(error)") }
+        } catch {
+            print("Error saving history: \(error)")
+        }
     }
     
     func loadHistory() {
         guard let data = UserDefaults.standard.data(forKey: historyStorageKey) else { return }
         do {
             self.history = try JSONDecoder().decode([String: DailyProgress].self, from: data)
-        } catch { print("Error loading history: \(error)") }
+        } catch {
+            print("Error loading history: \(error)")
+        }
     }
     
-   
     func getTodayDateString() -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
