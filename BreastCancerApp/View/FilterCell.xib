@@ -32,6 +32,12 @@
                             <constraint firstItem="C5S-dm-Bv3" firstAttribute="centerX" secondItem="q1m-Vo-Kxf" secondAttribute="centerX" id="J0l-NQ-z0R"/>
                             <constraint firstItem="C5S-dm-Bv3" firstAttribute="centerY" secondItem="q1m-Vo-Kxf" secondAttribute="centerY" id="eW7-9D-oSi"/>
                         </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="20"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                        </userDefinedRuntimeAttributes>
                     </view>
                 </subviews>
             </view>

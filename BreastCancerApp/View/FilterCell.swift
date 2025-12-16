@@ -13,11 +13,6 @@ class FilterCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-        // Make it a perfect pill shape
-        // We assume height is around 40, so radius 20 makes it round
-        containerView.layer.cornerRadius = 20
-        containerView.layer.masksToBounds = true
     }
     
     // Configure the look based on whether it is selected

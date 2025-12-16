@@ -8,7 +8,9 @@ class CircularTimerView: UIView {
     private var timerLabel = UILabel()
     
     // Settings
-    private let radius: CGFloat = 125
+    private var radius: CGFloat {
+        min(bounds.width, bounds.height) / 2 - lineWidth / 2
+    }
     private let lineWidth: CGFloat = 6
     
     // Custom Pink Color (Safe Unwrap)

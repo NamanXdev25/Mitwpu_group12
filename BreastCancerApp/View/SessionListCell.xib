@@ -28,16 +28,17 @@
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="20"/>
+                                        <integer key="value" value="12"/>
                                     </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="play.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Tnk-5s-dik">
-                                <rect key="frame" x="27" y="36.333333333333329" width="27" height="17.666666666666671"/>
+                                <rect key="frame" x="32" y="36.333333333333329" width="16" height="17.666666666666671"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Medication 15min" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sFt-Bh-r5S">
-                                <rect key="frame" x="86" y="45" width="114" height="17"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Medication  15min" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sFt-Bh-r5S">
+                                <rect key="frame" x="86" y="45" width="117.33333333333331" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" systemColor="systemGrayColor"/>
                                 <nil key="highlightedColor"/>
@@ -67,20 +68,35 @@
                             <constraint firstItem="sFt-Bh-r5S" firstAttribute="top" secondItem="jTA-Wi-lTh" secondAttribute="top" constant="45" id="1LQ-5d-QA3"/>
                             <constraint firstItem="y5W-4L-OS9" firstAttribute="top" secondItem="jTA-Wi-lTh" secondAttribute="top" constant="24" id="1ZG-GR-6wn"/>
                             <constraint firstItem="LlP-uF-k82" firstAttribute="centerY" secondItem="jTA-Wi-lTh" secondAttribute="centerY" id="1nJ-TB-nu3"/>
+                            <constraint firstItem="sFt-Bh-r5S" firstAttribute="leading" secondItem="Tnk-5s-dik" secondAttribute="trailing" constant="38" id="2s6-B8-7Ur"/>
                             <constraint firstAttribute="trailing" secondItem="LlP-uF-k82" secondAttribute="trailing" constant="14" id="Eq8-c6-OQN"/>
+                            <constraint firstItem="Tnk-5s-dik" firstAttribute="centerX" secondItem="iVv-ze-cD9" secondAttribute="centerX" id="N5O-vz-XzU"/>
                             <constraint firstItem="iVv-ze-cD9" firstAttribute="leading" secondItem="jTA-Wi-lTh" secondAttribute="leading" constant="10" id="Pwy-Ay-cpJ"/>
-                            <constraint firstItem="Tnk-5s-dik" firstAttribute="centerY" secondItem="jTA-Wi-lTh" secondAttribute="centerY" id="WP0-Nd-avD"/>
-                            <constraint firstItem="Tnk-5s-dik" firstAttribute="centerY" secondItem="iVv-ze-cD9" secondAttribute="centerY" id="a7t-r7-crc"/>
-                            <constraint firstItem="y5W-4L-OS9" firstAttribute="leading" secondItem="Tnk-5s-dik" secondAttribute="trailing" constant="32" id="brd-in-7GU"/>
+                            <constraint firstItem="Tnk-5s-dik" firstAttribute="centerY" secondItem="iVv-ze-cD9" secondAttribute="centerY" id="Sd9-pP-SUN"/>
                             <constraint firstItem="iVv-ze-cD9" firstAttribute="centerY" secondItem="jTA-Wi-lTh" secondAttribute="centerY" id="crA-cz-RfR"/>
                             <constraint firstItem="y5W-4L-OS9" firstAttribute="leading" secondItem="iVv-ze-cD9" secondAttribute="trailing" constant="16" id="e6N-FO-0aa"/>
-                            <constraint firstItem="Tnk-5s-dik" firstAttribute="top" secondItem="jTA-Wi-lTh" secondAttribute="top" constant="34" id="kIx-4N-oid"/>
-                            <constraint firstItem="Tnk-5s-dik" firstAttribute="leading" secondItem="jTA-Wi-lTh" secondAttribute="leading" constant="27" id="t04-Dr-1Ej"/>
+                            <constraint firstItem="Tnk-5s-dik" firstAttribute="top" secondItem="jTA-Wi-lTh" secondAttribute="top" constant="34" id="emQ-wa-VkZ"/>
                             <constraint firstItem="sFt-Bh-r5S" firstAttribute="leading" secondItem="iVv-ze-cD9" secondAttribute="trailing" constant="16" id="wQn-IB-IXZ"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                <integer key="value" value="13"/>
+                                <integer key="value" value="16"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="NO"/>
+                            <userDefinedRuntimeAttribute type="color" keyPath="layer.shadowColor">
+                                <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.shadowOpacity">
+                                <real key="value" value="0.050000000000000003"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.shadowOffset.width">
+                                <integer key="value" value="0"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.shadowOffset.height">
+                                <integer key="value" value="2"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.shadowRadius">
+                                <integer key="value" value="4"/>
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </view>
@@ -110,7 +126,7 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGrayColor">
-            <color red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

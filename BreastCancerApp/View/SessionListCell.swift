@@ -18,13 +18,13 @@ class SessionListCell: UICollectionViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        containerView.layer.cornerRadius = 16
-        containerView.layer.shadowColor = UIColor.black.cgColor
-        containerView.layer.shadowOpacity = 0.05
-        containerView.layer.shadowOffset = CGSize(width: 0, height: 2)
-        containerView.layer.shadowRadius = 4
-        thumbnailImageView.layer.cornerRadius = 12
-        thumbnailImageView.layer.masksToBounds = true
+//        containerView.layer.cornerRadius = 16
+//        containerView.layer.shadowColor = UIColor.black.cgColor
+//        containerView.layer.shadowOpacity = 0.05
+//        containerView.layer.shadowOffset = CGSize(width: 0, height: 2)
+//        containerView.layer.shadowRadius = 4
+//        thumbnailImageView.layer.cornerRadius = 12
+//        thumbnailImageView.layer.masksToBounds = true
     }
     
     // 3. The Action for the Button
