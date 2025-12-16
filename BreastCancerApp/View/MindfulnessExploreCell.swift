@@ -18,8 +18,6 @@ class MindfulnessExploreCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        let tap = UITapGestureRecognizer(target: self, action: #selector(tapped))
-        contentView.addGestureRecognizer(tap)
     }
 
     @objc private func tapped() {

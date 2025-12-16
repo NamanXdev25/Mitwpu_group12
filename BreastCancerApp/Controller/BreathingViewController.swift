@@ -10,6 +10,8 @@ class BreathingViewController: UIViewController {
     // 1. Outlets
     @IBOutlet weak var collectionView: UICollectionView!
     
+    var preselectedSessionID: String?
+    
     // 2. Data Variables
     var dataManager = BreathingDataManager()
     
