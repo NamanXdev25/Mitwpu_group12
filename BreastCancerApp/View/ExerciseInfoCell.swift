@@ -14,32 +14,6 @@ class ExerciseInfoCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-       // self.backgroundColor = .clear
-        
-        // Title - Bold and prominent
-        //titleLabel.font = .systemFont(ofSize: 26, weight: .bold)
-        //titleLabel.textColor = .black
-        //titleLabel.numberOfLines = 0
-        
-        // Info button - Pink circular
-//        let config = UIImage.SymbolConfiguration(pointSize: 22, weight: .medium)
-//        infoButton.setImage(UIImage(systemName: "info.circle", withConfiguration: config), for: .normal)
-//        infoButton.tintColor = UIColor(red: 0.85, green: 0.40, blue: 0.50, alpha: 1.0)
-        
-//        // Description - Gray, readable
-//        descriptionLabel.font = .systemFont(ofSize: 15, weight: .regular)
-//        descriptionLabel.textColor = UIColor.darkGray
-//        descriptionLabel.numberOfLines = 0
-//        
-//        // Level badge - Subtle, darker text
-//        levelLabel.font = .systemFont(ofSize: 12, weight: .semibold)
-//        levelLabel.textColor = .beginner
-        
-//        // The view you added behind the label (connect as outlet: levelBackgroundView)
-//           levelBackgroundView.backgroundColor = UIColor(red: 1.0, green: 0.90, blue: 0.93, alpha: 1.0) // soft pink
-//           levelBackgroundView.layer.cornerRadius = 10
-//           levelBackgroundView.layer.masksToBounds = true
     }
     
     func configure(title: String, description: String, level: String) {

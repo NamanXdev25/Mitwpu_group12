@@ -27,37 +27,6 @@ class VideoControlsCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-       // self.backgroundColor = .clear
-        
-        // Current time label (LEFT SIDE)
-        //currentTimeLabel.font = .systemFont(ofSize: 13, weight: .medium)
-        //currentTimeLabel.textColor = .darkGray
-        //currentTimeLabel.textAlignment = .left
-        
-        // Total time label (RIGHT SIDE)
-        //totalTimeLabel.font = .systemFont(ofSize: 13, weight: .medium)
-        //totalTimeLabel.textColor = .darkGray
-        //totalTimeLabel.textAlignment = .right
-        
-        // Progress slider
-        //let pinkColor = UIColor(red: 0.95, green: 0.45, blue: 0.55, alpha: 1.0)
-        //progressSlider.minimumTrackTintColor = pinkColor
-        //progressSlider.maximumTrackTintColor = UIColor(red: 0.92, green: 0.92, blue: 0.92, alpha: 1.0)
-       // progressSlider.setThumbImage(createThumbImage(), for: .normal)
-        //progressSlider.setThumbImage(createThumbImage(), for: .highlighted)
-        
-        // 🔥 Enable continuous updates
-       // progressSlider.isContinuous = true
-        
-        // 🔥 Enable user interaction explicitly
-       // progressSlider.isUserInteractionEnabled = true
-        
-        // Control buttons
-        //setupButton(restartButton, icon: "arrow.counterclockwise", size: 28)
-        //setupPlayButton()
-        //setupButton(replayButton, icon: "repeat.circle", size: 28)
-        
         updateLoopButtonAppearance()
     }
     

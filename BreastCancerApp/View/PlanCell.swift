@@ -17,20 +17,8 @@ class PlanCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-//        // 1. Basic Style
-//        containerView.backgroundColor = .white
-//        containerView.layer.shadowOpacity = 0
-//        
-//        // 2. Check Button Style
-//        checkButton.layer.cornerRadius = 15
         checkButton.layer.borderWidth = 2
         checkButton.layer.borderColor = UIColor.systemGray4.cgColor
-        checkButton.setTitle("", for: .normal)
-//
-//        // 3. Clock Icon Style
-//        clockIcon.tintColor = .systemGray
-//        clockIcon.contentMode = .scaleAspectFit
     }
 
     @IBAction func checkButtonTapped(_ sender: Any) {

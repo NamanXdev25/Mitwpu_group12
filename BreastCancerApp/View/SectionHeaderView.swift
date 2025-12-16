@@ -5,6 +5,5 @@ class SectionHeaderView: UICollectionReusableView {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-       // titleLabel.textColor = .black // Default color
     }
 }

@@ -7,23 +7,8 @@ class CalendarDateCell: UICollectionViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Default style
-        //selectionLayer.backgroundColor = .clear
-       // dayLabel.textColor = .black
     }
-    
-//    // --- FIX FOR PERFECT CIRCLES ---
-//    override func layoutSubviews() {
-//        super.layoutSubviews()
-//        
-//        // 1. Ensure the view is a circle (Width / 2)
-//        // If your constraint in Storyboard is 30x30, this will be 15.
-//        // If it stretches, this ensures it stays round.
-//        selectionLayer.layer.cornerRadius = selectionLayer.frame.height / 2
-//        selectionLayer.layer.masksToBounds = true
-//    }
-
-    func configure(day: String, status: String) {
+        func configure(day: String, status: String) {
         dayLabel.text = day
         
         // Reset

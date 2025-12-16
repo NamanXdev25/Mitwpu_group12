@@ -14,70 +14,7 @@ class VideoPlayerCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-       /*
-        self.backgroundColor = .clear
-        
-        // Container
-        containerView.backgroundColor = .white
-        containerView.layer.cornerRadius = 28
-        containerView.clipsToBounds = true
-        containerView.isUserInteractionEnabled = true
-        
-        // Image view
-        videoImageView.contentMode = .scaleAspectFill
-        videoImageView.clipsToBounds = true
-        videoImageView.isUserInteractionEnabled = false
-        
-        // Speaker button - Will be made circular in layoutSubviews
-        speakerButton.backgroundColor = UIColor.white.withAlphaComponent(0.3)
-        speakerButton.clipsToBounds = true
-        speakerButton.isUserInteractionEnabled = true
-        
-        // IMPORTANT: Don't set corner radius here, do it in layoutSubviews
-        
-        containerView.bringSubviewToFront(speakerButton)
-        
-        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .semibold)
-        speakerButton.setImage(UIImage(systemName: "speaker.wave.2.fill", withConfiguration: config), for: .normal)
-        speakerButton.tintColor = .darkGray
-        
-        // Time label
-        timeLabel.backgroundColor = UIColor.darkGray.withAlphaComponent(0.6)
-        timeLabel.textColor = .white
-        timeLabel.font = .systemFont(ofSize: 14, weight: .semibold)
-        timeLabel.layer.cornerRadius = 16
-        timeLabel.clipsToBounds = true
-        timeLabel.textAlignment = .center
-        timeLabel.isUserInteractionEnabled = false
-        
-        containerView.bringSubviewToFront(timeLabel)
-        
-        applyDynamicHeight()
-        */
     }
-    
-//    func applyDynamicHeight() {
-//        if let heightConstraint = containerHeightConstraint {
-//            heightConstraint.constant = VideoPlayerCell.videoHeight
-//        }
-//        self.layoutIfNeeded()
-//    }
-//    
-//    override func layoutSubviews() {
-//        super.layoutSubviews()
-//        
-//        // Apply corner radius after layout
-//        containerView.layer.cornerRadius = 28
-//        videoImageView.layer.cornerRadius = 28
-//        
-//        // 🔵 FIX: Make speaker button perfectly round
-//        // Use the actual frame size to ensure it's circular
-//        speakerButton.layer.cornerRadius = speakerButton.frame.width / 2
-//        
-//        // Ensure buttons are on top
-//        containerView.bringSubviewToFront(speakerButton)
-//        containerView.bringSubviewToFront(timeLabel)
-//    }
     
     func configure(imageName: String) {
         if let img = UIImage(named: imageName) {

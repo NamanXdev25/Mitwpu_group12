@@ -22,46 +22,6 @@ class DetailExerciseCell: UICollectionViewCell {
     // MARK: - Lifecycle
     override func awakeFromNib() {
         super.awakeFromNib()
-        /*
-        // 1. Card Style
-        containerView.layer.cornerRadius = 12
-        containerView.backgroundColor = .white
-
-        // Shadow
-        containerView.layer.shadowColor = UIColor.black.cgColor
-        containerView.layer.shadowOpacity = 0.05
-        containerView.layer.shadowOffset = CGSize(width: 0, height: 2)
-        containerView.layer.shadowRadius = 6
-
-        // 2. Image Style
-        exerciseImageView.layer.cornerRadius = 10
-        exerciseImageView.contentMode = .scaleAspectFill
-        exerciseImageView.clipsToBounds = true
-
-        // 3. Text Style
-        titleLabel.textColor = .black
-        titleLabel.numberOfLines = 2
-        titleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
-
-        subtitleLabel.textColor = .darkGray
-        subtitleLabel.font = .systemFont(ofSize: 13)
-
-        timeLabel.textColor = .gray
-        timeLabel.font = .systemFont(ofSize: 13)
-
-        // 4. Icons
-        clockIconImageView.tintColor = .systemGray
-        clockIconImageView.image = UIImage(systemName: "clock")
-
-        // 5. Chevron
-        let config = UIImage.SymbolConfiguration(pointSize: 14, weight: .semibold)
-        chevronButton.setImage(UIImage(systemName: "chevron.right", withConfiguration: config), for: .normal)
-        chevronButton.tintColor = .systemGray3
-
-        // Ensure button action exists (IBAction should be connected in IB; this is a safety)
-        chevronButton.removeTarget(nil, action: nil, for: .allEvents)
-        chevronButton.addTarget(self, action: #selector(chevronTapped(_:)), for: .touchUpInside)
-         */
     }
 
     // MARK: - Configure

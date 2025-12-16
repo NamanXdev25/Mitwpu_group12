@@ -11,16 +11,6 @@ class ActionButtonsCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        //self.backgroundColor = .clear
-        
-        // Add to Plan - Pink filled button
-//        let pinkColor = UIColor(red: 0.95, green: 0.45, blue: 0.55, alpha: 1.0)
-//        addToPlanButton.backgroundColor = pinkColor
-//        addToPlanButton.setTitleColor(.white, for: .normal)
-//        addToPlanButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
-//        addToPlanButton.layer.cornerRadius = 28
-//        addToPlanButton.setTitle("Add to Plan", for: .normal)
-        
     }
     
     // ✅ THESE ARE THE IBACTIONS
