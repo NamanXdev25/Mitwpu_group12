@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Hv8-h1-88l">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="xPh-kG-LWF">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
@@ -55,9 +55,9 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yMo-0l-JqN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1257" y="228"/>
+            <point key="canvasLocation" x="-79" y="1793"/>
         </scene>
-        <!--Home View Controller-->
+        <!--Home-->
         <scene sceneID="L1v-8g-lQk">
             <objects>
                 <viewController id="ogF-rp-Q1l" customClass="HomeViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
@@ -95,18 +95,128 @@
                             <constraint firstAttribute="trailing" secondItem="stz-oS-E5S" secondAttribute="trailing" id="vx3-07-Txv"/>
                         </constraints>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Home" image="house" catalog="system" selectedImage="house.fill" id="ZdB-fC-YhZ"/>
                     <connections>
                         <outlet property="collectionView" destination="stz-oS-E5S" id="BiA-Mt-47l"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9N6-oe-tdf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-25" y="227"/>
+            <point key="canvasLocation" x="-2669" y="1793"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="9FF-Iu-LpO">
+            <objects>
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="xPh-kG-LWF" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Eh0-TA-DkI">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="tintColor" name="TabBarcolour"/>
+                        <color key="selectedImageTintColor" name="TabBarcolour"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="ogF-rp-Q1l" kind="relationship" relationship="viewControllers" id="oAC-8W-pUE"/>
+                        <segue destination="Lnc-RW-BbG" kind="relationship" relationship="viewControllers" id="h4h-5q-j1K"/>
+                        <segue destination="Hv8-h1-88l" kind="relationship" relationship="viewControllers" id="QZC-ug-I9w"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DT6-Ib-K01" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1822.1374045801526" y="1000"/>
+        </scene>
+        <!--Mindfulness-->
+        <scene sceneID="dV0-gz-Nzp">
+            <objects>
+                <viewController storyboardIdentifier="MindfulnessViewController" title="Mindfulness" id="EDM-s6-iEi" customClass="MindfulnessViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="qCo-JS-v3h">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NZq-sq-gIv">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="300"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="300" id="LUO-qf-miD"/>
+                                </constraints>
+                            </view>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="PMn-Ed-DaO">
+                                <rect key="frame" x="0.0" y="300" width="393" height="552"/>
+                                <color key="backgroundColor" name="BgColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="OGQ-bV-XHG">
+                                    <size key="itemSize" width="353" height="357"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="8Ty-On-Gl1">
+                                        <rect key="frame" x="20" y="0.0" width="353" height="357"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="2RS-9i-JE1">
+                                            <rect key="frame" x="0.0" y="0.0" width="353" height="357"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </collectionViewCellContentView>
+                                        <size key="customSize" width="353" height="357"/>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="zsz-ge-zy8"/>
+                        <color key="backgroundColor" name="BgColor"/>
+                        <constraints>
+                            <constraint firstItem="PMn-Ed-DaO" firstAttribute="trailing" secondItem="zsz-ge-zy8" secondAttribute="trailing" id="2Tb-oF-JpY"/>
+                            <constraint firstItem="PMn-Ed-DaO" firstAttribute="leading" secondItem="zsz-ge-zy8" secondAttribute="leading" id="DHS-g4-I6X"/>
+                            <constraint firstItem="PMn-Ed-DaO" firstAttribute="top" secondItem="NZq-sq-gIv" secondAttribute="bottom" id="GlT-Ke-aZX"/>
+                            <constraint firstItem="zsz-ge-zy8" firstAttribute="trailing" secondItem="NZq-sq-gIv" secondAttribute="trailing" id="Oh5-bz-qwE"/>
+                            <constraint firstItem="NZq-sq-gIv" firstAttribute="top" secondItem="qCo-JS-v3h" secondAttribute="top" id="nf4-eo-v7Q"/>
+                            <constraint firstAttribute="bottom" secondItem="PMn-Ed-DaO" secondAttribute="bottom" id="oml-nt-eVA"/>
+                            <constraint firstItem="NZq-sq-gIv" firstAttribute="leading" secondItem="zsz-ge-zy8" secondAttribute="leading" id="vmx-1p-U1c"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Mindfulness" largeTitleDisplayMode="always" id="bIa-qT-SZj"/>
+                    <connections>
+                        <outlet property="collectionView" destination="PMn-Ed-DaO" id="X6w-dK-k4v"/>
+                        <outlet property="gradientView" destination="NZq-sq-gIv" id="E6j-Yt-dqx"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5Hx-E8-4XS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-856" y="1793"/>
+        </scene>
+        <!--Mindfulness-->
+        <scene sceneID="nKD-kq-N2o">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Lnc-RW-BbG" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Mindfulness" image="figure.mind.and.body.circle" catalog="system" selectedImage="figure.mind.and.body.circle.fill" id="iOt-8J-Rix"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="cRc-7p-4BU">
+                        <rect key="frame" x="0.0" y="118" width="393" height="106"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="EDM-s6-iEi" kind="relationship" relationship="rootViewController" id="583-tu-A3h"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hCg-v9-snq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1822" y="1793"/>
         </scene>
     </scenes>
     <resources>
+        <image name="figure.mind.and.body.circle" catalog="system" width="128" height="123"/>
+        <image name="figure.mind.and.body.circle.fill" catalog="system" width="128" height="123"/>
         <image name="heart.text.clipboard" catalog="system" width="103" height="128"/>
         <image name="heart.text.clipboard.fill" catalog="system" width="103" height="128"/>
+        <image name="house" catalog="system" width="128" height="104"/>
+        <image name="house.fill" catalog="system" width="128" height="104"/>
+        <namedColor name="BgColor">
+            <color red="0.97254901960784312" green="0.94901960784313721" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="TabBarcolour">
+            <color red="0.9100000262260437" green="0.41600000858306885" blue="0.57300001382827759" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="logsbgcolor">
             <color red="0.97299998998641968" green="0.94900000095367432" blue="0.9570000171661377" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

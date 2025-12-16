@@ -1,19 +1,20 @@
 //
 // ObservationsContainerCell.swift
 //
+//
+// ObservationsContainerCell.swift
+//
 
 import UIKit
 
 class ObservationsContainerCell: UICollectionViewCell {
-    // Connect these outlets in your XIB
-    @IBOutlet weak var headerLabel: UILabel?       // optional; connect if present in nib
+    @IBOutlet weak var headerLabel: UILabel?
     @IBOutlet weak var lumpsSwitch: UISwitch!
     @IBOutlet weak var skinChangesButton: UIButton!
     @IBOutlet weak var nippleChangesButton: UIButton!
     @IBOutlet weak var painButton: UIButton!
     @IBOutlet weak var sizeSwitch: UISwitch!
 
-    // Stored selection properties
     var selectedSkinChange: String?
     var selectedNippleChange: String?
     var selectedPainLevel: String?
@@ -43,18 +44,7 @@ class ObservationsContainerCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        // --- Make entire cell transparent so the pink page shows through ---
-        backgroundColor = .clear
-        contentView.backgroundColor = .clear
-
-        // Keep a neat header if present
-        if let header = headerLabel {
-            header.font = .systemFont(ofSize: 17, weight: .semibold)
-            header.text = "Observations"
-            header.textColor = UIColor(named: "mutedHeader") ?? UIColor.gray
-        }
-
-        // Restore saved/default values
+        // Restore saved values
         let dict = UserDefaults.standard.dictionary(forKey: "latestObservations") ?? [:]
         let savedSkin = (dict["skinChanges"] as? String) ?? "None"
         let savedNipple = (dict["nippleChanges"] as? String) ?? "None"
@@ -67,18 +57,12 @@ class ObservationsContainerCell: UICollectionViewCell {
         selectedPainLevel = savedPain
 
         skinChangesButton.setTitle(savedSkin, for: .normal)
-        skinChangesButton.setTitleColor(UIColor(named: "mutedText") ?? .systemGray, for: .normal)
-
         nippleChangesButton.setTitle(savedNipple, for: .normal)
-        nippleChangesButton.setTitleColor(UIColor(named: "mutedText") ?? .systemGray, for: .normal)
-
         painButton.setTitle(savedPain, for: .normal)
-        painButton.setTitleColor(UIColor(named: "mutedText") ?? .systemGray, for: .normal)
 
         lumpsSwitch.isOn = savedLumps
         sizeSwitch.isOn = savedSize
 
-        // Ensure buttons show their menus (UIMenu)
         configureMenus()
     }
 
@@ -182,7 +166,6 @@ class ObservationsContainerCell: UICollectionViewCell {
         return nil
     }
 
-    // Provide a dictionary snapshot for controller
     func currentObservationSnapshot() -> [String: Any] {
         return [
             "lumps": lumpsSwitch.isOn,
