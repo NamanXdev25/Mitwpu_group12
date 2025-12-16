@@ -225,10 +225,6 @@ class MindfulnessViewController: UIViewController {
             assertionFailure("BreathingPlayerViewController not found")
             return
         }
-
-        // Pass the recommended session
-        //vc.preselectedSessionID = id
-
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -363,7 +359,6 @@ class MindfulnessViewController: UIViewController {
     }
     
     private func handleExploreTap(at index: Int) {
-        // index 0 = label → ignore
         guard index != 0 else { return }
 
         switch index {
@@ -392,14 +387,12 @@ class MindfulnessViewController: UIViewController {
     
     private func openBreathingSessions() {
         let storyboard = UIStoryboard(name: "BreathingSessions", bundle: nil)
-        
 
         guard let breathingVC = storyboard.instantiateViewController(
             withIdentifier: "BreathingSessionsViewController"
         ) as? BreathingViewController else {
             fatalError("BreathingSessionsViewController not found in BretahingSessions.storyboard")
         }
-
         navigationController?.pushViewController(breathingVC, animated: true)
     }
 
@@ -425,21 +418,6 @@ extension MindfulnessViewController: UICollectionViewDelegate {
             }
         }
     }
-    
-//    func collectionView(_ collectionView: UICollectionView,
-//                        didSelectItemAt indexPath: IndexPath) {
-//
-//        guard let section = Section(rawValue: indexPath.section) else { return }
-//
-//        switch section {
-//
-//        case .explore:
-//            handleExploreTap(at: indexPath.item)
-//
-//        default:
-//            break
-//        }
-//    }
     
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath) {
