@@ -21,10 +21,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="80"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v7i-Zp-dFw">
-                                <rect key="frame" x="15" y="25" width="30" height="30"/>
+                                <rect key="frame" x="15" y="30" width="20" height="20"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="1F4-a8-dAm"/>
-                                    <constraint firstAttribute="width" constant="30" id="LGk-at-gXQ"/>
+                                    <constraint firstAttribute="height" constant="20" id="1F4-a8-dAm"/>
+                                    <constraint firstAttribute="width" constant="20" id="LGk-at-gXQ"/>
                                 </constraints>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain"/>
@@ -44,19 +44,19 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ehY-OK-yS9">
-                                <rect key="frame" x="60" y="7.9999999999999982" width="318" height="19.333333333333329"/>
+                                <rect key="frame" x="50" y="7.9999999999999982" width="328" height="19.333333333333329"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NYy-q1-gnz">
-                                <rect key="frame" x="60" y="32.333333333333336" width="318" height="15"/>
+                                <rect key="frame" x="50" y="32.333333333333336" width="328" height="15"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dDk-Vw-CoP">
-                                <rect key="frame" x="65" y="79" width="308" height="1"/>
+                                <rect key="frame" x="55" y="79" width="318" height="1"/>
                                 <color key="backgroundColor" systemColor="systemGray5Color"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="q0j-hg-rjJ"/>
@@ -73,7 +73,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clock" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="B2S-tI-hTY">
-                                <rect key="frame" x="228" y="30.666666666666664" width="53" height="18"/>
+                                <rect key="frame" x="218" y="30.666666666666664" width="63" height="18"/>
                                 <color key="tintColor" systemColor="systemGrayColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="18.329999999999998" id="9TZ-aq-kqz"/>

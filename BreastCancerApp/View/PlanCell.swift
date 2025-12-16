@@ -19,12 +19,13 @@ class PlanCell: UICollectionViewCell {
         super.awakeFromNib()
         checkButton.layer.borderWidth = 2
         checkButton.layer.borderColor = UIColor.systemGray4.cgColor
+        checkButton.layer.cornerRadius = checkButton.bounds.height / 2
+        checkButton.clipsToBounds = true
     }
 
     @IBAction func checkButtonTapped(_ sender: Any) {
         onToggle?()
     }
-    
     
     func configure(with item: PlanItem) {
         titleLabel.text = item.title
@@ -36,7 +37,11 @@ class PlanCell: UICollectionViewCell {
         if item.isCompleted {
             checkButton.backgroundColor = checkcolor
             checkButton.layer.borderWidth = 0
-            checkButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
+
+            let config = UIImage.SymbolConfiguration(pointSize: 14, weight: .bold)
+            let image = UIImage(systemName: "checkmark", withConfiguration: config)
+
+            checkButton.setImage(image, for: .normal)
             checkButton.tintColor = .white
         } else {
             checkButton.backgroundColor = .clear
