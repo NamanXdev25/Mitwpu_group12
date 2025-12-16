@@ -21,7 +21,6 @@ class VideoControlsCell: UICollectionViewCell {
     var currentSeconds: Int = 0
     var totalSeconds: Int = 240
     
-  
     var isDragging = false
     var wasPlayingBeforeDrag = false
     
@@ -36,9 +35,8 @@ class VideoControlsCell: UICollectionViewCell {
         isLooping = false
         isDragging = false
         updateLoopButtonAppearance()
+        resetPlayButton() 
     }
-    
-  
     
     func updateLoopButtonAppearance() {
         let config = UIImage.SymbolConfiguration(pointSize: 28, weight: .medium)
@@ -47,16 +45,7 @@ class VideoControlsCell: UICollectionViewCell {
         
         let color = UIColor(red: 0.95, green: 0.45, blue: 0.55, alpha: 1.0)
         replayButton.tintColor = color
-        
-        if isLooping {
-           // replayButton.backgroundColor = UIColor(red: 0.95, green: 0.45, blue: 0.55, alpha: 0.15)
-           // replayButton.layer.cornerRadius = 22
-        } else {
-            replayButton.backgroundColor = .clear
-        }
     }
-    
-
     
     func configure(currentTime: Int, totalTime: Int) {
         self.currentSeconds = currentTime
@@ -64,12 +53,16 @@ class VideoControlsCell: UICollectionViewCell {
         
         updateTimeLabels()
         updateProgress()
+        
+        // Ensure play button matches current state (optional, but good practice)
+        let config = UIImage.SymbolConfiguration(pointSize: 56, weight: .thin)
+        let iconName = isPlaying ? "pause.circle.fill" : "play.circle.fill"
+        playButton.setImage(UIImage(systemName: iconName, withConfiguration: config), for: .normal)
     }
     
     func updateProgress() {
-      
         if !isDragging {
-            let progress = Float(currentSeconds) / Float(totalSeconds)
+            let progress = totalSeconds > 0 ? Float(currentSeconds) / Float(totalSeconds) : 0
             progressSlider.value = progress
         }
     }
@@ -91,7 +84,6 @@ class VideoControlsCell: UICollectionViewCell {
         progressTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             guard let self = self else { return }
             
-            // Don't update if user is dragging
             if self.isDragging { return }
             
             if self.currentSeconds < self.totalSeconds {
@@ -100,7 +92,8 @@ class VideoControlsCell: UICollectionViewCell {
                 self.updateTimeLabels()
             } else {
                 if self.isLooping {
-                    print("🔁 Looping video...")
+                    // Loop logic is handled by the PlayerCell notification,
+                    // but we reset UI counter here to match
                     self.currentSeconds = 0
                     self.updateProgress()
                     self.updateTimeLabels()
@@ -126,10 +119,19 @@ class VideoControlsCell: UICollectionViewCell {
     @IBAction func restartTapped(_ sender: Any) {
         animateButton(restartButton)
         
+        // 1. Reset Time
         currentSeconds = 0
         updateProgress()
         updateTimeLabels()
         
+        // 2. FIX: Force UI to "Playing" state
+        // Even if we were paused, restart implies "Play from start"
+        isPlaying = true
+        let config = UIImage.SymbolConfiguration(pointSize: 56, weight: .thin)
+        playButton.setImage(UIImage(systemName: "pause.circle.fill", withConfiguration: config), for: .normal)
+        startProgressTimer()
+        
+        // 3. Notify Controller
         onRestart?()
     }
     
@@ -157,48 +159,30 @@ class VideoControlsCell: UICollectionViewCell {
         updateLoopButtonAppearance()
         
         let message = isLooping ? "Loop enabled 🔁" : "Loop disabled"
-        print(message)
-        
         onLoop?(isLooping)
         showLoopToast(message: message)
     }
     
-   
     @IBAction func sliderTouchDown(_ sender: UISlider) {
-        print("👆 User started dragging slider")
         isDragging = true
         wasPlayingBeforeDrag = isPlaying
-        
-        // Pause the timer while dragging
         if isPlaying {
             stopProgressTimer()
         }
     }
     
-   
     @IBAction func sliderChanged(_ sender: UISlider) {
-        // Update time display as user drags
         currentSeconds = Int(sender.value * Float(totalSeconds))
         updateTimeLabels()
-        
-        print("🎯 Slider at: \(formatTime(currentSeconds))")
     }
     
-   
     @IBAction func sliderTouchUp(_ sender: UISlider) {
-        print("✋ User finished dragging slider")
         isDragging = false
-        
-        // Update final position
         currentSeconds = Int(sender.value * Float(totalSeconds))
         updateTimeLabels()
         
-        print("✅ Seeked to: \(formatTime(currentSeconds))")
-        
-        // Notify parent
         onSeek?(sender.value)
         
-        // Resume playback if it was playing before
         if wasPlayingBeforeDrag {
             startProgressTimer()
         }
