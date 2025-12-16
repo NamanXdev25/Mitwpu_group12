@@ -1,5 +1,4 @@
 import UIKit
-
 class CircularTimerView: UIView {
 
     // UI Layers

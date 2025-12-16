@@ -12,19 +12,16 @@ class BreathingViewController: UIViewController {
     
     // 2. Data Variables
     var dataManager = BreathingDataManager()
+    var favoriteSessions: [BreathingSession] = [] //list
+    var filterTags: [String] = [] //categories stored
     
-    // Lists
-    var favoriteSessions: [BreathingSession] = []
-    var filterTags: [String] = []
-    
-    // "Master" List (Database - Holds everything)
+    // "Master"Database - Holds everything
     var allSessions: [BreathingSession] = []
     
-    // "Display" List (What users actually see based on filters)
+    // "Display" List based on user tap
     var filteredSessions: [BreathingSession] = []
     
-    // Track selected filter (Defaults to first one "All")
-    var selectedFilterIndex: Int = 0
+    var selectedFilterIndex: Int = 0 //tracks filter chip
 
     // MARK: - View Lifecycle
     override func viewDidLoad() {
@@ -35,27 +32,22 @@ class BreathingViewController: UIViewController {
         filterTags = dataManager.getFilterTags()
         allSessions = dataManager.getAllSessions()
         
-        // Initialize Filtered List (Start by showing everything)
+        // Start by showing everything
         filteredSessions = allSessions
-        
-        // B. Register Cells
-        registerCells()
+        registerCells() //register cells
         
         // C. Setup Data Source & Delegate
         collectionView.dataSource = self
         collectionView.delegate = self
         
-        // D. Setup Layout
-        collectionView.setCollectionViewLayout(generateLayout(), animated: false)
+        collectionView.setCollectionViewLayout(generateLayout(), animated: false) //apply compositional layout
     }
-
     
     // MARK: - Layout Generation
-    // MOVED OUTSIDE viewDidLoad (Crucial Fix)
     func generateLayout() -> UICollectionViewCompositionalLayout {
         return UICollectionViewCompositionalLayout { (sectionIndex, env) -> NSCollectionLayoutSection? in
             
-            // Define the Header Size
+            // Define the Section Header's Size
             let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(50))
             let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: "header", alignment: .top)
             
@@ -70,7 +62,7 @@ class BreathingViewController: UIViewController {
                     let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
                     let item = NSCollectionLayoutItem(layoutSize: itemSize)
                     
-                    // Height: 120 (Small and snug)
+                    // Height: 120
                     let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(120))
                     let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
                     
@@ -136,14 +128,11 @@ class BreathingViewController: UIViewController {
         // Section 0
         collectionView.register(UINib(nibName: "FavoriteSessionCell", bundle: nil), forCellWithReuseIdentifier: "FavoriteSessionCell")
         collectionView.register(UINib(nibName: "EmptyStateCell", bundle: nil), forCellWithReuseIdentifier: "EmptyStateCell")
-        
-        // Section 1
+   
         collectionView.register(UINib(nibName: "FilterCell", bundle: nil), forCellWithReuseIdentifier: "FilterCell")
         
-        // Section 2
         collectionView.register(UINib(nibName: "SessionListCell", bundle: nil), forCellWithReuseIdentifier: "ListCell")
         
-        // Headers
         collectionView.register(UINib(nibName: "HeaderView", bundle: nil), forSupplementaryViewOfKind: "header", withReuseIdentifier: "HeaderView")
     }
 }
@@ -169,7 +158,8 @@ extension BreathingViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         if indexPath.section == 0 {
-            // SECTION 0: FAVORITES
+    
+        // SECTION 0: FAVORITES
             if favoriteSessions.isEmpty {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EmptyStateCell", for: indexPath) as! EmptyStateCell
                 return cell

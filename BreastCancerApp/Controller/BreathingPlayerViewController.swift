@@ -5,20 +5,19 @@ import AVFoundation
 class BreathingPlayerViewController: UIViewController {
 
     var session: BreathingSession?
-    
-    // --- Outlets ---
+    // Outlets
     @IBOutlet weak var backgroundImageView: UIImageView!
     @IBOutlet weak var videoContainerView: VideoPlayerContainerView!
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var timerView: CircularTimerView!
     
-    // --- Video Player Variables ---
+    //Video Player Variables
     var player: AVPlayer?
     var playerLayer: AVPlayerLayer?
     var isPlaying = false
     var isFirstPlay = true
     
-    // --- Timer Logic ---
+    //Timer Logic
     var timer: Timer?
     var secondsRemaining = 300 // 5 mins
     var totalSessionDuration = 300
@@ -28,21 +27,21 @@ class BreathingPlayerViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        // 1. Create a Transparent Appearance
+        // a Transparent Appearance
         let appearance = UINavigationBarAppearance()
         appearance.configureWithTransparentBackground()
         appearance.backgroundColor = .clear
         appearance.shadowColor = .clear
         
-        // 2. Set Title to WHITE
+        // Title set to WHITE
         appearance.titleTextAttributes = [.foregroundColor: UIColor.white, .font: UIFont.systemFont(ofSize: 20, weight: .bold)]
         
-        // 3. Apply settings
+        // Apply settings
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationController?.navigationBar.compactAppearance = appearance
         
-        // 4. Make Back Button White
+        // Make Back Button White
         navigationController?.navigationBar.tintColor = .white
     }
     
@@ -53,7 +52,6 @@ class BreathingPlayerViewController: UIViewController {
         let defaultAppearance = UINavigationBarAppearance()
         defaultAppearance.configureWithDefaultBackground()
         
-        // Set Title to BLACK
         defaultAppearance.titleTextAttributes = [.foregroundColor: UIColor.black, .font: UIFont.systemFont(ofSize: 20, weight: .semibold)]
         
         // Apply default settings
@@ -66,14 +64,13 @@ class BreathingPlayerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // 2. Data Setup
         setupData()
         prepareVideo()
         setupTapGesture()
         timerView.reset()
     }
 
-    // MARK: - Setup
+    // MARK: - Setup - binds model data to ui
     func setupData() {
         guard let session = session else { return }
         self.title = session.title
@@ -85,7 +82,7 @@ class BreathingPlayerViewController: UIViewController {
         totalSessionDuration = 300
         secondsRemaining = totalSessionDuration
     }
-    
+    //MARK : - Sets up video playback sys  and media coordination
     func prepareVideo() {
         guard let session = session else { return }
         
@@ -106,13 +103,12 @@ class BreathingPlayerViewController: UIViewController {
     }
     
     func setupTapGesture() {
-        // This allows tapping anywhere on the screen (including the circle) to toggle pause
+        //  allows tapping on the screen to pause
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(screenTapped))
         view.addGestureRecognizer(tapGesture)
     }
       
     // MARK: - Interaction Logic
-    
     @objc func screenTapped() {
         if !isFirstPlay {
             togglePlayPause()
@@ -153,7 +149,7 @@ class BreathingPlayerViewController: UIViewController {
             stopTimer()
             isPlaying = false
             
-            // Hide the Timer Text
+            // Hide Timer txt
             timerView.setTimerTextHidden(true)
             
             // show Play Button
@@ -175,7 +171,7 @@ class BreathingPlayerViewController: UIViewController {
         }
     }
     
-    // MARK: - Timer Engine
+    //MARK: - Timer Engine
     func startTimer() {
         stopTimer()
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
@@ -195,51 +191,48 @@ class BreathingPlayerViewController: UIViewController {
             secondsRemaining -= 1
             timerView.updateProgress(secondsRemaining: secondsRemaining, totalDuration: totalSessionDuration)
         } else {
-            // --- FINISHED LOGIC ---
+            //FINISHED LOGIC
             stopTimer()
             player?.pause()
             isPlaying = false
             
-            // 1. Ensure circle is full pink
+            //Ensure circle is full pink
             timerView.setFullProgress()
             
-            // 2. Show the "Peace" Message
+            //Show the "Peace" Message
             timerView.showMessage("A quiet bloom marks your moment of peace")
             
-            // 3. Keep Play Button HIDDEN so they can read the text
+            //Keep Play Button HIDDEN so they can read the text
             playButton.isHidden = true
             UIView.animate(withDuration: 0.3) { self.backgroundImageView.alpha = 1 }
             
-            // 4. Wait 2 Seconds, THEN reset
+            //Wait 2 Seconds, THEN reset
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
                 guard let self = self else { return }
                 
-                // Reset UI for next time
+                //Reset UI for next time
                 self.timerView.reset()
                 self.isFirstPlay = true
                 self.secondsRemaining = 300
                 
-                // Show Play Button now
+                //Show Play Button now
                 self.playButton.isHidden = false
                 let config = UIImage.SymbolConfiguration(pointSize: 60)
                 self.playButton.setImage(UIImage(systemName: "play.fill", withConfiguration: config), for: .normal)
             }
         }
     }
-    
     @objc func loopVideo() {
         player?.seek(to: .zero)
         player?.play()
     }
     
     // MARK: - View State Updates
-
     func showBackground() {
         UIView.animate(withDuration: 0.3) {
             self.backgroundImageView.alpha = 1
         }
     }
-
     func hideBackground() {
         UIView.animate(withDuration: 0.5) {
             self.backgroundImageView.alpha = 0
