@@ -61,15 +61,13 @@ class BreathingViewController: UIViewController {
             let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: "header", alignment: .top)
             
             header.extendsBoundary = true
-            
-            // ---------------------------------------------------------
+      
             // SECTION 0: FAVORITES
-            // ---------------------------------------------------------
             if sectionIndex == 0 {
                 
                 // CHECK: Is the list empty?
                 if self.favoriteSessions.isEmpty {
-                    // --- SMALL LAYOUT (For "No Favorites" Message) ---
+                    //  SMALL LAYOUT (For "No Favorites" Message)
                     let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
                     let item = NSCollectionLayoutItem(layoutSize: itemSize)
                     
@@ -99,9 +97,8 @@ class BreathingViewController: UIViewController {
                     return section
                 }
             }
-            // ---------------------------------------------------------
+          
             // SECTION 1: FILTERS
-            // ---------------------------------------------------------
             else if sectionIndex == 1 {
                 
                 let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(100), heightDimension: .fractionalHeight(1.0))
@@ -118,9 +115,8 @@ class BreathingViewController: UIViewController {
                 return section
                 
             }
-            // ---------------------------------------------------------
+            
             // SECTION 2: LIST
-            // ---------------------------------------------------------
             else {
                 
                 let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
@@ -230,14 +226,11 @@ extension BreathingViewController: UICollectionViewDelegate {
             selectedFilterIndex = indexPath.row
             let selectedCategory = filterTags[indexPath.row]
             
-            if selectedCategory == "All" {
-                filteredSessions = allSessions
-            } else {
-                filteredSessions = allSessions.filter { session in
-                    return session.category == selectedCategory
-                }
-            }
-            
+            filteredSessions = BreathingSessionFilter.apply(
+                sessions: allSessions,
+                category: selectedCategory
+            )
+
             collectionView.performBatchUpdates {
                 collectionView.reloadSections(IndexSet(integer: 1))
                 collectionView.reloadSections(IndexSet(integer: 2))
@@ -338,66 +331,21 @@ extension BreathingViewController: SessionCellDelegate {
             }
         }
         
-
         // CASE B: Tapping inside Main List (Section 2)
         else if indexPath.section == 2 {
-            
-            // 1. Get from FILTERED list (what the user sees)
-            var session = filteredSessions[indexPath.row]
-            session.isFavorite.toggle()
-            filteredSessions[indexPath.row] = session
-            
-            // 2. Sync with MASTER list (So filters remember the like)
-            if let indexInMaster = allSessions.firstIndex(where: { $0.title == session.title }) {
-                allSessions[indexInMaster] = session
-            }
-            
-            // 3. Update Favorites Array
-            let wasEmpty = favoriteSessions.isEmpty
-            var insertPath: IndexPath? = nil
-            var deletePath: IndexPath? = nil
-            
-            if session.isFavorite {
-                favoriteSessions.insert(session, at: 0)
-                insertPath = IndexPath(item: 0, section: 0)
-            } else {
-                if let index = favoriteSessions.firstIndex(where: { $0.title == session.title }) {
-                    favoriteSessions.remove(at: index)
-                    deletePath = IndexPath(item: index, section: 0)
-                }
-            }
-            
-            // 4. Update UI
-            var layoutNeedsUpdate = false
-            let isEmptyNow = favoriteSessions.isEmpty
-            
-            // Check if we switched between Empty <-> Real
-            if (wasEmpty && !isEmptyNow) || (!wasEmpty && isEmptyNow) {
-                layoutNeedsUpdate = true
+            let session = filteredSessions[indexPath.row]
+
+            BreathingFavoritesManager.toggleFavorite(
+                session: session,
+                allSessions: &allSessions,
+                favorites: &favoriteSessions,
+                filtered: &filteredSessions
+            )
+            collectionView.performBatchUpdates {
+                collectionView.reloadSections(IndexSet(integer: 0)) // Favorites
+                collectionView.reloadSections(IndexSet(integer: 2)) // List
             }
 
-            collectionView.performBatchUpdates {
-                // Update the clicked heart
-                collectionView.reloadItems(at: [indexPath])
-                
-                if layoutNeedsUpdate {
-                    // Swap Empty <-> Real
-                    collectionView.reloadSections(IndexSet(integer: 0))
-                } else {
-                    // Normal Add/Remove
-                    if let insert = insertPath { collectionView.insertItems(at: [insert]) }
-                    if let delete = deletePath { collectionView.deleteItems(at: [delete]) }
-                }
-                
-            } completion: { _ in
-                // 5. Safe Layout Resize
-                if layoutNeedsUpdate {
-                    self.collectionView.setCollectionViewLayout(self.generateLayout(), animated: true)
-                }
-            }
         }
     }
 }
-
-
-

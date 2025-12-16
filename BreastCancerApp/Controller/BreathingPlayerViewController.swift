@@ -70,21 +70,12 @@ class BreathingPlayerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        // 1. UI Setup
-//        addTopGradient()
-        
         // 2. Data Setup
         setupData()
         prepareVideo()
         setupTapGesture()
         timerView.reset()
     }
-    
-//    override func viewDidLayoutSubviews() {
-//        super.viewDidLayoutSubviews()
-//        guard let playerLayer = playerLayer else { return }
-//        playerLayer.frame = videoContainerView.bounds
-//    }
 
     // MARK: - Setup
     func setupData() {
@@ -96,7 +87,6 @@ class BreathingPlayerViewController: UIViewController {
             bgImageView.contentMode = .scaleAspectFill
             bgImageView.clipsToBounds = true
         }
-        
         // Fixed 5 minutes
         totalSessionDuration = 300
         secondsRemaining = totalSessionDuration
@@ -176,9 +166,6 @@ class BreathingPlayerViewController: UIViewController {
             playButton.isHidden = false
             let config = UIImage.SymbolConfiguration(pointSize: 60)
             playButton.setImage(UIImage(systemName: "play.fill", withConfiguration: config), for: .normal)
-            
-//            UIView.animate(withDuration: 0.3) { self.backgroundImageView.alpha = 1 }
-
             showBackground()
 
         } else {
@@ -192,10 +179,7 @@ class BreathingPlayerViewController: UIViewController {
             
             // 2. HIDE Play Button
             playButton.isHidden = true
-            
-//            UIView.animate(withDuration: 0.5) { self.backgroundImageView.alpha = 0 }
             hideBackground()
-
         }
     }
     
@@ -269,5 +253,4 @@ class BreathingPlayerViewController: UIViewController {
             self.backgroundImageView.alpha = 0
         }
     }
-
 }

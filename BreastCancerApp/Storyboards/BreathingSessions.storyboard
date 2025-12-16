@@ -60,7 +60,7 @@
         <scene sceneID="Xqq-GF-EzA">
             <objects>
                 <viewController storyboardIdentifier="BreathingPlayerVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="f1b-uT-ZIG" customClass="BreathingPlayerViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="BZc-z9-lrp">
+                    <view key="view" contentMode="scaleToFill" id="BZc-z9-lrp" customClass="BreathingPlayerRootView" customModule="BreastCancerApp" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -122,10 +122,13 @@
                             <constraint firstAttribute="bottom" secondItem="Kdr-96-W4q" secondAttribute="bottom" id="wEp-AR-Qza"/>
                             <constraint firstItem="Y4l-mU-GY8" firstAttribute="trailing" secondItem="qkg-xf-LXH" secondAttribute="trailing" id="xjg-c7-TaC"/>
                         </constraints>
+                        <connections>
+                            <outlet property="backgroundImageView" destination="Y4l-mU-GY8" id="MHb-al-wFA"/>
+                        </connections>
                     </view>
                     <navigationItem key="navigationItem" title="Gentle Focus" id="VXJ-aY-Ney"/>
                     <connections>
-                        <outlet property="backgroundImageView" destination="Y4l-mU-GY8" id="Vgm-Ah-iH9"/>
+                        <outlet property="backgroundImageView" destination="Y4l-mU-GY8" id="KCb-Xm-WXV"/>
                         <outlet property="playButton" destination="n20-O2-vXr" id="56c-0y-peo"/>
                         <outlet property="timerView" destination="Kdr-96-W4q" id="ggb-aH-sgV"/>
                         <outlet property="videoContainerView" destination="CSi-py-koH" id="r0R-qh-aVc"/>

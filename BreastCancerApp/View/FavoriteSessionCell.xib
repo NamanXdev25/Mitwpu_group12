@@ -19,6 +19,11 @@
                 <subviews>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="aeh-M7-huP">
                         <rect key="frame" x="0.0" y="0.0" width="280" height="320"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="13"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
                     </imageView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BVe-eq-bGM" userLabel="ButtonBgView">
                         <rect key="frame" x="229" y="7" width="44" height="44"/>
@@ -46,6 +51,7 @@
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                 <integer key="value" value="22"/>
                             </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                         </userDefinedRuntimeAttributes>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8cc-Ol-Dh9" userLabel="CapsuleView">
@@ -65,7 +71,7 @@
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                <integer key="value" value="15"/>
+                                <integer key="value" value="16"/>
                             </userDefinedRuntimeAttribute>
                             <userDefinedRuntimeAttribute type="size" keyPath="layer.shadowOffset">
                                 <size key="value" width="0.0" height="2"/>
@@ -73,6 +79,7 @@
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.shadowRadius">
                                 <integer key="value" value="4"/>
                             </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                         </userDefinedRuntimeAttributes>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yfq-f9-mLt">
@@ -100,6 +107,11 @@
                 <constraint firstItem="yfq-f9-mLt" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="lHv-Ea-2fn"/>
                 <constraint firstItem="8cc-Ol-Dh9" firstAttribute="centerX" secondItem="aeh-M7-huP" secondAttribute="centerX" id="m7s-6Y-Dmq"/>
             </constraints>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                    <integer key="value" value="13"/>
+                </userDefinedRuntimeAttribute>
+            </userDefinedRuntimeAttributes>
             <connections>
                 <outlet property="categoryLabel" destination="yfq-f9-mLt" id="2H8-J6-8vm"/>
                 <outlet property="heartContainerView" destination="BVe-eq-bGM" id="80c-LB-Zzi"/>
@@ -120,7 +132,7 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.2196078431372549" blue="0.23529411764705882" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
