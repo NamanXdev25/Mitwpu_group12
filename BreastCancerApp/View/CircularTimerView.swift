@@ -9,8 +9,10 @@ class CircularTimerView: UIView {
     
     // Settings
     private var radius: CGFloat {
-        min(bounds.width, bounds.height) / 2 - lineWidth / 2
+        (min(bounds.width, bounds.height) / 2 - lineWidth / 2) * 0.75
     }
+
+
     private let lineWidth: CGFloat = 6
     
     // Custom Pink Color (Safe Unwrap)

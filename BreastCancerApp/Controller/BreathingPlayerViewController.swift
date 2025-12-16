@@ -8,7 +8,6 @@ class BreathingPlayerViewController: UIViewController {
     
     // --- Outlets ---
     @IBOutlet weak var backgroundImageView: UIImageView!
-
     @IBOutlet weak var videoContainerView: VideoPlayerContainerView!
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var timerView: CircularTimerView!
@@ -31,9 +30,9 @@ class BreathingPlayerViewController: UIViewController {
         
         // 1. Create a Transparent Appearance
         let appearance = UINavigationBarAppearance()
-        appearance.configureWithTransparentBackground() // This removes the white box
-        appearance.backgroundColor = .clear             // Ensures it is clear
-        appearance.shadowColor = .clear                 // Removes the grey line
+        appearance.configureWithTransparentBackground()
+        appearance.backgroundColor = .clear
+        appearance.shadowColor = .clear
         
         // 2. Set Title to WHITE
         appearance.titleTextAttributes = [.foregroundColor: UIColor.white, .font: UIFont.systemFont(ofSize: 20, weight: .bold)]
@@ -50,20 +49,17 @@ class BreathingPlayerViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        // RESTORE the navigation bar to default (black title) when leaving this screen
+        // restore the navigation bar to black title when leaving this screen
         let defaultAppearance = UINavigationBarAppearance()
         defaultAppearance.configureWithDefaultBackground()
         
         // Set Title to BLACK
-        defaultAppearance.titleTextAttributes = [.foregroundColor: UIColor.black, .font: UIFont.systemFont(ofSize: 20, weight: .bold)]
+        defaultAppearance.titleTextAttributes = [.foregroundColor: UIColor.black, .font: UIFont.systemFont(ofSize: 20, weight: .semibold)]
         
         // Apply default settings
         navigationController?.navigationBar.standardAppearance = defaultAppearance
         navigationController?.navigationBar.scrollEdgeAppearance = defaultAppearance
         navigationController?.navigationBar.compactAppearance = defaultAppearance
-        
-        // Restore default tint color (usually blue or your app's accent color)
-        navigationController?.navigationBar.tintColor = .systemBlue
     }
 
     // MARK: - View Lifecycle
@@ -84,8 +80,6 @@ class BreathingPlayerViewController: UIViewController {
         
         if let bgImageView = backgroundImageView {
             bgImageView.image = UIImage(named: session.imageName)
-            bgImageView.contentMode = .scaleAspectFill
-            bgImageView.clipsToBounds = true
         }
         // Fixed 5 minutes
         totalSessionDuration = 300
@@ -154,30 +148,28 @@ class BreathingPlayerViewController: UIViewController {
     
     func togglePlayPause() {
         if isPlaying {
-            // PAUSE
+            // pause
             player?.pause()
             stopTimer()
             isPlaying = false
             
-            // 1. Hide the Timer Text
+            // Hide the Timer Text
             timerView.setTimerTextHidden(true)
             
-            // 2. SHOW Play Button
+            // show Play Button
             playButton.isHidden = false
-            let config = UIImage.SymbolConfiguration(pointSize: 60)
-            playButton.setImage(UIImage(systemName: "play.fill", withConfiguration: config), for: .normal)
             showBackground()
 
         } else {
-            // RESUME
+            // resume
             player?.play()
             startTimer()
             isPlaying = true
             
-            // 1. Show the Timer Text
+            // Show  Timer Text
             timerView.setTimerTextHidden(false)
             
-            // 2. HIDE Play Button
+            // hide Play Button
             playButton.isHidden = true
             hideBackground()
         }

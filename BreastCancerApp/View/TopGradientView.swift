@@ -26,7 +26,7 @@ final class TopGradientView: UIView {
     private func setupGradient() {
         isUserInteractionEnabled = false
         gradientLayer.colors = [
-            UIColor(red: 0.6, green: 0.2, blue: 0.3, alpha: 0.85).cgColor,
+            UIColor(named: "primary_color")?.cgColor,
             UIColor.clear.cgColor
         ]
         layer.addSublayer(gradientLayer)
