@@ -4,16 +4,16 @@ class ExerciseDetailViewController: UIViewController, UICollectionViewDataSource
 
     @IBOutlet weak var collectionView: UICollectionView!
 
-    // Set by previous screen (category name)
+    
     var pageTitle: String = ""
 
-    // Loaded from exerciseDetails.json
+   
     var sections: [DetailSectionData] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Title
+        
         self.title = pageTitle
 
         // CollectionView setup
@@ -22,14 +22,14 @@ class ExerciseDetailViewController: UIViewController, UICollectionViewDataSource
         collectionView.delegate = self
         collectionView.backgroundColor = .clear
 
-        // Register nibs (ensure nib names and reuse identifiers match your project)
+        // Register nibs
         collectionView.register(UINib(nibName: "DetailExerciseCell", bundle: nil), forCellWithReuseIdentifier: "DetailExerciseCell")
         collectionView.register(UINib(nibName: "SectionHeaderView", bundle: nil), forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "SectionHeaderView")
 
         loadData()
     }
 
-    // MARK: - Load JSON
+    //Loading JSON
     func loadData() {
         guard let url = Bundle.main.url(forResource: "exerciseDetails", withExtension: "json") else {
             print("Error: exerciseDetails.json not found")
@@ -52,29 +52,29 @@ class ExerciseDetailViewController: UIViewController, UICollectionViewDataSource
         }
     }
 
-    // MARK: - Layout
+    // Layout
     func createLayout() -> UICollectionViewLayout {
-        // 1. Item (The Card)
+        
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(100))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
-        // Use 0 leading/trailing here, we will control padding at the Section level
+        
         item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0)
         
-        // 2. Group
+        
         let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, subitems: [item])
         
-        // 3. Section
+        
         let section = NSCollectionLayoutSection(group: group)
         
-        // APPLY PADDING HERE: This moves BOTH the cards and the header together
+        
         section.contentInsets = NSDirectionalEdgeInsets(top: 6, leading: 20, bottom: 4, trailing: 20)
         
-        // 4. Header (Title "Low Energy")
+       
         let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(40))
         let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
         
-        // HERE IS THE FIX: Force the Header to match the Item's 20px inset
+        
         header.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
         
         section.boundarySupplementaryItems = [header]
@@ -82,7 +82,7 @@ class ExerciseDetailViewController: UIViewController, UICollectionViewDataSource
         return UICollectionViewCompositionalLayout(section: section)
     }
 
-    // MARK: - UICollectionViewDataSource
+    // UICollectionViewDataSource
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sections.count
@@ -99,13 +99,13 @@ class ExerciseDetailViewController: UIViewController, UICollectionViewDataSource
         // Configure cell
         cell.configure(title: item.title, subtitle: item.subtitle, time: item.time, imageName: item.imageName)
 
-        // Assign delegate so the cell's chevron IBAction notifies this controller
+        
         cell.delegate = self
 
         return cell
     }
 
-    // MARK: - Header
+    // Header
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "SectionHeaderView", for: indexPath) as! SectionHeaderView
         header.titleLabel.text = sections[indexPath.section].title
@@ -114,7 +114,7 @@ class ExerciseDetailViewController: UIViewController, UICollectionViewDataSource
         return header
     }
 
-    // MARK: - DetailExerciseCellDelegate
+    // DetailExerciseCellDelegate
     func didTapChevron(on cell: DetailExerciseCell) {
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
         let item = sections[indexPath.section].exercises[indexPath.row]
@@ -128,7 +128,7 @@ class ExerciseDetailViewController: UIViewController, UICollectionViewDataSource
         }
     }
 
-    // MARK: - Item selection (optional duplicate behavior)
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = sections[indexPath.section].exercises[indexPath.row]
         let storyboard = UIStoryboard(name: "Exercise", bundle: nil)

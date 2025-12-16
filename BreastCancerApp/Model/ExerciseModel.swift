@@ -1,6 +1,6 @@
 import UIKit
 
-// --- 1. DATA STRUCTURES ---
+// DATA STRUCTURES 
 
 struct PlanItem: Codable {
     var id: String
@@ -17,33 +17,33 @@ struct ExerciseItem: Codable {
     var imageName: String
 }
 
-// --- NEW: History Structure ---
+// History Structure
 struct DailyProgress: Codable {
     let total: Int
     let completed: Int
 }
 
-// --- 2. THE MANAGER ---
+
 
 class ExerciseManager {
     
-    // Singleton - convenient access across controllers
+    
     static let shared = ExerciseManager()
     
-    private let todaysPlanStorageKey = "com.yourapp.todaysPlan.v1" // persistence key
-    private let historyStorageKey = "com.yourapp.history.v1"       // history key
+    private let todaysPlanStorageKey = "com.yourapp.todaysPlan.v1"
+    private let historyStorageKey = "com.yourapp.history.v1"
     
     var todaysPlan: [PlanItem] = []
     var myExercises: [ExerciseItem] = []
     var exploreItems: [ExerciseItem] = []
     
-    // Key: "yyyy-MM-dd", Value: Progress
+   
     var history: [String: DailyProgress] = [:]
     
     init() {
         loadAllData()
         loadSavedPlan()
-        loadHistory() // Load past data
+        loadHistory()
     }
     
     func loadAllData() {
@@ -52,7 +52,7 @@ class ExerciseManager {
         self.exploreItems = loadJSON(filename: "explore")
     }
     
-    // Helper function to load any JSON file into a list
+    
     func loadJSON<T: Codable>(filename: String) -> [T] {
         guard let url = Bundle.main.url(forResource: filename, withExtension: "json") else { return [] }
         do {
@@ -64,13 +64,13 @@ class ExerciseManager {
         }
     }
     
-    // MARK: - Plan manipulation
+   
     
     func togglePlanItem(at index: Int) {
         if index < todaysPlan.count {
             todaysPlan[index].isCompleted.toggle()
             saveTodaysPlan()
-            updateHistoryForToday() // <--- Update history immediately
+            updateHistoryForToday()
         }
     }
     
@@ -80,7 +80,7 @@ class ExerciseManager {
         }
         todaysPlan.insert(item, at: 0)
         saveTodaysPlan()
-        updateHistoryForToday() // <--- Update history immediately
+        updateHistoryForToday()
     }
 
     func containsExercise(title: String) -> Bool {
@@ -98,12 +98,12 @@ class ExerciseManager {
         let removed = before - todaysPlan.count
         if removed > 0 {
             saveTodaysPlan()
-            updateHistoryForToday() // <--- Update history immediately
+            updateHistoryForToday()
         }
         return removed
     }
     
-    // MARK: - Persistence
+    
     
     func saveTodaysPlan() {
         do {
@@ -119,14 +119,14 @@ class ExerciseManager {
         } catch { print("Error loading plan: \(error)") }
     }
     
-    // MARK: - History Logic (The "Next Day" Feature)
+   
     
     func updateHistoryForToday() {
         let key = getTodayDateString()
         let total = todaysPlan.count
         let completed = todaysPlan.filter { $0.isCompleted }.count
         
-        // Save to dictionary
+        
         let progress = DailyProgress(total: total, completed: completed)
         history[key] = progress
         
@@ -147,7 +147,7 @@ class ExerciseManager {
         } catch { print("Error loading history: \(error)") }
     }
     
-    // Helper to get consistent date key
+   
     func getTodayDateString() -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"

@@ -2,26 +2,26 @@ import UIKit
 
 class CalendarViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIPickerViewDataSource, UIPickerViewDelegate {
 
-    // --- OUTLETS ---
+    // OUTLETS
     @IBOutlet weak var monthLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     
-    // Changed from UIButton to UIBarButtonItem
+   
     @IBOutlet weak var closeBarButton: UIBarButtonItem!
     
-    // Outlets for navigation arrows
+   
     @IBOutlet weak var previousMonth: UIButton!
     @IBOutlet weak var nextMonth: UIButton!
     
-    // NEW: Picker Outlets
+  
     @IBOutlet weak var pickerContainerView: UIView!
     @IBOutlet weak var monthYearPicker: UIPickerView!
     
-    // NEW: Header Interaction Outlets
-    @IBOutlet weak var headerToggleButton: UIButton! // The invisible button over "Apr 2025"
-    @IBOutlet weak var chevronButton: UIButton!      // The pink chevron >
     
-    // --- VARIABLES ---
+    @IBOutlet weak var headerToggleButton: UIButton!
+    @IBOutlet weak var chevronButton: UIButton!
+    
+
     var selectedDate = Date()
     var totalSquares = [String]()
     
@@ -47,21 +47,20 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
         // 3. Picker Setup
         monthYearPicker.dataSource = self
         monthYearPicker.delegate = self
-        pickerContainerView.isHidden = true // Hidden by default
-       // pickerContainerView.backgroundColor = UIColor(red: 1.0, green: 0.95, blue: 0.96, alpha: 1.0) // Light Pink Background
+        pickerContainerView.isHidden = true
+       
         
-        // Populate Years (e.g., 2020 - 2040)
+        
         let currentYear = Calendar.current.component(.year, from: Date())
         years = Array((currentYear - 10)...(currentYear + 10))
         
-        // 4. Initial Setup
-        // selectedDate is initialized to Date() (Today) by default
+     
         setMonthView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // Ensure we show latest status if something changed just now
+        
         ExerciseManager.shared.updateHistoryForToday()
         collectionView.reloadData()
     }
@@ -82,20 +81,20 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
             totalSquares.append(String(i))
         }
         
-        // Update Title
+       
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMMM yyyy"
         monthLabel.text = dateFormatter.string(from: selectedDate)
         
         collectionView.reloadData()
         
-        // Sync Picker to current selection
+        
         syncPickerToDate()
     }
     
     func syncPickerToDate() {
         let calendar = Calendar.current
-        let monthIndex = calendar.component(.month, from: selectedDate) - 1 // 0-11
+        let monthIndex = calendar.component(.month, from: selectedDate) - 1
         let year = calendar.component(.year, from: selectedDate)
         
         if let yearIndex = years.firstIndex(of: year) {
@@ -104,33 +103,33 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
         }
     }
     
-    // --- ACTIONS ---
+    // ACTIONS
     
     @IBAction func headerToggleButton(_ sender: Any) {
         let isPickerVisible = !pickerContainerView.isHidden
         
         if isPickerVisible {
-            // HIDE Picker -> Show Calendar
+           
             pickerContainerView.isHidden = true
             collectionView.isHidden = false
             
-            // Restore Styles
+            
             monthLabel.textColor = .black
             UIView.animate(withDuration: 0.3) {
-                self.chevronButton.transform = .identity // Point Right
+                self.chevronButton.transform = .identity
             }
         } else {
-            // SHOW Picker -> Hide Calendar
+           
             pickerContainerView.isHidden = false
             collectionView.isHidden = true
             
             // Active Styles
-            monthLabel.textColor = UIColor(red: 0.85, green: 0.40, blue: 0.50, alpha: 1.0) // Dark Pink
+            monthLabel.textColor = UIColor(red: 0.85, green: 0.40, blue: 0.50, alpha: 1.0)
             UIView.animate(withDuration: 0.3) {
-                self.chevronButton.transform = CGAffineTransform(rotationAngle: .pi / 2) // Point Down
+                self.chevronButton.transform = CGAffineTransform(rotationAngle: .pi / 2)
             }
             
-            // Ensure picker shows correct date before appearing
+          
             syncPickerToDate()
         }
     }
@@ -145,12 +144,12 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
         setMonthView()
     }
     
-    // Updated for UIBarButtonItem
+   
     @IBAction func closeTapped(_ sender: UIBarButtonItem) {
         self.dismiss(animated: true, completion: nil)
     }
     
-    // --- COLLECTION VIEW DELEGATE ---
+    // COLLECTION VIEW DELEGATE
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return totalSquares.count
@@ -160,17 +159,17 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CalendarDateCell", for: indexPath) as! CalendarDateCell
             let dayString = totalSquares[indexPath.item]
             
-            // 1. Reset cell
+            // Reseting cell
             cell.configure(day: dayString, status: "none")
             
             if !dayString.isEmpty, let dayInt = Int(dayString) {
                 
-                // 2. Determine Date Key for this cell
+                // Determining Date Key for this cell
                 let calendar = Calendar.current
                 var components = calendar.dateComponents([.year, .month], from: selectedDate)
                 components.day = dayInt
                 
-                // Base Pink Color
+                
                 let basePink = UIColor(red: 0.85, green: 0.40, blue: 0.50, alpha: 1.0)
                 
                 if let cellDate = calendar.date(from: components) {
@@ -179,47 +178,41 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
                     formatter.dateFormat = "yyyy-MM-dd"
                     let dateKey = formatter.string(from: cellDate)
                     
-                    // --- UPDATED LOGIC ---
-                    
-                    // Is this TODAY?
+                
                     if calendar.isDateInToday(cellDate) {
-                        // Logic: "Today's date should have Dark pink circle only"
-                        // Check if there is ANY plan for today
+                        
                         let manager = ExerciseManager.shared
                         if manager.todaysPlan.count > 0 {
-                            // Active Plan -> Solid Dark Pink (No progress indication yet)
+                            
                             cell.selectionLayer.backgroundColor = basePink
                             cell.dayLabel.textColor = .white
                         } else {
-                            // No Plan -> Empty
+                           
                             cell.selectionLayer.backgroundColor = .clear
                             cell.dayLabel.textColor = .black
                         }
                     }
-                    // Is this a PAST date?
+                    
                     else if cellDate < Date() {
-                        // Logic: "all this data should get updated on next day"
-                        // Check History
+                        
                         if let progress = ExerciseManager.shared.history[dateKey] {
                             if progress.total > 0 {
                                 if progress.completed == progress.total {
-                                    // ALL DONE -> Solid Dark Pink
-                                    // "more exercise circle"
+                                   
                                     cell.selectionLayer.backgroundColor = basePink.withAlphaComponent(0.6)
                                     cell.dayLabel.textColor = .black
                                 } else {
-                                    // PARTIAL / MISSED -> Light Pink
-                                    // "less exercise circle"
+                                    
                                     cell.selectionLayer.backgroundColor = basePink.withAlphaComponent(0.2)
                                     cell.dayLabel.textColor = .black
                                 }
                             } else {
-                                // No exercises recorded for this past day
+                              
                                 cell.selectionLayer.backgroundColor = .clear
                                 cell.dayLabel.textColor = .black
                             }
                         }
-                        // Fallback for Dummy Data (December Demo only) if no real history exists
+                        
                         else {
                             let displayedMonth = calendar.component(.month, from: selectedDate)
                             if displayedMonth == 12 {
@@ -249,7 +242,7 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
         return CGSize(width: width, height: 40)
     }
     
-    // --- PICKER VIEW DELEGATE ---
+    //PICKER VIEW DELEGATE
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int { 2 }
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
@@ -278,7 +271,7 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
     }
 }
 
-// --- HELPER CLASS ---
+// HELPER CLASS
 class CalendarHelper {
     let calendar = Calendar.current
     func plusMonth(date: Date) -> Date { return calendar.date(byAdding: .month, value: 1, to: date)! }
