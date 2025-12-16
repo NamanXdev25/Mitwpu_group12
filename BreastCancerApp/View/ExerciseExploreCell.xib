@@ -3,6 +3,7 @@
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -16,13 +17,24 @@
                 <rect key="frame" x="0.0" y="0.0" width="160" height="220"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ccN-Ib-vdP">
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eyU-vX-vJi">
+                        <rect key="frame" x="0.0" y="0.0" width="160" height="220"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="16"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="NO"/>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ccN-Ib-vdP">
                         <rect key="frame" x="40" y="30" width="80" height="140"/>
+                        <color key="tintColor" name="plusbuttoncolor"/>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LSu-Z9-wUo">
-                        <rect key="frame" x="6" y="177" width="148" height="17"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <nil key="textColor"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LSu-Z9-wUo">
+                        <rect key="frame" x="6" y="177" width="148" height="18"/>
+                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
@@ -30,19 +42,29 @@
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="ccN-Ib-vdP" secondAttribute="trailing" constant="40" id="5bd-ir-PvS"/>
+                <constraint firstItem="eyU-vX-vJi" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="7wF-g4-XfO"/>
+                <constraint firstAttribute="bottom" secondItem="eyU-vX-vJi" secondAttribute="bottom" id="CpH-yy-R3x"/>
                 <constraint firstItem="ccN-Ib-vdP" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="30" id="EzF-Lv-lJw"/>
                 <constraint firstAttribute="bottom" secondItem="ccN-Ib-vdP" secondAttribute="bottom" constant="50" id="SSr-ub-xXZ"/>
+                <constraint firstAttribute="trailing" secondItem="eyU-vX-vJi" secondAttribute="trailing" id="VcN-vZ-wWd"/>
                 <constraint firstItem="LSu-Z9-wUo" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="6" id="WaM-be-E0B"/>
                 <constraint firstItem="LSu-Z9-wUo" firstAttribute="top" secondItem="ccN-Ib-vdP" secondAttribute="bottom" constant="7" id="nN4-4l-7DA"/>
+                <constraint firstItem="eyU-vX-vJi" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="qDz-RC-Jbf"/>
                 <constraint firstItem="LSu-Z9-wUo" firstAttribute="top" secondItem="ccN-Ib-vdP" secondAttribute="bottom" constant="7" id="sjY-7b-q1a"/>
                 <constraint firstItem="ccN-Ib-vdP" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="40" id="uCB-4r-Vlu"/>
                 <constraint firstAttribute="trailing" secondItem="LSu-Z9-wUo" secondAttribute="trailing" constant="6" id="viS-oD-RtO"/>
             </constraints>
             <connections>
+                <outlet property="containerView" destination="eyU-vX-vJi" id="7e6-J2-t85"/>
                 <outlet property="iconImageView" destination="ccN-Ib-vdP" id="yUw-d8-HXR"/>
                 <outlet property="titleLabel" destination="LSu-Z9-wUo" id="u44-Wu-CIc"/>
             </connections>
             <point key="canvasLocation" x="87.022900763358777" y="117.60563380281691"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <namedColor name="plusbuttoncolor">
+            <color red="0.9100000262260437" green="0.41600000858306885" blue="0.57300001382827759" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
 </document>

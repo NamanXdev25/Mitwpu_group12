@@ -3,6 +3,7 @@
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -16,20 +17,22 @@
                 <rect key="frame" x="0.0" y="0.0" width="393" height="190"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="currentTimeLabel" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EBy-Gv-jtC">
-                        <rect key="frame" x="20" y="8" width="102" height="14.333333333333336"/>
-                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
-                        <nil key="textColor"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="currentTimeLabel" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EBy-Gv-jtC">
+                        <rect key="frame" x="19.999999999999993" y="7.9999999999999991" width="109.33333333333331" height="15.666666666666664"/>
+                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="13"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="totalTimeLabel" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dDg-xE-lo0">
-                        <rect key="frame" x="286.66666666666669" y="8" width="86.333333333333314" height="14.333333333333336"/>
-                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
-                        <nil key="textColor"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="totalTimeLabel" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dDg-xE-lo0">
+                        <rect key="frame" x="280.66666666666669" y="7.9999999999999991" width="92.333333333333314" height="15.666666666666664"/>
+                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="13"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <slider opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="ml2-WQ-iSs">
-                        <rect key="frame" x="20" y="23.333333333333329" width="353" height="34"/>
+                        <rect key="frame" x="20" y="24.666666666666671" width="353" height="34"/>
+                        <color key="minimumTrackTintColor" name="plusbuttoncolor"/>
+                        <color key="maximumTrackTintColor" name="MaximumTrackcolor"/>
                         <connections>
                             <action selector="sliderChanged:" destination="gTV-IL-0wX" eventType="valueChanged" id="7Ao-Lx-PpI"/>
                             <action selector="sliderTouchDown:" destination="gTV-IL-0wX" eventType="valueChanged" id="DFb-2y-FTw"/>
@@ -37,37 +40,49 @@
                         </connections>
                     </slider>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ge0-pb-NHt">
-                        <rect key="frame" x="160.66666666666666" y="60.333333333333343" width="72" height="72"/>
+                        <rect key="frame" x="160.66666666666666" y="61.666666666666657" width="72" height="72"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="72" id="4v3-El-xmY"/>
                             <constraint firstAttribute="height" constant="72" id="SXB-Ld-bJj"/>
                         </constraints>
+                        <color key="tintColor" name="plusbuttoncolor"/>
                         <state key="normal" title="Button"/>
-                        <buttonConfiguration key="configuration" style="plain"/>
+                        <buttonConfiguration key="configuration" style="plain" image="play.circle.fill" catalog="system">
+                            <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" configurationType="pointSize" pointSize="56" weight="thin"/>
+                        </buttonConfiguration>
                         <connections>
                             <action selector="playTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="60M-Pw-LNz"/>
                         </connections>
                     </button>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fe3-ap-VKe">
-                        <rect key="frame" x="20" y="60.333333333333343" width="72" height="72"/>
+                        <rect key="frame" x="20" y="61.666666666666657" width="72" height="72"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="72" id="FrI-e7-ZMq"/>
                             <constraint firstAttribute="height" constant="72" id="cch-ag-hEu"/>
                         </constraints>
+                        <color key="tintColor" name="plusbuttoncolor"/>
                         <state key="normal" title="Button"/>
-                        <buttonConfiguration key="configuration" style="plain"/>
+                        <buttonConfiguration key="configuration" style="plain" image="arrow.counterclockwise" catalog="system">
+                            <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" configurationType="pointSize" pointSize="28" weight="medium"/>
+                        </buttonConfiguration>
                         <connections>
                             <action selector="restartTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="i28-j2-LI4"/>
                         </connections>
                     </button>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ae4-UG-8Oe">
-                        <rect key="frame" x="301" y="60.333333333333343" width="72" height="72"/>
+                        <rect key="frame" x="301" y="61.666666666666657" width="72" height="72"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="72" id="5aE-VN-7AF"/>
                             <constraint firstAttribute="height" constant="72" id="RyT-xN-Em7"/>
                         </constraints>
+                        <color key="tintColor" name="plusbuttoncolor"/>
                         <state key="normal" title="Button"/>
-                        <buttonConfiguration key="configuration" style="plain"/>
+                        <buttonConfiguration key="configuration" style="plain" image="repeat" catalog="system">
+                            <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" configurationType="pointSize" pointSize="28"/>
+                        </buttonConfiguration>
                         <connections>
                             <action selector="replayTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="Kkh-ei-t9A"/>
                         </connections>
@@ -103,4 +118,15 @@
             <point key="canvasLocation" x="104.58015267175573" y="50.70422535211268"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <image name="arrow.counterclockwise" catalog="system" width="110" height="128"/>
+        <image name="play.circle.fill" catalog="system" width="128" height="123"/>
+        <image name="repeat" catalog="system" width="128" height="98"/>
+        <namedColor name="MaximumTrackcolor">
+            <color red="0.92000000000000004" green="0.92000000000000004" blue="0.92000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="plusbuttoncolor">
+            <color red="0.9100000262260437" green="0.41600000858306885" blue="0.57300001382827759" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
 </document>

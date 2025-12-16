@@ -3,6 +3,7 @@
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -18,8 +19,13 @@
                 <subviews>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JFg-yO-eAn">
                         <rect key="frame" x="20" y="28" width="353" height="232"/>
+                        <color key="backgroundColor" name="plusbuttoncolor"/>
                         <state key="normal" title="Button"/>
-                        <buttonConfiguration key="configuration" style="plain"/>
+                        <buttonConfiguration key="configuration" style="plain" title="Add to Plan">
+                            <backgroundConfiguration key="background" cornerRadius="28"/>
+                            <fontDescription key="titleFontDescription" type="system" weight="semibold" pointSize="17"/>
+                            <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </buttonConfiguration>
                         <connections>
                             <action selector="addToPlanTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="jE0-2U-y77"/>
                         </connections>
@@ -40,4 +46,9 @@
             <point key="canvasLocation" x="113.74045801526717" y="158.45070422535213"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <namedColor name="plusbuttoncolor">
+            <color red="0.9100000262260437" green="0.41600000858306885" blue="0.57300001382827759" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
 </document>

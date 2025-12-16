@@ -14,7 +14,7 @@ class VideoPlayerCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+       /*
         self.backgroundColor = .clear
         
         // Container
@@ -53,30 +53,31 @@ class VideoPlayerCell: UICollectionViewCell {
         containerView.bringSubviewToFront(timeLabel)
         
         applyDynamicHeight()
+        */
     }
     
-    func applyDynamicHeight() {
-        if let heightConstraint = containerHeightConstraint {
-            heightConstraint.constant = VideoPlayerCell.videoHeight
-        }
-        self.layoutIfNeeded()
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        // Apply corner radius after layout
-        containerView.layer.cornerRadius = 28
-        videoImageView.layer.cornerRadius = 28
-        
-        // 🔵 FIX: Make speaker button perfectly round
-        // Use the actual frame size to ensure it's circular
-        speakerButton.layer.cornerRadius = speakerButton.frame.width / 2
-        
-        // Ensure buttons are on top
-        containerView.bringSubviewToFront(speakerButton)
-        containerView.bringSubviewToFront(timeLabel)
-    }
+//    func applyDynamicHeight() {
+//        if let heightConstraint = containerHeightConstraint {
+//            heightConstraint.constant = VideoPlayerCell.videoHeight
+//        }
+//        self.layoutIfNeeded()
+//    }
+//    
+//    override func layoutSubviews() {
+//        super.layoutSubviews()
+//        
+//        // Apply corner radius after layout
+//        containerView.layer.cornerRadius = 28
+//        videoImageView.layer.cornerRadius = 28
+//        
+//        // 🔵 FIX: Make speaker button perfectly round
+//        // Use the actual frame size to ensure it's circular
+//        speakerButton.layer.cornerRadius = speakerButton.frame.width / 2
+//        
+//        // Ensure buttons are on top
+//        containerView.bringSubviewToFront(speakerButton)
+//        containerView.bringSubviewToFront(timeLabel)
+//    }
     
     func configure(imageName: String) {
         if let img = UIImage(named: imageName) {
@@ -90,7 +91,7 @@ class VideoPlayerCell: UICollectionViewCell {
         isMuted = false
         updateSpeakerIcon()
         
-        applyDynamicHeight()
+        //applyDynamicHeight()
     }
     
     func updateSpeakerIcon() {

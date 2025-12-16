@@ -22,7 +22,7 @@ class DetailExerciseCell: UICollectionViewCell {
     // MARK: - Lifecycle
     override func awakeFromNib() {
         super.awakeFromNib()
-
+        /*
         // 1. Card Style
         containerView.layer.cornerRadius = 12
         containerView.backgroundColor = .white
@@ -61,6 +61,7 @@ class DetailExerciseCell: UICollectionViewCell {
         // Ensure button action exists (IBAction should be connected in IB; this is a safety)
         chevronButton.removeTarget(nil, action: nil, for: .allEvents)
         chevronButton.addTarget(self, action: #selector(chevronTapped(_:)), for: .touchUpInside)
+         */
     }
 
     // MARK: - Configure
