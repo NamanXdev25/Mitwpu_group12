@@ -1,5 +1,10 @@
 import UIKit
 
+protocol LogsStatsRowCellDelegate: AnyObject {
+    func didTapExercise()
+    func didTapHydration()
+}
+
 class LogsStatsRowCell: UICollectionViewCell {
     
     // --- HYDRATION OUTLETS ---
@@ -20,8 +25,33 @@ class LogsStatsRowCell: UICollectionViewCell {
     
     private let pinkColor = UIColor(named: "TabBarcolour")!
     
+    weak var delegate: LogsStatsRowCellDelegate?
+        
+        // Your existing code and outlets...
+        
+        // Add this method - call it from your configure method or awakeFromNib
+        func setupTapGestures() {
+            // Replace 'exerciseView' and 'hydrationView' with your actual outlet names
+            let exerciseTap = UITapGestureRecognizer(target: self, action: #selector(exerciseTapped))
+            exerciseContainer.addGestureRecognizer(exerciseTap)
+            exerciseContainer.isUserInteractionEnabled = true
+            
+            let hydrationTap = UITapGestureRecognizer(target: self, action: #selector(hydrationTapped))
+            hydrationContainer.addGestureRecognizer(hydrationTap)
+            hydrationContainer.isUserInteractionEnabled = true
+        }
+        
+        @objc private func exerciseTapped() {
+            delegate?.didTapExercise()
+        }
+        
+        @objc private func hydrationTapped() {
+            delegate?.didTapHydration()
+        }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
+        setupTapGestures()
     }
     
     func configure(with model: StatsModel) {

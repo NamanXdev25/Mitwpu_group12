@@ -82,6 +82,7 @@ class LogViewController: UIViewController, UICollectionViewDataSource, UICollect
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LogsStatsRowCell", for: indexPath) as! LogsStatsRowCell
             let statsData = dataStore.getStats()
             cell.configure(with: statsData)
+            cell.delegate = self
             return cell
             
         case 3:
@@ -95,6 +96,7 @@ class LogViewController: UIViewController, UICollectionViewDataSource, UICollect
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LogsTrackingCell", for: indexPath) as! LogsTrackingCell
             if let tracking = dataStore.getHealthTrackingItem(at: indexPath.row) {
                 cell.configure(with: tracking)
+                cell.delegate = self
             }
             return cell
             
@@ -174,5 +176,30 @@ class LogViewController: UIViewController, UICollectionViewDataSource, UICollect
                 return section
             }
         }
+    }
+}
+
+// MARK: - LogsStatsRowCell Delegate
+extension LogViewController: LogsStatsRowCellDelegate {
+    func didTapExercise() {
+        let storyboard = UIStoryboard(name: "Exercise", bundle: nil)
+        if let exerciseVC = storyboard.instantiateViewController(withIdentifier: "ExerciseViewController") as? ExerciseViewController {
+            navigationController?.pushViewController(exerciseVC, animated: true)
+        }
+    }
+    
+    func didTapHydration() {
+        // Handle hydration tap if needed
+    }
+}
+extension LogViewController: LogsTrackingCellDelegate {
+
+    func didTapSelfExam(with model: HealthTrackingModel) {
+        let storyboard = UIStoryboard(name: "selfexam", bundle: nil)
+        guard let selfexamVC = storyboard.instantiateViewController(
+            withIdentifier: "SelfExamViewController"
+        ) as? SelfExamineViewController else { return }
+
+        navigationController?.pushViewController(selfexamVC, animated: true)
     }
 }

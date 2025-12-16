@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="m6V-Rv-pI3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
@@ -13,7 +13,7 @@
         <!--self-Exam-->
         <scene sceneID="qdr-Pf-tkm">
             <objects>
-                <viewController id="puu-Zo-Jeq" customClass="SelfExamineViewController" customModule="BreastCancerApp" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SelfExamViewController" id="puu-Zo-Jeq" customClass="SelfExamineViewController" customModule="BreastCancerApp" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Uck-J6-t4D">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -54,7 +54,8 @@
                             <constraint firstItem="I5N-pD-9ex" firstAttribute="bottom" secondItem="hPv-DA-bBl" secondAttribute="bottom" id="zGe-ar-1aU"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="self-Exam" id="Pmm-Hj-Z3F"/>
+                    <navigationItem key="navigationItem" title="self-Exam" largeTitleDisplayMode="never" id="Pmm-Hj-Z3F"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="collectionView" destination="hPv-DA-bBl" id="Q6S-LT-g3P"/>
                         <segue destination="SFl-U8-WC4" kind="show" identifier="showObservations" id="2v3-Ab-dfR"/>
@@ -67,7 +68,7 @@
             </objects>
             <point key="canvasLocation" x="758" y="-2"/>
         </scene>
-        <!--Observations View Controller-->
+        <!--Log Self-Exam-->
         <scene sceneID="uSb-mq-Evz">
             <objects>
                 <viewController storyboardIdentifier="ObservationsViewController" id="SFl-U8-WC4" customClass="ObservationsViewController" customModule="BreastCancerApp" sceneMemberID="viewController">
@@ -109,7 +110,7 @@
                             <constraint firstItem="2W2-YY-1T3" firstAttribute="trailing" secondItem="cNK-M3-DRC" secondAttribute="trailing" id="qvN-pD-sKp"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="3jN-bM-X4r">
+                    <navigationItem key="navigationItem" title="Log Self-Exam" id="3jN-bM-X4r">
                         <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="DxV-ov-YOJ">
                             <color key="tintColor" name="pink"/>
                             <connections>
@@ -468,24 +469,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Yz9-oT-WUu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4773" y="-18"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="G5h-Gq-W2q">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="m6V-Rv-pI3" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="bJ9-tB-KUj">
-                        <rect key="frame" x="0.0" y="118" width="393" height="54"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="puu-Zo-Jeq" kind="relationship" relationship="rootViewController" id="zaC-Ck-r3j"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="VRd-cH-uq2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="5.343511450381679" y="-2.1126760563380285"/>
         </scene>
     </scenes>
     <resources>

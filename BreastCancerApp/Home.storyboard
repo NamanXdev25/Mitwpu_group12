@@ -10,7 +10,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Logs-->
+        <!--Log View Controller-->
         <scene sceneID="w6r-OM-Pds">
             <objects>
                 <viewController id="Hv8-h1-88l" customClass="LogViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
@@ -48,14 +48,14 @@
                             <constraint firstAttribute="trailing" secondItem="JUE-tt-FQp" secondAttribute="trailing" id="kzh-0m-4QP"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Logs" image="heart.text.clipboard" catalog="system" selectedImage="heart.text.clipboard.fill" id="K15-2q-9ch"/>
+                    <navigationItem key="navigationItem" id="Ahd-tp-D1f"/>
                     <connections>
                         <outlet property="collectionView" destination="JUE-tt-FQp" id="eMK-Mn-Rs0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yMo-0l-JqN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-79" y="1793"/>
+            <point key="canvasLocation" x="1797.709923664122" y="1792.9577464788733"/>
         </scene>
         <!--Home-->
         <scene sceneID="L1v-8g-lQk">
@@ -119,7 +119,7 @@
                     <connections>
                         <segue destination="ogF-rp-Q1l" kind="relationship" relationship="viewControllers" id="oAC-8W-pUE"/>
                         <segue destination="Lnc-RW-BbG" kind="relationship" relationship="viewControllers" id="h4h-5q-j1K"/>
-                        <segue destination="Hv8-h1-88l" kind="relationship" relationship="viewControllers" id="QZC-ug-I9w"/>
+                        <segue destination="MTw-i4-q5v" kind="relationship" relationship="viewControllers" id="QZC-ug-I9w"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DT6-Ib-K01" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -202,6 +202,25 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hCg-v9-snq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1822" y="1793"/>
+        </scene>
+        <!--Logs-->
+        <scene sceneID="6Bk-fF-ihS">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="MTw-i4-q5v" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Logs" image="heart.text.clipboard" catalog="system" selectedImage="heart.text.clipboard.fill" id="K15-2q-9ch"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="JUC-YP-p6S">
+                        <rect key="frame" x="0.0" y="118" width="393" height="54"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="Hv8-h1-88l" kind="relationship" relationship="rootViewController" id="emr-ce-o1Q"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="JUs-u3-mfA" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="870.99236641221376" y="1792.9577464788733"/>
         </scene>
     </scenes>
     <resources>
