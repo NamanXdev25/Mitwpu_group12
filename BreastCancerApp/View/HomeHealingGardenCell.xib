@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="UFQ-Kk-BQu" customClass="HomeHealingGardenCell" customModule="BreastCancerApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="140"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="393" height="140"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Fw-iX-FRF">
+                        <rect key="frame" x="17" y="5" width="359" height="130"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Healing Garden" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RKn-vI-0tw">
+                                <rect key="frame" x="16.000000000000007" y="26" width="120.66666666666669" height="21"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="800" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tvi-KQ-Wn9">
+                                <rect key="frame" x="16" y="51" width="31" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" systemColor="systemGray2Color"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text=" ✿" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lU9-yM-bls">
+                                <rect key="frame" x="46" y="51" width="19" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" name="TabBarcolour"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="to Level 2" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3cU-cF-dqs">
+                                <rect key="frame" x="68" y="51" width="74" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" systemColor="systemGray2Color"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lUW-em-8lu">
+                                <rect key="frame" x="331" y="26.666666666666671" width="12" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="CDC-cN-DbT"/>
+                                    <constraint firstAttribute="width" constant="12" id="Ulr-5r-9xI"/>
+                                </constraints>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain">
+                                    <imageReference key="image" image="chevron.right" catalog="system" symbolScale="small"/>
+                                    <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" configurationType="pointSize" pointSize="15" scale="small" weight="bold"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="ChevronTapped:" destination="UFQ-Kk-BQu" eventType="touchUpInside" id="pSR-wH-UsE"/>
+                                </connections>
+                            </button>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="hCQ-xQ-MRK">
+                                <rect key="frame" x="16" y="100" width="327" height="4"/>
+                                <color key="progressTintColor" name="TabBarcolour"/>
+                            </progressView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="/" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ESA-tt-R4N">
+                                <rect key="frame" x="312" y="75" width="4" height="12"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                <color key="textColor" name="Memorycolor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="6000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y8y-GA-Llc">
+                                <rect key="frame" x="317" y="76" width="26" height="12"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                <color key="textColor" name="Memorycolor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="5200" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="apL-3f-N4a">
+                                <rect key="frame" x="284" y="76" width="27" height="12"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="10"/>
+                                <color key="textColor" name="Memorycolor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="apL-3f-N4a" firstAttribute="top" secondItem="8Fw-iX-FRF" secondAttribute="top" constant="76" id="09H-UD-kIo"/>
+                            <constraint firstItem="3cU-cF-dqs" firstAttribute="top" secondItem="RKn-vI-0tw" secondAttribute="bottom" constant="4" id="0kx-sX-TCG"/>
+                            <constraint firstAttribute="bottom" secondItem="hCQ-xQ-MRK" secondAttribute="bottom" constant="26" id="1IZ-K5-Lq5"/>
+                            <constraint firstItem="RKn-vI-0tw" firstAttribute="top" secondItem="8Fw-iX-FRF" secondAttribute="top" constant="26" id="1ut-GL-vyD"/>
+                            <constraint firstItem="ESA-tt-R4N" firstAttribute="leading" secondItem="apL-3f-N4a" secondAttribute="trailing" constant="1" id="2oS-1H-2TF"/>
+                            <constraint firstItem="lU9-yM-bls" firstAttribute="top" secondItem="RKn-vI-0tw" secondAttribute="bottom" constant="4" id="3Z6-8b-eOv"/>
+                            <constraint firstItem="tvi-KQ-Wn9" firstAttribute="top" secondItem="RKn-vI-0tw" secondAttribute="bottom" constant="4" id="BeJ-Dw-bsM"/>
+                            <constraint firstItem="y8y-GA-Llc" firstAttribute="centerY" secondItem="apL-3f-N4a" secondAttribute="centerY" id="Emw-4E-Uqm"/>
+                            <constraint firstItem="RKn-vI-0tw" firstAttribute="leading" secondItem="8Fw-iX-FRF" secondAttribute="leading" constant="16" id="Gmy-D1-bqe"/>
+                            <constraint firstItem="y8y-GA-Llc" firstAttribute="leading" secondItem="ESA-tt-R4N" secondAttribute="trailing" constant="1" id="IAQ-LO-qhN"/>
+                            <constraint firstAttribute="trailing" secondItem="hCQ-xQ-MRK" secondAttribute="trailing" constant="16" id="Lbv-d3-oG3"/>
+                            <constraint firstAttribute="trailing" secondItem="lUW-em-8lu" secondAttribute="trailing" constant="16" id="LjP-l2-yNp"/>
+                            <constraint firstItem="hCQ-xQ-MRK" firstAttribute="leading" secondItem="8Fw-iX-FRF" secondAttribute="leading" constant="16" id="Lpn-FR-jDs"/>
+                            <constraint firstAttribute="trailing" secondItem="y8y-GA-Llc" secondAttribute="trailing" constant="16" id="TEN-1w-Bsc"/>
+                            <constraint firstItem="tvi-KQ-Wn9" firstAttribute="leading" secondItem="8Fw-iX-FRF" secondAttribute="leading" constant="16" id="VLd-Ga-ej7"/>
+                            <constraint firstItem="lUW-em-8lu" firstAttribute="centerY" secondItem="RKn-vI-0tw" secondAttribute="centerY" id="aMj-0z-ahH"/>
+                            <constraint firstItem="3cU-cF-dqs" firstAttribute="leading" secondItem="lU9-yM-bls" secondAttribute="trailing" constant="3" id="bRr-F0-gjw"/>
+                            <constraint firstItem="lU9-yM-bls" firstAttribute="leading" secondItem="8Fw-iX-FRF" secondAttribute="leading" constant="46" id="fYt-s1-Q2h"/>
+                            <constraint firstItem="ESA-tt-R4N" firstAttribute="top" secondItem="8Fw-iX-FRF" secondAttribute="top" constant="75" id="fnm-m2-xVk"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="13"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="TBc-k3-KyT"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="8Fw-iX-FRF" secondAttribute="bottom" constant="5" id="4Qh-6Z-9Ui"/>
+                <constraint firstAttribute="trailing" secondItem="8Fw-iX-FRF" secondAttribute="trailing" constant="17" id="H01-G6-cfe"/>
+                <constraint firstItem="8Fw-iX-FRF" firstAttribute="top" secondItem="UFQ-Kk-BQu" secondAttribute="top" constant="5" id="lD9-DP-yqs"/>
+                <constraint firstItem="8Fw-iX-FRF" firstAttribute="leading" secondItem="UFQ-Kk-BQu" secondAttribute="leading" constant="17" id="zkD-Q1-tON"/>
+            </constraints>
+            <size key="customSize" width="393" height="127"/>
+            <connections>
+                <outlet property="ChevronButton" destination="lUW-em-8lu" id="brf-34-2cN"/>
+                <outlet property="containerView" destination="8Fw-iX-FRF" id="lxU-OZ-oHA"/>
+                <outlet property="currentProgressLabel" destination="apL-3f-N4a" id="ed2-zv-zCV"/>
+                <outlet property="flowerLabel" destination="lU9-yM-bls" id="FGK-dj-PBu"/>
+                <outlet property="levelLabel" destination="3cU-cF-dqs" id="jZp-lx-nFH"/>
+                <outlet property="pointsLabel" destination="tvi-KQ-Wn9" id="Rny-FC-5C4"/>
+                <outlet property="progressView" destination="hCQ-xQ-MRK" id="tJJ-iu-6Ss"/>
+                <outlet property="separatorLabel" destination="ESA-tt-R4N" id="X0t-Z6-PsH"/>
+                <outlet property="titleLabel" destination="RKn-vI-0tw" id="EgD-q0-gfm"/>
+                <outlet property="totalGoalLabel" destination="y8y-GA-Llc" id="qWd-hL-lZx"/>
+            </connections>
+            <point key="canvasLocation" x="267.93893129770993" y="113.38028169014085"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="chevron.right" catalog="system" width="97" height="128"/>
+        <namedColor name="Memorycolor">
+            <color red="0.23499999940395355" green="0.23499999940395355" blue="0.2630000114440918" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="TabBarcolour">
+            <color red="0.9100000262260437" green="0.41600000858306885" blue="0.57300001382827759" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray2Color">
+            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="HomeMemoryCell" customModule="BreastCancerApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="224" height="246"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="224" height="246"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZcV-R9-zIG">
+                        <rect key="frame" x="16" y="5" width="208" height="236"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pDK-1v-LFT">
+                                <rect key="frame" x="12" y="166" width="33" height="16"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <color key="textColor" name="Memorycolor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lig-d4-Tjd">
+                                <rect key="frame" x="12" y="196" width="37.333333333333336" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nag-Hu-PRZ">
+                                <rect key="frame" x="12" y="12" width="184" height="140"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="140" id="3f8-nc-jyC"/>
+                                    <constraint firstAttribute="width" constant="184" id="awi-Yc-zaG"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="13"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="pDK-1v-LFT" firstAttribute="leading" secondItem="ZcV-R9-zIG" secondAttribute="leading" constant="12" id="FTB-rn-C90"/>
+                            <constraint firstItem="nag-Hu-PRZ" firstAttribute="leading" secondItem="ZcV-R9-zIG" secondAttribute="leading" constant="12" id="Sku-7q-Rhu"/>
+                            <constraint firstAttribute="trailing" secondItem="nag-Hu-PRZ" secondAttribute="trailing" constant="12" id="Z32-k2-eWi"/>
+                            <constraint firstItem="Lig-d4-Tjd" firstAttribute="top" secondItem="pDK-1v-LFT" secondAttribute="bottom" constant="14" id="Z5H-d0-y5h"/>
+                            <constraint firstItem="pDK-1v-LFT" firstAttribute="top" secondItem="nag-Hu-PRZ" secondAttribute="bottom" constant="14" id="bcZ-PO-fwQ"/>
+                            <constraint firstItem="nag-Hu-PRZ" firstAttribute="top" secondItem="ZcV-R9-zIG" secondAttribute="top" constant="12" id="pzD-f7-qqy"/>
+                            <constraint firstItem="Lig-d4-Tjd" firstAttribute="leading" secondItem="ZcV-R9-zIG" secondAttribute="leading" constant="12" id="tOF-DV-gMn"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="13"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstItem="ZcV-R9-zIG" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="CUl-Ry-5LU"/>
+                <constraint firstAttribute="bottom" secondItem="ZcV-R9-zIG" secondAttribute="bottom" constant="5" id="VRY-y6-bsy"/>
+                <constraint firstItem="ZcV-R9-zIG" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="5" id="hxE-hR-UA2"/>
+                <constraint firstAttribute="trailing" secondItem="ZcV-R9-zIG" secondAttribute="trailing" id="iYc-WC-vwI"/>
+            </constraints>
+            <size key="customSize" width="224" height="246"/>
+            <connections>
+                <outlet property="containerView" destination="ZcV-R9-zIG" id="sRC-ii-N58"/>
+                <outlet property="memoryImageView" destination="nag-Hu-PRZ" id="aB6-nj-QwE"/>
+                <outlet property="subtitleLabel" destination="Lig-d4-Tjd" id="yR7-bF-nzc"/>
+                <outlet property="titleLabel" destination="pDK-1v-LFT" id="ldS-ie-jWy"/>
+            </connections>
+            <point key="canvasLocation" x="48.854961832061065" y="146.47887323943664"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <namedColor name="Memorycolor">
+            <color red="0.23499999940395355" green="0.23499999940395355" blue="0.2630000114440918" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
