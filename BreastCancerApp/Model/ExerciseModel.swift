@@ -64,10 +64,25 @@ class ExerciseManager {
         }
     }
     
+    // MARK: - Filter Logic for Day-Wise Plan
+    
+    var currentDayPlan: [PlanItem] {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "E" // Returns "Mon", "Tue", etc.
+        let todayShort = dateFormatter.string(from: Date())
+        let todayMatch = "Every \(todayShort)" // e.g. "Every Tue"
+        
+        return todaysPlan.filter { item in
+            // Show item if it matches today OR is set to Every Day
+            return item.subtitle == "Every Day" || item.subtitle == todayMatch
+        }
+    }
+    
     // MARK: - Plan manipulation
     
-    func togglePlanItem(at index: Int) {
-        if index < todaysPlan.count {
+    // UPDATED: Toggle by ID, not Index (because UI index != Master index)
+    func togglePlanItem(id: String) {
+        if let index = todaysPlan.firstIndex(where: { $0.id == id }) {
             todaysPlan[index].isCompleted.toggle()
             saveTodaysPlan()
             updateHistoryForToday() // <--- Update history immediately
@@ -123,8 +138,12 @@ class ExerciseManager {
     
     func updateHistoryForToday() {
         let key = getTodayDateString()
-        let total = todaysPlan.count
-        let completed = todaysPlan.filter { $0.isCompleted }.count
+        
+        // UPDATED: Calculate progress based on TODAY'S filtered view, not the whole database
+        let dailyPlan = self.currentDayPlan
+        
+        let total = dailyPlan.count
+        let completed = dailyPlan.filter { $0.isCompleted }.count
         
         // Save to dictionary
         let progress = DailyProgress(total: total, completed: completed)

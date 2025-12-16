@@ -23,7 +23,7 @@ class VideoPlayerCell: UICollectionViewCell {
             videoImageView.backgroundColor = UIColor(red: 0.98, green: 0.95, blue: 0.96, alpha: 1.0)
         }
         
-        timeLabel.text = "  0:09 / 4:00  "
+        timeLabel.text = "  0:00 / 4:00  "
         
         isMuted = false
         updateSpeakerIcon()

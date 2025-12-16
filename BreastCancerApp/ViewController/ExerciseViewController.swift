@@ -25,13 +25,6 @@ class ExerciseViewController: UIViewController, UICollectionViewDataSource, UICo
         
         // Register Cells
         registerCells()
-        
-        // Style Floating Button
-//        floatingAddButton.layer.cornerRadius = floatingAddButton.frame.height / 2
-//        floatingAddButton.layer.shadowColor = UIColor.black.cgColor
-//        floatingAddButton.layer.shadowOpacity = 0.3
-//        floatingAddButton.layer.shadowOffset = CGSize(width: 0, height: 4)
-        
     }
     
     func registerCells() {
@@ -101,8 +94,8 @@ class ExerciseViewController: UIViewController, UICollectionViewDataSource, UICo
     
     // --- NEW: Handle Swipe Actions ---
     func swipeActions(for indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        // 1. Get the item
-        let item = model.todaysPlan[indexPath.row]
+        // 1. Get the item from the FILTERED list
+        let item = model.currentDayPlan[indexPath.row]
         
         // 2. DELETE Action
         let deleteAction = UIContextualAction(style: .destructive, title: nil) { [weak self] _, _, completion in
@@ -275,7 +268,7 @@ class ExerciseViewController: UIViewController, UICollectionViewDataSource, UICo
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section {
-        case 0: return model.todaysPlan.count
+        case 0: return model.currentDayPlan.count // ✅ Filtered Count
         case 1: return 1 // Warning
         default: return model.exploreItems.count
         }
@@ -286,7 +279,9 @@ class ExerciseViewController: UIViewController, UICollectionViewDataSource, UICo
         case 0:
             // --- Today's Plan ---
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PlanCell", for: indexPath) as! PlanCell
-            let item = model.todaysPlan[indexPath.row]
+            
+            // ✅ Use Filtered List
+            let item = model.currentDayPlan[indexPath.row]
             
             // Configure with new fields
             cell.configure(with: item)
@@ -314,8 +309,9 @@ class ExerciseViewController: UIViewController, UICollectionViewDataSource, UICo
             }
             
             // Handle Check Toggle
+            // ✅ pass ID, not index
             cell.onToggle = { [weak self] in
-                self?.model.togglePlanItem(at: indexPath.row)
+                self?.model.togglePlanItem(id: item.id)
                 self?.collectionView.reloadItems(at: [indexPath])
             }
             
@@ -361,7 +357,9 @@ class ExerciseViewController: UIViewController, UICollectionViewDataSource, UICo
         
         // --- NEW: Section 0 Selection (Show Description) ---
         if indexPath.section == 0 {
-            let item = model.todaysPlan[indexPath.row]
+            // ✅ Use Filtered List
+            let item = model.currentDayPlan[indexPath.row]
+            
             // Show Alert with Description
             let descriptionContent = (item.description != nil && !item.description!.isEmpty) ? item.description! : "No description available."
             let message = "Description: \(descriptionContent)"

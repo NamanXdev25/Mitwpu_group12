@@ -16,7 +16,6 @@ class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
     var totalDuration: Double = 240
     
     // 🎯 TEST DIFFERENT HEIGHTS HERE!
-    // Try: 400, 450, 500, 550, 600
     var currentVideoHeight: CGFloat = 350 {
         didSet {
             VideoPlayerCell.videoHeight = currentVideoHeight
@@ -32,7 +31,6 @@ class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // 🔧 SET YOUR TEST HEIGHT HERE!
         VideoPlayerCell.videoHeight = currentVideoHeight
         setupCollectionView()
         
@@ -48,26 +46,20 @@ class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         videoPlayer?.pause()
-        // Dismiss any visible popover instantly when leaving this screen
         dismissPopover(animated: false)
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        // Dismiss popover during rotation to avoid layout issues
         dismissPopover(animated: false)
     }
     
     @IBAction func calendarButtonTapped(_ sender: UIBarButtonItem) {
         let storyboard = UIStoryboard(name: "Exercise", bundle: nil)
         
-        // Load the Navigation Controller (not the CalendarViewController directly)
         if let calendarNavController = storyboard.instantiateViewController(withIdentifier: "ExerciseCalendarnav") as? UINavigationController {
             
-            // Present the navigation controller modally
             calendarNavController.modalPresentationStyle = .pageSheet
-            
-            // Optional: Configure sheet size
             if let sheet = calendarNavController.sheetPresentationController {
                 sheet.detents = [.large()]
                 sheet.prefersGrabberVisible = true
@@ -81,7 +73,6 @@ class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
         collectionView.collectionViewLayout = createLayout()
         collectionView.dataSource = self
         collectionView.delegate = self
-        
         
         collectionView.register(UINib(nibName: "VideoPlayerCell", bundle: nil), forCellWithReuseIdentifier: "VideoPlayerCell")
         collectionView.register(UINib(nibName: "ExerciseInfoCell", bundle: nil), forCellWithReuseIdentifier: "ExerciseInfoCell")
@@ -102,13 +93,8 @@ class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
     }
     
     func createVideoSection() -> NSCollectionLayoutSection {
-        // Calculate based on current video height + padding
-        let totalHeight = VideoPlayerCell.videoHeight + 40 // 20 top + 20 bottom
-        
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(totalHeight) // Use absolute height
-        )
+        let totalHeight = VideoPlayerCell.videoHeight + 40
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(totalHeight))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
         let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, subitems: [item])
@@ -119,10 +105,7 @@ class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
     }
     
     func createInfoSection() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(180)
-        )
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(180))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
         let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, subitems: [item])
@@ -133,10 +116,7 @@ class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
     }
     
     func createControlsSection() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(140)
-        )
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(140))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
         let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, subitems: [item])
@@ -147,10 +127,7 @@ class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
     }
     
     func createButtonsSection() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(88)
-        )
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(88))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
         let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, subitems: [item])
@@ -162,17 +139,11 @@ class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
     
     // MARK: - AddExerciseDelegate
     func didAddExercise(_ exercise: PlanItem) {
-        // Add to shared model
         ExerciseManager.shared.addPlanItem(exercise)
-        
-        // Refresh the Buttons section so button text toggles
         collectionView.reloadSections(IndexSet(integer: 3))
-        
-        // Show toast
         showToast(message: "Exercise added to plan")
     }
     
-    // Lightweight toast
     func showToast(message: String, duration: TimeInterval = 1.2) {
         let toastLabel = UILabel()
         toastLabel.text = message
@@ -180,14 +151,11 @@ class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
         toastLabel.textAlignment = .center
         toastLabel.alpha = 0
         toastLabel.numberOfLines = 0
-
-        // Style
         toastLabel.backgroundColor = UIColor(white: 0.12, alpha: 0.88)
         toastLabel.textColor = .white
         toastLabel.layer.cornerRadius = 14
         toastLabel.layer.masksToBounds = true
 
-        // Size & add
         let padding: CGFloat = 16
         let maxWidth = view.bounds.width - 60
         let targetSize = CGSize(width: maxWidth - padding*2, height: CGFloat.greatestFiniteMagnitude)
@@ -202,7 +170,6 @@ class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
         toastLabel.alpha = 0.0
         view.addSubview(toastLabel)
 
-        // Animate in/out
         UIView.animate(withDuration: 0.18, animations: {
             toastLabel.alpha = 1.0
         }) { _ in
@@ -214,18 +181,12 @@ class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
         }
     }
     
-    // MARK: - Popover UI (in-VC popover, no separate VC)
-    
-    /// Call to show the popover anchored to a button
-    func showBenefitsPopover(from anchorButton: UIButton,
-                             benefits: [String],
-                             precautions: [String]) {
-        // 1) Remove any existing popover
+    // MARK: - Popover UI
+    func showBenefitsPopover(from anchorButton: UIButton, benefits: [String], precautions: [String]) {
         dismissPopover(animated: false)
 
         guard let window = view.window ?? UIApplication.shared.windows.first else { return }
 
-        // 2) Background (dim & tap to dismiss)
         let bg = UIView(frame: window.bounds)
         bg.backgroundColor = UIColor(white: 0.0, alpha: 0.18)
         bg.alpha = 0.0
@@ -235,7 +196,6 @@ class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
         let tap = UITapGestureRecognizer(target: self, action: #selector(backgroundTapped(_:)))
         bg.addGestureRecognizer(tap)
 
-        // 3) Card
         let card = UIView()
         card.backgroundColor = .white
         card.layer.cornerRadius = 14
@@ -244,7 +204,6 @@ class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
         window.addSubview(card)
         popoverCardView = card
 
-        // 4) Build content inside the card (scrollable)
         let scroll = UIScrollView()
         scroll.translatesAutoresizingMaskIntoConstraints = false
         card.addSubview(scroll)
@@ -269,7 +228,6 @@ class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
             stack.widthAnchor.constraint(equalTo: scroll.widthAnchor)
         ])
 
-        // Helpers
         func makeHeader(_ text: String) -> UILabel {
             let lbl = UILabel()
             lbl.text = text
@@ -304,48 +262,35 @@ class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
             return h
         }
 
-        // Add Benefits
         stack.addArrangedSubview(makeHeader("View Benefits"))
         for b in benefits {
             stack.addArrangedSubview(makeBulletRow(icon: UIImage(systemName: "checkmark"), text: b))
         }
 
-        // Spacer
         let spacer = UIView()
         spacer.heightAnchor.constraint(equalToConstant: 6).isActive = true
         stack.addArrangedSubview(spacer)
 
-        // Add Precautions
         stack.addArrangedSubview(makeHeader("View Precautions"))
         for p in precautions {
             stack.addArrangedSubview(makeBulletRow(icon: UIImage(systemName: "exclamationmark"), text: p))
         }
 
-        // 5) Size card based on content (limit height)
-        // Layout once to get intrinsic sizes
         card.layoutIfNeeded()
-        // Estimate height: prefer up to 420pt, else allow scroll
         let estimatedRowHeight: CGFloat = 50
         let targetHeight = min(420, CGFloat((benefits.count + precautions.count)) * estimatedRowHeight + 120)
 
-        // 6) Position the card near the anchorButton (convert anchor to window coordinates)
         let anchorRectInWindow = anchorButton.convert(anchorButton.bounds, to: window)
-
-        // Preferred width
         let cardWidth: CGFloat = min(290, window.bounds.width - 40)
 
-        // Constraints: size constraints (we'll position to the left below)
         card.widthAnchor.constraint(equalToConstant: cardWidth).isActive = true
         card.heightAnchor.constraint(equalToConstant: targetHeight).isActive = true
 
-        // --- POSITION: try to place card to the LEFT of the anchor (clamped to screen) ---
-        // Compute desired leading such that card's right edge is near anchor.minX - 10
         let desiredLeading = anchorRectInWindow.minX - 10 - cardWidth
         let minLeading: CGFloat = 20
         let leadingX = max(minLeading, desiredLeading)
         card.leadingAnchor.constraint(equalTo: window.leadingAnchor, constant: leadingX).isActive = true
 
-        // Vertical position: center near anchor midY but clamp to screen
         let desiredCenterY = anchorRectInWindow.midY
         let halfHeight = targetHeight / 2
         let minCenterY = 20 + halfHeight
@@ -353,7 +298,6 @@ class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
         let centerY = max(minCenterY, min(maxCenterY, desiredCenterY))
         card.centerYAnchor.constraint(equalTo: window.topAnchor, constant: centerY).isActive = true
 
-        // 7) Create small arrow (layer) pointing RIGHT — after layout so card.frame is valid
         popoverArrow?.removeFromSuperlayer()
         popoverArrow = nil
 
@@ -361,38 +305,27 @@ class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
             guard let self = self, let window = self.view.window else { return }
             guard let card = self.popoverCardView else { return }
 
-            // Recompute anchor rect just to be safe
             let anchorRect = anchorButton.convert(anchorButton.bounds, to: window)
-
-            // Ensure layout is up-to-date
             window.layoutIfNeeded()
             card.layoutIfNeeded()
             let cardFrame = card.frame
 
-            // Arrow geometry — small right-pointing triangle
-            let arrowWidth: CGFloat = 10   // how far arrow sticks out to the right
-            let arrowHeight: CGFloat = 18  // triangle vertical size
-            let verticalInset: CGFloat = 12 // keep arrow away from rounded corners vertically
+            let arrowWidth: CGFloat = 10
+            let arrowHeight: CGFloat = 18
+            let verticalInset: CGFloat = 12
 
-            // TipY = anchor midY clamped inside card vertical safe range
             let unclampedTipY = anchorRect.midY
             let minTipY = cardFrame.minY + verticalInset + arrowHeight/2
             let maxTipY = cardFrame.maxY - verticalInset - arrowHeight/2
-            var tipY = max(minTipY, min(maxTipY, unclampedTipY))
+            let tipY = max(minTipY, min(maxTipY, unclampedTipY))
 
-            // Optional micro-nudge if needed:
-            // tipY += 0.0
-
-            // For right-pointing arrow:
-            // baseX is cardFrame.maxX, tipX is baseX + arrowWidth
             let baseX = cardFrame.maxX
             let tipX = baseX + arrowWidth
 
-            // Build triangular path pointing right (base on card right edge, tip outside toward button)
             let p = UIBezierPath()
-            p.move(to: CGPoint(x: baseX, y: tipY - arrowHeight/2))         // top base
-            p.addLine(to: CGPoint(x: tipX, y: tipY))                      // tip
-            p.addLine(to: CGPoint(x: baseX, y: tipY + arrowHeight/2))     // bottom base
+            p.move(to: CGPoint(x: baseX, y: tipY - arrowHeight/2))
+            p.addLine(to: CGPoint(x: tipX, y: tipY))
+            p.addLine(to: CGPoint(x: baseX, y: tipY + arrowHeight/2))
             p.close()
 
             let arrowLayer = CAShapeLayer()
@@ -404,7 +337,6 @@ class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
             arrowLayer.shadowRadius = 6
             arrowLayer.name = "popoverArrow"
 
-            // Insert arrow below the card so the card's rounded corners overlap the base
             if let superlayer = card.layer.superlayer {
                 superlayer.insertSublayer(arrowLayer, below: card.layer)
             } else {
@@ -414,7 +346,6 @@ class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
             self.popoverArrow = arrowLayer
         }
 
-        // 8) Animate in
         card.transform = CGAffineTransform(scaleX: 0.96, y: 0.96).translatedBy(x: 0, y: -8)
         card.alpha = 0.0
         UIView.animate(withDuration: 0.18, delay: 0, options: [.curveEaseOut], animations: {
@@ -473,13 +404,11 @@ extension ExercisePlayerViewController: UICollectionViewDataSource, UICollection
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch indexPath.section {
         case 0:
-            // Video Player Cell
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "VideoPlayerCell", for: indexPath) as! VideoPlayerCell
             cell.configure(imageName: exerciseData?.imageName ?? "girl_stretch")
             return cell
             
         case 1:
-            // Exercise Info Cell
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ExerciseInfoCell", for: indexPath) as! ExerciseInfoCell
             cell.configure(
                 title: exerciseData?.title ?? "Wall Climb Stretch",
@@ -487,7 +416,6 @@ extension ExercisePlayerViewController: UICollectionViewDataSource, UICollection
                 level: "Beginner"
             )
             
-            // Wire info tap to in-VC popover
             cell.onInfoTap = { [weak self] infoButton in
                 guard let self = self else { return }
                 let benefits = [
@@ -508,62 +436,43 @@ extension ExercisePlayerViewController: UICollectionViewDataSource, UICollection
             return cell
             
         case 2:
-            // Video Controls Cell
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "VideoControlsCell", for: indexPath) as! VideoControlsCell
-            cell.configure(currentTime: 9, totalTime: 240)
+            cell.configure(currentTime: 0, totalTime: 240)
             
-            // ✅ CORRECT CALLBACKS
-            cell.onPlayPause = { [weak self] in
-                self?.togglePlayPause()
-            }
-            
-            cell.onRestart = { [weak self] in
-                self?.restartVideo()
-            }
-            
-            // ✅ USE onLoop instead of onReplay
-            cell.onLoop = { [weak self] isLooping in
-                self?.toggleLoop(enabled: isLooping)
-            }
-            
-            cell.onSeek = { [weak self] progress in
-                self?.seekToProgress(progress)
-            }
+            cell.onPlayPause = { [weak self] in self?.togglePlayPause() }
+            cell.onRestart = { [weak self] in self?.restartVideo() }
+            cell.onLoop = { [weak self] isLooping in self?.toggleLoop(enabled: isLooping) }
+            cell.onSeek = { [weak self] progress in self?.seekToProgress(progress) }
             
             return cell
             
         case 3:
-            // Action Buttons Cell - UPDATED LOGIC (ID-based with Navigation Controller)
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ActionButtonsCell", for: indexPath) as! ActionButtonsCell
             
-            // Determine if already present (use shared model & id)
             let alreadyAdded = (exerciseData != nil) ? ExerciseManager.shared.containsExercise(id: exerciseData!.id) : false
             cell.setAdded(alreadyAdded)
             
-            // Callbacks
             cell.onAddToPlan = { [weak self] in
                 guard let self = self, let detail = self.exerciseData else { return }
                 
                 if ExerciseManager.shared.containsExercise(id: detail.id) {
-                    // Currently present -> remove by id
                     ExerciseManager.shared.removeExercisesById(detail.id)
                     self.collectionView.reloadSections(IndexSet(integer: 3))
                     self.showToast(message: "Exercise removed from plan")
                 } else {
-                    // Not present -> present AddExerciseViewController with Navigation Controller
                     let storyboard = UIStoryboard(name: "Exercise", bundle: nil)
                     
-                    // Load the Navigation Controller that contains AddExerciseViewController
                     if let addNavController = storyboard.instantiateViewController(withIdentifier: "AddExercisenav") as? UINavigationController {
                         
-                        // Get the AddExerciseViewController from the navigation controller
                         if let addVC = addNavController.viewControllers.first as? AddExerciseViewController {
-                            addVC.delegate = self // So didAddExercise is called when Save tapped
+                            addVC.delegate = self
                             addVC.initialName = detail.title
-                            addVC.initialID = detail.id // <<< important: carry the id
+                            addVC.initialID = detail.id
+                            
+                            // ✅ DISABLE NAME EDITING FOR LIBRARY EXERCISES
+                            addVC.isNameEditable = false
                         }
                         
-                        // Present the navigation controller modally
                         addNavController.modalPresentationStyle = .pageSheet
                         if let sheet = addNavController.sheetPresentationController {
                             sheet.detents = [.large()]
@@ -575,9 +484,7 @@ extension ExercisePlayerViewController: UICollectionViewDataSource, UICollection
                 }
             }
             
-            cell.onSetReminder = { [weak self] in
-                self?.setReminder()
-            }
+            cell.onSetReminder = { [weak self] in self?.setReminder() }
             
             return cell
             
@@ -587,55 +494,16 @@ extension ExercisePlayerViewController: UICollectionViewDataSource, UICollection
     }
     
     // MARK: - Action Methods
-    
-    func togglePlayPause() {
-        print("▶️/⏸️ Play/Pause tapped")
-        // Your video player logic here
-    }
-    
-    func restartVideo() {
-        print("⏮️ Restart tapped - Going to 0:00")
-        // Reset video to beginning
-    }
-    
-    func toggleLoop(enabled: Bool) {
-        print("🔁 Loop \(enabled ? "enabled" : "disabled")")
-        // Handle loop state
-    }
-    
-    func seekToProgress(_ progress: Float) {
-        let seconds = Int(progress * 240) // 240 = total duration
-        print("⏩ Seeked to: \(seconds) seconds")
-        // Seek video to position
-    }
-    
-    func addToPlan() {
-        print("➕ Add to Plan tapped")
-        
-        // Show confirmation alert
-        let alert = UIAlertController(
-            title: "Added to Plan",
-            message: "\(exerciseData?.title ?? "Exercise") has been added to your plan",
-            preferredStyle: .alert
-        )
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
-        
-        // Note: actual add logic is handled via didAddExercise (delegate) or direct model calls above
-    }
+    func togglePlayPause() { print("▶️/⏸️ Play/Pause tapped") }
+    func restartVideo() { print("⏮️ Restart tapped") }
+    func toggleLoop(enabled: Bool) { print("🔁 Loop \(enabled)") }
+    func seekToProgress(_ progress: Float) { print("⏩ Seeked") }
+    func addToPlan() {}
     
     func setReminder() {
         print("⏰ Set Reminder tapped")
-        
-        // Show time picker or navigate to reminder screen
-        let alert = UIAlertController(
-            title: "Set Reminder",
-            message: "Reminder feature coming soon!",
-            preferredStyle: .alert
-        )
+        let alert = UIAlertController(title: "Set Reminder", message: "Reminder feature coming soon!", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
-        
-        // TODO: Implement reminder logic
     }
 }

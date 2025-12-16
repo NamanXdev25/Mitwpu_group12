@@ -7,15 +7,15 @@ protocol AddExerciseDelegate: AnyObject {
 class AddExerciseViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
 
     // --- FORM OUTLETS ---
-    @IBOutlet weak var closeBarButton: UIBarButtonItem! // Changed to UIBarButtonItem
+    @IBOutlet weak var closeBarButton: UIBarButtonItem!
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var repeatTextField: UITextField!
     @IBOutlet weak var timeTextField: UITextField!
     @IBOutlet weak var reminderSwitch: UISwitch!
     @IBOutlet weak var descriptionTextView: UITextView!
-    @IBOutlet weak var saveBarButton: UIBarButtonItem! // Changed to UIBarButtonItem
+    @IBOutlet weak var saveBarButton: UIBarButtonItem!
     
-    // NEW: Chevron Image Views (no longer added programmatically)
+    // NEW: Chevron Image Views
     @IBOutlet weak var repeatChevronImageView: UIImageView!
     @IBOutlet weak var timeChevronImageView: UIImageView!
     
@@ -31,6 +31,10 @@ class AddExerciseViewController: UIViewController, UIPickerViewDelegate, UIPicke
     var initialName: String?
     // New property: carry the id of the detail exercise (if presenting from player)
     var initialID: String?
+    
+    // --- NEW: Control Editing ---
+    // Default is true (editable). We set this to false when coming from Player.
+    var isNameEditable: Bool = true
     
     // --- NEW: Edit Mode properties ---
     var initialSubtitle: String? // For "Repeat" (e.g., "Every Mon")
@@ -72,6 +76,13 @@ class AddExerciseViewController: UIViewController, UIPickerViewDelegate, UIPicke
             nameTextField.textColor = .black
         }
         
+        // --- NEW: Disable Name Editing if requested ---
+        if !isNameEditable {
+            nameTextField.isUserInteractionEnabled = false // Disables typing
+            nameTextField.textColor = .darkGray // Visual cue that it's read-only
+            nameTextField.backgroundColor = UIColor.systemGray6.withAlphaComponent(0.5) // Optional: light gray bg
+        }
+        
         if let sub = initialSubtitle, !sub.isEmpty {
             repeatTextField.text = sub
         }
@@ -94,8 +105,6 @@ class AddExerciseViewController: UIViewController, UIPickerViewDelegate, UIPicke
     }
     
     func setupUI() {
-        // Removed saveButton styling since it's now a UIBarButtonItem
-        
         // Style the popup card
         pickerCard.layer.cornerRadius = 16
         pickerCard.layer.shadowColor = UIColor.black.cgColor
@@ -135,6 +144,11 @@ class AddExerciseViewController: UIViewController, UIPickerViewDelegate, UIPicke
     
     // --- MAGIC: INTERCEPT TEXT FIELD TAPS ---
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        
+        // Check if name is editable (though isUserInteractionEnabled usually catches this first)
+        if textField == nameTextField && !isNameEditable {
+            return false
+        }
         
         if textField == repeatTextField {
             // User tapped "Repeat" -> Show Channel 1
@@ -205,51 +219,49 @@ class AddExerciseViewController: UIViewController, UIPickerViewDelegate, UIPicke
     }
     
     // --- ACTIONS ---
-//    @IBAction func closeTapped(_ sender: UIBarButtonItem) { // Changed parameter type
-//        self.dismiss(animated: true, completion: nil)
-//    }
-//    
-//    @IBAction func saveTapped(_ sender: UIBarButtonItem) { // Changed parameter type
-//        guard let name = nameTextField.text, !name.isEmpty else { return }
-//        let time = timeTextField.text ?? "10:00 AM"
-//        let repeatText = repeatTextField.text ?? "Every Mon"
-//
-//        // Use initialID if present (this preserves identity), otherwise create a new UUID
-//        let planId = initialID ?? UUID().uuidString
-//        
-//        // --- NEW: Capture Description ---
-//        var description = descriptionTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
-//        if description == "Add a description" {
-//            description = ""
-//        }
-//
-//        let newPlanItem = PlanItem(id: planId, title: name, subtitle: repeatText, time: time, isCompleted: false, description: description)
-//        delegate?.didAddExercise(newPlanItem)
-//        self.dismiss(animated: true, completion: nil)
-//    }
     
-    @IBAction func closeTapped(_ sender: UIBarButtonItem) { // Changed parameter type
-            self.dismiss(animated: true, completion: nil)
-       }
+    @IBAction func closeTapped(_ sender: UIBarButtonItem) {
+        self.dismiss(animated: true, completion: nil)
+    }
     
-    @IBAction func saveTapped(_ sender: UIBarButtonItem) { // Changed parameter type
-          guard let name = nameTextField.text, !name.isEmpty else { return }
-          let time = timeTextField.text ?? "10:00 AM"
-          let repeatText = repeatTextField.text ?? "Every Mon"
-  
-          // Use initialID if present (this preserves identity), otherwise create a new UUID
-          let planId = initialID ?? UUID().uuidString
-  
-          // --- NEW: Capture Description ---
-          var description = descriptionTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
-         if description == "Add a description" {
-              description = ""
-            }
-  
-          let newPlanItem = PlanItem(id: planId, title: name, subtitle: repeatText, time: time, isCompleted: false, description: description)
-         delegate?.didAddExercise(newPlanItem)
-          self.dismiss(animated: true, completion: nil)
-     }
+    @IBAction func saveTapped(_ sender: UIBarButtonItem) {
+        // 1. Validate Name
+        guard let name = nameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !name.isEmpty else {
+            showAlert(message: "Please enter a name for the exercise.")
+            return
+        }
+        
+        // 2. Validate Repeat Field
+        guard let repeatText = repeatTextField.text, !repeatText.isEmpty else {
+            showAlert(message: "Please select how often to repeat the exercise.")
+            return
+        }
+        
+        // 3. Validate Time Field
+        guard let time = timeTextField.text, !time.isEmpty else {
+            showAlert(message: "Please select a time for the exercise.")
+            return
+        }
+
+        // Use initialID if present (this preserves identity), otherwise create a new UUID
+        let planId = initialID ?? UUID().uuidString
+        
+        // --- NEW: Capture Description ---
+        var description = descriptionTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
+        if description == "Add a description" {
+            description = ""
+        }
+
+        let newPlanItem = PlanItem(id: planId, title: name, subtitle: repeatText, time: time, isCompleted: false, description: description)
+        delegate?.didAddExercise(newPlanItem)
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func showAlert(message: String) {
+        let alert = UIAlertController(title: "Required Field", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        self.present(alert, animated: true)
+    }
         
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
