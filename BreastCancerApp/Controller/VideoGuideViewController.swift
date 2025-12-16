@@ -114,7 +114,7 @@ class VideoGuideViewController: UIViewController {
     }
 
     @IBAction func logSelfExamTapped(_ sender: UIButton) {
-        let sb = UIStoryboard(name: "Main", bundle: nil)
+        let sb = UIStoryboard(name: "selfexam", bundle: nil)
         let obsVC = sb.instantiateViewController(withIdentifier: "ObservationsViewController")
         navigationController?.pushViewController(obsVC, animated: true)
     }

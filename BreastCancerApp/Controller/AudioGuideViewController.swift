@@ -101,7 +101,7 @@ class AudioGuideViewController: UIViewController {
     }
 
     @IBAction func logSelfExamTapped(_ sender: UIButton) {
-        guard let observationsVC = UIStoryboard(name: "Main", bundle: nil)
+        guard let observationsVC = UIStoryboard(name: "selfexam", bundle: nil)
             .instantiateViewController(withIdentifier: "ObservationsViewController") as? UIViewController else {
             return
         }
