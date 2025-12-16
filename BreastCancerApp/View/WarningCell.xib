@@ -3,8 +3,8 @@
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -22,6 +22,7 @@
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="exclamationmark.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="t8I-uW-yz5">
                                 <rect key="frame" x="15" y="23.666666666666664" width="24" height="22.666666666666664"/>
+                                <color key="tintColor" name="WarningIconColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="24" id="UqV-5m-fUf"/>
                                     <constraint firstAttribute="width" constant="24" id="mdz-ZV-ygJ"/>
@@ -30,11 +31,11 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Consult your healthcare provider before starting any new exercise routine." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7HR-0L-fbm">
                                 <rect key="frame" x="49" y="14.666666666666668" width="321" height="40.666666666666657"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
+                                <color key="textColor" name="WarningTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="WarningColor"/>
                         <constraints>
                             <constraint firstItem="t8I-uW-yz5" firstAttribute="leading" secondItem="8cT-Z7-Ohc" secondAttribute="leading" constant="15" id="56P-IU-TBm"/>
                             <constraint firstItem="7HR-0L-fbm" firstAttribute="leading" secondItem="t8I-uW-yz5" secondAttribute="trailing" constant="10" id="6Nw-1y-H8e"/>
@@ -44,6 +45,17 @@
                             <constraint firstItem="7HR-0L-fbm" firstAttribute="centerY" secondItem="8cT-Z7-Ohc" secondAttribute="centerY" id="Ehl-nT-bCQ"/>
                             <constraint firstAttribute="trailing" secondItem="7HR-0L-fbm" secondAttribute="trailing" id="yMa-iG-N1Q"/>
                         </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="14"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                <integer key="value" value="1"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="layer.borderColor">
+                                <color key="value" name="WarningBorderColor"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
                     </view>
                 </subviews>
             </view>
@@ -65,8 +77,17 @@
     </objects>
     <resources>
         <image name="exclamationmark.circle" catalog="system" width="128" height="123"/>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
+        <namedColor name="WarningBorderColor">
+            <color red="0.99599999189376831" green="0.90200001001358032" blue="0.5220000147819519" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="WarningColor">
+            <color red="1" green="0.98400002717971802" blue="0.92199999094009399" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="WarningIconColor">
+            <color red="0.88200002908706665" green="0.44299998879432678" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="WarningTextColor">
+            <color red="0.48199999332427979" green="0.20000000298023224" blue="0.024000000208616257" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

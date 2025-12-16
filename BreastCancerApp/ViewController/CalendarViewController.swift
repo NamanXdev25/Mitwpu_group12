@@ -5,7 +5,9 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
     // --- OUTLETS ---
     @IBOutlet weak var monthLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var closeButton: UIButton!
+    
+    // Changed from UIButton to UIBarButtonItem
+    @IBOutlet weak var closeBarButton: UIBarButtonItem!
     
     // Outlets for navigation arrows
     @IBOutlet weak var previousMonth: UIButton!
@@ -143,10 +145,11 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
         setMonthView()
     }
     
-    @IBAction func closeTapped(_ sender: Any) {
+    // Updated for UIBarButtonItem
+    @IBAction func closeTapped(_ sender: UIBarButtonItem) {
         self.dismiss(animated: true, completion: nil)
     }
-
+    
     // --- COLLECTION VIEW DELEGATE ---
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

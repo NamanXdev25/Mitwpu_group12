@@ -7,13 +7,17 @@ protocol AddExerciseDelegate: AnyObject {
 class AddExerciseViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
 
     // --- FORM OUTLETS ---
-    @IBOutlet weak var CloseButton: UIButton!
+    @IBOutlet weak var closeBarButton: UIBarButtonItem! // Changed to UIBarButtonItem
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var repeatTextField: UITextField!
     @IBOutlet weak var timeTextField: UITextField!
     @IBOutlet weak var reminderSwitch: UISwitch!
     @IBOutlet weak var descriptionTextView: UITextView!
-    @IBOutlet weak var saveButton: UIButton!
+    @IBOutlet weak var saveBarButton: UIBarButtonItem! // Changed to UIBarButtonItem
+    
+    // NEW: Chevron Image Views (no longer added programmatically)
+    @IBOutlet weak var repeatChevronImageView: UIImageView!
+    @IBOutlet weak var timeChevronImageView: UIImageView!
     
     // --- POPUP OUTLETS ---
     @IBOutlet weak var pickerOverlay: UIView!   // The dark background
@@ -52,8 +56,8 @@ class AddExerciseViewController: UIViewController, UIPickerViewDelegate, UIPicke
         timePicker.preferredDatePickerStyle = .wheels
         timePicker.locale = Locale(identifier: "en_US") // Optional: Forces AM/PM style
         
-        addChevron(to: repeatTextField)
-        addChevron(to: timeTextField)
+        // NEW: Setup tap gestures for chevron images
+        setupChevronTapGestures()
         
         // 2. Setup Overlay (Start with everything HIDDEN)
         pickerOverlay.isHidden = true
@@ -90,8 +94,7 @@ class AddExerciseViewController: UIViewController, UIPickerViewDelegate, UIPicke
     }
     
     func setupUI() {
-        saveButton.layer.cornerRadius = saveButton.frame.height / 2
-        saveButton.backgroundColor = UIColor(red: 0.85, green: 0.4, blue: 0.5, alpha: 1.0)
+        // Removed saveButton styling since it's now a UIBarButtonItem
         
         // Style the popup card
         pickerCard.layer.cornerRadius = 16
@@ -106,39 +109,28 @@ class AddExerciseViewController: UIViewController, UIPickerViewDelegate, UIPicke
         descriptionTextView.textColor = .lightGray
         descriptionTextView.delegate = self // Delegate is handled in extension below
         descriptionTextView.textContainerInset = UIEdgeInsets(top: 15, left: 10, bottom: 10, right: 10)
-
     }
 
-    func addChevron(to textField: UITextField) {
-        // Create a small container view for the icon
-        let iconContainer = UIView(frame: CGRect(x: 0, y: 0, width: 30, height: 20))
+    // NEW: Setup tap gestures for the chevron image views
+    func setupChevronTapGestures() {
+        // Make image views tappable
+        repeatChevronImageView.isUserInteractionEnabled = true
+        timeChevronImageView.isUserInteractionEnabled = true
         
-        // Create the image view
-        let iconView = UIImageView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
-        iconView.image = UIImage(systemName: "chevron.up.chevron.down") // Or just "chevron.down"
-        iconView.contentMode = .scaleAspectFit
-        iconView.tintColor = .lightGray
+        // Add tap gestures
+        let repeatTap = UITapGestureRecognizer(target: self, action: #selector(repeatChevronTapped))
+        repeatChevronImageView.addGestureRecognizer(repeatTap)
         
-        iconContainer.addSubview(iconView)
-        
-        // Add tap gesture to the container to ensure tapping the icon opens the picker
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(chevronTapped(_:)))
-        iconContainer.addGestureRecognizer(tapGesture)
-        iconContainer.isUserInteractionEnabled = true
-        
-        // Set it as the right view of the text field
-        textField.rightView = iconContainer
-        textField.rightViewMode = .always
-        
-        // Associate the text field with the gesture logic
-        iconContainer.accessibilityElements = [textField]
+        let timeTap = UITapGestureRecognizer(target: self, action: #selector(timeChevronTapped))
+        timeChevronImageView.addGestureRecognizer(timeTap)
     }
     
-    @objc func chevronTapped(_ sender: UITapGestureRecognizer) {
-        // Find which text field this chevron belongs to
-        if let container = sender.view, let textField = container.accessibilityElements?.first as? UITextField {
-            textField.becomeFirstResponder()
-        }
+    @objc func repeatChevronTapped() {
+        showRepeatPicker()
+    }
+    
+    @objc func timeChevronTapped() {
+        showTimePicker()
     }
     
     // --- MAGIC: INTERCEPT TEXT FIELD TAPS ---
@@ -213,29 +205,52 @@ class AddExerciseViewController: UIViewController, UIPickerViewDelegate, UIPicke
     }
     
     // --- ACTIONS ---
-    @IBAction func closeTapped(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
-    }
+//    @IBAction func closeTapped(_ sender: UIBarButtonItem) { // Changed parameter type
+//        self.dismiss(animated: true, completion: nil)
+//    }
+//    
+//    @IBAction func saveTapped(_ sender: UIBarButtonItem) { // Changed parameter type
+//        guard let name = nameTextField.text, !name.isEmpty else { return }
+//        let time = timeTextField.text ?? "10:00 AM"
+//        let repeatText = repeatTextField.text ?? "Every Mon"
+//
+//        // Use initialID if present (this preserves identity), otherwise create a new UUID
+//        let planId = initialID ?? UUID().uuidString
+//        
+//        // --- NEW: Capture Description ---
+//        var description = descriptionTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
+//        if description == "Add a description" {
+//            description = ""
+//        }
+//
+//        let newPlanItem = PlanItem(id: planId, title: name, subtitle: repeatText, time: time, isCompleted: false, description: description)
+//        delegate?.didAddExercise(newPlanItem)
+//        self.dismiss(animated: true, completion: nil)
+//    }
     
-    @IBAction func saveTapped(_ sender: Any) {
-        guard let name = nameTextField.text, !name.isEmpty else { return }
-        let time = timeTextField.text ?? "10:00 AM"
-        let repeatText = repeatTextField.text ?? "Every Mon"
-
-        // Use initialID if present (this preserves identity), otherwise create a new UUID
-        let planId = initialID ?? UUID().uuidString
+    @IBAction func closeTapped(_ sender: UIBarButtonItem) { // Changed parameter type
+            self.dismiss(animated: true, completion: nil)
+       }
+    
+    @IBAction func saveTapped(_ sender: UIBarButtonItem) { // Changed parameter type
+          guard let name = nameTextField.text, !name.isEmpty else { return }
+          let time = timeTextField.text ?? "10:00 AM"
+          let repeatText = repeatTextField.text ?? "Every Mon"
+  
+          // Use initialID if present (this preserves identity), otherwise create a new UUID
+          let planId = initialID ?? UUID().uuidString
+  
+          // --- NEW: Capture Description ---
+          var description = descriptionTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
+         if description == "Add a description" {
+              description = ""
+            }
+  
+          let newPlanItem = PlanItem(id: planId, title: name, subtitle: repeatText, time: time, isCompleted: false, description: description)
+         delegate?.didAddExercise(newPlanItem)
+          self.dismiss(animated: true, completion: nil)
+     }
         
-        // --- NEW: Capture Description ---
-        var description = descriptionTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
-        if description == "Add a description" {
-            description = ""
-        }
-
-        let newPlanItem = PlanItem(id: planId, title: name, subtitle: repeatText, time: time, isCompleted: false, description: description)
-        delegate?.didAddExercise(newPlanItem)
-        self.dismiss(animated: true, completion: nil)
-    }
-    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true

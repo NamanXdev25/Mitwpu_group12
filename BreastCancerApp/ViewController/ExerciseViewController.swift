@@ -11,6 +11,7 @@ class ExerciseViewController: UIViewController, UICollectionViewDataSource, UICo
 
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var floatingAddButton: UIButton!
+    @IBOutlet weak var calendarBarButton: UIBarButtonItem! // NEW: Calendar Bar Button
     
     var model = ExerciseManager.shared
 
@@ -26,60 +27,12 @@ class ExerciseViewController: UIViewController, UICollectionViewDataSource, UICo
         registerCells()
         
         // Style Floating Button
-        floatingAddButton.layer.cornerRadius = floatingAddButton.frame.height / 2
-        floatingAddButton.layer.shadowColor = UIColor.black.cgColor
-        floatingAddButton.layer.shadowOpacity = 0.3
-        floatingAddButton.layer.shadowOffset = CGSize(width: 0, height: 4)
+//        floatingAddButton.layer.cornerRadius = floatingAddButton.frame.height / 2
+//        floatingAddButton.layer.shadowColor = UIColor.black.cgColor
+//        floatingAddButton.layer.shadowOpacity = 0.3
+//        floatingAddButton.layer.shadowOffset = CGSize(width: 0, height: 4)
         
-        // --- NEW: Add Calendar Button to Navigation Bar ---
-        setupNavigationBar()
     }
-    
-    // --- NEW FUNCTION: Setup Navigation Bar ---
-    func setupNavigationBar() {
-        // 1. Set Title
-        self.title = "Exercises"
-        
-        // 2. Create a Custom Button View
-        let button = UIButton(type: .system)
-        button.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
-        
-        // 3. Configure Icon (Calendar with +)
-        let config = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
-        let image = UIImage(systemName: "calendar.badge.plus", withConfiguration: config)
-        
-        button.setImage(image, for: .normal)
-        
-        // 4. Style the Circle
-       // button.backgroundColor = .systemGray6 // Light gray background
-        button.tintColor = .black             // Black icon color
-        button.layer.cornerRadius = 20        // Half of height (40) makes it a circle
-        
-        // 5. Add Action
-        button.addTarget(self, action: #selector(calendarButtonTapped), for: .touchUpInside)
-        
-        // 6. Set as Right Bar Item
-        let barItem = UIBarButtonItem(customView: button)
-        navigationItem.rightBarButtonItem = barItem
-    }
-    
-    // --- CALENDAR ACTION ---
-        @objc func calendarButtonTapped() {
-               let storyboard = UIStoryboard(name: "Exercise", bundle: nil)
-               
-               // Ensure Identifier "CalendarViewController" matches Storyboard ID
-               if let calendarVC = storyboard.instantiateViewController(withIdentifier: "CalendarViewController") as? CalendarViewController {
-                   
-                   // This makes it slide up as a card (default behavior)
-                   if let sheet = calendarVC.sheetPresentationController {
-                      // sheet.detents = [.medium(), .large()] // Allows it to be half or full screen
-                       sheet.prefersGrabberVisible = true
-                   }
-                   
-                   self.present(calendarVC, animated: true, completion: nil)
-               }
-           }
-    
     
     func registerCells() {
         // Headers
@@ -189,24 +142,30 @@ class ExerciseViewController: UIViewController, UICollectionViewDataSource, UICo
     func openEditScreen(for item: PlanItem) {
         let storyboard = UIStoryboard(name: "Exercise", bundle: nil)
         
-        if let addVC = storyboard.instantiateViewController(withIdentifier: "AddExerciseViewController") as? AddExerciseViewController {
+        // Load the Navigation Controller that contains AddExerciseViewController
+        if let addNavController = storyboard.instantiateViewController(withIdentifier: "AddExercisenav") as? UINavigationController {
             
-            addVC.delegate = self
+            // Get the AddExerciseViewController from the navigation controller
+            if let addVC = addNavController.viewControllers.first as? AddExerciseViewController {
+                
+                addVC.delegate = self
+                
+                // PASS DATA TO PREFILL
+                addVC.initialID = item.id
+                addVC.initialName = item.title
+                addVC.initialSubtitle = item.subtitle
+                addVC.initialTime = item.time
+                addVC.initialDescription = item.description // --- NEW: Pass description
+            }
             
-            // PASS DATA TO PREFILL
-            addVC.initialID = item.id
-            addVC.initialName = item.title
-            addVC.initialSubtitle = item.subtitle
-            addVC.initialTime = item.time
-            addVC.initialDescription = item.description // --- NEW: Pass description
-            
-            addVC.modalPresentationStyle = .pageSheet
-            if let sheet = addVC.sheetPresentationController {
+            // Present the navigation controller modally
+            addNavController.modalPresentationStyle = .pageSheet
+            if let sheet = addNavController.sheetPresentationController {
                 sheet.detents = [.large()]
                 sheet.prefersGrabberVisible = true
             }
             
-            self.present(addVC, animated: true, completion: nil)
+            self.present(addNavController, animated: true, completion: nil)
         }
     }
     
@@ -268,18 +227,43 @@ class ExerciseViewController: UIViewController, UICollectionViewDataSource, UICo
     @IBAction func floatingButtonTapped(_ sender: Any) {
         let storyboard = UIStoryboard(name: "Exercise", bundle: nil)
         
-        if let addVC = storyboard.instantiateViewController(withIdentifier: "AddExerciseViewController") as? AddExerciseViewController {
+        // Load the Navigation Controller that contains AddExerciseViewController
+        if let addNavController = storyboard.instantiateViewController(withIdentifier: "AddExercisenav") as? UINavigationController {
             
-            // IMPORTANT: Set the delegate so we can get data back!
-            addVC.delegate = self
+            // Get the AddExerciseViewController from the navigation controller
+            if let addVC = addNavController.viewControllers.first as? AddExerciseViewController {
+                // IMPORTANT: Set the delegate so we can get data back!
+                addVC.delegate = self
+            }
             
-            addVC.modalPresentationStyle = .pageSheet
-            if let sheet = addVC.sheetPresentationController {
+            // Present the navigation controller modally
+            addNavController.modalPresentationStyle = .pageSheet
+            if let sheet = addNavController.sheetPresentationController {
                 sheet.detents = [.large()]
                 sheet.prefersGrabberVisible = true
             }
             
-            self.present(addVC, animated: true, completion: nil)
+            self.present(addNavController, animated: true, completion: nil)
+        }
+    }
+    
+    // --- NEW: CALENDAR BAR BUTTON ACTION ---
+    @IBAction func calendarButtonTapped(_ sender: UIBarButtonItem) {
+        let storyboard = UIStoryboard(name: "Exercise", bundle: nil)
+        
+        // Load the Navigation Controller (not the CalendarViewController directly)
+        if let calendarNavController = storyboard.instantiateViewController(withIdentifier: "ExerciseCalendarnav") as? UINavigationController {
+            
+            // Present the navigation controller modally
+            calendarNavController.modalPresentationStyle = .pageSheet
+            
+            // Optional: Configure sheet size
+            if let sheet = calendarNavController.sheetPresentationController {
+                sheet.detents = [.large()]
+                sheet.prefersGrabberVisible = true
+            }
+            
+            self.present(calendarNavController, animated: true, completion: nil)
         }
     }
 

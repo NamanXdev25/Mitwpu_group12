@@ -5,6 +5,7 @@ import AVFoundation
 class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
     
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var CalendarButton: UIBarButtonItem!
     
     var exerciseData: DetailExerciseItem?
     var videoPlayer: AVPlayer?
@@ -33,8 +34,6 @@ class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
         
         // 🔧 SET YOUR TEST HEIGHT HERE!
         VideoPlayerCell.videoHeight = currentVideoHeight
-        
-        setupNavigationBar()
         setupCollectionView()
         
         view.backgroundColor = UIColor(red: 0.96, green: 0.95, blue: 0.94, alpha: 1.0)
@@ -59,28 +58,22 @@ class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
         dismissPopover(animated: false)
     }
     
-    func setupNavigationBar() {
-        self.title = "Exercises"
-        
-        let button = UIButton(type: .system)
-        button.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
-        let config = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
-        let image = UIImage(systemName: "calendar.badge.plus", withConfiguration: config)
-        button.setImage(image, for: .normal)
-        button.tintColor = .black
-        button.addTarget(self, action: #selector(calendarButtonTapped), for: .touchUpInside)
-        
-        let barItem = UIBarButtonItem(customView: button)
-        navigationItem.rightBarButtonItem = barItem
-    }
-    
-    @objc func calendarButtonTapped() {
+    @IBAction func calendarButtonTapped(_ sender: UIBarButtonItem) {
         let storyboard = UIStoryboard(name: "Exercise", bundle: nil)
-        if let calendarVC = storyboard.instantiateViewController(withIdentifier: "CalendarViewController") as? CalendarViewController {
-            if let sheet = calendarVC.sheetPresentationController {
+        
+        // Load the Navigation Controller (not the CalendarViewController directly)
+        if let calendarNavController = storyboard.instantiateViewController(withIdentifier: "ExerciseCalendarnav") as? UINavigationController {
+            
+            // Present the navigation controller modally
+            calendarNavController.modalPresentationStyle = .pageSheet
+            
+            // Optional: Configure sheet size
+            if let sheet = calendarNavController.sheetPresentationController {
+                sheet.detents = [.large()]
                 sheet.prefersGrabberVisible = true
             }
-            self.present(calendarVC, animated: true, completion: nil)
+            
+            self.present(calendarNavController, animated: true, completion: nil)
         }
     }
     
@@ -540,7 +533,7 @@ extension ExercisePlayerViewController: UICollectionViewDataSource, UICollection
             return cell
             
         case 3:
-            // Action Buttons Cell - UPDATED LOGIC (ID-based)
+            // Action Buttons Cell - UPDATED LOGIC (ID-based with Navigation Controller)
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ActionButtonsCell", for: indexPath) as! ActionButtonsCell
             
             // Determine if already present (use shared model & id)
@@ -557,18 +550,27 @@ extension ExercisePlayerViewController: UICollectionViewDataSource, UICollection
                     self.collectionView.reloadSections(IndexSet(integer: 3))
                     self.showToast(message: "Exercise removed from plan")
                 } else {
-                    // Not present -> present AddExerciseViewController prefilled (carry id)
+                    // Not present -> present AddExerciseViewController with Navigation Controller
                     let storyboard = UIStoryboard(name: "Exercise", bundle: nil)
-                    if let addVC = storyboard.instantiateViewController(withIdentifier: "AddExerciseViewController") as? AddExerciseViewController {
-                        addVC.delegate = self // So didAddExercise is called when Save tapped
-                        addVC.initialName = detail.title
-                        addVC.initialID = detail.id           // <<< important: carry the id
-                        addVC.modalPresentationStyle = .pageSheet
-                        if let sheet = addVC.sheetPresentationController {
+                    
+                    // Load the Navigation Controller that contains AddExerciseViewController
+                    if let addNavController = storyboard.instantiateViewController(withIdentifier: "AddExercisenav") as? UINavigationController {
+                        
+                        // Get the AddExerciseViewController from the navigation controller
+                        if let addVC = addNavController.viewControllers.first as? AddExerciseViewController {
+                            addVC.delegate = self // So didAddExercise is called when Save tapped
+                            addVC.initialName = detail.title
+                            addVC.initialID = detail.id // <<< important: carry the id
+                        }
+                        
+                        // Present the navigation controller modally
+                        addNavController.modalPresentationStyle = .pageSheet
+                        if let sheet = addNavController.sheetPresentationController {
                             sheet.detents = [.large()]
                             sheet.prefersGrabberVisible = true
                         }
-                        self.present(addVC, animated: true, completion: nil)
+                        
+                        self.present(addNavController, animated: true, completion: nil)
                     }
                 }
             }
