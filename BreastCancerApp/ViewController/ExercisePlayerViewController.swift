@@ -8,14 +8,10 @@ class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
     @IBOutlet weak var CalendarButton: UIBarButtonItem!
     
     var exerciseData: DetailExerciseItem?
-    var videoPlayer: AVPlayer?
-    var playerLayer: AVPlayerLayer?
+    weak var activeVideoCell: VideoPlayerCell?
     
-    var isPlaying = false
-    var currentTime: Double = 0
-    var totalDuration: Double = 240
+    var totalDuration: Double = 1.0
     
-    // 🎯 TEST DIFFERENT HEIGHTS HERE!
     var currentVideoHeight: CGFloat = 350 {
         didSet {
             VideoPlayerCell.videoHeight = currentVideoHeight
@@ -23,7 +19,6 @@ class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
         }
     }
     
-    // MARK: - Popover in-VC properties
     private var popoverBackgroundView: UIView?
     private var popoverCardView: UIView?
     private var popoverArrow: CAShapeLayer?
@@ -39,13 +34,12 @@ class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // Reload the buttons section to reflect latest plan membership
         collectionView.reloadSections(IndexSet(integer: 3))
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        videoPlayer?.pause()
+        activeVideoCell?.player?.pause()
         dismissPopover(animated: false)
     }
     
@@ -137,7 +131,6 @@ class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
         return section
     }
     
-    // MARK: - AddExerciseDelegate
     func didAddExercise(_ exercise: PlanItem) {
         ExerciseManager.shared.addPlanItem(exercise)
         collectionView.reloadSections(IndexSet(integer: 3))
@@ -151,6 +144,7 @@ class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
         toastLabel.textAlignment = .center
         toastLabel.alpha = 0
         toastLabel.numberOfLines = 0
+
         toastLabel.backgroundColor = UIColor(white: 0.12, alpha: 0.88)
         toastLabel.textColor = .white
         toastLabel.layer.cornerRadius = 14
@@ -181,7 +175,6 @@ class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
         }
     }
     
-    // MARK: - Popover UI
     func showBenefitsPopover(from anchorButton: UIButton, benefits: [String], precautions: [String]) {
         dismissPopover(animated: false)
 
@@ -405,7 +398,19 @@ extension ExercisePlayerViewController: UICollectionViewDataSource, UICollection
         switch indexPath.section {
         case 0:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "VideoPlayerCell", for: indexPath) as! VideoPlayerCell
-            cell.configure(imageName: exerciseData?.imageName ?? "girl_stretch")
+            
+            self.activeVideoCell = cell
+            
+            cell.onDurationChanged = { [weak self] seconds in
+                guard let self = self else { return }
+                self.totalDuration = seconds
+                DispatchQueue.main.async {
+                    self.collectionView.reloadSections(IndexSet(integer: 2))
+                }
+            }
+            
+            cell.configure(videoName: "sample_video", imageName: exerciseData?.imageName ?? "girl_stretch")
+            
             return cell
             
         case 1:
@@ -437,7 +442,7 @@ extension ExercisePlayerViewController: UICollectionViewDataSource, UICollection
             
         case 2:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "VideoControlsCell", for: indexPath) as! VideoControlsCell
-            cell.configure(currentTime: 0, totalTime: 240)
+            cell.configure(currentTime: 0, totalTime: Int(self.totalDuration))
             
             cell.onPlayPause = { [weak self] in self?.togglePlayPause() }
             cell.onRestart = { [weak self] in self?.restartVideo() }
@@ -468,8 +473,6 @@ extension ExercisePlayerViewController: UICollectionViewDataSource, UICollection
                             addVC.delegate = self
                             addVC.initialName = detail.title
                             addVC.initialID = detail.id
-                            
-                            // ✅ DISABLE NAME EDITING FOR LIBRARY EXERCISES
                             addVC.isNameEditable = false
                         }
                         
@@ -493,15 +496,32 @@ extension ExercisePlayerViewController: UICollectionViewDataSource, UICollection
         }
     }
     
-    // MARK: - Action Methods
-    func togglePlayPause() { print("▶️/⏸️ Play/Pause tapped") }
-    func restartVideo() { print("⏮️ Restart tapped") }
-    func toggleLoop(enabled: Bool) { print("🔁 Loop \(enabled)") }
-    func seekToProgress(_ progress: Float) { print("⏩ Seeked") }
-    func addToPlan() {}
+    func togglePlayPause() {
+        if let player = activeVideoCell?.player {
+            if player.timeControlStatus == .playing {
+                activeVideoCell?.pause()
+            } else {
+                activeVideoCell?.play()
+            }
+        }
+    }
+    
+    func restartVideo() {
+        activeVideoCell?.seek(to: 0)
+        activeVideoCell?.play()
+    }
+    
+   
+    func toggleLoop(enabled: Bool) {
+        activeVideoCell?.isLooping = enabled
+    }
+    
+    func seekToProgress(_ progress: Float) {
+        let targetTime = Double(progress) * self.totalDuration
+        activeVideoCell?.seek(to: targetTime)
+    }
     
     func setReminder() {
-        print("⏰ Set Reminder tapped")
         let alert = UIAlertController(title: "Set Reminder", message: "Reminder feature coming soon!", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
