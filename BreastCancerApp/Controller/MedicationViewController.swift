@@ -38,9 +38,9 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
         collectionView.dataSource = self
         collectionView.delegate = self
         
-        let myPinkBackground = UIColor(red: 1.0 , green: 0.95 , blue: 0.96 , alpha: 1.0)
-        self.view.backgroundColor = myPinkBackground
-        self.collectionView.backgroundColor = myPinkBackground
+//        let myPinkBackground = UIColor(red: 1.0 , green: 0.95 , blue: 0.96 , alpha: 1.0)
+//        self.view.backgroundColor = myPinkBackground
+//        self.collectionView.backgroundColor = myPinkBackground
         
         // 2. Apply the Layout with Swipe Actions
         collectionView.setCollectionViewLayout(generateLayout(), animated: false)
@@ -264,4 +264,3 @@ extension MedicationViewController: AddMedicationDelegate {
         collectionView.reloadItems(at: [indexPath])
     }
 }
-

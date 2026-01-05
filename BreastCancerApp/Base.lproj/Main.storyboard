@@ -47,7 +47,7 @@
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="j6E-PH-Lde">
                                 <rect key="frame" x="0.0" y="120" width="393" height="612"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" red="0.97254901959999995" green="0.94901960780000005" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="3Ye-oQ-1sA">
                                     <size key="itemSize" width="291" height="213"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -382,7 +382,7 @@
                                 <rect key="frame" x="20" y="78" width="41" height="41"/>
                                 <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="Sso-Mz-rPM"/>
+                                    <constraint firstAttribute="height" constant="41" id="Sso-Mz-rPM"/>
                                 </constraints>
                                 <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" title="Button"/>
@@ -394,7 +394,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Medications" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yc5-W7-ayk">
-                                <rect key="frame" x="146.66666666666666" y="89" width="99.666666666666657" height="20.333333333333329"/>
+                                <rect key="frame" x="146.66666666666666" y="88.333333333333329" width="99.666666666666657" height="20.333333333333329"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -659,12 +659,11 @@
                         <constraints>
                             <constraint firstItem="IRI-A7-Vua" firstAttribute="trailing" secondItem="SSw-JD-wJm" secondAttribute="trailing" constant="16" id="3e3-PA-9oh"/>
                             <constraint firstItem="SSw-JD-wJm" firstAttribute="leading" secondItem="IRI-A7-Vua" secondAttribute="leading" constant="16" id="FPn-x1-Bem"/>
-                            <constraint firstItem="noX-OS-bqr" firstAttribute="top" secondItem="IRI-A7-Vua" secondAttribute="top" constant="20" id="N2a-Cx-Vxu"/>
+                            <constraint firstItem="noX-OS-bqr" firstAttribute="top" secondItem="IRI-A7-Vua" secondAttribute="top" constant="19" id="N2a-Cx-Vxu"/>
                             <constraint firstItem="Yc5-W7-ayk" firstAttribute="centerX" secondItem="fr9-ls-07j" secondAttribute="centerX" id="SSq-Ji-pzK"/>
                             <constraint firstItem="SSw-JD-wJm" firstAttribute="top" secondItem="noX-OS-bqr" secondAttribute="bottom" constant="30" id="e0A-dU-GoA"/>
                             <constraint firstItem="noX-OS-bqr" firstAttribute="leading" secondItem="IRI-A7-Vua" secondAttribute="leading" constant="20" id="kHe-XE-0Vs"/>
                             <constraint firstItem="Yc5-W7-ayk" firstAttribute="centerY" secondItem="noX-OS-bqr" secondAttribute="centerY" id="sM4-uM-I6g"/>
-                            <constraint firstItem="Yc5-W7-ayk" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="noX-OS-bqr" secondAttribute="trailing" constant="8" symbolic="YES" id="sQs-xK-9j3"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="K1J-Kd-bXk"/>
@@ -702,13 +701,13 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGray5Color">
-            <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGrayColor">
-            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="tintColor">
-            <color red="0.0" green="0.53333333333333333" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
