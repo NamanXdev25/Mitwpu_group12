@@ -1,0 +1,57 @@
+[
+  {
+    "id": "2D5C9CF8-4E13-44B0-9E83-0C6E5C66FA91",
+    "category": "mindfulness",
+    "question": "What emotion is strongest in your body right now?",
+    "tags": ["emotion"]
+  },
+  {
+    "id": "9F3A2FC0-5E41-4BBA-9F41-6A8C92E2C1F2",
+    "category": "gratitude",
+    "question": "What is something small that brought you joy today?",
+    "tags": ["joy", "daily"]
+  },
+  {
+    "id": "A9E6E0F4-1D4F-4F38-B0B0-42D51163C287",
+    "category": "anxiety",
+    "question": "What is one fear that’s occupying your mind, and is it based on fact or assumption?",
+    "tags": ["fear", "cognition"]
+  },
+  {
+    "id": "6C4E5C39-B7C1-4F81-B28E-1B1A25A2BB71",
+    "category": "self_compassion",
+    "question": "If your best friend felt what you feel today, what would you tell them?",
+    "tags": ["kindness"]
+  },
+
+  {
+    "id": "4E8F39A3-584C-4F0B-8E61-552BAFA63DA4",
+    "category": "mindfulness",
+    "question": "What thought has been taking up too much space in your mind lately?",
+    "tags": ["awareness"]
+  },
+  {
+    "id": "4C0B1817-9D48-4E24-8C63-E1E6F7A36D7F",
+    "category": "gratitude",
+    "question": "Who is one person you're quietly thankful for, even if you haven’t told them?",
+    "tags": ["relationships"]
+  },
+  {
+    "id": "E7F99AC1-4F39-49F4-A2B2-8A7FE82DFC21",
+    "category": "anxiety",
+    "question": "What is something you can control right now, and something you can let go of?",
+    "tags": ["control", "clarity"]
+  },
+  {
+    "id": "018A15F2-1F4D-42F7-896D-C321B47D8B9E",
+    "category": "self_compassion",
+    "question": "What would it look like to be 10% kinder to yourself today?",
+    "tags": ["self-care"]
+  },
+  {
+    "id": "AA6FE92C-5A6C-4A31-B59E-586D0E7A0C24",
+    "category": "mindfulness",
+    "question": "What physical sensation are you noticing right now — tension, warmth, stillness, pressure?",
+    "tags": ["body-awareness"]
+  }
+]

@@ -6,9 +6,14 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		983A8ECC2F0CE76500D8A1B0 /* JournalingSuggestions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 983A8ECB2F0CE76500D8A1B0 /* JournalingSuggestions.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		64E778AE2ECE2D6600B7826F /* BreastCancerApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BreastCancerApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		64E778EA2ECE372300B7826F /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		983A8ECB2F0CE76500D8A1B0 /* JournalingSuggestions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JournalingSuggestions.framework; path = System/Library/Frameworks/JournalingSuggestions.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -37,6 +42,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				983A8ECC2F0CE76500D8A1B0 /* JournalingSuggestions.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -48,6 +54,7 @@
 			children = (
 				64E778EA2ECE372300B7826F /* .gitignore */,
 				64E778B02ECE2D6600B7826F /* BreastCancerApp */,
+				983A8ECA2F0CE76500D8A1B0 /* Frameworks */,
 				64E778AF2ECE2D6600B7826F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -58,6 +65,14 @@
 				64E778AE2ECE2D6600B7826F /* BreastCancerApp.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		983A8ECA2F0CE76500D8A1B0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				983A8ECB2F0CE76500D8A1B0 /* JournalingSuggestions.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -147,6 +162,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = XXUCHD6GP7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BreastCancerApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BreastCancer;
@@ -176,6 +192,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = XXUCHD6GP7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BreastCancerApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BreastCancer;
