@@ -26,11 +26,9 @@ class EditSymptomListViewController: UIViewController {
         title = "Edit List"
         view.backgroundColor = .systemGroupedBackground
         
-        // Add close button
         let closeButton = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(closeButtonTapped))
         navigationItem.leftBarButtonItem = closeButton
         
-        // Add done button
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTapped))
         navigationItem.rightBarButtonItem = doneButton
     }
@@ -89,7 +87,7 @@ class EditSymptomListViewController: UIViewController {
 extension EditSymptomListViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2 // Your List and Add sections
+        return 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -104,7 +102,7 @@ extension EditSymptomListViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "EditSymptomCell", for: indexPath) as! EditSymptomCell
         
         if indexPath.section == 0 {
-            // Your List section
+            
             let symptom = userSymptoms[indexPath.row]
             cell.configure(with: symptom, isInUserList: true)
             
@@ -116,7 +114,7 @@ extension EditSymptomListViewController: UITableViewDataSource {
                 self?.showInfoAlert(for: symptom)
             }
         } else {
-            // Add section
+            
             let symptom = availableSymptoms[indexPath.row]
             cell.configure(with: symptom, isInUserList: false)
             
