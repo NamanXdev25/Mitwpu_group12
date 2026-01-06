@@ -13,7 +13,7 @@ struct MindfulnessSlide {
 }
 
 enum SlideAction {
-    case next
+    //case next
     case begin
     case addPhoto
 }
