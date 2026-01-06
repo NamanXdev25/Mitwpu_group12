@@ -9,20 +9,19 @@ import UIKit
 
 class SymptomsViewController: UIViewController {
     
-    
-    @IBOutlet var logTableView: UITableView!
-    @IBOutlet var todayTableView: UITableView!
+    @IBOutlet weak var logTableView: UITableView!
+    @IBOutlet weak var todayTableView: UITableView!
     @IBOutlet weak var logSymptomButton: UIButton!
     
     private let dataSource = SymptomDataSource.shared
     private var userSymptoms: [Symptom] = []
-    private var selectedSymptoms: [String: Int] = [:]
+    private var selectedSymptoms: [String: Int] = [:] // symptomId: severity
     private var todayLogs: [SymptomLog] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        setupTableView()
+        setupTableViews()
         loadData()
     }
     
@@ -33,32 +32,38 @@ class SymptomsViewController: UIViewController {
     
     private func setupUI() {
         title = "Symptoms"
+        view.backgroundColor = .systemGroupedBackground
         
-        
-        logSymptomButton.layer.cornerRadius = 25
-        logSymptomButton.backgroundColor = .systemGray5
-        logSymptomButton.setTitleColor(.systemGray, for: .normal)
-        logSymptomButton.isEnabled = false
-        
+        // Add navigation bar button for Edit
         let editButton = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(editButtonTapped))
         editButton.tintColor = .systemPink
         navigationItem.rightBarButtonItem = editButton
+        
+        // Button is already styled in storyboard, just set initial state
+        updateLogButtonState()
     }
     
-    private func setupTableView() {
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.separatorStyle = .none
-        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
+    private func setupTableViews() {
+        // Setup Log Table View
+        logTableView.delegate = self
+        logTableView.dataSource = self
+        logTableView.separatorStyle = .none
+        logTableView.backgroundColor = .systemGroupedBackground
+        logTableView.register(UINib(nibName: "SymptomSelectionCell", bundle: nil), forCellReuseIdentifier: "SymptomSelectionCell")
         
-        tableView.register(UINib(nibName: "SymptomSelectionCell", bundle: nil), forCellReuseIdentifier: "SymptomSelectionCell")
-        tableView.register(UINib(nibName: "SymptomLogCell", bundle: nil), forCellReuseIdentifier: "SymptomLogCell")
+        // Setup Today Table View
+        todayTableView.delegate = self
+        todayTableView.dataSource = self
+        todayTableView.separatorStyle = .none
+        todayTableView.backgroundColor = .systemGroupedBackground
+        todayTableView.register(UINib(nibName: "SymptomLogCell", bundle: nil), forCellReuseIdentifier: "SymptomLogCell")
     }
     
     private func loadData() {
         userSymptoms = dataSource.getUserSymptoms()
         todayLogs = dataSource.getTodayLogs()
-        tableView.reloadData()
+        logTableView.reloadData()
+        todayTableView.reloadData()
     }
     
     private func updateLogButtonState() {
@@ -78,80 +83,28 @@ class SymptomsViewController: UIViewController {
     }
     
     @IBAction func logSymptomButtonTapped(_ sender: UIButton) {
+        // Log all selected symptoms
         for (symptomId, severity) in selectedSymptoms {
             if let symptom = userSymptoms.first(where: { $0.id == symptomId }) {
                 dataSource.logSymptom(symptomId: symptomId, symptomName: symptom.name, severity: severity)
             }
         }
         
+        // Clear selections
         selectedSymptoms.removeAll()
         
+        // Reload data
         loadData()
         updateLogButtonState()
-    }
-}
-
-// MARK: - UITableViewDataSource
-extension SymptomsViewController: UITableViewDataSource {
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return userSymptoms.count
-        } else {
-            return todayLogs.count
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "SymptomSelectionCell", for: indexPath) as! SymptomSelectionCell
-            let symptom = userSymptoms[indexPath.row]
-            let isSelected = selectedSymptoms[symptom.id] != nil
-            let severity = selectedSymptoms[symptom.id] ?? 0
-            
-            cell.configure(with: symptom, isSelected: isSelected, severity: severity)
-            
-            cell.onCheckboxTapped = { [weak self] in
-                self?.toggleSymptomSelection(symptomId: symptom.id)
-            }
-            
-            cell.onSliderChanged = { [weak self] severity in
-                self?.selectedSymptoms[symptom.id] = severity
-            }
-            
-            cell.onInfoTapped = {
-                self.showInfoAlert(for: symptom)
-            }
-            
-            return cell
-        } else {
-            // Today section - SymptomLogCell
-            let cell = tableView.dequeueReusableCell(withIdentifier: "SymptomLogCell", for: indexPath) as! SymptomLogCell
-            let log = todayLogs[indexPath.row]
-            cell.configure(with: log)
-            return cell
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == 0 {
-            return "Log"
-        } else {
-            return "Today"
-        }
     }
     
     private func toggleSymptomSelection(symptomId: String) {
         if selectedSymptoms[symptomId] != nil {
             selectedSymptoms.removeValue(forKey: symptomId)
         } else {
-            selectedSymptoms[symptomId] = 0
+            selectedSymptoms[symptomId] = 0 // Default to mild
         }
-        tableView.reloadData()
+        logTableView.reloadData()
         updateLogButtonState()
     }
     
@@ -174,17 +127,73 @@ extension SymptomsViewController: UITableViewDataSource {
     }
 }
 
+// MARK: - UITableViewDataSource
+extension SymptomsViewController: UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if tableView == logTableView {
+            return userSymptoms.count
+        } else {
+            return todayLogs.count
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if tableView == logTableView {
+            // Log table - SymptomSelectionCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "SymptomSelectionCell", for: indexPath) as! SymptomSelectionCell
+            let symptom = userSymptoms[indexPath.row]
+            let isSelected = selectedSymptoms[symptom.id] != nil
+            let severity = selectedSymptoms[symptom.id] ?? 0
+            
+            cell.configure(with: symptom, isSelected: isSelected, severity: severity)
+            
+            cell.onCheckboxTapped = { [weak self] in
+                self?.toggleSymptomSelection(symptomId: symptom.id)
+            }
+            
+            cell.onSliderChanged = { [weak self] severity in
+                self?.selectedSymptoms[symptom.id] = severity
+            }
+            
+            cell.onInfoTapped = { [weak self] in
+                self?.showInfoAlert(for: symptom)
+            }
+            
+            return cell
+        } else {
+            // Today table - SymptomLogCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "SymptomLogCell", for: indexPath) as! SymptomLogCell
+            let log = todayLogs[indexPath.row]
+            cell.configure(with: log)
+            return cell
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if tableView == logTableView {
+            return "Log"
+        } else {
+            return "Today"
+        }
+    }
+}
+
 // MARK: - UITableViewDelegate
 extension SymptomsViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 0 {
+        if tableView == logTableView {
             let symptom = userSymptoms[indexPath.row]
             let isSelected = selectedSymptoms[symptom.id] != nil
             return isSelected ? 120 : 60
         } else {
             return 80
         }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 50
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -196,40 +205,37 @@ extension SymptomsViewController: UITableViewDelegate {
         titleLabel.font = .systemFont(ofSize: 22, weight: .bold)
         titleLabel.textColor = .label
         
-        if section == 0 {
+        if tableView == logTableView {
             titleLabel.text = "Log"
-        } else {
-            titleLabel.text = "Today"
-        }
-        
-        headerView.addSubview(titleLabel)
-        
-        NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
-            titleLabel.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16),
-            titleLabel.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 8),
-            titleLabel.bottomAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -8)
-        ])
-        
-        if section == 0 {
+            
+            // Add Edit button for Log section
             let editButton = UIButton(type: .system)
             editButton.translatesAutoresizingMaskIntoConstraints = false
             editButton.setTitle("Edit", for: .normal)
             editButton.setTitleColor(.systemPink, for: .normal)
             editButton.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
             
+            headerView.addSubview(titleLabel)
             headerView.addSubview(editButton)
             
             NSLayoutConstraint.activate([
+                titleLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
+                titleLabel.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
+                
                 editButton.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16),
-                editButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor)
+                editButton.centerYAnchor.constraint(equalTo: headerView.centerYAnchor)
+            ])
+        } else {
+            titleLabel.text = "Today"
+            
+            headerView.addSubview(titleLabel)
+            
+            NSLayoutConstraint.activate([
+                titleLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
+                titleLabel.centerYAnchor.constraint(equalTo: headerView.centerYAnchor)
             ])
         }
         
         return headerView
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 50
     }
 }
