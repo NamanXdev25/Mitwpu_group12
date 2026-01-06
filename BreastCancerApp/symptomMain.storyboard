@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="MSN-fH-cBY">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Symptoms-->
+        <scene sceneID="9fg-yS-bfo">
+            <objects>
+                <viewController id="qFB-B6-jW7" customClass="SymptomsViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="iaA-OZ-Wua">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sA6-WK-wEG">
+                                <rect key="frame" x="96.666666666666686" y="774" width="200" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="E14-Ab-MlX"/>
+                                    <constraint firstAttribute="width" constant="200" id="Ef8-Of-68O"/>
+                                </constraints>
+                                <color key="tintColor" name="SymptomsPrimaryColor"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Log Symptom"/>
+                                <connections>
+                                    <action selector="logSymptomButtonTapped:" destination="qFB-B6-jW7" eventType="touchUpInside" id="vOQ-w0-D2r"/>
+                                </connections>
+                            </button>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="SyO-My-tD5">
+                                <rect key="frame" x="0.0" y="172" width="393" height="602"/>
+                                <color key="backgroundColor" name="SymptomsBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SymptomLogCell" rowHeight="80" id="xc4-Tg-2d1">
+                                        <rect key="frame" x="0.0" y="50" width="393" height="80"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="xc4-Tg-2d1" id="H9V-SH-Tg0">
+                                            <rect key="frame" x="0.0" y="0.0" width="393" height="80"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Etr-RN-fOG"/>
+                        <color key="backgroundColor" name="SymptomsBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="SyO-My-tD5" firstAttribute="leading" secondItem="Etr-RN-fOG" secondAttribute="leading" id="Aer-Fd-Ztb"/>
+                            <constraint firstItem="sA6-WK-wEG" firstAttribute="centerX" secondItem="iaA-OZ-Wua" secondAttribute="centerX" id="B1C-xz-kOZ"/>
+                            <constraint firstItem="Etr-RN-fOG" firstAttribute="trailing" secondItem="SyO-My-tD5" secondAttribute="trailing" id="IWi-B5-CiY"/>
+                            <constraint firstItem="sA6-WK-wEG" firstAttribute="bottom" secondItem="Etr-RN-fOG" secondAttribute="bottom" constant="40" id="OSK-vQ-xQs"/>
+                            <constraint firstItem="sA6-WK-wEG" firstAttribute="bottom" secondItem="Etr-RN-fOG" secondAttribute="bottom" constant="40" id="RNQ-BP-lYZ"/>
+                            <constraint firstItem="SyO-My-tD5" firstAttribute="top" secondItem="Etr-RN-fOG" secondAttribute="top" id="X0h-KA-TFb"/>
+                            <constraint firstItem="sA6-WK-wEG" firstAttribute="top" secondItem="SyO-My-tD5" secondAttribute="bottom" id="lvc-79-dN5"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Symptoms" id="DQJ-bi-zxr"/>
+                    <connections>
+                        <outlet property="logSymptomButton" destination="sA6-WK-wEG" id="eck-Ru-vg0"/>
+                        <outlet property="tableView" destination="SyO-My-tD5" id="dOa-hW-KX9"/>
+                        <segue destination="T7p-Xj-HcE" kind="presentation" identifier="showEditList" modalPresentationStyle="automatic" id="D0u-kh-FqX"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XNL-nr-4uD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1983.9694656488548" y="281.69014084507046"/>
+        </scene>
+        <!--Edit Symptom List View Controller-->
+        <scene sceneID="Xm4-4H-GBC">
+            <objects>
+                <viewController id="Yzv-7r-Yyi" customClass="EditSymptomListViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="RyA-Pb-N29">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="kVJ-E3-9cT">
+                                <rect key="frame" x="0.0" y="70" width="393" height="723"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="EditSymptomCell" rowHeight="60" id="SfL-Wt-Y29">
+                                        <rect key="frame" x="0.0" y="55.333332061767578" width="393" height="60"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="SfL-Wt-Y29" id="jX1-4B-ZeJ">
+                                            <rect key="frame" x="0.0" y="0.0" width="393" height="60"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="AddSymptomCell" rowHeight="60" id="tc6-Qz-gKa">
+                                        <rect key="frame" x="0.0" y="115.33333206176758" width="393" height="60"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="tc6-Qz-gKa" id="MTb-5N-mbb">
+                                            <rect key="frame" x="0.0" y="0.0" width="393" height="60"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="ubS-hK-Zl3"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="ubS-hK-Zl3" firstAttribute="trailing" secondItem="kVJ-E3-9cT" secondAttribute="trailing" id="B6D-fZ-Wg7"/>
+                            <constraint firstItem="kVJ-E3-9cT" firstAttribute="leading" secondItem="ubS-hK-Zl3" secondAttribute="leading" id="DYk-WZ-ubx"/>
+                            <constraint firstItem="ubS-hK-Zl3" firstAttribute="bottom" secondItem="kVJ-E3-9cT" secondAttribute="bottom" id="Gcf-RV-jYG"/>
+                            <constraint firstItem="kVJ-E3-9cT" firstAttribute="top" secondItem="ubS-hK-Zl3" secondAttribute="top" id="lWD-BV-Pnt"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="syB-rt-9Kk"/>
+                    <connections>
+                        <outlet property="tableView" destination="kVJ-E3-9cT" id="UQW-tq-eWt"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vuR-A2-PBu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3721.3740458015268" y="281.69014084507046"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Bvc-TR-V3R">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="MSN-fH-cBY" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="YRR-mx-hyQ">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="qFB-B6-jW7" kind="relationship" relationship="rootViewController" id="5Dz-Ub-v2z"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="EHU-qQ-XvC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1057.2519083969464" y="281.69014084507046"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="ak0-tC-t6i">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="T7p-Xj-HcE" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="2kH-YB-8iA">
+                        <rect key="frame" x="0.0" y="16" width="393" height="54"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="Yzv-7r-Yyi" kind="relationship" relationship="rootViewController" id="b25-KO-zuv"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hJm-gx-M4e" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2794.6564885496182" y="281.69014084507046"/>
+        </scene>
+    </scenes>
+    <resources>
+        <namedColor name="SymptomsBackgroundColor">
+            <color red="0.97254901960784312" green="0.94901960784313721" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="SymptomsPrimaryColor">
+            <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
