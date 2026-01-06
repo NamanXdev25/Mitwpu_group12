@@ -206,7 +206,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             header.titleLabel.text = "Today's Goals"
             header.seeAllButton.isHidden = true
         case 3:
-            header.titleLabel.text = "Upcoming"
+            header.titleLabel.text = "Upcoming Appointments"
             header.seeAllButton.isHidden = true
         case 4:
             header.titleLabel.text = "Your Memories"
