@@ -9,7 +9,9 @@ import UIKit
 
 class SymptomsViewController: UIViewController {
     
-    @IBOutlet weak var tableView: UITableView!
+    
+    @IBOutlet var logTableView: UITableView!
+    @IBOutlet var todayTableView: UITableView!
     @IBOutlet weak var logSymptomButton: UIButton!
     
     private let dataSource = SymptomDataSource.shared
