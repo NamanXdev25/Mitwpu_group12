@@ -91,8 +91,8 @@ class AddMedicationViewController: UIViewController, UIPickerViewDelegate, UIPic
                 
                 // 2. Update Pink Button (Arrow Only)
                 saveButton.setTitle("", for: .normal) // Remove text
-                saveButton.setImage(UIImage(systemName: "arrow.right"), for: .normal) // Add Arrow
-                saveButton.tintColor = .white // Make arrow white
+                saveButton.setImage(UIImage(systemName: "checkmark"), for: .normal) 
+                saveButton.tintColor = .white
                 
                 // 3. Fill Fields
                 nameTextField.text = med.name

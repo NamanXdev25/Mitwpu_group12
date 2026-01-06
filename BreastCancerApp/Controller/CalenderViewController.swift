@@ -265,7 +265,7 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
             if let data = monthData[dayString] {
                 cell.configure(
                     day: dayString,
-                    isToday: isToday,          // <--- Pass the new flag
+                    isToday: isToday,          //Pass the new flag
                     isSelected: data.isSelected,
                     takenCount: data.taken,
                     goalCount: data.goal
@@ -273,7 +273,7 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
             } else {
                 cell.configure(
                     day: dayString,
-                    isToday: isToday,          // <--- Pass the new flag
+                    isToday: isToday,          //Pass the new flag
                     isSelected: false,
                     takenCount: 0,
                     goalCount: 0
@@ -288,7 +288,6 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
     }
     
     // --- PICKER VIEW DELEGATE ---
-    
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 2 // Month, Year
     }
