@@ -35,7 +35,6 @@ class SymptomsViewController: UIViewController {
     }
     
     private func setupUI() {
-        
         updateLogButtonState()
     }
     
@@ -70,7 +69,6 @@ class SymptomsViewController: UIViewController {
         }
         
         logTableViewHeightConstraint.constant = totalHeight
-        
     }
     
     private func updateTodayTableViewHeight() {
@@ -111,6 +109,7 @@ class SymptomsViewController: UIViewController {
 //    @IBAction func editButtonTapped(_ sender: UIButton) {
 //        performSegue(withIdentifier: "showEditList", sender: nil)
 //    }
+    
     @IBAction func logSymptomButtonTapped(_ sender: UIButton) {
         // Log all selected symptoms
         for (symptomId, severity) in selectedSymptoms {
@@ -199,14 +198,6 @@ extension SymptomsViewController: UITableViewDataSource {
             return cell
         }
     }
-//
-//    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        if tableView == logTableView {
-//            return "Log"
-//        } else {
-//            return "Today"
-//        }
-//    }
 }
 
 // MARK: - UITableViewDelegate
@@ -250,48 +241,4 @@ extension SymptomsViewController: UITableViewDelegate {
         }
         return 0
     }
-    
-//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        let headerView = UIView()
-//
-//        let titleLabel = UILabel()
-//        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-//        titleLabel.font = .systemFont(ofSize: 18, weight: .bold)
-//        titleLabel.textColor = .label
-//
-//        if tableView == logTableView {
-//            titleLabel.text = "Log"
-//
-//            let editButton = UIButton(type: .system)
-//            editButton.translatesAutoresizingMaskIntoConstraints = false
-//            editButton.setTitle("Edit", for: .normal)
-//            editButton.setTitleColor(
-//                UIColor(named: "SymptomsPrimaryColor"),
-//                for: .normal
-//            )
-//            editButton.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
-//
-//            headerView.addSubview(titleLabel)
-//            headerView.addSubview(editButton)
-//
-//            NSLayoutConstraint.activate([
-//                titleLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
-//                titleLabel.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
-//
-//                editButton.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16),
-//                editButton.centerYAnchor.constraint(equalTo: headerView.centerYAnchor)
-//            ])
-//        } else {
-//            titleLabel.text = "Today"
-//
-//            headerView.addSubview(titleLabel)
-//
-//            NSLayoutConstraint.activate([
-//                titleLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
-//                titleLabel.centerYAnchor.constraint(equalTo: headerView.centerYAnchor)
-//            ])
-//        }
-//
-//        return headerView
-//    }
 }
