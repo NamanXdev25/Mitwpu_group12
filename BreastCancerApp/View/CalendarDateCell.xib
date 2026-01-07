@@ -26,9 +26,24 @@
                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wpc-m5-UbZ">
+                                <rect key="frame" x="14.333333333333332" y="27.999999999999996" width="6" height="6.0000000000000036"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="6" id="eb0-BE-7tK"/>
+                                    <constraint firstAttribute="height" constant="6" id="vKJ-NC-WS9"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="3"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="Wpc-m5-UbZ" firstAttribute="top" secondItem="0BD-Td-vLp" secondAttribute="top" constant="28" id="0le-gW-Vfa"/>
+                            <constraint firstItem="Wpc-m5-UbZ" firstAttribute="centerX" secondItem="0BD-Td-vLp" secondAttribute="centerX" id="fGS-hA-P05"/>
                             <constraint firstAttribute="width" constant="35" id="uTR-9f-KP4"/>
                             <constraint firstAttribute="height" constant="35" id="zi2-p9-1zo"/>
                         </constraints>
