@@ -10,7 +10,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--self-Exam-->
+        <!--Self-Exam-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="SelfExamineViewController" customModule="BreastCancerApp" sceneMemberID="viewController">
@@ -54,7 +54,7 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="hUO-FT-pM5" secondAttribute="bottom" id="wXA-J0-Mmv"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="self-Exam" id="3LE-NG-Q9e"/>
+                    <navigationItem key="navigationItem" title="Self-Exam" id="3LE-NG-Q9e"/>
                     <connections>
                         <outlet property="collectionView" destination="hUO-FT-pM5" id="mto-Kh-8Iy"/>
                         <segue destination="WZH-rO-Ma5" kind="show" identifier="showObservations" id="ewu-Ia-oYs"/>

@@ -10,19 +10,30 @@ class SelfExamineViewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
 
-        ["GuidesCardCell", "SectionTitleCell",
-         "SelfExamCardsContainerCell", "ActionsContainerCell"].forEach {
-            collectionView.register(UINib(nibName: $0, bundle: nil),
-                                    forCellWithReuseIdentifier: $0)
+        [
+            "GuidesCardCell",
+            "SectionTitleCell",
+            "SelfExamCardsContainerCell",
+            "ActionsContainerCell"
+        ].forEach {
+            collectionView.register(
+                UINib(nibName: $0, bundle: nil),
+                forCellWithReuseIdentifier: $0
+            )
         }
 
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumInteritemSpacing = 0
         layout.minimumLineSpacing = 16
-        layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        layout.sectionInset = UIEdgeInsets(
+            top: 16,
+            left: 16,
+            bottom: 16,
+            right: 16
+        )
+
         collectionView.setCollectionViewLayout(layout, animated: false)
-        
         collectionView.translatesAutoresizingMaskIntoConstraints = false
     }
 
@@ -35,30 +46,41 @@ class SelfExamineViewController: UIViewController {
 // MARK: - UICollectionViewDataSource
 extension SelfExamineViewController: UICollectionViewDataSource {
 
-    func collectionView(_ collectionView: UICollectionView,
-                        numberOfItemsInSection section: Int) -> Int { 4 }
+    func collectionView(
+        _ collectionView: UICollectionView,
+        numberOfItemsInSection section: Int
+    ) -> Int {
+        return 4
+    }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
 
+        // UPDATED ORDER
         let id: String = [
-            "GuidesCardCell",
-            "SectionTitleCell",
-            "SelfExamCardsContainerCell",
-            "ActionsContainerCell"
+            "SectionTitleCell",              // How to Self-Examine
+            "SelfExamCardsContainerCell",    // Horizontal cards
+            "GuidesCardCell",                // Video + Audio guides
+            "ActionsContainerCell"           // Bottom buttons
         ][indexPath.item]
 
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: id, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: id,
+            for: indexPath
+        )
 
         switch (indexPath.item, cell) {
 
-        case (0, let c as GuidesCardCell):
+        case (2, let c as GuidesCardCell):
             c.delegate = self
 
         case (3, let c as ActionsContainerCell):
             c.delegate = self
 
-        default: break
+        default:
+            break
         }
 
         return cell
@@ -69,18 +91,25 @@ extension SelfExamineViewController: UICollectionViewDataSource {
 // MARK: - UICollectionViewDelegateFlowLayout
 extension SelfExamineViewController: UICollectionViewDelegateFlowLayout {
 
-    func collectionView(_ collectionView: UICollectionView,
-                        layout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
 
         let width = collectionView.frame.width - 32
 
         switch indexPath.item {
-        case 0: return .init(width: width, height: 180)
-        case 1: return .init(width: width, height: 44)
-        case 2: return .init(width: width, height: 200)
-        case 3: return .init(width: width, height: 140)
-        default: return .init(width: width, height: 60)
+        case 0:
+            return CGSize(width: width, height: 44)    // Section title
+        case 1:
+            return CGSize(width: width, height: 200)   // Horizontal cards
+        case 2:
+            return CGSize(width: width, height: 180)   // Guides
+        case 3:
+            return CGSize(width: width, height: 140)   // Actions
+        default:
+            return CGSize(width: width, height: 60)
         }
     }
 }

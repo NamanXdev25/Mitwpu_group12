@@ -1,7 +1,3 @@
-//
-// VideoGuideViewController.swift
-//
-
 import UIKit
 import AVFoundation
 
@@ -23,6 +19,12 @@ class VideoGuideViewController: UIViewController {
         setupPlayer()
     }
 
+   
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        resetPlayerToStart()
+    }
+
     deinit {
         if let token = timeObserverToken { player?.removeTimeObserver(token) }
         NotificationCenter.default.removeObserver(self)
@@ -35,8 +37,8 @@ class VideoGuideViewController: UIViewController {
             print("Video not found in bundle: self_exam.mp4")
             return
         }
-        player = AVPlayer(url: url)
 
+        player = AVPlayer(url: url)
         guard let player = player else { return }
 
         let pl = AVPlayerLayer(player: player)
@@ -56,20 +58,35 @@ class VideoGuideViewController: UIViewController {
 
         let interval = CMTime(seconds: 0.5, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
         timeObserverToken = player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] time in
-            guard let self = self, !self.isSeeking,
-                  let duration = player.currentItem?.duration.seconds, duration > 0 else { return }
+            guard let self = self,
+                  !self.isSeeking,
+                  let duration = player.currentItem?.duration.seconds,
+                  duration > 0 else { return }
+
             self.progressSlider.value = Float(time.seconds / duration)
         }
 
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(didFinishPlaying),
-                                               name: .AVPlayerItemDidPlayToEndTime,
-                                               object: player.currentItem)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(didFinishPlaying),
+            name: .AVPlayerItemDidPlayToEndTime,
+            object: player.currentItem
+        )
+    }
+
+   
+    private func resetPlayerToStart() {
+        guard let player = player else { return }
+        player.pause()
+        player.seek(to: .zero)
+        progressSlider.value = 0
+        playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         guard let pl = playerLayer else { return }
+
         CATransaction.begin()
         CATransaction.setDisableActions(true)
         pl.frame = actualVideoView.bounds
@@ -79,6 +96,7 @@ class VideoGuideViewController: UIViewController {
 
     @IBAction func playPauseTapped(_ sender: UIButton) {
         guard let player = player else { return }
+
         if player.timeControlStatus == .playing {
             player.pause()
             playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
@@ -95,12 +113,16 @@ class VideoGuideViewController: UIViewController {
     }
 
     @IBAction func progressTouchUp(_ sender: UISlider) {
-        guard let player = player, let duration = player.currentItem?.duration.seconds, duration > 0 else {
+        guard let player = player,
+              let duration = player.currentItem?.duration.seconds,
+              duration > 0 else {
             isSeeking = false
             return
         }
+
         let seconds = Double(progressSlider.value) * duration
         let time = CMTime(seconds: seconds, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+
         player.seek(to: time) { [weak self] _ in
             self?.isSeeking = false
         }

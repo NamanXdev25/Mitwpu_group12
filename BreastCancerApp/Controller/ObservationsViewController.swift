@@ -1,7 +1,3 @@
-//
-// ObservationsViewController.swift
-//
-
 import UIKit
 
 protocol ObservationsCollector {
@@ -57,7 +53,9 @@ class ObservationsViewController: UIViewController {
 
 extension ObservationsViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int { 1 }
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        1
+    }
 
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -72,7 +70,8 @@ extension ObservationsViewController: UICollectionViewDataSource, UICollectionVi
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
 
-        let width = collectionView.bounds.width - 40
+       
+        let width = collectionView.frame.width - 40
         return CGSize(width: width, height: 360)
     }
 }
