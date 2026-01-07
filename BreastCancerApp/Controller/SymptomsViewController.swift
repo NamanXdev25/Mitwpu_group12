@@ -9,133 +9,230 @@ import UIKit
 
 class SymptomsViewController: UIViewController {
     
-    @IBOutlet weak var logTableView: UITableView!
-    @IBOutlet weak var todayTableView: UITableView!
-    @IBOutlet weak var logSymptomButton: UIButton!
-    @IBOutlet weak var editButton: UIButton!
-    
-    @IBOutlet var logTableViewHeightConstraint: NSLayoutConstraint!
-    @IBOutlet var todayTableViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var collectionView: UICollectionView!
+//    @IBOutlet weak var editButton: UIButton!
     
     private let dataSource = SymptomDataSource.shared
     private var userSymptoms: [Symptom] = []
     private var selectedSymptoms: [String: Int] = [:]
     private var todayLogs: [SymptomLog] = []
     
+    private enum Section: Int, CaseIterable {
+        case log = 0
+        case button = 1
+        case today = 2
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
-        setupTableViews()
+        setupCollectionView()
         loadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        loadData()
+        collectionView.reloadSections(IndexSet([Section.today.rawValue]))
     }
     
-    private func setupUI() {
-        updateLogButtonState()
-    }
-    
-    private func setupTableViews() {
-        // Setup Log Table View
-        logTableView.delegate = self
-        logTableView.dataSource = self
-        logTableView.register(UINib(nibName: "SymptomSelectionCell", bundle: nil), forCellReuseIdentifier: "SymptomSelectionCell")
+    private func setupCollectionView() {
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.collectionViewLayout = createLayout()
         
-        // Setup Today Table View
-        todayTableView.delegate = self
-        todayTableView.dataSource = self
-        todayTableView.register(UINib(nibName: "SymptomLogCell", bundle: nil), forCellReuseIdentifier: "SymptomLogCell")
+        // Register cells
+        collectionView.register(UINib(nibName: "SymptomSelectionCell", bundle: nil), forCellWithReuseIdentifier: "SymptomSelectionCell")
+        collectionView.register(UINib(nibName: "SymptomLogCell", bundle: nil), forCellWithReuseIdentifier: "SymptomLogCell")
+        collectionView.register(
+            UINib(nibName: "SymptomHeaderView", bundle: nil),
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: SymptomHeaderView.reuseIdentifier
+        )
+
+        collectionView.register(LogButtonCell.self, forCellWithReuseIdentifier: "LogButtonCell")
+        collectionView.register(EmptyStateCell.self, forCellWithReuseIdentifier: "EmptyStateCell")
+    }
+    
+    private func createLayout() -> UICollectionViewLayout {
+        let layout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, environment in
+            guard let self = self,
+                  let sectionType = Section(rawValue: sectionIndex) else {
+                return nil
+            }
+            
+            switch sectionType {
+            case .log:
+                return self.createLogSection()
+            case .button:
+                return self.createButtonSection()
+            case .today:
+                return self.createTodaySection()
+            }
+        }
+        
+        return layout
+    }
+    
+    private func createLogSection() -> NSCollectionLayoutSection {
+        // Item
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .estimated(140) // ⬅️ IMPORTANT
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        // Group
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .estimated(140)
+        )
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        
+        // Section
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 0, trailing: 16)
+        section.interGroupSpacing = 0
+        
+        // Header
+        let headerSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .absolute(50)
+        )
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: headerSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .top
+        )
+        section.boundarySupplementaryItems = [header]
+        
+        return section
+    }
+    
+    private func createButtonSection() -> NSCollectionLayoutSection {
+        // Item
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .absolute(66)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        // Group
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .absolute(66)
+        )
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        
+        // Section
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 0, bottom: 16, trailing: 0)
+        
+        return section
+    }
+    
+    private func createTodaySection() -> NSCollectionLayoutSection {
+        // Item
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .absolute(80)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        // Group
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .absolute(80)
+        )
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        
+        // Section
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 16, trailing: 16)
+        section.interGroupSpacing = 0
+        
+        // Header
+        let headerSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .absolute(50)
+        )
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: headerSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .top
+        )
+        section.boundarySupplementaryItems = [header]
+        
+        return section
     }
     
     private func loadData() {
         userSymptoms = dataSource.getUserSymptoms()
         todayLogs = dataSource.getTodayLogs()
-        logTableView.reloadData()
-        todayTableView.reloadData()
-        updateLogTableViewHeight()
-        updateTodayTableViewHeight()
+        collectionView.reloadData()
     }
     
-    private func updateLogTableViewHeight() {
-        var totalHeight: CGFloat = 0
-        
-        for (_, symptom) in userSymptoms.enumerated() {
-            let isSelected = selectedSymptoms[symptom.id] != nil
-            let cellHeight: CGFloat = isSelected ? 120 : 60
-            totalHeight += cellHeight
-        }
-        
-        logTableViewHeightConstraint.constant = totalHeight
-    }
-    
-    private func updateTodayTableViewHeight() {
-        var totalHeight: CGFloat = 0
-        
-        if todayLogs.isEmpty {
-            // Show empty state message - just enough height for the message
-            totalHeight = 100
-        } else {
-            // Calculate based on logs
-            for _ in todayLogs {
-                totalHeight += 80 // height per cell
-            }
-        }
-        
-        todayTableViewHeightConstraint.constant = totalHeight
-    }
-    
-    private func updateLogButtonState() {
-        if selectedSymptoms.isEmpty {
-            logSymptomButton.isEnabled = false
-        } else {
-            logSymptomButton.isEnabled = true
-        }
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showEditList" {
-            if let navController = segue.destination as? UINavigationController,
-               let editVC = navController.viewControllers.first as? EditSymptomListViewController {
-                editVC.onDismiss = { [weak self] in
-                    self?.loadData()
-                }
-            }
-        }
-    }
-    
-//    @IBAction func editButtonTapped(_ sender: UIButton) {
-//        performSegue(withIdentifier: "showEditList", sender: nil)
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == "showEditList" {
+//            if let navController = segue.destination as? UINavigationController,
+//               let editVC = navController.viewControllers.first as? EditSymptomListViewController {
+//                editVC.onDismiss = { [weak self] in
+//                    self?.loadData()
+//                }
+//            }
+//        }
 //    }
     
-    @IBAction func logSymptomButtonTapped(_ sender: UIButton) {
-        // Log all selected symptoms
+    @objc private func logSymptomButtonTapped() {
+        guard !selectedSymptoms.isEmpty else { return }
+
         for (symptomId, severity) in selectedSymptoms {
             if let symptom = userSymptoms.first(where: { $0.id == symptomId }) {
-                dataSource.logSymptom(symptomId: symptomId, symptomName: symptom.name, severity: severity)
+                dataSource.logSymptom(
+                    symptomId: symptomId,
+                    symptomName: symptom.name,
+                    severity: severity
+                )
             }
         }
-        
-        // Clear selections
+
+        // Clear selection
         selectedSymptoms.removeAll()
-        
-        // Reload data
-        loadData()
-        updateLogButtonState()
+
+        // 🔥 REFRESH TODAY LOGS
+        todayLogs = dataSource.getTodayLogs()
+
+        // Reload affected sections
+        collectionView.reloadSections(
+            IndexSet([Section.log.rawValue,
+                      Section.button.rawValue,
+                      Section.today.rawValue])
+        )
     }
+
+
     
     private func toggleSymptomSelection(symptomId: String) {
+        guard let index = userSymptoms.firstIndex(where: { $0.id == symptomId }) else { return }
+
         if selectedSymptoms[symptomId] != nil {
             selectedSymptoms.removeValue(forKey: symptomId)
         } else {
-            selectedSymptoms[symptomId] = 0 // Default to mild
+            selectedSymptoms[symptomId] = 0
         }
-        logTableView.reloadData()
-        updateLogButtonState()
-        updateLogTableViewHeight()
+
+        let logIndexPath = IndexPath(item: index, section: Section.log.rawValue)
+
+        collectionView.performBatchUpdates {
+            // Reload the tapped symptom cell
+            collectionView.reloadItems(at: [logIndexPath])
+
+            // 🔥 RELOAD THE BUTTON SECTION
+            collectionView.reloadSections(IndexSet([Section.button.rawValue]))
+        }
+
+        collectionView.collectionViewLayout.invalidateLayout()
     }
+
+
     
     private func showInfoAlert(for symptom: Symptom) {
         let message: String
@@ -154,24 +251,57 @@ class SymptomsViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
     }
+//    
+//    @objc private func editButtonTapped() {
+//        performSegue(withIdentifier: "showEditList", sender: nil)
+//    }
+    
+    private func openEditList() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+
+        let editVC = storyboard.instantiateViewController(
+            withIdentifier: "EditSymptomListViewController"
+        ) as! EditSymptomListViewController
+
+        editVC.onDismiss = { [weak self] in
+            self?.loadData()
+        }
+
+        let nav = UINavigationController(rootViewController: editVC)
+        present(nav, animated: true)
+    }
+
 }
 
-// MARK: - UITableViewDataSource
-extension SymptomsViewController: UITableViewDataSource {
+// MARK: - UICollectionViewDataSource
+extension SymptomsViewController: UICollectionViewDataSource {
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView == logTableView {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return Section.allCases.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        guard let sectionType = Section(rawValue: section) else { return 0 }
+        
+        switch sectionType {
+        case .log:
             return userSymptoms.count
-        } else {
-            return todayLogs.count
+        case .button:
+            return 1
+        case .today:
+            return todayLogs.isEmpty ? 1 : todayLogs.count
         }
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if tableView == logTableView {
-            // Log table - SymptomSelectionCell
-            let cell = tableView.dequeueReusableCell(withIdentifier: "SymptomSelectionCell", for: indexPath) as! SymptomSelectionCell
-            let symptom = userSymptoms[indexPath.row]
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let sectionType = Section(rawValue: indexPath.section) else {
+            return UICollectionViewCell()
+        }
+        
+        switch sectionType {
+        case .log:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SymptomSelectionCell", for: indexPath) as! SymptomSelectionCell
+            let symptom = userSymptoms[indexPath.item]
             let isSelected = selectedSymptoms[symptom.id] != nil
             let severity = selectedSymptoms[symptom.id] ?? 0
             
@@ -190,55 +320,212 @@ extension SymptomsViewController: UITableViewDataSource {
             }
             
             return cell
-        } else {
-            // Today table - SymptomLogCell
-            let cell = tableView.dequeueReusableCell(withIdentifier: "SymptomLogCell", for: indexPath) as! SymptomLogCell
-            let log = todayLogs[indexPath.row]
-            cell.configure(with: log)
+            
+        case .button:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LogButtonCell", for: indexPath) as! LogButtonCell
+            cell.configure(isEnabled: !selectedSymptoms.isEmpty)
+            cell.onButtonTapped = { [weak self] in
+                self?.logSymptomButtonTapped()
+            }
             return cell
+            
+        case .today:
+            if todayLogs.isEmpty {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EmptyStateCell", for: indexPath) as! EmptyStateCell
+                cell.configure(message: "No symptoms logged yet")
+                return cell
+            } else {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SymptomLogCell", for: indexPath) as! SymptomLogCell
+                let log = todayLogs[indexPath.item]
+                cell.configure(with: log)
+                return cell
+            }
         }
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        viewForSupplementaryElementOfKind kind: String,
+        at indexPath: IndexPath
+    ) -> UICollectionReusableView {
+
+        guard kind == UICollectionView.elementKindSectionHeader,
+              let sectionType = Section(rawValue: indexPath.section) else {
+            return UICollectionReusableView()
+        }
+
+        let header = collectionView.dequeueReusableSupplementaryView(
+            ofKind: kind,
+            withReuseIdentifier: SymptomHeaderView.reuseIdentifier,
+            for: indexPath
+        ) as! SymptomHeaderView
+
+        switch sectionType {
+
+        case .log:
+            header.configure(title: "Log", showButton: true)
+            header.editTapped = { [weak self] in
+                self?.openEditList()
+            }
+
+        case .today:
+            header.configure(title: "Today", showButton: false)
+            header.editTapped = nil
+
+        case .button:
+            return UICollectionReusableView()
+        }
+
+        return header
+    }
+
+}
+
+// MARK: - UICollectionViewDelegate
+extension SymptomsViewController: UICollectionViewDelegate {
+    // Add any selection handling if needed
+}
+
+// MARK: - Custom Cells
+
+class LogButtonCell: UICollectionViewCell {
+    
+    private let button: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.setTitle("Log Symptom", for: .normal)
+        btn.backgroundColor = UIColor(named: "SymptomsPrimaryColor")
+        btn.setTitleColor(.white, for: .normal)
+        btn.layer.cornerRadius = 25
+        btn.titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
+        return btn
+    }()
+    
+    var onButtonTapped: (() -> Void)?
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupUI()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupUI()
+    }
+    
+    private func setupUI() {
+        contentView.addSubview(button)
+        
+        NSLayoutConstraint.activate([
+            button.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            button.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            button.widthAnchor.constraint(equalToConstant: 200),
+            button.heightAnchor.constraint(equalToConstant: 50)
+        ])
+        
+        button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+    }
+    
+    func configure(isEnabled: Bool) {
+        button.isEnabled = isEnabled
+        button.alpha = isEnabled ? 1.0 : 0.5
+    }
+    
+    @objc private func buttonTapped() {
+        onButtonTapped?()
     }
 }
 
-// MARK: - UITableViewDelegate
-extension SymptomsViewController: UITableViewDelegate {
+class EmptyStateCell: UICollectionViewCell {
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if tableView == logTableView {
-            let symptom = userSymptoms[indexPath.row]
-            let isSelected = selectedSymptoms[symptom.id] != nil
-            return isSelected ? 120 : 60
-        } else {
-            return 80
-        }
+    private let label: UILabel = {
+        let lbl = UILabel()
+        lbl.translatesAutoresizingMaskIntoConstraints = false
+        lbl.textAlignment = .center
+        lbl.textColor = .secondaryLabel
+        lbl.font = .systemFont(ofSize: 16)
+        return lbl
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupUI()
     }
     
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        if tableView == todayTableView && todayLogs.isEmpty {
-            let emptyView = UIView()
-            let label = UILabel()
-            label.translatesAutoresizingMaskIntoConstraints = false
-            label.text = "No symptoms logged yet"
-            label.textAlignment = .center
-            label.textColor = .secondaryLabel
-            label.font = .systemFont(ofSize: 16)
-            
-            emptyView.addSubview(label)
-            
-            NSLayoutConstraint.activate([
-                label.centerXAnchor.constraint(equalTo: emptyView.centerXAnchor),
-                label.centerYAnchor.constraint(equalTo: emptyView.centerYAnchor)
-            ])
-            
-            return emptyView
-        }
-        return nil
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupUI()
     }
+    
+    private func setupUI() {
+        contentView.addSubview(label)
+        
+        NSLayoutConstraint.activate([
+            label.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            label.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
+        ])
+    }
+    
+    func configure(message: String) {
+        label.text = message
+    }
+}
 
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        if tableView == todayTableView && todayLogs.isEmpty {
-            return 100
-        }
-        return 0
+class SectionHeaderView: UICollectionReusableView {
+    
+    private let titleLabel: UILabel = {
+        let lbl = UILabel()
+        lbl.translatesAutoresizingMaskIntoConstraints = false
+        lbl.font = .systemFont(ofSize: 18, weight: .bold)
+        lbl.textColor = .label
+        return lbl
+    }()
+    
+    private let editButton: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.setTitle("Edit", for: .normal)
+        btn.setTitleColor(UIColor(named: "SymptomsPrimaryColor"), for: .normal)
+        return btn
+    }()
+    
+    var onEditTapped: (() -> Void)?
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupUI()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupUI()
+    }
+    
+    private func setupUI() {
+        backgroundColor = UIColor(named: "SymptomsBackgroundColor")
+        
+        addSubview(titleLabel)
+        addSubview(editButton)
+        
+        NSLayoutConstraint.activate([
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
+            
+            editButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            editButton.centerYAnchor.constraint(equalTo: centerYAnchor)
+        ])
+        
+        editButton.addTarget(self, action: #selector(editTapped), for: .touchUpInside)
+    }
+    
+    func configure(title: String, showEditButton: Bool) {
+        titleLabel.text = title
+        editButton.isHidden = !showEditButton
+    }
+    
+    @objc private func editTapped() {
+        onEditTapped?()
     }
 }

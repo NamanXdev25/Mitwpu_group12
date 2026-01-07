@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SymptomLogCell: UITableViewCell {
+class SymptomLogCell: UICollectionViewCell { // Changed from UITableViewCell
 
     @IBOutlet var symptomNameLabel: UILabel!
     @IBOutlet var severityLabel: UILabel!
@@ -15,7 +15,11 @@ class SymptomLogCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        selectionStyle = .none
+        
+        // Add styling for collection cell
+        contentView.layer.cornerRadius = 8
+        contentView.layer.masksToBounds = true
+        contentView.backgroundColor = .white
     }
     
     func configure(with log: SymptomLog) {
@@ -28,5 +32,4 @@ class SymptomLogCell: UITableViewCell {
         formatter.timeStyle = .short
         timeLabel.text = formatter.string(from: log.timestamp)
     }
-    
 }

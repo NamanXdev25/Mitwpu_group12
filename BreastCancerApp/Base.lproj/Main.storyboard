@@ -5,19 +5,20 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Edit List-->
         <scene sceneID="ktF-c6-h5y">
             <objects>
-                <viewController id="uOg-Sn-rZv" customClass="EditSymptomListViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EditSymptomListViewController" id="uOg-Sn-rZv" customClass="EditSymptomListViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="I5t-7H-QEq">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="793"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="hTX-yg-smS">
-                                <rect key="frame" x="0.0" y="70" width="393" height="723"/>
+                                <rect key="frame" x="0.0" y="172" width="393" height="612"/>
                                 <color key="backgroundColor" name="SymptomsBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="EditSymptomCell" rowHeight="60" id="0Tc-wt-ccX">
@@ -61,6 +62,7 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="tableView" destination="hTX-yg-smS" id="UmJ-3D-vvo"/>
                     </connections>
@@ -68,24 +70,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Wwd-fI-AaT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3721.3740458015268" y="281.69014084507046"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="aHQ-uC-2Af">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="e8e-yI-mC8" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="0sP-fu-JmY">
-                        <rect key="frame" x="0.0" y="16" width="393" height="54"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="uOg-Sn-rZv" kind="relationship" relationship="rootViewController" id="icg-3j-mpb"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="bfh-W3-a0f" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2482" y="282"/>
         </scene>
         <!--Symptoms-->
         <scene sceneID="dSK-xV-rl5">
@@ -95,107 +79,43 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BXz-5Y-MVq">
-                                <rect key="frame" x="96.666666666666686" y="530.33333333333337" width="200" height="50"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="200" id="4Lo-DC-4ad"/>
-                                    <constraint firstAttribute="height" constant="50" id="pZg-Cq-DLn"/>
-                                </constraints>
-                                <color key="tintColor" name="SymptomsPrimaryColor"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="filled" title="Log Symptom"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="25"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="logSymptomButtonTapped:" destination="Wjw-2n-cpy" eventType="touchUpInside" id="wXx-t3-FwH"/>
-                                </connections>
-                            </button>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="sub-zZ-Nn6">
-                                <rect key="frame" x="16" y="624.33333333333337" width="361" height="100"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="100" id="VXO-ax-Nuy"/>
-                                </constraints>
-                                <color key="sectionIndexBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="13"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </tableView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Log" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DxR-B8-AMS">
-                                <rect key="frame" x="15.999999999999998" y="172" width="29.333333333333329" height="34.333333333333343"/>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="wdf-md-3ja">
-                                <rect key="frame" x="16" y="214.33333333333337" width="361" height="300"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="300" id="ilW-FW-3OK"/>
-                                </constraints>
-                                <color key="sectionIndexBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="13"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
-                                </userDefinedRuntimeAttributes>
-                            </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="392-Rd-gLR">
-                                <rect key="frame" x="323" y="172" width="54" height="34.333333333333343"/>
-                                <color key="tintColor" name="SymptomsPrimaryColor"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Edit"/>
-                                <connections>
-                                    <segue destination="e8e-yI-mC8" kind="presentation" identifier="showEditList" id="S4N-ch-UfS"/>
-                                </connections>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Today" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="baD-bH-FUT">
-                                <rect key="frame" x="16" y="596.33333333333337" width="361" height="20"/>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="9w8-mJ-gNS">
+                                <rect key="frame" x="0.0" y="172" width="393" height="612"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Yh5-LS-sP5">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="XFO-S5-JbJ">
+                                        <rect key="frame" x="0.0" y="0.0" width="127.99999999999997" height="128"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="Jmv-QR-XTc">
+                                            <rect key="frame" x="0.0" y="0.0" width="127.99999999999997" height="128"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </collectionViewCellContentView>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="EsF-Ct-6b0"/>
                         <color key="backgroundColor" name="SymptomsBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="baD-bH-FUT" firstAttribute="leading" secondItem="EsF-Ct-6b0" secondAttribute="leading" constant="16" id="4oE-IX-db6"/>
-                            <constraint firstItem="wdf-md-3ja" firstAttribute="top" secondItem="DxR-B8-AMS" secondAttribute="bottom" constant="8" id="4vo-kX-7F2"/>
-                            <constraint firstItem="BXz-5Y-MVq" firstAttribute="top" secondItem="wdf-md-3ja" secondAttribute="bottom" constant="16" id="6YM-Op-mJT"/>
-                            <constraint firstItem="EsF-Ct-6b0" firstAttribute="trailing" secondItem="wdf-md-3ja" secondAttribute="trailing" constant="16" id="72L-Jo-02s"/>
-                            <constraint firstItem="EsF-Ct-6b0" firstAttribute="trailing" secondItem="baD-bH-FUT" secondAttribute="trailing" constant="16" id="7yF-gM-WKw"/>
-                            <constraint firstItem="baD-bH-FUT" firstAttribute="top" secondItem="BXz-5Y-MVq" secondAttribute="bottom" constant="16" id="Grn-VG-Sje"/>
-                            <constraint firstItem="EsF-Ct-6b0" firstAttribute="trailing" secondItem="sub-zZ-Nn6" secondAttribute="trailing" constant="16" id="Igp-rt-CVf"/>
-                            <constraint firstItem="EsF-Ct-6b0" firstAttribute="trailing" secondItem="392-Rd-gLR" secondAttribute="trailing" constant="16" id="IsE-E7-M7A"/>
-                            <constraint firstItem="wdf-md-3ja" firstAttribute="leading" secondItem="EsF-Ct-6b0" secondAttribute="leading" constant="16" id="SP1-LT-F1X"/>
-                            <constraint firstItem="392-Rd-gLR" firstAttribute="centerY" secondItem="DxR-B8-AMS" secondAttribute="centerY" id="b6Q-Ya-Sgr"/>
-                            <constraint firstItem="wdf-md-3ja" firstAttribute="top" secondItem="392-Rd-gLR" secondAttribute="bottom" constant="8" id="oP0-O4-cvR"/>
-                            <constraint firstItem="DxR-B8-AMS" firstAttribute="top" secondItem="EsF-Ct-6b0" secondAttribute="top" id="rvq-JS-SqQ"/>
-                            <constraint firstItem="BXz-5Y-MVq" firstAttribute="centerX" secondItem="EsF-Ct-6b0" secondAttribute="centerX" id="suN-ac-JNm"/>
-                            <constraint firstItem="sub-zZ-Nn6" firstAttribute="top" secondItem="baD-bH-FUT" secondAttribute="bottom" constant="8" id="ym0-4z-LVZ"/>
-                            <constraint firstItem="DxR-B8-AMS" firstAttribute="leading" secondItem="EsF-Ct-6b0" secondAttribute="leading" constant="16" id="yqX-sk-jIg"/>
-                            <constraint firstItem="sub-zZ-Nn6" firstAttribute="leading" secondItem="EsF-Ct-6b0" secondAttribute="leading" constant="16" id="zR0-KC-P4E"/>
+                            <constraint firstItem="9w8-mJ-gNS" firstAttribute="top" secondItem="EsF-Ct-6b0" secondAttribute="top" id="0Q8-dv-aZK"/>
+                            <constraint firstItem="EsF-Ct-6b0" firstAttribute="trailing" secondItem="9w8-mJ-gNS" secondAttribute="trailing" id="T8g-WV-igd"/>
+                            <constraint firstItem="9w8-mJ-gNS" firstAttribute="leading" secondItem="EsF-Ct-6b0" secondAttribute="leading" id="jHl-ct-mKT"/>
+                            <constraint firstItem="EsF-Ct-6b0" firstAttribute="bottom" secondItem="9w8-mJ-gNS" secondAttribute="bottom" id="m5S-xL-Gue"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Symptoms" id="tfb-6A-QlI"/>
                     <connections>
-                        <outlet property="editButton" destination="392-Rd-gLR" id="FsI-hD-lOc"/>
-                        <outlet property="logSymptomButton" destination="BXz-5Y-MVq" id="MIf-F6-pa1"/>
-                        <outlet property="logTableView" destination="wdf-md-3ja" id="17i-7v-fvd"/>
-                        <outlet property="logTableViewHeightConstraint" destination="ilW-FW-3OK" id="Due-MM-bhw"/>
-                        <outlet property="todayTableView" destination="sub-zZ-Nn6" id="ibI-JE-FFy"/>
-                        <outlet property="todayTableViewHeightConstraint" destination="VXO-ax-Nuy" id="Mwb-zN-n1f"/>
+                        <outlet property="collectionView" destination="9w8-mJ-gNS" id="rBt-bX-PMG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iof-Ht-240" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1650" y="282"/>
+            <point key="canvasLocation" x="1649.6183206106869" y="281.69014084507046"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="QEe-za-9MY">
