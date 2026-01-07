@@ -110,9 +110,8 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xyh-zK-Ngr">
-                                        <rect key="frame" x="193" y="5.999999999999801" width="68" height="38"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xyh-zK-Ngr">
+                                        <rect key="frame" x="193" y="3" width="68" height="38"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="3.0 L">
                                             <fontDescription key="titleFontDescription" type="system" pointSize="20"/>
@@ -124,6 +123,8 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="8d8-Fa-hsK"/>
                                     <constraint firstItem="EEy-qy-tpg" firstAttribute="centerY" secondItem="bbh-MO-cNG" secondAttribute="centerY" id="B5I-sl-oRz"/>
+                                    <constraint firstAttribute="trailing" secondItem="Xyh-zK-Ngr" secondAttribute="trailing" constant="4" id="I0i-tS-5uu"/>
+                                    <constraint firstItem="Xyh-zK-Ngr" firstAttribute="centerY" secondItem="bbh-MO-cNG" secondAttribute="centerY" id="R2d-fx-e1W"/>
                                     <constraint firstItem="EEy-qy-tpg" firstAttribute="leading" secondItem="bbh-MO-cNG" secondAttribute="leading" id="XqC-Ye-ZNL"/>
                                 </constraints>
                             </view>
@@ -143,9 +144,8 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Ag-tc-9aN">
-                                        <rect key="frame" x="182" y="3" width="92" height="38"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Ag-tc-9aN">
+                                        <rect key="frame" x="169" y="3" width="92" height="38"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="200 mL">
                                             <fontDescription key="titleFontDescription" type="system" pointSize="20"/>
@@ -156,7 +156,9 @@
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="0Ee-Nm-od0"/>
+                                    <constraint firstItem="3Ag-tc-9aN" firstAttribute="centerY" secondItem="23B-NQ-Ez0" secondAttribute="centerY" id="4MP-Mz-0Ks"/>
                                     <constraint firstItem="ddb-PC-z98" firstAttribute="leading" secondItem="23B-NQ-Ez0" secondAttribute="leading" id="PHe-TJ-RcG"/>
+                                    <constraint firstAttribute="trailing" secondItem="3Ag-tc-9aN" secondAttribute="trailing" constant="4" id="XIa-V0-S4a"/>
                                     <constraint firstItem="ddb-PC-z98" firstAttribute="centerY" secondItem="23B-NQ-Ez0" secondAttribute="centerY" id="cC1-NT-qTy"/>
                                 </constraints>
                             </view>

@@ -20,11 +20,6 @@ class HydrationViewController: UIViewController {
     // MARK: - State
     private var chartMode: HydrationChartMode = .weekly
 
-    // MARK: - Hydration State
-    private var dailyGoal: Double = 3.0     // liters
-    private var cupSize: Int = 200          // ml
-    private var consumedML: Int = 0         // ml today
-
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,32 +73,37 @@ extension HydrationViewController: UICollectionViewDataSource {
             ) as! HydrationTopCardCell
 
             cell.configure(
-                consumedML: consumedML,
-                goal: dailyGoal,
-                cupSize: cupSize
+                consumedML: Int(HydrationModel.consumedToday() * 1000),
+                goal: HydrationModel.currentGoal(),
+                cupSize: Int(HydrationModel.currentCupSize() * 1000)
             )
 
-            // Goal selector
             cell.onGoalTapped = { [weak self] in
                 self?.showGoalSelector()
             }
 
-            // Cup selector
             cell.onCupTapped = { [weak self] in
                 self?.showCupSelector()
             }
 
-            // Drop button behavior
             cell.onDropTapped = { [weak self] in
                 guard let self else { return }
 
-                let goalML = Int(self.dailyGoal * 1000)
-                self.consumedML = min(
-                    self.consumedML + self.cupSize,
-                    goalML
+                // Update today
+                HydrationModel.addCup()
+
+                // Update history (for chart)
+                HydrationHistoryModel.addWater(
+                    amount: HydrationModel.currentCupSize()
                 )
 
-                self.reloadTopCard()
+                // Reload top card + chart
+                self.collectionView.reloadItems(
+                    at: [
+                        IndexPath(item: 0, section: 0),
+                        IndexPath(item: 1, section: 0)
+                    ]
+                )
             }
 
             return cell
@@ -157,9 +157,9 @@ extension HydrationViewController {
 
         options.forEach { value in
             alert.addAction(
-                UIAlertAction(title: "\(value) L", style: .default) { [weak self] _ in
-                    self?.dailyGoal = value
-                    self?.reloadTopCard()
+                UIAlertAction(title: "\(value) L", style: .default) { _ in
+                    HydrationModel.setGoal(value)
+                    self.reloadTopCard()
                 }
             )
         }
@@ -169,7 +169,7 @@ extension HydrationViewController {
     }
 
     func showCupSelector() {
-        let options: [Int] = [100, 150, 200, 250, 300, 500]
+        let options: [Double] = [0.1, 0.15, 0.2, 0.25, 0.3, 0.5]
 
         let alert = UIAlertController(
             title: "Cup Size",
@@ -178,10 +178,11 @@ extension HydrationViewController {
         )
 
         options.forEach { value in
+            let ml = Int(value * 1000)
             alert.addAction(
-                UIAlertAction(title: "\(value) mL", style: .default) { [weak self] _ in
-                    self?.cupSize = value
-                    self?.reloadTopCard()
+                UIAlertAction(title: "\(ml) mL", style: .default) { _ in
+                    HydrationModel.setCupSize(value)
+                    self.reloadTopCard()
                 }
             )
         }

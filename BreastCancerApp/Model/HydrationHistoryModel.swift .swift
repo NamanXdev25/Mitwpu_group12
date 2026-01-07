@@ -2,12 +2,15 @@ import Foundation
 
 struct HydrationHistoryModel {
 
+    // MARK: - Storage
     private static let historyKey = "hydration_daily_history"
 
     enum Period {
         case weekly
         case monthly
     }
+
+    // MARK: - Public API
 
     static func addWater(amount: Double) {
         var history = loadHistory()
@@ -17,43 +20,53 @@ struct HydrationHistoryModel {
     }
 
     static func average(for period: Period) -> Double {
-        let values = valuesFor(period: period)
+        let values = chartValues(for: period)
         guard !values.isEmpty else { return 0 }
         return values.reduce(0, +) / Double(values.count)
     }
 
     static func chartValues(for period: Period) -> [Double] {
-        valuesFor(period: period)
-    }
-
-    // MARK: - Helpers
-
-    private static func valuesFor(period: Period) -> [Double] {
         let history = loadHistory()
-        let calendar = Calendar.current
         let today = Date()
 
         switch period {
 
+        // MARK: - Weekly (Sunday → Saturday)
         case .weekly:
-            return (0..<7).compactMap {
-                calendar.date(byAdding: .day, value: -$0, to: today)
-                    .flatMap { history[dateKey(for: $0)] }
-            }.reversed()
+            var calendar = Calendar.current
+            calendar.firstWeekday = 1 // Sunday
 
+            let startOfWeek = calendar.date(
+                from: calendar.dateComponents(
+                    [.yearForWeekOfYear, .weekOfYear],
+                    from: today
+                )
+            )!
+
+            // Always return exactly 7 values (Sun → Sat)
+            return (0..<7).map { offset in
+                let date = calendar.date(byAdding: .day, value: offset, to: startOfWeek)!
+                return history[dateKey(for: date)] ?? 0
+            }
+
+        // MARK: - Monthly
         case .monthly:
+            let calendar = Calendar.current
+
             guard let range = calendar.range(of: .day, in: .month, for: today) else {
                 return []
             }
 
-            return range.compactMap { day in
+            return range.map { day in
                 var comps = calendar.dateComponents([.year, .month], from: today)
                 comps.day = day
-                return calendar.date(from: comps)
-                    .flatMap { history[dateKey(for: $0)] }
+                let date = calendar.date(from: comps)!
+                return history[dateKey(for: date)] ?? 0
             }
         }
     }
+
+    // MARK: - Persistence
 
     private static func loadHistory() -> [String: Double] {
         UserDefaults.standard.dictionary(forKey: historyKey) as? [String: Double] ?? [:]
@@ -64,8 +77,10 @@ struct HydrationHistoryModel {
     }
 
     private static func dateKey(for date: Date) -> String {
-        let f = DateFormatter()
-        f.dateFormat = "yyyy-MM-dd"
-        return f.string(from: date)
+        let formatter = DateFormatter()
+        formatter.calendar = Calendar(identifier: .gregorian)
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter.string(from: date)
     }
 }
