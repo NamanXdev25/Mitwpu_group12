@@ -10,7 +10,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--self-Exam-->
+        <!--Self-Exam-->
         <scene sceneID="qdr-Pf-tkm">
             <objects>
                 <viewController id="puu-Zo-Jeq" customClass="SelfExamineViewController" customModule="BreastCancerApp" sceneMemberID="viewController">
@@ -54,7 +54,7 @@
                             <constraint firstItem="I5N-pD-9ex" firstAttribute="bottom" secondItem="hPv-DA-bBl" secondAttribute="bottom" id="zGe-ar-1aU"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="self-Exam" id="Pmm-Hj-Z3F"/>
+                    <navigationItem key="navigationItem" title="Self-Exam" id="Pmm-Hj-Z3F"/>
                     <connections>
                         <outlet property="collectionView" destination="hPv-DA-bBl" id="Q6S-LT-g3P"/>
                         <segue destination="SFl-U8-WC4" kind="show" identifier="showObservations" id="2v3-Ab-dfR"/>
@@ -492,8 +492,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="F95-aZ-lai"/>
-        <segue reference="rc3-6d-QI2"/>
+        <segue reference="KqS-3D-mRG"/>
+        <segue reference="2v3-Ab-dfR"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Gemini_Generated_Image_7grqus7grqus7grq" width="1024" height="1024"/>
