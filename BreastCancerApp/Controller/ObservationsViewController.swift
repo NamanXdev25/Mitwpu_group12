@@ -12,6 +12,14 @@ class ObservationsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+       
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 0
+        collectionView.setCollectionViewLayout(layout, animated: false)
+
         let nib = UINib(nibName: "ObservationsContainerCell", bundle: nil)
         collectionView.register(nib, forCellWithReuseIdentifier: "ObservationsContainerCell")
 
@@ -66,12 +74,15 @@ extension ObservationsViewController: UICollectionViewDataSource, UICollectionVi
         ) as! ObservationsContainerCell
     }
 
+  
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
 
-       
-        let width = collectionView.frame.width - 40
+        let layout = collectionViewLayout as! UICollectionViewFlowLayout
+        let horizontalInsets = layout.sectionInset.left + layout.sectionInset.right
+        let width = collectionView.bounds.width - horizontalInsets
+
         return CGSize(width: width, height: 360)
     }
 }

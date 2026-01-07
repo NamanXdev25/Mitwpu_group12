@@ -19,14 +19,15 @@ class VideoGuideViewController: UIViewController {
         setupPlayer()
     }
 
-   
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         resetPlayerToStart()
     }
 
     deinit {
-        if let token = timeObserverToken { player?.removeTimeObserver(token) }
+        if let token = timeObserverToken {
+            player?.removeTimeObserver(token)
+        }
         NotificationCenter.default.removeObserver(self)
         player?.pause()
         player = nil
@@ -41,23 +42,19 @@ class VideoGuideViewController: UIViewController {
         player = AVPlayer(url: url)
         guard let player = player else { return }
 
-        let pl = AVPlayerLayer(player: player)
-        pl.videoGravity = .resizeAspect
-        playerLayer = pl
+        let layer = AVPlayerLayer(player: player)
+        layer.videoGravity = .resizeAspect
+        playerLayer = layer
 
         actualVideoView.layer.masksToBounds = true
         actualVideoView.clipsToBounds = true
-        actualVideoView.layer.insertSublayer(pl, at: 0)
-
-        pl.frame = actualVideoView.bounds
-        pl.position = CGPoint(x: actualVideoView.bounds.midX, y: actualVideoView.bounds.midY)
-
-        view.bringSubviewToFront(playPauseButton)
-        view.bringSubviewToFront(progressSlider)
-        view.bringSubviewToFront(logSelfExamButton)
+        actualVideoView.layer.insertSublayer(layer, at: 0)
 
         let interval = CMTime(seconds: 0.5, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
-        timeObserverToken = player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] time in
+        timeObserverToken = player.addPeriodicTimeObserver(
+            forInterval: interval,
+            queue: .main
+        ) { [weak self] time in
             guard let self = self,
                   !self.isSeeking,
                   let duration = player.currentItem?.duration.seconds,
@@ -74,24 +71,26 @@ class VideoGuideViewController: UIViewController {
         )
     }
 
-   
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        guard let layer = playerLayer else { return }
+
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        layer.frame = actualVideoView.bounds
+        layer.position = CGPoint(
+            x: actualVideoView.bounds.midX,
+            y: actualVideoView.bounds.midY
+        )
+        CATransaction.commit()
+    }
+
     private func resetPlayerToStart() {
         guard let player = player else { return }
         player.pause()
         player.seek(to: .zero)
         progressSlider.value = 0
         playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        guard let pl = playerLayer else { return }
-
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
-        pl.frame = actualVideoView.bounds
-        pl.position = CGPoint(x: actualVideoView.bounds.midX, y: actualVideoView.bounds.midY)
-        CATransaction.commit()
     }
 
     @IBAction func playPauseTapped(_ sender: UIButton) {
@@ -105,8 +104,6 @@ class VideoGuideViewController: UIViewController {
             playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
         }
     }
-
-    @IBAction func progressChanged(_ sender: UISlider) {}
 
     @IBAction func progressTouchDown(_ sender: UISlider) {
         isSeeking = true
@@ -129,15 +126,11 @@ class VideoGuideViewController: UIViewController {
     }
 
     @objc private func didFinishPlaying() {
-        player?.seek(to: .zero)
-        player?.pause()
-        playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
-        progressSlider.value = 0
+        resetPlayerToStart()
     }
 
+  
     @IBAction func logSelfExamTapped(_ sender: UIButton) {
-        let sb = UIStoryboard(name: "Main", bundle: nil)
-        let obsVC = sb.instantiateViewController(withIdentifier: "ObservationsViewController")
-        navigationController?.pushViewController(obsVC, animated: true)
+        performSegue(withIdentifier: "showObservations", sender: sender)
     }
 }

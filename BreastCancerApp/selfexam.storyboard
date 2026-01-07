@@ -120,6 +120,7 @@
                     <connections>
                         <outlet property="collectionView" destination="cNK-M3-DRC" id="13V-ny-JbT"/>
                         <outlet property="doneBarButton" destination="DxV-ov-YOJ" id="JI6-dp-R5j"/>
+                        <segue destination="fcE-Hy-pA7" kind="show" id="F95-aZ-lai"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bnr-x4-NWc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -329,6 +330,7 @@
                         <outlet property="playPauseButton" destination="fb6-cI-z15" id="FF5-hO-Jvq"/>
                         <outlet property="progressSlider" destination="Wqz-Mg-CaQ" id="X03-HY-9Co"/>
                         <outlet property="videoContainerView" destination="dsf-ul-vy2" id="cOr-f8-ec0"/>
+                        <segue destination="SFl-U8-WC4" kind="show" identifier="showObservations" id="rc3-6d-QI2"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ozw-H8-plS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -463,6 +465,7 @@
                         <outlet property="playPauseButton" destination="dIP-cS-4bT" id="o4l-gq-68R"/>
                         <outlet property="progressSlider" destination="GC9-mi-1f4" id="cwM-ao-kcq"/>
                         <outlet property="titleLabel" destination="oxS-QE-Oek" id="7hV-UC-jqn"/>
+                        <segue destination="SFl-U8-WC4" kind="show" identifier="showObservations" id="CpE-OU-g1Q"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Yz9-oT-WUu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -488,6 +491,10 @@
             <point key="canvasLocation" x="5.343511450381679" y="-2.1126760563380285"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="F95-aZ-lai"/>
+        <segue reference="rc3-6d-QI2"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="Gemini_Generated_Image_7grqus7grqus7grq" width="1024" height="1024"/>
         <image name="backward.fill" catalog="system" width="128" height="76"/>
