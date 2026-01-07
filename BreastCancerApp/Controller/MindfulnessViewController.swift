@@ -187,22 +187,8 @@ class MindfulnessViewController: UIViewController {
         let slide = slides[index]
         
         switch slide.action {
-        case .next:
-            let next = index + 1
-            if let nextVC = slideVC(at: next) {
-                pageVC?.setViewControllers(
-                    [nextVC],
-                    direction: .forward,
-                    animated: true
-                ) { [weak self] _ in
-                    self?.currentPageIndex = next
-                    self?.attachedPageControl?.currentPage = next
-                }
-            }
-
         case .begin:
             guard let destination = slide.destination else { return }
-
             switch destination {
             case .breathing(let sessionID):
                 openBreathingSession(id: sessionID)
@@ -210,7 +196,6 @@ class MindfulnessViewController: UIViewController {
             case .journalBlank:
                 openBlankJournal()
             }
-
         case .addPhoto:
             print("Add photo tapped")
         }
@@ -262,13 +247,6 @@ class MindfulnessViewController: UIViewController {
         }
 
         slides = [
-            MindfulnessSlide(
-                title: intro.title,
-                description: intro.description,
-                buttonText: intro.buttonText ?? "Next",
-                action: .next,
-                destination: nil
-            ),
             MindfulnessSlide(
                 title: breathe.title,
                 description: breathe.description,
