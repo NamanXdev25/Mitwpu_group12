@@ -55,24 +55,20 @@ class SymptomsViewController: UIViewController {
         logTableView.reloadData()
         todayTableView.reloadData()
         updateLogTableViewHeight()
-        updateTodayTableViewHeight()
+        
     }
     
-    private func updateTodayTableViewHeight() {
-        // Calculate total height needed
+    private func updateLogTableViewHeight() {
         var totalHeight: CGFloat = 0
         
-        // Add header height
         totalHeight += 50
         
-        // Add cell heights
         for (_, symptom) in userSymptoms.enumerated() {
             let isSelected = selectedSymptoms[symptom.id] != nil
             let cellHeight: CGFloat = isSelected ? 120 : 60
             totalHeight += cellHeight
         }
         
-        // Update constraint
         logTableViewHeightConstraint.constant = totalHeight
         
     }
@@ -210,10 +206,6 @@ extension SymptomsViewController: UITableViewDelegate {
             return 80
         }
     }
-    
-//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//        return 24
-//    }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView()
