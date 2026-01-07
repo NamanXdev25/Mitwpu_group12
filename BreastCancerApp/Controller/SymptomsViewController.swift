@@ -13,9 +13,10 @@ class SymptomsViewController: UIViewController {
     @IBOutlet weak var todayTableView: UITableView!
     @IBOutlet weak var logSymptomButton: UIButton!
     
+    @IBOutlet var logTableViewHeightConstraint: NSLayoutConstraint!
     private let dataSource = SymptomDataSource.shared
     private var userSymptoms: [Symptom] = []
-    private var selectedSymptoms: [String: Int] = [:] // symptomId: severity
+    private var selectedSymptoms: [String: Int] = [:]
     private var todayLogs: [SymptomLog] = []
     
     override func viewDidLoad() {
@@ -31,15 +32,7 @@ class SymptomsViewController: UIViewController {
     }
     
     private func setupUI() {
-        title = "Symptoms"
-        view.backgroundColor = .systemGroupedBackground
         
-        // Add navigation bar button for Edit
-        let editButton = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(editButtonTapped))
-        editButton.tintColor = .systemPink
-        navigationItem.rightBarButtonItem = editButton
-        
-        // Button is already styled in storyboard, just set initial state
         updateLogButtonState()
     }
     
@@ -47,15 +40,11 @@ class SymptomsViewController: UIViewController {
         // Setup Log Table View
         logTableView.delegate = self
         logTableView.dataSource = self
-        logTableView.separatorStyle = .none
-        logTableView.backgroundColor = .systemGroupedBackground
         logTableView.register(UINib(nibName: "SymptomSelectionCell", bundle: nil), forCellReuseIdentifier: "SymptomSelectionCell")
         
         // Setup Today Table View
         todayTableView.delegate = self
         todayTableView.dataSource = self
-        todayTableView.separatorStyle = .none
-        todayTableView.backgroundColor = .systemGroupedBackground
         todayTableView.register(UINib(nibName: "SymptomLogCell", bundle: nil), forCellReuseIdentifier: "SymptomLogCell")
     }
     
@@ -64,16 +53,36 @@ class SymptomsViewController: UIViewController {
         todayLogs = dataSource.getTodayLogs()
         logTableView.reloadData()
         todayTableView.reloadData()
+        updateLogTableViewHeight()
+    }
+    
+    private func updateLogTableViewHeight() {
+        // Calculate total height needed
+        var totalHeight: CGFloat = 0
+        
+        // Add header height
+        totalHeight += 80
+        
+        // Add cell heights
+        for (_, symptom) in userSymptoms.enumerated() {
+            let isSelected = selectedSymptoms[symptom.id] != nil
+            let cellHeight: CGFloat = isSelected ? 120 : 60
+            totalHeight += cellHeight
+        }
+        
+        // Update constraint
+        logTableViewHeightConstraint.constant = totalHeight
+        
     }
     
     private func updateLogButtonState() {
         if selectedSymptoms.isEmpty {
-            logSymptomButton.backgroundColor = .systemGray5
-            logSymptomButton.setTitleColor(.systemGray, for: .normal)
+//            logSymptomButton.backgroundColor = .systemGray5
+//            logSymptomButton.setTitleColor(.systemGray, for: .normal)
             logSymptomButton.isEnabled = false
         } else {
-            logSymptomButton.backgroundColor = .systemPink
-            logSymptomButton.setTitleColor(.white, for: .normal)
+//            logSymptomButton.backgroundColor = .systemPink
+//            logSymptomButton.setTitleColor(.white, for: .normal)
             logSymptomButton.isEnabled = true
         }
     }
@@ -106,6 +115,7 @@ class SymptomsViewController: UIViewController {
         }
         logTableView.reloadData()
         updateLogButtonState()
+        updateLogTableViewHeight()
     }
     
     private func showInfoAlert(for symptom: Symptom) {
@@ -198,21 +208,22 @@ extension SymptomsViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView()
-        headerView.backgroundColor = .systemGroupedBackground
         
         let titleLabel = UILabel()
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.font = .systemFont(ofSize: 22, weight: .bold)
+        titleLabel.font = .systemFont(ofSize: 18, weight: .bold)
         titleLabel.textColor = .label
         
         if tableView == logTableView {
             titleLabel.text = "Log"
             
-            // Add Edit button for Log section
             let editButton = UIButton(type: .system)
             editButton.translatesAutoresizingMaskIntoConstraints = false
             editButton.setTitle("Edit", for: .normal)
-            editButton.setTitleColor(.systemPink, for: .normal)
+            editButton.setTitleColor(
+                UIColor(named: "SymptomsPrimaryColor"),
+                for: .normal
+            )
             editButton.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
             
             headerView.addSubview(titleLabel)

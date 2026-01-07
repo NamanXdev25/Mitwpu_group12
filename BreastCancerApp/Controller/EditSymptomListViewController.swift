@@ -17,28 +17,13 @@ class EditSymptomListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
         setupTableView()
         loadData()
-    }
-    
-    private func setupUI() {
-        title = "Edit List"
-        view.backgroundColor = .systemGroupedBackground
-        
-        let closeButton = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(closeButtonTapped))
-        navigationItem.leftBarButtonItem = closeButton
-        
-        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTapped))
-        navigationItem.rightBarButtonItem = doneButton
     }
     
     private func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.separatorStyle = .singleLine
-        
-        // Register cell
         tableView.register(UINib(nibName: "EditSymptomCell", bundle: nil), forCellReuseIdentifier: "EditSymptomCell")
     }
     
@@ -48,11 +33,10 @@ class EditSymptomListViewController: UIViewController {
         tableView.reloadData()
     }
     
-    @objc private func closeButtonTapped() {
+    @IBAction func closeButtonTapped(_ sender: Any) {
         dismiss(animated: true)
     }
-    
-    @objc private func doneButtonTapped() {
+    @IBAction func doneButtonTapped(_ sender: Any) {
         dismiss(animated: true)
     }
     
