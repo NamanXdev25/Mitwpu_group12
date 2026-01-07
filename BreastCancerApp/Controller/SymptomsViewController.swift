@@ -14,6 +14,7 @@ class SymptomsViewController: UIViewController {
     @IBOutlet weak var logSymptomButton: UIButton!
     
     @IBOutlet var logTableViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet var todayTableViewHeightConstraint: NSLayoutConstraint!
     private let dataSource = SymptomDataSource.shared
     private var userSymptoms: [Symptom] = []
     private var selectedSymptoms: [String: Int] = [:]
@@ -54,14 +55,15 @@ class SymptomsViewController: UIViewController {
         logTableView.reloadData()
         todayTableView.reloadData()
         updateLogTableViewHeight()
+        updateTodayTableViewHeight()
     }
     
-    private func updateLogTableViewHeight() {
+    private func updateTodayTableViewHeight() {
         // Calculate total height needed
         var totalHeight: CGFloat = 0
         
         // Add header height
-        totalHeight += 80
+        totalHeight += 50
         
         // Add cell heights
         for (_, symptom) in userSymptoms.enumerated() {
@@ -77,18 +79,25 @@ class SymptomsViewController: UIViewController {
     
     private func updateLogButtonState() {
         if selectedSymptoms.isEmpty {
-//            logSymptomButton.backgroundColor = .systemGray5
-//            logSymptomButton.setTitleColor(.systemGray, for: .normal)
             logSymptomButton.isEnabled = false
         } else {
-//            logSymptomButton.backgroundColor = .systemPink
-//            logSymptomButton.setTitleColor(.white, for: .normal)
             logSymptomButton.isEnabled = true
         }
     }
     
     @objc private func editButtonTapped() {
         performSegue(withIdentifier: "showEditList", sender: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showEditList" {
+            if let navController = segue.destination as? UINavigationController,
+               let editVC = navController.viewControllers.first as? EditSymptomListViewController {
+                editVC.onDismiss = { [weak self] in
+                    self?.loadData()
+                }
+            }
+        }
     }
     
     @IBAction func logSymptomButtonTapped(_ sender: UIButton) {
@@ -202,9 +211,9 @@ extension SymptomsViewController: UITableViewDelegate {
         }
     }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 50
-    }
+//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//        return 24
+//    }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView()

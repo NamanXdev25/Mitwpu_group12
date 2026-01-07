@@ -14,6 +14,7 @@ class EditSymptomListViewController: UIViewController {
     private let dataSource = SymptomDataSource.shared
     private var userSymptoms: [Symptom] = []
     private var availableSymptoms: [Symptom] = []
+    var onDismiss: (() -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,10 +35,15 @@ class EditSymptomListViewController: UIViewController {
     }
     
     @IBAction func closeButtonTapped(_ sender: Any) {
-        dismiss(animated: true)
+        dismiss(animated: true) {
+            self.onDismiss?()
+        }
     }
+
     @IBAction func doneButtonTapped(_ sender: Any) {
-        dismiss(animated: true)
+        dismiss(animated: true) {
+            self.onDismiss?()
+        }
     }
     
     private func showInfoAlert(for symptom: Symptom) {

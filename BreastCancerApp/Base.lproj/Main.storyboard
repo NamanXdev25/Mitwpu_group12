@@ -17,12 +17,18 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="s51-Jr-PZ1">
-                                <rect key="frame" x="0.0" y="172" width="393" height="300"/>
-                                <color key="backgroundColor" name="SymptomsBackgroundColor"/>
+                                <rect key="frame" x="16" y="172" width="361" height="300"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="300" id="CCE-Sz-OVw"/>
                                 </constraints>
-                                <color key="sectionIndexBackgroundColor" name="SymptomsBackgroundColor"/>
+                                <color key="sectionIndexBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="13"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                </userDefinedRuntimeAttributes>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SZW-H7-8do">
                                 <rect key="frame" x="96.666666666666686" y="488" width="200" height="50"/>
@@ -43,23 +49,31 @@
                                 </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="IGQ-ff-6CI">
-                                <rect key="frame" x="0.0" y="554" width="393" height="230"/>
-                                <color key="backgroundColor" name="SymptomsBackgroundColor"/>
-                                <color key="sectionIndexBackgroundColor" name="SymptomsBackgroundColor"/>
+                                <rect key="frame" x="16" y="554" width="361" height="230"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="230" id="Umm-oz-Zhh"/>
+                                </constraints>
+                                <color key="sectionIndexBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="13"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="AW4-0k-Hc2"/>
                         <color key="backgroundColor" name="SymptomsBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="s51-Jr-PZ1" firstAttribute="leading" secondItem="AW4-0k-Hc2" secondAttribute="leading" id="0mT-Mu-jUF"/>
+                            <constraint firstItem="s51-Jr-PZ1" firstAttribute="leading" secondItem="AW4-0k-Hc2" secondAttribute="leading" constant="16" id="0mT-Mu-jUF"/>
                             <constraint firstItem="IGQ-ff-6CI" firstAttribute="top" secondItem="SZW-H7-8do" secondAttribute="bottom" constant="16" id="36P-S0-K5Z"/>
                             <constraint firstItem="AW4-0k-Hc2" firstAttribute="bottom" secondItem="IGQ-ff-6CI" secondAttribute="bottom" id="9cF-im-NVU"/>
                             <constraint firstItem="SZW-H7-8do" firstAttribute="top" secondItem="s51-Jr-PZ1" secondAttribute="bottom" constant="16" id="DZp-sF-L6f"/>
-                            <constraint firstItem="IGQ-ff-6CI" firstAttribute="leading" secondItem="AW4-0k-Hc2" secondAttribute="leading" id="SIG-eJ-sNy"/>
-                            <constraint firstItem="AW4-0k-Hc2" firstAttribute="trailing" secondItem="IGQ-ff-6CI" secondAttribute="trailing" id="SyS-kU-k84"/>
+                            <constraint firstItem="IGQ-ff-6CI" firstAttribute="leading" secondItem="AW4-0k-Hc2" secondAttribute="leading" constant="16" id="SIG-eJ-sNy"/>
+                            <constraint firstItem="AW4-0k-Hc2" firstAttribute="trailing" secondItem="IGQ-ff-6CI" secondAttribute="trailing" constant="16" id="SyS-kU-k84"/>
                             <constraint firstItem="SZW-H7-8do" firstAttribute="centerX" secondItem="AW4-0k-Hc2" secondAttribute="centerX" id="Zs8-Hm-Vv1"/>
                             <constraint firstItem="s51-Jr-PZ1" firstAttribute="top" secondItem="AW4-0k-Hc2" secondAttribute="top" id="gR6-mu-Lra"/>
-                            <constraint firstItem="AW4-0k-Hc2" firstAttribute="trailing" secondItem="s51-Jr-PZ1" secondAttribute="trailing" id="rDO-lW-hyn"/>
+                            <constraint firstItem="AW4-0k-Hc2" firstAttribute="trailing" secondItem="s51-Jr-PZ1" secondAttribute="trailing" constant="16" id="rDO-lW-hyn"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Symptoms" id="33z-YY-1I2"/>
@@ -68,6 +82,7 @@
                         <outlet property="logTableView" destination="s51-Jr-PZ1" id="TE0-df-neL"/>
                         <outlet property="logTableViewHeightConstraint" destination="CCE-Sz-OVw" id="lUD-1N-S2u"/>
                         <outlet property="todayTableView" destination="IGQ-ff-6CI" id="Frl-sZ-4LZ"/>
+                        <outlet property="todayTableViewHeightConstraint" destination="IGQ-ff-6CI" id="fIc-mN-0xy"/>
                         <segue destination="e8e-yI-mC8" kind="presentation" identifier="showEditList" modalPresentationStyle="automatic" id="zGb-TJ-PrE"/>
                     </connections>
                 </viewController>
