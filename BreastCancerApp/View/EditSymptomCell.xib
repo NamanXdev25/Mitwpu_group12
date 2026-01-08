@@ -37,18 +37,8 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CgN-Rp-mno">
-                        <rect key="frame" x="274" y="15" width="30" height="30"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="30" id="ITA-H2-yOt"/>
-                            <constraint firstAttribute="height" constant="30" id="y3B-DW-dgO"/>
-                        </constraints>
-                        <color key="tintColor" systemColor="systemGrayColor"/>
-                        <state key="normal" title="Button"/>
-                        <buttonConfiguration key="configuration" style="plain" image="line.3.horizontal" catalog="system"/>
-                    </button>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fx3-z7-GNA">
-                        <rect key="frame" x="236" y="15" width="30" height="30"/>
+                        <rect key="frame" x="274" y="15" width="30" height="30"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="30" id="HqO-2P-cC4"/>
                             <constraint firstAttribute="width" constant="30" id="QQb-xn-3n1"/>
@@ -62,10 +52,8 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="Ehv-hw-VWq" firstAttribute="leading" secondItem="gdi-yK-GP1" secondAttribute="trailing" constant="16" id="6k5-v6-Uhh"/>
-                    <constraint firstAttribute="trailing" secondItem="CgN-Rp-mno" secondAttribute="trailing" constant="16" id="6sS-m9-UdR"/>
                     <constraint firstItem="gdi-yK-GP1" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="B06-CF-TNA"/>
-                    <constraint firstItem="CgN-Rp-mno" firstAttribute="centerY" secondItem="Ehv-hw-VWq" secondAttribute="centerY" id="Lw3-hL-Ygk"/>
-                    <constraint firstItem="CgN-Rp-mno" firstAttribute="leading" secondItem="Fx3-z7-GNA" secondAttribute="trailing" constant="8" id="Vg5-mJ-XJq"/>
+                    <constraint firstAttribute="trailing" secondItem="Fx3-z7-GNA" secondAttribute="trailing" constant="16" id="BOz-Fp-UWM"/>
                     <constraint firstItem="gdi-yK-GP1" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="dmQ-BW-9ET"/>
                     <constraint firstItem="Fx3-z7-GNA" firstAttribute="centerY" secondItem="Ehv-hw-VWq" secondAttribute="centerY" id="g0x-TJ-qox"/>
                     <constraint firstItem="Ehv-hw-VWq" firstAttribute="centerY" secondItem="gdi-yK-GP1" secondAttribute="centerY" id="szc-5H-Jqd"/>
@@ -80,21 +68,16 @@
             <connections>
                 <outlet property="actionButton" destination="gdi-yK-GP1" id="T7K-XT-qly"/>
                 <outlet property="infoButton" destination="Fx3-z7-GNA" id="usf-Da-Gjg"/>
-                <outlet property="reorderButton" destination="CgN-Rp-mno" id="A5N-2w-o8A"/>
                 <outlet property="symptomNameLabel" destination="Ehv-hw-VWq" id="fFt-Ka-hUD"/>
             </connections>
             <point key="canvasLocation" x="139" y="154"/>
         </tableViewCell>
     </objects>
     <resources>
-        <image name="line.3.horizontal" catalog="system" width="128" height="65"/>
         <image name="minus.circle.fill" catalog="system" width="128" height="123"/>
         <namedColor name="SymptomsPrimaryColor">
             <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <systemColor name="systemGrayColor">
-            <color red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
         <systemColor name="systemRedColor">
             <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

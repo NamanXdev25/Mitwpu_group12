@@ -12,7 +12,6 @@ class EditSymptomCell: UITableViewCell {
     @IBOutlet weak var actionButton: UIButton!
     @IBOutlet weak var symptomNameLabel: UILabel!
     @IBOutlet weak var infoButton: UIButton!
-    @IBOutlet weak var reorderButton: UIButton!
     
     var onActionTapped: (() -> Void)?
     var onInfoTapped: (() -> Void)?
@@ -20,6 +19,7 @@ class EditSymptomCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         selectionStyle = .none
+        showsReorderControl = true
     }
     
     func configure(with symptom: Symptom, isInUserList: Bool) {
@@ -28,11 +28,9 @@ class EditSymptomCell: UITableViewCell {
         if isInUserList {
             actionButton.setImage(UIImage(systemName: "minus.circle.fill"), for: .normal)
             actionButton.tintColor = .systemRed
-            reorderButton.isHidden = false
         } else {
             actionButton.setImage(UIImage(systemName: "plus.circle.fill"), for: .normal)
             actionButton.tintColor = .systemGreen
-            reorderButton.isHidden = true
         }
     }
     

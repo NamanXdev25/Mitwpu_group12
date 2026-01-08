@@ -30,8 +30,7 @@ class SymptomsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        todayLogs = dataSource.getTodayLogs()
-        collectionView.reloadSections(IndexSet([Section.today.rawValue]))
+        loadData()
     }
     
     private func setupCollectionView() {

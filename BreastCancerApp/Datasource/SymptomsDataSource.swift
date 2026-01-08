@@ -12,6 +12,8 @@ class SymptomDataSource {
     
     private init() {}
     
+    private let userSymptomsOrderKey = "userSymptomsOrder"
+
     // All available symptoms
     private var allSymptoms: [Symptom] = [
         Symptom(id: "1", name: "Fatigue", isInUserList: true),
@@ -28,23 +30,70 @@ class SymptomDataSource {
     
     // MARK: - User List Management
     func getUserSymptoms() -> [Symptom] {
-        return allSymptoms.filter { $0.isInUserList }
+
+        // Only symptoms that belong to the user
+        let userSymptoms = allSymptoms.filter { $0.isInUserList }
+
+        let savedOrder = UserDefaults.standard.stringArray(
+            forKey: userSymptomsOrderKey
+        )
+
+        // 🔥 First run or no saved order → return natural order
+        guard let order = savedOrder, !order.isEmpty else {
+            return userSymptoms
+        }
+
+        // Rebuild in saved order
+        var ordered: [Symptom] = []
+
+        for id in order {
+            if let symptom = userSymptoms.first(where: { $0.id == id }) {
+                ordered.append(symptom)
+            }
+        }
+
+        return ordered
     }
+
+
     
     func getAvailableSymptoms() -> [Symptom] {
         return allSymptoms.filter { !$0.isInUserList }
     }
     
     func addSymptomToUserList(symptomId: String) {
-        if let index = allSymptoms.firstIndex(where: { $0.id == symptomId }) {
-            allSymptoms[index].isInUserList = true
+        guard let index = allSymptoms.firstIndex(where: { $0.id == symptomId }) else { return }
+
+        allSymptoms[index].isInUserList = true
+
+        var order = UserDefaults.standard.stringArray(
+            forKey: userSymptomsOrderKey
+        ) ?? []
+
+        if !order.contains(symptomId) {
+            order.append(symptomId)
+            UserDefaults.standard.set(order, forKey: userSymptomsOrderKey)
         }
     }
+
     
     func removeSymptomFromUserList(symptomId: String) {
-        if let index = allSymptoms.firstIndex(where: { $0.id == symptomId }) {
-            allSymptoms[index].isInUserList = false
-        }
+        guard let index = allSymptoms.firstIndex(where: { $0.id == symptomId }) else { return }
+
+        allSymptoms[index].isInUserList = false
+
+        var order = UserDefaults.standard.stringArray(
+            forKey: userSymptomsOrderKey
+        ) ?? []
+
+        order.removeAll { $0 == symptomId }
+        UserDefaults.standard.set(order, forKey: userSymptomsOrderKey)
+    }
+
+    
+    func updateUserSymptomsOrder(_ symptoms: [Symptom]) {
+        let orderedIds = symptoms.map { $0.id }
+        UserDefaults.standard.set(orderedIds, forKey: userSymptomsOrderKey)
     }
     
     // MARK: - Logging Management

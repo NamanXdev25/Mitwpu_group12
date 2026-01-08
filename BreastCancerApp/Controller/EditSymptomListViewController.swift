@@ -20,6 +20,7 @@ class EditSymptomListViewController: UIViewController {
         super.viewDidLoad()
         setupTableView()
         loadData()
+        tableView.isEditing = true
     }
     
     private func setupTableView() {
@@ -120,12 +121,58 @@ extension EditSymptomListViewController: UITableViewDataSource {
         return cell
     }
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == 0 {
-            return "Your List"
-        } else {
-            return "Add"
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView {
+
+        let container = UIView()
+        container.backgroundColor = tableView.backgroundColor
+
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 17, weight: .semibold)
+        label.textColor = .secondaryLabel
+        label.text = section == 0 ? "Your List" : "Add"
+
+        container.addSubview(label)
+
+        NSLayoutConstraint.activate([
+            label.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 16),
+            label.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -6)
+        ])
+
+        return container
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 36
+    }
+    
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        return indexPath.section == 0
+    }
+    
+    func tableView(
+        _ tableView: UITableView,
+        moveRowAt sourceIndexPath: IndexPath,
+        to destinationIndexPath: IndexPath
+    ) {
+        guard sourceIndexPath.section == 0,
+              destinationIndexPath.section == 0 else {
+            tableView.reloadData()
+            return
         }
+
+        let movedSymptom = userSymptoms.remove(at: sourceIndexPath.row)
+        userSymptoms.insert(movedSymptom, at: destinationIndexPath.row)
+
+        // 🔥 Persist new order
+        dataSource.updateUserSymptomsOrder(userSymptoms)
+    }
+    
+    func tableView(
+        _ tableView: UITableView,
+        editingStyleForRowAt indexPath: IndexPath
+    ) -> UITableViewCell.EditingStyle {
+        return .none
     }
     
     private func removeSymptom(symptomId: String) {
