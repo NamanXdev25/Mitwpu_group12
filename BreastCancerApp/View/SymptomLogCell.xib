@@ -44,6 +44,11 @@
                     <constraint firstItem="Zcc-wf-X3q" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="tHF-ae-iIe"/>
                     <constraint firstAttribute="trailing" secondItem="9IO-C1-da9" secondAttribute="trailing" constant="16" id="tXV-4T-Ne7"/>
                 </constraints>
+                <userDefinedRuntimeAttributes>
+                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                        <integer key="value" value="13"/>
+                    </userDefinedRuntimeAttribute>
+                </userDefinedRuntimeAttributes>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <userDefinedRuntimeAttributes>

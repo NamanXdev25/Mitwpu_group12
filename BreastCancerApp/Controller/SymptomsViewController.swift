@@ -73,26 +73,26 @@ class SymptomsViewController: UIViewController {
     }
     
     private func createLogSection() -> NSCollectionLayoutSection {
-        // Item
+
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(140) // ⬅️ IMPORTANT
+            heightDimension: .estimated(60)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        
-        // Group
+
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(140)
+            heightDimension: .estimated(60)
         )
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        
-        // Section
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: groupSize,
+            subitems: [item]
+        )
+
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 0, trailing: 16)
-        section.interGroupSpacing = 0
-        
-        // Header
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 8, trailing: 16)
+        section.interGroupSpacing = 8
+
         let headerSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .absolute(50)
@@ -102,10 +102,11 @@ class SymptomsViewController: UIViewController {
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .top
         )
+
         section.boundarySupplementaryItems = [header]
-        
         return section
     }
+
     
     private func createButtonSection() -> NSCollectionLayoutSection {
         // Item
@@ -146,8 +147,8 @@ class SymptomsViewController: UIViewController {
         
         // Section
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 16, trailing: 16)
-        section.interGroupSpacing = 0
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 8, trailing: 16)
+        section.interGroupSpacing = 8
         
         // Header
         let headerSize = NSCollectionLayoutSize(
@@ -169,17 +170,6 @@ class SymptomsViewController: UIViewController {
         todayLogs = dataSource.getTodayLogs()
         collectionView.reloadData()
     }
-    
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == "showEditList" {
-//            if let navController = segue.destination as? UINavigationController,
-//               let editVC = navController.viewControllers.first as? EditSymptomListViewController {
-//                editVC.onDismiss = { [weak self] in
-//                    self?.loadData()
-//                }
-//            }
-//        }
-//    }
     
     @objc private func logSymptomButtonTapped() {
         guard !selectedSymptoms.isEmpty else { return }

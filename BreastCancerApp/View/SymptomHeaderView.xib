@@ -15,13 +15,13 @@
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XHF-rP-SdM" userLabel="titleLabel">
-                    <rect key="frame" x="16.000000000000004" y="106.33333333333333" width="43.333333333333343" height="20.333333333333329"/>
+                    <rect key="frame" x="0.0" y="106.33333333333333" width="43.333333333333336" height="20.333333333333329"/>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cF0-vn-Xek">
-                    <rect key="frame" x="237" y="104.66666666666667" width="75" height="24.000000000000014"/>
+                    <rect key="frame" x="245" y="104.66666666666667" width="75" height="24.000000000000014"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="24" id="XXV-AZ-c4l"/>
                     </constraints>
@@ -35,8 +35,8 @@
             </subviews>
             <viewLayoutGuide key="safeArea" id="VXr-Tz-HHm"/>
             <constraints>
-                <constraint firstItem="XHF-rP-SdM" firstAttribute="leading" secondItem="VXr-Tz-HHm" secondAttribute="leading" constant="16" id="PB9-hr-tWo"/>
-                <constraint firstAttribute="trailing" secondItem="cF0-vn-Xek" secondAttribute="trailing" constant="8" id="iEt-mu-d4H"/>
+                <constraint firstItem="XHF-rP-SdM" firstAttribute="leading" secondItem="VXr-Tz-HHm" secondAttribute="leading" id="PB9-hr-tWo"/>
+                <constraint firstAttribute="trailing" secondItem="cF0-vn-Xek" secondAttribute="trailing" id="iEt-mu-d4H"/>
                 <constraint firstItem="XHF-rP-SdM" firstAttribute="centerY" secondItem="VXr-Tz-HHm" secondAttribute="centerY" id="sNQ-ML-UNz"/>
                 <constraint firstItem="cF0-vn-Xek" firstAttribute="centerY" secondItem="XHF-rP-SdM" secondAttribute="centerY" id="xrk-XB-bNk"/>
             </constraints>
