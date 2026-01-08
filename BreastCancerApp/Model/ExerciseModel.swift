@@ -17,42 +17,44 @@ struct ExerciseItem: Codable {
     var imageName: String
 }
 
-// --- NEW: History Structure ---
+// --- UPDATED: History Structure ---
+// Now stores the actual items so we can see titles/times in the missed list
 struct DailyProgress: Codable {
-    let total: Int
-    let completed: Int
+    let items: [PlanItem]
+    
+    var total: Int { items.count }
+    var completedCount: Int { items.filter { $0.isCompleted }.count }
+    var missedItems: [PlanItem] { items.filter { !$0.isCompleted } }
 }
 
 // --- 2. THE MANAGER ---
 
 class ExerciseManager {
     
-    // Singleton - convenient access across controllers
     static let shared = ExerciseManager()
     
-    private let todaysPlanStorageKey = "com.yourapp.todaysPlan.v1" // persistence key
-    private let historyStorageKey = "com.yourapp.history.v1"       // history key
+    private let todaysPlanStorageKey = "com.yourapp.todaysPlan.v1"
+    private let historyStorageKey = "com.yourapp.history.v1"
     
     var todaysPlan: [PlanItem] = []
     var myExercises: [ExerciseItem] = []
     var exploreItems: [ExerciseItem] = []
     
-    // Key: "yyyy-MM-dd", Value: Progress
+    // Key: "yyyy-MM-dd", Value: Progress object containing full items
     var history: [String: DailyProgress] = [:]
     
     init() {
         loadAllData()
         loadSavedPlan()
-        loadHistory() // Load past data
+        loadHistory()
     }
     
     func loadAllData() {
-        self.todaysPlan = loadJSON(filename: "todaysPlan")
+        // Keeps your initial functionality for loading JSON assets
         self.myExercises = loadJSON(filename: "myExercises")
         self.exploreItems = loadJSON(filename: "explore")
     }
     
-    // Helper function to load any JSON file into a list
     func loadJSON<T: Codable>(filename: String) -> [T] {
         guard let url = Bundle.main.url(forResource: filename, withExtension: "json") else { return [] }
         do {
@@ -64,42 +66,34 @@ class ExerciseManager {
         }
     }
     
-    // MARK: - Filter Logic for Day-Wise Plan
+    // MARK: - Filter Logic
     
     var currentDayPlan: [PlanItem] {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "E" // Returns "Mon", "Tue", etc.
-        let todayShort = dateFormatter.string(from: Date())
-        let todayMatch = "Every \(todayShort)" // e.g. "Every Tue"
+        dateFormatter.dateFormat = "E"
+        let todayMatch = "Every \(dateFormatter.string(from: Date()))"
         
         return todaysPlan.filter { item in
-            // Show item if it matches today OR is set to Every Day
             return item.subtitle == "Every Day" || item.subtitle == todayMatch
         }
     }
     
     // MARK: - Plan manipulation
     
-    // UPDATED: Toggle by ID, not Index (because UI index != Master index)
     func togglePlanItem(id: String) {
         if let index = todaysPlan.firstIndex(where: { $0.id == id }) {
             todaysPlan[index].isCompleted.toggle()
             saveTodaysPlan()
-            updateHistoryForToday() // <--- Update history immediately
+            updateHistoryForToday()
         }
     }
     
     func addPlanItem(_ item: PlanItem) {
-        if containsExercise(id: item.id) {
-            _ = removeExercisesById(item.id)
-        }
+        // Prevents duplicates by removing existing ID before inserting
+        removeExercisesById(item.id)
         todaysPlan.insert(item, at: 0)
         saveTodaysPlan()
-        updateHistoryForToday() // <--- Update history immediately
-    }
-
-    func containsExercise(title: String) -> Bool {
-        return todaysPlan.contains { $0.title == title }
+        updateHistoryForToday()
     }
 
     func containsExercise(id: String) -> Bool {
@@ -113,7 +107,7 @@ class ExerciseManager {
         let removed = before - todaysPlan.count
         if removed > 0 {
             saveTodaysPlan()
-            updateHistoryForToday() // <--- Update history immediately
+            updateHistoryForToday()
         }
         return removed
     }
@@ -128,27 +122,22 @@ class ExerciseManager {
     }
     
     func loadSavedPlan() {
-        guard let data = UserDefaults.standard.data(forKey: todaysPlanStorageKey) else { return }
+        guard let data = UserDefaults.standard.data(forKey: todaysPlanStorageKey) else {
+            // Fallback to local JSON if no User Defaults exist yet
+            self.todaysPlan = loadJSON(filename: "todaysPlan")
+            return
+        }
         do {
             self.todaysPlan = try JSONDecoder().decode([PlanItem].self, from: data)
         } catch { print("Error loading plan: \(error)") }
     }
     
-    // MARK: - History Logic (The "Next Day" Feature)
+    // MARK: - History Logic
     
     func updateHistoryForToday() {
         let key = getTodayDateString()
-        
-        // UPDATED: Calculate progress based on TODAY'S filtered view, not the whole database
-        let dailyPlan = self.currentDayPlan
-        
-        let total = dailyPlan.count
-        let completed = dailyPlan.filter { $0.isCompleted }.count
-        
-        // Save to dictionary
-        let progress = DailyProgress(total: total, completed: completed)
-        history[key] = progress
-        
+        // Critical change: We save the full list of items instead of just counts
+        history[key] = DailyProgress(items: currentDayPlan)
         saveHistory()
     }
     
@@ -166,10 +155,14 @@ class ExerciseManager {
         } catch { print("Error loading history: \(error)") }
     }
     
-    // Helper to get consistent date key
+    // Helper to get consistent date keys
     func getTodayDateString() -> String {
+        return getDateKey(for: Date())
+    }
+    
+    func getDateKey(for date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
-        return formatter.string(from: Date())
+        return formatter.string(from: date)
     }
 }
