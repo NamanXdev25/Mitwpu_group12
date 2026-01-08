@@ -57,6 +57,11 @@ class SymptomDataSource {
         return todayLogs.sorted { $0.timestamp > $1.timestamp }
     }
     
+    // 🔥 NEW: Delete log entry
+    func deleteLog(logId: String) {
+        todayLogs.removeAll { $0.id == logId }
+    }
+    
     func getSeverityText(for severity: Int) -> String {
         switch severity {
         case 0: return "Mild"

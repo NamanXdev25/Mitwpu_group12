@@ -10,7 +10,6 @@ import UIKit
 class SymptomsViewController: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
-//    @IBOutlet weak var editButton: UIButton!
     
     private let dataSource = SymptomDataSource.shared
     private var userSymptoms: [Symptom] = []
@@ -31,6 +30,7 @@ class SymptomsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        todayLogs = dataSource.getTodayLogs()
         collectionView.reloadSections(IndexSet([Section.today.rawValue]))
     }
     
@@ -53,7 +53,7 @@ class SymptomsViewController: UIViewController {
     }
     
     private func createLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, environment in
+        let layout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, layoutEnvironment in
             guard let self = self,
                   let sectionType = Section(rawValue: sectionIndex) else {
                 return nil
@@ -65,7 +65,7 @@ class SymptomsViewController: UIViewController {
             case .button:
                 return self.createButtonSection()
             case .today:
-                return self.createTodaySection()
+                return self.createTodaySection(layoutEnvironment: layoutEnvironment)
             }
         }
         
@@ -130,25 +130,33 @@ class SymptomsViewController: UIViewController {
         return section
     }
     
-    private func createTodaySection() -> NSCollectionLayoutSection {
-        // Item
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(80)
-        )
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+    private func createTodaySection(layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
+        // 🔥 Use list configuration for swipe actions
+        var config = UICollectionLayoutListConfiguration(appearance: .plain)
+        config.showsSeparators = false
+        config.backgroundColor = .clear
         
-        // Group
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(80)
-        )
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        // 🔥 ADD SWIPE-TO-DELETE
+        config.trailingSwipeActionsConfigurationProvider = { [weak self] indexPath in
+            guard let self = self else { return nil }
+            
+            // Only apply to actual log items, not empty state
+            guard !self.todayLogs.isEmpty else { return nil }
+            
+            let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { action, view, completion in
+                self.confirmDelete(at: indexPath, completion: completion)
+            }
+            deleteAction.image = UIImage(systemName: "trash.fill")
+            deleteAction.backgroundColor = .systemRed
+            
+            let swipeConfig = UISwipeActionsConfiguration(actions: [deleteAction])
+            swipeConfig.performsFirstActionWithFullSwipe = true
+            
+            return swipeConfig
+        }
         
-        // Section
-        let section = NSCollectionLayoutSection(group: group)
+        let section = NSCollectionLayoutSection.list(using: config, layoutEnvironment: layoutEnvironment)
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 8, trailing: 16)
-        section.interGroupSpacing = 8
         
         // Header
         let headerSize = NSCollectionLayoutSize(
@@ -187,7 +195,7 @@ class SymptomsViewController: UIViewController {
         // Clear selection
         selectedSymptoms.removeAll()
 
-        // 🔥 REFRESH TODAY LOGS
+        // Refresh today logs
         todayLogs = dataSource.getTodayLogs()
 
         // Reload affected sections
@@ -197,8 +205,6 @@ class SymptomsViewController: UIViewController {
                       Section.today.rawValue])
         )
     }
-
-
     
     private func toggleSymptomSelection(symptomId: String) {
         guard let index = userSymptoms.firstIndex(where: { $0.id == symptomId }) else { return }
@@ -212,17 +218,52 @@ class SymptomsViewController: UIViewController {
         let logIndexPath = IndexPath(item: index, section: Section.log.rawValue)
 
         collectionView.performBatchUpdates {
-            // Reload the tapped symptom cell
             collectionView.reloadItems(at: [logIndexPath])
-
-            // 🔥 RELOAD THE BUTTON SECTION
             collectionView.reloadSections(IndexSet([Section.button.rawValue]))
         }
 
         collectionView.collectionViewLayout.invalidateLayout()
     }
-
-
+    
+    // 🔥 NEW: Delete confirmation
+    private func confirmDelete(at indexPath: IndexPath, completion: @escaping (Bool) -> Void) {
+        let log = todayLogs[indexPath.item]
+        
+        let alert = UIAlertController(
+            title: "Delete Log?",
+            message: "Are you sure you want to delete this \(log.symptomName) entry?",
+            preferredStyle: .alert
+        )
+        
+        let deleteBtn = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+            guard let self = self else { return }
+            
+            // Remove from data source
+            self.dataSource.deleteLog(logId: log.id)
+            
+            // Update local array
+            self.todayLogs = self.dataSource.getTodayLogs()
+            
+            // Animate deletion
+            if self.todayLogs.isEmpty {
+                // Show empty state
+                self.collectionView.reloadSections(IndexSet([Section.today.rawValue]))
+            } else {
+                // Delete specific item
+                self.collectionView.deleteItems(at: [indexPath])
+            }
+            
+            completion(true)
+        }
+        
+        let cancelBtn = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+            completion(false)
+        }
+        
+        alert.addAction(deleteBtn)
+        alert.addAction(cancelBtn)
+        present(alert, animated: true)
+    }
     
     private func showInfoAlert(for symptom: Symptom) {
         let message: String
@@ -241,10 +282,6 @@ class SymptomsViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
     }
-//    
-//    @objc private func editButtonTapped() {
-//        performSegue(withIdentifier: "showEditList", sender: nil)
-//    }
     
     private func openEditList() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -260,7 +297,6 @@ class SymptomsViewController: UIViewController {
         let nav = UINavigationController(rootViewController: editVC)
         present(nav, animated: true)
     }
-
 }
 
 // MARK: - UICollectionViewDataSource
@@ -368,7 +404,6 @@ extension SymptomsViewController: UICollectionViewDataSource {
 
         return header
     }
-
 }
 
 // MARK: - UICollectionViewDelegate
