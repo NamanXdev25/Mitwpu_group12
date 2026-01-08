@@ -31,13 +31,13 @@
                                 </segments>
                             </segmentedControl>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Average" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kuY-nC-Umx">
-                                <rect key="frame" x="15.999999999999996" y="56" width="50.666666666666657" height="15.666666666666671"/>
-                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="13"/>
+                                <rect key="frame" x="15.999999999999996" y="56" width="55.666666666666657" height="18"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2.7 L" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kUP-dG-Cnt">
-                                <rect key="frame" x="20" y="76" width="61" height="25"/>
+                                <rect key="frame" x="20" y="80" width="61" height="21"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="28"/>
                                 <color key="textColor" name="bg"/>
                                 <color key="highlightedColor" name="bg"/>
@@ -56,7 +56,7 @@
                             <constraint firstItem="kuY-nC-Umx" firstAttribute="top" secondItem="vwX-Aq-f5s" secondAttribute="bottom" constant="16" id="7EJ-FC-hWu"/>
                             <constraint firstAttribute="trailing" secondItem="vwX-Aq-f5s" secondAttribute="trailing" constant="16" id="FZN-qZ-V2V"/>
                             <constraint firstItem="Ahl-Wt-MDS" firstAttribute="top" secondItem="kUP-dG-Cnt" secondAttribute="bottom" constant="16" id="Jha-cg-aci"/>
-                            <constraint firstItem="kUP-dG-Cnt" firstAttribute="top" secondItem="vwX-Aq-f5s" secondAttribute="bottom" constant="36" id="Oyu-Uj-BNm"/>
+                            <constraint firstItem="kUP-dG-Cnt" firstAttribute="top" secondItem="vwX-Aq-f5s" secondAttribute="bottom" constant="40" id="Oyu-Uj-BNm"/>
                             <constraint firstItem="kuY-nC-Umx" firstAttribute="leading" secondItem="qi4-Yi-PhN" secondAttribute="leading" constant="16" id="ka3-6Q-GX8"/>
                             <constraint firstItem="vwX-Aq-f5s" firstAttribute="leading" secondItem="qi4-Yi-PhN" secondAttribute="leading" constant="16" id="pER-Ea-DtM"/>
                             <constraint firstItem="kUP-dG-Cnt" firstAttribute="leading" secondItem="qi4-Yi-PhN" secondAttribute="leading" constant="20" id="sFj-dt-9Xd"/>

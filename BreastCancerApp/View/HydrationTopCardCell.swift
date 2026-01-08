@@ -3,6 +3,7 @@ import UIKit
 class HydrationTopCardCell: UICollectionViewCell {
 
     // MARK: - Outlets
+    @IBOutlet weak var progressRingView: CircularProgressView!
     @IBOutlet weak var valueLabel: UILabel!
     @IBOutlet weak var remainingLabel: UILabel!
     @IBOutlet weak var dropButton: UIButton!
@@ -17,6 +18,12 @@ class HydrationTopCardCell: UICollectionViewCell {
     // MARK: - Lifecycle
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        // Configure progress ring appearance - thinner ring
+        progressRingView.lineWidth = 8
+        progressRingView.trackColor = UIColor(white: 0.92, alpha: 1.0)
+        progressRingView.progressColor = UIColor.bg
+        progressRingView.backgroundColor = .clear
 
         goalValueButton.addTarget(
             self,
@@ -36,7 +43,6 @@ class HydrationTopCardCell: UICollectionViewCell {
             for: .touchUpInside
         )
     }
-
     // MARK: - Actions
     @objc private func goalTapped() {
         onGoalTapped?()
@@ -57,6 +63,9 @@ class HydrationTopCardCell: UICollectionViewCell {
 
         let consumedLiters = Double(consumedML) / 1000.0
         let remainingLiters = max(goal - consumedLiters, 0)
+        
+        // Calculate progress (0.0 to 1.0)
+        let progressValue = CGFloat(consumedLiters / goal)
 
         valueLabel.text = String(
             format: "%.1f L / %.1f L",
@@ -78,5 +87,8 @@ class HydrationTopCardCell: UICollectionViewCell {
             "\(cupSize) mL",
             for: .normal
         )
+        
+        // Update progress ring with animation
+        progressRingView.setProgress(progressValue, animated: true)
     }
 }

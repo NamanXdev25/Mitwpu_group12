@@ -33,7 +33,7 @@ class HydrationViewController: UIViewController {
 
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.estimatedItemSize = .zero
-            layout.minimumLineSpacing = 8
+            layout.minimumLineSpacing = 1
             layout.sectionInset = .zero
         }
 
@@ -139,7 +139,7 @@ extension HydrationViewController: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
 
-        CGSize(width: collectionView.bounds.width, height: 360)
+        CGSize(width: collectionView.bounds.width, height: 370)
     }
 }
 
