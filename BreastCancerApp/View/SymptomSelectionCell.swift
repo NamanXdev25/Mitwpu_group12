@@ -63,9 +63,6 @@ final class SymptomSelectionCell: UICollectionViewCell {
         infoButton.addTarget(self, action: #selector(infoTapped), for: .touchUpInside)
         severitySlider.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
 
-        // Cell appearance
-        contentView.layer.cornerRadius = 12
-        contentView.backgroundColor = .white
     }
 
     // MARK: - State Handling

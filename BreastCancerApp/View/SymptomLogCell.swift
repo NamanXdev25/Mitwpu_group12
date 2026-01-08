@@ -1,13 +1,13 @@
 //
-//  SymptomLogCell.swift
-//  symptomTracking
+//  SymptomLogCell2.swift
+//  BreastCancerApp
 //
-//  Created by Shivani Dinesh on 04/01/26.
+//  Created by Shivani Dinesh on 08/01/26.
 //
 
 import UIKit
 
-class SymptomLogCell: UICollectionViewCell { // Changed from UITableViewCell
+class SymptomLogCell: UICollectionViewCell {
 
     @IBOutlet var symptomNameLabel: UILabel!
     @IBOutlet var severityLabel: UILabel!
@@ -32,4 +32,6 @@ class SymptomLogCell: UICollectionViewCell { // Changed from UITableViewCell
         formatter.timeStyle = .short
         timeLabel.text = formatter.string(from: log.timestamp)
     }
+
+
 }

@@ -90,7 +90,7 @@ class SymptomsViewController: UIViewController {
         )
 
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 8, trailing: 16)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0)
         section.interGroupSpacing = 8
 
         let headerSize = NSCollectionLayoutSize(
@@ -135,7 +135,8 @@ class SymptomsViewController: UIViewController {
         var config = UICollectionLayoutListConfiguration(appearance: .plain)
         config.showsSeparators = false
         config.backgroundColor = .clear
-        
+        config.headerMode = .supplementary
+
         // 🔥 ADD SWIPE-TO-DELETE
         config.trailingSwipeActionsConfigurationProvider = { [weak self] indexPath in
             guard let self = self else { return nil }
@@ -156,7 +157,9 @@ class SymptomsViewController: UIViewController {
         }
         
         let section = NSCollectionLayoutSection.list(using: config, layoutEnvironment: layoutEnvironment)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 8, trailing: 16)
+        // Fix spacing: add proper insets and spacing between items
+        section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 16, trailing: 16)
+        section.interGroupSpacing = 8
         
         // Header
         let headerSize = NSCollectionLayoutSize(
