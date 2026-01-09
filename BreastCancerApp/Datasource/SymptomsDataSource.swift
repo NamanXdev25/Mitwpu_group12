@@ -5,20 +5,6 @@
 //  Created by Shivani Dinesh on 04/01/26.
 //
 
-//
-//  SymptomsDataSource.swift
-//  symptomTracking
-//
-//  Created by Shivani Dinesh on 04/01/26.
-//
-
-//
-//  SymptomsDataSource.swift
-//  symptomTracking
-//
-//  Created by Shivani Dinesh on 04/01/26.
-//
-
 import Foundation
 
 class SymptomDataSource {
@@ -26,6 +12,7 @@ class SymptomDataSource {
     
     private init() {
         loadSymptomsFromJSON()
+        loadSampleLogs() // 🔥 Load sample historical data
     }
     
     // 🔥 REMOVED: private let userSymptomsOrderKey = "userSymptomsOrder"
@@ -50,6 +37,12 @@ class SymptomDataSource {
         
         allSymptoms = symptomsData.symptoms
         print("✅ Loaded \(allSymptoms.count) symptoms from JSON")
+    }
+    
+    // 🔥 NEW: Load sample historical logs
+    private func loadSampleLogs() {
+        todayLogs = SampleSymptomData.allLogs
+        print("✅ Loaded \(todayLogs.count) sample symptom logs")
     }
     
     // MARK: - Get Description
@@ -121,7 +114,12 @@ class SymptomDataSource {
     }
     
     func getTodayLogs() -> [SymptomLog] {
-        return todayLogs.sorted { $0.timestamp > $1.timestamp }
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        
+        return todayLogs.filter { log in
+            calendar.isDate(log.timestamp, inSameDayAs: today)
+        }.sorted { $0.timestamp > $1.timestamp }
     }
     
     func deleteLog(logId: String) {

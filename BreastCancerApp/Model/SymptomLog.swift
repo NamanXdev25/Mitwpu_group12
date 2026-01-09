@@ -21,4 +21,12 @@ struct SymptomLog {
         self.severity = severity
         self.timestamp = Date()
     }
+    
+    init(symptomId: String, symptomName: String, severity: Int, timestamp: Date) {
+        self.id = UUID().uuidString
+        self.symptomId = symptomId
+        self.symptomName = symptomName
+        self.severity = severity
+        self.timestamp = timestamp
+    }
 }
