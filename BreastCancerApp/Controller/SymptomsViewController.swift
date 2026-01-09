@@ -33,6 +33,15 @@ class SymptomsViewController: UIViewController {
         loadData()
     }
     
+    @IBAction func calendarTapped(_ sender: UIBarButtonItem) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let nav = storyboard.instantiateViewController(
+            withIdentifier: "CalendarNavController"
+        )
+        nav.modalPresentationStyle = .pageSheet
+        present(nav, animated: true)
+    }
+    
     private func setupCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self

@@ -127,9 +127,11 @@ extension EditSymptomListViewController: UITableViewDataSource {
 
         let movedSymptom = userSymptoms.remove(at: sourceIndexPath.row)
         userSymptoms.insert(movedSymptom, at: destinationIndexPath.row)
-
-        // 🔥 Persist new order
-        dataSource.updateUserSymptomsOrder(userSymptoms)
+//
+//        // 🔥 Persist new order
+//        dataSource.updateUserSymptomsOrder(userSymptoms)
+        
+        dataSource.updateUserSymptomsOrderInMemory(userSymptoms)
     }
     
     func tableView(
