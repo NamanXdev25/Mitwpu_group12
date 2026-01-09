@@ -93,8 +93,11 @@ class JournalCalendarViewController: UIViewController, UICollectionViewDataSourc
             ) as! JournalCalendarDateCell
 
             let dayString = totalSquares[indexPath.item]
+
             var hasJournal = false
             var isSelected = false
+            var isToday = false
+            var isFuture = false
 
             if let day = Int(dayString) {
                 let calendar = Calendar.current
@@ -108,14 +111,18 @@ class JournalCalendarViewController: UIViewController, UICollectionViewDataSourc
                     isSelected = selectedDay.map {
                         calendar.isDate($0, inSameDayAs: normalized)
                     } ?? false
+
+                    isToday = calendar.isDateInToday(normalized)
+                    isFuture = normalized > calendar.startOfDay(for: Date())
                 }
             }
 
-            // config cell
             cell.configure(
                 day: dayString,
                 hasJournal: hasJournal,
-                isSelected: isSelected
+                isSelected: isSelected,
+                isToday: isToday,
+                isFuture: isFuture
             )
 
             return cell
@@ -158,9 +165,9 @@ class JournalCalendarViewController: UIViewController, UICollectionViewDataSourc
     func setMonthView() {
         totalSquares.removeAll()
         
-        let daysInMonth = CalendarHelper().daysInMonth(date: selectedDate)
-        let firstDayOfMonth = CalendarHelper().firstOfMonth(date: selectedDate)
-        let startingSpaces = CalendarHelper().weekDay(date: firstDayOfMonth)
+        let daysInMonth = ExerciseCalendarHelper().daysInMonth(date: selectedDate)
+        let firstDayOfMonth = ExerciseCalendarHelper().firstOfMonth(date: selectedDate)
+        let startingSpaces = ExerciseCalendarHelper().weekDay(date: firstDayOfMonth)
         
         var count: Int = 1
         while(count < startingSpaces) {
@@ -223,12 +230,12 @@ class JournalCalendarViewController: UIViewController, UICollectionViewDataSourc
     }
     
     @IBAction func previousMonth(_ sender: Any) {
-        selectedDate = CalendarHelper().minusMonth(date: selectedDate)
+        selectedDate = ExerciseCalendarHelper().minusMonth(date: selectedDate)
         setMonthView()
     }
     
     @IBAction func nextMonth(_ sender: Any) {
-        selectedDate = CalendarHelper().plusMonth(date: selectedDate)
+        selectedDate = ExerciseCalendarHelper().plusMonth(date: selectedDate)
         setMonthView()
     }
     
@@ -289,13 +296,21 @@ class JournalCalendarViewController: UIViewController, UICollectionViewDataSourc
         components.day = day
 
         guard let date = calendar.date(from: components) else { return }
-        selectedDay = date
-        filteredJournals = JournalStore.shared.entries.journals(on: date)
+
+        let today = calendar.startOfDay(for: Date())
+        let selected = calendar.startOfDay(for: date)
+        if selected > today {
+            return
+        }
+
+        selectedDay = selected
+        filteredJournals = JournalStore.shared.entries.journals(on: selected)
         journalsCollectionView.backgroundView = filteredJournals.isEmpty ? emptyStateLabel() : nil
 
         journalsCollectionView.reloadData()
-        collectionView.reloadData() // refresh calendar selection
+        collectionView.reloadData()
     }
+
 
     // collection view using compositional layout
     private func configureJournalsCollectionView() {
@@ -345,7 +360,7 @@ class JournalCalendarViewController: UIViewController, UICollectionViewDataSourc
 }
 
 // helper class
-class CalendarHelper {
+class ExerciseCalendarHelper {
     let calendar = Calendar.current
     func plusMonth(date: Date) -> Date {
         return calendar.date(byAdding: .month, value: 1, to: date)!
