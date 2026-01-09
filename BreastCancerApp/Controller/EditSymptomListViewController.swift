@@ -121,25 +121,8 @@ extension EditSymptomListViewController: UITableViewDataSource {
         return cell
     }
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView {
-
-        let container = UIView()
-        container.backgroundColor = tableView.backgroundColor
-
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 17, weight: .semibold)
-        label.textColor = .secondaryLabel
-        label.text = section == 0 ? "Your List" : "Add"
-
-        container.addSubview(label)
-
-        NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 16),
-            label.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -6)
-        ])
-
-        return container
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return section == 0 ? "Your List" : "Add"
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -191,5 +174,11 @@ extension EditSymptomListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        guard let header = view as? UITableViewHeaderFooterView else { return }
+        header.textLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
+        header.textLabel?.textColor = .secondaryLabel
     }
 }

@@ -16,6 +16,7 @@ class SymptomLogButtonCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         logButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+        logButton.configuration?.baseBackgroundColor = UIColor(named: "SymptomsPrimaryColor")
     }
     
     func configure(isEnabled: Bool) {

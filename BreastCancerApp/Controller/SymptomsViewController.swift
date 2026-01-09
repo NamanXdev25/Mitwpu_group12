@@ -39,6 +39,10 @@ class SymptomsViewController: UIViewController {
         collectionView.collectionViewLayout = createLayout()
         
         // Register cells
+        collectionView.register(UINib(nibName: "SymptomLogButtonCell", bundle: nil), forCellWithReuseIdentifier: "SymptomLogButtonCell")
+        collectionView.register(UINib(nibName: "EmptyStateCell", bundle: nil), forCellWithReuseIdentifier: "EmptyStateCell")
+        collectionView.register(UINib(nibName: "SymptomSelectionCell", bundle: nil), forCellWithReuseIdentifier: "SymptomSelectionCell")
+        collectionView.register(UINib(nibName: "SymptomLogCell", bundle: nil), forCellWithReuseIdentifier: "SymptomLogCell")
         collectionView.register(UINib(nibName: "SymptomSelectionCell", bundle: nil), forCellWithReuseIdentifier: "SymptomSelectionCell")
         collectionView.register(UINib(nibName: "SymptomLogCell", bundle: nil), forCellWithReuseIdentifier: "SymptomLogCell")
         collectionView.register(
@@ -46,9 +50,6 @@ class SymptomsViewController: UIViewController {
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: SymptomHeaderView.reuseIdentifier
         )
-
-        collectionView.register(LogButtonCell.self, forCellWithReuseIdentifier: "LogButtonCell")
-        collectionView.register(EmptyStateCell.self, forCellWithReuseIdentifier: "EmptyStateCell")
     }
     
     private func createLayout() -> UICollectionViewLayout {
@@ -350,7 +351,7 @@ extension SymptomsViewController: UICollectionViewDataSource {
             return cell
             
         case .button:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LogButtonCell", for: indexPath) as! LogButtonCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SymptomLogButtonCell", for: indexPath) as! SymptomLogButtonCell
             cell.configure(isEnabled: !selectedSymptoms.isEmpty)
             cell.onButtonTapped = { [weak self] in
                 self?.logSymptomButtonTapped()
@@ -411,91 +412,4 @@ extension SymptomsViewController: UICollectionViewDataSource {
 // MARK: - UICollectionViewDelegate
 extension SymptomsViewController: UICollectionViewDelegate {
     // Add any selection handling if needed
-}
-
-// MARK: - Custom Cells
-
-class LogButtonCell: UICollectionViewCell {
-    
-    private let button: UIButton = {
-        let btn = UIButton(type: .system)
-        btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.setTitle("Log Symptom", for: .normal)
-        btn.backgroundColor = UIColor(named: "SymptomsPrimaryColor")
-        btn.setTitleColor(.white, for: .normal)
-        btn.layer.cornerRadius = 25
-        btn.titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
-        return btn
-    }()
-    
-    var onButtonTapped: (() -> Void)?
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupUI()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupUI()
-    }
-    
-    private func setupUI() {
-        contentView.addSubview(button)
-        
-        NSLayoutConstraint.activate([
-            button.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            button.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            button.widthAnchor.constraint(equalToConstant: 200),
-            button.heightAnchor.constraint(equalToConstant: 50)
-        ])
-        
-        button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
-    }
-    
-    func configure(isEnabled: Bool) {
-        button.isEnabled = isEnabled
-        button.alpha = isEnabled ? 1.0 : 0.5
-    }
-    
-    @objc private func buttonTapped() {
-        onButtonTapped?()
-    }
-}
-
-class EmptyStateCell: UICollectionViewCell {
-    
-    private let label: UILabel = {
-        let lbl = UILabel()
-        lbl.translatesAutoresizingMaskIntoConstraints = false
-        lbl.textAlignment = .center
-        lbl.textColor = .secondaryLabel
-        lbl.font = .systemFont(ofSize: 16)
-        return lbl
-    }()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupUI()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupUI()
-    }
-    
-    private func setupUI() {
-        contentView.addSubview(label)
-        
-        NSLayoutConstraint.activate([
-            label.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            label.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
-        ])
-    }
-    
-    func configure(message: String) {
-        label.text = message
-    }
 }

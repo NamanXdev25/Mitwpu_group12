@@ -30,6 +30,7 @@
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <color key="tintColor" name="SymptomsPrimaryColor"/>
             <constraints>
                 <constraint firstItem="NXC-hh-A4m" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="a0v-nh-uuh"/>
                 <constraint firstItem="NXC-hh-A4m" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="wT2-Zv-YFO"/>
