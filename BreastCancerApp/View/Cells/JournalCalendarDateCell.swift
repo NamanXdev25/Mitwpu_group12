@@ -13,6 +13,7 @@ class JournalCalendarDateCell: UICollectionViewCell {
     @IBOutlet weak var selectionLayer: UIView!
     @IBOutlet weak var dotView: UIView!
     
+    private let primaryColor = UIColor(named: "PrimaryColor") ?? .label
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -36,7 +37,9 @@ class JournalCalendarDateCell: UICollectionViewCell {
     func configure(
         day: String,
         hasJournal: Bool,
-        isSelected: Bool
+        isSelected: Bool,
+        isToday: Bool,
+        isFuture: Bool
     ) {
         dayLabel.text = day
         
@@ -49,6 +52,26 @@ class JournalCalendarDateCell: UICollectionViewCell {
         // showing dot if journal exists
         if hasJournal {
             dotView.isHidden = false
+        }
+        
+        // FUTURE DATE — disabled
+        if isFuture {
+            dayLabel.textColor = .tertiaryLabel
+            contentView.alpha = 0.4
+            contentView.backgroundColor = .clear
+            dotView.isHidden = true
+            return
+        }
+
+        contentView.alpha = 1.0
+
+        // TODAY
+        if isToday {
+            selectionLayer.backgroundColor =
+            UIColor(named: "PrimaryColor")?.withAlphaComponent(1.0)
+            
+            dayLabel.textColor = .white
+            dotView.backgroundColor = .white
         }
         
         // highlight selected date

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -260,7 +260,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xaV-a9-x9r">
-                                <rect key="frame" x="16" y="172" width="361" height="413"/>
+                                <rect key="frame" x="16" y="172" width="361" height="340"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2UI-6O-zxQ">
                                         <rect key="frame" x="101" y="23" width="39.666666666666657" height="15"/>
@@ -359,10 +359,10 @@
                                         </constraints>
                                     </stackView>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="0gm-mx-EVh">
-                                        <rect key="frame" x="10" y="101" width="346" height="260"/>
+                                        <rect key="frame" x="10" y="101" width="346" height="200"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="260" id="l8j-wX-xBJ"/>
+                                            <constraint firstAttribute="height" constant="200" id="l8j-wX-xBJ"/>
                                         </constraints>
                                         <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="0G7-Mo-zj1">
                                             <size key="itemSize" width="128" height="128"/>
@@ -425,7 +425,7 @@
                                     <constraint firstItem="kZd-Tz-imR" firstAttribute="top" secondItem="2EX-ql-tvb" secondAttribute="bottom" constant="20" id="ZXX-Qw-SRD"/>
                                     <constraint firstItem="UvB-Zf-N4g" firstAttribute="leading" secondItem="2EX-ql-tvb" secondAttribute="trailing" constant="85.666666666666686" id="dHM-UZ-RaS"/>
                                     <constraint firstItem="kZd-Tz-imR" firstAttribute="top" secondItem="HLh-yx-XWb" secondAttribute="bottom" constant="20" id="dW9-Nh-z8y"/>
-                                    <constraint firstAttribute="height" constant="413" id="eD3-UW-VRC"/>
+                                    <constraint firstAttribute="height" constant="340" id="eD3-UW-VRC"/>
                                     <constraint firstItem="2UI-6O-zxQ" firstAttribute="top" secondItem="xaV-a9-x9r" secondAttribute="top" constant="23" id="iPd-7X-kpk"/>
                                     <constraint firstItem="2EX-ql-tvb" firstAttribute="leading" secondItem="xaV-a9-x9r" secondAttribute="leading" constant="15" id="iwY-iA-dh5"/>
                                     <constraint firstItem="HLh-yx-XWb" firstAttribute="top" secondItem="xaV-a9-x9r" secondAttribute="top" constant="20" id="k1C-EX-nA3"/>
@@ -445,7 +445,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="cDX-4k-Ofd" userLabel="JournalCollectionView">
-                                <rect key="frame" x="0.0" y="585" width="393" height="199"/>
+                                <rect key="frame" x="0.0" y="512" width="393" height="272"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="nNe-gf-MtK">
                                     <size key="itemSize" width="217" height="165"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
