@@ -7,14 +7,20 @@
 
 import Foundation
 
-struct Symptom {
+struct Symptom: Codable {
     let id: String
     let name: String
+    let description: String
     var isInUserList: Bool
     
-    init(id: String, name: String, isInUserList: Bool = false) {
-        self.id = id
-        self.name = name
-        self.isInUserList = isInUserList
+    enum CodingKeys: String, CodingKey {
+        case id
+        case name
+        case description
+        case isInUserList = "isInUserListByDefault"
     }
+}
+
+struct SymptomsData: Codable {
+    let symptoms: [Symptom]
 }

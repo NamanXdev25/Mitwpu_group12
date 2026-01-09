@@ -48,26 +48,7 @@ class EditSymptomListViewController: UIViewController {
     }
     
     private func showInfoAlert(for symptom: Symptom) {
-        let message: String
-        switch symptom.name {
-        case "Fatigue":
-            message = "Feeling unusually tired is common during treatment. It may not improve with rest, but gentle activity, good nutrition, and enough sleep can help. Talk to your care team if it feels severe or persistent."
-        case "Nausea":
-            message = "Feeling sick to your stomach can be managed with medication, eating small frequent meals, and avoiding strong smells."
-        case "Pain":
-            message = "Pain should be reported to your care team. There are many ways to manage it effectively."
-        case "Headache":
-            message = "Headaches can have many causes. Stay hydrated and track their frequency and intensity."
-        case "Dizziness":
-            message = "Dizziness should be reported to your care team, especially if it affects your balance or daily activities."
-        case "Fever":
-            message = "Fever can be a sign of infection. Contact your care team if your temperature is above 100.4°F (38°C)."
-        case "Cough":
-            message = "A persistent cough should be monitored and reported to your care team."
-        default:
-            message = "Track this symptom and discuss with your care team if it persists or worsens."
-        }
-        
+        let message = dataSource.getDescription(for: symptom.name)
         let alert = UIAlertController(title: symptom.name, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
