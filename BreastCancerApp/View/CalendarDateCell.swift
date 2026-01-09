@@ -8,22 +8,9 @@ class CalendarDateCell: UICollectionViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-//        // Style the dot (small pink circle)
-//        if let dot = dotView {
-//            dot.layer.cornerRadius = dot.frame.width / 2
-//            dot.backgroundColor = UIColor(red: 0.85, green: 0.40, blue: 0.50, alpha: 1.0)
-//        }
-//        
-//        // Style the selection layer (large pink circle)
-//        if let sel = selectionLayer {
-//            // Ensure it's a circle. If your layer is 34x34, 17 is correct.
-//            sel.layer.cornerRadius = sel.frame.width / 2
-//            sel.clipsToBounds = true
-//        }
     }
     
-    func configure(day: String, isSelected: Bool, hasPlan: Bool) {
+    func configure(day: String, isSelected: Bool, hasPlan: Bool, isFuture: Bool, isToday: Bool) {
         // 1. RESET: Start with the state that worked in your initial code
         dayLabel.text = day
         dayLabel.textColor = .black
@@ -43,22 +30,32 @@ class CalendarDateCell: UICollectionViewCell {
             return
         }
         
-        // 3. APPLY LOGIC: Match the design requirements
-        if isSelected {
-            // Show big pink circle and white text
-            selectionLayer.backgroundColor = UIColor(red: 0.85, green: 0.40, blue: 0.50, alpha: 1.0)
-            dayLabel.textColor = .white
-        } else if hasPlan {
-            // Show small dot ONLY if not selected
-            dotView?.isHidden = false
+        // 3. Handle future dates - gray them out and disable interaction
+        if isFuture {
+            dayLabel.textColor = UIColor.lightGray
+            dayLabel.alpha = 0.5
+            selectionLayer.backgroundColor = .clear
+            dotView?.isHidden = true
+            self.isUserInteractionEnabled = false
+            return
         }
         
-//        // 4. HIERARCHY FIX:
-//        // This ensures the label is physically drawn ON TOP of the pink circle
-//        // even if the Storyboard order is wrong.
-//        if let parent = dayLabel.superview {
-//            parent.bringSubviewToFront(selectionLayer)
-//            parent.bringSubviewToFront(dayLabel)
-//        }
+        // Re-enable interaction for non-future dates
+        self.isUserInteractionEnabled = true
+        
+        // 4. APPLY LOGIC: Today should ALWAYS show dark pink, even when not selected
+        if isToday {
+            // Current date - ALWAYS show bright/dark pink circle
+            selectionLayer.backgroundColor = UIColor(red: 0.85, green: 0.40, blue: 0.50, alpha: 1.0)
+            dayLabel.textColor = .white
+        } else if isSelected {
+            // Past date selected - Light pink
+            let lightpink = UIColor(named: "More_Exercise")
+            selectionLayer.backgroundColor = lightpink
+            dayLabel.textColor = .black
+        } else if hasPlan {
+            // Show small dot ONLY if not selected and not today
+            dotView?.isHidden = false
+        }
     }
 }

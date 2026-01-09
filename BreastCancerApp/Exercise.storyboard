@@ -328,7 +328,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fQS-lw-kxG">
-                                <rect key="frame" x="16" y="589" width="361" height="231"/>
+                                <rect key="frame" x="16" y="589" width="361" height="240"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2 of 5 Completed" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jyb-RI-OtV">
                                         <rect key="frame" x="15" y="8" width="209" height="33.666666666666664"/>
@@ -336,46 +336,22 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mon, Jan 5" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HZL-ix-IUQ">
-                                        <rect key="frame" x="15" y="46.666666666666629" width="75.666666666666671" height="18"/>
-                                        <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QgV-vS-H5m">
-                                        <rect key="frame" x="15" y="79.666666666666629" width="331" height="1"/>
-                                        <color key="backgroundColor" systemColor="systemGray5Color"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="1" id="N2I-s7-5yg"/>
-                                        </constraints>
-                                    </view>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Missed" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cqi-lW-CYO">
-                                        <rect key="frame" x="15" y="90.666666666666629" width="57" height="20.333333333333329"/>
-                                        <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="EJd-dT-BbO">
-                                        <rect key="frame" x="0.0" y="123" width="361" height="98"/>
+                                        <rect key="frame" x="0.0" y="46.666666666666629" width="361" height="120"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="120" id="BHr-1g-qc5"/>
+                                        </constraints>
                                     </tableView>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstItem="cqi-lW-CYO" firstAttribute="leading" secondItem="fQS-lw-kxG" secondAttribute="leading" constant="15" id="4Hw-j9-5Cy"/>
-                                    <constraint firstItem="HZL-ix-IUQ" firstAttribute="leading" secondItem="fQS-lw-kxG" secondAttribute="leading" constant="15" id="8lc-ua-bgw"/>
                                     <constraint firstAttribute="trailing" secondItem="EJd-dT-BbO" secondAttribute="trailing" id="CFh-Yl-knO"/>
                                     <constraint firstItem="jyb-RI-OtV" firstAttribute="top" secondItem="fQS-lw-kxG" secondAttribute="top" constant="8" id="JVK-l3-1fa"/>
-                                    <constraint firstAttribute="bottom" secondItem="EJd-dT-BbO" secondAttribute="bottom" constant="10" id="Oiz-FK-JGO"/>
-                                    <constraint firstAttribute="trailing" secondItem="QgV-vS-H5m" secondAttribute="trailing" constant="15" id="TrQ-Ef-gGo"/>
-                                    <constraint firstItem="cqi-lW-CYO" firstAttribute="top" secondItem="QgV-vS-H5m" secondAttribute="bottom" constant="10" id="U3r-8t-DTq"/>
+                                    <constraint firstItem="EJd-dT-BbO" firstAttribute="top" secondItem="jyb-RI-OtV" secondAttribute="bottom" constant="5" id="PiH-C9-dBf"/>
                                     <constraint firstItem="jyb-RI-OtV" firstAttribute="leading" secondItem="fQS-lw-kxG" secondAttribute="leading" constant="15" id="hFN-fN-dKC"/>
                                     <constraint firstItem="EJd-dT-BbO" firstAttribute="leading" secondItem="fQS-lw-kxG" secondAttribute="leading" id="hja-Zn-Rjl"/>
-                                    <constraint firstItem="QgV-vS-H5m" firstAttribute="leading" secondItem="fQS-lw-kxG" secondAttribute="leading" constant="15" id="o01-as-vg9"/>
-                                    <constraint firstItem="QgV-vS-H5m" firstAttribute="top" secondItem="HZL-ix-IUQ" secondAttribute="bottom" constant="15" id="qC2-BO-RAB"/>
-                                    <constraint firstItem="HZL-ix-IUQ" firstAttribute="top" secondItem="jyb-RI-OtV" secondAttribute="bottom" constant="5" id="s9l-uo-Xe0"/>
-                                    <constraint firstItem="EJd-dT-BbO" firstAttribute="top" secondItem="cqi-lW-CYO" secondAttribute="bottom" constant="12" id="v7o-Pu-cNQ"/>
-                                    <constraint firstAttribute="width" secondItem="fQS-lw-kxG" secondAttribute="height" multiplier="361:231" id="vJH-BN-pnW"/>
+                                    <constraint firstAttribute="height" constant="240" id="ox0-f4-jWL"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -406,16 +382,17 @@
                         <outlet property="chevronButton" destination="0N2-rt-Dx9" id="t9S-W7-tMJ"/>
                         <outlet property="closeBarButton" destination="VU1-vw-1Rt" id="oSt-9B-HjY"/>
                         <outlet property="collectionView" destination="ysj-9t-o5O" id="fle-Go-e4B"/>
+                        <outlet property="detailCardHeightConstraint" destination="ox0-f4-jWL" id="0j9-w2-cj6"/>
+                        <outlet property="detailCardView" destination="fQS-lw-kxG" id="buP-jD-pmz"/>
                         <outlet property="headerToggleButton" destination="7tU-Fx-iGX" id="ZXR-Jm-zyy"/>
-                        <outlet property="missedHeaderLabel" destination="cqi-lW-CYO" id="VFt-S5-IuC"/>
                         <outlet property="missedTableView" destination="EJd-dT-BbO" id="Kkh-vD-eac"/>
                         <outlet property="monthLabel" destination="kIW-cQ-CIY" id="lO1-Qy-Arf"/>
                         <outlet property="monthYearPicker" destination="3DX-0f-Wlu" id="aew-9s-jdy"/>
                         <outlet property="nextMonth" destination="iFe-BS-FpJ" id="EYa-f3-iD4"/>
                         <outlet property="pickerContainerView" destination="H4u-kq-97G" id="2Z0-9i-td4"/>
                         <outlet property="previousMonth" destination="mQN-Mv-kBj" id="2Qh-Al-th0"/>
-                        <outlet property="selectedDateLabel" destination="HZL-ix-IUQ" id="wn7-Sz-qpR"/>
                         <outlet property="statusLabel" destination="jyb-RI-OtV" id="vpd-Gl-Fyv"/>
+                        <outlet property="tableViewHeightConstraint" destination="BHr-1g-qc5" id="PtP-HH-NOd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sQB-gR-9ry" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
