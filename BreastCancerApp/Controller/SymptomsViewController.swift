@@ -22,12 +22,12 @@ class SymptomsViewController: UIViewController {
         case today = 2
     }
     
+    // override funcs
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
         loadData()
     }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         loadData()
@@ -61,6 +61,7 @@ class SymptomsViewController: UIViewController {
         )
     }
     
+    // collection view layout
     private func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, layoutEnvironment in
             guard let self = self,
@@ -80,7 +81,7 @@ class SymptomsViewController: UIViewController {
         
         return layout
     }
-    
+
     private func createLogSection() -> NSCollectionLayoutSection {
 
         let itemSize = NSCollectionLayoutSize(
@@ -115,7 +116,6 @@ class SymptomsViewController: UIViewController {
         section.boundarySupplementaryItems = [header]
         return section
     }
-
     
     private func createButtonSection() -> NSCollectionLayoutSection {
         // Item
@@ -140,19 +140,15 @@ class SymptomsViewController: UIViewController {
     }
     
     private func createTodaySection(layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
-        // 🔥 Use list configuration for swipe actions
         var config = UICollectionLayoutListConfiguration(appearance: .plain)
         config.showsSeparators = false
         config.backgroundColor = .clear
         config.headerMode = .supplementary
-
-        // 🔥 ADD SWIPE-TO-DELETE
         config.trailingSwipeActionsConfigurationProvider = { [weak self] indexPath in
             guard let self = self else { return nil }
-            
-            // Only apply to actual log items, not empty state
             guard !self.todayLogs.isEmpty else { return nil }
             
+            // delete functionality
             let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { action, view, completion in
                 self.confirmDelete(at: indexPath, completion: completion)
             }
@@ -166,11 +162,10 @@ class SymptomsViewController: UIViewController {
         }
         
         let section = NSCollectionLayoutSection.list(using: config, layoutEnvironment: layoutEnvironment)
-        // Fix spacing: add proper insets and spacing between items
         section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 16, trailing: 16)
         section.interGroupSpacing = 8
         
-        // Header
+        // header
         let headerSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .absolute(50)
@@ -181,7 +176,6 @@ class SymptomsViewController: UIViewController {
             alignment: .top
         )
         section.boundarySupplementaryItems = [header]
-        
         return section
     }
     
@@ -204,13 +198,8 @@ class SymptomsViewController: UIViewController {
             }
         }
 
-        // Clear selection
         selectedSymptoms.removeAll()
-
-        // Refresh today logs
         todayLogs = dataSource.getTodayLogs()
-
-        // Reload affected sections
         collectionView.reloadSections(
             IndexSet([Section.log.rawValue,
                       Section.button.rawValue,
@@ -226,18 +215,15 @@ class SymptomsViewController: UIViewController {
         } else {
             selectedSymptoms[symptomId] = 0
         }
-
         let logIndexPath = IndexPath(item: index, section: Section.log.rawValue)
-
         collectionView.performBatchUpdates {
             collectionView.reloadItems(at: [logIndexPath])
             collectionView.reloadSections(IndexSet([Section.button.rawValue]))
         }
-
         collectionView.collectionViewLayout.invalidateLayout()
     }
     
-    // 🔥 NEW: Delete confirmation
+    // delete confirmation
     private func confirmDelete(at indexPath: IndexPath, completion: @escaping (Bool) -> Void) {
         let log = todayLogs[indexPath.item]
         
@@ -250,21 +236,13 @@ class SymptomsViewController: UIViewController {
         let deleteBtn = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
             guard let self = self else { return }
             
-            // Remove from data source
             self.dataSource.deleteLog(logId: log.id)
-            
-            // Update local array
             self.todayLogs = self.dataSource.getTodayLogs()
-            
-            // Animate deletion
             if self.todayLogs.isEmpty {
-                // Show empty state
                 self.collectionView.reloadSections(IndexSet([Section.today.rawValue]))
             } else {
-                // Delete specific item
                 self.collectionView.deleteItems(at: [indexPath])
             }
-            
             completion(true)
         }
         
@@ -286,7 +264,6 @@ class SymptomsViewController: UIViewController {
     
     private func openEditList() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-
         let editVC = storyboard.instantiateViewController(
             withIdentifier: "EditSymptomListViewController"
         ) as! EditSymptomListViewController
@@ -300,7 +277,7 @@ class SymptomsViewController: UIViewController {
     }
 }
 
-// MARK: - UICollectionViewDataSource
+// UICollectionViewDataSource
 extension SymptomsViewController: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -388,26 +365,23 @@ extension SymptomsViewController: UICollectionViewDataSource {
         ) as! SymptomHeaderView
 
         switch sectionType {
-
         case .log:
             header.configure(title: "Log", showButton: true)
             header.editTapped = { [weak self] in
                 self?.openEditList()
             }
-
         case .today:
             header.configure(title: "Today", showButton: false)
             header.editTapped = nil
-
         case .button:
             return UICollectionReusableView()
         }
-
+        
         return header
     }
 }
 
-// MARK: - UICollectionViewDelegate
+// UICollectionViewDelegate
 extension SymptomsViewController: UICollectionViewDelegate {
-    // Add any selection handling if needed
+    
 }

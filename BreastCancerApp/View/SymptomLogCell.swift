@@ -16,10 +16,6 @@ class SymptomLogCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        // Add styling for collection cell
-        contentView.layer.cornerRadius = 8
-        contentView.layer.masksToBounds = true
-        contentView.backgroundColor = .white
     }
     
     func configure(with log: SymptomLog) {

@@ -9,26 +9,22 @@ import UIKit
 
 final class SymptomSelectionCell: UICollectionViewCell {
 
-    // MARK: - Outlets (Top Row)
+    // IBOutlets
     @IBOutlet weak var checkboxButton: UIButton!
     @IBOutlet weak var symptomNameLabel: UILabel!
     @IBOutlet weak var infoButton: UIButton!
-
-    // MARK: - Slider Section
     @IBOutlet weak var sliderContainerView: UIView!
     @IBOutlet weak var severitySlider: UISlider!
     @IBOutlet weak var mildLabel: UILabel!
     @IBOutlet weak var severeLabel: UILabel!
 
-    // MARK: - Callbacks
+    // Callbacks
     var onCheckboxTapped: (() -> Void)?
     var onInfoTapped: (() -> Void)?
     var onSliderChanged: ((Int) -> Void)?
 
-    // MARK: - State
     private var isSymptomSelected: Bool = false
 
-    // MARK: - Lifecycle
     override func awakeFromNib() {
         super.awakeFromNib()
         setupUI()
@@ -36,26 +32,24 @@ final class SymptomSelectionCell: UICollectionViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        // Reset state for reuse
         setSelected(false)
         severitySlider.value = 0
     }
 
-    // MARK: - Public Configure
     func configure(with symptom: Symptom, isSelected: Bool, severity: Int) {
         symptomNameLabel.text = symptom.name
         severitySlider.value = Float(severity)
         setSelected(isSelected)
     }
 
-    // MARK: - Private UI Setup
+    // UI setup
     private func setupUI() {
-        // Slider config
+        // slider config
         severitySlider.minimumValue = 0
         severitySlider.maximumValue = 4
         severitySlider.isContinuous = true
 
-        // Initial collapsed state
+        // initial collapsed state
         sliderContainerView.isHidden = true
 
         // Button actions
@@ -65,22 +59,20 @@ final class SymptomSelectionCell: UICollectionViewCell {
 
     }
 
-    // MARK: - State Handling
+    // selection
     private func setSelected(_ selected: Bool) {
         isSymptomSelected = selected
 
-        // Checkbox UI
         let imageName = selected ? "checkmark.circle.fill" : "circle"
         checkboxButton.setImage(UIImage(systemName: imageName), for: .normal)
         checkboxButton.tintColor = selected
             ? UIColor(named: "SymptomsPrimaryColor")
             : .systemGray
 
-        // Slider visibility
         sliderContainerView.isHidden = !selected
     }
 
-    // MARK: - Actions
+    // actions
     @objc private func checkboxTapped() {
         onCheckboxTapped?()
     }

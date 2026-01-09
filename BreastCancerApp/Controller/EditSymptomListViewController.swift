@@ -9,13 +9,16 @@ import UIKit
 
 class EditSymptomListViewController: UIViewController {
     
+    // IBOutlets
     @IBOutlet weak var tableView: UITableView!
     
+    // variable definitions
     private let dataSource = SymptomDataSource.shared
     private var userSymptoms: [Symptom] = []
     private var availableSymptoms: [Symptom] = []
     var onDismiss: (() -> Void)?
     
+    // override funcs
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
@@ -23,6 +26,7 @@ class EditSymptomListViewController: UIViewController {
         tableView.isEditing = true
     }
     
+    // func definitions
     private func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
@@ -35,6 +39,14 @@ class EditSymptomListViewController: UIViewController {
         tableView.reloadData()
     }
     
+    private func showInfoAlert(for symptom: Symptom) {
+        let message = dataSource.getDescription(for: symptom.name)
+        let alert = UIAlertController(title: symptom.name, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
+    
+    // IBActions
     @IBAction func closeButtonTapped(_ sender: Any) {
         dismiss(animated: true) {
             self.onDismiss?()
@@ -46,16 +58,9 @@ class EditSymptomListViewController: UIViewController {
             self.onDismiss?()
         }
     }
-    
-    private func showInfoAlert(for symptom: Symptom) {
-        let message = dataSource.getDescription(for: symptom.name)
-        let alert = UIAlertController(title: symptom.name, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
-    }
 }
 
-// MARK: - UITableViewDataSource
+// UITableViewDataSource - tableview setup
 extension EditSymptomListViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -73,32 +78,28 @@ extension EditSymptomListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "EditSymptomCell", for: indexPath) as! EditSymptomCell
         
-        if indexPath.section == 0 {
+        if indexPath.section == 0 { // your list section
             
             let symptom = userSymptoms[indexPath.row]
             cell.configure(with: symptom, isInUserList: true)
-            
             cell.onActionTapped = { [weak self] in
                 self?.removeSymptom(symptomId: symptom.id)
             }
-            
             cell.onInfoTapped = { [weak self] in
                 self?.showInfoAlert(for: symptom)
             }
-        } else {
+            
+        } else { // add section
             
             let symptom = availableSymptoms[indexPath.row]
             cell.configure(with: symptom, isInUserList: false)
-            
             cell.onActionTapped = { [weak self] in
                 self?.addSymptom(symptomId: symptom.id)
             }
-            
             cell.onInfoTapped = { [weak self] in
                 self?.showInfoAlert(for: symptom)
             }
         }
-        
         return cell
     }
     
@@ -120,17 +121,14 @@ extension EditSymptomListViewController: UITableViewDataSource {
         to destinationIndexPath: IndexPath
     ) {
         guard sourceIndexPath.section == 0,
-              destinationIndexPath.section == 0 else {
+              destinationIndexPath.section == 0
+        else {
             tableView.reloadData()
             return
         }
-
+        
         let movedSymptom = userSymptoms.remove(at: sourceIndexPath.row)
         userSymptoms.insert(movedSymptom, at: destinationIndexPath.row)
-//
-//        // 🔥 Persist new order
-//        dataSource.updateUserSymptomsOrder(userSymptoms)
-        
         dataSource.updateUserSymptomsOrderInMemory(userSymptoms)
     }
     
@@ -152,16 +150,10 @@ extension EditSymptomListViewController: UITableViewDataSource {
     }
 }
 
-// MARK: - UITableViewDelegate
+// UITableViewDelegate
 extension EditSymptomListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
-    }
-    
-    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        guard let header = view as? UITableViewHeaderFooterView else { return }
-        header.textLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
-        header.textLabel?.textColor = .secondaryLabel
     }
 }

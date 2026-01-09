@@ -60,6 +60,11 @@
                 <constraint firstItem="VdD-bK-u5Z" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="uRG-G7-vCA"/>
             </constraints>
             <size key="customSize" width="257" height="72"/>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                    <integer key="value" value="13"/>
+                </userDefinedRuntimeAttribute>
+            </userDefinedRuntimeAttributes>
             <connections>
                 <outlet property="severityLabel" destination="HbU-iv-4mp" id="3dI-k2-Pxt"/>
                 <outlet property="symptomNameLabel" destination="Q5Q-v4-6x3" id="QTK-6L-gQR"/>

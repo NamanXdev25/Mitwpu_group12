@@ -42,14 +42,10 @@ class SymptomCalendarDateCell: UICollectionViewCell {
         isFuture: Bool
     ) {
         dayLabel.text = day
-        
-        // Reset
         selectionLayer.backgroundColor = .clear
         dotView.isHidden = true
         
         guard !day.isEmpty else { return }
-        
-        // showing dot if symptom log exists
         if hasSymptomLog {
             dotView.isHidden = false
         }
