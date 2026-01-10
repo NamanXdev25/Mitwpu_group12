@@ -48,6 +48,7 @@ class SymptomCalendarDateCell: UICollectionViewCell {
         guard !day.isEmpty else { return }
         if hasSymptomLog {
             dotView.isHidden = false
+            dotView.backgroundColor = UIColor(named: "SymptomsPrimaryColor")
         }
         
         // FUTURE DATE — disabled
@@ -76,6 +77,7 @@ class SymptomCalendarDateCell: UICollectionViewCell {
             UIColor(named: "SymptomsPrimaryColor")?.withAlphaComponent(0.2)
             
             dayLabel.textColor = UIColor(named: "SymptomsPrimaryColor")
+            dotView.backgroundColor = UIColor(named: "SymptomsPrimaryColor")
         }
     }
 }
