@@ -87,13 +87,6 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
         missedTableView.separatorStyle = .none
         missedTableView.isScrollEnabled = false // Disable scrolling - height will adjust instead
         missedTableView.register(UINib(nibName: "MissedExerciseCell", bundle: nil), forCellReuseIdentifier: "MissedExerciseCell")
-        
-        // Round all corners of the card
-        if let cardView = detailCardView {
-            cardView.layer.cornerRadius = 16
-            cardView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-            cardView.clipsToBounds = true
-        }
     }
     
     func setMonthView() {
@@ -179,8 +172,8 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
         
         // Calculate max table height based on available screen space
         let screenHeight = UIScreen.main.bounds.height
-        let availableHeight = screenHeight * 0.4  // Use max 40% of screen for table
-        let maxTableHeight = min(availableHeight, CGFloat(10) * cellHeight)  // Cap at 10 cells or 40% screen
+        let availableHeight = screenHeight * 0.2  // Use max 40% of screen for table
+        let maxTableHeight = min(availableHeight, CGFloat(6) * cellHeight)  // Cap at 10 cells or 40% screen
         
         let actualTableHeight = min(tableHeight, maxTableHeight)
         
