@@ -1,0 +1,109 @@
+//
+//  ArticleDetailViewController.swift
+//  BreastCancerApp
+//
+//  Created by Shivani Dinesh on 10/01/26.
+//
+
+import UIKit
+
+class ArticleDetailViewController: UIViewController {
+
+    @IBOutlet weak var collectionView: UICollectionView!
+
+    var article: ArticleModel!
+    private var dataSource: ArticleDetailDataSource!
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        setupNavigation()
+        setupCollectionView()
+    }
+
+    private func setupNavigation() {
+        navigationItem.title = "Article"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .close,
+            target: self,
+            action: #selector(closeTapped)
+        )
+    }
+
+    private func setupCollectionView() {
+        // Set compositional layout
+        collectionView.collectionViewLayout = createLayout()
+        
+        dataSource = ArticleDetailDataSource(article: article)
+        collectionView.dataSource = dataSource
+
+        collectionView.register(
+            UINib(nibName: "ArticleHeaderCell", bundle: nil),
+            forCellWithReuseIdentifier: "ArticleHeaderCell"
+        )
+
+        collectionView.register(
+            UINib(nibName: "ArticleContentCell", bundle: nil),
+            forCellWithReuseIdentifier: "ArticleContentCell"
+        )
+    }
+    
+    private func createLayout() -> UICollectionViewLayout {
+        let layout = UICollectionViewCompositionalLayout { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
+            
+            if sectionIndex == 0 {
+                // Header section
+                let itemSize = NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1.0),
+                    heightDimension: .absolute(175)
+                )
+                let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                
+                let groupSize = NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1.0),
+                    heightDimension: .absolute(175)
+                )
+                let group = NSCollectionLayoutGroup.vertical(
+                    layoutSize: groupSize,
+                    subitems: [item]
+                )
+                
+                let section = NSCollectionLayoutSection(group: group)
+                return section
+                
+            } else {
+                // Content section
+                let itemSize = NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1.0),
+                    heightDimension: .estimated(500)
+                )
+                let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                
+                let groupSize = NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1.0),
+                    heightDimension: .estimated(500)
+                )
+                let group = NSCollectionLayoutGroup.vertical(
+                    layoutSize: groupSize,
+                    subitems: [item]
+                )
+                
+                let section = NSCollectionLayoutSection(group: group)
+                section.contentInsets = NSDirectionalEdgeInsets(
+                    top: 0,
+                    leading: 0,
+                    bottom: 0,
+                    trailing: 0
+                )
+                
+                return section
+            }
+        }
+        
+        return layout
+    }
+
+    @objc private func closeTapped() {
+        dismiss(animated: true)
+    }
+}
