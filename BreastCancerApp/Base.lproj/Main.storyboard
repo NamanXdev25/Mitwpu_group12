@@ -65,7 +65,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Rf9-Cd-3to">
-                                <rect key="frame" x="0.0" y="118" width="393" height="666"/>
+                                <rect key="frame" x="0.0" y="172" width="393" height="612"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="vhd-6M-H96">
                                     <size key="itemSize" width="128" height="128"/>
@@ -94,13 +94,20 @@
                             <constraint firstItem="Rf9-Cd-3to" firstAttribute="leading" secondItem="9UH-vj-H3i" secondAttribute="leading" id="ooh-KM-edV"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" title="Article" id="566-Ul-PgU">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Yim-XD-Fxh">
+                            <connections>
+                                <action selector="closeTapped:" destination="86J-xN-Bkl" id="t3V-1W-Qo3"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="collectionView" destination="Rf9-Cd-3to" id="3OP-Da-Iv5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1IK-gx-mfY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4349" y="-511"/>
+            <point key="canvasLocation" x="4691" y="-511"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="J93-qV-gzD">
@@ -119,6 +126,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Wyp-fV-1tc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1927.4809160305342" y="-511.26760563380282"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="VeJ-Xd-lgD">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="L3w-t7-hqn" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="dKT-CT-2o2">
+                        <rect key="frame" x="0.0" y="118" width="393" height="54"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="86J-xN-Bkl" kind="relationship" relationship="rootViewController" id="dkh-0h-wzH"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qym-cb-K5V" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3921" y="-511"/>
         </scene>
     </scenes>
     <resources>

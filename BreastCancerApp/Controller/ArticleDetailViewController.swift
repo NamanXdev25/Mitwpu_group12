@@ -17,17 +17,7 @@ class ArticleDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupNavigation()
         setupCollectionView()
-    }
-
-    private func setupNavigation() {
-        navigationItem.title = "Article"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            barButtonSystemItem: .close,
-            target: self,
-            action: #selector(closeTapped)
-        )
     }
 
     private func setupCollectionView() {
@@ -55,13 +45,13 @@ class ArticleDetailViewController: UIViewController {
                 // Header section
                 let itemSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1.0),
-                    heightDimension: .absolute(175)
+                    heightDimension: .absolute(200)
                 )
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
                 
                 let groupSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1.0),
-                    heightDimension: .absolute(175)
+                    heightDimension: .absolute(200)
                 )
                 let group = NSCollectionLayoutGroup.vertical(
                     layoutSize: groupSize,
@@ -103,7 +93,7 @@ class ArticleDetailViewController: UIViewController {
         return layout
     }
 
-    @objc private func closeTapped() {
+    @IBAction func closeTapped(_ sender: UIBarButtonItem) {
         dismiss(animated: true)
     }
 }
