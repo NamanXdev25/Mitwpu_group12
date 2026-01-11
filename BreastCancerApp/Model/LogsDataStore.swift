@@ -2,13 +2,11 @@ import Foundation
 
 class LogsDataStore {
     
-    
     private var header: HeaderModel
     private var appointment: AppointmentModel
     private var stats: StatsModel
     private var medications: [MedicationModel] = []
     private var healthTracking: [HealthTrackingModel] = []
-    
     
     static let shared = LogsDataStore()
     
@@ -35,9 +33,9 @@ class LogsDataStore {
         
         // Appointment Data
         appointment = AppointmentModel(
-            title: "Upcoming Appointment",
+            title: "Oncology Check-Up",
             doctorName: "Dr. Sarah Johnson",
-            dateAndYear: "Mon 22 Apr, 2024",
+            dateAndYear: "22 Apr 2025",
             time: "10:30 AM"
         )
         
@@ -84,7 +82,6 @@ class LogsDataStore {
         ]
     }
     
-   
     func getHeader() -> HeaderModel {
         return header
     }
@@ -107,6 +104,8 @@ class LogsDataStore {
     
     func getSectionHeader(for section: Int) -> SectionHeaderModel? {
         switch section {
+        case 2:
+            return SectionHeaderModel(title: "Appointments", showManageButton: true)
         case 3:
             return SectionHeaderModel(title: "Medications", showManageButton: true)
         case 4:
@@ -116,7 +115,6 @@ class LogsDataStore {
         }
     }
     
-   
     func getMedication(at index: Int) -> MedicationModel? {
         guard index < medications.count else { return nil }
         return medications[index]
