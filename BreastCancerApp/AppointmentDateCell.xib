@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="GZt-RK-FvW" customClass="AppointmentDateCell" customModule="Appointments" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="axe-6e-Dr3">
+                        <rect key="frame" x="7.6666666666666679" y="7.6666666666666679" width="35" height="35"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wgc-Tk-MDg">
+                                <rect key="frame" x="0.0" y="0.0" width="35" height="36"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="35" id="dDO-eA-d3Y"/>
+                            <constraint firstAttribute="height" constant="35" id="qii-f0-bA7"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <real key="value" value="17.5"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="1Zz-Jt-oDm"/>
+            <constraints>
+                <constraint firstItem="axe-6e-Dr3" firstAttribute="centerX" secondItem="GZt-RK-FvW" secondAttribute="centerX" id="7Vr-3p-X1r"/>
+                <constraint firstItem="axe-6e-Dr3" firstAttribute="centerX" secondItem="GZt-RK-FvW" secondAttribute="centerX" id="7jP-Qv-cYA"/>
+                <constraint firstItem="axe-6e-Dr3" firstAttribute="centerY" secondItem="GZt-RK-FvW" secondAttribute="centerY" id="aGT-uL-ptZ"/>
+                <constraint firstItem="axe-6e-Dr3" firstAttribute="centerX" secondItem="GZt-RK-FvW" secondAttribute="centerX" id="pt1-zr-ZEJ"/>
+            </constraints>
+            <connections>
+                <outlet property="dayLabel" destination="Wgc-Tk-MDg" id="cZR-tO-6lW"/>
+                <outlet property="selectionLayer" destination="axe-6e-Dr3" id="e4K-G7-6qo"/>
+            </connections>
+            <point key="canvasLocation" x="87.022900763358777" y="100"/>
+        </collectionViewCell>
+    </objects>
+</document>
