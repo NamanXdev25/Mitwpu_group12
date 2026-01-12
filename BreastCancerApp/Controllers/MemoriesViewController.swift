@@ -28,7 +28,7 @@ final class MemoriesViewController: UIViewController,
         addButton.layer.cornerRadius = addButton.bounds.height / 2
     }
 
-    // MARK: - UI Setup
+    // MARK: - UI
     private func configureUI() {
         title = "Memories"
         view.backgroundColor = .systemBackground
@@ -45,6 +45,15 @@ final class MemoriesViewController: UIViewController,
         collectionView.backgroundColor = .clear
         collectionView.dataSource = self
         collectionView.delegate = self
+
+        // 🔴 FORCE FLOW LAYOUT (IMPORTANT)
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumInteritemSpacing = 8
+        layout.minimumLineSpacing = 8
+        layout.sectionInset = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+
+        collectionView.setCollectionViewLayout(layout, animated: false)
 
         collectionView.register(
             UINib(nibName: "MemoryImageCell", bundle: nil),
@@ -75,7 +84,6 @@ final class MemoriesViewController: UIViewController,
 
         sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
 
-        // iPad safety
         if let popover = sheet.popoverPresentationController {
             popover.sourceView = sender
             popover.sourceRect = sender.bounds
@@ -119,7 +127,7 @@ final class MemoriesViewController: UIViewController,
         guard let addVC = storyboard.instantiateViewController(
             withIdentifier: "AddMemoryViewController"
         ) as? AddMemoryViewController else {
-            fatalError("AddMemoryViewController not found in storyboard")
+            fatalError("AddMemoryViewController not found")
         }
 
         addVC.image = image
@@ -165,8 +173,11 @@ final class MemoriesViewController: UIViewController,
 
         let itemsPerRow: CGFloat = 4
         let spacing: CGFloat = 8
-        let totalSpacing = (itemsPerRow - 1) * spacing + 24
-        let width = (collectionView.bounds.width - totalSpacing) / itemsPerRow
+        let sectionInsets: CGFloat = 24
+
+        let totalSpacing = (itemsPerRow - 1) * spacing + sectionInsets
+        let availableWidth = collectionView.bounds.width - totalSpacing
+        let width = floor(availableWidth / itemsPerRow)
 
         return CGSize(width: width, height: width)
     }
