@@ -52,6 +52,7 @@ class JournalCalendarDateCell: UICollectionViewCell {
         // showing dot if journal exists
         if hasJournal {
             dotView.isHidden = false
+            dotView.backgroundColor = UIColor(named: "PrimaryColor")
         }
         
         // FUTURE DATE — disabled
