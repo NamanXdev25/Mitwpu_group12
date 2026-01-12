@@ -18,10 +18,10 @@
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yyg-05-RhH">
-                        <rect key="frame" x="16" y="8" width="255" height="242"/>
+                        <rect key="frame" x="10" y="8" width="267" height="242"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xel-L5-2sH" userLabel="exerciseRowView">
-                                <rect key="frame" x="0.0" y="0.0" width="255" height="48"/>
+                                <rect key="frame" x="0.0" y="0.0" width="267" height="48"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Exercise" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yxe-6R-y3m">
                                         <rect key="frame" x="16.000000000000004" y="15" width="57.333333333333343" height="18"/>
@@ -30,10 +30,10 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VlA-Ex-ndF">
-                                        <rect key="frame" x="178" y="10" width="63" height="28"/>
+                                        <rect key="frame" x="190" y="10" width="63" height="28"/>
                                     </switch>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b5P-Rj-xcn">
-                                        <rect key="frame" x="16" y="47.666666666666664" width="223" height="0.3333333333333357"/>
+                                        <rect key="frame" x="16" y="47.666666666666664" width="235" height="0.3333333333333357"/>
                                         <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="0.5" id="vWz-z6-fHg"/>
@@ -53,7 +53,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fAt-QL-a9A" userLabel="exerciseRowView">
-                                <rect key="frame" x="0.0" y="48" width="255" height="48"/>
+                                <rect key="frame" x="0.0" y="48" width="267" height="48"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hydration" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R5S-fS-d37">
                                         <rect key="frame" x="16" y="15" width="67" height="18"/>
@@ -62,10 +62,10 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0wG-wb-ldA">
-                                        <rect key="frame" x="178" y="10" width="63" height="28"/>
+                                        <rect key="frame" x="190" y="10" width="63" height="28"/>
                                     </switch>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="92u-cA-1hM">
-                                        <rect key="frame" x="16" y="47.666666666666671" width="223" height="0.3333333333333357"/>
+                                        <rect key="frame" x="16" y="47.666666666666671" width="235" height="0.3333333333333357"/>
                                         <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="0.5" id="l4B-WD-dNA"/>
@@ -85,7 +85,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AXx-RO-PLM" userLabel="exerciseRowView">
-                                <rect key="frame" x="0.0" y="96" width="255" height="48"/>
+                                <rect key="frame" x="0.0" y="96" width="267" height="48"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Appointments" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jeu-oI-yVK">
                                         <rect key="frame" x="16" y="15" width="96" height="18"/>
@@ -94,10 +94,10 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AF4-f8-a3o">
-                                        <rect key="frame" x="178" y="10" width="63" height="28"/>
+                                        <rect key="frame" x="190" y="10" width="63" height="28"/>
                                     </switch>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ARc-2z-ebw">
-                                        <rect key="frame" x="16" y="47.666666666666657" width="223" height="0.3333333333333357"/>
+                                        <rect key="frame" x="16" y="47.666666666666657" width="235" height="0.3333333333333357"/>
                                         <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="0.5" id="r4e-YB-IdT"/>
@@ -117,7 +117,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xms-tJ-CGd" userLabel="exerciseRowView">
-                                <rect key="frame" x="0.0" y="144" width="255" height="48"/>
+                                <rect key="frame" x="0.0" y="144" width="267" height="48"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Medications" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ehG-P1-k3H">
                                         <rect key="frame" x="16" y="15" width="83.333333333333329" height="18"/>
@@ -126,7 +126,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MWW-rD-QLl">
-                                        <rect key="frame" x="178" y="10" width="63" height="28"/>
+                                        <rect key="frame" x="190" y="10" width="63" height="28"/>
                                     </switch>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -166,8 +166,8 @@
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="yyg-05-RhH" secondAttribute="bottom" constant="8" id="QIb-z1-yu7"/>
                 <constraint firstItem="yyg-05-RhH" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="8" id="Qc6-5Q-VXk"/>
-                <constraint firstAttribute="trailing" secondItem="yyg-05-RhH" secondAttribute="trailing" constant="16" id="e6f-lN-3HM"/>
-                <constraint firstItem="yyg-05-RhH" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="zhP-SD-u0c"/>
+                <constraint firstAttribute="trailing" secondItem="yyg-05-RhH" secondAttribute="trailing" constant="10" id="e6f-lN-3HM"/>
+                <constraint firstItem="yyg-05-RhH" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="10" id="zhP-SD-u0c"/>
             </constraints>
             <size key="customSize" width="287" height="258"/>
             <connections>

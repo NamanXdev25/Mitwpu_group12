@@ -115,7 +115,7 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
         case 1:
             return CGSize(width: width, height: 72)  // Health status
         case 2:
-            return CGSize(width: width, height: 44)  // Notifications header
+            return CGSize(width: width, height: 28)  // Notifications header
         default:
             return CGSize(width: width, height: 208) // Notification toggles
         }
