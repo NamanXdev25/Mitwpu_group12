@@ -102,7 +102,7 @@ class AddMedicationViewController: UIViewController, UIPickerViewDelegate, UIPic
                 if weekDays.contains(med.note) {
                     repeatTextField.text = med.note
                     descriptionTextView.text = "Add a note"
-                    descriptionTextView.textColor = .lightGray
+                    //descriptionTextView.textColor = .lightGray
                 } else {
                     repeatTextField.text = "Every Day"
                     descriptionTextView.text = med.note
