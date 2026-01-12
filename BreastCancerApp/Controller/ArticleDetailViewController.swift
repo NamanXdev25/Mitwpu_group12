@@ -21,7 +21,7 @@ class ArticleDetailViewController: UIViewController {
     }
 
     private func setupCollectionView() {
-        // Set compositional layout
+        // compositional layout
         collectionView.collectionViewLayout = createLayout()
         
         dataSource = ArticleDetailDataSource(article: article)
@@ -42,7 +42,7 @@ class ArticleDetailViewController: UIViewController {
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
             
             if sectionIndex == 0 {
-                // Header section
+                // header section
                 let itemSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1.0),
                     heightDimension: .absolute(200)
@@ -62,7 +62,7 @@ class ArticleDetailViewController: UIViewController {
                 return section
                 
             } else {
-                // Content section
+                // content section
                 let itemSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1.0),
                     heightDimension: .estimated(500)

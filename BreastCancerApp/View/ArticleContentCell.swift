@@ -15,9 +15,6 @@ class ArticleContentCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-//        // Set preferred max width for proper text wrapping
-//        titleLabel.numberOfLines = 0
-//        contentLabel.numberOfLines = 0
     }
     
     func configure(title: String, content: String) {

@@ -22,7 +22,7 @@ class ArticlesViewController: UIViewController {
     }
 
     private func setupCollectionView() {
-        // Set compositional layout
+        // compositional layout
         collectionView.collectionViewLayout = createLayout()
         
         collectionView.dataSource = dataSource
@@ -35,14 +35,14 @@ class ArticlesViewController: UIViewController {
     private func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
             
-            // Item
+            // item
             let itemSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .estimated(270)
             )
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             
-            // Group
+            // group
             let groupSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .estimated(270)
@@ -52,7 +52,7 @@ class ArticlesViewController: UIViewController {
                 subitems: [item]
             )
             
-            // Section
+            // section
             let section = NSCollectionLayoutSection(group: group)
             section.interGroupSpacing = 0
             section.contentInsets = NSDirectionalEdgeInsets(
@@ -80,10 +80,9 @@ extension ArticlesViewController: UICollectionViewDelegate {
 
         vc.article = article
         
-        // Wrap in navigation controller for modal presentation
+        // for modal presentation
         let navController = UINavigationController(rootViewController: vc)
         
-        // Configure modal presentation style
         if let sheet = navController.sheetPresentationController {
             sheet.detents = [.large()]
             sheet.prefersGrabberVisible = true
