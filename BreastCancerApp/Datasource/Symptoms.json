@@ -3,43 +3,67 @@
     {
       "id": "1",
       "name": "Fatigue",
-      "description": "Feeling unusually tired is common during treatment. It may not improve with rest, but gentle activity, good nutrition, and enough sleep can help. Talk to your care team if it feels severe or persistent.",
+      "description": "Unusual and persistent tiredness common during breast cancer treatment; can impact daily functioning and may not get better with rest.",
       "isInUserListByDefault": true
     },
     {
       "id": "2",
       "name": "Nausea",
-      "description": "Feeling sick to your stomach can be managed with medication, eating small frequent meals, and avoiding strong smells.",
+      "description": "Feeling sick to your stomach or vomiting often occurs with chemotherapy or targeted therapies and may affect appetite and hydration.",
       "isInUserListByDefault": true
     },
     {
       "id": "3",
       "name": "Pain",
-      "description": "Pain should be reported to your care team. There are many ways to manage it effectively.",
+      "description": "Pain or discomfort anywhere (surgical site, bones, joints, chest, etc.) that may be treatment related — track severity and location.",
       "isInUserListByDefault": true
     },
     {
       "id": "4",
-      "name": "Headache",
-      "description": "Headaches can have many causes. Stay hydrated and track their frequency and intensity.",
+      "name": "Peripheral Neuropathy",
+      "description": "Tingling, numbness, or burning in hands/feet often caused by chemotherapy — track how it affects daily tasks.",
       "isInUserListByDefault": false
     },
     {
       "id": "5",
-      "name": "Dizziness",
-      "description": "Dizziness should be reported to your care team, especially if it affects your balance or daily activities.",
+      "name": "Appetite Changes",
+      "description": "Loss of appetite or changes in hunger levels; can be linked to nausea, taste changes, or other treatment effects.",
       "isInUserListByDefault": false
     },
     {
       "id": "6",
-      "name": "Fever",
-      "description": "Fever can be a sign of infection. Contact your care team if your temperature is above 100.4°F (38°C).",
+      "name": "Sleep Disturbance / Insomnia",
+      "description": "Difficulty falling or staying asleep, or non-restorative sleep, which commonly co-occurs with fatigue and treatment stress.",
       "isInUserListByDefault": false
     },
     {
       "id": "7",
-      "name": "Cough",
-      "description": "A persistent cough should be monitored and reported to your care team.",
+      "name": "Mood Symptoms (Anxiety / Depression)",
+      "description": "Feelings of sadness, hopelessness, or anxiety that can result from and worsen treatment side effects; track daily changes.",
+      "isInUserListByDefault": false
+    },
+    {
+      "id": "8",
+      "name": "Cognitive Changes (Chemobrain)",
+      "description": "Problems with memory, concentration or thinking often reported during and after chemotherapy, useful to monitor over time.",
+      "isInUserListByDefault": false
+    },
+    {
+      "id": "9",
+      "name": "Skin Irritation / Radiation Dermatitis",
+      "description": "Redness, dryness, or peeling of skin in radiated areas or where topical treatment is applied.",
+      "isInUserListByDefault": false
+    },
+    {
+      "id": "10",
+      "name": "Swelling / Lymphedema",
+      "description": "Swelling of arms/hands following surgery or lymph node removal; track size changes and discomfort.",
+      "isInUserListByDefault": false
+    },
+    {
+      "id": "11",
+      "name": "Shortness of Breath",
+      "description": "New or worsening breathlessness can be due to anemia, cardiotoxicity, or lung effects; needs prompt reporting.",
       "isInUserListByDefault": false
     }
   ]

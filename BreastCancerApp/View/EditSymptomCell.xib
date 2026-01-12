@@ -19,7 +19,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gdi-yK-GP1">
-                        <rect key="frame" x="16" y="15" width="30" height="30"/>
+                        <rect key="frame" x="0.0" y="15" width="30" height="30"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="30" id="02c-Oz-GcC"/>
                             <constraint firstAttribute="height" constant="30" id="3vQ-DQ-3ax"/>
@@ -31,8 +31,8 @@
                             <action selector="actionButtonTapped:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="0Gq-Hy-n97"/>
                         </connections>
                     </button>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Fatigue" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ehv-hw-VWq">
-                        <rect key="frame" x="62" y="19.666666666666668" width="56" height="21.000000000000004"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Fatigue" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ehv-hw-VWq">
+                        <rect key="frame" x="46" y="20" width="212" height="20.333333333333329"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -54,7 +54,8 @@
                     <constraint firstItem="Ehv-hw-VWq" firstAttribute="leading" secondItem="gdi-yK-GP1" secondAttribute="trailing" constant="16" id="6k5-v6-Uhh"/>
                     <constraint firstItem="gdi-yK-GP1" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="B06-CF-TNA"/>
                     <constraint firstAttribute="trailing" secondItem="Fx3-z7-GNA" secondAttribute="trailing" constant="16" id="BOz-Fp-UWM"/>
-                    <constraint firstItem="gdi-yK-GP1" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="dmQ-BW-9ET"/>
+                    <constraint firstItem="Fx3-z7-GNA" firstAttribute="leading" secondItem="Ehv-hw-VWq" secondAttribute="trailing" constant="16" id="VPC-Fp-5bq"/>
+                    <constraint firstItem="gdi-yK-GP1" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="dmQ-BW-9ET"/>
                     <constraint firstItem="Fx3-z7-GNA" firstAttribute="centerY" secondItem="Ehv-hw-VWq" secondAttribute="centerY" id="g0x-TJ-qox"/>
                     <constraint firstItem="Ehv-hw-VWq" firstAttribute="centerY" secondItem="gdi-yK-GP1" secondAttribute="centerY" id="szc-5H-Jqd"/>
                 </constraints>

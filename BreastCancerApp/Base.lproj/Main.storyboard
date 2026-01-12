@@ -20,7 +20,7 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="hTX-yg-smS">
                                 <rect key="frame" x="0.0" y="172" width="393" height="612"/>
-                                <color key="backgroundColor" name="SymptomsBackgroundColor"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="EditSymptomCell" rowHeight="60" id="0Tc-wt-ccX">
                                         <rect key="frame" x="0.0" y="55.333332061767578" width="393" height="60"/>
@@ -42,7 +42,7 @@
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Eh3-oG-LtJ"/>
-                        <color key="backgroundColor" name="SymptomsBackgroundColor"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="hTX-yg-smS" firstAttribute="top" secondItem="Eh3-oG-LtJ" secondAttribute="top" id="IhA-Bw-rMH"/>
                             <constraint firstItem="Eh3-oG-LtJ" firstAttribute="trailing" secondItem="hTX-yg-smS" secondAttribute="trailing" id="QnH-qw-Sth"/>
