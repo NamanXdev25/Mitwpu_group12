@@ -1,8 +1,11 @@
-//
-//  HealthStatusModel.swift
-//  BreastCancerApp
-//
-//  Created by Gayatri Goundadkar on 12/01/26.
-//
-
 import Foundation
+
+struct HealthStatusModel {
+    var firstName: String
+    var lastName: String
+    var diagnosisDate: Date
+    var gender: String
+    var age: Int
+    var cancerStage: String
+    var treatmentState: String
+}
