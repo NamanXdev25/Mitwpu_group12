@@ -18,7 +18,8 @@ class NewAppointmentViewController: UIViewController {
     // MARK: - IBOutlets
     @IBOutlet weak var closeBarButton: UIBarButtonItem!
     @IBOutlet weak var saveBarButton: UIBarButtonItem!
-    @IBOutlet weak var titleTextField: UITextField!
+    @IBOutlet weak var userTitleTextField: UITextField!  // NEW: For custom title
+    @IBOutlet weak var categoryTextField: UITextField!   // RENAMED: For Chemotherapy/Doctor Visit
     @IBOutlet weak var chemotherapyIndicatorView: UIView!
     @IBOutlet weak var doctorVisitIndicatorView: UIView!
     @IBOutlet weak var dateTextField: UITextField!
@@ -26,13 +27,13 @@ class NewAppointmentViewController: UIViewController {
     @IBOutlet weak var setReminderSwitch: UISwitch!
     @IBOutlet weak var noteTextView: UITextView!
     
-    @IBOutlet weak var titleChevronImageView: UIImageView!
+    @IBOutlet weak var categoryChevronImageView: UIImageView!  // RENAMED
     @IBOutlet weak var dateChevronImageView: UIImageView!
     @IBOutlet weak var timeChevronImageView: UIImageView!
     
     @IBOutlet weak var pickerOverlay: UIView!
     @IBOutlet weak var pickerCard: UIView!
-    @IBOutlet weak var titlePicker: UIPickerView!
+    @IBOutlet weak var categoryPicker: UIPickerView!  // RENAMED
     @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var timePicker: UIDatePicker!
     
@@ -40,7 +41,7 @@ class NewAppointmentViewController: UIViewController {
     weak var delegate: AddAppointmentDelegate?
     
     var initialAppointment: AppointmentItem?
-    var originalDate: Date? // Store the original date for editing
+    var originalDate: Date?
     
     private var selectedAppointmentType: AppointmentType = .chemotherapy
     private let notePlaceholder = "Add a note"
@@ -60,6 +61,7 @@ class NewAppointmentViewController: UIViewController {
         setupNoteTextView()
         setupTitleIndicator()
         setupPickers()
+        setupCategoryTextField()
         pickerOverlay.isHidden = true
     }
     
@@ -80,17 +82,20 @@ class NewAppointmentViewController: UIViewController {
     }
     
     private func setupTitleIndicator() {
-        // Setup Chemotherapy Indicator
         chemotherapyIndicatorView.layer.cornerRadius = chemotherapyIndicatorView.frame.width / 2
         chemotherapyIndicatorView.clipsToBounds = true
         chemotherapyIndicatorView.backgroundColor = AppointmentType.chemotherapy.color
         
-        // Setup Doctor Visit Indicator
         doctorVisitIndicatorView.layer.cornerRadius = doctorVisitIndicatorView.frame.width / 2
         doctorVisitIndicatorView.clipsToBounds = true
         doctorVisitIndicatorView.backgroundColor = AppointmentType.doctorVisit.color
         
         updateIndicatorVisibility()
+    }
+    
+    private func setupCategoryTextField() {
+        categoryTextField.textColor = .lightGray
+        categoryTextField.isUserInteractionEnabled = true
     }
     
     private func setupPickers() {
@@ -105,11 +110,12 @@ class NewAppointmentViewController: UIViewController {
     }
     
     private func setupDelegates() {
-        titleTextField.delegate = self
+        userTitleTextField.delegate = self
+        categoryTextField.delegate = self
         dateTextField.delegate = self
         timeTextField.delegate = self
-        titlePicker.delegate = self
-        titlePicker.dataSource = self
+        categoryPicker.delegate = self
+        categoryPicker.dataSource = self
     }
     
     private func setupGestures() {
@@ -118,12 +124,12 @@ class NewAppointmentViewController: UIViewController {
     }
     
     private func setupChevronTapGestures() {
-        titleChevronImageView.isUserInteractionEnabled = true
+        categoryChevronImageView.isUserInteractionEnabled = true
         dateChevronImageView.isUserInteractionEnabled = true
         timeChevronImageView.isUserInteractionEnabled = true
         
-        let titleTap = UITapGestureRecognizer(target: self, action: #selector(titleChevronTapped))
-        titleChevronImageView.addGestureRecognizer(titleTap)
+        let categoryTap = UITapGestureRecognizer(target: self, action: #selector(categoryChevronTapped))
+        categoryChevronImageView.addGestureRecognizer(categoryTap)
         
         let dateTap = UITapGestureRecognizer(target: self, action: #selector(dateChevronTapped))
         dateChevronImageView.addGestureRecognizer(dateTap)
@@ -147,30 +153,35 @@ class NewAppointmentViewController: UIViewController {
     }
     
     private func setDefaultValues() {
-        titleTextField.text = AppointmentType.chemotherapy.title
+        categoryTextField.text = AppointmentType.chemotherapy.title
+        categoryTextField.textColor = .lightGray
         updateIndicatorVisibility()
     }
     
     private func loadAppointmentData(_ appointment: AppointmentItem) {
-        // Load title
+        // Load custom title
+        userTitleTextField.text = appointment.title
+        userTitleTextField.textColor = .black
+        
+        // Load category
         if let type = AppointmentType(rawValue: appointment.colorIndex) {
             selectedAppointmentType = type
-            titleTextField.text = type.title
+            categoryTextField.text = type.title
+            categoryTextField.textColor = .black
             updateIndicatorVisibility()
         }
         
-        // Load date and store original date
+        // Load date
         if !appointment.date.isEmpty {
             dateTextField.text = appointment.date
             let formatter = DateFormatter()
             formatter.dateFormat = "dd MMM yyyy"
             if let parsedDate = formatter.date(from: appointment.date) {
                 datePicker.date = parsedDate
-                originalDate = parsedDate // Store original date for editing
+                originalDate = parsedDate
             }
         }
         
-        // Date field is always editable - chevron always visible
         dateTextField.isUserInteractionEnabled = true
         dateTextField.textColor = .black
         dateTextField.backgroundColor = .clear
@@ -192,7 +203,6 @@ class NewAppointmentViewController: UIViewController {
             noteTextView.textColor = .black
         }
         
-        // Load reminder
         setReminderSwitch.isOn = appointment.reminderEnabled
     }
     
@@ -208,22 +218,22 @@ class NewAppointmentViewController: UIViewController {
         }
     }
     
-    private func showPicker(title: Bool = false, date: Bool = false, time: Bool = false) {
+    private func showPicker(category: Bool = false, date: Bool = false, time: Bool = false) {
         view.endEditing(true)
         pickerOverlay.isHidden = false
         
-        titlePicker.isHidden = !title
+        categoryPicker.isHidden = !category
         datePicker.isHidden = !date
         timePicker.isHidden = !time
         
-        if title {
-            titlePicker.selectRow(selectedAppointmentType.rawValue, inComponent: 0, animated: false)
+        if category {
+            categoryPicker.selectRow(selectedAppointmentType.rawValue, inComponent: 0, animated: false)
         }
     }
     
     // MARK: - Gesture Actions
-    @objc private func titleChevronTapped() {
-        showPicker(title: true)
+    @objc private func categoryChevronTapped() {
+        showPicker(category: true)
     }
     
     @objc private func dateChevronTapped() {
@@ -235,8 +245,8 @@ class NewAppointmentViewController: UIViewController {
     }
     
     @objc private func dismissPopup() {
-        if !titlePicker.isHidden {
-            handleTitlePickerDismiss()
+        if !categoryPicker.isHidden {
+            handleCategoryPickerDismiss()
         } else if !datePicker.isHidden {
             handleDatePickerDismiss()
         } else if !timePicker.isHidden {
@@ -246,11 +256,12 @@ class NewAppointmentViewController: UIViewController {
         pickerOverlay.isHidden = true
     }
     
-    private func handleTitlePickerDismiss() {
-        let selectedRow = titlePicker.selectedRow(inComponent: 0)
+    private func handleCategoryPickerDismiss() {
+        let selectedRow = categoryPicker.selectedRow(inComponent: 0)
         if let type = AppointmentType(rawValue: selectedRow) {
             selectedAppointmentType = type
-            titleTextField.text = type.title
+            categoryTextField.text = type.title
+            categoryTextField.textColor = .black
             updateIndicatorVisibility()
         }
     }
@@ -275,17 +286,14 @@ class NewAppointmentViewController: UIViewController {
     @IBAction func saveTapped(_ sender: UIBarButtonItem) {
         guard validateInputs() else { return }
         
-        // If editing and date changed, delete from old date first
         if let appointment = initialAppointment, let oldDate = originalDate {
             let newDateString = dateTextField.text ?? ""
             let formatter = DateFormatter()
             formatter.dateFormat = "dd MMM yyyy"
             
             if let newDate = formatter.date(from: newDateString) {
-                // Check if date changed
                 let calendar = Calendar.current
                 if !calendar.isDate(oldDate, inSameDayAs: newDate) {
-                    // Date changed - delete from old date
                     AppointmentManager.shared.deleteAppointment(appointment.id, for: oldDate)
                 }
             }
@@ -298,17 +306,28 @@ class NewAppointmentViewController: UIViewController {
     
     // MARK: - Validation
     private func validateInputs() -> Bool {
-        guard let title = titleTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
+        // Validate Title
+        guard let title = userTitleTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
               !title.isEmpty else {
-            showAlert(message: "Please select an appointment type.")
+            showAlert(message: "Please enter a title for the appointment.")
             return false
         }
         
+        // Validate Category
+        guard let category = categoryTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
+              !category.isEmpty,
+              categoryTextField.textColor != .lightGray else {
+            showAlert(message: "Please select a category.")
+            return false
+        }
+        
+        // Validate Date
         guard let date = dateTextField.text, !date.isEmpty else {
             showAlert(message: "Please select a date for the appointment.")
             return false
         }
         
+        // Validate Time
         guard let time = timeTextField.text, !time.isEmpty else {
             showAlert(message: "Please select a time for the appointment.")
             return false
@@ -320,14 +339,16 @@ class NewAppointmentViewController: UIViewController {
     // MARK: - Model Creation
     private func createAppointment() -> AppointmentItem {
         let appointmentId = initialAppointment?.id ?? UUID().uuidString
-        let title = titleTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let userTitle = userTitleTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let category = categoryTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         let date = dateTextField.text ?? ""
         let time = timeTextField.text ?? ""
         let note = getNoteText()
         
         return AppointmentItem(
             id: appointmentId,
-            title: title,
+            title: userTitle,
+            category: category,
             date: date,
             time: time,
             reminderEnabled: setReminderSwitch.isOn,
@@ -361,8 +382,8 @@ class NewAppointmentViewController: UIViewController {
 // MARK: - UITextFieldDelegate
 extension NewAppointmentViewController: UITextFieldDelegate {
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        if textField == titleTextField {
-            showPicker(title: true)
+        if textField == categoryTextField {
+            showPicker(category: true)
             return false
         } else if textField == dateTextField {
             showPicker(date: true)
@@ -398,7 +419,8 @@ extension NewAppointmentViewController: UIPickerViewDataSource, UIPickerViewDele
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if let type = AppointmentType(rawValue: row) {
             selectedAppointmentType = type
-            titleTextField.text = type.title
+            categoryTextField.text = type.title
+            categoryTextField.textColor = .black
             updateIndicatorVisibility()
         }
     }

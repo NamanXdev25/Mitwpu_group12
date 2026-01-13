@@ -298,34 +298,35 @@
                     <navigationItem key="navigationItem" title="New Appointment" id="ftK-eV-J8d">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="2Wa-72-VbP">
                             <connections>
-                                <action selector="closeTapped:" destination="cJu-Dy-ck2" id="0hd-2K-XOD"/>
+                                <action selector="closeTapped:" destination="cJu-Dy-ck2" id="t1k-Jf-9uD"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="eQ6-cu-4B9">
                             <color key="tintColor" name="plusbuttoncolor"/>
                             <connections>
-                                <action selector="saveTapped:" destination="cJu-Dy-ck2" id="53u-3a-NF4"/>
+                                <action selector="saveTapped:" destination="cJu-Dy-ck2" id="Csn-n8-mwY"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="chemotherapyIndicatorView" destination="592-jV-o1k" id="gPb-s5-8qb"/>
-                        <outlet property="closeBarButton" destination="2Wa-72-VbP" id="bSU-pE-Hso"/>
-                        <outlet property="dateChevronImageView" destination="6j3-Gv-SZC" id="Qkq-42-RPP"/>
-                        <outlet property="datePicker" destination="79W-0i-Ci0" id="BBQ-E5-l4v"/>
-                        <outlet property="dateTextField" destination="AfV-S1-ch2" id="bUS-6w-YYs"/>
-                        <outlet property="doctorVisitIndicatorView" destination="2U3-L7-OOn" id="HHf-gt-KmP"/>
-                        <outlet property="noteTextView" destination="6l5-th-kF9" id="t0x-6j-Xac"/>
-                        <outlet property="pickerCard" destination="wQ1-rB-UNh" id="Kdh-QM-bPF"/>
-                        <outlet property="pickerOverlay" destination="LQL-4f-xKt" id="k8J-dT-920"/>
-                        <outlet property="saveBarButton" destination="eQ6-cu-4B9" id="oQc-O0-bSo"/>
-                        <outlet property="setReminderSwitch" destination="HQn-nj-tas" id="yTD-qN-OuV"/>
-                        <outlet property="timeChevronImageView" destination="Yeb-t0-cyd" id="J0K-Gh-MiG"/>
-                        <outlet property="timePicker" destination="Oub-ZM-1MV" id="pQH-Va-3nt"/>
-                        <outlet property="timeTextField" destination="yWO-UF-LZT" id="jqV-XH-VB1"/>
-                        <outlet property="titleChevronImageView" destination="aq3-eN-Mg7" id="sMn-Ya-fYy"/>
-                        <outlet property="titlePicker" destination="hpE-HC-F71" id="Mf6-P4-1Bs"/>
-                        <outlet property="titleTextField" destination="yTq-RK-QgX" id="DFJ-pe-pRb"/>
+                        <outlet property="categoryChevronImageView" destination="aq3-eN-Mg7" id="4p5-5D-VAn"/>
+                        <outlet property="categoryPicker" destination="hpE-HC-F71" id="36N-OZ-BIc"/>
+                        <outlet property="categoryTextField" destination="yTq-RK-QgX" id="K0I-NB-dad"/>
+                        <outlet property="chemotherapyIndicatorView" destination="592-jV-o1k" id="Xgb-OE-uok"/>
+                        <outlet property="closeBarButton" destination="2Wa-72-VbP" id="N5L-hb-iA7"/>
+                        <outlet property="dateChevronImageView" destination="6j3-Gv-SZC" id="MAK-AV-27b"/>
+                        <outlet property="datePicker" destination="79W-0i-Ci0" id="BWH-I4-g1Q"/>
+                        <outlet property="dateTextField" destination="AfV-S1-ch2" id="1FT-Gf-A9T"/>
+                        <outlet property="doctorVisitIndicatorView" destination="2U3-L7-OOn" id="g0l-z7-Dwn"/>
+                        <outlet property="noteTextView" destination="6l5-th-kF9" id="rvL-Pc-Pez"/>
+                        <outlet property="pickerCard" destination="wQ1-rB-UNh" id="bxz-4q-UpD"/>
+                        <outlet property="pickerOverlay" destination="LQL-4f-xKt" id="OJz-WF-Ccn"/>
+                        <outlet property="saveBarButton" destination="eQ6-cu-4B9" id="IRf-Vh-T7z"/>
+                        <outlet property="setReminderSwitch" destination="HQn-nj-tas" id="W5W-cq-tK5"/>
+                        <outlet property="timeChevronImageView" destination="Yeb-t0-cyd" id="ycN-vm-Wg2"/>
+                        <outlet property="timePicker" destination="Oub-ZM-1MV" id="yRt-bg-C98"/>
+                        <outlet property="timeTextField" destination="yWO-UF-LZT" id="2to-5M-H6O"/>
+                        <outlet property="userTitleTextField" destination="BxG-7c-hId" id="NIG-OU-S2A"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5oP-sq-fwg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

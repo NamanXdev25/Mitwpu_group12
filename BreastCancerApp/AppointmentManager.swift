@@ -14,36 +14,30 @@ class AppointmentManager {
     private let userDefaults = UserDefaults.standard
     private let appointmentsKey = "SavedAppointments"
     
-    // Dictionary: "yyyy-MM-dd" -> [AppointmentItem]
     private var appointments: [String: [AppointmentItem]] = [:]
     
     private init() {
         loadAppointments()
     }
     
-    // MARK: - Date Key Helper
     func getDateKey(for date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         return formatter.string(from: date)
     }
     
-    // MARK: - Load from UserDefaults
     private func loadAppointments() {
         guard let data = userDefaults.data(forKey: appointmentsKey),
               let decoded = try? JSONDecoder().decode([String: [AppointmentItemCodable]].self, from: data) else {
             return
         }
         
-        // Convert codable to regular AppointmentItem
         appointments = decoded.mapValues { codableItems in
             codableItems.map { $0.toAppointmentItem() }
         }
     }
     
-    // MARK: - Save to UserDefaults
     private func saveAppointments() {
-        // Convert to codable version
         let codableAppointments = appointments.mapValues { items in
             items.map { AppointmentItemCodable(from: $0) }
         }
@@ -53,14 +47,10 @@ class AppointmentManager {
         }
     }
     
-    // MARK: - Public Methods
-    
-    /// Save or update an appointment
     func saveAppointment(_ appointment: AppointmentItem, for date: Date) {
         let key = getDateKey(for: date)
         
         if var existing = appointments[key] {
-            // Check if updating existing appointment
             if let index = existing.firstIndex(where: { $0.id == appointment.id }) {
                 existing[index] = appointment
             } else {
@@ -74,13 +64,11 @@ class AppointmentManager {
         saveAppointments()
     }
     
-    /// Get all appointments for a specific date
     func getAppointments(for date: Date) -> [AppointmentItem] {
         let key = getDateKey(for: date)
         return appointments[key] ?? []
     }
     
-    /// Delete an appointment
     func deleteAppointment(_ appointmentId: String, for date: Date) {
         let key = getDateKey(for: date)
         
@@ -97,22 +85,21 @@ class AppointmentManager {
         }
     }
     
-    /// Check if a date has any appointments
     func hasAppointments(for date: Date) -> Bool {
         let key = getDateKey(for: date)
         return appointments[key] != nil && !appointments[key]!.isEmpty
     }
     
-    /// Get all dates that have appointments
     func getAllDatesWithAppointments() -> [String] {
         return Array(appointments.keys)
     }
 }
 
-// MARK: - Codable Version for UserDefaults
+// MARK: - Codable Version
 struct AppointmentItemCodable: Codable {
     let id: String
     let title: String
+    let category: String
     let date: String
     let time: String
     let reminderEnabled: Bool
@@ -122,6 +109,7 @@ struct AppointmentItemCodable: Codable {
     init(from appointment: AppointmentItem) {
         self.id = appointment.id
         self.title = appointment.title
+        self.category = appointment.category
         self.date = appointment.date
         self.time = appointment.time
         self.reminderEnabled = appointment.reminderEnabled
@@ -133,6 +121,7 @@ struct AppointmentItemCodable: Codable {
         return AppointmentItem(
             id: id,
             title: title,
+            category: category,
             date: date,
             time: time,
             reminderEnabled: reminderEnabled,
@@ -141,4 +130,3 @@ struct AppointmentItemCodable: Codable {
         )
     }
 }
-

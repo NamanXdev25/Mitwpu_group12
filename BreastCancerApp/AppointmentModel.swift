@@ -5,12 +5,14 @@
 //  Created by Naman Bhansali on 10/01/26.
 //
 
+
 import UIKit
 
 // MARK: - AppointmentItem Model
 struct AppointmentItem {
     let id: String
-    let title: String
+    let title: String        // User's custom title
+    let category: String     // "Chemotherapy" or "Doctor Visit"
     let date: String
     let time: String
     let reminderEnabled: Bool
@@ -41,16 +43,15 @@ enum AppointmentType: Int, CaseIterable {
     }
     
     var pickerTitle: String {
-            switch self {
-            case .chemotherapy:
-                return "Chemotherapy"
-            case .doctorVisit:
-                return "Doctor Visit"
-            }
+        switch self {
+        case .chemotherapy:
+            return "Chemotherapy"
+        case .doctorVisit:
+            return "Doctor Visit"
         }
+    }
     
     var color: UIColor {
-        
         let chemocolor = UIColor(named: "chemotherapyindicator")!
         let DoctorVisitcolor = UIColor(named: "DoctorVisitindicator")!
         switch self {
