@@ -87,8 +87,27 @@ class TreatmentStatusViewController: UIViewController {
     }
     
     @IBAction func nextButtonTapped(_ sender: UIButton) {
-        guard selectedIndex != nil else { return }
-        print("Next tapped - selected: \(treatmentOptions[selectedIndex!])")
-        // Will navigate to next screen
+        guard let index = selectedIndex else { return }
+        
+        let selectedOption = treatmentOptions[index]
+        print("Next tapped - selected: \(selectedOption)")
+        
+        // Navigate based on selection
+        var identifier: String
+        
+        switch index {
+        case 0: // Currently in treatment
+            identifier = "showJourneyDetails"
+        case 1: // Under Observation
+            identifier = "showUnderObservation"
+        case 2: // Post-treatment / in recovery
+            identifier = "showPostTreatment"
+        case 3: // Prefer not to say
+            identifier = "showPreferNotToSay"
+        default:
+            return
+        }
+        
+        performSegue(withIdentifier: identifier, sender: nil)
     }
 }

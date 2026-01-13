@@ -17,12 +17,12 @@ class JourneyDetailsViewController: UIViewController {
     @IBOutlet weak var datePicker: UIDatePicker!
     
     // Age picker and display - CHANGED TO UIButton
-    @IBOutlet weak var ageLabel: UIButton! // The button that shows selected age with chevron
+    @IBOutlet weak var ageButton: UIButton! // The button that shows selected age with chevron
     @IBOutlet weak var agePickerView: UIView! // Container view for age picker
     @IBOutlet weak var agePicker: UIPickerView!
     
     // Stage picker and display - CHANGED TO UIButton
-    @IBOutlet weak var stageLabel: UIButton! // The button that shows selected stage with chevron
+    @IBOutlet weak var stageButton: UIButton! // The button that shows selected stage with chevron
     @IBOutlet weak var stagePickerView: UIView! // Container view for stage picker
     @IBOutlet weak var stagePicker: UIPickerView!
     
@@ -186,32 +186,18 @@ extension JourneyDetailsViewController: UIPickerViewDelegate, UIPickerViewDataSo
             selectedAge = ageOptions[row]
             
             // Update button title to show selected age
-            var config = ageLabel.configuration ?? UIButton.Configuration.plain()
+            var config = ageButton.configuration ?? UIButton.Configuration.plain()
             config.title = selectedAge
-            config.imagePlacement = .trailing
-            config.image = UIImage(systemName: "chevron.up.chevron.down")
-            ageLabel.configuration = config
-            ageLabel.tintColor = UIColor(named: "OnboardingPrimaryColor")
-            
-            // Auto-dismiss after selection
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-                self?.overlayTapped()
-            }
+            ageButton.configuration = config
+
         } else { // Stage
             selectedStage = stageOptions[row]
             
             // Update button title to show selected stage
-            var config = stageLabel.configuration ?? UIButton.Configuration.plain()
+            var config = stageButton.configuration ?? UIButton.Configuration.plain()
             config.title = selectedStage
-            config.imagePlacement = .trailing
-            config.image = UIImage(systemName: "chevron.up.chevron.down")
-            stageLabel.configuration = config
-            stageLabel.tintColor = UIColor(named: "OnboardingPrimaryColor")
+            stageButton.configuration = config
             
-            // Auto-dismiss after selection
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-                self?.overlayTapped()
-            }
         }
         
         updateNextButtonState()
