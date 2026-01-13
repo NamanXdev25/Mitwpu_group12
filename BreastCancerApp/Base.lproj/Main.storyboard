@@ -44,6 +44,7 @@
                                     <constraint firstAttribute="width" constant="56" id="0pm-bY-QEA"/>
                                     <constraint firstAttribute="height" constant="56" id="hug-9Y-7h7"/>
                                 </constraints>
+                                <color key="tintColor" name="pink"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" image="plus" catalog="system"/>
                                 <userDefinedRuntimeAttributes>
@@ -76,6 +77,35 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1064.885496183206" y="130.98591549295776"/>
+        </scene>
+        <!--Memory Viewer View Controller-->
+        <scene sceneID="Oit-hH-65b">
+            <objects>
+                <viewController storyboardIdentifier="MemoryViewerViewController" id="wgc-G7-rRB" customClass="MemoryViewerViewController" customModule="BreastCancerApp" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="obf-Kx-jPe">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="aiK-SO-TnC">
+                                <rect key="frame" x="0.0" y="118" width="393" height="666"/>
+                            </imageView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="8gU-Ag-CCM"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="8gU-Ag-CCM" firstAttribute="trailing" secondItem="aiK-SO-TnC" secondAttribute="trailing" id="23j-eV-9Gm"/>
+                            <constraint firstItem="8gU-Ag-CCM" firstAttribute="bottom" secondItem="aiK-SO-TnC" secondAttribute="bottom" id="A56-cd-f1w"/>
+                            <constraint firstItem="aiK-SO-TnC" firstAttribute="leading" secondItem="8gU-Ag-CCM" secondAttribute="leading" id="PCX-n4-b8w"/>
+                            <constraint firstItem="aiK-SO-TnC" firstAttribute="top" secondItem="8gU-Ag-CCM" secondAttribute="top" id="S16-vd-eU9"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="imageView" destination="aiK-SO-TnC" id="XSz-oX-Kgx"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hIN-0v-UQV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1951" y="139"/>
         </scene>
         <!--Add Memory-->
         <scene sceneID="cyc-1W-8Su">
@@ -172,6 +202,9 @@
         <image name="plus" catalog="system" width="128" height="113"/>
         <namedColor name="bg">
             <color red="0.97254901960784312" green="0.94901960784313721" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+        <namedColor name="pink">
+            <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
         <systemColor name="opaqueSeparatorColor">
             <color red="0.77647058820000003" green="0.77647058820000003" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

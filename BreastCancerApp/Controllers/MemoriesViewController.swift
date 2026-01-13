@@ -1,12 +1,11 @@
 import UIKit
 
 final class MemoriesViewController: UIViewController,
-    UIImagePickerControllerDelegate,
-    UINavigationControllerDelegate,
-    AddMemoryDelegate,
-    UICollectionViewDataSource,
-    UICollectionViewDelegate,
-    UICollectionViewDelegateFlowLayout {
+                                    UIImagePickerControllerDelegate,
+                                    UINavigationControllerDelegate,
+                                    AddMemoryDelegate,
+                                    UICollectionViewDataSource,
+                                    UICollectionViewDelegateFlowLayout {
 
     // MARK: - Outlets
     @IBOutlet weak var collectionView: UICollectionView!
@@ -14,10 +13,19 @@ final class MemoriesViewController: UIViewController,
 
     // MARK: - Data
     private var memories: [Memory] = []
+    private var groupedMemories: [(date: Date, items: [Memory])] = []
+
+    private let calendar = Calendar.current
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        print("MemoriesViewController loaded")
+
+        memories = MemoryStore.load()
+        sortAndGroupMemories()
+
         configureUI()
         configureCollectionView()
         configureAddButton()
@@ -28,15 +36,14 @@ final class MemoriesViewController: UIViewController,
         addButton.layer.cornerRadius = addButton.bounds.height / 2
     }
 
-    // MARK: - UI
+    // MARK: - UI Setup
     private func configureUI() {
         title = "Memories"
-        view.backgroundColor = .systemBackground
     }
 
     private func configureAddButton() {
         addButton.configuration = nil
-        addButton.backgroundColor = .systemPink
+        addButton.backgroundColor = .pink
         addButton.setImage(UIImage(systemName: "plus"), for: .normal)
         addButton.tintColor = .white
     }
@@ -46,7 +53,6 @@ final class MemoriesViewController: UIViewController,
         collectionView.dataSource = self
         collectionView.delegate = self
 
-        // 🔴 FORCE FLOW LAYOUT (IMPORTANT)
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumInteritemSpacing = 8
@@ -59,9 +65,32 @@ final class MemoriesViewController: UIViewController,
             UINib(nibName: "MemoryImageCell", bundle: nil),
             forCellWithReuseIdentifier: MemoryImageCell.reuseIdentifier
         )
+
+        collectionView.register(
+            MemoryHeaderView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: MemoryHeaderView.reuseIdentifier
+        )
+
+        // 🔴 CRITICAL FIX — FORCE SELECTION & TOUCH
+        collectionView.allowsSelection = true
+        collectionView.isUserInteractionEnabled = true
+        collectionView.delaysContentTouches = false
+
+        print("CollectionView delegate:", collectionView.delegate as Any)
+        print("CollectionView dataSource:", collectionView.dataSource as Any)
+
+        // 🔴 ABSOLUTE VERIFICATION TAP
+        let tap = UITapGestureRecognizer(target: self, action: #selector(forceTap))
+        tap.cancelsTouchesInView = false
+        collectionView.addGestureRecognizer(tap)
     }
 
-    // MARK: - Add Button
+    @objc private func forceTap() {
+        print("FORCE TAP DETECTED ON COLLECTION VIEW")
+    }
+
+    // MARK: - Add Button Action
     @IBAction func addButtonTapped(_ sender: UIButton) {
 
         let sheet = UIAlertController(
@@ -70,17 +99,13 @@ final class MemoriesViewController: UIViewController,
             preferredStyle: .actionSheet
         )
 
-        sheet.addAction(
-            UIAlertAction(title: "Open Camera", style: .default) { _ in
-                self.presentImagePicker(sourceType: .camera)
-            }
-        )
+        sheet.addAction(UIAlertAction(title: "Open Camera", style: .default) { _ in
+            self.presentImagePicker(sourceType: .camera)
+        })
 
-        sheet.addAction(
-            UIAlertAction(title: "Add from Gallery", style: .default) { _ in
-                self.presentImagePicker(sourceType: .photoLibrary)
-            }
-        )
+        sheet.addAction(UIAlertAction(title: "Add from Gallery", style: .default) { _ in
+            self.presentImagePicker(sourceType: .photoLibrary)
+        })
 
         sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
 
@@ -99,8 +124,6 @@ final class MemoriesViewController: UIViewController,
         let picker = UIImagePickerController()
         picker.sourceType = sourceType
         picker.delegate = self
-        picker.allowsEditing = false
-
         present(picker, animated: true)
     }
 
@@ -108,7 +131,6 @@ final class MemoriesViewController: UIViewController,
         _ picker: UIImagePickerController,
         didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]
     ) {
-
         guard let image = info[.originalImage] as? UIImage else {
             picker.dismiss(animated: true)
             return
@@ -121,64 +143,134 @@ final class MemoriesViewController: UIViewController,
 
     // MARK: - Navigation
     private func openAddMemoryScreen(with image: UIImage) {
-
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
 
-        guard let addVC = storyboard.instantiateViewController(
+        let addVC = storyboard.instantiateViewController(
             withIdentifier: "AddMemoryViewController"
-        ) as? AddMemoryViewController else {
-            fatalError("AddMemoryViewController not found")
-        }
+        ) as! AddMemoryViewController
 
         addVC.image = image
         addVC.delegate = self
 
         let navVC = UINavigationController(rootViewController: addVC)
-        navVC.modalPresentationStyle = .fullScreen
-
         present(navVC, animated: true)
     }
 
     // MARK: - AddMemoryDelegate
     func didAddMemory(_ memory: Memory) {
-        memories.insert(memory, at: 0)
+        memories.append(memory)
+        sortAndGroupMemories()
+        MemoryStore.save(memories)
         collectionView.reloadData()
     }
 
-    // MARK: - UICollectionViewDataSource
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        memories.count
+    // MARK: - Grouping & Sorting
+    private func sortAndGroupMemories() {
+        memories.sort { $0.date > $1.date }
+
+        let grouped = Dictionary(grouping: memories) {
+            calendar.startOfDay(for: $0.date)
+        }
+
+        groupedMemories = grouped
+            .map { ($0.key, $0.value) }
+            .sorted { $0.0 > $1.0 }
     }
 
-    func collectionView(
-        _ collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath
-    ) -> UICollectionViewCell {
+    // MARK: - Collection View Data Source
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        groupedMemories.count
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
+        groupedMemories[section].items.count
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
         let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: MemoryImageCell.reuseIdentifier,
             for: indexPath
         ) as! MemoryImageCell
 
-        cell.configure(with: memories[indexPath.item].image)
+        let memory = groupedMemories[indexPath.section].items[indexPath.item]
+        cell.configure(with: memory.image!)
+
+        cell.onTap = { [weak self] in
+            self?.openViewer(with: memory.image!)
+        }
+
         return cell
     }
 
-    // MARK: - UICollectionViewDelegateFlowLayout
-    func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        sizeForItemAt indexPath: IndexPath
-    ) -> CGSize {
+
+    // MARK: - Selection (THIS IS WHAT WE ARE TESTING)
+    func collectionView(_ collectionView: UICollectionView,
+                        didSelectItemAt indexPath: IndexPath) {
+
+        let memory = groupedMemories[indexPath.section].items[indexPath.item]
+        print("DID SELECT MEMORY:", memory.date)
+    }
+
+    // MARK: - Section Header
+    func collectionView(_ collectionView: UICollectionView,
+                        viewForSupplementaryElementOfKind kind: String,
+                        at indexPath: IndexPath) -> UICollectionReusableView {
+
+        let header = collectionView.dequeueReusableSupplementaryView(
+            ofKind: kind,
+            withReuseIdentifier: MemoryHeaderView.reuseIdentifier,
+            for: indexPath
+        ) as! MemoryHeaderView
+
+        header.label.text = formattedDate(groupedMemories[indexPath.section].date)
+        return header
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        referenceSizeForHeaderInSection section: Int) -> CGSize {
+        CGSize(width: collectionView.bounds.width, height: 40)
+    }
+
+    // MARK: - Layout
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
 
         let itemsPerRow: CGFloat = 4
         let spacing: CGFloat = 8
         let sectionInsets: CGFloat = 24
 
         let totalSpacing = (itemsPerRow - 1) * spacing + sectionInsets
-        let availableWidth = collectionView.bounds.width - totalSpacing
-        let width = floor(availableWidth / itemsPerRow)
+        let width = floor((collectionView.bounds.width - totalSpacing) / itemsPerRow)
 
         return CGSize(width: width, height: width)
     }
+
+    // MARK: - Date Formatting
+    private func formattedDate(_ date: Date) -> String {
+        if calendar.isDateInToday(date) { return "Today" }
+        if calendar.isDateInYesterday(date) { return "Yesterday" }
+
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd MMM yyyy"
+        return formatter.string(from: date)
+    }
+    
+    private func openViewer(with image: UIImage) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+
+        let viewerVC = storyboard.instantiateViewController(
+            withIdentifier: "MemoryViewerViewController"
+        ) as! MemoryViewerViewController
+
+        viewerVC.image = image
+        viewerVC.modalPresentationStyle = .fullScreen
+
+        present(viewerVC, animated: true)
+    }
+
 }

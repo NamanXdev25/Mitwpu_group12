@@ -1,7 +1,12 @@
+import Foundation
 import UIKit
 
-struct Memory {
-    let image: UIImage
+struct Memory: Codable {
+    let imageData: Data
     let date: Date
     let note: String?
+
+    var image: UIImage? {
+        UIImage(data: imageData)
+    }
 }

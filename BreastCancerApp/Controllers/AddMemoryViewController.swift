@@ -11,7 +11,6 @@ final class AddMemoryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Add Memory"
-        view.backgroundColor = .systemBackground
         setupUI()
     }
 
@@ -30,11 +29,14 @@ final class AddMemoryViewController: UIViewController {
             action: #selector(closeTapped)
         )
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
+        let doneButton = UIBarButtonItem(
             barButtonSystemItem: .done,
             target: self,
             action: #selector(doneTapped)
         )
+
+        doneButton.tintColor = UIColor(named: "pink")
+        navigationItem.rightBarButtonItem = doneButton
     }
 
     @objc private func closeTapped() {
@@ -44,8 +46,12 @@ final class AddMemoryViewController: UIViewController {
     @objc private func doneTapped() {
         let note = noteTextView.textColor == .systemGray ? nil : noteTextView.text
 
+        guard let imageData = image.jpegData(compressionQuality: 0.9) else {
+            return
+        }
+
         let memory = Memory(
-            image: image,
+            imageData: imageData,
             date: Date(),
             note: note
         )
