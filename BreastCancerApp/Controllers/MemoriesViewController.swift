@@ -263,14 +263,16 @@ final class MemoriesViewController: UIViewController,
     private func openViewer(with image: UIImage) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
 
-        let viewerVC = storyboard.instantiateViewController(
-            withIdentifier: "MemoryViewerViewController"
-        ) as! MemoryViewerViewController
+        let pageVC = storyboard.instantiateViewController(
+            withIdentifier: "MemoryPageViewController"
+        ) as! MemoryPageViewController
 
-        viewerVC.image = image
-        viewerVC.modalPresentationStyle = .fullScreen
+        pageVC.images = memories.compactMap { $0.image }
+        pageVC.startIndex = pageVC.images.firstIndex(of: image) ?? 0
+        pageVC.modalPresentationStyle = .fullScreen
 
-        present(viewerVC, animated: true)
+        present(pageVC, animated: true)
     }
+
 
 }

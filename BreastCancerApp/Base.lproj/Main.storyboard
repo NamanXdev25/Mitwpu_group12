@@ -107,6 +107,14 @@
             </objects>
             <point key="canvasLocation" x="1951" y="139"/>
         </scene>
+        <!--Memory Page View Controller-->
+        <scene sceneID="LQo-6L-qs1">
+            <objects>
+                <pageViewController storyboardIdentifier="MemoryPageViewController" autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="i3B-ZV-fwm" customClass="MemoryPageViewController" customModule="BreastCancerApp" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iVC-p8-eCc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2753" y="155"/>
+        </scene>
         <!--Add Memory-->
         <scene sceneID="cyc-1W-8Su">
             <objects>
@@ -177,7 +185,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AZh-er-eyr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2854.1984732824426" y="125.35211267605635"/>
+            <point key="canvasLocation" x="3680" y="131"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="IEo-ie-cPC">
