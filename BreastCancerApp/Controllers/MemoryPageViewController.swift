@@ -2,13 +2,15 @@ import UIKit
 
 final class MemoryPageViewController: UIPageViewController {
 
-    var images: [UIImage] = []
+    // MARK: - Data
+    var memories: [Memory] = []
     var startIndex: Int = 0
 
     weak var deleteDelegate: MemoryDeleteDelegate?
 
     private var currentIndex: Int = 0
 
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -18,23 +20,28 @@ final class MemoryPageViewController: UIPageViewController {
         view.backgroundColor = .white
         currentIndex = startIndex
 
-        let startVC = imageViewController(at: startIndex)
+        let startVC = viewerController(at: startIndex)
         setViewControllers([startVC], direction: .forward, animated: false)
 
         addGlassBackButton()
         addGlassDeleteButton()
     }
 
-    private func imageViewController(at index: Int) -> MemoryViewerViewController {
+    // MARK: - Child Viewer VC
+    private func viewerController(at index: Int) -> MemoryViewerViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
 
         let vc = storyboard.instantiateViewController(
             withIdentifier: "MemoryViewerViewController"
         ) as! MemoryViewerViewController
 
-        vc.image = images[index]
+        let memory = memories[index]
+
+        vc.image = memory.image
+        vc.note = memory.note
         vc.view.tag = index
         vc.view.backgroundColor = .white
+
         return vc
     }
 
@@ -108,12 +115,36 @@ final class MemoryPageViewController: UIPageViewController {
         )
 
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
-            self.deleteDelegate?.didDeleteMemory(at: self.currentIndex)
-            self.dismiss(animated: true)
+            self.performDelete()
         })
 
         present(alert, animated: true)
+    }
+
+    // MARK: - Delete Logic (Photos-style)
+    private func performDelete() {
+
+        deleteDelegate?.didDeleteMemory(at: currentIndex)
+        memories.remove(at: currentIndex)
+
+        guard !memories.isEmpty else {
+            dismiss(animated: true)
+            return
+        }
+
+        let nextIndex: Int
+        if currentIndex < memories.count {
+            nextIndex = currentIndex          // show right
+        } else {
+            nextIndex = memories.count - 1   // show left
+        }
+
+        currentIndex = nextIndex
+
+        let nextVC = viewerController(at: nextIndex)
+        setViewControllers([nextVC], direction: .forward, animated: true)
     }
 }
 
@@ -127,7 +158,7 @@ extension MemoryPageViewController: UIPageViewControllerDataSource, UIPageViewCo
 
         let index = viewController.view.tag
         guard index > 0 else { return nil }
-        return imageViewController(at: index - 1)
+        return viewerController(at: index - 1)
     }
 
     func pageViewController(
@@ -136,8 +167,8 @@ extension MemoryPageViewController: UIPageViewControllerDataSource, UIPageViewCo
     ) -> UIViewController? {
 
         let index = viewController.view.tag
-        guard index < images.count - 1 else { return nil }
-        return imageViewController(at: index + 1)
+        guard index < memories.count - 1 else { return nil }
+        return viewerController(at: index + 1)
     }
 
     func pageViewController(

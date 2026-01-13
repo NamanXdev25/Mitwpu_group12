@@ -22,8 +22,6 @@ final class MemoriesViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        print("MemoriesViewController loaded")
-
         memories = MemoryStore.load()
         sortAndGroupMemories()
 
@@ -73,20 +71,14 @@ final class MemoriesViewController: UIViewController,
             withReuseIdentifier: MemoryHeaderView.reuseIdentifier
         )
 
-        // Touch reliability
         collectionView.allowsSelection = true
         collectionView.isUserInteractionEnabled = true
         collectionView.delaysContentTouches = false
     }
 
-    // MARK: - Add Button Action
+    // MARK: - Add Button
     @IBAction func addButtonTapped(_ sender: UIButton) {
-
-        let sheet = UIAlertController(
-            title: nil,
-            message: nil,
-            preferredStyle: .actionSheet
-        )
+        let sheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 
         sheet.addAction(UIAlertAction(title: "Open Camera", style: .default) { _ in
             self.presentImagePicker(sourceType: .camera)
@@ -118,7 +110,7 @@ final class MemoriesViewController: UIViewController,
 
     func imagePickerController(
         _ picker: UIImagePickerController,
-        didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]
+        didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]
     ) {
         guard let image = info[.originalImage] as? UIImage else {
             picker.dismiss(animated: true)
@@ -148,12 +140,12 @@ final class MemoriesViewController: UIViewController,
     // MARK: - AddMemoryDelegate
     func didAddMemory(_ memory: Memory) {
         memories.append(memory)
-        sortAndGroupMemories()
         MemoryStore.save(memories)
+        sortAndGroupMemories()
         collectionView.reloadData()
     }
 
-    // MARK: - Delete Delegate
+    // MARK: - MemoryDeleteDelegate
     func didDeleteMemory(at index: Int) {
         memories.remove(at: index)
         MemoryStore.save(memories)
@@ -161,7 +153,7 @@ final class MemoriesViewController: UIViewController,
         collectionView.reloadData()
     }
 
-    // MARK: - Grouping & Sorting
+    // MARK: - Grouping
     private func sortAndGroupMemories() {
         memories.sort { $0.date > $1.date }
 
@@ -174,7 +166,7 @@ final class MemoriesViewController: UIViewController,
             .sorted { $0.0 > $1.0 }
     }
 
-    // MARK: - Collection View Data Source
+    // MARK: - CollectionView DataSource
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         groupedMemories.count
     }
@@ -196,13 +188,13 @@ final class MemoriesViewController: UIViewController,
         cell.configure(with: memory.image!)
 
         cell.onTap = { [weak self] in
-            self?.openViewer(with: memory.image!)
+            self?.openViewer(section: indexPath.section, item: indexPath.item)
         }
 
         return cell
     }
 
-    // MARK: - Section Header
+    // MARK: - Headers
     func collectionView(_ collectionView: UICollectionView,
                         viewForSupplementaryElementOfKind kind: String,
                         at indexPath: IndexPath) -> UICollectionReusableView {
@@ -248,16 +240,20 @@ final class MemoriesViewController: UIViewController,
         return formatter.string(from: date)
     }
 
-    // MARK: - Open Viewer
-    private func openViewer(with image: UIImage) {
+    // MARK: - Open Viewer (STRUCT-SAFE)
+    private func openViewer(section: Int, item: Int) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
 
         let pageVC = storyboard.instantiateViewController(
             withIdentifier: "MemoryPageViewController"
         ) as! MemoryPageViewController
 
-        pageVC.images = memories.compactMap { $0.image }
-        pageVC.startIndex = pageVC.images.firstIndex(of: image) ?? 0
+        let flatMemories = groupedMemories.flatMap { $0.items }
+        let startIndex = groupedMemories[..<section]
+            .reduce(0) { $0 + $1.items.count } + item
+
+        pageVC.memories = flatMemories
+        pageVC.startIndex = startIndex
         pageVC.deleteDelegate = self
         pageVC.modalPresentationStyle = .fullScreen
 
