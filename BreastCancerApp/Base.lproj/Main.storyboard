@@ -51,24 +51,26 @@
                             <constraint firstItem="w5G-o8-VT1" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="xMo-gn-4tJ"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="dOo-5r-nfC"/>
                     <connections>
                         <outlet property="collectionView" destination="w5G-o8-VT1" id="FRd-ua-646"/>
+                        <segue destination="11i-0f-bkX" kind="show" identifier="ShowHealthStatus" id="Noj-vH-bmh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="139" y="131"/>
+            <point key="canvasLocation" x="1064.885496183206" y="130.98591549295776"/>
         </scene>
         <!--Health Status-->
         <scene sceneID="E9P-OK-8Vn">
             <objects>
                 <viewController storyboardIdentifier="HealthStatusViewController" id="11i-0f-bkX" customClass="HealthStatusViewController" customModule="BreastCancerApp" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Hva-NP-GHf">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="793"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Rcb-W1-gkU">
-                                <rect key="frame" x="0.0" y="172" width="393" height="612"/>
+                                <rect key="frame" x="0.0" y="59" width="393" height="734"/>
                                 <color key="backgroundColor" name="bg"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="dNq-ld-Pm6">
                                     <size key="itemSize" width="128" height="128"/>
@@ -104,7 +106,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XDW-d4-fqQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2101.5267175572517" y="114.78873239436621"/>
+            <point key="canvasLocation" x="3028.2442748091603" y="114.78873239436621"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="51P-fG-pmg">
@@ -122,9 +124,12 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tfi-Oz-agC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1174.8091603053435" y="114.78873239436621"/>
+            <point key="canvasLocation" x="2101.5267175572517" y="114.78873239436621"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="Noj-vH-bmh"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <namedColor name="bg">
             <color red="0.97254901960784312" green="0.94901960784313721" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>

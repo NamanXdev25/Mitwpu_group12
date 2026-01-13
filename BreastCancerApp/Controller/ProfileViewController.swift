@@ -106,7 +106,6 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
 
-        // ✅ IMPORTANT: subtract section insets (16 + 16)
         let width = collectionView.bounds.width - 32
 
         switch indexPath.item {
@@ -115,7 +114,7 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
         case 1:
             return CGSize(width: width, height: 72)  // Health status
         case 2:
-            return CGSize(width: width, height: 28)  // Notifications header
+            return CGSize(width: width, height: 20)  // Notifications header (tight)
         default:
             return CGSize(width: width, height: 208) // Notification toggles
         }
@@ -134,7 +133,7 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         minimumLineSpacingForSectionAt section: Int
     ) -> CGFloat {
-        16
+        8
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

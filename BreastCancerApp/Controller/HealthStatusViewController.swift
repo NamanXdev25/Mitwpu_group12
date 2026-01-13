@@ -184,7 +184,7 @@ extension HealthStatusViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         insetForSectionAt section: Int
     ) -> UIEdgeInsets {
-        UIEdgeInsets(top: 16, left: 16, bottom: 24, right: 16)
+        UIEdgeInsets(top: 0, left: 16, bottom: 24, right: 16)
     }
 
     func collectionView(

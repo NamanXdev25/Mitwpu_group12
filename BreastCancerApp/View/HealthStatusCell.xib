@@ -11,23 +11,23 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="HealthStatusCell" customModule="BreastCancerApp">
-            <rect key="frame" x="0.0" y="0.0" width="296" height="155"/>
+            <rect key="frame" x="0.0" y="0.0" width="280" height="93"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="296" height="155"/>
+                <rect key="frame" x="0.0" y="0.0" width="280" height="93"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SVr-zX-i7Q">
-                        <rect key="frame" x="16" y="8" width="264" height="139"/>
+                        <rect key="frame" x="16" y="8" width="248" height="77"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Health Status" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="22G-1r-5Bb">
-                                <rect key="frame" x="16" y="60.666666666666671" width="92.666666666666671" height="18"/>
+                                <rect key="frame" x="16" y="29.666666666666664" width="92.666666666666671" height="18"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="8Cs-C9-ohN">
-                                <rect key="frame" x="236" y="61.666666666666679" width="12" height="16.333333333333336"/>
+                                <rect key="frame" x="220" y="30.666666666666664" width="12" height="16.333333333333336"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="Rb5-Ka-kwj"/>
                                     <constraint firstAttribute="width" constant="12" id="WXN-Rg-PCo"/>
@@ -57,12 +57,12 @@
                 <constraint firstItem="SVr-zX-i7Q" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="nif-VV-r04"/>
                 <constraint firstAttribute="trailing" secondItem="SVr-zX-i7Q" secondAttribute="trailing" constant="16" id="o0n-1O-9B7"/>
             </constraints>
-            <size key="customSize" width="296" height="155"/>
+            <size key="customSize" width="280" height="93"/>
             <connections>
                 <outlet property="chevronImageView" destination="8Cs-C9-ohN" id="Snz-ci-Rsa"/>
                 <outlet property="titleLabel" destination="22G-1r-5Bb" id="dPK-Sq-b3I"/>
             </connections>
-            <point key="canvasLocation" x="326.71755725190837" y="190.49295774647888"/>
+            <point key="canvasLocation" x="314.50381679389312" y="168.66197183098592"/>
         </collectionViewCell>
     </objects>
     <resources>

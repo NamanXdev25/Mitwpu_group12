@@ -5,7 +5,9 @@ final class NotificationTogglesCell: UICollectionViewCell {
     // MARK: - Reuse Identifier
     static let reuseIdentifier = "NotificationTogglesCell"
 
-    // MARK: - Outlets (connect from XIB)
+    // MARK: - Outlets
+    @IBOutlet private weak var cardView: UIView!
+
     @IBOutlet weak var exerciseSwitch: UISwitch!
     @IBOutlet weak var hydrationSwitch: UISwitch!
     @IBOutlet weak var appointmentsSwitch: UISwitch!
@@ -14,7 +16,7 @@ final class NotificationTogglesCell: UICollectionViewCell {
     // MARK: - Lifecycle
     override func awakeFromNib() {
         super.awakeFromNib()
-        selectionStyleDisabled()
+        configureUI()
     }
 
     // MARK: - Configuration
@@ -30,10 +32,13 @@ final class NotificationTogglesCell: UICollectionViewCell {
         medicationsSwitch.isOn = medicationsEnabled
     }
 
-    // MARK: - Helpers
-    private func selectionStyleDisabled() {
-        // Prevent highlight on tap (collection view default behavior)
+    // MARK: - UI Setup
+    private func configureUI() {
         backgroundColor = .clear
         contentView.backgroundColor = .clear
+
+        cardView.backgroundColor = .white
+        cardView.layer.cornerRadius = 12
+        cardView.clipsToBounds = true
     }
 }
