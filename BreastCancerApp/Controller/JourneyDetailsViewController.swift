@@ -155,7 +155,7 @@ class JourneyDetailsViewController: UIViewController {
         print("- Date: \(datePicker.date)")
         print("- Age: \(selectedAge ?? "none")")
         print("- Stage: \(selectedStage ?? "none")")
-        // Will navigate to hobbies screen
+        performSegue(withIdentifier: "showHobbies", sender: nil)
     }
 }
 

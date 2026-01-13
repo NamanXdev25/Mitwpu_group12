@@ -7,6 +7,7 @@
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -194,7 +195,6 @@
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="8" id="EkJ-Nh-J8v"/>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="8" id="ddA-1c-Snt"/>
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h9m-tl-Obr">
@@ -264,10 +264,10 @@
                         <outlet property="nextButton" destination="8bj-WK-QX4" id="TnH-6Q-T08"/>
                         <outlet property="progressBar" destination="SiZ-sw-flw" id="IPB-DH-Kuy"/>
                         <outlet property="stackView" destination="dCp-ML-l7C" id="1Kf-Lw-G8I"/>
-                        <segue destination="XB0-qL-SXI" kind="show" id="5UR-bP-lFq"/>
-                        <segue destination="M9d-7A-WiT" kind="show" id="cKz-9p-ySZ"/>
-                        <segue destination="WGa-4n-SUH" kind="show" id="Xfl-9e-wco"/>
-                        <segue destination="nEW-sL-8D5" kind="show" id="mDB-lK-WAR"/>
+                        <segue destination="XB0-qL-SXI" kind="show" identifier="showJourneyDetails" id="5UR-bP-lFq"/>
+                        <segue destination="M9d-7A-WiT" kind="show" identifier="showUnderObservation" id="cKz-9p-ySZ"/>
+                        <segue destination="WGa-4n-SUH" kind="show" identifier="showPostTreatment" id="Xfl-9e-wco"/>
+                        <segue destination="nEW-sL-8D5" kind="show" identifier="showPreferNotToSay" id="mDB-lK-WAR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mfn-gU-eh6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -504,16 +504,128 @@
                         <outlet property="stageButton" destination="uPq-2j-MLb" id="xgn-yj-Y32"/>
                         <outlet property="stagePicker" destination="qhA-wK-pG0" id="Wzm-wf-sNN"/>
                         <outlet property="stagePickerView" destination="N3a-Kf-XJC" id="SUE-03-Xab"/>
+                        <segue destination="Pzx-Ua-6B7" kind="show" identifier="showHobbies" id="6PA-z6-9r9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XdH-5Q-rwq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="5777.8625954198469" y="235.91549295774649"/>
         </scene>
-        <!--View Controller-->
+        <!--Hobbies View Controller-->
+        <scene sceneID="N0s-iy-vE4">
+            <objects>
+                <viewController storyboardIdentifier="HobbiesViewController" id="Pzx-Ua-6B7" customClass="HobbiesViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Oau-z9-2EK">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vbw-VE-RIg" customClass="ProgressBarView" customModule="BreastCancerApp" customModuleProvider="target">
+                                <rect key="frame" x="16" y="184" width="361" height="8"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="8" id="lDU-m9-BFa"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="khW-Wf-ZM0">
+                                <rect key="frame" x="320" y="200" width="57" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="egU-yf-c2N"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="35" id="kjw-Sz-1MC"/>
+                                </constraints>
+                                <color key="tintColor" name="OnboardingPrimaryColor"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Skip"/>
+                                <connections>
+                                    <action selector="skipButtonTapped:" destination="Pli-cI-ajq" eventType="touchUpInside" id="25x-qn-Sih"/>
+                                    <action selector="skipButtonTapped:" destination="Pzx-Ua-6B7" eventType="touchUpInside" id="8WC-Gi-SFg"/>
+                                    <action selector="skipButtonTapped:" destination="B0G-Dm-mY6" eventType="touchUpInside" id="skJ-eD-ThO"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select what you enjoy doing" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZIh-bR-KhW">
+                                <rect key="frame" x="16" y="250.99999999999997" width="361" height="81.666666666666657"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="omJ-iI-4lw">
+                                <rect key="frame" x="0.0" y="364.66666666666669" width="393" height="195.00000000000006"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="woi-ub-Nh2">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="nJ3-0L-Xx1">
+                                        <rect key="frame" x="0.0" y="0.0" width="127.99999999999997" height="128"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="hKB-tW-3jM">
+                                            <rect key="frame" x="0.0" y="0.0" width="127.99999999999997" height="128"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </collectionViewCellContentView>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Share your favourite hobbies so we can suggest activities that bring you joy." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p85-kI-B38">
+                                <rect key="frame" x="24" y="599.66666666666663" width="345" height="42.333333333333371"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gl1-wl-kYt">
+                                <rect key="frame" x="96" y="678" width="201" height="56"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="56" id="Kze-6v-JlR"/>
+                                </constraints>
+                                <color key="tintColor" name="OnboardingPrimaryColor"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Next" cornerStyle="capsule"/>
+                                <connections>
+                                    <action selector="nextButtonTapped:" destination="Pzx-Ua-6B7" eventType="touchUpInside" id="IbG-mU-wnh"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="LPi-F2-ZlF"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Gl1-wl-kYt" firstAttribute="leading" secondItem="LPi-F2-ZlF" secondAttribute="leading" constant="96" id="0wV-Tn-hkb"/>
+                            <constraint firstItem="LPi-F2-ZlF" firstAttribute="trailing" secondItem="ZIh-bR-KhW" secondAttribute="trailing" constant="16" id="3Jb-nJ-CYl"/>
+                            <constraint firstItem="Vbw-VE-RIg" firstAttribute="top" secondItem="LPi-F2-ZlF" secondAttribute="top" constant="12" id="4du-go-lmO"/>
+                            <constraint firstItem="ZIh-bR-KhW" firstAttribute="top" secondItem="khW-Wf-ZM0" secondAttribute="bottom" constant="16" id="72D-OL-EUY"/>
+                            <constraint firstItem="p85-kI-B38" firstAttribute="leading" secondItem="LPi-F2-ZlF" secondAttribute="leading" constant="24" id="9ah-aw-dhp"/>
+                            <constraint firstItem="Gl1-wl-kYt" firstAttribute="top" secondItem="p85-kI-B38" secondAttribute="bottom" constant="36" id="HUi-XO-dYM"/>
+                            <constraint firstItem="LPi-F2-ZlF" firstAttribute="bottom" secondItem="Gl1-wl-kYt" secondAttribute="bottom" constant="50" id="MIy-ma-MJZ"/>
+                            <constraint firstItem="p85-kI-B38" firstAttribute="top" secondItem="omJ-iI-4lw" secondAttribute="bottom" constant="40" id="OXr-3Z-nic"/>
+                            <constraint firstItem="LPi-F2-ZlF" firstAttribute="trailing" secondItem="Gl1-wl-kYt" secondAttribute="trailing" constant="96" id="RQK-qa-GQe"/>
+                            <constraint firstItem="khW-Wf-ZM0" firstAttribute="top" secondItem="Vbw-VE-RIg" secondAttribute="bottom" constant="8" id="TAn-B6-EuX"/>
+                            <constraint firstItem="LPi-F2-ZlF" firstAttribute="trailing" secondItem="omJ-iI-4lw" secondAttribute="trailing" id="VDG-l1-iAb"/>
+                            <constraint firstItem="Vbw-VE-RIg" firstAttribute="leading" secondItem="LPi-F2-ZlF" secondAttribute="leading" constant="16" id="guu-Fr-QJT"/>
+                            <constraint firstItem="omJ-iI-4lw" firstAttribute="top" secondItem="ZIh-bR-KhW" secondAttribute="bottom" constant="32" id="mXW-p3-skh"/>
+                            <constraint firstItem="omJ-iI-4lw" firstAttribute="leading" secondItem="LPi-F2-ZlF" secondAttribute="leading" id="qJA-wb-Jph"/>
+                            <constraint firstItem="LPi-F2-ZlF" firstAttribute="trailing" secondItem="p85-kI-B38" secondAttribute="trailing" constant="24" id="r9m-ne-voQ"/>
+                            <constraint firstItem="LPi-F2-ZlF" firstAttribute="trailing" secondItem="khW-Wf-ZM0" secondAttribute="trailing" constant="16" id="wAR-sA-dIb"/>
+                            <constraint firstItem="ZIh-bR-KhW" firstAttribute="leading" secondItem="LPi-F2-ZlF" secondAttribute="leading" constant="16" id="xpI-PE-7A2"/>
+                            <constraint firstItem="LPi-F2-ZlF" firstAttribute="trailing" secondItem="Vbw-VE-RIg" secondAttribute="trailing" constant="16" id="yVu-fg-5BO"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="rj5-0d-3qq"/>
+                    <connections>
+                        <outlet property="collectionView" destination="omJ-iI-4lw" id="mRC-Is-n9g"/>
+                        <outlet property="descriptionLabel" destination="p85-kI-B38" id="0CF-Pt-SgR"/>
+                        <outlet property="nextButton" destination="Gl1-wl-kYt" id="fvk-Np-X2F"/>
+                        <outlet property="progressBar" destination="Vbw-VE-RIg" id="SXc-wq-SnS"/>
+                        <outlet property="skipButton" destination="khW-Wf-ZM0" id="Bia-xd-d8i"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="sDF-34-E6A" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="6814" y="239"/>
+        </scene>
+        <!--Under Observation View Controller-->
         <scene sceneID="Iqz-lC-pjd">
             <objects>
-                <viewController storyboardIdentifier="UnderObservationViewController" id="M9d-7A-WiT" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="UnderObservationViewController" id="M9d-7A-WiT" customClass="UnderObservationViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="0aH-0A-fkB">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -526,10 +638,10 @@
             </objects>
             <point key="canvasLocation" x="5859" y="990"/>
         </scene>
-        <!--View Controller-->
+        <!--Post Treatment View Controller-->
         <scene sceneID="xkB-cN-6zn">
             <objects>
-                <viewController storyboardIdentifier="PostTreatmentViewController" id="WGa-4n-SUH" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PostTreatmentViewController" id="WGa-4n-SUH" customClass="PostTreatmentViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Maf-7V-Oky">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -542,10 +654,10 @@
             </objects>
             <point key="canvasLocation" x="5030" y="1073"/>
         </scene>
-        <!--View Controller-->
+        <!--Prefer Not To Say View Controller-->
         <scene sceneID="tvc-8i-W63">
             <objects>
-                <viewController storyboardIdentifier="PreferNotToSayViewController" id="nEW-sL-8D5" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PreferNotToSayViewController" id="nEW-sL-8D5" customClass="PreferNotToSayViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="kIJ-Jq-j9w">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
