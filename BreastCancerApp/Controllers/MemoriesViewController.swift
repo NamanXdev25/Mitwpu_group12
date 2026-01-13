@@ -4,6 +4,7 @@ final class MemoriesViewController: UIViewController,
                                     UIImagePickerControllerDelegate,
                                     UINavigationControllerDelegate,
                                     AddMemoryDelegate,
+                                    MemoryDeleteDelegate,
                                     UICollectionViewDataSource,
                                     UICollectionViewDelegateFlowLayout {
 
@@ -72,22 +73,10 @@ final class MemoriesViewController: UIViewController,
             withReuseIdentifier: MemoryHeaderView.reuseIdentifier
         )
 
-        // 🔴 CRITICAL FIX — FORCE SELECTION & TOUCH
+        // Touch reliability
         collectionView.allowsSelection = true
         collectionView.isUserInteractionEnabled = true
         collectionView.delaysContentTouches = false
-
-        print("CollectionView delegate:", collectionView.delegate as Any)
-        print("CollectionView dataSource:", collectionView.dataSource as Any)
-
-        // 🔴 ABSOLUTE VERIFICATION TAP
-        let tap = UITapGestureRecognizer(target: self, action: #selector(forceTap))
-        tap.cancelsTouchesInView = false
-        collectionView.addGestureRecognizer(tap)
-    }
-
-    @objc private func forceTap() {
-        print("FORCE TAP DETECTED ON COLLECTION VIEW")
     }
 
     // MARK: - Add Button Action
@@ -164,6 +153,14 @@ final class MemoriesViewController: UIViewController,
         collectionView.reloadData()
     }
 
+    // MARK: - Delete Delegate
+    func didDeleteMemory(at index: Int) {
+        memories.remove(at: index)
+        MemoryStore.save(memories)
+        sortAndGroupMemories()
+        collectionView.reloadData()
+    }
+
     // MARK: - Grouping & Sorting
     private func sortAndGroupMemories() {
         memories.sort { $0.date > $1.date }
@@ -203,15 +200,6 @@ final class MemoriesViewController: UIViewController,
         }
 
         return cell
-    }
-
-
-    // MARK: - Selection (THIS IS WHAT WE ARE TESTING)
-    func collectionView(_ collectionView: UICollectionView,
-                        didSelectItemAt indexPath: IndexPath) {
-
-        let memory = groupedMemories[indexPath.section].items[indexPath.item]
-        print("DID SELECT MEMORY:", memory.date)
     }
 
     // MARK: - Section Header
@@ -259,7 +247,8 @@ final class MemoriesViewController: UIViewController,
         formatter.dateFormat = "dd MMM yyyy"
         return formatter.string(from: date)
     }
-    
+
+    // MARK: - Open Viewer
     private func openViewer(with image: UIImage) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
 
@@ -269,10 +258,9 @@ final class MemoriesViewController: UIViewController,
 
         pageVC.images = memories.compactMap { $0.image }
         pageVC.startIndex = pageVC.images.firstIndex(of: image) ?? 0
+        pageVC.deleteDelegate = self
         pageVC.modalPresentationStyle = .fullScreen
 
         present(pageVC, animated: true)
     }
-
-
 }

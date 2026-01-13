@@ -91,7 +91,7 @@
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="8gU-Ag-CCM"/>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" name="bg"/>
                         <constraints>
                             <constraint firstItem="8gU-Ag-CCM" firstAttribute="trailing" secondItem="aiK-SO-TnC" secondAttribute="trailing" id="23j-eV-9Gm"/>
                             <constraint firstItem="8gU-Ag-CCM" firstAttribute="bottom" secondItem="aiK-SO-TnC" secondAttribute="bottom" id="A56-cd-f1w"/>
