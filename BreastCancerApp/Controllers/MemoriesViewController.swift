@@ -16,6 +16,12 @@ final class MemoriesViewController: UIViewController,
     private var memories: [Memory] = []
     private var groupedMemories: [(date: Date, items: [Memory])] = []
 
+    // MARK: - Filter State
+    private var isFiltering = false
+    private var filteredMemories: [Memory] = []
+    private var selectedMonth: Int?
+    private var selectedYear: Int?
+
     private let calendar = Calendar.current
 
     // MARK: - Lifecycle
@@ -35,9 +41,35 @@ final class MemoriesViewController: UIViewController,
         addButton.layer.cornerRadius = addButton.bounds.height / 2
     }
 
-    // MARK: - UI Setup
+    // MARK: - UI
     private func configureUI() {
         title = "Memories"
+
+        let filterButton = UIButton(type: .system)
+        filterButton.setImage(
+            UIImage(systemName: "line.3.horizontal.decrease"),
+            for: .normal
+        )
+        filterButton.tintColor = isFiltering
+            ? UIColor(named: "pink")
+            : .label
+        filterButton.addTarget(self, action: #selector(filterTapped), for: .touchUpInside)
+
+        let blur = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
+        blur.layer.cornerRadius = 18
+        blur.clipsToBounds = true
+        blur.translatesAutoresizingMaskIntoConstraints = false
+        blur.contentView.addSubview(filterButton)
+
+        filterButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            blur.widthAnchor.constraint(equalToConstant: 36),
+            blur.heightAnchor.constraint(equalToConstant: 36),
+            filterButton.centerXAnchor.constraint(equalTo: blur.contentView.centerXAnchor),
+            filterButton.centerYAnchor.constraint(equalTo: blur.contentView.centerYAnchor)
+        ])
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: blur)
     }
 
     private func configureAddButton() {
@@ -70,13 +102,59 @@ final class MemoriesViewController: UIViewController,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: MemoryHeaderView.reuseIdentifier
         )
-
-        collectionView.allowsSelection = true
-        collectionView.isUserInteractionEnabled = true
-        collectionView.delaysContentTouches = false
     }
 
-    // MARK: - Add Button
+    // MARK: - Filter
+    @objc private func filterTapped() {
+        isFiltering ? clearFilter() : presentFilterSheet()
+    }
+
+    private func presentFilterSheet() {
+        let pickerVC = MonthYearPickerViewController()
+
+        pickerVC.onApply = { [weak self] month, year in
+            self?.applyFilter(month: month, year: year)
+        }
+
+        pickerVC.modalPresentationStyle = .pageSheet
+
+        if let sheet = pickerVC.sheetPresentationController {
+            sheet.detents = [.custom { _ in 280 }]
+            sheet.prefersGrabberVisible = true
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+            sheet.preferredCornerRadius = 24
+        }
+
+        present(pickerVC, animated: true)
+    }
+
+    private func applyFilter(month: Int, year: Int) {
+        selectedMonth = month
+        selectedYear = year
+        isFiltering = true
+
+        filteredMemories = memories.filter {
+            let c = calendar.dateComponents([.month, .year], from: $0.date)
+            return c.month == month && c.year == year
+        }
+
+        sortAndGroupMemories()
+        configureUI()
+        collectionView.reloadData()
+    }
+
+    private func clearFilter() {
+        isFiltering = false
+        selectedMonth = nil
+        selectedYear = nil
+        filteredMemories.removeAll()
+
+        sortAndGroupMemories()
+        configureUI()
+        collectionView.reloadData()
+    }
+
+    // MARK: - Add
     @IBAction func addButtonTapped(_ sender: UIButton) {
         let sheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 
@@ -90,18 +168,12 @@ final class MemoriesViewController: UIViewController,
 
         sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
 
-        if let popover = sheet.popoverPresentationController {
-            popover.sourceView = sender
-            popover.sourceRect = sender.bounds
-        }
-
         present(sheet, animated: true)
     }
 
-    // MARK: - Image Picker
+    // MARK: - Picker
     private func presentImagePicker(sourceType: UIImagePickerController.SourceType) {
         guard UIImagePickerController.isSourceTypeAvailable(sourceType) else { return }
-
         let picker = UIImagePickerController()
         picker.sourceType = sourceType
         picker.delegate = self
@@ -125,19 +197,15 @@ final class MemoriesViewController: UIViewController,
     // MARK: - Navigation
     private func openAddMemoryScreen(with image: UIImage) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-
         let addVC = storyboard.instantiateViewController(
             withIdentifier: "AddMemoryViewController"
         ) as! AddMemoryViewController
-
         addVC.image = image
         addVC.delegate = self
-
-        let navVC = UINavigationController(rootViewController: addVC)
-        present(navVC, animated: true)
+        present(UINavigationController(rootViewController: addVC), animated: true)
     }
 
-    // MARK: - AddMemoryDelegate
+    // MARK: - Delegates
     func didAddMemory(_ memory: Memory) {
         memories.append(memory)
         MemoryStore.save(memories)
@@ -145,7 +213,6 @@ final class MemoriesViewController: UIViewController,
         collectionView.reloadData()
     }
 
-    // MARK: - MemoryDeleteDelegate
     func didDeleteMemory(at index: Int) {
         memories.remove(at: index)
         MemoryStore.save(memories)
@@ -155,9 +222,9 @@ final class MemoriesViewController: UIViewController,
 
     // MARK: - Grouping
     private func sortAndGroupMemories() {
-        memories.sort { $0.date > $1.date }
+        let source = isFiltering ? filteredMemories : memories
 
-        let grouped = Dictionary(grouping: memories) {
+        let grouped = Dictionary(grouping: source) {
             calendar.startOfDay(for: $0.date)
         }
 
@@ -166,7 +233,7 @@ final class MemoriesViewController: UIViewController,
             .sorted { $0.0 > $1.0 }
     }
 
-    // MARK: - CollectionView DataSource
+    // MARK: - CollectionView
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         groupedMemories.count
     }
@@ -230,7 +297,7 @@ final class MemoriesViewController: UIViewController,
         return CGSize(width: width, height: width)
     }
 
-    // MARK: - Date Formatting
+    // MARK: - Date Format
     private func formattedDate(_ date: Date) -> String {
         if calendar.isDateInToday(date) { return "Today" }
         if calendar.isDateInYesterday(date) { return "Yesterday" }
@@ -240,19 +307,18 @@ final class MemoriesViewController: UIViewController,
         return formatter.string(from: date)
     }
 
-    // MARK: - Open Viewer (STRUCT-SAFE)
+    // MARK: - Viewer
     private func openViewer(section: Int, item: Int) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-
         let pageVC = storyboard.instantiateViewController(
             withIdentifier: "MemoryPageViewController"
         ) as! MemoryPageViewController
 
-        let flatMemories = groupedMemories.flatMap { $0.items }
+        let flat = groupedMemories.flatMap { $0.items }
         let startIndex = groupedMemories[..<section]
             .reduce(0) { $0 + $1.items.count } + item
 
-        pageVC.memories = flatMemories
+        pageVC.memories = flat
         pageVC.startIndex = startIndex
         pageVC.deleteDelegate = self
         pageVC.modalPresentationStyle = .fullScreen

@@ -5,7 +5,6 @@ final class MonthYearPickerViewController: UIViewController {
     var onApply: ((Int, Int) -> Void)?
 
     private let picker = UIPickerView()
-
     private let months = Calendar.current.monthSymbols
     private let years = Array(2000...Calendar.current.component(.year, from: Date()))
 
@@ -16,37 +15,45 @@ final class MonthYearPickerViewController: UIViewController {
         picker.dataSource = self
         picker.delegate = self
 
-        let close = UIButton(type: .system)
-        close.setImage(UIImage(systemName: "xmark"), for: .normal)
-        close.addTarget(self, action: #selector(dismissSelf), for: .touchUpInside)
-
-        let apply = UIButton(type: .system)
-        apply.setImage(UIImage(systemName: "arrow.up"), for: .normal)
-        apply.tintColor = UIColor(named: "pink")
-        apply.addTarget(self, action: #selector(applyTapped), for: .touchUpInside)
-
-        let header = UIStackView(arrangedSubviews: [close, UIView(), apply])
-        header.axis = .horizontal
-        header.translatesAutoresizingMaskIntoConstraints = false
-
         picker.translatesAutoresizingMaskIntoConstraints = false
-
-        view.addSubview(header)
         view.addSubview(picker)
 
         NSLayoutConstraint.activate([
-            header.topAnchor.constraint(equalTo: view.topAnchor, constant: 16),
-            header.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            header.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-
-            picker.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 16),
             picker.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             picker.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            picker.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            picker.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            picker.heightAnchor.constraint(equalToConstant: 200)
+        ])
+
+        setupButtons()
+    }
+
+    private func setupButtons() {
+        let close = UIButton(type: .system)
+        close.setImage(UIImage(systemName: "xmark"), for: .normal)
+        close.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
+
+        let apply = UIButton(type: .system)
+        apply.setImage(UIImage(systemName: "arrow.up"), for: .normal)
+        apply.tintColor = .pink
+        apply.addTarget(self, action: #selector(applyTapped), for: .touchUpInside)
+
+        close.translatesAutoresizingMaskIntoConstraints = false
+        apply.translatesAutoresizingMaskIntoConstraints = false
+
+        view.addSubview(close)
+        view.addSubview(apply)
+
+        NSLayoutConstraint.activate([
+            close.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            close.topAnchor.constraint(equalTo: view.topAnchor, constant: 16),
+
+            apply.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            apply.topAnchor.constraint(equalTo: view.topAnchor, constant: 16)
         ])
     }
 
-    @objc private func dismissSelf() {
+    @objc private func closeTapped() {
         dismiss(animated: true)
     }
 
@@ -62,7 +69,8 @@ extension MonthYearPickerViewController: UIPickerViewDataSource, UIPickerViewDel
 
     func numberOfComponents(in pickerView: UIPickerView) -> Int { 2 }
 
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    func pickerView(_ pickerView: UIPickerView,
+                    numberOfRowsInComponent component: Int) -> Int {
         component == 0 ? months.count : years.count
     }
 
