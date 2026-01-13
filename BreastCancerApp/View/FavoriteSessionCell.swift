@@ -1,125 +1,85 @@
 import UIKit
+
 class FavoriteSessionCell: UICollectionViewCell {
     
-    // --- OLD OUTLETS (Keep these safely connected) ---
+    // --- OUTLETS ---
     @IBOutlet weak var sessionImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var likeButton: UIButton!
-    @IBOutlet weak var titleContainerView: UIView!
-    @IBOutlet weak var heartContainerView: UIView!
-    
-    // --- NEW OUTLETS (Changed to '?' to prevent crashing) ---
     @IBOutlet weak var nameLabel: UILabel?
     @IBOutlet weak var gradientContainerView: UIView?
     
-    // --- VARIABLES ---
-    weak var delegate: SessionCellDelegate?
-    private let gradientLayer = CAGradientLayer()
+    // --- MATERIAL DESIGN ELEMENTS ---
+    private let blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
     
-    // --- LIFECYCLE ---
+    weak var delegate: SessionCellDelegate?
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        setupGradient()
+        setupMaterialGradient()
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        // Safely update gradient frame if the view exists
-        if let container = gradientContainerView {
-            gradientLayer.frame = container.bounds
-        }
+    private func setupMaterialGradient() {
+        guard let container = gradientContainerView else { return }
+        container.backgroundColor = .clear
+        
+        blurEffectView.translatesAutoresizingMaskIntoConstraints = false
+        container.insertSubview(blurEffectView, at: 0)
+        
+        NSLayoutConstraint.activate([
+            blurEffectView.topAnchor.constraint(equalTo: container.topAnchor),
+            blurEffectView.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            blurEffectView.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+            blurEffectView.bottomAnchor.constraint(equalTo: container.bottomAnchor)
+        ])
     }
     
-    // --- SETUP ---
-    private func setupGradient() {
-        // Only add gradient if the container exists
-        if let container = gradientContainerView {
-            container.layer.insertSublayer(gradientLayer, at: 0)
-        }
-    }
-    
-    // --- ACTIONS ---
     @IBAction func likeButtonTapped(_ sender: UIButton) {
         delegate?.didTapLikeButton(on: self)
     }
     
-    // --- CONFIGURATION ---
     func configureCell(session: BreathingSession) {
-        
-        // 1. Basic Setup
         sessionImageView.image = UIImage(named: session.imageName)
+        titleLabel?.text = session.title
+        categoryLabel?.text = session.category
+        nameLabel?.text = session.title
         
-        // 2. Set Text (Handle both Old and New Labels safely)
-        titleLabel?.text = session.title       // Old Design
-        categoryLabel?.text = session.category // Old Design
-        nameLabel?.text = session.title        // New Design (Safe)
-        
-        // 3. Heart Button Logic
         let heartName = session.isFavorite ? "heart.fill" : "heart"
         likeButton.setImage(UIImage(systemName: heartName), for: .normal)
         likeButton.tintColor = .systemPink
         
-        // 4. Run Smart Gradient Logic (Only if image exists)
         if let image = sessionImageView.image {
-            applyAdaptiveTheme(for: image)
+            applyMaterialTheme(for: image)
         }
     }
     
-    // --- SMART THEME LOGIC ---
-    private func applyAdaptiveTheme(for image: UIImage) {
-        // Guard checks to prevent crashing
-        guard let nameLabel = nameLabel, let _ = gradientContainerView else { return }
+    private func applyMaterialTheme(for image: UIImage) {
+        guard let nameLabel = nameLabel, let container = gradientContainerView else { return }
         
+        // This line will now work because of the extension below
         let isDark = image.isDark
-        
-        // 1. Set Text Color
         nameLabel.textColor = isDark ? .white : .black
+        blurEffectView.effect = isDark ? UIBlurEffect(style: .dark) : UIBlurEffect(style: .light)
         
-        // 2. Set Gradient Colors
-        let baseColor = isDark ? UIColor.black : UIColor.white
-        
-        // CHANGE HERE: Lower the alpha values so the image shows through
-        gradientLayer.colors = [
-            baseColor.withAlphaComponent(0.0).cgColor, // Top: Completely Clear
-            baseColor.withAlphaComponent(0.4).cgColor, // Middle: Very subtle fade
-            baseColor.withAlphaComponent(0.88).cgColor // Bottom: 85% opacity (Not 100% solid!)
-        ]
-        
-        // Optional: Adjust the gradient locations to push the color lower down
-        gradientLayer.locations = [0.0, 0.6, 1.0]
+        // Material tint #E86A92
+        container.backgroundColor = UIColor(red: 232/255, green: 106/255, blue: 146/255, alpha: 0.15)
     }
 }
 
-// PASTE AT THE BOTTOM OF FavoriteSessionCell.swift
-
+// MARK: - Helper Extension (Fixes 'isDark' error)
 extension UIImage {
     var isDark: Bool {
         guard let cgImage = self.cgImage else { return false }
-        guard let imageData = cgImage.dataProvider?.data else { return false }
-        guard let ptr = CFDataGetBytePtr(imageData) else { return false }
-        
         let width = cgImage.width
         let height = cgImage.height
-        let bytesPerPixel = 4
-        let bytesPerRow = cgImage.bytesPerRow
+        let colorSpace = CGColorSpaceCreateDeviceGray()
+        let data = UnsafeMutablePointer<UInt8>.allocate(capacity: 1)
+        defer { data.deallocate() }
         
-        var totalLuminance: CGFloat = 0
-        var pixelCount: CGFloat = 0
+        let context = CGContext(data: data, width: 1, height: 1, bitsPerComponent: 8, bytesPerRow: 1, space: colorSpace, bitmapInfo: CGImageAlphaInfo.none.rawValue)
+        context?.draw(cgImage, in: CGRect(x: 0, y: 0, width: 1, height: 1))
         
-        for x in stride(from: 0, to: width, by: 100) {
-            for y in stride(from: 0, to: height, by: 100) {
-                let offset = (y * bytesPerRow) + (x * bytesPerPixel)
-                let r = ptr[offset]
-                let g = ptr[offset + 1]
-                let b = ptr[offset + 2]
-                
-                let luminance = (0.299 * CGFloat(r) + 0.587 * CGFloat(g) + 0.114 * CGFloat(b))
-                totalLuminance += luminance
-                pixelCount += 1
-            }
-        }
-        
-        return (totalLuminance / pixelCount) < 128
+        return data.pointee < 128
     }
 }

@@ -1,21 +1,21 @@
 import UIKit
+
 class CircularTimerView: UIView {
 
-    // UI Layers
-    private var trackLayer = CAShapeLayer()
-    private var progressLayer = CAShapeLayer()
-    private var timerLabel = UILabel()
+    // MARK: - Properties
+    private let glassContainer = UIView()
+    private let blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+    private let timerLabel = UILabel()
+    private let staticBorderView = UIView() // The thin white background ring
     
-    // Settings
-    private var radius: CGFloat {
-        (min(bounds.width, bounds.height) / 2 - lineWidth / 2) * 0.75
+    // Progress tracking
+    private var progress: CGFloat = 0.0 {
+        didSet {
+            setNeedsDisplay() // Redraws the moving border whenever progress changes
+        }
     }
 
-
-    private let lineWidth: CGFloat = 6
-    
-    // Custom Pink Color (Safe Unwrap)
-    private let pinkColor = UIColor(named: "primary_color") ?? UIColor.systemPink
+    private let pinkColor = UIColor(red: 232/255, green: 106/255, blue: 146/255, alpha: 1.0) // #E86A92
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -30,97 +30,129 @@ class CircularTimerView: UIView {
     private func setupView() {
         self.backgroundColor = .clear
         
-        // 1. Define Path
-        let circularPath = UIBezierPath(arcCenter: CGPoint(x: bounds.midX, y: bounds.midY),
-                                        radius: radius,
-                                        startAngle: -CGFloat.pi / 2,
-                                        endAngle: 2 * CGFloat.pi,
-                                        clockwise: true)
+        // 1. Setup the Glass Circle
+        glassContainer.clipsToBounds = true
+        glassContainer.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(glassContainer)
         
-        // 2. Track Layer (Background Ring & Fill)
-        trackLayer.path = circularPath.cgPath
-        trackLayer.strokeColor = UIColor.white.withAlphaComponent(0.2).cgColor
-        trackLayer.lineWidth = lineWidth
-        // Dark transparent background for readability
-        trackLayer.fillColor = UIColor.black.withAlphaComponent(0.4).cgColor
-        trackLayer.lineCap = .round
-        layer.addSublayer(trackLayer)
+        // 2. Add Blur Effect
+        blurEffectView.translatesAutoresizingMaskIntoConstraints = false
+        glassContainer.addSubview(blurEffectView)
         
-        // 3. Progress Layer (Pink Filling Ring)
-        progressLayer.path = circularPath.cgPath
-        progressLayer.strokeColor = pinkColor.cgColor
-        progressLayer.lineWidth = lineWidth
-        progressLayer.fillColor = UIColor.clear.cgColor
-        progressLayer.lineCap = .round
-        progressLayer.strokeEnd = 0.0 // Starts Empty
-        layer.addSublayer(progressLayer)
+        // 3. Static White Outer Ring (The "Track")
+        staticBorderView.backgroundColor = .clear
+        staticBorderView.layer.borderWidth = 1.5 // Thin border as requested
+        staticBorderView.layer.borderColor = UIColor.white.withAlphaComponent(0.5).cgColor
+        staticBorderView.translatesAutoresizingMaskIntoConstraints = false
+        glassContainer.addSubview(staticBorderView)
         
-        // 4. Label Setup
-        timerLabel.font = UIFont.monospacedDigitSystemFont(ofSize: 22, weight: .bold)
+        // 4. Timer Text
+        timerLabel.font = UIFont.monospacedDigitSystemFont(ofSize: 28, weight: .bold)
         timerLabel.textColor = .white
         timerLabel.textAlignment = .center
-        timerLabel.numberOfLines = 3 // Allow more lines for the end message
-        timerLabel.text = ""
-        
+        timerLabel.numberOfLines = 0
+        timerLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(timerLabel)
         
-        timerLabel.translatesAutoresizingMaskIntoConstraints = false
+        setupConstraints()
+    }
+
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
-            timerLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            timerLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-            timerLabel.widthAnchor.constraint(equalToConstant: 220)
+            glassContainer.centerXAnchor.constraint(equalTo: centerXAnchor),
+            glassContainer.centerYAnchor.constraint(equalTo: centerYAnchor),
+            glassContainer.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.8),
+            glassContainer.heightAnchor.constraint(equalTo: glassContainer.widthAnchor),
+            
+            blurEffectView.topAnchor.constraint(equalTo: glassContainer.topAnchor),
+            blurEffectView.leadingAnchor.constraint(equalTo: glassContainer.leadingAnchor),
+            blurEffectView.trailingAnchor.constraint(equalTo: glassContainer.trailingAnchor),
+            blurEffectView.bottomAnchor.constraint(equalTo: glassContainer.bottomAnchor),
+            
+            staticBorderView.topAnchor.constraint(equalTo: glassContainer.topAnchor),
+            staticBorderView.leadingAnchor.constraint(equalTo: glassContainer.leadingAnchor),
+            staticBorderView.trailingAnchor.constraint(equalTo: glassContainer.trailingAnchor),
+            staticBorderView.bottomAnchor.constraint(equalTo: glassContainer.bottomAnchor),
+            
+            timerLabel.centerXAnchor.constraint(equalTo: glassContainer.centerXAnchor),
+            timerLabel.centerYAnchor.constraint(equalTo: glassContainer.centerYAnchor),
+            timerLabel.widthAnchor.constraint(equalTo: glassContainer.widthAnchor, constant: -20)
         ])
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
-        let path = UIBezierPath(arcCenter: CGPoint(x: bounds.midX, y: bounds.midY), radius: radius, startAngle: -CGFloat.pi / 2, endAngle: 2 * CGFloat.pi, clockwise: true)
-        trackLayer.path = path.cgPath
-        progressLayer.path = path.cgPath
+        let radius = glassContainer.frame.width / 2
+        glassContainer.layer.cornerRadius = radius
+        staticBorderView.layer.cornerRadius = radius
     }
-    
-    // MARK: - Public Helper Functions
-    
-    func showMessage(_ text: String) {
-        timerLabel.isHidden = false
-        timerLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
-        timerLabel.text = text
+
+    // MARK: - Custom Drawing (The Moving Border)
+    // This replaces CAShapeLayer to create the progress line around the outskirts
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        
+        guard progress > 0 else { return }
+        
+        // Calculate the path for the thin pink border
+        let center = CGPoint(x: bounds.midX, y: bounds.midY)
+        let radius = (glassContainer.frame.width / 2)
+        let startAngle = -CGFloat.pi / 2
+        let endAngle = startAngle + (2 * CGFloat.pi * progress)
+        
+        let path = UIBezierPath(arcCenter: center,
+                                radius: radius,
+                                startAngle: startAngle,
+                                endAngle: endAngle,
+                                clockwise: true)
+        
+        pinkColor.setStroke()
+        path.lineWidth = 3.0 // Thin moving border
+        path.lineCapStyle = .round
+        path.stroke()
     }
-    
-    func showTime(_ secondsRemaining: Int) {
-        timerLabel.isHidden = false
-        timerLabel.font = UIFont.monospacedDigitSystemFont(ofSize: 28, weight: .bold)
-        let minutes = secondsRemaining / 60
-        let seconds = secondsRemaining % 60
-        timerLabel.text = String(format: "%02d:%02d", minutes, seconds)
-    }
-    
-    // NEW: Function to hide/show the text (used when pausing)
+
+    // MARK: - Public Helper Methods (Fixed Errors)
+
+    /// Hides/Shows the timer text (Fixes togglePlayPause error)
     func setTimerTextHidden(_ hidden: Bool) {
         UIView.animate(withDuration: 0.2) {
             self.timerLabel.alpha = hidden ? 0 : 1
         }
     }
     
+    /// Forces the border to be fully pink (Fixes tick error)
+    func setFullProgress() {
+        self.progress = 1.0
+    }
+
     func updateProgress(secondsRemaining: Int, totalDuration: Int) {
-        // Update Text
         showTime(secondsRemaining)
         
-        // Update Ring (Fill UP from 0 to 1)
+        // Calculate how much of the border should be drawn
         if totalDuration > 0 {
-            let timeElapsed = CGFloat(totalDuration - secondsRemaining)
-            let percentage = timeElapsed / CGFloat(totalDuration)
-            progressLayer.strokeEnd = percentage
+            let elapsed = CGFloat(totalDuration - secondsRemaining)
+            self.progress = elapsed / CGFloat(totalDuration)
         }
     }
-    
-    func setFullProgress() {
-        progressLayer.strokeEnd = 1.0 // Force full circle
+
+    func showTime(_ secondsRemaining: Int) {
+        timerLabel.isHidden = false
+        timerLabel.font = UIFont.monospacedDigitSystemFont(ofSize: 32, weight: .bold)
+        let minutes = secondsRemaining / 60
+        let seconds = secondsRemaining % 60
+        timerLabel.text = String(format: "%02d:%02d", minutes, seconds)
+    }
+
+    func showMessage(_ text: String) {
+        timerLabel.isHidden = false
+        timerLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+        timerLabel.text = text
     }
     
     func reset() {
+        self.progress = 0
         timerLabel.text = ""
-        timerLabel.alpha = 1 // Ensure visible
-        progressLayer.strokeEnd = 0.0
+        timerLabel.alpha = 1
     }
 }

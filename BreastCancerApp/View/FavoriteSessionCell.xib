@@ -64,8 +64,8 @@
                         <rect key="frame" x="0.0" y="200" width="280" height="120"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Gentle Focus" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KFo-vj-svd">
-                                <rect key="frame" x="16" y="77.666666666666686" width="248" height="26.333333333333329"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                <rect key="frame" x="16" y="83.666666666666686" width="248" height="20.333333333333329"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -104,10 +104,10 @@
             <connections>
                 <outlet property="categoryLabel" destination="yfq-f9-mLt" id="2H8-J6-8vm"/>
                 <outlet property="gradientContainerView" destination="61m-Dw-6o2" id="Gwm-pm-D0M"/>
-                <outlet property="heartContainerView" destination="BVe-eq-bGM" id="80c-LB-Zzi"/>
                 <outlet property="likeButton" destination="GgS-r5-dej" id="z2r-Y1-0GX"/>
                 <outlet property="nameLabel" destination="KFo-vj-svd" id="B3k-5Q-evF"/>
                 <outlet property="sessionImageView" destination="aeh-M7-huP" id="vz3-mJ-8jN"/>
+                <outlet property="titleLabel" destination="KFo-vj-svd" id="UWI-vo-x9R"/>
             </connections>
             <point key="canvasLocation" x="-10.44776119402985" y="141.41876430205949"/>
         </collectionViewCell>
