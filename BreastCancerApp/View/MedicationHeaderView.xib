@@ -10,11 +10,11 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="med_header" id="U6b-Vx-4bR" customClass="MedicationHeaderView" customModule="BreastCancerApp" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
+            <rect key="frame" x="0.0" y="0.0" width="379" height="69"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nQB-fR-ZfA">
-                    <rect key="frame" x="20" y="6" width="275" height="10"/>
+                    <rect key="frame" x="20" y="6" width="339" height="14"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
@@ -24,14 +24,14 @@
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="nQB-fR-ZfA" firstAttribute="leading" secondItem="VXr-Tz-HHm" secondAttribute="leading" constant="20" id="Ctf-AD-Zc9"/>
-                <constraint firstItem="VXr-Tz-HHm" firstAttribute="trailing" secondItem="nQB-fR-ZfA" secondAttribute="trailing" constant="25" id="LAW-fA-eps"/>
-                <constraint firstItem="VXr-Tz-HHm" firstAttribute="bottom" secondItem="nQB-fR-ZfA" secondAttribute="bottom" id="WV7-YY-7RK"/>
+                <constraint firstItem="VXr-Tz-HHm" firstAttribute="trailing" secondItem="nQB-fR-ZfA" secondAttribute="trailing" constant="20" id="LAW-fA-eps"/>
+                <constraint firstItem="VXr-Tz-HHm" firstAttribute="bottom" secondItem="nQB-fR-ZfA" secondAttribute="bottom" constant="15" id="WV7-YY-7RK"/>
                 <constraint firstItem="nQB-fR-ZfA" firstAttribute="top" secondItem="U6b-Vx-4bR" secondAttribute="top" constant="6" id="bYZ-Ea-wrI"/>
             </constraints>
             <connections>
                 <outlet property="titleLabel" destination="nQB-fR-ZfA" id="61E-Fc-5aL"/>
             </connections>
-            <point key="canvasLocation" x="138.93129770992365" y="153.52112676056339"/>
+            <point key="canvasLocation" x="183.96946564885496" y="80.633802816901408"/>
         </collectionReusableView>
     </objects>
 </document>

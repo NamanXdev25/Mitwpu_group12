@@ -38,9 +38,10 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
         collectionView.dataSource = self
         collectionView.delegate = self
         
-//        let myPinkBackground = UIColor(red: 1.0 , green: 0.95 , blue: 0.96 , alpha: 1.0)
-//        self.view.backgroundColor = myPinkBackground
-//        self.collectionView.backgroundColor = myPinkBackground
+        let pink = UIColor(red: 1.0, green: 0.95, blue: 0.96, alpha: 1.0)
+        view.backgroundColor = pink
+        collectionView.backgroundColor = .clear
+
         
         // 2. Apply the Layout with Swipe Actions
         collectionView.setCollectionViewLayout(generateLayout(), animated: false)
@@ -142,6 +143,11 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
         config.showsSeparators = false
         config.headerMode = .supplementary
         config.showsSeparators = true
+        
+        var bgConfig = UIBackgroundConfiguration.clear()
+        bgConfig.backgroundColor = UIColor(red: 1.0, green: 0.95, blue: 0.96, alpha: 1.0) // your pink
+        config.backgroundColor = bgConfig.backgroundColor
+
         
         config.trailingSwipeActionsConfigurationProvider = { [weak self] indexPath in
             
