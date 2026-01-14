@@ -53,4 +53,13 @@ struct OnboardingDataSource {
         "56-65",
         "65+"
     ]
+    
+    // MARK: - Follow-up Frequencies
+    static let followUpFrequencies = [
+        "Every month",
+        "Every 2 months",
+        "Every 3 months",
+        "Every 6 months",
+        "Once a year"
+    ]
 }

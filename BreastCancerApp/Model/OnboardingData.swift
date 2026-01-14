@@ -14,11 +14,17 @@ class OnboardingData {
     
     // User's selections
     var treatmentStatus: String?
+    var selectedHobbies: [String] = []
+    var userName: String = "Sophie" // Default name, can be changed
+    
+    // currently in treatment
     var diagnosisDate: Date?
     var currentAge: String?
     var currentStage: String?
-    var selectedHobbies: [String] = []
-    var userName: String = "Sophie" // Default name, can be changed
+    
+    // under observation
+    var lastCheckupDate: Date?
+    var followUpFrequency: String?
     
     private init() {}
     
@@ -29,6 +35,8 @@ class OnboardingData {
         currentAge = nil
         currentStage = nil
         selectedHobbies.removeAll()
+        lastCheckupDate = nil
+        followUpFrequency = nil
     }
     
     // Check if onboarding is complete
