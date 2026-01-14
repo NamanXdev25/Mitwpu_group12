@@ -9,57 +9,54 @@ import UIKit
 
 class HobbyCell: UICollectionViewCell {
     
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 17)
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+    // MARK: - Outlets
+    @IBOutlet private weak var containerView: UIView! // Tag 100
+    @IBOutlet private weak var titleLabel: UILabel!   // Tag 101
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupUI()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
+    // MARK: - Initialization
+    override func awakeFromNib() {
+        super.awakeFromNib()
         setupUI()
     }
     
     private func setupUI() {
-        contentView.addSubview(titleLabel)
-        
-        NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
-        ])
-        
-        contentView.layer.cornerRadius = 20
-        contentView.backgroundColor = UIColor(named: "OnboardingLightPink")
+        // Initial unselected state
+        updateAppearance(isSelected: false)
     }
     
+    // MARK: - Configuration
     func configure(with hobby: String, isSelected: Bool) {
         titleLabel.text = hobby
-        
+        updateAppearance(isSelected: isSelected)
+    }
+    
+    private func updateAppearance(isSelected: Bool) {
         if isSelected {
-            contentView.backgroundColor = UIColor(named: "OnboardingPrimaryColor")
+            containerView.backgroundColor = UIColor(named: "OnboardingPrimaryColor")
             titleLabel.textColor = .white
         } else {
-            contentView.backgroundColor = UIColor(named: "OnboardingLightPink")
+            containerView.backgroundColor = UIColor(named: "OnboardingBackgroundColor")
             titleLabel.textColor = .black
         }
     }
     
+    // MARK: - Dynamic Sizing
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
-        let targetSize = CGSize(width: layoutAttributes.frame.width, height: 0)
-        layoutAttributes.frame.size = contentView.systemLayoutSizeFitting(
-            targetSize,
-            withHorizontalFittingPriority: .required,
-            verticalFittingPriority: .fittingSizeLevel
-        )
+        setNeedsLayout()
+        layoutIfNeeded()
+        
+        // Calculate width based on label
+        let targetSize = CGSize(width: UIView.layoutFittingCompressedSize.width,
+                               height: UIView.layoutFittingCompressedSize.height)
+        let size = contentView.systemLayoutSizeFitting(targetSize,
+                                                       withHorizontalFittingPriority: .fittingSizeLevel,
+                                                       verticalFittingPriority: .required)
+        
+        var frame = layoutAttributes.frame
+        frame.size.width = ceil(size.width)
+        frame.size.height = 40 // Fixed height for all cells
+        layoutAttributes.frame = frame
+        
         return layoutAttributes
     }
 }

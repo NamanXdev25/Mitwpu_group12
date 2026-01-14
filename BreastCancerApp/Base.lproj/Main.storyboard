@@ -7,7 +7,6 @@
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
-        <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -227,6 +226,9 @@
                                 <color key="tintColor" name="OnboardingPrimaryColor"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Next" cornerStyle="capsule"/>
+                                <connections>
+                                    <action selector="nextButtonTapped:" destination="B0G-Dm-mY6" eventType="touchUpInside" id="tsR-0o-lGo"/>
+                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We'll tailor reminders, activities, and self-care suggestions accordingly." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xod-IV-IAA">
                                 <rect key="frame" x="24" y="599.66666666666663" width="345" height="42.333333333333371"/>
@@ -318,7 +320,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Next" cornerStyle="capsule"/>
                                 <connections>
-                                    <action selector="nextButtonTapped:" destination="XB0-qL-SXI" eventType="touchUpInside" id="o7H-6U-Pod"/>
+                                    <action selector="nextButtonTapped:" destination="XB0-qL-SXI" eventType="touchUpInside" id="PUv-zt-p2b"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="249" text="It's okay if you aren't sure. Just choose what feels most accurate." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dmH-Sj-FwW">
@@ -498,7 +500,7 @@
                         <outlet property="agePicker" destination="zGF-sp-NNS" id="Ip6-tY-IAW"/>
                         <outlet property="agePickerView" destination="nae-0o-Jl3" id="s7p-uJ-m5i"/>
                         <outlet property="datePicker" destination="HWK-3v-0yq" id="yF2-yA-04C"/>
-                        <outlet property="nextButton" destination="3Af-Ma-cdN" id="4ZY-gr-CQ2"/>
+                        <outlet property="nextButton" destination="3Af-Ma-cdN" id="lpP-JL-8tj"/>
                         <outlet property="overlayView" destination="LBf-xS-GqJ" id="d6K-su-5He"/>
                         <outlet property="progressBar" destination="7gq-AV-OrL" id="gE2-aq-MK6"/>
                         <outlet property="stageButton" destination="uPq-2j-MLb" id="xgn-yj-Y32"/>
@@ -550,22 +552,8 @@
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="omJ-iI-4lw">
                                 <rect key="frame" x="0.0" y="364.66666666666669" width="393" height="195.00000000000006"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="woi-ub-Nh2">
-                                    <size key="itemSize" width="128" height="128"/>
-                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                </collectionViewFlowLayout>
-                                <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="nJ3-0L-Xx1">
-                                        <rect key="frame" x="0.0" y="0.0" width="127.99999999999997" height="128"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="hKB-tW-3jM">
-                                            <rect key="frame" x="0.0" y="0.0" width="127.99999999999997" height="128"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                        </collectionViewCellContentView>
-                                    </collectionViewCell>
-                                </cells>
+                                <collectionViewLayout key="collectionViewLayout" id="mWZ-MR-HJO"/>
+                                <cells/>
                             </collectionView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Share your favourite hobbies so we can suggest activities that bring you joy." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p85-kI-B38">
                                 <rect key="frame" x="24" y="599.66666666666663" width="345" height="42.333333333333371"/>
@@ -600,6 +588,7 @@
                             <constraint firstItem="LPi-F2-ZlF" firstAttribute="trailing" secondItem="Gl1-wl-kYt" secondAttribute="trailing" constant="96" id="RQK-qa-GQe"/>
                             <constraint firstItem="khW-Wf-ZM0" firstAttribute="top" secondItem="Vbw-VE-RIg" secondAttribute="bottom" constant="8" id="TAn-B6-EuX"/>
                             <constraint firstItem="LPi-F2-ZlF" firstAttribute="trailing" secondItem="omJ-iI-4lw" secondAttribute="trailing" id="VDG-l1-iAb"/>
+                            <constraint firstItem="khW-Wf-ZM0" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="LPi-F2-ZlF" secondAttribute="leading" symbolic="YES" id="YDX-Rs-064"/>
                             <constraint firstItem="Vbw-VE-RIg" firstAttribute="leading" secondItem="LPi-F2-ZlF" secondAttribute="leading" constant="16" id="guu-Fr-QJT"/>
                             <constraint firstItem="omJ-iI-4lw" firstAttribute="top" secondItem="ZIh-bR-KhW" secondAttribute="bottom" constant="32" id="mXW-p3-skh"/>
                             <constraint firstItem="omJ-iI-4lw" firstAttribute="leading" secondItem="LPi-F2-ZlF" secondAttribute="leading" id="qJA-wb-Jph"/>

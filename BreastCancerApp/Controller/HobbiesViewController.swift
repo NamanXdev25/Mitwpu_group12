@@ -43,12 +43,14 @@ class HobbiesViewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.allowsMultipleSelection = true
+        collectionView.backgroundColor = .clear
         
-        // Register cell
-        collectionView.register(HobbyCell.self, forCellWithReuseIdentifier: "HobbyCell")
+        // Register XIB cell
+        let nib = UINib(nibName: "HobbyCell", bundle: nil)
+        collectionView.register(nib, forCellWithReuseIdentifier: "HobbyCell")
         
-        // Setup flow layout
-        let layout = UICollectionViewFlowLayout()
+        // Setup flow layout with left alignment
+        let layout = LeftAlignedCollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumInteritemSpacing = 12
         layout.minimumLineSpacing = 12
