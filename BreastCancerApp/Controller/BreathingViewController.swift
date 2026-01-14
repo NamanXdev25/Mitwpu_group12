@@ -7,18 +7,13 @@ import UIKit
 
 class BreathingViewController: UIViewController {
 
-    // 1. Outlets
     @IBOutlet weak var collectionView: UICollectionView!
     
-    // 2. Data Variables
     var dataManager = BreathingDataManager()
-    var favoriteSessions: [BreathingSession] = [] //list
-    var filterTags: [String] = [] //categories stored
-    
-    // "Master"Database - Holds everything
+    var favoriteSessions: [BreathingSession] = []
+    var filterTags: [String] = []
     var allSessions: [BreathingSession] = []
     
-    // "Display" List based on user tap
     var filteredSessions: [BreathingSession] = []
     
     var selectedFilterIndex: Int = 0 //tracks filter chip
@@ -27,7 +22,7 @@ class BreathingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // A. Load Data
+        // Load Data
         favoriteSessions = dataManager.getFavoriteSessions()
         filterTags = dataManager.getFilterTags()
         allSessions = dataManager.getAllSessions()
@@ -36,7 +31,6 @@ class BreathingViewController: UIViewController {
         filteredSessions = allSessions
         registerCells() //register cells
         
-        // C. Setup Data Source & Delegate
         collectionView.dataSource = self
         collectionView.delegate = self
         
@@ -246,14 +240,14 @@ extension BreathingViewController: UICollectionViewDelegate {
             // 2. Perform Navigation if we found a session
             if let session = selectedSession {
                 
-                // A. Load the Player Screen from Storyboard
+                //  Load the Player Screen from Storyboard
                 let storyboard = UIStoryboard(name: "BreathingSessions", bundle: nil)
                 if let playerVC = storyboard.instantiateViewController(withIdentifier: "BreathingPlayerVC") as? BreathingPlayerViewController {
                     
-                    // B. Pass the Data
+                    //  Pass the Data
                     playerVC.session = session
                     
-                    // C. Show the Screen
+                    // Show the Screen
                     // If we are inside a Navigation Controller, push it (Slide animation)
                     if let nav = self.navigationController {
                         nav.pushViewController(playerVC, animated: true)
@@ -275,20 +269,20 @@ extension BreathingViewController: SessionCellDelegate {
         
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
         
-        // CASE A: Removing from Favorites (Top Section)
+        //  Removing from Favorites (Top Section)
         if indexPath.section == 0 {
             
             let sessionToRemove = favoriteSessions[indexPath.row]
             
-            // 1. Remove from Favorites
+            //  Remove from Favorites
             favoriteSessions.remove(at: indexPath.row)
             
-            // 2. Sync with Master List (Un-like in database)
+            //  Sync with Master List (Un-like in database)
             if let indexInMaster = allSessions.firstIndex(where: { $0.title == sessionToRemove.title }) {
                 allSessions[indexInMaster].isFavorite = false
             }
             
-            // 3. Sync with Filtered List (Un-like on screen so heart turns gray)
+            //  Sync with Filtered List (Un-like on screen so heart turns gray)
             var indexInFiltered: Int? = nil
             if let index = filteredSessions.firstIndex(where: { $0.title == sessionToRemove.title }) {
                 filteredSessions[index].isFavorite = false
@@ -297,7 +291,7 @@ extension BreathingViewController: SessionCellDelegate {
             
             let isEmptyNow = favoriteSessions.isEmpty
             
-            // 4. Update UI
+            //  Update UI
             collectionView.performBatchUpdates {
                 // Update heart color in list below
                 if let index = indexInFiltered {
@@ -313,14 +307,14 @@ extension BreathingViewController: SessionCellDelegate {
                 }
                 
             } completion: { _ in
-                // 5. Safe Layout Resize (After animation)
+                //  Safe Layout Resize (After animation)
                 if isEmptyNow {
                     self.collectionView.setCollectionViewLayout(self.generateLayout(), animated: true)
                 }
             }
         }
         
-        // CASE B: Tapping inside Main List (Section 2)
+        //  Tapping inside Main List (Section 2)
         else if indexPath.section == 2 {
             let session = filteredSessions[indexPath.row]
 
@@ -331,7 +325,7 @@ extension BreathingViewController: SessionCellDelegate {
                 filtered: &filteredSessions
             )
             collectionView.performBatchUpdates {
-                collectionView.reloadSections(IndexSet(integer: 0)) // Favorites
+                collectionView.reloadSections(IndexSet(integer: 0)) //Favorites
                 collectionView.reloadSections(IndexSet(integer: 2)) // List
             }
 

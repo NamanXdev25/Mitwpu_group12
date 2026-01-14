@@ -2,16 +2,16 @@ import UIKit
 
 class FavoriteSessionCell: UICollectionViewCell {
     
-    // --- OUTLETS ---
     @IBOutlet weak var sessionImageView: UIImageView!
-    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var categoryLabel: UILabel!
-    @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var nameLabel: UILabel?
+    @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var gradientContainerView: UIView?
     
-    // --- MATERIAL DESIGN ELEMENTS ---
-    private let blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+    // --- MATERIAL GRADIENT ELEMENT ---
+    
+    // Using standard UIVisualEffectView for Material Design
+    private let materialBlur = FadingMaterialView(effect: UIBlurEffect(style: .light))
     
     weak var delegate: SessionCellDelegate?
     
@@ -22,64 +22,66 @@ class FavoriteSessionCell: UICollectionViewCell {
     
     private func setupMaterialGradient() {
         guard let container = gradientContainerView else { return }
-        container.backgroundColor = .clear
         
-        blurEffectView.translatesAutoresizingMaskIntoConstraints = false
-        container.insertSubview(blurEffectView, at: 0)
+        container.backgroundColor = .clear
+        materialBlur.translatesAutoresizingMaskIntoConstraints = false
+        container.insertSubview(materialBlur, at: 0)
+        
+        materialBlur.alpha = 0.87
         
         NSLayoutConstraint.activate([
-            blurEffectView.topAnchor.constraint(equalTo: container.topAnchor),
-            blurEffectView.leadingAnchor.constraint(equalTo: container.leadingAnchor),
-            blurEffectView.trailingAnchor.constraint(equalTo: container.trailingAnchor),
-            blurEffectView.bottomAnchor.constraint(equalTo: container.bottomAnchor)
+            materialBlur.topAnchor.constraint(equalTo: container.topAnchor),
+            materialBlur.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            materialBlur.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+            materialBlur.bottomAnchor.constraint(equalTo: container.bottomAnchor)
         ])
-    }
-    
-    @IBAction func likeButtonTapped(_ sender: UIButton) {
-        delegate?.didTapLikeButton(on: self)
     }
     
     func configureCell(session: BreathingSession) {
         sessionImageView.image = UIImage(named: session.imageName)
-        titleLabel?.text = session.title
+        
         categoryLabel?.text = session.category
         nameLabel?.text = session.title
         
         let heartName = session.isFavorite ? "heart.fill" : "heart"
         likeButton.setImage(UIImage(systemName: heartName), for: .normal)
-        likeButton.tintColor = .systemPink
         
         if let image = sessionImageView.image {
-            applyMaterialTheme(for: image)
+            let isDark = image.isDark // Uses extension below
+            nameLabel?.textColor = isDark ? .white : .black
+            materialBlur.effect = isDark ? UIBlurEffect(style: .dark) : UIBlurEffect(style: .light)
         }
     }
     
-    private func applyMaterialTheme(for image: UIImage) {
-        guard let nameLabel = nameLabel, let container = gradientContainerView else { return }
-        
-        // This line will now work because of the extension below
-        let isDark = image.isDark
-        nameLabel.textColor = isDark ? .white : .black
-        blurEffectView.effect = isDark ? UIBlurEffect(style: .dark) : UIBlurEffect(style: .light)
-        
-        // Material tint #E86A92
-        container.backgroundColor = UIColor(red: 232/255, green: 106/255, blue: 146/255, alpha: 0.15)
+    @IBAction func likeButtonTapped(_ sender: UIButton) {
+        delegate?.didTapLikeButton(on: self)
     }
 }
 
-// MARK: - Helper Extension (Fixes 'isDark' error)
+// MARK: - Fading Material View (Pure UIKit approach)
+final class FadingMaterialView: UIVisualEffectView {
+    // gradient manner opacity
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let maskLayer = CAGradientLayer() // Used internally as a mask 
+        maskLayer.frame = self.bounds
+        maskLayer.colors = [UIColor.clear.cgColor, UIColor.white.cgColor]
+        
+        // Blur starts 30% down for a smooth upper-edge blend
+        maskLayer.locations = [0.3, 1.0]
+        self.layer.mask = maskLayer
+    }
+}
+
+// MARK: - Helper Extension (Define ONLY once in your project)
 extension UIImage {
     var isDark: Bool {
         guard let cgImage = self.cgImage else { return false }
-        let width = cgImage.width
-        let height = cgImage.height
         let colorSpace = CGColorSpaceCreateDeviceGray()
         let data = UnsafeMutablePointer<UInt8>.allocate(capacity: 1)
         defer { data.deallocate() }
-        
         let context = CGContext(data: data, width: 1, height: 1, bitsPerComponent: 8, bytesPerRow: 1, space: colorSpace, bitmapInfo: CGImageAlphaInfo.none.rawValue)
         context?.draw(cgImage, in: CGRect(x: 0, y: 0, width: 1, height: 1))
-        
         return data.pointee < 128
     }
 }

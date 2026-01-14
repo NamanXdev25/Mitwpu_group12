@@ -19,6 +19,10 @@
                 <subviews>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="aeh-M7-huP">
                         <rect key="frame" x="0.0" y="0.0" width="280" height="320"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="320" id="azF-MO-LRG"/>
+                            <constraint firstAttribute="width" constant="280" id="zSg-4Q-PRr"/>
+                        </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                 <integer key="value" value="13"/>
@@ -26,13 +30,15 @@
                         </userDefinedRuntimeAttributes>
                     </imageView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BVe-eq-bGM" userLabel="ButtonBgView">
-                        <rect key="frame" x="229" y="7" width="44" height="44"/>
+                        <rect key="frame" x="220" y="16" width="44" height="44"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GgS-r5-dej">
                                 <rect key="frame" x="6" y="6" width="32" height="32"/>
                                 <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="32" id="02N-zU-aCH"/>
                                     <constraint firstAttribute="height" constant="32" id="221-1l-Tc9"/>
                                     <constraint firstAttribute="width" constant="32" id="FKb-rd-8qG"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="32" id="qQQ-L5-9YW"/>
                                 </constraints>
                                 <color key="tintColor" systemColor="systemRedColor"/>
                                 <state key="normal" title="Button"/>
@@ -44,7 +50,9 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="GgS-r5-dej" firstAttribute="centerX" secondItem="BVe-eq-bGM" secondAttribute="centerX" id="61y-Ci-hBk"/>
+                            <constraint firstAttribute="height" constant="44" id="9mx-lN-lhk"/>
+                            <constraint firstItem="GgS-r5-dej" firstAttribute="centerX" secondItem="BVe-eq-bGM" secondAttribute="centerX" id="iLd-MG-Tjk"/>
+                            <constraint firstAttribute="width" constant="44" id="vJh-6U-eQC"/>
                             <constraint firstItem="GgS-r5-dej" firstAttribute="centerY" secondItem="BVe-eq-bGM" secondAttribute="centerY" id="ve4-NZ-8ye"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
@@ -55,16 +63,16 @@
                         </userDefinedRuntimeAttributes>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yfq-f9-mLt">
-                        <rect key="frame" x="16" y="16" width="33" height="15.666666666666664"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <rect key="frame" x="16.000000000000004" y="16" width="41.333333333333343" height="20"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="61m-Dw-6o2" userLabel="GradientContainerView">
-                        <rect key="frame" x="0.0" y="200" width="280" height="120"/>
+                        <rect key="frame" x="0.0" y="260" width="280" height="60"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Gentle Focus" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KFo-vj-svd">
-                                <rect key="frame" x="16" y="83.666666666666686" width="248" height="20.333333333333329"/>
+                                <rect key="frame" x="16" y="27.666666666666686" width="264" height="20.333333333333329"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -72,9 +80,9 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="KFo-vj-svd" secondAttribute="bottom" constant="16" id="VoD-oW-c4Q"/>
-                            <constraint firstAttribute="trailing" secondItem="KFo-vj-svd" secondAttribute="trailing" constant="16" id="aB7-6W-KgO"/>
-                            <constraint firstAttribute="height" constant="120" id="p9S-NX-sUh"/>
+                            <constraint firstAttribute="bottom" secondItem="KFo-vj-svd" secondAttribute="bottom" constant="12" id="VoD-oW-c4Q"/>
+                            <constraint firstAttribute="trailing" secondItem="KFo-vj-svd" secondAttribute="trailing" id="aB7-6W-KgO"/>
+                            <constraint firstAttribute="height" constant="60" id="p9S-NX-sUh"/>
                             <constraint firstItem="KFo-vj-svd" firstAttribute="leading" secondItem="61m-Dw-6o2" secondAttribute="leading" constant="16" id="yDp-uR-wMu"/>
                         </constraints>
                     </view>
@@ -84,17 +92,15 @@
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="61m-Dw-6o2" secondAttribute="bottom" id="2O9-xt-llW"/>
                 <constraint firstAttribute="bottom" secondItem="aeh-M7-huP" secondAttribute="bottom" id="4JZ-Fu-m6k"/>
-                <constraint firstItem="BVe-eq-bGM" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="229" id="5RH-rC-rfH"/>
                 <constraint firstAttribute="trailing" secondItem="aeh-M7-huP" secondAttribute="trailing" id="6du-d8-Y3m"/>
-                <constraint firstAttribute="trailing" secondItem="BVe-eq-bGM" secondAttribute="trailing" constant="7" id="Atf-M3-N8S"/>
+                <constraint firstItem="yfq-f9-mLt" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="16" id="QcF-e2-CAe"/>
                 <constraint firstAttribute="trailing" secondItem="61m-Dw-6o2" secondAttribute="trailing" id="S9N-pQ-j5o"/>
-                <constraint firstItem="BVe-eq-bGM" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="7" id="Xum-WJ-Dki"/>
-                <constraint firstItem="yfq-f9-mLt" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="16" id="Zc3-nl-9d0"/>
                 <constraint firstItem="61m-Dw-6o2" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="aag-Nm-qbS"/>
-                <constraint firstAttribute="bottom" secondItem="BVe-eq-bGM" secondAttribute="bottom" constant="269" id="dkF-Oa-Qhj"/>
+                <constraint firstItem="BVe-eq-bGM" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="16" id="cRh-Nr-BbF"/>
+                <constraint firstAttribute="trailing" secondItem="BVe-eq-bGM" secondAttribute="trailing" constant="16" id="dbe-wl-pL6"/>
                 <constraint firstItem="aeh-M7-huP" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="jCU-Kf-XX4"/>
                 <constraint firstItem="aeh-M7-huP" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="jNO-Df-WzQ"/>
-                <constraint firstItem="yfq-f9-mLt" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="lHv-Ea-2fn"/>
+                <constraint firstItem="yfq-f9-mLt" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="t7z-ay-Xdi"/>
             </constraints>
             <userDefinedRuntimeAttributes>
                 <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -102,12 +108,11 @@
                 </userDefinedRuntimeAttribute>
             </userDefinedRuntimeAttributes>
             <connections>
-                <outlet property="categoryLabel" destination="yfq-f9-mLt" id="2H8-J6-8vm"/>
+                <outlet property="categoryLabel" destination="yfq-f9-mLt" id="Lh1-ht-6az"/>
                 <outlet property="gradientContainerView" destination="61m-Dw-6o2" id="Gwm-pm-D0M"/>
                 <outlet property="likeButton" destination="GgS-r5-dej" id="z2r-Y1-0GX"/>
                 <outlet property="nameLabel" destination="KFo-vj-svd" id="B3k-5Q-evF"/>
                 <outlet property="sessionImageView" destination="aeh-M7-huP" id="vz3-mJ-8jN"/>
-                <outlet property="titleLabel" destination="KFo-vj-svd" id="UWI-vo-x9R"/>
             </connections>
             <point key="canvasLocation" x="-10.44776119402985" y="141.41876430205949"/>
         </collectionViewCell>

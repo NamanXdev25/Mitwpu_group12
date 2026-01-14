@@ -6,7 +6,7 @@ class CircularTimerView: UIView {
     private let glassContainer = UIView()
     private let blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
     private let timerLabel = UILabel()
-    private let staticBorderView = UIView() // The thin white background ring
+    private let staticBorderView = UIView() //thin white background ring
     
     // Progress tracking
     private var progress: CGFloat = 0.0 {
@@ -15,7 +15,7 @@ class CircularTimerView: UIView {
         }
     }
 
-    private let pinkColor = UIColor(red: 232/255, green: 106/255, blue: 146/255, alpha: 1.0) // #E86A92
+    private let pinkColor = UIColor(red: 232/255, green: 106/255, blue: 146/255, alpha: 1.0)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -30,23 +30,23 @@ class CircularTimerView: UIView {
     private func setupView() {
         self.backgroundColor = .clear
         
-        // 1. Setup the Glass Circle
+        //  Setup the Glass Circle
         glassContainer.clipsToBounds = true
         glassContainer.translatesAutoresizingMaskIntoConstraints = false
         addSubview(glassContainer)
         
-        // 2. Add Blur Effect
+        //  Add Blur Effect
         blurEffectView.translatesAutoresizingMaskIntoConstraints = false
         glassContainer.addSubview(blurEffectView)
         
-        // 3. Static White Outer Ring (The "Track")
+        //  Static White Outer Ring (The "Track")
         staticBorderView.backgroundColor = .clear
-        staticBorderView.layer.borderWidth = 1.5 // Thin border as requested
-        staticBorderView.layer.borderColor = UIColor.white.withAlphaComponent(0.5).cgColor
+        staticBorderView.layer.borderWidth = 2.0 // Thin border as requested
+        staticBorderView.layer.borderColor = UIColor.white.withAlphaComponent(0.2).cgColor
         staticBorderView.translatesAutoresizingMaskIntoConstraints = false
         glassContainer.addSubview(staticBorderView)
         
-        // 4. Timer Text
+        // Timer Text
         timerLabel.font = UIFont.monospacedDigitSystemFont(ofSize: 28, weight: .bold)
         timerLabel.textColor = .white
         timerLabel.textAlignment = .center
@@ -88,7 +88,7 @@ class CircularTimerView: UIView {
     }
 
     // MARK: - Custom Drawing (The Moving Border)
-    // This replaces CAShapeLayer to create the progress line around the outskirts
+    
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         
@@ -107,21 +107,21 @@ class CircularTimerView: UIView {
                                 clockwise: true)
         
         pinkColor.setStroke()
-        path.lineWidth = 3.0 // Thin moving border
+        path.lineWidth = 10.0 // Thin moving border
         path.lineCapStyle = .round
         path.stroke()
     }
 
     // MARK: - Public Helper Methods (Fixed Errors)
 
-    /// Hides/Shows the timer text (Fixes togglePlayPause error)
+    // Hides/Shows the timer text (Fixes togglePlayPause error)
     func setTimerTextHidden(_ hidden: Bool) {
         UIView.animate(withDuration: 0.2) {
             self.timerLabel.alpha = hidden ? 0 : 1
         }
     }
     
-    /// Forces the border to be fully pink (Fixes tick error)
+    // Forces the border to be fully pink 
     func setFullProgress() {
         self.progress = 1.0
     }

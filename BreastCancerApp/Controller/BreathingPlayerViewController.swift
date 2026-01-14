@@ -5,19 +5,17 @@ import AVFoundation
 class BreathingPlayerViewController: UIViewController {
 
     var session: BreathingSession?
-    // Outlets
+   
     @IBOutlet weak var backgroundImageView: UIImageView!
     @IBOutlet weak var videoContainerView: VideoPlayerContainerView!
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var timerView: CircularTimerView!
     
-    //Video Player Variables
     var player: AVPlayer?
     var playerLayer: AVPlayerLayer?
     var isPlaying = false
     var isFirstPlay = true
-    
-    //Timer Logic
+   
     var timer: Timer?
     var secondsRemaining = 300 // 5 mins
     var totalSessionDuration = 300
@@ -27,22 +25,18 @@ class BreathingPlayerViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        // a Transparent Appearance
+        // a transparent appearance
         let appearance = UINavigationBarAppearance()
         appearance.configureWithTransparentBackground()
         appearance.backgroundColor = .clear
         appearance.shadowColor = .clear
         
-        // Title set to WHITE
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.white, .font: UIFont.systemFont(ofSize: 20, weight: .bold)]
+       appearance.titleTextAttributes = [.foregroundColor: UIColor.white, .font: UIFont.systemFont(ofSize: 20, weight: .bold)]
         
-        // Apply settings
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationController?.navigationBar.compactAppearance = appearance
-        
-        // Make Back Button White
-        navigationController?.navigationBar.tintColor = .white
+    
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -54,7 +48,6 @@ class BreathingPlayerViewController: UIViewController {
         
         defaultAppearance.titleTextAttributes = [.foregroundColor: UIColor.black, .font: UIFont.systemFont(ofSize: 20, weight: .semibold)]
         
-        // Apply default settings
         navigationController?.navigationBar.standardAppearance = defaultAppearance
         navigationController?.navigationBar.scrollEdgeAppearance = defaultAppearance
         navigationController?.navigationBar.compactAppearance = defaultAppearance
@@ -70,7 +63,7 @@ class BreathingPlayerViewController: UIViewController {
         timerView.reset()
     }
 
-    // MARK: - Setup - binds model data to ui
+    // MARK: - Binds model data to ui
     func setupData() {
         guard let session = session else { return }
         self.title = session.title
@@ -78,11 +71,12 @@ class BreathingPlayerViewController: UIViewController {
         if let bgImageView = backgroundImageView {
             bgImageView.image = UIImage(named: session.imageName)
         }
-        // Fixed 5 minutes
+        
+        // fixed 5 mins
         totalSessionDuration = 300
         secondsRemaining = totalSessionDuration
     }
-    //MARK : - Sets up video playback sys  and media coordination
+    //MARK : - Sets up video playback sys and media coordination
     func prepareVideo() {
         guard let session = session else { return }
         
@@ -103,6 +97,7 @@ class BreathingPlayerViewController: UIViewController {
     }
     
     func setupTapGesture() {
+        
         //  allows tapping on the screen to pause
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(screenTapped))
         view.addGestureRecognizer(tapGesture)
@@ -127,15 +122,15 @@ class BreathingPlayerViewController: UIViewController {
         isFirstPlay = false
         isPlaying = true
         
-        // Hide Button immediately
+        // hide button immediately
         playButton.isHidden = true
         
-        // Show Message
+        //show message
         timerView.showMessage("Take a deep breath in...")
         
         player?.play()
         
-        // Wait 2 Seconds
+        // wait 2 Seconds
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
             guard let self = self else { return }
             self.startTimer()
@@ -149,10 +144,10 @@ class BreathingPlayerViewController: UIViewController {
             stopTimer()
             isPlaying = false
             
-            // Hide Timer txt
+            // hide timer txt
             timerView.setTimerTextHidden(true)
             
-            // show Play Button
+            // show play button
             playButton.isHidden = false
             showBackground()
 
@@ -162,7 +157,7 @@ class BreathingPlayerViewController: UIViewController {
             startTimer()
             isPlaying = true
             
-            // Show  Timer Text
+            // show Timer Text
             timerView.setTimerTextHidden(false)
             
             // hide Play Button
@@ -191,31 +186,31 @@ class BreathingPlayerViewController: UIViewController {
             secondsRemaining -= 1
             timerView.updateProgress(secondsRemaining: secondsRemaining, totalDuration: totalSessionDuration)
         } else {
-            //FINISHED LOGIC
+            
+            //finished logic
             stopTimer()
             player?.pause()
             isPlaying = false
             
-            //Ensure circle is full pink
+            //ensure circle is full pink
             timerView.setFullProgress()
             
-            //Show the "Peace" Message
             timerView.showMessage("A quiet bloom marks your moment of peace")
             
-            //Keep Play Button HIDDEN so they can read the text
+            //keeps Play Button hidden so user can read the text
             playButton.isHidden = true
             UIView.animate(withDuration: 0.3) { self.backgroundImageView.alpha = 1 }
             
-            //Wait 2 Seconds, THEN reset
+            //wait 2 secs,then reset
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
                 guard let self = self else { return }
                 
-                //Reset UI for next time
+                //reset UI for next time
                 self.timerView.reset()
                 self.isFirstPlay = true
                 self.secondsRemaining = 300
                 
-                //Show Play Button now
+                //show play button now
                 self.playButton.isHidden = false
                 let config = UIImage.SymbolConfiguration(pointSize: 60)
                 self.playButton.setImage(UIImage(systemName: "play.fill", withConfiguration: config), for: .normal)
