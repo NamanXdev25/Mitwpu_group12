@@ -68,6 +68,14 @@ struct OnboardingDataSource {
         InterestOption(title: "Physical Strength", icon: "figure.strengthtraining.traditional"),
         InterestOption(title: "Mindfulness", icon: "figure.mind.and.body")
     ]
+    
+    // MARK: - Prefer Not To Say Interests
+    static let preferNotToSayInterests = [
+        InterestOption(title: "Physical Strength", icon: "figure.strengthtraining.traditional.circle.fill"),
+        InterestOption(title: "Mindfulness", icon: "figure.mind.and.body.circle.fill"),
+        InterestOption(title: "Prevention", icon: "magnifyingglass.circle.fill"),
+        InterestOption(title: "Learning", icon: "book.circle.fill")
+    ]
 }
 
 // MARK: - Interest Option Model
