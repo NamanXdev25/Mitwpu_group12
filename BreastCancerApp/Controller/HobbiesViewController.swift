@@ -79,7 +79,7 @@ class HobbiesViewController: UIViewController {
     @IBAction func nextButtonTapped(_ sender: UIButton) {
         saveData()
         print("Hobbies saved: \(selectedHobbies)")
-        // Navigate to next screen or complete onboarding
+        performSegue(withIdentifier: "showCompletion", sender: nil)
     }
 }
 

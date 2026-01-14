@@ -532,7 +532,6 @@
                                 <rect key="frame" x="320" y="200" width="57" height="35"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="egU-yf-c2N"/>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="35" id="kjw-Sz-1MC"/>
                                 </constraints>
                                 <color key="tintColor" name="OnboardingPrimaryColor"/>
                                 <state key="normal" title="Button"/>
@@ -605,11 +604,90 @@
                         <outlet property="nextButton" destination="Gl1-wl-kYt" id="fvk-Np-X2F"/>
                         <outlet property="progressBar" destination="Vbw-VE-RIg" id="SXc-wq-SnS"/>
                         <outlet property="skipButton" destination="khW-Wf-ZM0" id="Bia-xd-d8i"/>
+                        <segue destination="TNc-Cj-teY" kind="show" identifier="showCompletion" id="VNO-Df-0M8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sDF-34-E6A" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="6814" y="239"/>
+        </scene>
+        <!--Completion View Controller-->
+        <scene sceneID="OSb-QY-kAp">
+            <objects>
+                <viewController id="TNc-Cj-teY" customClass="CompletionViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Mwo-YF-NeA">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1fx-4r-3lf" customClass="ProgressBarView" customModule="BreastCancerApp" customModuleProvider="target">
+                                <rect key="frame" x="16" y="184" width="361" height="8"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="8" id="Mhh-9K-MQt"/>
+                                    <constraint firstAttribute="height" constant="8" id="y48-a9-e0o"/>
+                                </constraints>
+                            </view>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="final_flower" translatesAutoresizingMaskIntoConstraints="NO" id="U0h-Qj-fzj">
+                                <rect key="frame" x="106.66666666666669" y="256" width="180" height="180"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="180" id="FiS-q6-WE2"/>
+                                    <constraint firstAttribute="width" constant="180" id="dZn-Xr-mZj"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You're All Set, Username!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n1B-JB-GSd">
+                                <rect key="frame" x="40" y="476.00000000000006" width="313" height="81.666666666666686"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Based on what you shared, the app will focus on what matters most — your healing and wellbeing." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ct2-0Q-CFG">
+                                <rect key="frame" x="40" y="577.66666666666663" width="313" height="64.333333333333371"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="846-49-Fyc">
+                                <rect key="frame" x="96" y="678" width="201" height="56"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="56" id="Ejs-3j-8VZ"/>
+                                </constraints>
+                                <color key="tintColor" name="OnboardingPrimaryColor"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Go to Home Screen" cornerStyle="capsule"/>
+                                <connections>
+                                    <action selector="homeButtonTapped:" destination="TNc-Cj-teY" eventType="touchUpInside" id="xjI-ic-Aci"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Rse-Df-BI8"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="U0h-Qj-fzj" firstAttribute="centerY" secondItem="Mwo-YF-NeA" secondAttribute="centerY" constant="-80" id="0b5-tV-xRS"/>
+                            <constraint firstItem="Rse-Df-BI8" firstAttribute="bottom" secondItem="846-49-Fyc" secondAttribute="bottom" constant="50" id="EsM-7e-Z0s"/>
+                            <constraint firstItem="1fx-4r-3lf" firstAttribute="leading" secondItem="Rse-Df-BI8" secondAttribute="leading" constant="16" id="Ihu-ux-hSa"/>
+                            <constraint firstItem="U0h-Qj-fzj" firstAttribute="centerX" secondItem="Mwo-YF-NeA" secondAttribute="centerX" id="JBA-Zg-Aws"/>
+                            <constraint firstItem="ct2-0Q-CFG" firstAttribute="leading" secondItem="Rse-Df-BI8" secondAttribute="leading" constant="40" id="KWd-8j-URD"/>
+                            <constraint firstItem="Rse-Df-BI8" firstAttribute="trailing" secondItem="ct2-0Q-CFG" secondAttribute="trailing" constant="40" id="OhL-mm-jpc"/>
+                            <constraint firstItem="Rse-Df-BI8" firstAttribute="trailing" secondItem="846-49-Fyc" secondAttribute="trailing" constant="96" id="a6G-WB-sT4"/>
+                            <constraint firstItem="n1B-JB-GSd" firstAttribute="top" secondItem="U0h-Qj-fzj" secondAttribute="bottom" constant="40" id="cYD-ru-e2H"/>
+                            <constraint firstItem="Rse-Df-BI8" firstAttribute="trailing" secondItem="n1B-JB-GSd" secondAttribute="trailing" constant="40" id="dGz-Xl-3ih"/>
+                            <constraint firstItem="Rse-Df-BI8" firstAttribute="trailing" secondItem="1fx-4r-3lf" secondAttribute="trailing" constant="16" id="ich-zk-aDB"/>
+                            <constraint firstItem="1fx-4r-3lf" firstAttribute="top" secondItem="Rse-Df-BI8" secondAttribute="top" constant="12" id="ifN-94-RLA"/>
+                            <constraint firstItem="n1B-JB-GSd" firstAttribute="leading" secondItem="Rse-Df-BI8" secondAttribute="leading" constant="40" id="pYI-e8-jHw"/>
+                            <constraint firstItem="846-49-Fyc" firstAttribute="leading" secondItem="Rse-Df-BI8" secondAttribute="leading" constant="96" id="wRM-KV-9Fh"/>
+                            <constraint firstItem="ct2-0Q-CFG" firstAttribute="top" secondItem="n1B-JB-GSd" secondAttribute="bottom" constant="20" id="z0a-QI-4Fn"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="eU9-wz-bjf"/>
+                    <connections>
+                        <outlet property="homeButton" destination="846-49-Fyc" id="QJE-Tw-QTb"/>
+                        <outlet property="progressBar" destination="1fx-4r-3lf" id="cEL-tV-y6G"/>
+                        <outlet property="titleLabel" destination="n1B-JB-GSd" id="1ym-zp-Axh"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Tvv-Ga-Uuv" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="7622" y="236"/>
         </scene>
         <!--Under Observation View Controller-->
         <scene sceneID="Iqz-lC-pjd">
@@ -681,6 +759,7 @@
     <resources>
         <image name="chevron.up.chevron.down" catalog="system" width="109" height="128"/>
         <image name="dataPrivacy_heart" width="500" height="500"/>
+        <image name="final_flower" width="500" height="500"/>
         <image name="intro_image" width="1024" height="1024"/>
         <namedColor name="OnboardingPrimaryColor">
             <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
