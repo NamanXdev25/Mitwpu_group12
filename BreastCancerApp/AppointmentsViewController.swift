@@ -47,8 +47,10 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
     var years = [Int]()
     
     // MARK: - Constants for Dynamic Height
-    let cellHeight: CGFloat = 50
-    let maxVisibleRows: Int = 3
+    // INCREASED HEIGHT: To get the "Icon above Title" look in swipe actions,
+    // the cell usually needs to be taller (70+ points).
+    let cellHeight: CGFloat = 63
+    let maxVisibleRows: Int = 2
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -388,45 +390,24 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         // Check if the appointment date is in the past
-        let appointment = appointmentsForSelectedDate[indexPath.row]
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd MMM yyyy"
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let viewingDay = calendar.startOfDay(for: viewingDate)
         
-        if let appointmentDate = dateFormatter.date(from: appointment.date) {
-            let calendar = Calendar.current
-            let today = calendar.startOfDay(for: Date())
-            let appointmentDay = calendar.startOfDay(for: appointmentDate)
-            
-            // If appointment is in the past, return nil (no swipe actions)
-            if appointmentDay < today {
-                return nil
-            }
+        // If viewing date is strictly before today, disable actions
+        if viewingDay < today {
+            return nil
         }
         
-        // Delete Action
+        // --- ACTION 1: DELETE (Red) ---
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { [weak self] (action, view, completionHandler) in
-            guard let self = self else { return }
-            
-            let appointment = self.appointmentsForSelectedDate[indexPath.row]
-            AppointmentManager.shared.deleteAppointment(appointment.id, for: self.viewingDate)
-            self.appointmentsForSelectedDate.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .fade)
-            
-            // Recalculate heights after deletion
-            self.updateCardHeight()
-            self.collectionView.reloadData()
-            
-            // Hide container if no more appointments
-            if self.appointmentsForSelectedDate.isEmpty {
-                self.appointmentsContainerView.isHidden = true
-            }
-            
-            completionHandler(true)
+            // Call the confirmation alert logic
+            self?.confirmDelete(at: indexPath, completion: completionHandler)
         }
         deleteAction.image = UIImage(systemName: "trash.fill")
         deleteAction.backgroundColor = .systemRed
         
-        // Edit Action
+        // --- ACTION 2: EDIT (Blue) ---
         let editAction = UIContextualAction(style: .normal, title: "Edit") { [weak self] (action, view, completionHandler) in
             guard let self = self else { return }
             
@@ -456,6 +437,52 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
         configuration.performsFirstActionWithFullSwipe = false
         
         return configuration
+    }
+    
+    // MARK: - Delete Confirmation Logic
+    func confirmDelete(at indexPath: IndexPath, completion: @escaping (Bool) -> Void) {
+        
+        // Safely get the title/category for the alert message
+        let appointment = appointmentsForSelectedDate[indexPath.row]
+        let displayTitle = !appointment.title.isEmpty ? appointment.title : appointment.category
+        
+        let alert = UIAlertController(
+            title: "Delete Appointment?",
+            message: "Are you sure you want to delete '\(displayTitle)'?",
+            preferredStyle: .alert
+        )
+        
+        let deleteBtn = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+            guard let self = self else { return }
+            
+            // 1. Delete from Manager
+            AppointmentManager.shared.deleteAppointment(appointment.id, for: self.viewingDate)
+            
+            // 2. Remove from local array
+            self.appointmentsForSelectedDate.remove(at: indexPath.row)
+            
+            // 3. Delete row animation
+            self.appointmentsTableView.deleteRows(at: [indexPath], with: .fade)
+            
+            // 4. Recalculate heights after deletion
+            self.updateCardHeight()
+            self.collectionView.reloadData()
+            
+            // 5. Hide container if no more appointments
+            if self.appointmentsForSelectedDate.isEmpty {
+                self.appointmentsContainerView.isHidden = true
+            }
+            
+            completion(true)
+        }
+        
+        let cancelBtn = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+            completion(false)
+        }
+        
+        alert.addAction(deleteBtn)
+        alert.addAction(cancelBtn)
+        present(alert, animated: true)
     }
     
     // MARK: - UIPickerView DataSource & Delegate
