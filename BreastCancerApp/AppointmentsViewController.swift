@@ -197,19 +197,10 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
             print("❌ tableViewHeightConstraint is nil - NOT CONNECTED!")
         }
         
-        // Calculate container height WITHOUT the button spacing
-        // The button should be positioned outside/below the container
-        // Container should only include:
-        // - Container top to Date Header: 15
-        // - Date Header height: 29
-        // - Date Header to Table View: 7.67 (includes separator)
-        // - Table View height: actualTableHeight (57, 114, or 171)
-        // - Bottom padding: 15 (small padding after last appointment)
-        
         let topToDateHeader: CGFloat = 15
         let dateHeaderHeight: CGFloat = 29
         let dateHeaderToTable: CGFloat = 7.67
-        let bottomPadding: CGFloat = 0 // Reduced from 54 (34+20)
+        let bottomPadding: CGFloat = 0
         
         let totalContainerHeight = topToDateHeader + dateHeaderHeight + dateHeaderToTable + actualTableHeight + bottomPadding
         
@@ -227,6 +218,7 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
         
         print("📊 Appointments: \(numberOfItems), Table: \(actualTableHeight), Container: \(totalContainerHeight)")
     }
+    
     // MARK: - IBActions
     @IBAction func backButtonTapped(_ sender: UIBarButtonItem) {
         dismiss(animated: true)
@@ -322,7 +314,53 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
         components.day = dayInt
         
         if let newDate = cal.date(from: components) {
-            updateAppointmentsList(for: newDate)
+            // Check if this date has appointments
+            let appointments = AppointmentManager.shared.getAppointments(for: newDate)
+            
+            // If no appointments, don't allow selection
+            guard !appointments.isEmpty else {
+                return
+            }
+            
+            // Store old viewing date to find its cell
+            let oldViewingDate = viewingDate
+            
+            // Update viewing date first
+            viewingDate = newDate
+            
+            // Update date header
+            let formatter = DateFormatter()
+            formatter.dateFormat = "EEE dd MMM"
+            dateHeaderLabel.text = formatter.string(from: newDate)
+            
+            // Get appointments for new date
+            appointmentsForSelectedDate = appointments
+            
+            // Show container (we already checked it's not empty)
+            appointmentsContainerView.isHidden = false
+            
+            // Reload table view
+            appointmentsTableView.reloadData()
+            updateCardHeight()
+            
+            // Only reload the affected calendar cells (old and new selection)
+            var cellsToReload: [IndexPath] = []
+            
+            // Find and reload old selected cell
+            let oldDay = cal.component(.day, from: oldViewingDate)
+            if let oldIndex = totalSquares.firstIndex(of: String(oldDay)) {
+                cellsToReload.append(IndexPath(item: oldIndex, section: 0))
+            }
+            
+            // Find and reload new selected cell
+            if let newIndex = totalSquares.firstIndex(of: String(dayInt)) {
+                cellsToReload.append(IndexPath(item: newIndex, section: 0))
+            }
+            
+            // Reload only these specific cells
+            if !cellsToReload.isEmpty {
+                collectionView.reloadItems(at: cellsToReload)
+            }
         }
     }
     
@@ -349,8 +387,24 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
     // MARK: - Swipe Actions (Edit & Delete)
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
+        // Check if the appointment date is in the past
+        let appointment = appointmentsForSelectedDate[indexPath.row]
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd MMM yyyy"
+        
+        if let appointmentDate = dateFormatter.date(from: appointment.date) {
+            let calendar = Calendar.current
+            let today = calendar.startOfDay(for: Date())
+            let appointmentDay = calendar.startOfDay(for: appointmentDate)
+            
+            // If appointment is in the past, return nil (no swipe actions)
+            if appointmentDay < today {
+                return nil
+            }
+        }
+        
         // Delete Action
-        let deleteAction = UIContextualAction(style: .destructive, title: nil) { [weak self] (action, view, completionHandler) in
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { [weak self] (action, view, completionHandler) in
             guard let self = self else { return }
             
             let appointment = self.appointmentsForSelectedDate[indexPath.row]
@@ -373,7 +427,7 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
         deleteAction.backgroundColor = .systemRed
         
         // Edit Action
-        let editAction = UIContextualAction(style: .normal, title: nil) { [weak self] (action, view, completionHandler) in
+        let editAction = UIContextualAction(style: .normal, title: "Edit") { [weak self] (action, view, completionHandler) in
             guard let self = self else { return }
             
             let appointment = self.appointmentsForSelectedDate[indexPath.row]
