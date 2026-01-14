@@ -29,8 +29,6 @@ class InterestsCell: UICollectionViewCell {
     
     // MARK: - Setup
     private func setupUI() {
-        containerView.layer.cornerRadius = 13
-        containerView.layer.masksToBounds = true
         updateSelectionState()
     }
     
