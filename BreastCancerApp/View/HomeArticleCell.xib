@@ -19,13 +19,13 @@
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tha-Pz-YLg">
-                        <rect key="frame" x="16" y="5" width="361" height="264"/>
+                        <rect key="frame" x="16" y="5" width="377" height="264"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="tY5-p8-ICF">
-                                <rect key="frame" x="0.0" y="0.0" width="361" height="175"/>
+                                <rect key="frame" x="0.0" y="0.0" width="377" height="175"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="361" id="h4Y-Eo-rww"/>
                                     <constraint firstAttribute="height" constant="175" id="jzC-jP-KNO"/>
+                                    <constraint firstAttribute="width" constant="377" id="qMO-pP-eAN"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LR0-0z-EQf">
@@ -61,7 +61,7 @@
             </view>
             <viewLayoutGuide key="safeArea" id="eXh-ML-G7K"/>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="Tha-Pz-YLg" secondAttribute="trailing" constant="16" id="9Zx-2D-NTz"/>
+                <constraint firstAttribute="trailing" secondItem="Tha-Pz-YLg" secondAttribute="trailing" id="9Zx-2D-NTz"/>
                 <constraint firstAttribute="bottom" secondItem="Tha-Pz-YLg" secondAttribute="bottom" constant="10" id="HCS-jB-x1f"/>
                 <constraint firstItem="Tha-Pz-YLg" firstAttribute="leading" secondItem="Qqf-0g-jbi" secondAttribute="leading" constant="16" id="Qwv-lH-WNW"/>
                 <constraint firstItem="Tha-Pz-YLg" firstAttribute="top" secondItem="Qqf-0g-jbi" secondAttribute="top" constant="5" id="uMI-iZ-qRI"/>
