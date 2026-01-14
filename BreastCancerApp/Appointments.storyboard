@@ -614,20 +614,20 @@
                                 <rect key="frame" x="16" y="635" width="361" height="103"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mon 30 Apr" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fgX-Fg-DN5">
-                                        <rect key="frame" x="15" y="7.9999999999999982" width="93" height="29.333333333333329"/>
+                                        <rect key="frame" x="15" y="7.9999999999999982" width="93" height="20.333333333333329"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                         <color key="textColor" systemColor="systemGrayColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QhA-dB-e5f">
-                                        <rect key="frame" x="15" y="45" width="331" height="1"/>
+                                        <rect key="frame" x="15" y="36" width="331" height="1"/>
                                         <color key="backgroundColor" systemColor="systemGray5Color"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="1" id="pZe-K0-4nu"/>
                                         </constraints>
                                     </view>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="v9Q-wn-zHN">
-                                        <rect key="frame" x="0.0" y="46" width="361" height="57"/>
+                                        <rect key="frame" x="0.0" y="37" width="361" height="57"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="57" id="OkF-e3-ePf"/>
@@ -644,7 +644,6 @@
                                     <constraint firstItem="v9Q-wn-zHN" firstAttribute="leading" secondItem="MAf-Vf-gEy" secondAttribute="leading" id="kle-2W-D1r"/>
                                     <constraint firstItem="v9Q-wn-zHN" firstAttribute="top" secondItem="QhA-dB-e5f" secondAttribute="bottom" id="oQh-Vr-RjZ"/>
                                     <constraint firstItem="QhA-dB-e5f" firstAttribute="leading" secondItem="MAf-Vf-gEy" secondAttribute="leading" constant="15" id="szG-sV-9MF"/>
-                                    <constraint firstAttribute="bottom" secondItem="v9Q-wn-zHN" secondAttribute="bottom" id="weD-Rs-Rjy"/>
                                     <constraint firstItem="QhA-dB-e5f" firstAttribute="top" secondItem="fgX-Fg-DN5" secondAttribute="bottom" constant="7.6699999999999999" id="yeT-S4-JDV"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
@@ -673,13 +672,15 @@
                         <viewLayoutGuide key="safeArea" id="OcN-3h-P6v"/>
                         <color key="backgroundColor" name="Backgroundcolor"/>
                         <constraints>
+                            <constraint firstItem="OcN-3h-P6v" firstAttribute="trailing" secondItem="MAf-Vf-gEy" secondAttribute="trailing" constant="16" id="0Qf-1H-Qsw"/>
                             <constraint firstItem="MAf-Vf-gEy" firstAttribute="trailing" secondItem="BUu-CS-clb" secondAttribute="trailing" id="G17-5v-my6"/>
                             <constraint firstItem="BUu-CS-clb" firstAttribute="top" secondItem="OcN-3h-P6v" secondAttribute="top" constant="30" id="Gca-SJ-uhb"/>
                             <constraint firstItem="MAf-Vf-gEy" firstAttribute="leading" secondItem="BUu-CS-clb" secondAttribute="leading" id="Ukf-Qh-w10"/>
-                            <constraint firstItem="9oT-0X-S8E" firstAttribute="top" secondItem="MAf-Vf-gEy" secondAttribute="bottom" constant="34" id="dZ0-gZ-bbn"/>
+                            <constraint firstItem="9oT-0X-S8E" firstAttribute="top" secondItem="MAf-Vf-gEy" secondAttribute="bottom" constant="34" id="Ymt-JH-YsT"/>
                             <constraint firstItem="MAf-Vf-gEy" firstAttribute="top" secondItem="BUu-CS-clb" secondAttribute="bottom" constant="20" id="eOT-wT-chi"/>
                             <constraint firstItem="OcN-3h-P6v" firstAttribute="trailing" secondItem="BUu-CS-clb" secondAttribute="trailing" constant="16" id="fAD-DM-oCo"/>
                             <constraint firstItem="BUu-CS-clb" firstAttribute="leading" secondItem="OcN-3h-P6v" secondAttribute="leading" constant="16" id="fU3-Am-Zyc"/>
+                            <constraint firstItem="MAf-Vf-gEy" firstAttribute="leading" secondItem="OcN-3h-P6v" secondAttribute="leading" constant="16" id="hVw-yq-HAW"/>
                             <constraint firstAttribute="trailing" secondItem="9oT-0X-S8E" secondAttribute="trailing" constant="15" id="jIS-M1-mcM"/>
                         </constraints>
                     </view>
@@ -697,6 +698,7 @@
                         <outlet property="backBarButton" destination="nPk-0y-n0A" id="jQy-Um-QF5"/>
                         <outlet property="chevronButton" destination="j1P-9S-0pm" id="hY0-OL-pEK"/>
                         <outlet property="collectionView" destination="0Sm-zf-BFY" id="gAa-O4-lTa"/>
+                        <outlet property="containerHeightConstraint" destination="ZTu-VT-zxj" id="FZH-dy-Muk"/>
                         <outlet property="dateHeaderLabel" destination="fgX-Fg-DN5" id="cLV-0z-KYz"/>
                         <outlet property="headerToggleButton" destination="rqb-rB-ZZL" id="3TM-Jn-rCX"/>
                         <outlet property="monthLabel" destination="W8h-rm-K8s" id="gQi-76-WSb"/>
@@ -704,6 +706,7 @@
                         <outlet property="nextMonth" destination="wyV-wQ-zYh" id="D9s-i7-08D"/>
                         <outlet property="pickerContainerView" destination="HZg-oG-nIq" id="EfR-st-oVc"/>
                         <outlet property="previousMonth" destination="M4R-UN-02d" id="ek9-WP-XsP"/>
+                        <outlet property="tableViewHeightConstraint" destination="OkF-e3-ePf" id="lYN-bU-T4r"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JH2-Kl-Vvl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -757,13 +760,13 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGray2Color">
-            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray5Color">
-            <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGrayColor">
-            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

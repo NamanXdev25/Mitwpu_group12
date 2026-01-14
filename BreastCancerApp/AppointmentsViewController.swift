@@ -32,6 +32,10 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
     @IBOutlet weak var appointmentsTableView: UITableView!
     @IBOutlet weak var addAppointmentButton: UIButton! // Pink + button
     
+    // MARK: - Dynamic Height Constraint (ONLY TABLE VIEW)
+    @IBOutlet weak var tableViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var containerHeightConstraint: NSLayoutConstraint!
+    
     // MARK: - Properties
     var selectedDate = Date()
     var viewingDate = Date()
@@ -41,6 +45,10 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
     // Picker Data
     let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     var years = [Int]()
+    
+    // MARK: - Constants for Dynamic Height
+    let cellHeight: CGFloat = 57.0
+    let maxVisibleRows: Int = 3
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -64,7 +72,7 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
     // MARK: - Setup Methods
     private func setupYears() {
         let currentYear = Calendar.current.component(.year, from: Date())
-        years = Array((currentYear - 10)...(currentYear + 10)) // Past and future years
+        years = Array((currentYear - 10)...(currentYear + 10))
     }
     
     private func setupCollectionView() {
@@ -84,11 +92,11 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
         appointmentsTableView.separatorStyle = .none
         appointmentsTableView.separatorColor = .clear
         appointmentsTableView.separatorInset = .zero
-        appointmentsTableView.isScrollEnabled = true
-        appointmentsTableView.showsVerticalScrollIndicator = false
+        appointmentsTableView.isScrollEnabled = false
+        appointmentsTableView.showsVerticalScrollIndicator = true
         appointmentsTableView.backgroundColor = .clear
-        appointmentsTableView.isPagingEnabled = true // Enable paging for snap scrolling
-        appointmentsTableView.bounces = false // Disable bouncing
+        appointmentsTableView.isPagingEnabled = false
+        appointmentsTableView.bounces = true
         appointmentsTableView.alwaysBounceVertical = false
         appointmentsTableView.contentInsetAdjustmentBehavior = .never
         appointmentsTableView.register(UINib(nibName: "AppointmentCell", bundle: nil), forCellReuseIdentifier: "AppointmentCell")
@@ -154,13 +162,71 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
             appointmentsContainerView.isHidden = false
         }
         
-        // Enable scrolling only if more than 1 appointment
-        appointmentsTableView.isScrollEnabled = appointmentsForSelectedDate.count > 1
-        
         appointmentsTableView.reloadData()
         collectionView.reloadData()
+        
+        // Update Dynamic Heights
+        updateCardHeight()
     }
     
+    // MARK: - Dynamic Height Logic
+    private func updateCardHeight() {
+        // If hidden, no need to calculate
+        guard !appointmentsContainerView.isHidden else { return }
+        
+        let numberOfItems = appointmentsForSelectedDate.count
+        
+        // Calculate table content height
+        let tableContentHeight = CGFloat(numberOfItems) * cellHeight
+        
+        // Calculate maximum allowed height (3 rows)
+        let maxTableHeight = CGFloat(maxVisibleRows) * cellHeight
+        
+        // Actual table height (minimum of content vs max allowed)
+        let actualTableHeight = min(tableContentHeight, maxTableHeight)
+        
+        // Enable scrolling only if more than 3 appointments
+        appointmentsTableView.isScrollEnabled = numberOfItems > maxVisibleRows
+        appointmentsTableView.showsVerticalScrollIndicator = numberOfItems > maxVisibleRows
+        
+        // Update TableView Height Constraint
+        if let tableConstraint = tableViewHeightConstraint {
+            tableConstraint.constant = actualTableHeight
+            print("✅ Table height set to: \(actualTableHeight)")
+        } else {
+            print("❌ tableViewHeightConstraint is nil - NOT CONNECTED!")
+        }
+        
+        // Calculate container height WITHOUT the button spacing
+        // The button should be positioned outside/below the container
+        // Container should only include:
+        // - Container top to Date Header: 15
+        // - Date Header height: 29
+        // - Date Header to Table View: 7.67 (includes separator)
+        // - Table View height: actualTableHeight (57, 114, or 171)
+        // - Bottom padding: 15 (small padding after last appointment)
+        
+        let topToDateHeader: CGFloat = 15
+        let dateHeaderHeight: CGFloat = 29
+        let dateHeaderToTable: CGFloat = 7.67
+        let bottomPadding: CGFloat = 0 // Reduced from 54 (34+20)
+        
+        let totalContainerHeight = topToDateHeader + dateHeaderHeight + dateHeaderToTable + actualTableHeight + bottomPadding
+        
+        if let containerConstraint = containerHeightConstraint {
+            containerConstraint.constant = totalContainerHeight
+            print("✅ Container height set to: \(totalContainerHeight)")
+        } else {
+            print("❌ containerHeightConstraint is nil - NOT CONNECTED!")
+        }
+        
+        // Animate the change
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
+        
+        print("📊 Appointments: \(numberOfItems), Table: \(actualTableHeight), Container: \(totalContainerHeight)")
+    }
     // MARK: - IBActions
     @IBAction func backButtonTapped(_ sender: UIBarButtonItem) {
         dismiss(animated: true)
@@ -277,7 +343,7 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 57
+        return cellHeight
     }
     
     // MARK: - Swipe Actions (Edit & Delete)
@@ -292,9 +358,8 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
             self.appointmentsForSelectedDate.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
             
-            // Update scrolling state based on remaining appointments
-            self.appointmentsTableView.isScrollEnabled = self.appointmentsForSelectedDate.count > 1
-            
+            // Recalculate heights after deletion
+            self.updateCardHeight()
             self.collectionView.reloadData()
             
             // Hide container if no more appointments
@@ -334,7 +399,7 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
         editAction.backgroundColor = .systemBlue
         
         let configuration = UISwipeActionsConfiguration(actions: [deleteAction, editAction])
-        configuration.performsFirstActionWithFullSwipe = false // Disable full swipe to delete
+        configuration.performsFirstActionWithFullSwipe = false
         
         return configuration
     }
