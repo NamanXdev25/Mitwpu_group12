@@ -26,6 +26,10 @@ class OnboardingData {
     var lastCheckupDate: Date?
     var followUpFrequency: String?
     
+    // post treatment
+    var treatmentCompletionDate: Date?
+    var selectedInterests: [String] = []
+    
     private init() {}
     
     // Reset all data
@@ -37,6 +41,8 @@ class OnboardingData {
         selectedHobbies.removeAll()
         lastCheckupDate = nil
         followUpFrequency = nil
+        treatmentCompletionDate = nil
+        selectedInterests.removeAll()
     }
     
     // Check if onboarding is complete

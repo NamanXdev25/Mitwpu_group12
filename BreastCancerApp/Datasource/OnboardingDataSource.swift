@@ -62,4 +62,16 @@ struct OnboardingDataSource {
         "Every 6 months",
         "Once a year"
     ]
+    
+    // MARK: - Post Treatment Interests
+    static let postTreatmentInterests = [
+        InterestOption(title: "Physical Strength", icon: "figure.strengthtraining.traditional"),
+        InterestOption(title: "Mindfulness", icon: "figure.mind.and.body")
+    ]
+}
+
+// MARK: - Interest Option Model
+struct InterestOption {
+    let title: String
+    let icon: String
 }

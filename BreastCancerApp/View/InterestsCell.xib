@@ -5,7 +5,6 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -22,7 +21,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Activity" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bgi-WC-0Fn">
-                                <rect key="frame" x="8" y="71" width="84" height="21"/>
+                                <rect key="frame" x="8" y="55" width="84" height="21"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -36,13 +35,13 @@
                                 </constraints>
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="OnboardingBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="wRN-Of-aAL" firstAttribute="top" secondItem="Wey-Nc-Rdt" secondAttribute="top" constant="16" id="70T-Wm-q5o"/>
                             <constraint firstItem="Bgi-WC-0Fn" firstAttribute="leading" secondItem="Wey-Nc-Rdt" secondAttribute="leading" constant="8" id="FuH-qg-ASf"/>
                             <constraint firstAttribute="trailing" secondItem="Bgi-WC-0Fn" secondAttribute="trailing" constant="8" id="Xgo-xP-zwI"/>
                             <constraint firstItem="wRN-Of-aAL" firstAttribute="centerX" secondItem="Wey-Nc-Rdt" secondAttribute="centerX" id="ZSn-aZ-Mh9"/>
-                            <constraint firstAttribute="bottom" secondItem="Bgi-WC-0Fn" secondAttribute="bottom" constant="8" id="yuz-3c-gCB"/>
+                            <constraint firstAttribute="bottom" secondItem="Bgi-WC-0Fn" secondAttribute="bottom" constant="24" id="yuz-3c-gCB"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -60,16 +59,21 @@
                 <constraint firstItem="Wey-Nc-Rdt" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="mnu-4E-eZA"/>
             </constraints>
             <size key="customSize" width="94" height="94"/>
+            <connections>
+                <outlet property="containerView" destination="Wey-Nc-Rdt" id="Tu7-bL-bQK"/>
+                <outlet property="iconImageView" destination="wRN-Of-aAL" id="CtB-bR-zJI"/>
+                <outlet property="titleLabel" destination="Bgi-WC-0Fn" id="dwL-2X-ywA"/>
+            </connections>
             <point key="canvasLocation" x="-175.57251908396947" y="121.83098591549296"/>
         </collectionViewCell>
     </objects>
     <resources>
         <image name="figure.run.circle.fill" catalog="system" width="128" height="123"/>
+        <namedColor name="OnboardingBackgroundColor">
+            <color red="0.97254901960784312" green="0.94901960784313721" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="OnboardingPrimaryColor">
             <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
     </resources>
 </document>

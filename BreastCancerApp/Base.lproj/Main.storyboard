@@ -901,6 +901,7 @@
                                 <buttonConfiguration key="configuration" style="plain" title="Skip"/>
                                 <connections>
                                     <action selector="skipButtonTapped:" destination="Pli-cI-ajq" eventType="touchUpInside" id="7jj-GO-rFh"/>
+                                    <action selector="skipButtonTapped:" destination="WGa-4n-SUH" eventType="touchUpInside" id="bTo-U4-EMj"/>
                                     <action selector="skipButtonTapped:" destination="B0G-Dm-mY6" eventType="touchUpInside" id="upl-xw-L4P"/>
                                 </connections>
                             </button>
@@ -919,6 +920,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Next" cornerStyle="capsule"/>
                                 <connections>
+                                    <action selector="nextButtonTapped:" destination="WGa-4n-SUH" eventType="touchUpInside" id="M5E-MS-5Ba"/>
                                     <action selector="nextButtonTapped:" destination="B0G-Dm-mY6" eventType="touchUpInside" id="Pui-dp-xBl"/>
                                 </connections>
                             </button>
@@ -955,13 +957,13 @@
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What is your focus now?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xYN-9u-lnT">
-                                <rect key="frame" x="16" y="444.66666666666669" width="232" height="27"/>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
+                                <rect key="frame" x="16" y="460.66666666666669" width="292.66666666666669" height="33.666666666666686"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Hmu-2g-L9V">
-                                <rect key="frame" x="0.0" y="503.66666666666674" width="393" height="56"/>
+                                <rect key="frame" x="0.0" y="494.33333333333331" width="393" height="65.333333333333314"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Wl6-eh-qgN">
                                     <size key="itemSize" width="128" height="128"/>
@@ -987,7 +989,7 @@
                             <constraint firstItem="ETZ-KA-Khy" firstAttribute="leading" secondItem="PnW-PC-oFe" secondAttribute="leading" constant="24" id="2Kw-k2-FgM"/>
                             <constraint firstItem="PnW-PC-oFe" firstAttribute="trailing" secondItem="rj4-tf-gfL" secondAttribute="trailing" constant="96" id="BnY-3H-gfe"/>
                             <constraint firstAttribute="trailing" secondItem="eQN-uU-WuJ" secondAttribute="trailing" constant="16" id="CEP-LO-1tO"/>
-                            <constraint firstItem="Hmu-2g-L9V" firstAttribute="top" secondItem="xYN-9u-lnT" secondAttribute="bottom" constant="32" id="CnY-0j-T9o"/>
+                            <constraint firstItem="Hmu-2g-L9V" firstAttribute="top" secondItem="xYN-9u-lnT" secondAttribute="bottom" id="CnY-0j-T9o"/>
                             <constraint firstItem="PnW-PC-oFe" firstAttribute="trailing" secondItem="7PK-Fp-8R5" secondAttribute="trailing" constant="24" id="DjC-KU-e2e"/>
                             <constraint firstItem="cg2-tO-BVL" firstAttribute="top" secondItem="eQN-uU-WuJ" secondAttribute="bottom" constant="8" id="FAn-cb-0CJ"/>
                             <constraint firstItem="eQN-uU-WuJ" firstAttribute="top" secondItem="PnW-PC-oFe" secondAttribute="top" constant="12" id="Gdc-re-Ix4"/>
@@ -1004,13 +1006,20 @@
                             <constraint firstItem="1N2-8m-Wl1" firstAttribute="top" secondItem="cg2-tO-BVL" secondAttribute="bottom" constant="16" id="hDk-s6-vb1"/>
                             <constraint firstAttribute="trailing" secondItem="1N2-8m-Wl1" secondAttribute="trailing" constant="16" id="iCJ-fl-myf"/>
                             <constraint firstItem="PnW-PC-oFe" firstAttribute="bottom" secondItem="rj4-tf-gfL" secondAttribute="bottom" constant="50" id="m36-eE-NJV"/>
-                            <constraint firstItem="xYN-9u-lnT" firstAttribute="top" secondItem="7PK-Fp-8R5" secondAttribute="bottom" constant="16" id="v11-VA-A1Z"/>
+                            <constraint firstItem="xYN-9u-lnT" firstAttribute="top" secondItem="7PK-Fp-8R5" secondAttribute="bottom" constant="32" id="v11-VA-A1Z"/>
                             <constraint firstItem="PnW-PC-oFe" firstAttribute="trailing" secondItem="ETZ-KA-Khy" secondAttribute="trailing" constant="24" id="vOt-Na-2rO"/>
                             <constraint firstItem="Hmu-2g-L9V" firstAttribute="leading" secondItem="PnW-PC-oFe" secondAttribute="leading" id="wBg-TQ-2al"/>
                             <constraint firstItem="7PK-Fp-8R5" firstAttribute="top" secondItem="1N2-8m-Wl1" secondAttribute="bottom" constant="40" id="yd6-2z-83h"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="UAD-M1-oz7"/>
+                    <connections>
+                        <outlet property="collectionView" destination="Hmu-2g-L9V" id="Sl8-UO-Mrh"/>
+                        <outlet property="completionDatePicker" destination="XB1-zu-c7u" id="ZXh-S2-FyY"/>
+                        <outlet property="nextButton" destination="rj4-tf-gfL" id="XqP-kr-0ur"/>
+                        <outlet property="progressBar" destination="eQN-uU-WuJ" id="prC-Ab-n7x"/>
+                        <segue destination="Pzx-Ua-6B7" kind="show" identifier="showHobbies" id="XHg-qT-ZK3"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8Z1-V9-gTi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1052,7 +1061,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="fqm-s0-qMn"/>
+        <segue reference="XHg-qT-ZK3"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="chevron.up.chevron.down" catalog="system" width="109" height="128"/>
