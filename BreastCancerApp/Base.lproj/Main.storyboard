@@ -86,6 +86,9 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="ILz-Cx-V9K"/>
+                    <connections>
+                        <outlet property="continueButton" destination="Zns-Jg-Xl7" id="c7b-Rp-3Fm"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EcT-nA-hXt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -175,6 +178,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="OJt-o3-Hle"/>
                     <connections>
+                        <outlet property="letsBeginButton" destination="BkD-mE-Cph" id="guN-uQ-bFy"/>
                         <outlet property="progressBar" destination="HcV-9X-LZr" id="VVE-AX-NP9"/>
                     </connections>
                 </viewController>
