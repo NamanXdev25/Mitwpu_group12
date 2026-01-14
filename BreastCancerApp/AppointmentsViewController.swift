@@ -47,7 +47,7 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
     var years = [Int]()
     
     // MARK: - Constants for Dynamic Height
-    let cellHeight: CGFloat = 57.0
+    let cellHeight: CGFloat = 50
     let maxVisibleRows: Int = 3
     
     // MARK: - Lifecycle
