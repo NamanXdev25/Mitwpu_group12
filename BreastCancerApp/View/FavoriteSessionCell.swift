@@ -73,7 +73,7 @@ final class FadingMaterialView: UIVisualEffectView {
     }
 }
 
-// MARK: - Helper Extension (Define ONLY once in your project)
+// MARK: - Helper Extension 
 extension UIImage {
     var isDark: Bool {
         guard let cgImage = self.cgImage else { return false }
