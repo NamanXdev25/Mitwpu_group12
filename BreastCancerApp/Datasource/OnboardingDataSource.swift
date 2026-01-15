@@ -9,7 +9,7 @@ import Foundation
 
 struct OnboardingDataSource {
     
-    // MARK: - Treatment Options
+    // Treatment Options
     static let treatmentOptions = [
         "Currently in treatment",
         "Under Observation",
@@ -17,7 +17,7 @@ struct OnboardingDataSource {
         "Prefer not to say"
     ]
     
-    // MARK: - Hobbies
+    // Hobbies
     static let hobbies = [
         "Drawing",
         "music",
@@ -34,7 +34,7 @@ struct OnboardingDataSource {
         "Journaling"
     ]
     
-    // MARK: - Cancer Stages (for dropdown)
+    // Cancer Stages
     static let cancerStages = [
         "Stage 0",
         "Stage I",
@@ -44,8 +44,9 @@ struct OnboardingDataSource {
         "Not sure"
     ]
     
-    // MARK: - Age Groups (for dropdown)
+    // Age Groups
     static let ageGroups = [
+        "Below 18",
         "18-25",
         "26-35",
         "36-45",
@@ -54,7 +55,7 @@ struct OnboardingDataSource {
         "65+"
     ]
     
-    // MARK: - Follow-up Frequencies
+    // Follow-up Frequency
     static let followUpFrequencies = [
         "Every month",
         "Every 2 months",
@@ -63,13 +64,13 @@ struct OnboardingDataSource {
         "Once a year"
     ]
     
-    // MARK: - Post Treatment Interests
+    // Post Treatment Focus
     static let postTreatmentInterests = [
         InterestOption(title: "Physical Strength", icon: "figure.strengthtraining.traditional"),
         InterestOption(title: "Mindfulness", icon: "figure.mind.and.body")
     ]
     
-    // MARK: - Prefer Not To Say Interests
+    // Prefer Not To Say Interests
     static let preferNotToSayInterests = [
         InterestOption(title: "Physical Strength", icon: "figure.strengthtraining.traditional.circle.fill"),
         InterestOption(title: "Mindfulness", icon: "figure.mind.and.body.circle.fill"),
@@ -78,7 +79,7 @@ struct OnboardingDataSource {
     ]
 }
 
-// MARK: - Interest Option Model
+// Interest Option Model
 struct InterestOption {
     let title: String
     let icon: String

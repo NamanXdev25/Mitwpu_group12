@@ -9,16 +9,13 @@ import UIKit
 
 class PreferNotToSayViewController: UIViewController {
     
-    // MARK: - Outlets
     @IBOutlet weak var progressBar: ProgressBarView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var nextButton: UIButton!
     
-    // MARK: - Properties
     private let interests = OnboardingDataSource.preferNotToSayInterests
     private var selectedInterests: Set<String> = []
     
-    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -27,10 +24,9 @@ class PreferNotToSayViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        progressBar.setProgress(currentStep: 3, totalSteps: 4, animated: true)
+        progressBar.setProgress(currentStep: 3, totalSteps: 5, animated: true)
     }
     
-    // MARK: - Setup
     private func setupUI() {
         progressBar.setProgress(0, animated: false)
         navigationItem.backButtonTitle = ""
@@ -43,11 +39,11 @@ class PreferNotToSayViewController: UIViewController {
         collectionView.allowsMultipleSelection = true
         collectionView.backgroundColor = .clear
         
-        // Register XIB cell
+        // register XIB cell
         let nib = UINib(nibName: "InterestsCell", bundle: nil)
         collectionView.register(nib, forCellWithReuseIdentifier: "InterestsCell")
         
-        // Setup flow layout - 2 columns
+        // setup flow layout
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumInteritemSpacing = 16
@@ -63,7 +59,7 @@ class PreferNotToSayViewController: UIViewController {
     }
     
     private func updateNextButtonState() {
-        // User can proceed without selecting interests
+        // user can proceed without selecting interests
         nextButton.isEnabled = true
         nextButton.alpha = 1.0
     }
@@ -72,7 +68,6 @@ class PreferNotToSayViewController: UIViewController {
         OnboardingData.shared.selectedInterests = Array(selectedInterests)
     }
     
-    // MARK: - Actions
     @IBAction func skipButtonTapped(_ sender: UIButton) {
         print("Skip tapped - Prefer not to say")
         performSegue(withIdentifier: "showHobbies", sender: nil)
@@ -85,7 +80,7 @@ class PreferNotToSayViewController: UIViewController {
     }
 }
 
-// MARK: - UICollectionViewDelegate, UICollectionViewDataSource
+// delegate and datasource
 extension PreferNotToSayViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

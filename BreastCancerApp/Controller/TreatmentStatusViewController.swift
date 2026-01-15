@@ -8,13 +8,11 @@
 import UIKit
 
 class TreatmentStatusViewController: UIViewController {
-    
-    // MARK: - Outlets
+    // outlets
     @IBOutlet weak var progressBar: ProgressBarView!
     @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var nextButton: UIButton!
     
-    // MARK: - Properties
     private var treatmentOptions: [String] = []
     private var selectedIndex: Int? {
         didSet {
@@ -23,7 +21,6 @@ class TreatmentStatusViewController: UIViewController {
     }
     private var optionViews: [TreatmentOptionView] = []
     
-    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -32,11 +29,9 @@ class TreatmentStatusViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        // Animate progress to 50% (step 2 of 4)
-        progressBar.setProgress(currentStep: 2, totalSteps: 4, animated: true)
+        progressBar.setProgress(currentStep: 2, totalSteps: 5, animated: true)
     }
     
-    // MARK: - Setup
     private func setupUI() {
         progressBar.setProgress(0, animated: false)
         navigationItem.backButtonTitle = ""
@@ -44,17 +39,15 @@ class TreatmentStatusViewController: UIViewController {
     }
     
     private func loadTreatmentOptions() {
-        // Get options from datasource
+        // options from datasource
         treatmentOptions = OnboardingDataSource.treatmentOptions
         
-        // Create option views
         for (index, option) in treatmentOptions.enumerated() {
             let optionView = TreatmentOptionView()
             optionView.title = option
             optionView.translatesAutoresizingMaskIntoConstraints = false
             optionView.heightAnchor.constraint(equalToConstant: 64).isActive = true
             
-            // Handle tap
             optionView.onTap = { [weak self] in
                 self?.handleOptionTapped(at: index)
             }
@@ -65,14 +58,10 @@ class TreatmentStatusViewController: UIViewController {
     }
     
     private func handleOptionTapped(at index: Int) {
-        // Deselect all
         optionViews.forEach { $0.isSelectedOption = false }
-        
-        // Select tapped one
         optionViews[index].isSelectedOption = true
         selectedIndex = index
         
-        // Save to model
         OnboardingData.shared.treatmentStatus = treatmentOptions[index]
     }
     
@@ -81,7 +70,6 @@ class TreatmentStatusViewController: UIViewController {
         nextButton.alpha = selectedIndex != nil ? 1.0 : 0.5
     }
     
-    // MARK: - Actions
     @IBAction func skipButtonTapped(_ sender: UIButton) {
         print("Skip tapped")
     }
@@ -92,7 +80,7 @@ class TreatmentStatusViewController: UIViewController {
         let selectedOption = treatmentOptions[index]
         print("Next tapped - selected: \(selectedOption)")
         
-        // Navigate based on selection
+        // navigate based on selection
         var identifier: String
         
         switch index {

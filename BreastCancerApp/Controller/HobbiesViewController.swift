@@ -9,30 +9,28 @@ import UIKit
 
 class HobbiesViewController: UIViewController {
     
-    // MARK: - Outlets
+    // IBOutlets
     @IBOutlet weak var progressBar: ProgressBarView!
     @IBOutlet weak var skipButton: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var nextButton: UIButton!
     @IBOutlet weak var descriptionLabel: UILabel!
     
-    // MARK: - Properties
     private let hobbies = OnboardingDataSource.hobbies
     private var selectedHobbies: Set<String> = []
     
-    // MARK: - Lifecycle
+    // override funcs
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupCollectionView()
     }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        progressBar.setProgress(currentStep: 4, totalSteps: 4, animated: true)
+        progressBar.setProgress(currentStep: 4, totalSteps: 5, animated: true)
     }
     
-    // MARK: - Setup
+    // function def
     private func setupUI() {
         progressBar.setProgress(0, animated: false)
         navigationItem.backButtonTitle = ""
@@ -45,11 +43,11 @@ class HobbiesViewController: UIViewController {
         collectionView.allowsMultipleSelection = true
         collectionView.backgroundColor = .clear
         
-        // Register XIB cell
+        // register XIB cell
         let nib = UINib(nibName: "HobbyCell", bundle: nil)
         collectionView.register(nib, forCellWithReuseIdentifier: "HobbyCell")
         
-        // Setup flow layout with left alignment
+        // set flow layout with left alignment
         let layout = LeftAlignedCollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumInteritemSpacing = 12
@@ -70,10 +68,9 @@ class HobbiesViewController: UIViewController {
         OnboardingData.shared.selectedHobbies = Array(selectedHobbies)
     }
     
-    // MARK: - Actions
     @IBAction func skipButtonTapped(_ sender: UIButton) {
         print("Skip tapped - Hobbies")
-        // Navigate to next screen or home
+        // navigate to completion screen
     }
     
     @IBAction func nextButtonTapped(_ sender: UIButton) {
@@ -83,7 +80,7 @@ class HobbiesViewController: UIViewController {
     }
 }
 
-// MARK: - UICollectionViewDelegate, UICollectionViewDataSource
+// delegate and datasource
 extension HobbiesViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

@@ -9,26 +9,18 @@ import UIKit
 
 class UnderObservationViewController: UIViewController {
     
-    // MARK: - Outlets
+    // IBOutlets
     @IBOutlet weak var progressBar: ProgressBarView!
     @IBOutlet weak var nextButton: UIButton!
-    
-    // Date picker for last checkup
     @IBOutlet weak var lastCheckupDatePicker: UIDatePicker!
-    
-    // Follow-up frequency picker and display
-    @IBOutlet weak var followUpButton: UIButton! // The button showing selected frequency
-    @IBOutlet weak var followUpPickerView: UIView! // Container for picker
+    @IBOutlet weak var followUpButton: UIButton!
+    @IBOutlet weak var followUpPickerView: UIView!
     @IBOutlet weak var followUpPicker: UIPickerView!
+    @IBOutlet weak var overlayView: UIView! // overlay for dimming & tap gesture
     
-    // Overlay for dimming
-    @IBOutlet weak var overlayView: UIView!
-    
-    // MARK: - Properties
     private var selectedFollowUpFrequency: String?
     private let frequencyOptions = OnboardingDataSource.followUpFrequencies
     
-    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -38,50 +30,42 @@ class UnderObservationViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        progressBar.setProgress(currentStep: 3, totalSteps: 4, animated: true)
+        progressBar.setProgress(currentStep: 3, totalSteps: 5, animated: true)
     }
     
-    // MARK: - Setup
     private func setupUI() {
         progressBar.setProgress(0, animated: false)
         navigationItem.backButtonTitle = ""
         updateNextButtonState()
         
-        // Set max date for last checkup to today
         lastCheckupDatePicker.maximumDate = Date()
         lastCheckupDatePicker.addTarget(self, action: #selector(datePickerChanged), for: .valueChanged)
         
-        // Hide picker and overlay initially
         overlayView.isHidden = true
         overlayView.alpha = 0.5
         followUpPickerView.isHidden = true
     }
     
     private func setupPickers() {
-        // Configure follow-up frequency picker
         followUpPicker.delegate = self
         followUpPicker.dataSource = self
     }
     
     private func setupGestures() {
-        // Tap gesture for overlay (to dismiss picker)
+        // tap gesture for overlay
         let overlayTap = UITapGestureRecognizer(target: self, action: #selector(overlayTapped))
         overlayView.addGestureRecognizer(overlayTap)
     }
     
-    // MARK: - Actions
     @IBAction func followUpButtonTapped(_ sender: UIButton) {
-        // Show overlay and picker
         overlayView.isHidden = false
         followUpPickerView.isHidden = false
         
-        // Bring to front
         view.bringSubviewToFront(overlayView)
         view.bringSubviewToFront(followUpPickerView)
     }
     
     @objc private func overlayTapped() {
-        // Hide overlay and picker
         overlayView.isHidden = true
         followUpPickerView.isHidden = true
     }
@@ -92,8 +76,6 @@ class UnderObservationViewController: UIViewController {
     
     private func updateNextButtonState() {
         let hasFrequency = selectedFollowUpFrequency != nil
-        // Date picker always has a value
-        
         let isValid = hasFrequency
         nextButton.isEnabled = isValid
         nextButton.alpha = isValid ? 1.0 : 0.5
@@ -106,7 +88,8 @@ class UnderObservationViewController: UIViewController {
     
     @IBAction func skipButtonTapped(_ sender: UIButton) {
         print("Skip tapped - Under Observation")
-        // Navigate to hobbies screen
+        
+        // navigate to hobbies screen
         performSegue(withIdentifier: "showHobbies", sender: nil)
     }
     
@@ -116,12 +99,12 @@ class UnderObservationViewController: UIViewController {
         print("- Last Checkup: \(lastCheckupDatePicker.date)")
         print("- Follow-up Frequency: \(selectedFollowUpFrequency ?? "none")")
         
-        // Navigate to hobbies screen
+        // navigate to hobbies screen
         performSegue(withIdentifier: "showHobbies", sender: nil)
     }
 }
 
-// MARK: - UIPickerViewDelegate, UIPickerViewDataSource
+// delegate & datasource
 extension UnderObservationViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -137,8 +120,6 @@ extension UnderObservationViewController: UIPickerViewDelegate, UIPickerViewData
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         selectedFollowUpFrequency = frequencyOptions[row]
-        
-        // Update button title to show selected frequency
         var config = followUpButton.configuration ?? UIButton.Configuration.plain()
         config.title = selectedFollowUpFrequency
         followUpButton.configuration = config
