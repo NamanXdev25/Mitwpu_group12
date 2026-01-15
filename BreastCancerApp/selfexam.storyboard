@@ -67,7 +67,7 @@
             </objects>
             <point key="canvasLocation" x="758" y="-2"/>
         </scene>
-        <!--Observations-->
+        <!--Self-Exam Log-->
         <scene sceneID="uSb-mq-Evz">
             <objects>
                 <viewController storyboardIdentifier="ObservationsViewController" id="SFl-U8-WC4" customClass="ObservationsViewController" customModule="BreastCancerApp" sceneMemberID="viewController">
@@ -109,7 +109,7 @@
                             <constraint firstItem="2W2-YY-1T3" firstAttribute="trailing" secondItem="cNK-M3-DRC" secondAttribute="trailing" id="qvN-pD-sKp"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Observations" id="3jN-bM-X4r">
+                    <navigationItem key="navigationItem" title="Self-Exam Log" id="3jN-bM-X4r">
                         <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="DxV-ov-YOJ">
                             <color key="tintColor" name="pink"/>
                             <connections>
@@ -492,7 +492,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="KqS-3D-mRG"/>
+        <segue reference="F95-aZ-lai"/>
         <segue reference="2v3-Ab-dfR"/>
     </inferredMetricsTieBreakers>
     <resources>
