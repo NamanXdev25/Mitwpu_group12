@@ -15,8 +15,21 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
 
     // MARK: - Data Source
     var allMedications: [Medication] = []  // Store ALL medications
-    var todaysMedications: [Medication] {  // Computed property to filter for today
-        return allMedications.filter { $0.isScheduledFor(date: Date()) }
+    var todaysMedications: [Medication] {
+        let filtered = allMedications.filter { $0.isScheduledFor(date: Date()) }
+        
+        // Sort by time in ascending order (AM to PM)
+        return filtered.sorted { med1, med2 in
+            let timeFormatter = DateFormatter()
+            timeFormatter.dateFormat = "h:mm a"
+            timeFormatter.locale = Locale(identifier: "en_US_POSIX")
+            
+            if let date1 = timeFormatter.date(from: med1.time),
+               let date2 = timeFormatter.date(from: med2.time) {
+                return date1 < date2
+            }
+            return med1.time < med2.time
+        }
     }
 
     // MARK: - Lifecycle

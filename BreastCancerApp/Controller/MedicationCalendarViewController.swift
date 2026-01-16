@@ -154,7 +154,20 @@ class MedicationCalendarViewController: UIViewController, UICollectionViewDataSo
         if let history = MedicationHistory.shared.getHistory(for: date) {
             // Medications were planned for this day
             let allMedications = history.medications
-            missedMedications = allMedications.filter { !$0.isTaken }
+            let unsortedMissed = allMedications.filter { !$0.isTaken }
+            
+            // Sort missed medications by time in ascending order (AM to PM)
+            missedMedications = unsortedMissed.sorted { med1, med2 in
+                let timeFormatter = DateFormatter()
+                timeFormatter.dateFormat = "h:mm a"
+                timeFormatter.locale = Locale(identifier: "en_US_POSIX")
+                
+                if let date1 = timeFormatter.date(from: med1.time),
+                   let date2 = timeFormatter.date(from: med2.time) {
+                    return date1 < date2
+                }
+                return med1.time < med2.time
+            }
             
             if missedMedications.isEmpty {
                 // All medications taken
