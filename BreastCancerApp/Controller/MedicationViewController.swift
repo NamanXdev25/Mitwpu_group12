@@ -63,9 +63,22 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
         if let history = MedicationHistory.shared.getHistory(for: Date()) {
             allMedications = history.medications
         } else {
-            // If no medications exist for today, start with empty array
-            allMedications = []
+            // If no medications exist for today, load dummy data
+            loadDummyData()
         }
+    }
+    
+    // MARK: - Load Dummy Data
+    func loadDummyData() {
+        allMedications = [
+            Medication(name: "Aspirin", note: "Take with food", time: "8:00 AM", repeatOption: "Every Day", isTaken: false, reminderEnabled: true),
+            Medication(name: "Vitamin D", note: "Morning supplement", time: "9:00 AM", repeatOption: "Every Day", isTaken: false, reminderEnabled: true),
+            Medication(name: "Blood Pressure Med", note: "", time: "12:00 PM", repeatOption: "Every Day", isTaken: false, reminderEnabled: true),
+            Medication(name: "Thyroid Medicine", note: "Take on empty stomach", time: "7:00 AM", repeatOption: "Every Day", isTaken: false, reminderEnabled: true),
+            Medication(name: "Omega-3", note: "", time: "6:00 PM", repeatOption: "Every Mon", isTaken: false, reminderEnabled: false),
+            Medication(name: "Allergy Medicine", note: "Only if needed", time: "10:00 PM", repeatOption: "Every Day", isTaken: false, reminderEnabled: true)
+        ]
+        saveMedications()
     }
     
     // MARK: - Save Medications

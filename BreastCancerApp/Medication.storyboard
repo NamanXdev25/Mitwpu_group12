@@ -14,7 +14,7 @@
         <!--Medication-->
         <scene sceneID="a3l-jL-ZDv">
             <objects>
-                <viewController id="BQn-dE-dnr" customClass="MedicationViewController" customModule="Medication" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BQn-dE-dnr" customClass="MedicationViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ld1-hP-3Pw">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -110,7 +110,7 @@
         <!--Add Medication-->
         <scene sceneID="48g-fF-evS">
             <objects>
-                <viewController id="Efw-Vt-AIG" customClass="AddMedicationViewController" customModule="Medication" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Efw-Vt-AIG" customClass="AddMedicationViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="sfY-rJ-824">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -374,7 +374,7 @@
         <!--Medications-->
         <scene sceneID="7Kb-8p-uoH">
             <objects>
-                <viewController storyboardIdentifier="CalendarViewController" id="yt4-c7-xSI" customClass="MedicationCalendarViewController" customModule="Medication" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CalendarViewController" id="yt4-c7-xSI" customClass="MedicationCalendarViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3Gu-ab-DK5">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

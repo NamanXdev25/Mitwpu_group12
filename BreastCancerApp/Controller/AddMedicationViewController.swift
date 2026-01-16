@@ -57,7 +57,7 @@ class AddMedicationViewController: UIViewController, UIPickerViewDelegate, UIPic
             timeTextField.text = med.time
             noteTextView.text = med.note.isEmpty ? "Add a note (optional)" : med.note
             noteTextView.textColor = med.note.isEmpty ? .lightGray : .black
-            reminderSwitch.isOn = med.reminderEnabled  // NEW: Load reminder state
+            reminderSwitch.isOn = med.reminderEnabled  // Load reminder state
             title = "Edit Medication"
             
             // Set picker to the correct repeat option
@@ -69,7 +69,7 @@ class AddMedicationViewController: UIViewController, UIPickerViewDelegate, UIPic
             // Set initial grayed out state for repeat field
             repeatTextField.text = "Every Day"
             repeatTextField.textColor = .lightGray  // Grayed out
-            reminderSwitch.isOn = true  // NEW: Default to ON for new medications
+            reminderSwitch.isOn = true  // Default to ON for new medications
         }
     }
     
@@ -237,7 +237,7 @@ class AddMedicationViewController: UIViewController, UIPickerViewDelegate, UIPic
             note = ""
         }
         
-        // NEW: Get reminder switch state
+        // Get reminder switch state
         let reminderEnabled = reminderSwitch.isOn
         
         // Check if editing or adding

@@ -6,7 +6,7 @@ struct Medication {
     var time: String
     var repeatOption: String  // Store the actual repeat option (e.g., "Every Mon", "Every Day")
     var isTaken: Bool = false
-    var reminderEnabled: Bool = true  // NEW: Store reminder switch state
+    var reminderEnabled: Bool = true  // Store reminder switch state
     
     // Helper function to check if medication is scheduled for a given date
     func isScheduledFor(date: Date) -> Bool {
