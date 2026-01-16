@@ -1,7 +1,5 @@
 import UIKit
 
-// --- 1. DATA STRUCTURES ---
-
 struct PlanItem: Codable {
     var id: String
     var title: String
@@ -9,6 +7,7 @@ struct PlanItem: Codable {
     var time: String
     var isCompleted: Bool
     var description: String?
+    var hasReminder: Bool?
 }
 
 struct ExerciseItem: Codable {
@@ -17,7 +16,6 @@ struct ExerciseItem: Codable {
     var imageName: String
 }
 
-// --- UPDATED: History Structure ---
 struct DailyProgress: Codable {
     let items: [PlanItem]
     
@@ -25,8 +23,6 @@ struct DailyProgress: Codable {
     var completedCount: Int { items.filter { $0.isCompleted }.count }
     var missedItems: [PlanItem] { items.filter { !$0.isCompleted } }
 }
-
-// --- 2. THE MANAGER ---
 
 class ExerciseManager {
     
@@ -51,7 +47,6 @@ class ExerciseManager {
         updateHistoryForAllDates()
     }
     
-    // MARK: - Dummy Data for Testing
     func addDummyDataForTesting() {
         let calendar = Calendar.current
         let today = Date()
@@ -83,8 +78,9 @@ class ExerciseManager {
                             title: "Exercise \(i)",
                             subtitle: "Every Day",
                             time: timeString,
-                            isCompleted: false, // All missed
-                            description: "Test exercise \(i)"
+                            isCompleted: false,
+                            description: "Test exercise \(i)",
+                            hasReminder: true
                         ))
                     }
                     history[key] = DailyProgress(items: dummyExercises)
@@ -94,40 +90,38 @@ class ExerciseManager {
                     continue
                 }
                 
-                // REGULAR DAYS: Normal dummy data
-                // Exercise 1
                 dummyExercises.append(PlanItem(
                     id: "dummy_\(key)_1",
                     title: "Morning Stretches",
                     subtitle: "Every Day",
                     time: "8:00 AM",
-                    isCompleted: daysBack % 2 == 0, // Completed on even days
-                    description: "Daily morning stretching routine"
+                    isCompleted: daysBack % 2 == 0,
+                    description: "Daily morning stretching routine",
+                    hasReminder: true
                 ))
                 
-                // Exercise 2
                 dummyExercises.append(PlanItem(
                     id: "dummy_\(key)_2",
                     title: "Arm Exercises",
                     subtitle: "Every Day",
                     time: "2:00 PM",
-                    isCompleted: daysBack % 3 == 0, // Completed every 3rd day
-                    description: "Arm strengthening exercises"
+                    isCompleted: daysBack % 3 == 0,
+                    description: "Arm strengthening exercises",
+                    hasReminder: false
                 ))
                 
-                // Exercise 3 - add only to some days
                 if daysBack <= 10 {
                     dummyExercises.append(PlanItem(
                         id: "dummy_\(key)_3",
                         title: "Evening Walk",
                         subtitle: "Every Day",
                         time: "6:00 PM",
-                        isCompleted: false, // Not completed
-                        description: "30 minute evening walk"
+                        isCompleted: false,
+                        description: "30 minute evening walk",
+                        hasReminder: true
                     ))
                 }
                 
-                // Exercise 4 - add for recent days
                 if daysBack <= 7 {
                     dummyExercises.append(PlanItem(
                         id: "dummy_\(key)_4",
@@ -135,11 +129,11 @@ class ExerciseManager {
                         subtitle: "Every Day",
                         time: "9:00 PM",
                         isCompleted: true,
-                        description: "Deep breathing exercises"
+                        description: "Deep breathing exercises",
+                        hasReminder: false
                     ))
                 }
                 
-                // Save to history
                 history[key] = DailyProgress(items: dummyExercises)
                 print("Added \(dummyExercises.count) exercises for \(key)")
             }
@@ -147,7 +141,6 @@ class ExerciseManager {
         
         saveHistory()
         
-       
         if let testDate = calendar.date(byAdding: .day, value: -5, to: today) {
             let df = DateFormatter()
             df.dateFormat = "MMM d, yyyy"
@@ -156,7 +149,6 @@ class ExerciseManager {
     }
     
     func loadAllData() {
-    
         self.myExercises = loadJSON(filename: "myExercises")
         self.exploreItems = loadJSON(filename: "explore")
     }
@@ -172,7 +164,6 @@ class ExerciseManager {
         }
     }
     
-    
     func currentDayPlan(for date: Date) -> [PlanItem] {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "E"
@@ -187,7 +178,6 @@ class ExerciseManager {
         return currentDayPlan(for: Date())
     }
     
-    
     func togglePlanItem(id: String) {
         if let index = todaysPlan.firstIndex(where: { $0.id == id }) {
             todaysPlan[index].isCompleted.toggle()
@@ -197,7 +187,6 @@ class ExerciseManager {
     }
     
     func addPlanItem(_ item: PlanItem) {
-       
         removeExercisesById(item.id)
         todaysPlan.insert(item, at: 0)
         saveTodaysPlan()
@@ -220,8 +209,6 @@ class ExerciseManager {
         return removed
     }
     
-   
-    
     func saveTodaysPlan() {
         do {
             let data = try JSONEncoder().encode(todaysPlan)
@@ -239,8 +226,6 @@ class ExerciseManager {
         } catch { print("Error loading plan: \(error)") }
     }
     
- 
-    
     func updateHistoryForToday() {
         let key = getTodayDateString()
         let todayExercises = currentDayPlan
@@ -250,30 +235,24 @@ class ExerciseManager {
         }
     }
     
-   
     func updateHistoryForAllDates() {
         let calendar = Calendar.current
         let today = Date()
         
-  
         let startDate = getAppStartDate()
         
-       
         let components = calendar.dateComponents([.day], from: startDate, to: today)
         guard let daysToCheck = components.day else { return }
         
-      
         for daysBack in 0...daysToCheck {
             if let pastDate = calendar.date(byAdding: .day, value: -daysBack, to: today) {
                 let key = getDateKey(for: pastDate)
                 
-               
                 if history[key] != nil {
                     continue
                 }
                 
                 let exercisesForDate = currentDayPlan(for: pastDate)
-                
                 
                 if !exercisesForDate.isEmpty {
                     history[key] = DailyProgress(items: exercisesForDate)
@@ -283,15 +262,12 @@ class ExerciseManager {
         saveHistory()
     }
     
- 
     func getAppStartDate() -> Date {
         let startDateKey = "com.yourapp.startDate"
-        
         
         if let savedTimestamp = UserDefaults.standard.object(forKey: startDateKey) as? TimeInterval {
             return Date(timeIntervalSince1970: savedTimestamp)
         } else {
-           
             let now = Date()
             UserDefaults.standard.set(now.timeIntervalSince1970, forKey: startDateKey)
             return now

@@ -61,19 +61,36 @@ class ExerciseViewController: UIViewController, UICollectionViewDataSource, UICo
     func swipeActions(for indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let item = model.currentDayPlan[indexPath.row]
         
-        let deleteAction = UIContextualAction(style: .destructive, title: nil) { [weak self] _, _, completion in
+        // Added title "Delete" which will appear below the trash icon
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { [weak self] _, _, completion in
             guard let self = self else { return }
-            self.model.removeExercisesById(item.id)
-            self.collectionView.deleteItems(at: [indexPath])
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                self.collectionView.reloadSections(IndexSet(integer: 0))
+            
+            // Alert Controller for confirmation
+            let alert = UIAlertController(title: "Delete Exercise", message: "Are you sure you want to delete this exercise?", preferredStyle: .alert)
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+                completion(false)
             }
-            completion(true)
+            
+            let deleteConfirmAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
+                self.model.removeExercisesById(item.id)
+                self.collectionView.deleteItems(at: [indexPath])
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    self.collectionView.reloadSections(IndexSet(integer: 0))
+                }
+                completion(true)
+            }
+            
+            alert.addAction(cancelAction)
+            alert.addAction(deleteConfirmAction)
+            
+            self.present(alert, animated: true, completion: nil)
         }
         deleteAction.image = UIImage(systemName: "trash")
         deleteAction.backgroundColor = .systemRed
         
-        let editAction = UIContextualAction(style: .normal, title: nil) { [weak self] _, _, completion in
+        // Added title "Edit" which will appear below the pencil icon
+        let editAction = UIContextualAction(style: .normal, title: "Edit") { [weak self] _, _, completion in
             guard let self = self else { return }
             self.openEditScreen(for: item)
             completion(true)
@@ -98,6 +115,8 @@ class ExerciseViewController: UIViewController, UICollectionViewDataSource, UICo
                 addVC.initialTime = item.time
                 addVC.initialDescription = item.description
                 
+                // Pass the saved reminder state
+                addVC.initialReminderState = item.hasReminder ?? true
                 
                 if isUUID(item.id) {
                     addVC.isNameEditable = true
@@ -204,6 +223,17 @@ class ExerciseViewController: UIViewController, UICollectionViewDataSource, UICo
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PlanCell", for: indexPath) as! PlanCell
             let item = model.currentDayPlan[indexPath.row]
             cell.configure(with: item)
+            
+            // Ensure minimum height for swipe actions to display correctly (Title below Icon)
+            let minHeight: CGFloat = 61
+            let hasConstraint = cell.containerView.constraints.contains { constraint in
+                return constraint.firstAttribute == .height && constraint.constant == minHeight && constraint.relation == .greaterThanOrEqual
+            }
+            
+            if !hasConstraint {
+                let constraint = cell.containerView.heightAnchor.constraint(greaterThanOrEqualToConstant: minHeight)
+                constraint.isActive = true
+            }
             
             let totalRows = collectionView.numberOfItems(inSection: 0)
             cell.containerView.layer.cornerRadius = 0

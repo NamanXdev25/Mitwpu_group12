@@ -35,6 +35,7 @@ class AddExerciseViewController: UIViewController, UIPickerViewDelegate, UIPicke
     var initialSubtitle: String?
     var initialTime: String?
     var initialDescription: String?
+    var initialReminderState: Bool = true 
     
     let weekDays = ["Every Mon", "Every Tue", "Every Wed", "Every Thu", "Every Fri", "Every Sat", "Every Sun", "Every Day"]
     
@@ -88,6 +89,9 @@ class AddExerciseViewController: UIViewController, UIPickerViewDelegate, UIPicke
             descriptionTextView.text = desc
             descriptionTextView.textColor = .black
         }
+        
+        // Initialize switch state
+        reminderSwitch.isOn = initialReminderState
     }
     
     func setupUI() {
@@ -211,8 +215,11 @@ class AddExerciseViewController: UIViewController, UIPickerViewDelegate, UIPicke
         if description == "Add a description" {
             description = ""
         }
+        
+        // Capture reminder switch state
+        let hasReminder = reminderSwitch.isOn
 
-        let newPlanItem = PlanItem(id: planId, title: name, subtitle: repeatText, time: time, isCompleted: false, description: description)
+        let newPlanItem = PlanItem(id: planId, title: name, subtitle: repeatText, time: time, isCompleted: false, description: description, hasReminder: hasReminder)
         delegate?.didAddExercise(newPlanItem)
         self.dismiss(animated: true, completion: nil)
     }
