@@ -18,13 +18,13 @@
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="titleLabel" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IAB-zp-cmZ">
-                        <rect key="frame" x="20" y="15.999999999999998" width="317" height="31.333333333333329"/>
-                        <fontDescription key="fontDescription" type="boldSystem" pointSize="26"/>
+                        <rect key="frame" x="20" y="15.999999999999996" width="317" height="40.666666666666657"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M1j-4e-BtK">
-                        <rect key="frame" x="341" y="15.666666666666664" width="32" height="32"/>
+                        <rect key="frame" x="341" y="20.333333333333329" width="32" height="32"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="32" id="Lj1-ry-5df"/>
                             <constraint firstAttribute="height" constant="32" id="lyw-Dq-583"/>
@@ -39,13 +39,13 @@
                         </connections>
                     </button>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="descriptionLabel" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="api-xJ-yxF">
-                        <rect key="frame" x="20" y="59.333333333333343" width="337" height="18"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <rect key="frame" x="20" y="68.666666666666671" width="337" height="18"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gcd-GZ-Zqk">
-                        <rect key="frame" x="20" y="85.333333333333329" width="70" height="23"/>
+                        <rect key="frame" x="20" y="94.666666666666671" width="70" height="23"/>
                         <color key="backgroundColor" name="Less_Exercise"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="70" id="X27-1v-QVC"/>
@@ -59,8 +59,8 @@
                         </userDefinedRuntimeAttributes>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2dW-Db-j7e">
-                        <rect key="frame" x="29.000000000000004" y="89.333333333333329" width="32.333333333333343" height="59.666666666666671"/>
-                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
+                        <rect key="frame" x="30" y="96.666666666666671" width="31" height="52.333333333333329"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                         <color key="textColor" name="beginner_color"/>
                         <nil key="highlightedColor"/>
                     </label>
@@ -69,13 +69,13 @@
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <constraints>
                 <constraint firstItem="api-xJ-yxF" firstAttribute="top" secondItem="IAB-zp-cmZ" secondAttribute="bottom" constant="12" id="6bR-FM-FUs"/>
-                <constraint firstItem="2dW-Db-j7e" firstAttribute="top" secondItem="api-xJ-yxF" secondAttribute="bottom" constant="12" id="7k3-az-FLM"/>
+                <constraint firstItem="2dW-Db-j7e" firstAttribute="top" secondItem="api-xJ-yxF" secondAttribute="bottom" constant="10" id="7k3-az-FLM"/>
                 <constraint firstAttribute="trailing" secondItem="IAB-zp-cmZ" secondAttribute="trailing" constant="56" id="A27-Ty-hFc"/>
                 <constraint firstItem="IAB-zp-cmZ" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="16" id="J2Z-37-B2X"/>
                 <constraint firstItem="IAB-zp-cmZ" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="20" id="K17-YH-U2K"/>
                 <constraint firstAttribute="trailing" secondItem="M1j-4e-BtK" secondAttribute="trailing" constant="20" id="UsV-0Y-DPu"/>
                 <constraint firstItem="Gcd-GZ-Zqk" firstAttribute="top" secondItem="api-xJ-yxF" secondAttribute="bottom" constant="8" id="ViE-sC-KSz"/>
-                <constraint firstItem="2dW-Db-j7e" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="29" id="aOu-Bj-Hep"/>
+                <constraint firstItem="2dW-Db-j7e" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="30" id="aOu-Bj-Hep"/>
                 <constraint firstItem="Gcd-GZ-Zqk" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="20" id="e8X-OF-TfR"/>
                 <constraint firstAttribute="bottom" secondItem="2dW-Db-j7e" secondAttribute="bottom" constant="16" id="fCG-bS-uxf"/>
                 <constraint firstItem="M1j-4e-BtK" firstAttribute="centerY" secondItem="IAB-zp-cmZ" secondAttribute="centerY" id="hh3-yM-nh1"/>
