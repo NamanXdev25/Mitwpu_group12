@@ -169,8 +169,20 @@ class ExerciseManager {
         dateFormatter.dateFormat = "E"
         let dayMatch = "Every \(dateFormatter.string(from: date))"
         
-        return todaysPlan.filter { item in
+        let filteredItems = todaysPlan.filter { item in
             return item.subtitle == "Every Day" || item.subtitle == dayMatch
+        }
+        
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "h:mm a"
+        timeFormatter.locale = Locale(identifier: "en_US_POSIX")
+        
+        return filteredItems.sorted { item1, item2 in
+            if let date1 = timeFormatter.date(from: item1.time),
+               let date2 = timeFormatter.date(from: item2.time) {
+                return date1 < date2
+            }
+            return item1.time < item2.time
         }
     }
     

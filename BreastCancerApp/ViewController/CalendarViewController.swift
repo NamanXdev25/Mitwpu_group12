@@ -133,7 +133,18 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
         detailCardView?.isHidden = false
         
         if let progress = ExerciseManager.shared.history[key] {
-            missedItems = progress.missedItems
+            // Sort missed items by time in ascending order
+            missedItems = progress.missedItems.sorted { item1, item2 in
+                let timeFormatter = DateFormatter()
+                timeFormatter.dateFormat = "h:mm a"
+                timeFormatter.locale = Locale(identifier: "en_US_POSIX")
+                
+                if let date1 = timeFormatter.date(from: item1.time),
+                   let date2 = timeFormatter.date(from: item2.time) {
+                    return date1 < date2
+                }
+                return item1.time < item2.time
+            }
             
             if missedItems.isEmpty {
                 statusLabel.text = "All exercises completed"

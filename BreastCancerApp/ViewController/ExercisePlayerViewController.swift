@@ -461,9 +461,25 @@ extension ExercisePlayerViewController: UICollectionViewDataSource, UICollection
                 guard let self = self, let detail = self.exerciseData else { return }
                 
                 if ExerciseManager.shared.containsExercise(id: detail.id) {
-                    ExerciseManager.shared.removeExercisesById(detail.id)
-                    self.collectionView.reloadSections(IndexSet(integer: 3))
-                    self.showToast(message: "Exercise removed from plan")
+                    let alert = UIAlertController(
+                        title: "Remove Exercise",
+                        message: "Are you sure you want to remove this exercise from your plan?",
+                        preferredStyle: .alert
+                    )
+                    
+                    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                    
+                    let removeAction = UIAlertAction(title: "Remove", style: .destructive) { _ in
+                        ExerciseManager.shared.removeExercisesById(detail.id)
+                        self.collectionView.reloadSections(IndexSet(integer: 3))
+                        self.showToast(message: "Exercise removed from plan")
+                    }
+                    
+                    alert.addAction(cancelAction)
+                    alert.addAction(removeAction)
+                    
+                    self.present(alert, animated: true, completion: nil)
+                    
                 } else {
                     let storyboard = UIStoryboard(name: "Exercise", bundle: nil)
                     
