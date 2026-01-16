@@ -35,6 +35,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
                     <constraint firstItem="1K8-Hz-K5M" firstAttribute="centerY" secondItem="nAg-Gl-1YF" secondAttribute="centerY" id="1wC-fo-kHZ"/>
                     <constraint firstItem="tpi-QE-UG1" firstAttribute="leading" secondItem="nAg-Gl-1YF" secondAttribute="leading" constant="15" id="Bqy-CE-b6Y"/>

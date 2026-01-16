@@ -16,7 +16,6 @@ class AppointmentDateCell: UICollectionViewCell {
         super.awakeFromNib()
         // Make selection layer circular
         selectionLayer.layer.cornerRadius = selectionLayer.frame.width / 2
-        selectionLayer.clipsToBounds = true
     }
     
     override func layoutSubviews() {

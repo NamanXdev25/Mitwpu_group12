@@ -18,8 +18,8 @@ class NewAppointmentViewController: UIViewController {
     // MARK: - IBOutlets
     @IBOutlet weak var closeBarButton: UIBarButtonItem!
     @IBOutlet weak var saveBarButton: UIBarButtonItem!
-    @IBOutlet weak var userTitleTextField: UITextField!  // NEW: For custom title
-    @IBOutlet weak var categoryTextField: UITextField!   // RENAMED: For Chemotherapy/Doctor Visit
+    @IBOutlet weak var userTitleTextField: UITextField! 
+    @IBOutlet weak var categoryTextField: UITextField!
     @IBOutlet weak var chemotherapyIndicatorView: UIView!
     @IBOutlet weak var doctorVisitIndicatorView: UIView!
     @IBOutlet weak var dateTextField: UITextField!
@@ -27,13 +27,13 @@ class NewAppointmentViewController: UIViewController {
     @IBOutlet weak var setReminderSwitch: UISwitch!
     @IBOutlet weak var noteTextView: UITextView!
     
-    @IBOutlet weak var categoryChevronImageView: UIImageView!  // RENAMED
+    @IBOutlet weak var categoryChevronImageView: UIImageView!
     @IBOutlet weak var dateChevronImageView: UIImageView!
     @IBOutlet weak var timeChevronImageView: UIImageView!
     
     @IBOutlet weak var pickerOverlay: UIView!
     @IBOutlet weak var pickerCard: UIView!
-    @IBOutlet weak var categoryPicker: UIPickerView!  // RENAMED
+    @IBOutlet weak var categoryPicker: UIPickerView!
     @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var timePicker: UIDatePicker!
     

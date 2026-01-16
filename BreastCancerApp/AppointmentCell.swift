@@ -20,7 +20,6 @@ class AppointmentCell: UITableViewCell {
     
     private func setupUI() {
         self.backgroundColor = .clear
-        self.contentView.backgroundColor = .clear
         selectionStyle = .none
     }
     

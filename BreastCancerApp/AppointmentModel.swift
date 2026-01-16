@@ -11,8 +11,8 @@ import UIKit
 // MARK: - AppointmentItem Model
 struct AppointmentItem {
     let id: String
-    let title: String        // User's custom title
-    let category: String     // "Chemotherapy" or "Doctor Visit"
+    let title: String
+    let category: String
     let date: String
     let time: String
     let reminderEnabled: Bool

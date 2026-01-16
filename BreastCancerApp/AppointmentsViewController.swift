@@ -47,8 +47,6 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
     var years = [Int]()
     
     // MARK: - Constants for Dynamic Height
-    // INCREASED HEIGHT: To get the "Icon above Title" look in swipe actions,
-    // the cell usually needs to be taller (70+ points).
     let cellHeight: CGFloat = 63
     let maxVisibleRows: Int = 2
     
@@ -149,13 +147,25 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
     private func updateAppointmentsList(for date: Date) {
         viewingDate = date
         
-        // Update date header - "Mon 30 Apr"
         let formatter = DateFormatter()
         formatter.dateFormat = "EEE dd MMM"
         dateHeaderLabel.text = formatter.string(from: date)
         
         // Get appointments for this date from AppointmentManager
         appointmentsForSelectedDate = AppointmentManager.shared.getAppointments(for: date)
+        
+        // Sort appointments by time in ascending order (earliest first)
+        appointmentsForSelectedDate.sort { appointment1, appointment2 in
+            let timeFormatter = DateFormatter()
+            timeFormatter.dateFormat = "h:mm a"
+            
+            guard let time1 = timeFormatter.date(from: appointment1.time),
+                  let time2 = timeFormatter.date(from: appointment2.time) else {
+                return false
+            }
+            
+            return time1 < time2 // Ascending order (earliest time first)
+        }
         
         // Show/hide the appointments container based on whether there are appointments
         if appointmentsForSelectedDate.isEmpty {
@@ -167,7 +177,6 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
         appointmentsTableView.reloadData()
         collectionView.reloadData()
         
-        // Update Dynamic Heights
         updateCardHeight()
     }
     
@@ -545,7 +554,6 @@ extension AppointmentsViewController: AddAppointmentDelegate {
         }
     }
 }
-
 // MARK: - CalendarHelper
 class CalendarHelper {
     let calendar = Calendar.current
