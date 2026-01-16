@@ -92,8 +92,6 @@ class VideoControlsCell: UICollectionViewCell {
                 self.updateTimeLabels()
             } else {
                 if self.isLooping {
-                    // Loop logic is handled by the PlayerCell notification,
-                    // but we reset UI counter here to match
                     self.currentSeconds = 0
                     self.updateProgress()
                     self.updateTimeLabels()
@@ -119,19 +117,15 @@ class VideoControlsCell: UICollectionViewCell {
     @IBAction func restartTapped(_ sender: Any) {
         animateButton(restartButton)
         
-        // 1. Reset Time
         currentSeconds = 0
         updateProgress()
         updateTimeLabels()
         
-        // 2. FIX: Force UI to "Playing" state
-        // Even if we were paused, restart implies "Play from start"
         isPlaying = true
         let config = UIImage.SymbolConfiguration(pointSize: 56, weight: .thin)
         playButton.setImage(UIImage(systemName: "pause.circle.fill", withConfiguration: config), for: .normal)
         startProgressTimer()
         
-        // 3. Notify Controller
         onRestart?()
     }
     

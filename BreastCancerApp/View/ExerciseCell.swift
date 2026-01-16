@@ -21,12 +21,8 @@ class ExerciseCell: UICollectionViewCell {
         nameButton.titleLabel?.lineBreakMode = .byWordWrapping
         nameButton.titleLabel?.textAlignment = .center
         nameButton.titleLabel?.font = .systemFont(ofSize: 12, weight: .bold)
-        
-        // Ensure button content is centered
         nameButton.contentHorizontalAlignment = .center
         nameButton.contentVerticalAlignment = .center
-        
-        // Add internal padding so text doesn't hit the pill edges
         nameButton.contentEdgeInsets = UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8)
         
         nameButton.isUserInteractionEnabled = true

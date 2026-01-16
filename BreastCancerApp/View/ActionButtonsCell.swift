@@ -4,7 +4,6 @@ class ActionButtonsCell: UICollectionViewCell {
     
     @IBOutlet weak var addToPlanButton: UIButton!
     
-    // ✅ THESE ARE THE CLOSURES
     var onAddToPlan: (() -> Void)?
     var onSetReminder: (() -> Void)?
     
@@ -13,10 +12,9 @@ class ActionButtonsCell: UICollectionViewCell {
         
     }
     
-    // ✅ THESE ARE THE IBACTIONS
     @IBAction func addToPlanTapped(_ sender: Any) {
         animateButton(addToPlanButton)
-        onAddToPlan?()  // Call the closure
+        onAddToPlan?()
     }
     
     
@@ -30,10 +28,8 @@ class ActionButtonsCell: UICollectionViewCell {
         }
     }
 
-    // MARK: - Appearance Toggle
     func setAdded(_ added: Bool) {
         if added {
-            // Show "Remove" style: white bg + pink border + pink text
             addToPlanButton.setTitle("Remove", for: .normal)
             addToPlanButton.backgroundColor = .white
             let pink = UIColor(red: 0.95, green: 0.45, blue: 0.55, alpha: 1.0)
@@ -41,7 +37,6 @@ class ActionButtonsCell: UICollectionViewCell {
             addToPlanButton.layer.borderWidth = 1
             addToPlanButton.layer.borderColor = pink.cgColor
         } else {
-            // Restore "Add to Plan" pink filled look
             let pinkColor = UIColor(red: 0.95, green: 0.45, blue: 0.55, alpha: 1.0)
             addToPlanButton.setTitle("Add to Plan", for: .normal)
             addToPlanButton.backgroundColor = pinkColor

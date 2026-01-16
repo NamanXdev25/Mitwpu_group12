@@ -1,6 +1,5 @@
 import UIKit
 
-// Global delegate protocol so controllers can adopt it easily
 protocol DetailExerciseCellDelegate: AnyObject {
     func didTapChevron(on cell: DetailExerciseCell)
 }
@@ -38,9 +37,6 @@ class DetailExerciseCell: UICollectionViewCell {
         }
     }
 
-    // MARK: - IBAction
-    // Connect this IBAction from the chevron UIButton in Interface Builder,
-    // or the programmatic target above will also call it.
     @IBAction func chevronTapped(_ sender: UIButton) {
         delegate?.didTapChevron(on: self)
     }

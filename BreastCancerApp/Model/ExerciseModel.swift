@@ -18,7 +18,6 @@ struct ExerciseItem: Codable {
 }
 
 // --- UPDATED: History Structure ---
-// Now stores the actual items so we can see titles/times in the missed list
 struct DailyProgress: Codable {
     let items: [PlanItem]
     
@@ -40,7 +39,6 @@ class ExerciseManager {
     var myExercises: [ExerciseItem] = []
     var exploreItems: [ExerciseItem] = []
     
-    // Key: "yyyy-MM-dd", Value: Progress object containing full items
     var history: [String: DailyProgress] = [:]
     
     init() {
@@ -48,10 +46,8 @@ class ExerciseManager {
         loadSavedPlan()
         loadHistory()
         
-        // Add dummy data for testing if no history exists
         addDummyDataForTesting()
         
-        // Initialize history for all past dates on first load (but don't override dummy data)
         updateHistoryForAllDates()
     }
     
@@ -60,30 +56,24 @@ class ExerciseManager {
         let calendar = Calendar.current
         let today = Date()
         
-        // Add dummy data for the past 15 days
         for daysBack in 1...15 {
             if let pastDate = calendar.date(byAdding: .day, value: -daysBack, to: today) {
                 let key = getDateKey(for: pastDate)
                 
-                // Skip if history already exists for this date
                 if history[key] != nil {
-                    print("⏭️ Skipping day \(daysBack) ago (\(key)) - data already exists")
+                    print("Skipping day \(daysBack) ago (\(key)) - data already exists")
                     continue
                 }
                 
                 var dummyExercises: [PlanItem] = []
                 
-                // SPECIAL CASE 1: Day with NO exercises (8 days back)
                 if daysBack == 8 {
-                    // Don't add any exercises for this day
-                    // This will show "No exercises planned"
-                    print("⚠️ Day \(daysBack) ago (\(getDateKey(for: pastDate))): NO exercises")
+                    print("Day \(daysBack) ago (\(getDateKey(for: pastDate))): NO exercises")
                     continue
                 }
                 
-                // SPECIAL CASE 2: Day with 10 MISSED exercises (5 days back = Jan 3)
                 if daysBack == 5 {
-                    print("🔥 Creating 10 exercises for day \(daysBack) ago (\(getDateKey(for: pastDate)))")
+                    print("Creating 10 exercises for day \(daysBack) ago (\(getDateKey(for: pastDate)))")
                     for i in 1...10 {
                         let hour = 7 + i
                         let timeString = hour < 12 ? "\(hour):00 AM" : (hour == 12 ? "12:00 PM" : "\(hour - 12):00 PM")
@@ -98,7 +88,7 @@ class ExerciseManager {
                         ))
                     }
                     history[key] = DailyProgress(items: dummyExercises)
-                    print("✅ Added 10 MISSED exercises for \(getDateKey(for: pastDate))")
+                    print("Added 10 MISSED exercises for \(getDateKey(for: pastDate))")
                     print("   Total: \(history[key]?.total ?? 0), Completed: \(history[key]?.completedCount ?? 0), Missed: \(history[key]?.missedItems.count ?? 0)")
                     saveHistory()
                     continue
@@ -151,22 +141,22 @@ class ExerciseManager {
                 
                 // Save to history
                 history[key] = DailyProgress(items: dummyExercises)
-                print("📝 Added \(dummyExercises.count) exercises for \(key)")
+                print("Added \(dummyExercises.count) exercises for \(key)")
             }
         }
         
         saveHistory()
         
-        // Calculate the date with 10 exercises for user reference
+       
         if let testDate = calendar.date(byAdding: .day, value: -5, to: today) {
             let df = DateFormatter()
             df.dateFormat = "MMM d, yyyy"
-            print("🎯 Check date \(df.string(from: testDate)) for 10 missed exercises")
+            print("Check date \(df.string(from: testDate)) for 10 missed exercises")
         }
     }
     
     func loadAllData() {
-        // Keeps your initial functionality for loading JSON assets
+    
         self.myExercises = loadJSON(filename: "myExercises")
         self.exploreItems = loadJSON(filename: "explore")
     }
@@ -182,7 +172,6 @@ class ExerciseManager {
         }
     }
     
-    // MARK: - Filter Logic
     
     func currentDayPlan(for date: Date) -> [PlanItem] {
         let dateFormatter = DateFormatter()
@@ -198,7 +187,6 @@ class ExerciseManager {
         return currentDayPlan(for: Date())
     }
     
-    // MARK: - Plan manipulation
     
     func togglePlanItem(id: String) {
         if let index = todaysPlan.firstIndex(where: { $0.id == id }) {
@@ -209,7 +197,7 @@ class ExerciseManager {
     }
     
     func addPlanItem(_ item: PlanItem) {
-        // Prevents duplicates by removing existing ID before inserting
+       
         removeExercisesById(item.id)
         todaysPlan.insert(item, at: 0)
         saveTodaysPlan()
@@ -232,7 +220,7 @@ class ExerciseManager {
         return removed
     }
     
-    // MARK: - Persistence
+   
     
     func saveTodaysPlan() {
         do {
@@ -243,7 +231,6 @@ class ExerciseManager {
     
     func loadSavedPlan() {
         guard let data = UserDefaults.standard.data(forKey: todaysPlanStorageKey) else {
-            // Fallback to local JSON if no User Defaults exist yet
             self.todaysPlan = loadJSON(filename: "todaysPlan")
             return
         }
@@ -252,7 +239,7 @@ class ExerciseManager {
         } catch { print("Error loading plan: \(error)") }
     }
     
-    // MARK: - History Logic
+ 
     
     func updateHistoryForToday() {
         let key = getTodayDateString()
@@ -263,31 +250,31 @@ class ExerciseManager {
         }
     }
     
-    // NEW: Update history for all past dates (but don't override dummy data)
+   
     func updateHistoryForAllDates() {
         let calendar = Calendar.current
         let today = Date()
         
-        // Get the earliest date we need to track
+  
         let startDate = getAppStartDate()
         
-        // Calculate number of days between start date and today
+       
         let components = calendar.dateComponents([.day], from: startDate, to: today)
         guard let daysToCheck = components.day else { return }
         
-        // Go through all days from start date to today
+      
         for daysBack in 0...daysToCheck {
             if let pastDate = calendar.date(byAdding: .day, value: -daysBack, to: today) {
                 let key = getDateKey(for: pastDate)
                 
-                // ✅ SKIP if dummy data already exists for this key
+               
                 if history[key] != nil {
-                    continue  // Don't override dummy data
+                    continue
                 }
                 
                 let exercisesForDate = currentDayPlan(for: pastDate)
                 
-                // Only add to history if there are exercises for this date
+                
                 if !exercisesForDate.isEmpty {
                     history[key] = DailyProgress(items: exercisesForDate)
                 }
@@ -296,15 +283,15 @@ class ExerciseManager {
         saveHistory()
     }
     
-    // Get the app start date (when user first installed/used the app)
+ 
     func getAppStartDate() -> Date {
         let startDateKey = "com.yourapp.startDate"
         
-        // Check if we've already saved a start date
+        
         if let savedTimestamp = UserDefaults.standard.object(forKey: startDateKey) as? TimeInterval {
             return Date(timeIntervalSince1970: savedTimestamp)
         } else {
-            // First time - save current date as start date
+           
             let now = Date()
             UserDefaults.standard.set(now.timeIntervalSince1970, forKey: startDateKey)
             return now
@@ -325,7 +312,6 @@ class ExerciseManager {
         } catch { print("Error loading history: \(error)") }
     }
     
-    // Helper to get consistent date keys
     func getTodayDateString() -> String {
         return getDateKey(for: Date())
     }

@@ -16,21 +16,21 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
     @IBOutlet weak var monthYearPicker: UIPickerView!
     
     // Header Interaction Outlets
-    @IBOutlet weak var headerToggleButton: UIButton! // The invisible button over "Apr 2025"
-    @IBOutlet weak var chevronButton: UIButton!      // The pink chevron >
+    @IBOutlet weak var headerToggleButton: UIButton!
+    @IBOutlet weak var chevronButton: UIButton!
     
-    // Detail View Outlets - SIMPLIFIED
-    @IBOutlet weak var statusLabel: UILabel!       // This will show: "Missed" or "All exercises completed" or "No exercises planned"
+    // Detail View Outlets
+    @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var missedTableView: UITableView!
     
     // Container and constraints
-    @IBOutlet weak var detailCardView: UIView! // The card that contains all detail views
-    @IBOutlet weak var tableViewHeightConstraint: NSLayoutConstraint! // Height constraint for table
-    @IBOutlet weak var detailCardHeightConstraint: NSLayoutConstraint! // Height constraint for entire card
+    @IBOutlet weak var detailCardView: UIView!
+    @IBOutlet weak var tableViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var detailCardHeightConstraint: NSLayoutConstraint!
     
     // --- VARIABLES ---
-    var selectedDate = Date()         // Month currently being displayed
-    var viewingDate = Date()          // Specific date selected for the detail view
+    var selectedDate = Date()
+    var viewingDate = Date()
     var totalSquares = [String]()
     var missedItems: [PlanItem] = []
     
@@ -45,20 +45,17 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
         setupCollectionView()
         setupTableView()
         
-        // Picker Setup
         monthYearPicker.dataSource = self
         monthYearPicker.delegate = self
-        pickerContainerView.isHidden = true // Hidden by default
+        pickerContainerView.isHidden = true
         
         setMonthView()
-        updateDetails(for: Date()) // Initialize with today's date
+        updateDetails(for: Date())
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // Ensure we show latest status if something changed just now
         ExerciseManager.shared.updateHistoryForToday()
-        // Also update history for all past dates that have plans
         ExerciseManager.shared.updateHistoryForAllDates()
         setMonthView()
         updateDetails(for: viewingDate)
@@ -66,7 +63,7 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
     
     func setupYears() {
         let currentYear = Calendar.current.component(.year, from: Date())
-        years = Array((currentYear - 10)...currentYear) // Only up to current year
+        years = Array((currentYear - 10)...currentYear)
     }
     
     func setupCollectionView() {
@@ -74,7 +71,6 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
         collectionView.delegate = self
         collectionView.register(UINib(nibName: "CalendarDateCell", bundle: nil), forCellWithReuseIdentifier: "CalendarDateCell")
         
-        // Ensure layout is flat
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
@@ -85,7 +81,7 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
         missedTableView.dataSource = self
         missedTableView.delegate = self
         missedTableView.separatorStyle = .none
-        missedTableView.isScrollEnabled = false // Disable scrolling - height will adjust instead
+        missedTableView.isScrollEnabled = false
         missedTableView.register(UINib(nibName: "MissedExerciseCell", bundle: nil), forCellReuseIdentifier: "MissedExerciseCell")
     }
     
@@ -112,7 +108,7 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
     
     func syncPickerToDate() {
         let calendar = Calendar.current
-        let monthIndex = calendar.component(.month, from: selectedDate) - 1 // 0-11
+        let monthIndex = calendar.component(.month, from: selectedDate) - 1
         let year = calendar.component(.year, from: selectedDate)
         
         if let yearIndex = years.firstIndex(of: year) {
@@ -125,42 +121,33 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
         viewingDate = date
         let key = ExerciseManager.shared.getDateKey(for: date)
         
-        // Check if selected date is today or in the future
         let calendar = Calendar.current
         let isToday = calendar.isDateInToday(date)
         let isFuture = date > Date()
         
-        // Hide entire card for today and future dates
         if isToday || isFuture {
             detailCardView?.isHidden = true
             return
         }
         
-        // Show card for past dates
         detailCardView?.isHidden = false
         
-        // Fetch Progress from Manager
         if let progress = ExerciseManager.shared.history[key] {
-            // Exercises were planned for this day
             missedItems = progress.missedItems
             
             if missedItems.isEmpty {
-                // All exercises completed
                 statusLabel.text = "All exercises completed"
                 missedTableView.isHidden = true
             } else {
-                // Some exercises missed
                 statusLabel.text = "Missed"
                 missedTableView.isHidden = false
             }
         } else {
-            // No exercises planned for this day
             statusLabel.text = "No exercises planned"
             missedItems = []
             missedTableView.isHidden = true
         }
         
-        // Update table view and adjust heights dynamically
         missedTableView.reloadData()
         updateCardHeight()
     }
@@ -170,10 +157,9 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
         let numberOfItems = missedItems.count
         let tableHeight = CGFloat(numberOfItems) * cellHeight
         
-        // Calculate max table height based on available screen space
         let screenHeight = UIScreen.main.bounds.height
-        let availableHeight = screenHeight * 0.2  // Use max 40% of screen for table
-        let maxTableHeight = min(availableHeight, CGFloat(6) * cellHeight)  // Cap at 10 cells or 40% screen
+        let availableHeight = screenHeight * 0.2
+        let maxTableHeight = min(availableHeight, CGFloat(6) * cellHeight)
         
         let actualTableHeight = min(tableHeight, maxTableHeight)
         
@@ -231,19 +217,16 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
     @IBAction func nextMonth(_ sender: Any) {
         let nextMonthDate = CalendarHelper().plusMonth(date: selectedDate)
         
-        // Check if next month would be in the future
         let calendar = Calendar.current
         let currentYear = calendar.component(.year, from: Date())
         let currentMonth = calendar.component(.month, from: Date())
         let nextYear = calendar.component(.year, from: nextMonthDate)
         let nextMonthValue = calendar.component(.month, from: nextMonthDate)
         
-        // Only allow if next month is not in the future
         if nextYear < currentYear || (nextYear == currentYear && nextMonthValue <= currentMonth) {
             selectedDate = nextMonthDate
             setMonthView()
         }
-        // If it would go to future, do nothing (button press is ignored)
     }
     
     @IBAction func closeTapped(_ sender: UIBarButtonItem) {
@@ -276,7 +259,6 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
                 let key = ExerciseManager.shared.getDateKey(for: cellDate)
                 hasPlan = ExerciseManager.shared.history[key] != nil
                 
-                // Check if date is in future (compared to today)
                 isFutureDate = cellDate > Date()
             }
         }
@@ -294,7 +276,6 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
         components.day = dayInt
         
         if let newDate = cal.date(from: components) {
-            // Don't allow selecting future dates
             if newDate > Date() {
                 return
             }
@@ -322,7 +303,7 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 30 // Adjust this to match your cell height
+        return 30
     }
 
     // --- PICKER VIEW DELEGATE ---
@@ -342,14 +323,11 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
         let yearIndex = pickerView.selectedRow(inComponent: 1)
         let year = years[yearIndex]
         
-        // Get current date components
         let calendar = Calendar.current
         let currentYear = calendar.component(.year, from: Date())
         let currentMonth = calendar.component(.month, from: Date())
         
-        // Don't allow selecting future months in current year
         if year == currentYear && monthIndex > currentMonth {
-            // Reset to current month
             pickerView.selectRow(currentMonth - 1, inComponent: 0, animated: true)
             return
         }

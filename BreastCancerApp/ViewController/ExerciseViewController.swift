@@ -10,13 +10,9 @@ class ExerciseViewController: UIViewController, UICollectionViewDataSource, UICo
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Setup Layout
         collectionView.collectionViewLayout = createLayout()
         collectionView.dataSource = self
         collectionView.delegate = self
-        
-        // Register Cells
         registerCells()
     }
     
@@ -102,14 +98,11 @@ class ExerciseViewController: UIViewController, UICollectionViewDataSource, UICo
                 addVC.initialTime = item.time
                 addVC.initialDescription = item.description
                 
-                // --- NEW LOGIC: Lock name if it's a Library Exercise ---
-                // 1. If ID is a UUID (standard format), it was likely created by the user -> EDITABLE.
-                // 2. If ID is anything else (e.g. "chest_wallclimb_001"), it is from the Library -> LOCKED.
                 
                 if isUUID(item.id) {
-                    addVC.isNameEditable = true // Custom
+                    addVC.isNameEditable = true
                 } else {
-                    addVC.isNameEditable = false // Library/Pre-loaded
+                    addVC.isNameEditable = false
                 }
             }
             
@@ -123,7 +116,6 @@ class ExerciseViewController: UIViewController, UICollectionViewDataSource, UICo
         }
     }
     
-    // Helper to check if string is a UUID
     func isUUID(_ id: String) -> Bool {
         return UUID(uuidString: id) != nil
     }
@@ -196,7 +188,6 @@ class ExerciseViewController: UIViewController, UICollectionViewDataSource, UICo
         }
     }
 
-    // --- DATA SOURCE ---
     func numberOfSections(in collectionView: UICollectionView) -> Int { return 3 }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

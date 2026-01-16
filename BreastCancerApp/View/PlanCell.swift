@@ -8,8 +8,6 @@ class PlanCell: UICollectionViewCell {
     @IBOutlet weak var checkButton: UIButton!
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var separatorView: UIView!
-    
-    // --- NEW OUTLET ---
     @IBOutlet weak var clockIcon: UIImageView!
     
     var onToggle: (() -> Void)?
