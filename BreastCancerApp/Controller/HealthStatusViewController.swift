@@ -44,20 +44,21 @@ final class HealthStatusViewController: UIViewController {
         )
     }
 
-    // MARK: - Navigation Bar
+    // MARK: - Navigation Bar Appearance
     private func configureNavigationBarAppearance() {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithTransparentBackground()
         appearance.shadowColor = .clear
 
         let pink = UIColor(named: "pink") ?? .systemPink
-        appearance.buttonAppearance.normal.titleTextAttributes = [.foregroundColor: pink]
 
+        // Icons stay pink
+        navigationController?.navigationBar.tintColor = pink
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        navigationController?.navigationBar.tintColor = pink
     }
 
+    // MARK: - Navigation Bar Setup
     private func configureNavigationBar() {
         navigationItem.title = "Health Status"
 
@@ -68,14 +69,27 @@ final class HealthStatusViewController: UIViewController {
             action: #selector(backTapped)
         )
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
+        let editButton = UIBarButtonItem(
             title: "Edit",
             style: .plain,
             target: self,
             action: #selector(editTapped)
         )
+
+        // 👇 Force Edit text to black
+        editButton.setTitleTextAttributes(
+            [.foregroundColor: UIColor.black],
+            for: .normal
+        )
+        editButton.setTitleTextAttributes(
+            [.foregroundColor: UIColor.black],
+            for: .highlighted
+        )
+
+        navigationItem.rightBarButtonItem = editButton
     }
 
+    // MARK: - Actions
     @objc private func backTapped() {
         dismiss(animated: true)
     }
