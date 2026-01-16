@@ -144,7 +144,7 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
         }
     }
     
-    private func updateAppointmentsList(for date: Date) {
+    private func updateAppointmentsList(for date: Date, reloadCalendar: Bool = true) {
         viewingDate = date
         
         let formatter = DateFormatter()
@@ -155,10 +155,11 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
         appointmentsForSelectedDate = AppointmentManager.shared.getAppointments(for: date)
         
         // Sort appointments by time in ascending order (earliest first)
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "h:mm a"
+        timeFormatter.locale = Locale(identifier: "en_US_POSIX")
+        
         appointmentsForSelectedDate.sort { appointment1, appointment2 in
-            let timeFormatter = DateFormatter()
-            timeFormatter.dateFormat = "h:mm a"
-            
             guard let time1 = timeFormatter.date(from: appointment1.time),
                   let time2 = timeFormatter.date(from: appointment2.time) else {
                 return false
@@ -175,7 +176,11 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
         }
         
         appointmentsTableView.reloadData()
-        collectionView.reloadData()
+        
+        // Only reload calendar if needed
+        if reloadCalendar {
+            collectionView.reloadData()
+        }
         
         updateCardHeight()
     }
@@ -203,9 +208,9 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
         // Update TableView Height Constraint
         if let tableConstraint = tableViewHeightConstraint {
             tableConstraint.constant = actualTableHeight
-            print("✅ Table height set to: \(actualTableHeight)")
+            print("able height set to: \(actualTableHeight)")
         } else {
-            print("❌ tableViewHeightConstraint is nil - NOT CONNECTED!")
+            print("tableViewHeightConstraint is nil - NOT CONNECTED!")
         }
         
         let topToDateHeader: CGFloat = 15
@@ -336,23 +341,8 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
             // Store old viewing date to find its cell
             let oldViewingDate = viewingDate
             
-            // Update viewing date first
-            viewingDate = newDate
-            
-            // Update date header
-            let formatter = DateFormatter()
-            formatter.dateFormat = "EEE dd MMM"
-            dateHeaderLabel.text = formatter.string(from: newDate)
-            
-            // Get appointments for new date
-            appointmentsForSelectedDate = appointments
-            
-            // Show container (we already checked it's not empty)
-            appointmentsContainerView.isHidden = false
-            
-            // Reload table view
-            appointmentsTableView.reloadData()
-            updateCardHeight()
+            // Update appointments list without reloading the entire calendar
+            updateAppointmentsList(for: newDate, reloadCalendar: false)
             
             // Only reload the affected calendar cells (old and new selection)
             var cellsToReload: [IndexPath] = []
