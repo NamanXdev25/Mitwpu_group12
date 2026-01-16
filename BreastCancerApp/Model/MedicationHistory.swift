@@ -1,36 +1,61 @@
 //
 //  MedicationHistory.swift
-//  BreastCancerApp
+//  Medication
 //
-//  Created by Shloka on 12/12/25.
+//  Created by Naman Bhansali on 16/01/26.
 //
+
 import Foundation
 
+struct MedicationHistoryEntry {
+    let date: Date
+    var medications: [Medication]
+    var taken: Int
+    var goal: Int
+}
+
 class MedicationHistory {
-    static let shared = MedicationHistory() // Singleton to access from anywhere
+    static let shared = MedicationHistory()
     
-    // Key: Date String (e.g., "12-12-2025"), Value: (Taken, Goal)
-    private var dailyLogs: [String: (taken: Int, goal: Int)] = [:]
+    private var history: [String: MedicationHistoryEntry] = [:]
     
     private init() {}
     
-    // Save or Update progress for a specific date
-    func updateProgress(date: Date, taken: Int, goal: Int) {
-        let key = formatDate(date)
-        dailyLogs[key] = (taken, goal)
-    }
-    
-    // Get progress for a specific date
-    func getProgress(for date: Date) -> (taken: Int, goal: Int) {
-        let key = formatDate(date)
-        // Default to (0, 0) if no data exists
-        return dailyLogs[key] ?? (0, 0)
-    }
-    
-    // Helper to make the key simple
-    func formatDate(_ date: Date) -> String {
+    private func dateKey(from date: Date) -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "dd-MM-yyyy"
+        formatter.dateFormat = "yyyy-MM-dd"
         return formatter.string(from: date)
+    }
+    
+    func updateProgress(date: Date, taken: Int, goal: Int) {
+        let key = dateKey(from: date)
+        
+        if var entry = history[key] {
+            entry.taken = taken
+            entry.goal = goal
+            history[key] = entry
+        } else {
+            let entry = MedicationHistoryEntry(date: date, medications: [], taken: taken, goal: goal)
+            history[key] = entry
+        }
+    }
+    
+    func saveMedications(_ medications: [Medication], for date: Date) {
+        let key = dateKey(from: date)
+        
+        let taken = medications.filter { $0.isTaken }.count
+        let goal = medications.count
+        
+        let entry = MedicationHistoryEntry(date: date, medications: medications, taken: taken, goal: goal)
+        history[key] = entry
+    }
+    
+    func getHistory(for date: Date) -> MedicationHistoryEntry? {
+        let key = dateKey(from: date)
+        return history[key]
+    }
+    
+    func getAllHistory() -> [MedicationHistoryEntry] {
+        return Array(history.values).sorted { $0.date > $1.date }
     }
 }
