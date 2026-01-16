@@ -47,3 +47,4 @@ fastlane/screenshots/**/*.png
 
 # Workspace
 *.xcworkspace
+*.xcuserdatad/
