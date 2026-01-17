@@ -66,14 +66,9 @@ class MedicationHistory {
         let calendar = Calendar.current
         let today = Date()
         
-        // Generate data for the past 30 days (excluding today)
         for daysAgo in 1...30 {
             guard let pastDate = calendar.date(byAdding: .day, value: -daysAgo, to: today) else { continue }
-            
-            // Get weekday to determine which medications are scheduled
             let weekday = calendar.component(.weekday, from: pastDate)
-            
-            // Create medications for this day
             var dayMedications: [Medication] = []
             
             // Daily medications (always included)
@@ -82,7 +77,7 @@ class MedicationHistory {
                 note: "Take with food",
                 time: "8:00 AM",
                 repeatOption: "Every Day",
-                isTaken: Bool.random(), // Randomly mark as taken or not
+                isTaken: Bool.random(),
                 reminderEnabled: true
             ))
             
@@ -163,7 +158,6 @@ class MedicationHistory {
         }
     }
     
-    // Optional: Function to reload dummy data (can be called from settings or debug menu)
     func reloadDummyData() {
         history.removeAll()
         loadDummyHistoryData()

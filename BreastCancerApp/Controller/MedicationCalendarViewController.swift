@@ -25,18 +25,18 @@ class MedicationCalendarViewController: UIViewController, UICollectionViewDataSo
     @IBOutlet weak var headerToggleButton: UIButton!
     @IBOutlet weak var chevronButton: UIButton!
     
-    // Detail View Outlets - Following CalendarViewController pattern
-    @IBOutlet weak var statusLabel: UILabel!       // This will show: "Missed" or "All medications taken" or "No medications planned"
+    // Detail View Outlets
+    @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var missedTableView: UITableView!
     
     // Container and constraints
-    @IBOutlet weak var detailCardView: UIView! // The card that contains all detail views
-    @IBOutlet weak var tableViewHeightConstraint: NSLayoutConstraint! // Height constraint for table
-    @IBOutlet weak var detailCardHeightConstraint: NSLayoutConstraint! // Height constraint for entire card
+    @IBOutlet weak var detailCardView: UIView!
+    @IBOutlet weak var tableViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var detailCardHeightConstraint: NSLayoutConstraint!
     
     // MARK: - Properties
-    var selectedDate = Date()         // Month currently being displayed
-    var viewingDate = Date()          // Specific date selected for the detail view
+    var selectedDate = Date()
+    var viewingDate = Date()
     var totalSquares = [String]()
     var missedMedications: [Medication] = []
     
@@ -87,7 +87,7 @@ class MedicationCalendarViewController: UIViewController, UICollectionViewDataSo
         missedTableView.dataSource = self
         missedTableView.delegate = self
         missedTableView.separatorStyle = .none
-        missedTableView.isScrollEnabled = false // Disable scrolling - height will adjust instead
+        missedTableView.isScrollEnabled = false
         missedTableView.register(UINib(nibName: "MedicationCell", bundle: nil), forCellReuseIdentifier: "MedicationCell")
     }
     
@@ -136,27 +136,22 @@ class MedicationCalendarViewController: UIViewController, UICollectionViewDataSo
     private func updateDetails(for date: Date) {
         viewingDate = date
         
-        // Check if selected date is today or in the future
         let calendar = Calendar.current
         let isToday = calendar.isDateInToday(date)
         let isFuture = date > Date()
         
-        // Hide entire card for today and future dates
         if isToday || isFuture {
             detailCardView?.isHidden = true
             return
         }
         
-        // Show card for past dates
         detailCardView?.isHidden = false
         
-        // Fetch medications history from Manager
         if let history = MedicationHistory.shared.getHistory(for: date) {
-            // Medications were planned for this day
+        
             let allMedications = history.medications
             let unsortedMissed = allMedications.filter { !$0.isTaken }
             
-            // Sort missed medications by time in ascending order (AM to PM)
             missedMedications = unsortedMissed.sorted { med1, med2 in
                 let timeFormatter = DateFormatter()
                 timeFormatter.dateFormat = "h:mm a"
@@ -185,20 +180,18 @@ class MedicationCalendarViewController: UIViewController, UICollectionViewDataSo
             missedTableView.isHidden = true
         }
         
-        // Update table view and adjust heights dynamically
         missedTableView.reloadData()
         updateCardHeight()
     }
     
-    // MARK: - Dynamic Height Logic (Following CalendarViewController pattern)
+    // MARK: - Dynamic Height
     private func updateCardHeight() {
         let numberOfItems = missedMedications.count
         let tableHeight = CGFloat(numberOfItems) * cellHeight
         
-        // Calculate max table height based on available screen space
         let screenHeight = UIScreen.main.bounds.height
-        let availableHeight = screenHeight * 0.2  // Use max 20% of screen for table
-        let maxTableHeight = min(availableHeight, CGFloat(6) * cellHeight)  // Cap at 6 cells or 20% screen
+        let availableHeight = screenHeight * 0.2
+        let maxTableHeight = min(availableHeight, CGFloat(6) * cellHeight)
         
         let actualTableHeight = min(tableHeight, maxTableHeight)
         
@@ -259,19 +252,16 @@ class MedicationCalendarViewController: UIViewController, UICollectionViewDataSo
     @IBAction func nextMonthTapped(_ sender: UIButton) {
         let nextMonthDate = CalendarHelper().plusMonth(date: selectedDate)
         
-        // Check if next month would be in the future
         let calendar = Calendar.current
         let currentYear = calendar.component(.year, from: Date())
         let currentMonth = calendar.component(.month, from: Date())
         let nextYear = calendar.component(.year, from: nextMonthDate)
         let nextMonthValue = calendar.component(.month, from: nextMonthDate)
         
-        // Only allow if next month is not in the future
         if nextYear < currentYear || (nextYear == currentYear && nextMonthValue <= currentMonth) {
             selectedDate = nextMonthDate
             setMonthView()
         }
-        // If it would go to future, do nothing (button press is ignored)
     }
     
     // MARK: - UICollectionView DataSource & Delegate
@@ -301,7 +291,6 @@ class MedicationCalendarViewController: UIViewController, UICollectionViewDataSo
                     hasMedications = !history.medications.isEmpty
                 }
                 
-                // Check if date is in future (compared to today)
                 isFutureDate = cellDate > Date()
             }
         }
@@ -319,12 +308,10 @@ class MedicationCalendarViewController: UIViewController, UICollectionViewDataSo
         components.day = dayInt
         
         if let newDate = cal.date(from: components) {
-            // Don't allow selecting future dates
             if newDate > Date() {
                 return
             }
             
-            // Don't allow selecting dates with no medications
             if MedicationHistory.shared.getHistory(for: newDate) == nil {
                 return
             }
@@ -373,14 +360,11 @@ class MedicationCalendarViewController: UIViewController, UICollectionViewDataSo
         let yearIndex = pickerView.selectedRow(inComponent: 1)
         let year = years[yearIndex]
         
-        // Get current date components
         let calendar = Calendar.current
         let currentYear = calendar.component(.year, from: Date())
         let currentMonth = calendar.component(.month, from: Date())
         
-        // Don't allow selecting future months in current year
         if year == currentYear && monthIndex > currentMonth {
-            // Reset to current month
             pickerView.selectRow(currentMonth - 1, inComponent: 0, animated: true)
             return
         }

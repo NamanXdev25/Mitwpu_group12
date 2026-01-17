@@ -18,11 +18,7 @@ class MedicationItemCell: UICollectionViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-        // Setup button appearance
-        checkButton.layer.borderWidth = 2
-        checkButton.layer.borderColor = UIColor.systemGray4.cgColor
-        checkButton.layer.cornerRadius = checkButton.frame.width / 2  // Make it circular
+
     }
 
     @IBAction func checkButtonTapped(_ sender: UIButton) {
@@ -34,17 +30,14 @@ class MedicationItemCell: UICollectionViewCell {
         subtitleLabel.text = med.note
         timeLabel.text = med.time
 
-        // Use your custom color or default to a pink color
-        let checkColor = UIColor(named: "plusbuttoncolor") ?? UIColor(red: 0.85, green: 0.40, blue: 0.50, alpha: 1.0)
+        let checkColor = UIColor(named: "MedicationPrimaryColor")
         
         if med.isTaken {
-            // Completed state - filled with checkmark
             checkButton.backgroundColor = checkColor
             checkButton.layer.borderWidth = 0
             checkButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
             checkButton.tintColor = .white
         } else {
-            // Uncompleted state - empty circle with border
             checkButton.backgroundColor = .clear
             checkButton.layer.borderWidth = 2
             checkButton.layer.borderColor = UIColor.systemGray4.cgColor

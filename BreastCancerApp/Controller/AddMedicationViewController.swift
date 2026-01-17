@@ -68,29 +68,17 @@ class AddMedicationViewController: UIViewController, UIPickerViewDelegate, UIPic
             title = "Add Medication"
             // Set initial grayed out state for repeat field
             repeatTextField.text = "Every Day"
-            repeatTextField.textColor = .lightGray  // Grayed out
-            reminderSwitch.isOn = true  // Default to ON for new medications
+            repeatTextField.textColor = .lightGray
+            reminderSwitch.isOn = true
         }
     }
     
     // MARK: - Setup Methods
     func setupUI() {
-        // Style the popup card
-        pickerCard.layer.cornerRadius = 16
-        pickerCard.layer.shadowColor = UIColor.black.cgColor
-        pickerCard.layer.shadowOpacity = 0.2
-        pickerCard.layer.shadowRadius = 10
-        
-        // Style note text view
-        noteTextView.layer.cornerRadius = 12
-        noteTextView.backgroundColor = UIColor.systemGray6
-        noteTextView.textContainerInset = UIEdgeInsets(top: 15, left: 10, bottom: 10, right: 10)
-        
         if medicationToEdit == nil {
             noteTextView.text = "Add a note (optional)"
             noteTextView.textColor = .lightGray
         }
-        
         noteTextView.delegate = self
         
         // Configure time picker
@@ -213,34 +201,24 @@ class AddMedicationViewController: UIViewController, UIPickerViewDelegate, UIPic
     }
     
     func saveMedication() {
-        // Validate Name
         guard let name = nameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !name.isEmpty else {
             showAlert(message: "Please enter a medication name.")
             return
         }
-        
-        // Validate Repeat
         guard let repeatText = repeatTextField.text, !repeatText.isEmpty else {
             showAlert(message: "Please select how often to take this medication.")
             return
         }
-        
-        // Validate Time
         guard let time = timeTextField.text, !time.isEmpty else {
             showAlert(message: "Please select a time.")
             return
         }
-        
-        // Get note
         var note = noteTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
         if note == "Add a note (optional)" {
             note = ""
         }
-        
-        // Get reminder switch state
         let reminderEnabled = reminderSwitch.isOn
         
-        // Check if editing or adding
         if let index = indexToEdit {
             delegate?.didEditMedication(index: index, name: name, time: time, repeatOption: repeatText, note: note, reminderEnabled: reminderEnabled)
         } else {

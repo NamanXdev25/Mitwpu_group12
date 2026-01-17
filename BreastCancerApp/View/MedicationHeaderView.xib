@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -13,9 +13,9 @@
             <rect key="frame" x="0.0" y="0.0" width="379" height="69"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2T8-kh-PGo">
-                    <rect key="frame" x="0.0" y="6" width="41.333333333333336" height="14"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Today" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2T8-kh-PGo">
+                    <rect key="frame" x="0.0" y="0.0" width="58" height="27"/>
+                    <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
@@ -23,8 +23,7 @@
             <viewLayoutGuide key="safeArea" id="cJ7-Rt-JTP"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstItem="cJ7-Rt-JTP" firstAttribute="bottom" secondItem="2T8-kh-PGo" secondAttribute="bottom" constant="15" id="JgP-YA-qzq"/>
-                <constraint firstItem="2T8-kh-PGo" firstAttribute="top" secondItem="mVO-QZ-roL" secondAttribute="top" constant="6" id="fVN-Yh-bo9"/>
+                <constraint firstItem="2T8-kh-PGo" firstAttribute="top" secondItem="mVO-QZ-roL" secondAttribute="top" id="fVN-Yh-bo9"/>
                 <constraint firstItem="2T8-kh-PGo" firstAttribute="leading" secondItem="cJ7-Rt-JTP" secondAttribute="leading" id="ldN-DP-0V7"/>
             </constraints>
             <connections>

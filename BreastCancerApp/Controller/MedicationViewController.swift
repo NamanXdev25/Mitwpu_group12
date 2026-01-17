@@ -1,9 +1,10 @@
 //
-//  CalendarViewController.swift
+//  MedicationViewController.swift
 //  BreastCancerApp
 //
 //  Created by Shloka Shetty on 3/12/25.
 //
+
 import UIKit
 
 class MedicationViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
@@ -14,11 +15,10 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
     @IBOutlet weak var calendarBarButton: UIBarButtonItem!
 
     // MARK: - Data Source
-    var allMedications: [Medication] = []  // Store ALL medications
+    var allMedications: [Medication] = []
     var todaysMedications: [Medication] {
         let filtered = allMedications.filter { $0.isScheduledFor(date: Date()) }
         
-        // Sort by time in ascending order (AM to PM)
         return filtered.sorted { med1, med2 in
             let timeFormatter = DateFormatter()
             timeFormatter.dateFormat = "h:mm a"
@@ -66,17 +66,15 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
             withReuseIdentifier: "med_header"
         )
         
-        // Register a basic cell for empty state
+        // Register cell for empty state
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "empty_state")
     }
     
     // MARK: - Load Medications
     func loadMedications() {
-        // Load all medications from history for today
         if let history = MedicationHistory.shared.getHistory(for: Date()) {
             allMedications = history.medications
         } else {
-            // If no medications exist for today, load dummy data
             loadDummyData()
         }
     }
@@ -105,17 +103,14 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // Return 1 if empty to show the empty state cell
         return todaysMedications.isEmpty ? 1 : todaysMedications.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        // Show empty state if no medications
         if todaysMedications.isEmpty {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "empty_state", for: indexPath)
             
-            // Configure empty state cell
             cell.contentView.subviews.forEach { $0.removeFromSuperview() }
             
             let label = UILabel()
@@ -158,7 +153,6 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
             
             let medToToggle = displayedMeds[dynamicIndexPath.row]
             
-            // Find this medication in allMedications and toggle it
             if let index = self.allMedications.firstIndex(where: {
                 $0.name == medToToggle.name && $0.time == medToToggle.time && $0.repeatOption == medToToggle.repeatOption
             }) {
@@ -181,7 +175,6 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
                 for: indexPath
             ) as! MedicationHeaderView
             
-            header.configure(with: "Today's Medications")
             return header
         }
         return UICollectionReusableView()
@@ -189,19 +182,22 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
 
     // MARK: - Layout Generation (With Edit & Delete)
     func generateLayout() -> UICollectionViewLayout {
-        var config = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
+        var config = UICollectionLayoutListConfiguration(appearance: .plain)
+        config.backgroundColor = .clear
         config.showsSeparators = false
         config.headerMode = .supplementary
-        config.showsSeparators = true
         
-        var bgConfig = UIBackgroundConfiguration.clear()
-        bgConfig.backgroundColor = UIColor(red: 1.0, green: 0.95, blue: 0.96, alpha: 1.0)
-        config.backgroundColor = bgConfig.backgroundColor
-
+        config.itemSeparatorHandler = { indexPath, sectionSeparatorConfiguration in
+            var configuration = sectionSeparatorConfiguration
+            configuration.topSeparatorVisibility = .hidden
+            configuration.bottomSeparatorVisibility = .hidden
+            return configuration
+        }
+        
+        // Add swipe actions
         config.trailingSwipeActionsConfigurationProvider = { [weak self] indexPath in
             guard let self = self else { return nil }
             
-            // Don't show swipe actions for empty state
             if self.todaysMedications.isEmpty {
                 return nil
             }
@@ -213,7 +209,6 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
             
             let medToEdit = displayedMeds[indexPath.row]
             
-            // Find the actual index in allMedications
             guard let actualIndex = self.allMedications.firstIndex(where: {
                 $0.name == medToEdit.name && $0.time == medToEdit.time && $0.repeatOption == medToEdit.repeatOption
             }) else {
@@ -226,7 +221,7 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
             }
             deleteAction.image = UIImage(systemName: "trash.fill")
             deleteAction.backgroundColor = .systemRed
-
+            
             // EDIT ACTION
             let editAction = UIContextualAction(style: .normal, title: "Edit") { action, view, completion in
                 self.openEditMedication(actualIndex: actualIndex)
@@ -258,12 +253,9 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
         let deleteBtn = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
             guard let self = self else { return }
             
-            // Remove from allMedications
             self.allMedications.remove(at: actualIndex)
             self.saveMedications()
             
-            // Reload entire collection view instead of trying to delete specific item
-            // This avoids the invalid update error since todaysMedications is computed
             self.collectionView.reloadData()
             
             completion(true)
