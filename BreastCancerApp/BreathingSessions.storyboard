@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="jtB-UG-jtB">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Breathing Sessions-->
+        <scene sceneID="Bl0-9a-hRg">
+            <objects>
+                <viewController id="R5i-7y-f6S" customClass="BreathingViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="I1j-Ex-iCa">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ZCl-Ce-pf3">
+                                <rect key="frame" x="0.0" y="172" width="393" height="612"/>
+                                <color key="backgroundColor" red="0.97254901959999995" green="0.94901960780000005" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="8Ob-Vy-Wwr">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cell" id="uLY-xu-dWb">
+                                        <rect key="frame" x="0.0" y="0.0" width="127.99999999999997" height="128"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="onx-RL-foa">
+                                            <rect key="frame" x="0.0" y="0.0" width="127.99999999999997" height="128"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </collectionViewCellContentView>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="1V6-H5-koJ"/>
+                        <color key="backgroundColor" red="0.97254901959999995" green="0.94901960780000005" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="1V6-H5-koJ" firstAttribute="bottom" secondItem="ZCl-Ce-pf3" secondAttribute="bottom" id="5NG-2J-Vhc"/>
+                            <constraint firstItem="ZCl-Ce-pf3" firstAttribute="leading" secondItem="1V6-H5-koJ" secondAttribute="leading" id="NYj-jD-4cA"/>
+                            <constraint firstItem="1V6-H5-koJ" firstAttribute="trailing" secondItem="ZCl-Ce-pf3" secondAttribute="trailing" id="YXO-K1-vMg"/>
+                            <constraint firstItem="ZCl-Ce-pf3" firstAttribute="top" secondItem="1V6-H5-koJ" secondAttribute="top" id="ndn-dG-8x9"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Breathing Sessions" id="ktx-NX-R6C"/>
+                    <connections>
+                        <outlet property="collectionView" destination="ZCl-Ce-pf3" id="X6z-O9-OVt"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SXv-Rd-H4o" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1912.2137404580151" y="161.97183098591549"/>
+        </scene>
+        <!--Gentle Focus-->
+        <scene sceneID="Xqq-GF-EzA">
+            <objects>
+                <viewController storyboardIdentifier="BreathingPlayerVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="f1b-uT-ZIG" customClass="BreathingPlayerViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="BZc-z9-lrp" customClass="BreathingPlayerRootView" customModule="BreastCancerApp" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Y4l-mU-GY8">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                            </imageView>
+                            <view contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="CSi-py-koH" customClass="VideoPlayerContainerView" customModule="BreastCancerApp" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gc8-Uh-bXj" customClass="TopGradientView" customModule="BreastCancerApp" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="150"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="150" id="7qw-SP-mwx"/>
+                                </constraints>
+                            </view>
+                            <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kdr-96-W4q" userLabel="CircularTimerView" customClass="CircularTimerView" customModule="BreastCancerApp">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n20-O2-vXr">
+                                <rect key="frame" x="140" y="371.33333333333331" width="113.33333333333331" height="109.66666666666669"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="60" id="Io5-TE-Qne"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="60" id="e8C-li-lMQ"/>
+                                </constraints>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="play.fill" catalog="system">
+                                    <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" configurationType="pointSize" pointSize="80" scale="large"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="playButtonTapped:" destination="f1b-uT-ZIG" eventType="touchUpInside" id="lsY-kB-TQY"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="qkg-xf-LXH"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Kdr-96-W4q" firstAttribute="leading" secondItem="qkg-xf-LXH" secondAttribute="leading" id="6fa-BF-awM"/>
+                            <constraint firstAttribute="bottom" secondItem="Y4l-mU-GY8" secondAttribute="bottom" id="IOK-C3-Tlm"/>
+                            <constraint firstItem="Gc8-Uh-bXj" firstAttribute="trailing" secondItem="qkg-xf-LXH" secondAttribute="trailing" id="JDW-M0-Edl"/>
+                            <constraint firstItem="Gc8-Uh-bXj" firstAttribute="leading" secondItem="qkg-xf-LXH" secondAttribute="leading" id="OQ5-zb-ZqD"/>
+                            <constraint firstItem="n20-O2-vXr" firstAttribute="centerX" secondItem="BZc-z9-lrp" secondAttribute="centerX" id="QJn-Zp-vwF"/>
+                            <constraint firstItem="Y4l-mU-GY8" firstAttribute="leading" secondItem="qkg-xf-LXH" secondAttribute="leading" id="UQ1-kP-Tno"/>
+                            <constraint firstItem="Kdr-96-W4q" firstAttribute="trailing" secondItem="qkg-xf-LXH" secondAttribute="trailing" id="Ul3-Ig-enr"/>
+                            <constraint firstItem="Kdr-96-W4q" firstAttribute="centerX" secondItem="BZc-z9-lrp" secondAttribute="centerX" id="XSH-LB-iEY"/>
+                            <constraint firstItem="Kdr-96-W4q" firstAttribute="centerY" secondItem="BZc-z9-lrp" secondAttribute="centerY" id="Xh3-5s-hfE"/>
+                            <constraint firstAttribute="bottom" secondItem="CSi-py-koH" secondAttribute="bottom" id="bTZ-xt-c66"/>
+                            <constraint firstItem="CSi-py-koH" firstAttribute="leading" secondItem="qkg-xf-LXH" secondAttribute="leading" id="bti-1t-ALh"/>
+                            <constraint firstItem="CSi-py-koH" firstAttribute="trailing" secondItem="qkg-xf-LXH" secondAttribute="trailing" id="dEi-LZ-4sx"/>
+                            <constraint firstItem="Y4l-mU-GY8" firstAttribute="top" secondItem="BZc-z9-lrp" secondAttribute="top" id="faL-FJ-OK5"/>
+                            <constraint firstItem="Kdr-96-W4q" firstAttribute="top" secondItem="BZc-z9-lrp" secondAttribute="top" id="lTb-QO-fV9"/>
+                            <constraint firstItem="n20-O2-vXr" firstAttribute="centerY" secondItem="BZc-z9-lrp" secondAttribute="centerY" id="ps5-1A-fgn"/>
+                            <constraint firstItem="CSi-py-koH" firstAttribute="top" secondItem="BZc-z9-lrp" secondAttribute="top" id="rWo-3T-Sjl"/>
+                            <constraint firstItem="Gc8-Uh-bXj" firstAttribute="top" secondItem="BZc-z9-lrp" secondAttribute="top" id="sy3-Zr-5lv"/>
+                            <constraint firstAttribute="bottom" secondItem="Kdr-96-W4q" secondAttribute="bottom" id="wEp-AR-Qza"/>
+                            <constraint firstItem="Y4l-mU-GY8" firstAttribute="trailing" secondItem="qkg-xf-LXH" secondAttribute="trailing" id="xjg-c7-TaC"/>
+                        </constraints>
+                        <connections>
+                            <outlet property="backgroundImageView" destination="Y4l-mU-GY8" id="MHb-al-wFA"/>
+                        </connections>
+                    </view>
+                    <navigationItem key="navigationItem" title="Gentle Focus" id="VXJ-aY-Ney"/>
+                    <connections>
+                        <outlet property="backgroundImageView" destination="Y4l-mU-GY8" id="KCb-Xm-WXV"/>
+                        <outlet property="playButton" destination="n20-O2-vXr" id="56c-0y-peo"/>
+                        <outlet property="timerView" destination="Kdr-96-W4q" id="ggb-aH-sgV"/>
+                        <outlet property="videoContainerView" destination="CSi-py-koH" id="r0R-qh-aVc"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wtL-hB-BYG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3594.6564885496182" y="160.56338028169014"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="IGx-7f-p1y">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="jtB-UG-jtB" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="6wT-uF-hjw">
+                        <rect key="frame" x="0.0" y="118" width="393" height="54"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="R5i-7y-f6S" kind="relationship" relationship="rootViewController" id="yRY-1U-tC2"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="psQ-Ck-O5T" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="985.49618320610682" y="161.97183098591549"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="NJj-iW-aIK">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="La1-6J-Hnn" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ycn-qa-H7T">
+                        <rect key="frame" x="0.0" y="118" width="393" height="54"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="f1b-uT-ZIG" kind="relationship" relationship="rootViewController" id="e3C-Gl-5vO"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5EP-lf-nLG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2667.93893129771" y="160.56338028169014"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="play.fill" catalog="system" width="120" height="128"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
