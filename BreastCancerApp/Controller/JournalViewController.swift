@@ -103,7 +103,7 @@ class JournalViewController: UIViewController {
     }
     
     func openBlankJournal() {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let storyboard = UIStoryboard(name: "JournalMain", bundle: nil)
         let vc = storyboard.instantiateViewController(
             withIdentifier: "BlankJournalViewController"
         ) as! BlankJournalViewController
@@ -112,7 +112,7 @@ class JournalViewController: UIViewController {
     }
     
     func openGuidedJournal() {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let storyboard = UIStoryboard(name: "JournalMain", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "GuidedJournalViewController") as! GuidedJournalViewController
         
         vc.categoryText = "MIND • SELF-AWARENESS"
@@ -122,7 +122,7 @@ class JournalViewController: UIViewController {
     }
     
     func openAllJournals() {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let storyboard = UIStoryboard(name: "JournalMain", bundle: nil)
         let vc = storyboard.instantiateViewController(
             withIdentifier: "AllJournalsViewController"
         ) as! AllJournalsViewController
@@ -130,7 +130,7 @@ class JournalViewController: UIViewController {
     }
 
     func openEntry(_ entry: JournalEntry) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let storyboard = UIStoryboard(name: "JournalMain", bundle: nil)
         switch entry.type {
         case .regular:
             let vc = storyboard.instantiateViewController(
@@ -148,7 +148,7 @@ class JournalViewController: UIViewController {
     }
     
     @IBAction func calendarTapped(_ sender: UIBarButtonItem) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let storyboard = UIStoryboard(name: "JournalMain", bundle: nil)
         let nav = storyboard.instantiateViewController(
             withIdentifier: "CalendarNavController"
         )

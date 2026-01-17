@@ -118,7 +118,7 @@ extension AllJournalsViewController: UICollectionViewDelegate {
     
     // set storyboard
     private func openEntry(_ entry: JournalEntry) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let storyboard = UIStoryboard(name: "JournalMain", bundle: nil)
         switch entry.type {
             
         case .regular:
