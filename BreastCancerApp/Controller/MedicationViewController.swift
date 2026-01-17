@@ -182,61 +182,76 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
 
     // MARK: - Layout Generation (With Edit & Delete)
     func generateLayout() -> UICollectionViewLayout {
-        var config = UICollectionLayoutListConfiguration(appearance: .plain)
-        config.backgroundColor = .clear
-        config.showsSeparators = false
-        config.headerMode = .supplementary
-        
-        config.itemSeparatorHandler = { indexPath, sectionSeparatorConfiguration in
-            var configuration = sectionSeparatorConfiguration
-            configuration.topSeparatorVisibility = .hidden
-            configuration.bottomSeparatorVisibility = .hidden
-            return configuration
+        let layout = UICollectionViewCompositionalLayout { (sectionIndex, environment) -> NSCollectionLayoutSection? in
+            
+            var config = UICollectionLayoutListConfiguration(appearance: .plain)
+            config.backgroundColor = .clear
+            config.showsSeparators = false
+            config.headerMode = .none
+            
+            config.itemSeparatorHandler = { indexPath, sectionSeparatorConfiguration in
+                var configuration = sectionSeparatorConfiguration
+                configuration.topSeparatorVisibility = .hidden
+                configuration.bottomSeparatorVisibility = .hidden
+                return configuration
+            }
+            
+            config.trailingSwipeActionsConfigurationProvider = { [weak self] indexPath in
+                guard let self = self else { return nil }
+                
+                if self.todaysMedications.isEmpty {
+                    return nil
+                }
+                
+                let displayedMeds = self.todaysMedications
+                if indexPath.row >= displayedMeds.count {
+                    return nil
+                }
+                
+                let medToEdit = displayedMeds[indexPath.row]
+                
+                guard let actualIndex = self.allMedications.firstIndex(where: {
+                    $0.name == medToEdit.name && $0.time == medToEdit.time && $0.repeatOption == medToEdit.repeatOption
+                }) else {
+                    return nil
+                }
+                
+                // DELETE ACTION
+                let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { action, view, completion in
+                    self.confirmDelete(actualIndex: actualIndex, displayIndexPath: indexPath, completion: completion)
+                }
+                deleteAction.image = UIImage(systemName: "trash.fill")
+                deleteAction.backgroundColor = .systemRed
+                
+                // EDIT ACTION
+                let editAction = UIContextualAction(style: .normal, title: "Edit") { action, view, completion in
+                    self.openEditMedication(actualIndex: actualIndex)
+                    completion(true)
+                }
+                editAction.image = UIImage(systemName: "pencil")
+                editAction.backgroundColor = .systemBlue
+                
+                let swipeConfig = UISwipeActionsConfiguration(actions: [deleteAction, editAction])
+                swipeConfig.performsFirstActionWithFullSwipe = true
+                
+                return swipeConfig
+            }
+            
+            let section = NSCollectionLayoutSection.list(using: config, layoutEnvironment: environment)
+            
+            let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(28))
+            let header = NSCollectionLayoutBoundarySupplementaryItem(
+                layoutSize: headerSize,
+                elementKind: UICollectionView.elementKindSectionHeader,
+                alignment: .top
+            )
+            section.boundarySupplementaryItems = [header]
+            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+            
+            return section
         }
         
-        // Add swipe actions
-        config.trailingSwipeActionsConfigurationProvider = { [weak self] indexPath in
-            guard let self = self else { return nil }
-            
-            if self.todaysMedications.isEmpty {
-                return nil
-            }
-            
-            let displayedMeds = self.todaysMedications
-            if indexPath.row >= displayedMeds.count {
-                return nil
-            }
-            
-            let medToEdit = displayedMeds[indexPath.row]
-            
-            guard let actualIndex = self.allMedications.firstIndex(where: {
-                $0.name == medToEdit.name && $0.time == medToEdit.time && $0.repeatOption == medToEdit.repeatOption
-            }) else {
-                return nil
-            }
-            
-            // DELETE ACTION
-            let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { action, view, completion in
-                self.confirmDelete(actualIndex: actualIndex, displayIndexPath: indexPath, completion: completion)
-            }
-            deleteAction.image = UIImage(systemName: "trash.fill")
-            deleteAction.backgroundColor = .systemRed
-            
-            // EDIT ACTION
-            let editAction = UIContextualAction(style: .normal, title: "Edit") { action, view, completion in
-                self.openEditMedication(actualIndex: actualIndex)
-                completion(true)
-            }
-            editAction.image = UIImage(systemName: "pencil")
-            editAction.backgroundColor = .systemBlue
-            
-            let swipeConfig = UISwipeActionsConfiguration(actions: [deleteAction, editAction])
-            swipeConfig.performsFirstActionWithFullSwipe = true
-            
-            return swipeConfig
-        }
-        
-        return UICollectionViewCompositionalLayout.list(using: config)
+        return layout
     }
     
     // MARK: - Delete Confirmation

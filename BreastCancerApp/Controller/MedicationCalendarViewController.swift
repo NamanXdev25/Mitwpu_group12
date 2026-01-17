@@ -27,6 +27,7 @@ class MedicationCalendarViewController: UIViewController, UICollectionViewDataSo
     
     // Detail View Outlets
     @IBOutlet weak var statusLabel: UILabel!
+    @IBOutlet weak var countLabel: UILabel!
     @IBOutlet weak var missedTableView: UITableView!
     
     // Container and constraints
@@ -69,7 +70,7 @@ class MedicationCalendarViewController: UIViewController, UICollectionViewDataSo
     // MARK: - Setup Methods
     private func setupYears() {
         let currentYear = Calendar.current.component(.year, from: Date())
-        years = Array((currentYear - 10)...currentYear) // Only up to current year
+        years = Array((currentYear - 10)...currentYear)
     }
     
     private func setupCollectionView() {
@@ -164,18 +165,26 @@ class MedicationCalendarViewController: UIViewController, UICollectionViewDataSo
                 return med1.time < med2.time
             }
             
+            let totalCount = allMedications.count
+            let missedCount = missedMedications.count
+            
             if missedMedications.isEmpty {
-                // All medications taken
                 statusLabel.text = "All medications taken"
+                countLabel.isHidden = true
                 missedTableView.isHidden = true
             } else {
-                // Some medications missed
                 statusLabel.text = "Missed"
+                
+                let countText = "\(missedCount)/\(totalCount)"
+                let attributedString = NSMutableAttributedString(string: countText)
+                countLabel.attributedText = attributedString
+                countLabel.isHidden = false
                 missedTableView.isHidden = false
             }
         } else {
             // No medications planned for this day
             statusLabel.text = "No medications planned"
+            countLabel.isHidden = true
             missedMedications = []
             missedTableView.isHidden = true
         }
