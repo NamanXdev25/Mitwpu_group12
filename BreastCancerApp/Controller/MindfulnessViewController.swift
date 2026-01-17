@@ -45,6 +45,8 @@ class MindfulnessViewController: UIViewController {
         collectionView.dataSource = dataSource
         
         collectionView.delegate = self
+        
+        collectionView.allowsSelection = true
 
         // register cell XIBs
         collectionView.register(
@@ -185,25 +187,58 @@ class MindfulnessViewController: UIViewController {
         let slide = slides[index]
         
         switch slide.action {
-//        case .next:
-//            let next = index + 1
-//            if let nextVC = slideVC(at: next) {
-//                pageVC?.setViewControllers(
-//                    [nextVC],
-//                    direction: .forward,
-//                    animated: true
-//                ) { [weak self] _ in
-//                    self?.currentPageIndex = next
-//                    self?.attachedPageControl?.currentPage = next
-//                }
-//            }
-
         case .begin:
-            print("Begin tapped")
+            guard let destination = slide.destination else { return }
+            switch destination {
+            case .breathing(let sessionID):
+                openBreathingSession(id: sessionID)
 
+            case .journalBlank:
+                openBlankJournal()
+            }
         case .addPhoto:
             print("Add photo tapped")
         }
+    }
+    
+    private func openBreathingSession(id: String) {
+        let storyboard = UIStoryboard(name: "BreathingSessions", bundle: nil)
+
+        guard let vc = storyboard.instantiateViewController(
+            withIdentifier: "BreathingPlayerVC"
+        ) as? BreathingPlayerViewController else {
+            assertionFailure("BreathingPlayerViewController not found")
+            return
+        }
+        
+        let dataManager = BreathingDataManager()
+        let allSessions = dataManager.getAllSessions()
+        
+        var targetSession = allSessions.first(where: { $0.title == id })
+        
+        if targetSession == nil {
+            targetSession = allSessions.first
+            print("Could not find session with title '\(id)'")
+        }
+        
+        vc.session = targetSession
+        vc.navigationItem.largeTitleDisplayMode = .never
+        
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    private func openBlankJournal() {
+        let storyboard = UIStoryboard(name: "JournalMain", bundle: nil)
+
+        guard let vc = storyboard.instantiateViewController(
+            withIdentifier: "BlankJournalViewController"
+        ) as? BlankJournalViewController else {
+            assertionFailure("BlankJournalViewController not found")
+            return
+        }
+        
+        vc.navigationItem.largeTitleDisplayMode = .never
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     private func setupSlides(for emotionIndex: Int) {
@@ -216,7 +251,6 @@ class MindfulnessViewController: UIViewController {
             return
         }
 
-        let intro = moodContent.intro
         guard
             let breathe = moodContent.breathing.randomElement(),
             let journal = moodContent.journaling.randomElement(),
@@ -228,34 +262,31 @@ class MindfulnessViewController: UIViewController {
         }
 
         slides = [
-//            MindfulnessSlide(
-//                title: intro.title,
-//                description: intro.description,
-//                buttonText: intro.buttonText ?? "Next",
-//                action: .next
-//            ),
             MindfulnessSlide(
                 title: breathe.title,
                 description: breathe.description,
                 buttonText: breathe.buttonText ?? "Begin",
-                action: .begin
+                action: .begin,
+                destination: .breathing(sessionID: breathe.title)
             ),
             MindfulnessSlide(
                 title: journal.title,
                 description: journal.description,
                 buttonText: journal.buttonText ?? "Begin",
-                action: .begin
+                action: .begin,
+                destination: .journalBlank
             ),
             MindfulnessSlide(
                 title: hobby.title,
                 description: hobby.description,
                 buttonText: hobby.buttonText ?? "Add Photo",
-                action: .addPhoto
+                action: .addPhoto,
+                destination: nil
             )
         ]
     }
     
-// Compositional Layout (collectionv view)
+// Compositional Layout (collection view)
     
     private func createCompositionalLayout() -> UICollectionViewCompositionalLayout {
         return UICollectionViewCompositionalLayout { sectionIndex, environment -> NSCollectionLayoutSection? in
@@ -319,6 +350,46 @@ class MindfulnessViewController: UIViewController {
             }
         }
     }
+    
+    private func handleExploreTap(at index: Int) {
+        guard index != 0 else { return }
+
+        switch index {
+        case 1:
+            openBreathingSessions()
+        case 2:
+            openJournal()
+            
+        default:
+            break
+        }
+    }
+    
+    private func openJournal() {
+        let storyboard = UIStoryboard(name: "JournalMain", bundle: nil)
+        
+
+        guard let journalVC = storyboard.instantiateViewController(
+            withIdentifier: "JournalViewController"
+        ) as? JournalViewController else {
+            fatalError("JournalViewController not found in Journal.storyboard")
+        }
+        journalVC.navigationItem.largeTitleDisplayMode = .never
+        navigationController?.pushViewController(journalVC, animated: true)
+    }
+    
+    private func openBreathingSessions() {
+        let storyboard = UIStoryboard(name: "BreathingSessions", bundle: nil)
+
+        guard let breathingVC = storyboard.instantiateViewController(
+            withIdentifier: "BreathingSessionsViewController"
+        ) as? BreathingViewController else {
+            fatalError("BreathingSessionsViewController not found in BretahingSessions.storyboard")
+        }
+        breathingVC.navigationItem.largeTitleDisplayMode = .never
+        navigationController?.pushViewController(breathingVC, animated: true)
+    }
+
 }
 
 extension MindfulnessViewController: UICollectionViewDelegate {
@@ -341,6 +412,19 @@ extension MindfulnessViewController: UICollectionViewDelegate {
             }
         }
     }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        didSelectItemAt indexPath: IndexPath) {
+
+        print("DID SELECT:", indexPath)
+
+        guard let section = Section(rawValue: indexPath.section) else { return }
+
+        if section == .explore {
+            handleExploreTap(at: indexPath.item)
+        }
+    }
+
 }
 
 extension MindfulnessViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {}
