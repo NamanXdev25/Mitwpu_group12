@@ -66,15 +66,12 @@ class NewAppointmentViewController: UIViewController {
     }
     
     private func setupPickerCard() {
-        pickerCard.layer.cornerRadius = 16
         pickerCard.layer.shadowColor = UIColor.black.cgColor
         pickerCard.layer.shadowOpacity = 0.2
         pickerCard.layer.shadowRadius = 10
     }
     
     private func setupNoteTextView() {
-        noteTextView.layer.cornerRadius = 12
-        noteTextView.backgroundColor = UIColor.systemGray6
         noteTextView.text = notePlaceholder
         noteTextView.textColor = .lightGray
         noteTextView.delegate = self

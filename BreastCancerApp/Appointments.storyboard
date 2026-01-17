@@ -165,7 +165,7 @@
                             </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Add a note" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="6l5-th-kF9">
                                 <rect key="frame" x="27" y="543.66666666666663" width="339" height="156"/>
-                                <color key="backgroundColor" name="DescriptionTextFieldColor"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="156" id="g71-Sf-aKq"/>
                                 </constraints>
@@ -174,7 +174,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="8"/>
+                                        <integer key="value" value="12"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </textView>
@@ -740,9 +740,6 @@
         <image name="plus" catalog="system" width="128" height="113"/>
         <namedColor name="Backgroundcolor">
             <color red="0.97299998998641968" green="0.94900000095367432" blue="0.9570000171661377" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="DescriptionTextFieldColor">
-            <color red="0.96100002527236938" green="0.96100002527236938" blue="0.96100002527236938" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="DoctorVisitindicator">
             <color red="0.0" green="0.76499998569488525" blue="0.81599998474121094" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
