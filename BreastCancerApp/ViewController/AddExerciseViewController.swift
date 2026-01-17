@@ -90,20 +90,15 @@ class AddExerciseViewController: UIViewController, UIPickerViewDelegate, UIPicke
             descriptionTextView.textColor = .black
         }
         
-        // Initialize switch state
         reminderSwitch.isOn = initialReminderState
     }
     
     func setupUI() {
-        pickerCard.layer.cornerRadius = 16
         pickerCard.layer.shadowColor = UIColor.black.cgColor
         pickerCard.layer.shadowOpacity = 0.2
         pickerCard.layer.shadowRadius = 10
         
-        descriptionTextView.layer.cornerRadius = 12
-        descriptionTextView.backgroundColor = UIColor.systemGray6
         descriptionTextView.text = "Add a description"
-        descriptionTextView.layer.cornerRadius = 12
         descriptionTextView.textColor = .lightGray
         descriptionTextView.delegate = self
         descriptionTextView.textContainerInset = UIEdgeInsets(top: 15, left: 10, bottom: 10, right: 10)
