@@ -1,138 +1,182 @@
 //
-//  CalendarViewController.swift
-//  BreastCancerApp
+//  AddMedicationViewController.swift
+//  Medication
 //
-//  Created by Shloka Shetty on 3/12/25.
+//  Created by Naman Bhansali on 15/01/26.
 //
+
 import UIKit
 
-// This protocol allows us to send the new pill data back to the List Screen
 protocol AddMedicationDelegate: AnyObject {
-    func didAddMedication(name: String, time: String, repeatOption: String, note: String)
-    
-    // NEW: Function to handle updates
-    func didEditMedication(index: Int, name: String, time: String, repeatOption: String, note: String)
+    func didAddMedication(name: String, time: String, repeatOption: String, note: String, reminderEnabled: Bool)
+    func didEditMedication(index: Int, name: String, time: String, repeatOption: String, note: String, reminderEnabled: Bool)
 }
 
-class AddMedicationViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate, UITextViewDelegate {
+class AddMedicationViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
 
-    //Mark:- --- OUTLETS ---
-    @IBOutlet weak var CloseButton: UIButton!
+    // MARK: - Outlets
+    @IBOutlet weak var closeBarButton: UIBarButtonItem!
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var repeatTextField: UITextField!
     @IBOutlet weak var timeTextField: UITextField!
     @IBOutlet weak var reminderSwitch: UISwitch!
-    @IBOutlet weak var descriptionTextView: UITextView!
-    @IBOutlet weak var saveButton: UIButton!
+    @IBOutlet weak var noteTextView: UITextView!
+    @IBOutlet weak var saveBarButton: UIBarButtonItem!
     
-    // --- PICKER OUTLETS ---
+    // Chevron Image Views
+    @IBOutlet weak var repeatChevronImageView: UIImageView!
+    @IBOutlet weak var timeChevronImageView: UIImageView!
+    
+    // Popup Outlets
     @IBOutlet weak var pickerOverlay: UIView!
     @IBOutlet weak var pickerCard: UIView!
     @IBOutlet weak var repeatPicker: UIPickerView!
     @IBOutlet weak var timePicker: UIDatePicker!
     
+    // MARK: - Properties
     weak var delegate: AddMedicationDelegate?
     
-    let weekDays = ["Every Mon", "Every Tue", "Every Wed", "Every Thu", "Every Fri", "Every Sat", "Every Sun", "Every Day"]
-    
-    // --- NEW VARIABLES FOR EDITING ---
     var medicationToEdit: Medication?
     var indexToEdit: Int?
     
+    let repeatOptions = ["Every Day", "Every Mon", "Every Tue", "Every Wed", "Every Thu", "Every Fri", "Every Sat", "Every Sun"]
+    
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupDelegates()
+        setupChevronTapGestures()
+        setupPickerOverlay()
         
-        // Delegates
+        // Prefill data if editing
+        if let med = medicationToEdit {
+            nameTextField.text = med.name
+            repeatTextField.text = med.repeatOption
+            repeatTextField.textColor = .black  // Normal color when editing
+            timeTextField.text = med.time
+            noteTextView.text = med.note.isEmpty ? "Add a note (optional)" : med.note
+            noteTextView.textColor = med.note.isEmpty ? .lightGray : .black
+            reminderSwitch.isOn = med.reminderEnabled  // Load reminder state
+            title = "Edit Medication"
+            
+            // Set picker to the correct repeat option
+            if let index = repeatOptions.firstIndex(of: med.repeatOption) {
+                repeatPicker.selectRow(index, inComponent: 0, animated: false)
+            }
+        } else {
+            title = "Add Medication"
+            // Set initial grayed out state for repeat field
+            repeatTextField.text = "Every Day"
+            repeatTextField.textColor = .lightGray  // Grayed out
+            reminderSwitch.isOn = true  // Default to ON for new medications
+        }
+    }
+    
+    // MARK: - Setup Methods
+    func setupUI() {
+        // Style the popup card
+        pickerCard.layer.cornerRadius = 16
+        pickerCard.layer.shadowColor = UIColor.black.cgColor
+        pickerCard.layer.shadowOpacity = 0.2
+        pickerCard.layer.shadowRadius = 10
+        
+        // Style note text view
+        noteTextView.layer.cornerRadius = 12
+        noteTextView.backgroundColor = UIColor.systemGray6
+        noteTextView.textContainerInset = UIEdgeInsets(top: 15, left: 10, bottom: 10, right: 10)
+        
+        if medicationToEdit == nil {
+            noteTextView.text = "Add a note (optional)"
+            noteTextView.textColor = .lightGray
+        }
+        
+        noteTextView.delegate = self
+        
+        // Configure time picker
+        timePicker.datePickerMode = .time
+        timePicker.preferredDatePickerStyle = .wheels
+        timePicker.locale = Locale(identifier: "en_US")
+    }
+    
+    func setupDelegates() {
         nameTextField.delegate = self
         repeatTextField.delegate = self
         timeTextField.delegate = self
         repeatPicker.delegate = self
         repeatPicker.dataSource = self
-        descriptionTextView.delegate = self
-        self.title = "Edit Details"
-        
-        // Setup Time Picker
-        timePicker.datePickerMode = .time
-        timePicker.preferredDatePickerStyle = .wheels
-        
-        // Setup Pickers (Hidden initially)≠≠≠≠
-        pickerOverlay.isHidden = true
-        
-        // Add Tap to Dismiss Overlay
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissPopup))
-        pickerOverlay.addGestureRecognizer(tapGesture)
-        
-        // Add Chevrons
-        addChevron(to: repeatTextField)
-        addChevron(to: timeTextField)
-        
-        // --- NEW: PRE-FILL DATA IF EDITING ---
-        checkForEditMode()
     }
     
-    func setupUI() {
-        saveButton.layer.cornerRadius = saveButton.frame.height / 2
-        pickerCard.layer.cornerRadius = 16
-        descriptionTextView.layer.cornerRadius = 12
-        descriptionTextView.backgroundColor = UIColor.systemGray6
+    func setupChevronTapGestures() {
+        repeatChevronImageView.isUserInteractionEnabled = true
+        timeChevronImageView.isUserInteractionEnabled = true
         
-        // Default State
-        descriptionTextView.text = "Add a note"
-        descriptionTextView.textColor = .lightGray
-        descriptionTextView.textContainerInset = UIEdgeInsets(top: 15, left: 10, bottom: 10, right: 10)
+        let repeatTap = UITapGestureRecognizer(target: self, action: #selector(repeatChevronTapped))
+        repeatChevronImageView.addGestureRecognizer(repeatTap)
+        
+        let timeTap = UITapGestureRecognizer(target: self, action: #selector(timeChevronTapped))
+        timeChevronImageView.addGestureRecognizer(timeTap)
     }
-
-    // --- NEW: POPULATE FIELDS ---
-    func checkForEditMode() {
-            if let med = medicationToEdit {
-                // 1. Update Title
-                self.title = "Edit Details"
-                
-                // 2. Update Pink Button (Arrow Only)
-                saveButton.setTitle("", for: .normal) // Remove text
-                saveButton.setImage(UIImage(systemName: "checkmark"), for: .normal) 
-                saveButton.tintColor = .white
-                
-                // 3. Fill Fields
-                nameTextField.text = med.name
-                timeTextField.text = med.time
-                
-                // 4. Handle Description/Note
-                if weekDays.contains(med.note) {
-                    repeatTextField.text = med.note
-                    descriptionTextView.text = "Add a note"
-                    //descriptionTextView.textColor = .lightGray
-                } else {
-                    repeatTextField.text = "Every Day"
-                    descriptionTextView.text = med.note
-                    descriptionTextView.textColor = .black
-                }
-            }
-        }
-
-    // --- LOGIC TO SHOW PICKERS ---
+    
+    func setupPickerOverlay() {
+        pickerOverlay.isHidden = true
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissPopup))
+        pickerOverlay.addGestureRecognizer(tapGesture)
+    }
+    
+    // MARK: - Chevron Actions
+    @objc func repeatChevronTapped() {
+        showRepeatPicker()
+    }
+    
+    @objc func timeChevronTapped() {
+        showTimePicker()
+    }
+    
+    // MARK: - TextField Delegate
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         if textField == repeatTextField {
-            view.endEditing(true)
-            pickerOverlay.isHidden = false
-            repeatPicker.isHidden = false
-            timePicker.isHidden = true
+            showRepeatPicker()
             return false
         } else if textField == timeTextField {
-            view.endEditing(true)
-            pickerOverlay.isHidden = false
-            repeatPicker.isHidden = true
-            timePicker.isHidden = false
+            showTimePicker()
             return false
         }
         return true
     }
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    // MARK: - Picker Display Methods
+    func showRepeatPicker() {
+        view.endEditing(true)
+        
+        // Sync picker to current selection
+        if let currentText = repeatTextField.text,
+           let index = repeatOptions.firstIndex(of: currentText) {
+            repeatPicker.selectRow(index, inComponent: 0, animated: false)
+        }
+        
+        pickerOverlay.isHidden = false
+        repeatPicker.isHidden = false
+        timePicker.isHidden = true
+    }
+    
+    func showTimePicker() {
+        view.endEditing(true)
+        pickerOverlay.isHidden = false
+        repeatPicker.isHidden = true
+        timePicker.isHidden = false
+    }
+    
     @objc func dismissPopup() {
         if !repeatPicker.isHidden {
-            let row = repeatPicker.selectedRow(inComponent: 0)
-            repeatTextField.text = weekDays[row]
+            let selectedRow = repeatPicker.selectedRow(inComponent: 0)
+            repeatTextField.text = repeatOptions[selectedRow]
+            repeatTextField.textColor = .black  // Change to normal color after selection
         } else if !timePicker.isHidden {
             let formatter = DateFormatter()
             formatter.timeStyle = .short
@@ -141,87 +185,95 @@ class AddMedicationViewController: UIViewController, UIPickerViewDelegate, UIPic
         pickerOverlay.isHidden = true
     }
     
-    // --- ACTIONS ---
-    @IBAction func closeTapped(_ sender: Any) {
-        self.dismiss(animated: true)
+    // MARK: - UIPickerView DataSource & Delegate
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
     }
     
-    @IBAction func saveTapped(_ sender: Any) {
-        // 1. Get the data
-        guard let name = nameTextField.text, !name.isEmpty else { return }
-        let time = timeTextField.text ?? "10:00 AM"
-        let repeatOption = repeatTextField.text ?? "Every Day"
-        let note = (descriptionTextView.text == "Add a note") ? "" : descriptionTextView.text ?? ""
-        
-        // 2. CHECK: ARE WE EDITING OR ADDING?
-        if let index = indexToEdit {
-            // We are EDITING
-            delegate?.didEditMedication(index: index, name: name, time: time, repeatOption: repeatOption, note: note)
-        } else {
-            // We are ADDING
-            delegate?.didAddMedication(name: name, time: time, repeatOption: repeatOption, note: note)
-        }
-        
-        // 3. Close the Modal
-        self.dismiss(animated: true)
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return repeatOptions.count
     }
     
-    // --- HELPERS ---
-    func numberOfComponents(in pickerView: UIPickerView) -> Int { 1 }
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int { weekDays.count }
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? { weekDays[row] }
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return repeatOptions[row]
+    }
+    
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        repeatTextField.text = weekDays[row]
+        repeatTextField.text = repeatOptions[row]
+        repeatTextField.textColor = .black  // Change to normal color after selection
     }
     
-    func addChevron(to textField: UITextField) {
-        // Create a small container view for the icon
-        let iconContainer = UIView(frame: CGRect(x: 0, y: 0, width: 30, height: 20))
-        
-        // Create the image view
-        let iconView = UIImageView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
-        iconView.image = UIImage(systemName: "chevron.up.chevron.down") // Or just "chevron.down"
-        iconView.contentMode = .scaleAspectFit
-        iconView.tintColor = .lightGray
-        
-        iconContainer.addSubview(iconView)
-        
-        // Add tap gesture to the container to ensure tapping the icon opens the picker
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(chevronTapped(_:)))
-        iconContainer.addGestureRecognizer(tapGesture)
-        iconContainer.isUserInteractionEnabled = true
-        
-        // Store reference to text field in the container's tag or accessibilityIdentifier if needed,
-        // but since we are inside a closure-like scope, we can just use the textField reference if we were defining the action here.
-        // Instead, we will attach the text field to the gesture recognizer's view via a simple associated object trick or just rely on the fact that rightView touches often pass through.
-        // A cleaner way is to make the icon container pass touches to the text field.
-        
-        // Set it as the right view of the text field
-        textField.rightView = iconContainer
-        textField.rightViewMode = .always
-        
-        // Associate the text field with the gesture logic
-        iconContainer.accessibilityElements = [textField]
+    // MARK: - Actions
+    @IBAction func closeTapped(_ sender: UIBarButtonItem) {
+        dismiss(animated: true)
     }
     
-    @objc func chevronTapped(_ sender: UITapGestureRecognizer) {
-        // Find which text field this chevron belongs to
-        if let container = sender.view, let textField = container.accessibilityElements?.first as? UITextField {
-            textField.becomeFirstResponder()
+    @IBAction func saveTapped(_ sender: UIBarButtonItem) {
+        saveMedication()
+    }
+    
+    func saveMedication() {
+        // Validate Name
+        guard let name = nameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !name.isEmpty else {
+            showAlert(message: "Please enter a medication name.")
+            return
         }
+        
+        // Validate Repeat
+        guard let repeatText = repeatTextField.text, !repeatText.isEmpty else {
+            showAlert(message: "Please select how often to take this medication.")
+            return
+        }
+        
+        // Validate Time
+        guard let time = timeTextField.text, !time.isEmpty else {
+            showAlert(message: "Please select a time.")
+            return
+        }
+        
+        // Get note
+        var note = noteTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
+        if note == "Add a note (optional)" {
+            note = ""
+        }
+        
+        // Get reminder switch state
+        let reminderEnabled = reminderSwitch.isOn
+        
+        // Check if editing or adding
+        if let index = indexToEdit {
+            delegate?.didEditMedication(index: index, name: name, time: time, repeatOption: repeatText, note: note, reminderEnabled: reminderEnabled)
+        } else {
+            delegate?.didAddMedication(name: name, time: time, repeatOption: repeatText, note: note, reminderEnabled: reminderEnabled)
+        }
+        
+        dismiss(animated: true)
     }
     
-    // TextView Placeholder Logic
+    func showAlert(message: String) {
+        let alert = UIAlertController(title: "Required Field", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+}
+
+// MARK: - UITextViewDelegate
+extension AddMedicationViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == .lightGray {
+        if textView.textColor == UIColor.lightGray {
             textView.text = nil
-            textView.textColor = .black
+            textView.textColor = UIColor.black
         }
     }
+    
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
-            textView.text = "Add a note"
-            textView.textColor = .lightGray
+            textView.text = "Add a note (optional)"
+            textView.textColor = UIColor.lightGray
         }
     }
 }
