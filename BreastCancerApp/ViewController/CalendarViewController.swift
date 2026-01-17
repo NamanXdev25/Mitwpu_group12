@@ -21,6 +21,7 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
     
     // Detail View Outlets
     @IBOutlet weak var statusLabel: UILabel!
+    @IBOutlet weak var countLabel: UILabel!
     @IBOutlet weak var missedTableView: UITableView!
     
     // Container and constraints
@@ -133,7 +134,6 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
         detailCardView?.isHidden = false
         
         if let progress = ExerciseManager.shared.history[key] {
-            // Sort missed items by time in ascending order
             missedItems = progress.missedItems.sorted { item1, item2 in
                 let timeFormatter = DateFormatter()
                 timeFormatter.dateFormat = "h:mm a"
@@ -146,15 +146,25 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
                 return item1.time < item2.time
             }
             
+            let totalCount = progress.total
+            let missedCount = missedItems.count
+            
             if missedItems.isEmpty {
                 statusLabel.text = "All exercises completed"
+                countLabel.isHidden = true
                 missedTableView.isHidden = true
             } else {
                 statusLabel.text = "Missed"
+                
+                let countText = "\(missedCount)/\(totalCount)"
+                let attributedString = NSMutableAttributedString(string: countText)
+                countLabel.attributedText = attributedString
+                countLabel.isHidden = false
                 missedTableView.isHidden = false
             }
         } else {
             statusLabel.text = "No exercises planned"
+            countLabel.isHidden = true
             missedItems = []
             missedTableView.isHidden = true
         }
