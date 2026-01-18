@@ -121,7 +121,7 @@ class BreathingViewController: UIViewController {
     func registerCells() {
         // Section 0
         collectionView.register(UINib(nibName: "FavoriteSessionCell", bundle: nil), forCellWithReuseIdentifier: "FavoriteSessionCell")
-        collectionView.register(UINib(nibName: "EmptyStateCell", bundle: nil), forCellWithReuseIdentifier: "EmptyStateCell")
+        collectionView.register(UINib(nibName: "BreathingEmptyStateCell", bundle: nil), forCellWithReuseIdentifier: "BreathingEmptyStateCell")
    
         collectionView.register(UINib(nibName: "FilterCell", bundle: nil), forCellWithReuseIdentifier: "FilterCell")
         
@@ -155,7 +155,7 @@ extension BreathingViewController: UICollectionViewDataSource {
     
         // SECTION 0: FAVORITES
             if favoriteSessions.isEmpty {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EmptyStateCell", for: indexPath) as! EmptyStateCell
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BreathingEmptyStateCell", for: indexPath) as! BreathingEmptyStateCell
                 return cell
             } else {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FavoriteSessionCell", for: indexPath) as! FavoriteSessionCell
