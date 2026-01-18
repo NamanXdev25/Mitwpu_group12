@@ -2,21 +2,31 @@ import UIKit
 
 final class NotificationTogglesCell: UICollectionViewCell {
 
-    // MARK: - Reuse Identifier
+    // MARK: - Reuse
     static let reuseIdentifier = "NotificationTogglesCell"
 
     // MARK: - Outlets
     @IBOutlet private weak var cardView: UIView!
 
-    @IBOutlet weak var exerciseSwitch: UISwitch!
-    @IBOutlet weak var hydrationSwitch: UISwitch!
-    @IBOutlet weak var appointmentsSwitch: UISwitch!
-    @IBOutlet weak var medicationsSwitch: UISwitch!
+    @IBOutlet private weak var exerciseSwitch: UISwitch!
+    @IBOutlet private weak var hydrationSwitch: UISwitch!
+    @IBOutlet private weak var appointmentsSwitch: UISwitch!
+    @IBOutlet private weak var medicationsSwitch: UISwitch!
+
+    // MARK: - Constants
+    private enum Layout {
+        static let cornerRadius: CGFloat = 12
+    }
 
     // MARK: - Lifecycle
     override func awakeFromNib() {
         super.awakeFromNib()
         configureUI()
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        resetSwitches()
     }
 
     // MARK: - Configuration
@@ -38,7 +48,15 @@ final class NotificationTogglesCell: UICollectionViewCell {
         contentView.backgroundColor = .clear
 
         cardView.backgroundColor = .white
-        cardView.layer.cornerRadius = 12
+        cardView.layer.cornerRadius = Layout.cornerRadius
         cardView.clipsToBounds = true
+    }
+
+    // MARK: - Reuse
+    private func resetSwitches() {
+        exerciseSwitch.isOn = false
+        hydrationSwitch.isOn = false
+        appointmentsSwitch.isOn = false
+        medicationsSwitch.isOn = false
     }
 }

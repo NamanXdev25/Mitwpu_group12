@@ -1,11 +1,23 @@
 import Foundation
 
 struct HealthStatusModel {
-    var firstName: String
-    var lastName: String
-    var diagnosisDate: Date
-    var gender: String
-    var age: Int
-    var cancerStage: String
-    var treatmentState: String
+
+    // MARK: - Identity
+    let firstName: String
+    let lastName: String
+
+    // MARK: - Medical Information
+    let diagnosisDate: Date
+    let gender: String
+    let age: Int
+    let cancerStage: String
+    let treatmentState: String
+}
+
+// MARK: - Convenience
+extension HealthStatusModel {
+
+    var fullName: String {
+        firstName + " " + lastName
+    }
 }
