@@ -9,12 +9,10 @@ import UIKit
 
 class TreatmentOptionView: UIView {
     
-    // MARK: - Outlets
     @IBOutlet private weak var contentView: UIView!
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var checkmarkImageView: UIImageView!
     
-    // MARK: - Properties
     var isSelectedOption: Bool = false {
         didSet {
             updateSelectionState()
@@ -27,10 +25,8 @@ class TreatmentOptionView: UIView {
         }
     }
     
-    // Callback for when tapped
     var onTap: (() -> Void)?
     
-    // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -42,7 +38,6 @@ class TreatmentOptionView: UIView {
     }
     
     private func commonInit() {
-        // Load XIB
         let bundle = Bundle(for: type(of: self))
         let nib = UINib(nibName: "TreatmentOptionView", bundle: bundle)
         guard let view = nib.instantiate(withOwner: self, options: nil).first as? UIView else {
@@ -54,7 +49,6 @@ class TreatmentOptionView: UIView {
         addSubview(view)
         contentView = view
         
-        // Add tap gesture
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         addGestureRecognizer(tapGesture)
         
@@ -62,12 +56,10 @@ class TreatmentOptionView: UIView {
         updateSelectionState()
     }
     
-    // MARK: - Actions
     @objc private func handleTap() {
         onTap?()
     }
     
-    // MARK: - Private Methods
     private func updateSelectionState() {
         if isSelectedOption {
             contentView.borderWidth = 2

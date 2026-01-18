@@ -83,7 +83,7 @@ class PostTreatmentViewController: UIViewController {
     
     // action buttons
     @IBAction func skipButtonTapped(_ sender: UIButton) {
-        print("Skip tapped - Post Treatment")
+        // navigate to hobbies
         performSegue(withIdentifier: "showHobbies", sender: nil)
     }
     

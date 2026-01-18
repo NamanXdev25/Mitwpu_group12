@@ -52,7 +52,8 @@ struct OnboardingDataSource {
         "36-45",
         "46-55",
         "56-65",
-        "65+"
+        "66-75",
+        "75+"
     ]
     
     // Follow-up Frequency

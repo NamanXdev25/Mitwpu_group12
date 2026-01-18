@@ -115,8 +115,8 @@ class JourneyDetailsViewController: UIViewController {
     }
     
     @IBAction func skipButtonTapped(_ sender: UIButton) {
-        print("Skip tapped")
-        // navigate to hobby screen
+        // navigate to hobbies
+        performSegue(withIdentifier: "showHobbies", sender: nil)
     }
     
     @IBAction func nextButtonTapped(_ sender: UIButton) {

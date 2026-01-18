@@ -69,8 +69,8 @@ class HobbiesViewController: UIViewController {
     }
     
     @IBAction func skipButtonTapped(_ sender: UIButton) {
-        print("Skip tapped - Hobbies")
-        // navigate to completion screen
+        // navigate to hobbies
+        performSegue(withIdentifier: "showCompletion", sender: nil)
     }
     
     @IBAction func nextButtonTapped(_ sender: UIButton) {

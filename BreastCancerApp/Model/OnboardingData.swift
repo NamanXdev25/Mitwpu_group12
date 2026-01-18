@@ -9,13 +9,11 @@ import Foundation
 
 class OnboardingData {
     
-    // Singleton instance
+    // singleton instance
     static let shared = OnboardingData()
     
-    // User's selections
+    var userName: String = "User" // default name for testing
     var treatmentStatus: String?
-    var selectedHobbies: [String] = []
-    var userName: String = "Sophie" // Default name, can be changed
     
     // currently in treatment
     var diagnosisDate: Date?
@@ -29,6 +27,9 @@ class OnboardingData {
     // post treatment
     var treatmentCompletionDate: Date?
     var selectedInterests: [String] = []
+    
+    // hobbies
+    var selectedHobbies: [String] = []
     
     private init() {}
     

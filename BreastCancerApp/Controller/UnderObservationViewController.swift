@@ -87,9 +87,7 @@ class UnderObservationViewController: UIViewController {
     }
     
     @IBAction func skipButtonTapped(_ sender: UIButton) {
-        print("Skip tapped - Under Observation")
-        
-        // navigate to hobbies screen
+        // navigate to hobbies
         performSegue(withIdentifier: "showHobbies", sender: nil)
     }
     

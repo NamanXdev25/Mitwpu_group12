@@ -9,22 +9,18 @@ import UIKit
 
 class HobbyCell: UICollectionViewCell {
     
-    // MARK: - Outlets
     @IBOutlet private weak var containerView: UIView! // Tag 100
     @IBOutlet private weak var titleLabel: UILabel!   // Tag 101
     
-    // MARK: - Initialization
     override func awakeFromNib() {
         super.awakeFromNib()
         setupUI()
     }
     
     private func setupUI() {
-        // Initial unselected state
         updateAppearance(isSelected: false)
     }
     
-    // MARK: - Configuration
     func configure(with hobby: String, isSelected: Bool) {
         titleLabel.text = hobby
         updateAppearance(isSelected: isSelected)
@@ -40,12 +36,10 @@ class HobbyCell: UICollectionViewCell {
         }
     }
     
-    // MARK: - Dynamic Sizing
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
         setNeedsLayout()
         layoutIfNeeded()
         
-        // Calculate width based on label
         let targetSize = CGSize(width: UIView.layoutFittingCompressedSize.width,
                                height: UIView.layoutFittingCompressedSize.height)
         let size = contentView.systemLayoutSizeFitting(targetSize,

@@ -38,8 +38,8 @@ class CompletionViewController: UIViewController {
         print("Onboarding Data Summary:")
         print("========================================")
         
-        print("✓ Treatment Status: \(OnboardingData.shared.treatmentStatus ?? "None")")
-        print("✓ Selected Hobbies: \(OnboardingData.shared.selectedHobbies)")
+        print("Treatment Status: \(OnboardingData.shared.treatmentStatus ?? "None")")
+        print("Selected Hobbies: \(OnboardingData.shared.selectedHobbies)")
         
         if let treatmentStatus = OnboardingData.shared.treatmentStatus {
             print("\nTreatment-Specific Data:")

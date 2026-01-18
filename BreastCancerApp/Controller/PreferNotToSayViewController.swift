@@ -69,7 +69,7 @@ class PreferNotToSayViewController: UIViewController {
     }
     
     @IBAction func skipButtonTapped(_ sender: UIButton) {
-        print("Skip tapped - Prefer not to say")
+        // navigate to hobbies
         performSegue(withIdentifier: "showHobbies", sender: nil)
     }
     
