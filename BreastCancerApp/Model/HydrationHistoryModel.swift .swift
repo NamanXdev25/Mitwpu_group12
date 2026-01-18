@@ -3,7 +3,7 @@ import Foundation
 struct HydrationHistoryModel {
 
     // MARK: - Storage
-    private static let historyKey = "hydration_daily_history"
+    private static let historyKey = "hydration_daily_history"   // stored in mL
 
     enum Period {
         case weekly
@@ -12,26 +12,35 @@ struct HydrationHistoryModel {
 
     // MARK: - Public API
 
-    static func addWater(amount: Double) {
+    /// ✅ Add water in **milliliters**
+    static func addWaterML(_ ml: Int) {
         var history = loadHistory()
         let todayKey = dateKey(for: Date())
-        history[todayKey, default: 0] += amount
+        history[todayKey, default: 0] += Double(ml)
         saveHistory(history)
     }
 
+    /// Average in liters (for charts)
     static func average(for period: Period) -> Double {
-        let values = chartValues(for: period)
-        guard !values.isEmpty else { return 0 }
-        return values.reduce(0, +) / Double(values.count)
+        let valuesML = chartValuesML(for: period)
+        guard !valuesML.isEmpty else { return 0 }
+        let avgML = valuesML.reduce(0, +) / Double(valuesML.count)
+        return avgML / 1000.0
     }
 
+    /// Chart values in liters
     static func chartValues(for period: Period) -> [Double] {
+        chartValuesML(for: period).map { $0 / 1000.0 }
+    }
+
+    // MARK: - Internal (mL)
+
+    private static func chartValuesML(for period: Period) -> [Double] {
         let history = loadHistory()
         let today = Date()
 
         switch period {
 
-        // MARK: - Weekly (Sunday → Saturday)
         case .weekly:
             var calendar = Calendar.current
             calendar.firstWeekday = 1 // Sunday
@@ -43,13 +52,11 @@ struct HydrationHistoryModel {
                 )
             )!
 
-            // Always return exactly 7 values (Sun → Sat)
             return (0..<7).map { offset in
                 let date = calendar.date(byAdding: .day, value: offset, to: startOfWeek)!
                 return history[dateKey(for: date)] ?? 0
             }
 
-        // MARK: - Monthly
         case .monthly:
             let calendar = Calendar.current
 

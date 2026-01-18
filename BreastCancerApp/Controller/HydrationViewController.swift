@@ -20,10 +20,12 @@ class HydrationViewController: UIViewController {
     // MARK: - State
     private var chartMode: HydrationChartMode = .weekly
 
+    // MARK: - Selector UI State
+    private var selectorOverlayView: UIView?
+
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
         view.backgroundColor = UIColor(named: "baground")
         setupCollectionView()
     }
@@ -72,10 +74,14 @@ extension HydrationViewController: UICollectionViewDataSource {
                 for: indexPath
             ) as! HydrationTopCardCell
 
+            let consumedML = HydrationModel.consumedTodayML()
+            let goalLiters = HydrationModel.currentGoal()
+            let cupML = Int(HydrationModel.currentCupSize() * 1000)
+
             cell.configure(
-                consumedML: Int(HydrationModel.consumedToday() * 1000),
-                goal: HydrationModel.currentGoal(),
-                cupSize: Int(HydrationModel.currentCupSize() * 1000)
+                consumedML: consumedML,
+                goal: goalLiters,
+                cupSize: cupML
             )
 
             cell.onGoalTapped = { [weak self] in
@@ -86,18 +92,15 @@ extension HydrationViewController: UICollectionViewDataSource {
                 self?.showCupSelector()
             }
 
+            // ✅ FIXED: increment strictly in mL
             cell.onDropTapped = { [weak self] in
                 guard let self else { return }
 
-                // Update today
-                HydrationModel.addCup()
+                let cupML = Int(HydrationModel.currentCupSize() * 1000)
 
-                // Update history (for chart)
-                HydrationHistoryModel.addWater(
-                    amount: HydrationModel.currentCupSize()
-                )
+                HydrationModel.addWaterML(cupML)
+                HydrationHistoryModel.addWaterML(cupML)
 
-                // Reload top card + chart
                 self.collectionView.reloadItems(
                     at: [
                         IndexPath(item: 0, section: 0),
@@ -109,7 +112,7 @@ extension HydrationViewController: UICollectionViewDataSource {
             return cell
         }
 
-        // CHART CARD
+        // CHART
         let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: CellReuseID.chart,
             for: indexPath
@@ -143,52 +146,151 @@ extension HydrationViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
+// MARK: - Glass Selector (ONLY GlassOptionCell.xib)
+extension HydrationViewController {
+
+    private func showSelector(
+        title: String,
+        subtitle: String,
+        options: [String],
+        onSelect: @escaping (Int) -> Void
+    ) {
+
+        guard selectorOverlayView == nil else { return }
+
+        // Overlay
+        let overlay = UIView(frame: view.bounds)
+        overlay.backgroundColor = UIColor.black.withAlphaComponent(0.25)
+
+        let blur = UIVisualEffectView(
+            effect: UIBlurEffect(style: .systemUltraThinMaterial)
+        )
+        blur.frame = overlay.bounds
+        blur.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        overlay.addSubview(blur)
+
+        // Card
+        let card = UIView()
+        card.backgroundColor = UIColor.white.withAlphaComponent(0.9)
+        card.layer.cornerRadius = 24
+        card.translatesAutoresizingMaskIntoConstraints = false
+
+        overlay.addSubview(card)
+        view.addSubview(overlay)
+
+        NSLayoutConstraint.activate([
+            card.centerYAnchor.constraint(equalTo: overlay.centerYAnchor),
+            card.leadingAnchor.constraint(equalTo: overlay.leadingAnchor, constant: 24),
+            card.trailingAnchor.constraint(equalTo: overlay.trailingAnchor, constant: -24)
+        ])
+
+        // Stack
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = 12
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        card.addSubview(stack)
+
+        NSLayoutConstraint.activate([
+            stack.topAnchor.constraint(equalTo: card.topAnchor, constant: 20),
+            stack.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 16),
+            stack.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -16),
+            stack.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -16)
+        ])
+
+        // Title
+        let titleLabel = UILabel()
+        titleLabel.text = title
+        titleLabel.font = .boldSystemFont(ofSize: 18)
+        titleLabel.textAlignment = .center
+
+        let subtitleLabel = UILabel()
+        subtitleLabel.text = subtitle
+        subtitleLabel.font = .systemFont(ofSize: 14)
+        subtitleLabel.textColor = .darkGray
+        subtitleLabel.textAlignment = .center
+
+        stack.addArrangedSubview(titleLabel)
+        stack.addArrangedSubview(subtitleLabel)
+
+        // OPTIONS
+        for (index, text) in options.enumerated() {
+            let cell = Bundle.main
+                .loadNibNamed("GlassOptionCell", owner: nil)?
+                .first as! GlassOptionCell
+
+            cell.configure(
+                text: text,
+                hideDivider: index == options.count - 1
+            )
+
+            cell.translatesAutoresizingMaskIntoConstraints = false
+            cell.heightAnchor.constraint(equalToConstant: 50).isActive = true
+
+            cell.onTap = { [weak self] in
+                self?.dismissSelector()
+                onSelect(index)
+            }
+
+            stack.addArrangedSubview(cell)
+        }
+
+        // Cancel
+        let cancelCell = Bundle.main
+            .loadNibNamed("GlassOptionCell", owner: nil)?
+            .first as! GlassOptionCell
+
+        cancelCell.configure(text: "Cancel", hideDivider: true)
+        cancelCell.translatesAutoresizingMaskIntoConstraints = false
+        cancelCell.heightAnchor.constraint(equalToConstant: 50).isActive = true
+
+        cancelCell.onTap = { [weak self] in
+            self?.dismissSelector()
+        }
+
+        stack.addArrangedSubview(cancelCell)
+
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissSelector))
+        overlay.addGestureRecognizer(tap)
+
+        selectorOverlayView = overlay
+    }
+
+    @objc private func dismissSelector() {
+        selectorOverlayView?.removeFromSuperview()
+        selectorOverlayView = nil
+    }
+}
+
 // MARK: - Goal / Cup Selectors
 extension HydrationViewController {
 
     func showGoalSelector() {
-        let options: [Double] = [1.5, 2.0, 2.5, 3.0, 3.5, 4.0]
+        let values = [1.5, 2.0, 2.5, 3.0, 3.5, 4.0]
+        let titles = values.map { "\($0) L" }
 
-        let alert = UIAlertController(
+        showSelector(
             title: "Daily Goal",
-            message: "Select your daily water goal",
-            preferredStyle: .actionSheet
-        )
-
-        options.forEach { value in
-            alert.addAction(
-                UIAlertAction(title: "\(value) L", style: .default) { _ in
-                    HydrationModel.setGoal(value)
-                    self.reloadTopCard()
-                }
-            )
+            subtitle: "Select your daily water goal",
+            options: titles
+        ) { index in
+            HydrationModel.setGoal(values[index])
+            self.reloadTopCard()
         }
-
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        present(alert, animated: true)
     }
 
     func showCupSelector() {
-        let options: [Double] = [0.1, 0.15, 0.2, 0.25, 0.3, 0.5]
+        let values: [Double] = [0.1, 0.15, 0.2, 0.25, 0.3, 0.5]
+        let titles = values.map { "\(Int($0 * 1000)) mL" }
 
-        let alert = UIAlertController(
+        showSelector(
             title: "Cup Size",
-            message: "Select your cup size",
-            preferredStyle: .actionSheet
-        )
-
-        options.forEach { value in
-            let ml = Int(value * 1000)
-            alert.addAction(
-                UIAlertAction(title: "\(ml) mL", style: .default) { _ in
-                    HydrationModel.setCupSize(value)
-                    self.reloadTopCard()
-                }
-            )
+            subtitle: "Select your cup size",
+            options: titles
+        ) { index in
+            HydrationModel.setCupSize(values[index])
+            self.reloadTopCard()
         }
-
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        present(alert, animated: true)
     }
 
     func reloadTopCard() {

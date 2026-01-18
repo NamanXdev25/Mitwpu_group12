@@ -1,39 +1,40 @@
-//
-//  HydrationModel.swift
-//  BreastCancerApp
-//
-//  Created by Gayatri Goundadkar on 05/01/26.
-//
-
 import Foundation
 
 struct HydrationModel {
 
     // MARK: - UserDefaults Keys
-    private static let consumedKey = "hydration_consumed"
-    private static let goalKey = "hydration_goal"
-    private static let cupSizeKey = "hydration_cup_size"
+    private static let consumedKey = "hydration_consumed"      // Int (mL)
+    private static let goalKey = "hydration_goal"              // Double (L)
+    private static let cupSizeKey = "hydration_cup_size"       // Double (L)
     private static let lastUpdatedDateKey = "hydration_last_date"
 
     // MARK: - Defaults
     static let defaultGoal: Double = 3.0      // Liters
-    static let defaultCupSize: Double = 0.2   // 200 ml in liters
+    static let defaultCupSize: Double = 0.2   // Liters (200 mL)
 
     // MARK: - Getters
 
+    /// Daily goal in liters
     static func currentGoal() -> Double {
         let value = UserDefaults.standard.double(forKey: goalKey)
         return value == 0 ? defaultGoal : value
     }
 
+    /// Cup size in liters
     static func currentCupSize() -> Double {
         let value = UserDefaults.standard.double(forKey: cupSizeKey)
         return value == 0 ? defaultCupSize : value
     }
 
-    static func consumedToday() -> Double {
+    /// Consumed today in **milliliters**
+    static func consumedTodayML() -> Int {
         checkForDailyReset()
-        return UserDefaults.standard.double(forKey: consumedKey)
+        return UserDefaults.standard.integer(forKey: consumedKey)
+    }
+
+    /// Consumed today in liters (UI convenience)
+    static func consumedToday() -> Double {
+        Double(consumedTodayML()) / 1000.0
     }
 
     // MARK: - Setters
@@ -46,15 +47,15 @@ struct HydrationModel {
         UserDefaults.standard.set(cupSize, forKey: cupSizeKey)
     }
 
-    static func addCup() {
+    /// ✅ Add water in **milliliters**
+    static func addWaterML(_ ml: Int) {
         checkForDailyReset()
-        let current = consumedToday()
-        let updated = current + currentCupSize()
-        UserDefaults.standard.set(updated, forKey: consumedKey)
+        let current = consumedTodayML()
+        UserDefaults.standard.set(current + ml, forKey: consumedKey)
     }
 
     static func resetConsumed() {
-        UserDefaults.standard.set(0.0, forKey: consumedKey)
+        UserDefaults.standard.set(0, forKey: consumedKey)
     }
 
     // MARK: - Daily Reset Logic
