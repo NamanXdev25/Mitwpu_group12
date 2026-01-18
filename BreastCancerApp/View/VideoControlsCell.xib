@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="VideoControlsCell" customModule="BreastCancerApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="190"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="393" height="190"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="currentTimeLabel" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EBy-Gv-jtC">
+                        <rect key="frame" x="19.999999999999993" y="7.9999999999999991" width="106.33333333333331" height="15.666666666666664"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="totalTimeLabel" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dDg-xE-lo0">
+                        <rect key="frame" x="283" y="7.9999999999999991" width="90" height="15.666666666666664"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <slider opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="ml2-WQ-iSs">
+                        <rect key="frame" x="20" y="24.666666666666671" width="353" height="34"/>
+                        <color key="minimumTrackTintColor" name="plusbuttoncolor"/>
+                        <color key="maximumTrackTintColor" name="MaximumTrackcolor"/>
+                        <connections>
+                            <action selector="sliderChanged:" destination="gTV-IL-0wX" eventType="valueChanged" id="7Ao-Lx-PpI"/>
+                            <action selector="sliderTouchDown:" destination="gTV-IL-0wX" eventType="valueChanged" id="DFb-2y-FTw"/>
+                            <action selector="sliderTouchUp:" destination="gTV-IL-0wX" eventType="valueChanged" id="zRK-jo-ZD1"/>
+                        </connections>
+                    </slider>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ge0-pb-NHt">
+                        <rect key="frame" x="160.66666666666666" y="61.666666666666657" width="72" height="72"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="72" id="4v3-El-xmY"/>
+                            <constraint firstAttribute="height" constant="72" id="SXB-Ld-bJj"/>
+                        </constraints>
+                        <color key="tintColor" name="plusbuttoncolor"/>
+                        <state key="normal" title="Button"/>
+                        <buttonConfiguration key="configuration" style="plain" image="play.circle.fill" catalog="system">
+                            <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" configurationType="pointSize" pointSize="56" weight="thin"/>
+                        </buttonConfiguration>
+                        <connections>
+                            <action selector="playTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="60M-Pw-LNz"/>
+                        </connections>
+                    </button>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fe3-ap-VKe">
+                        <rect key="frame" x="20" y="61.666666666666657" width="72" height="72"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="72" id="FrI-e7-ZMq"/>
+                            <constraint firstAttribute="height" constant="72" id="cch-ag-hEu"/>
+                        </constraints>
+                        <color key="tintColor" name="plusbuttoncolor"/>
+                        <state key="normal" title="Button"/>
+                        <buttonConfiguration key="configuration" style="plain" image="arrow.counterclockwise" catalog="system">
+                            <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" configurationType="pointSize" pointSize="28" weight="medium"/>
+                        </buttonConfiguration>
+                        <connections>
+                            <action selector="restartTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="i28-j2-LI4"/>
+                        </connections>
+                    </button>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ae4-UG-8Oe">
+                        <rect key="frame" x="301" y="61.666666666666657" width="72" height="72"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="72" id="5aE-VN-7AF"/>
+                            <constraint firstAttribute="height" constant="72" id="RyT-xN-Em7"/>
+                        </constraints>
+                        <color key="tintColor" name="plusbuttoncolor"/>
+                        <state key="normal" title="Button"/>
+                        <buttonConfiguration key="configuration" style="plain" image="repeat" catalog="system">
+                            <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" configurationType="pointSize" pointSize="28"/>
+                        </buttonConfiguration>
+                        <connections>
+                            <action selector="replayTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="Kkh-ei-t9A"/>
+                        </connections>
+                    </button>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="ae4-UG-8Oe" secondAttribute="trailing" constant="20" id="32h-at-alG"/>
+                <constraint firstItem="EBy-Gv-jtC" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="8" id="72H-bd-wLS"/>
+                <constraint firstItem="ae4-UG-8Oe" firstAttribute="top" secondItem="ml2-WQ-iSs" secondAttribute="bottom" constant="3" id="E7q-11-9kx"/>
+                <constraint firstAttribute="trailing" secondItem="ml2-WQ-iSs" secondAttribute="trailing" constant="20" id="GAf-8d-Khp"/>
+                <constraint firstItem="ml2-WQ-iSs" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="20" id="HFL-eh-yMg"/>
+                <constraint firstAttribute="trailing" secondItem="dDg-xE-lo0" secondAttribute="trailing" constant="20" id="JZw-el-gGN"/>
+                <constraint firstItem="ml2-WQ-iSs" firstAttribute="top" secondItem="EBy-Gv-jtC" secondAttribute="bottom" constant="1" id="LIA-6T-46I"/>
+                <constraint firstItem="Ge0-pb-NHt" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="N82-WP-OpK"/>
+                <constraint firstItem="dDg-xE-lo0" firstAttribute="centerY" secondItem="EBy-Gv-jtC" secondAttribute="centerY" id="NV1-og-oq0"/>
+                <constraint firstItem="fe3-ap-VKe" firstAttribute="top" secondItem="ml2-WQ-iSs" secondAttribute="bottom" constant="3" id="Rti-lx-yTX"/>
+                <constraint firstItem="dDg-xE-lo0" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="8" id="WHC-82-rMG"/>
+                <constraint firstItem="Ge0-pb-NHt" firstAttribute="top" secondItem="ml2-WQ-iSs" secondAttribute="bottom" constant="3" id="iVg-js-9nY"/>
+                <constraint firstItem="EBy-Gv-jtC" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="20" id="nOt-i8-hdL"/>
+                <constraint firstItem="fe3-ap-VKe" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="20" id="p3M-3y-dyT"/>
+            </constraints>
+            <size key="customSize" width="393" height="183"/>
+            <connections>
+                <outlet property="currentTimeLabel" destination="EBy-Gv-jtC" id="hrV-2q-QCl"/>
+                <outlet property="playButton" destination="Ge0-pb-NHt" id="k6G-8X-W1l"/>
+                <outlet property="progressSlider" destination="ml2-WQ-iSs" id="TZ5-5U-Id1"/>
+                <outlet property="replayButton" destination="ae4-UG-8Oe" id="FPX-RH-3eA"/>
+                <outlet property="restartButton" destination="fe3-ap-VKe" id="Utx-jw-mkc"/>
+                <outlet property="totalTimeLabel" destination="dDg-xE-lo0" id="NH6-29-Vfa"/>
+            </connections>
+            <point key="canvasLocation" x="104.58015267175573" y="50.70422535211268"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="arrow.counterclockwise" catalog="system" width="110" height="128"/>
+        <image name="play.circle.fill" catalog="system" width="128" height="123"/>
+        <image name="repeat" catalog="system" width="128" height="98"/>
+        <namedColor name="MaximumTrackcolor">
+            <color red="0.92000001668930054" green="0.92000001668930054" blue="0.92000001668930054" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="plusbuttoncolor">
+            <color red="0.9100000262260437" green="0.41600000858306885" blue="0.57300001382827759" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>
