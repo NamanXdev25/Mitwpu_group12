@@ -7,7 +7,7 @@
 
 import UIKit
 
-class EmptyStateCell: UICollectionViewCell {
+class BreathingEmptyStateCell: UICollectionViewCell {
 
     @IBOutlet weak var containerView: UIView!
     
