@@ -66,11 +66,11 @@
             <objects>
                 <viewController storyboardIdentifier="HealthStatusViewController" id="xKW-gD-z7M" customClass="HealthStatusViewController" customModule="BreastCancerApp" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="gDj-i0-LtW">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="793"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="qMQ-TT-mnf">
-                                <rect key="frame" x="0.0" y="59" width="393" height="734"/>
+                                <rect key="frame" x="0.0" y="172" width="393" height="612"/>
                                 <color key="backgroundColor" name="bg"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="LRR-Qm-hxy">
                                     <size key="itemSize" width="128" height="128"/>
@@ -112,6 +112,8 @@
         <scene sceneID="hRr-ke-bSF">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="RWh-xn-wYT" sceneMemberID="viewController">
+                    <string key="storyboardIdentifier">HealthStatusNavigationController
+</string>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="x2r-Jw-qRT">
                         <rect key="frame" x="0.0" y="118" width="393" height="54"/>
@@ -128,7 +130,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="2Ro-h8-LUu"/>
+        <segue reference="WGB-vt-an3"/>
     </inferredMetricsTieBreakers>
     <resources>
         <namedColor name="bg">

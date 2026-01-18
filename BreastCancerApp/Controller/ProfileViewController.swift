@@ -3,27 +3,7 @@ import UIKit
 final class ProfileViewController: UIViewController {
 
     // MARK: - Outlets
-    @IBOutlet private weak var collectionView: UICollectionView!
-
-    // MARK: - Constants
-    private enum Layout {
-        static let horizontalInset: CGFloat = 16
-        static let verticalInset: CGFloat = 16
-        static let lineSpacing: CGFloat = 8
-
-        static let profileHeaderHeight: CGFloat = 160
-        static let healthStatusHeight: CGFloat = 72
-        static let notificationsHeaderHeight: CGFloat = 20
-        static let notificationTogglesHeight: CGFloat = 208
-    }
-
-    private enum Strings {
-        static let profileName = "Sophie Chen"
-        static let healthStatusTitle = "Health Status"
-        static let notificationsTitle = "Notifications"
-        static let storyboardName = "Main"
-        static let healthStatusVCIdentifier = "HealthStatusViewController"
-    }
+    @IBOutlet weak var collectionView: UICollectionView!
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -34,54 +14,40 @@ final class ProfileViewController: UIViewController {
 
     // MARK: - Setup
     private func setupCollectionView() {
-        collectionView.backgroundColor = .clear
         collectionView.dataSource = self
         collectionView.delegate = self
+        collectionView.backgroundColor = .clear
     }
 
     private func registerCells() {
         collectionView.register(
-            UINib(nibName: ProfileHeaderCell.reuseIdentifier, bundle: nil),
+            UINib(nibName: "ProfileHeaderCell", bundle: nil),
             forCellWithReuseIdentifier: ProfileHeaderCell.reuseIdentifier
         )
 
         collectionView.register(
-            UINib(nibName: HealthStatusCell.reuseIdentifier, bundle: nil),
+            UINib(nibName: "HealthStatusCell", bundle: nil),
             forCellWithReuseIdentifier: HealthStatusCell.reuseIdentifier
         )
 
         collectionView.register(
-            UINib(nibName: NotificationsHeaderCell.reuseIdentifier, bundle: nil),
+            UINib(nibName: "NotificationsHeaderCell", bundle: nil),
             forCellWithReuseIdentifier: NotificationsHeaderCell.reuseIdentifier
         )
 
         collectionView.register(
-            UINib(nibName: NotificationTogglesCell.reuseIdentifier, bundle: nil),
+            UINib(nibName: "NotificationTogglesCell", bundle: nil),
             forCellWithReuseIdentifier: NotificationTogglesCell.reuseIdentifier
         )
-    }
-
-    // MARK: - Navigation
-    private func presentHealthStatus() {
-        let storyboard = UIStoryboard(name: Strings.storyboardName, bundle: nil)
-        let viewController = storyboard.instantiateViewController(
-            withIdentifier: Strings.healthStatusVCIdentifier
-        ) as! HealthStatusViewController
-
-        let navigationController = UINavigationController(rootViewController: viewController)
-        navigationController.modalPresentationStyle = .fullScreen
-        present(navigationController, animated: true)
     }
 }
 
 // MARK: - UICollectionViewDataSource
 extension ProfileViewController: UICollectionViewDataSource {
 
-    func collectionView(
-        _ collectionView: UICollectionView,
-        numberOfItemsInSection section: Int
-    ) -> Int {
-        4
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        // Profile Header + Health Status + Notifications Header + Toggles
+        return 4
     }
 
     func collectionView(
@@ -98,7 +64,7 @@ extension ProfileViewController: UICollectionViewDataSource {
             ) as! ProfileHeaderCell
 
             cell.configure(
-                name: Strings.profileName,
+                name: "Sophie Chen",
                 image: UIImage(named: "profile_placeholder")
                     ?? UIImage(systemName: "person.crop.circle.fill")
             )
@@ -110,7 +76,7 @@ extension ProfileViewController: UICollectionViewDataSource {
                 for: indexPath
             ) as! HealthStatusCell
 
-            cell.configure(title: Strings.healthStatusTitle)
+            cell.configure(title: "Health Status")
             return cell
 
         case 2:
@@ -119,7 +85,7 @@ extension ProfileViewController: UICollectionViewDataSource {
                 for: indexPath
             ) as! NotificationsHeaderCell
 
-            cell.configure(title: Strings.notificationsTitle)
+            cell.configure(title: "Notifications")
             return cell
 
         default:
@@ -140,17 +106,17 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
 
-        let width = collectionView.bounds.width - (Layout.horizontalInset * 2)
+        let width = collectionView.bounds.width - 32
 
         switch indexPath.item {
         case 0:
-            return CGSize(width: width, height: Layout.profileHeaderHeight)
+            return CGSize(width: width, height: 160) // Profile header
         case 1:
-            return CGSize(width: width, height: Layout.healthStatusHeight)
+            return CGSize(width: width, height: 72)  // Health status
         case 2:
-            return CGSize(width: width, height: Layout.notificationsHeaderHeight)
+            return CGSize(width: width, height: 20)  // Notifications header (tight)
         default:
-            return CGSize(width: width, height: Layout.notificationTogglesHeight)
+            return CGSize(width: width, height: 208) // Notification toggles
         }
     }
 
@@ -159,12 +125,7 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         insetForSectionAt section: Int
     ) -> UIEdgeInsets {
-        UIEdgeInsets(
-            top: Layout.verticalInset,
-            left: Layout.horizontalInset,
-            bottom: Layout.verticalInset,
-            right: Layout.horizontalInset
-        )
+        UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
     }
 
     func collectionView(
@@ -172,14 +133,20 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         minimumLineSpacingForSectionAt section: Int
     ) -> CGFloat {
-        Layout.lineSpacing
+        8
     }
 
-    func collectionView(
-        _ collectionView: UICollectionView,
-        didSelectItemAt indexPath: IndexPath
-    ) {
-        guard indexPath.item == 1 else { return }
-        presentHealthStatus()
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.item == 1 {
+            let storyboard = UIStoryboard(name: "profile", bundle: nil)
+            let vc = storyboard.instantiateViewController(
+                withIdentifier: "HealthStatusViewController"
+            ) as! HealthStatusViewController
+
+            let navController = UINavigationController(rootViewController: vc)
+            navController.modalPresentationStyle = .fullScreen
+
+            present(navController, animated: true)
+        }
     }
 }
