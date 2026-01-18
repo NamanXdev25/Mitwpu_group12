@@ -1,0 +1,70 @@
+{
+  "symptoms": [
+    {
+      "id": "1",
+      "name": "Fatigue",
+      "description": "Unusual and persistent tiredness common during breast cancer treatment; can impact daily functioning and may not get better with rest.",
+      "isInUserListByDefault": true
+    },
+    {
+      "id": "2",
+      "name": "Nausea",
+      "description": "Feeling sick to your stomach or vomiting often occurs with chemotherapy or targeted therapies and may affect appetite and hydration.",
+      "isInUserListByDefault": true
+    },
+    {
+      "id": "3",
+      "name": "Pain",
+      "description": "Pain or discomfort anywhere (surgical site, bones, joints, chest, etc.) that may be treatment related — track severity and location.",
+      "isInUserListByDefault": true
+    },
+    {
+      "id": "4",
+      "name": "Peripheral Neuropathy",
+      "description": "Tingling, numbness, or burning in hands/feet often caused by chemotherapy — track how it affects daily tasks.",
+      "isInUserListByDefault": false
+    },
+    {
+      "id": "5",
+      "name": "Appetite Changes",
+      "description": "Loss of appetite or changes in hunger levels; can be linked to nausea, taste changes, or other treatment effects.",
+      "isInUserListByDefault": false
+    },
+    {
+      "id": "6",
+      "name": "Sleep Disturbance / Insomnia",
+      "description": "Difficulty falling or staying asleep, or non-restorative sleep, which commonly co-occurs with fatigue and treatment stress.",
+      "isInUserListByDefault": false
+    },
+    {
+      "id": "7",
+      "name": "Mood Symptoms (Anxiety / Depression)",
+      "description": "Feelings of sadness, hopelessness, or anxiety that can result from and worsen treatment side effects; track daily changes.",
+      "isInUserListByDefault": false
+    },
+    {
+      "id": "8",
+      "name": "Cognitive Changes (Chemobrain)",
+      "description": "Problems with memory, concentration or thinking often reported during and after chemotherapy, useful to monitor over time.",
+      "isInUserListByDefault": false
+    },
+    {
+      "id": "9",
+      "name": "Skin Irritation / Radiation Dermatitis",
+      "description": "Redness, dryness, or peeling of skin in radiated areas or where topical treatment is applied.",
+      "isInUserListByDefault": false
+    },
+    {
+      "id": "10",
+      "name": "Swelling / Lymphedema",
+      "description": "Swelling of arms/hands following surgery or lymph node removal; track size changes and discomfort.",
+      "isInUserListByDefault": false
+    },
+    {
+      "id": "11",
+      "name": "Shortness of Breath",
+      "description": "New or worsening breathlessness can be due to anemia, cardiotoxicity, or lung effects; needs prompt reporting.",
+      "isInUserListByDefault": false
+    }
+  ]
+}

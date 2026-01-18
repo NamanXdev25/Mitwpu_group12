@@ -1,0 +1,89 @@
+//
+//  SymptomSelectionCell.swift
+//  BreastCancerApp
+//
+//  Created by Shivani Dinesh on 08/01/26.
+//
+
+import UIKit
+
+final class SymptomSelectionCell: UICollectionViewCell {
+
+    // IBOutlets
+    @IBOutlet weak var checkboxButton: UIButton!
+    @IBOutlet weak var symptomNameLabel: UILabel!
+    @IBOutlet weak var infoButton: UIButton!
+    @IBOutlet weak var sliderContainerView: UIView!
+    @IBOutlet weak var severitySlider: UISlider!
+    @IBOutlet weak var mildLabel: UILabel!
+    @IBOutlet weak var severeLabel: UILabel!
+
+    // Callbacks
+    var onCheckboxTapped: (() -> Void)?
+    var onInfoTapped: (() -> Void)?
+    var onSliderChanged: ((Int) -> Void)?
+
+    private var isSymptomSelected: Bool = false
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        setupUI()
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        setSelected(false)
+        severitySlider.value = 0
+    }
+
+    func configure(with symptom: Symptom, isSelected: Bool, severity: Int) {
+        symptomNameLabel.text = symptom.name
+        severitySlider.value = Float(severity)
+        setSelected(isSelected)
+    }
+
+    // UI setup
+    private func setupUI() {
+        // slider config
+        severitySlider.minimumValue = 0
+        severitySlider.maximumValue = 4
+        severitySlider.isContinuous = true
+
+        // initial collapsed state
+        sliderContainerView.isHidden = true
+
+        // Button actions
+        checkboxButton.addTarget(self, action: #selector(checkboxTapped), for: .touchUpInside)
+        infoButton.addTarget(self, action: #selector(infoTapped), for: .touchUpInside)
+        severitySlider.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
+
+    }
+
+    // selection
+    private func setSelected(_ selected: Bool) {
+        isSymptomSelected = selected
+
+        let imageName = selected ? "checkmark.circle.fill" : "circle"
+        checkboxButton.setImage(UIImage(systemName: imageName), for: .normal)
+        checkboxButton.tintColor = selected
+            ? UIColor(named: "SymptomsPrimaryColor")
+            : .systemGray
+
+        sliderContainerView.isHidden = !selected
+    }
+
+    // actions
+    @objc private func checkboxTapped() {
+        onCheckboxTapped?()
+    }
+
+    @objc private func infoTapped() {
+        onInfoTapped?()
+    }
+
+    @objc private func sliderValueChanged(_ sender: UISlider) {
+        let rounded = Int(sender.value.rounded())
+        sender.value = Float(rounded)
+        onSliderChanged?(rounded)
+    }
+}
