@@ -10,14 +10,14 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="WelcomeHeaderCollectionViewCell" customModule="BreastCancerApp" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="120"/>
+            <rect key="frame" x="0.0" y="0.0" width="395" height="314"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="375" height="120"/>
+                <rect key="frame" x="0.0" y="0.0" width="395" height="314"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome Back" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VMc-CI-yAh">
-                        <rect key="frame" x="16" y="32" width="343" height="34"/>
+                        <rect key="frame" x="16" y="70" width="363" height="34"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="34" id="Nf5-Zg-ZcU"/>
                         </constraints>
@@ -25,7 +25,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Login to your account" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sFl-hf-7yE">
-                        <rect key="frame" x="16" y="74" width="343" height="20"/>
+                        <rect key="frame" x="16" y="112" width="363" height="20"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="20" id="erD-Ra-RdM"/>
                         </constraints>
@@ -37,19 +37,19 @@
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <constraints>
-                <constraint firstItem="VMc-CI-yAh" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="32" id="0JE-1i-G4V"/>
+                <constraint firstItem="VMc-CI-yAh" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="70" id="0JE-1i-G4V"/>
                 <constraint firstItem="VMc-CI-yAh" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="Ccw-kC-E46"/>
                 <constraint firstAttribute="trailing" secondItem="VMc-CI-yAh" secondAttribute="trailing" constant="16" id="Xm5-wX-bOa"/>
                 <constraint firstItem="sFl-hf-7yE" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="dk0-q2-172"/>
                 <constraint firstAttribute="trailing" secondItem="sFl-hf-7yE" secondAttribute="trailing" constant="16" id="gfl-G9-4R8"/>
                 <constraint firstItem="sFl-hf-7yE" firstAttribute="top" secondItem="VMc-CI-yAh" secondAttribute="bottom" constant="8" id="tLu-Fc-8fm"/>
             </constraints>
-            <size key="customSize" width="299" height="339"/>
+            <size key="customSize" width="319" height="533"/>
             <connections>
                 <outlet property="subtitleLabel" destination="sFl-hf-7yE" id="c8O-4t-C5R"/>
                 <outlet property="titleLabel" destination="VMc-CI-yAh" id="wnp-1S-n7e"/>
             </connections>
-            <point key="canvasLocation" x="237.40458015267174" y="123.59154929577466"/>
+            <point key="canvasLocation" x="252.67175572519082" y="191.5492957746479"/>
         </collectionViewCell>
     </objects>
 </document>
