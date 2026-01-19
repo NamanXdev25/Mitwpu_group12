@@ -209,7 +209,7 @@
                 <outlet property="passwordTextField" destination="RF7-61-PVc" id="mUM-xS-f5b"/>
                 <outlet property="rememberMeButton" destination="gIo-aH-ENb" id="n8G-IX-xUB"/>
             </connections>
-            <point key="canvasLocation" x="78.625954198473281" y="97.183098591549296"/>
+            <point key="canvasLocation" x="389" y="94"/>
         </collectionViewCell>
     </objects>
     <resources>

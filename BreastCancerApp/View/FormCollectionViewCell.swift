@@ -1,10 +1,3 @@
-//
-//  FormCollectionViewCell.swift
-//  BreastCancerApp
-//
-//  Created by Shloka on 18/01/26.
-//
-
 import UIKit
 
 class FormCollectionViewCell: UICollectionViewCell {
@@ -21,32 +14,64 @@ class FormCollectionViewCell: UICollectionViewCell {
     }
 
     private func setupUI() {
+
+        // 🔴 CRITICAL (Safe Area present)
+        contentView.isUserInteractionEnabled = true
+        isUserInteractionEnabled = true
+
+        // TextFields
         emailTextField.isUserInteractionEnabled = true
         passwordTextField.isUserInteractionEnabled = true
         passwordTextField.isSecureTextEntry = true
 
-        eyeButton.setImage(UIImage(named: "icon_eye_closed"), for: .normal)
+        // Borders
+        applyBorder(to: emailTextField.superview)
+        applyBorder(to: passwordTextField.superview)
 
-        rememberMeButton.setImage(UIImage(named: "icon_checkbox_unchecked"), for: .normal)
-        rememberMeButton.setImage(UIImage(named: "icon_checkbox_checked"), for: .selected)
+        // Eye button
+        eyeButton.adjustsImageWhenHighlighted = false
 
-        
-        loginButton.backgroundColor = UIColor.systemPink
+        // ✅ Checkbox — SF Symbols + Pink color
+        rememberMeButton.adjustsImageWhenHighlighted = false
+        rememberMeButton.tintColor = UIColor(named: "Pink")
+        rememberMeButton.setImage(
+            UIImage(systemName: "square"),
+            for: .normal
+        )
+
+        // ✅ Login button — ALWAYS Pink
+        loginButton.adjustsImageWhenHighlighted = false
+        loginButton.backgroundColor = UIColor(named: "Pink")
+        loginButton.setTitleColor(.white, for: .normal)
         loginButton.layer.cornerRadius = 26
         loginButton.clipsToBounds = true
     }
 
+    private func applyBorder(to view: UIView?) {
+        guard let view = view else { return }
+        view.layer.cornerRadius = 14
+        view.layer.borderWidth = 1
+        view.layer.borderColor = UIColor(named: "Pink")?.cgColor
+        view.clipsToBounds = true
+    }
+
+    // MARK: - Actions
 
     @IBAction func didTapEyeButton(_ sender: UIButton) {
         sender.isSelected.toggle()
-
         passwordTextField.isSecureTextEntry.toggle()
-
-        let imageName = sender.isSelected ? "icon_eye_open" : "icon_eye_closed"
-        sender.setImage(UIImage(named: imageName), for: .normal)
     }
 
     @IBAction func didTapRememberMe(_ sender: UIButton) {
         sender.isSelected.toggle()
+
+        let symbolName = sender.isSelected
+            ? "checkmark.square.fill"
+            : "square"
+
+        sender.setImage(
+            UIImage(systemName: symbolName),
+            for: .normal
+        )
     }
 }
