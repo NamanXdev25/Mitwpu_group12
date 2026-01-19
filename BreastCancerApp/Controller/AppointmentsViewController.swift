@@ -111,9 +111,9 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
     // MARK: - Calendar Methods
     private func setMonthView() {
         totalSquares.removeAll()
-        let daysInMonth = CalendarHelper().daysInMonth(date: selectedDate)
-        let firstDayOfMonth = CalendarHelper().firstOfMonth(date: selectedDate)
-        let startingSpaces = CalendarHelper().weekDay(date: firstDayOfMonth)
+        let daysInMonth = AppointmentCalendarHelper().daysInMonth(date: selectedDate)
+        let firstDayOfMonth = AppointmentCalendarHelper().firstOfMonth(date: selectedDate)
+        let startingSpaces = AppointmentCalendarHelper().weekDay(date: firstDayOfMonth)
         
         var count = 1
         while count < startingSpaces {
@@ -262,12 +262,12 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
     }
     
     @IBAction func previousMonthTapped(_ sender: UIButton) {
-        selectedDate = CalendarHelper().minusMonth(date: selectedDate)
+        selectedDate = AppointmentCalendarHelper().minusMonth(date: selectedDate)
         setMonthView()
     }
     
     @IBAction func nextMonthTapped(_ sender: UIButton) {
-        selectedDate = CalendarHelper().plusMonth(date: selectedDate)
+        selectedDate = AppointmentCalendarHelper().plusMonth(date: selectedDate)
         setMonthView()
     }
     
@@ -545,7 +545,7 @@ extension AppointmentsViewController: AddAppointmentDelegate {
     }
 }
 // MARK: - CalendarHelper
-class CalendarHelper {
+class AppointmentCalendarHelper {
     let calendar = Calendar.current
     
     func plusMonth(date: Date) -> Date {

@@ -88,9 +88,9 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
     
     func setMonthView() {
         totalSquares.removeAll()
-        let daysInMonth = CalendarHelper().daysInMonth(date: selectedDate)
-        let firstDayOfMonth = CalendarHelper().firstOfMonth(date: selectedDate)
-        let startingSpaces = CalendarHelper().weekDay(date: firstDayOfMonth)
+        let daysInMonth = ExerciseCalendarHelper().daysInMonth(date: selectedDate)
+        let firstDayOfMonth = ExerciseCalendarHelper().firstOfMonth(date: selectedDate)
+        let startingSpaces = ExerciseCalendarHelper().weekDay(date: firstDayOfMonth)
         
         var count = 1
         while count < startingSpaces {
@@ -231,12 +231,12 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
     }
     
     @IBAction func previousMonth(_ sender: Any) {
-        selectedDate = CalendarHelper().minusMonth(date: selectedDate)
+        selectedDate = ExerciseCalendarHelper().minusMonth(date: selectedDate)
         setMonthView()
     }
     
     @IBAction func nextMonth(_ sender: Any) {
-        let nextMonthDate = CalendarHelper().plusMonth(date: selectedDate)
+        let nextMonthDate = ExerciseCalendarHelper().plusMonth(date: selectedDate)
         
         let calendar = Calendar.current
         let currentYear = calendar.component(.year, from: Date())
@@ -365,7 +365,7 @@ class CalendarViewController: UIViewController, UICollectionViewDataSource, UICo
     }
 }
 
-class CalendarHelper {
+class ExerciseCalendarHelper {
     let calendar = Calendar.current
     func plusMonth(date: Date) -> Date { return calendar.date(byAdding: .month, value: 1, to: date)! }
     func minusMonth(date: Date) -> Date { return calendar.date(byAdding: .month, value: -1, to: date)! }

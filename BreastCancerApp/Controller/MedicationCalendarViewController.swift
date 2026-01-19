@@ -101,9 +101,9 @@ class MedicationCalendarViewController: UIViewController, UICollectionViewDataSo
     // MARK: - Calendar Methods
     private func setMonthView() {
         totalSquares.removeAll()
-        let daysInMonth = CalendarHelper().daysInMonth(date: selectedDate)
-        let firstDayOfMonth = CalendarHelper().firstOfMonth(date: selectedDate)
-        let startingSpaces = CalendarHelper().weekDay(date: firstDayOfMonth)
+        let daysInMonth = MedicationCalendarHelper().daysInMonth(date: selectedDate)
+        let firstDayOfMonth = MedicationCalendarHelper().firstOfMonth(date: selectedDate)
+        let startingSpaces = MedicationCalendarHelper().weekDay(date: firstDayOfMonth)
         
         var count = 1
         while count < startingSpaces {
@@ -254,12 +254,12 @@ class MedicationCalendarViewController: UIViewController, UICollectionViewDataSo
     }
     
     @IBAction func previousMonthTapped(_ sender: UIButton) {
-        selectedDate = CalendarHelper().minusMonth(date: selectedDate)
+        selectedDate = MedicationCalendarHelper().minusMonth(date: selectedDate)
         setMonthView()
     }
     
     @IBAction func nextMonthTapped(_ sender: UIButton) {
-        let nextMonthDate = CalendarHelper().plusMonth(date: selectedDate)
+        let nextMonthDate = MedicationCalendarHelper().plusMonth(date: selectedDate)
         
         let calendar = Calendar.current
         let currentYear = calendar.component(.year, from: Date())
@@ -391,7 +391,7 @@ class MedicationCalendarViewController: UIViewController, UICollectionViewDataSo
 }
 
 // MARK: - CalendarHelper
-class CalendarHelper {
+class MedicationCalendarHelper {
     let calendar = Calendar.current
     func plusMonth(date: Date) -> Date {
         return calendar.date(byAdding: .month, value: 1, to: date)!

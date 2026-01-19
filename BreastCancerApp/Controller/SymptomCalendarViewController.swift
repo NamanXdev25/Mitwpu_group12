@@ -159,9 +159,9 @@ class SymptomCalendarViewController: UIViewController, UICollectionViewDataSourc
     func setMonthView() {
         totalSquares.removeAll()
         
-        let daysInMonth = CalendarHelper().daysInMonth(date: selectedDate)
-        let firstDayOfMonth = CalendarHelper().firstOfMonth(date: selectedDate)
-        let startingSpaces = CalendarHelper().weekDay(date: firstDayOfMonth)
+        let daysInMonth = SymptomCalendarHelper().daysInMonth(date: selectedDate)
+        let firstDayOfMonth = SymptomCalendarHelper().firstOfMonth(date: selectedDate)
+        let startingSpaces = SymptomCalendarHelper().weekDay(date: firstDayOfMonth)
         
         var count: Int = 1
         while(count < startingSpaces) {
@@ -224,12 +224,12 @@ class SymptomCalendarViewController: UIViewController, UICollectionViewDataSourc
     }
     
     @IBAction func previousMonth(_ sender: Any) {
-        selectedDate = CalendarHelper().minusMonth(date: selectedDate)
+        selectedDate = SymptomCalendarHelper().minusMonth(date: selectedDate)
         setMonthView()
     }
     
     @IBAction func nextMonth(_ sender: Any) {
-        selectedDate = CalendarHelper().plusMonth(date: selectedDate)
+        selectedDate = SymptomCalendarHelper().plusMonth(date: selectedDate)
         setMonthView()
     }
     
@@ -354,7 +354,7 @@ class SymptomCalendarViewController: UIViewController, UICollectionViewDataSourc
 }
 
 // helper class
-class CalendarHelper {
+class SymptomCalendarHelper {
     let calendar = Calendar.current
     func plusMonth(date: Date) -> Date {
         return calendar.date(byAdding: .month, value: 1, to: date)!
