@@ -34,7 +34,7 @@ class SymptomsViewController: UIViewController {
     }
     
     @IBAction func calendarTapped(_ sender: UIBarButtonItem) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let storyboard = UIStoryboard(name: "symptomMain", bundle: nil)
         let nav = storyboard.instantiateViewController(
             withIdentifier: "CalendarNavController"
         )
@@ -263,7 +263,7 @@ class SymptomsViewController: UIViewController {
     }
     
     private func openEditList() {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let storyboard = UIStoryboard(name: "symptomMain", bundle: nil)
         let editVC = storyboard.instantiateViewController(
             withIdentifier: "EditSymptomListViewController"
         ) as! EditSymptomListViewController

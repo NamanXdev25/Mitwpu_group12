@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="lUf-1a-524">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="qNL-Nd-sUi">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Logs-->
+        <!--Log View Controller-->
         <scene sceneID="6r2-pp-zBa">
             <objects>
                 <viewController id="lUf-1a-524" customClass="LogViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
@@ -47,14 +47,33 @@
                             <constraint firstItem="a1b-h7-2iJ" firstAttribute="top" secondItem="ioe-6q-PJ4" secondAttribute="top" id="X2k-xm-12B"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Logs" image="heart.text.clipboard" catalog="system" selectedImage="heart.text.clipboard.fill" id="aYc-uw-lD7"/>
+                    <navigationItem key="navigationItem" id="LLs-Bb-Vm5"/>
                     <connections>
                         <outlet property="collectionView" destination="a1b-h7-2iJ" id="j0V-NF-l9v"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S5a-op-HEh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1257" y="228"/>
+            <point key="canvasLocation" x="596.18320610687022" y="227.46478873239437"/>
+        </scene>
+        <!--Logs-->
+        <scene sceneID="CX1-1h-ZT2">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="qNL-Nd-sUi" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Logs" image="heart.text.clipboard" catalog="system" selectedImage="heart.text.clipboard.fill" id="aYc-uw-lD7"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Bh6-7O-oZc">
+                        <rect key="frame" x="0.0" y="118" width="393" height="54"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="lUf-1a-524" kind="relationship" relationship="rootViewController" id="5IQ-tX-Oaa"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="De1-br-3G8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-330.53435114503816" y="227.46478873239437"/>
         </scene>
     </scenes>
     <resources>

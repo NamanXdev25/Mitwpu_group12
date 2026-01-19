@@ -73,6 +73,7 @@ class LogViewController: UIViewController, UICollectionViewDataSource, UICollect
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LogsStatsRowCell", for: indexPath) as! LogsStatsRowCell
             let statsData = dataStore.getStats()
             cell.configure(with: statsData)
+            cell.delegate = self
             return cell
             
         case 2:
@@ -92,6 +93,7 @@ class LogViewController: UIViewController, UICollectionViewDataSource, UICollect
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LogsTrackingCell", for: indexPath) as! LogsTrackingCell
             if let tracking = dataStore.getHealthTrackingItem(at: indexPath.row) {
                 cell.configure(with: tracking)
+                cell.delegate = self
             }
             return cell
             
@@ -108,7 +110,8 @@ class LogViewController: UIViewController, UICollectionViewDataSource, UICollect
         ) as! LogsSectionHeader
         
         if let headerModel = dataStore.getSectionHeader(for: indexPath.section) {
-            header.configure(with: headerModel)
+            header.configure(with: headerModel, section: indexPath.section)
+            header.delegate = self
         }
         
         return header
@@ -174,6 +177,70 @@ class LogViewController: UIViewController, UICollectionViewDataSource, UICollect
                 section.boundarySupplementaryItems = [header]
                 return section
             }
+        }
+    }
+}
+// MARK: - LogsStatsRowCell Delegate
+extension LogViewController: LogsStatsRowCellDelegate {
+    func didTapExercise() {
+        let storyboard = UIStoryboard(name: "Exercise", bundle: nil)
+        if let exerciseVC = storyboard.instantiateViewController(withIdentifier: "ExerciseViewController") as? ExerciseViewController {
+            navigationController?.pushViewController(exerciseVC, animated: true)
+        }
+    }
+    
+    func didTapHydration() {
+        // Handle hydration tap if needed
+    }
+}
+// MARK: - LogsTrackingCell Delegate
+extension LogViewController: LogsTrackingCellDelegate {
+    func didTapTrackingCell(with model: HealthTrackingModel) {
+        // Check which cell was tapped based on the title or add an identifier to HealthTrackingModel
+        if model.title == "Self-Exam Steps" {
+            let storyboard = UIStoryboard(name: "selfexam", bundle: nil)
+            guard let selfexamVC = storyboard.instantiateViewController(
+                withIdentifier: "SelfExamineViewController"
+            ) as? SelfExamineViewController else { return }
+            
+            navigationController?.pushViewController(selfexamVC, animated: true)
+        } else if model.title == "Track Your Symptoms" {
+            // Navigate to symptom tracking screen
+             let storyboard = UIStoryboard(name: "symptomMain", bundle: nil)
+            guard let symptomVC = storyboard.instantiateViewController(
+               withIdentifier: "SymptomsViewController"
+             ) as? SymptomsViewController else { return }
+                navigationController?.pushViewController(symptomVC, animated: true)
+            print("Navigate to Symptom Tracking")
+        }
+    }
+}
+// MARK: - LogsSectionHeader Delegate
+extension LogViewController: LogsSectionHeaderDelegate {
+    func didTapManageButton(for section: Int) {
+        switch section {
+        case 2: // Appointments
+            // Navigate to manage appointments screen
+            let storyboard = UIStoryboard(name: "Appointments", bundle: nil)
+            if let appointmentsVC = storyboard.instantiateViewController(
+                withIdentifier: "CalendarViewController"
+            ) as? AppointmentsViewController {
+                navigationController?.pushViewController(appointmentsVC, animated: true)
+            }
+            print("Navigate to Manage Appointments")
+            
+        case 3: // Medications
+            // Navigate to manage medications screen
+            let storyboard = UIStoryboard(name: "Medication", bundle: nil)
+            if let medicationsVC = storyboard.instantiateViewController(
+                withIdentifier: "MedicationViewController"
+            ) as? MedicationViewController {
+                navigationController?.pushViewController(medicationsVC, animated: true)
+            }
+            print("Navigate to Manage Medications")
+            
+        default:
+            break
         }
     }
 }

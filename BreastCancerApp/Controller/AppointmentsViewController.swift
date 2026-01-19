@@ -12,7 +12,6 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
     // MARK: - Outlets
     @IBOutlet weak var monthLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var backBarButton: UIBarButtonItem!
     
     // Navigation arrows
     @IBOutlet weak var previousMonth: UIButton!
@@ -233,11 +232,6 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
         }
         
         print("📊 Appointments: \(numberOfItems), Table: \(actualTableHeight), Container: \(totalContainerHeight)")
-    }
-    
-    // MARK: - IBActions
-    @IBAction func backButtonTapped(_ sender: UIBarButtonItem) {
-        dismiss(animated: true)
     }
     
     @IBAction func headerToggleButtonTapped(_ sender: UIButton) {
