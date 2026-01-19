@@ -28,6 +28,8 @@ class ExerciseManager {
     
     static let shared = ExerciseManager()
     
+    static let exerciseDataDidChangeNotification = Notification.Name("ExerciseDataDidChange")
+    
     private let todaysPlanStorageKey = "com.yourapp.todaysPlan.v1"
     private let historyStorageKey = "com.yourapp.history.v1"
     
@@ -195,6 +197,9 @@ class ExerciseManager {
             todaysPlan[index].isCompleted.toggle()
             saveTodaysPlan()
             updateHistoryForToday()
+            
+            NotificationCenter.default.post(name: ExerciseManager.exerciseDataDidChangeNotification, object: nil)
+
         }
     }
     
@@ -203,6 +208,9 @@ class ExerciseManager {
         todaysPlan.insert(item, at: 0)
         saveTodaysPlan()
         updateHistoryForToday()
+        
+        NotificationCenter.default.post(name: ExerciseManager.exerciseDataDidChangeNotification, object: nil)
+
     }
 
     func containsExercise(id: String) -> Bool {
@@ -217,6 +225,9 @@ class ExerciseManager {
         if removed > 0 {
             saveTodaysPlan()
             updateHistoryForToday()
+            
+            NotificationCenter.default.post(name: ExerciseManager.exerciseDataDidChangeNotification, object: nil)
+
         }
         return removed
     }

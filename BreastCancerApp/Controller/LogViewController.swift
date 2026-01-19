@@ -16,7 +16,33 @@ class LogViewController: UIViewController, UICollectionViewDataSource, UICollect
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
+        setupNotificationObserver()
     }
+    
+    private func setupNotificationObserver() {
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(exerciseDataDidChange),
+                name: ExerciseManager.exerciseDataDidChangeNotification,
+                object: nil
+            )
+        }
+        
+        @objc private func exerciseDataDidChange() {
+            // Reload only the stats section for better performance
+            collectionView.reloadSections(IndexSet(integer: 1))
+        }
+        
+        deinit {
+            NotificationCenter.default.removeObserver(self)
+        }
+    
+    override func viewWillAppear(_ animated: Bool) {
+            super.viewWillAppear(animated)
+            // Reload the stats section to reflect updated exercise data
+            collectionView.reloadSections(IndexSet(integer: 1))
+    }
+    
     
     private func setupCollectionView() {
         collectionView.dataSource = self

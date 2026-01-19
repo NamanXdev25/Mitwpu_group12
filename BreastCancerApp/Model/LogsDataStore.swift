@@ -4,7 +4,6 @@ class LogsDataStore {
     
     private var header: HeaderModel
     private var appointment: AppointmentModel
-    private var stats: StatsModel
     private var medications: [MedicationModel] = []
     private var healthTracking: [HealthTrackingModel] = []
     
@@ -14,10 +13,6 @@ class LogsDataStore {
         // Initialize with default values
         self.header = HeaderModel(title: "", date: "")
         self.appointment = AppointmentModel(title: "", doctorName: "", dateAndYear: "", time: "")
-        self.stats = StatsModel(
-            hydration: StatsModel.StatItem(title: "", currentValue: "", goalValue: "", subtitle: "", progress: 0),
-            exercise: StatsModel.StatItem(title: "", currentValue: "", goalValue: "", subtitle: "", progress: 0)
-        )
         
         // Load sample data
         loadSampleData()
@@ -37,24 +32,6 @@ class LogsDataStore {
             doctorName: "Dr. Sarah Johnson",
             dateAndYear: "22 Apr 2025",
             time: "10:30 AM"
-        )
-        
-        // Stats Data
-        stats = StatsModel(
-            hydration: StatsModel.StatItem(
-                title: "Hydration",
-                currentValue: "1.8",
-                goalValue: "3L",
-                subtitle: "Completed",
-                progress: 0.6
-            ),
-            exercise: StatsModel.StatItem(
-                title: "Exercise",
-                currentValue: "2",
-                goalValue: "4",
-                subtitle: "Done",
-                progress: 0.5
-            )
         )
         
         // Medications Data
@@ -90,8 +67,31 @@ class LogsDataStore {
         return appointment
     }
     
+    // UPDATED: Get stats from ExerciseManager
     func getStats() -> StatsModel {
-        return stats
+        let exerciseManager = ExerciseManager.shared
+        let todayPlan = exerciseManager.currentDayPlan
+        
+        let totalExercises = todayPlan.count
+        let completedExercises = todayPlan.filter { $0.isCompleted }.count
+        let progress = totalExercises > 0 ? Float(completedExercises) / Float(totalExercises) : 0.0
+        
+        return StatsModel(
+            hydration: StatsModel.StatItem(
+                title: "Hydration",
+                currentValue: "1.8",
+                goalValue: "3L",
+                subtitle: "Completed",
+                progress: 0.6
+            ),
+            exercise: StatsModel.StatItem(
+                title: "Exercise",
+                currentValue: "\(completedExercises)",
+                goalValue: "\(totalExercises)",
+                subtitle: "Done",
+                progress: progress
+            )
+        )
     }
     
     func getMedications() -> [MedicationModel] {
