@@ -35,6 +35,18 @@ class LoginViewController: UIViewController {
         collectionView.keyboardDismissMode = .interactive
         collectionView.backgroundColor = .white
 
+        // ✅ THIS IS THE KEY LINE
+        // Moves entire content downward (like your Figma)
+        collectionView.contentInset = UIEdgeInsets(
+            top: 100,    // 👈 adjust this (24–48 recommended)
+            left: 0,
+            bottom: 32,
+            right: 0
+        )
+
+        // Optional: keeps scrolling natural
+        collectionView.verticalScrollIndicatorInsets = collectionView.contentInset
+
         collectionView.register(
             UINib(nibName: "WelcomeHeaderCollectionViewCell", bundle: nil),
             forCellWithReuseIdentifier: "WelcomeHeaderCollectionViewCell"
