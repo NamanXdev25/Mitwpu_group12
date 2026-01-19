@@ -35,16 +35,13 @@ class LoginViewController: UIViewController {
         collectionView.keyboardDismissMode = .interactive
         collectionView.backgroundColor = .white
 
-        // ✅ THIS IS THE KEY LINE
-        // Moves entire content downward (like your Figma)
         collectionView.contentInset = UIEdgeInsets(
-            top: 100,    // 👈 adjust this (24–48 recommended)
+            top: 90,
             left: 0,
-            bottom: 32,
+            bottom: 10,
             right: 0
         )
 
-        // Optional: keeps scrolling natural
         collectionView.verticalScrollIndicatorInsets = collectionView.contentInset
 
         collectionView.register(
@@ -124,13 +121,13 @@ extension LoginViewController: UICollectionViewDelegateFlowLayout {
         switch items[indexPath.item] {
 
         case .welcome:
-            return CGSize(width: width, height: 140)
+            return CGSize(width: width, height: 96)
 
         case .form:
-            return CGSize(width: width, height: 420)
+            return CGSize(width: width, height: 360)
 
         case .or:
-            return CGSize(width: width, height: 44)
+            return CGSize(width: width, height: 20)
 
         case .social:
             return CGSize(width: width, height: 220)
