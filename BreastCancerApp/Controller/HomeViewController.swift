@@ -6,7 +6,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     let dataStore = HomeDataStore.shared
     
-    var goals: [HomeTodaysGoalModel] = []
+    //var goals: [HomeTodaysGoalModel] = []
     var upcomingEvents: [HomeUpcomingModel] = []
     var memories: [HomeMemoryModel] = []
     var articles: [HomeArticleModel] = []
@@ -33,7 +33,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     
     func loadDataFromStore() {
-        goals = dataStore.getGoals()
+        //goals = dataStore.getGoals()
         upcomingEvents = dataStore.getUpcomingEvents()
         memories = dataStore.getMemories()
         articles = dataStore.getArticles()
@@ -46,7 +46,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         // Register cells using XIB names directly
         collectionView.register(UINib(nibName: "HomeHeaderCell", bundle: nil), forCellWithReuseIdentifier: "HomeHeaderCell")
         collectionView.register(UINib(nibName: "HomeHealingGardenCell", bundle: nil), forCellWithReuseIdentifier: "HomeHealingGardenCell")
-        collectionView.register(UINib(nibName: "HomeTodaysGoalCell", bundle: nil), forCellWithReuseIdentifier: "HomeTodaysGoalCell")
+        //collectionView.register(UINib(nibName: "HomeTodaysGoalCell", bundle: nil), forCellWithReuseIdentifier: "HomeTodaysGoalCell")
         collectionView.register(UINib(nibName: "HomeUpcomingCell", bundle: nil), forCellWithReuseIdentifier: "HomeUpcomingCell")
         collectionView.register(UINib(nibName: "HomeMemoryCell", bundle: nil), forCellWithReuseIdentifier: "HomeMemoryCell")
         collectionView.register(UINib(nibName: "HomeArticleCell", bundle: nil), forCellWithReuseIdentifier: "HomeArticleCell")
@@ -62,7 +62,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             switch sectionIndex {
             case 0: return self.createHomeHeaderSection()
             case 1: return self.createGardenSection()
-            case 2: return self.createGoalsSection()
+            //case 2: return self.createGoalsSection()
             case 3: return self.createUpcomingSection()
             case 4: return self.createMemoriesSection()
             case 5: return self.createArticlesSection()
@@ -88,14 +88,14 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         return section
     }
 
-    func createGoalsSection() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(100))
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, subitems: [NSCollectionLayoutItem(layoutSize: itemSize)])
-        let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-        addHeader(to: section)
-        return section
-    }
+//    func createGoalsSection() -> NSCollectionLayoutSection {
+//        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(100))
+//        let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, subitems: [NSCollectionLayoutItem(layoutSize: itemSize)])
+//        let section = NSCollectionLayoutSection(group: group)
+//        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+//        addHeader(to: section)
+//        return section
+//    }
     
     func createUpcomingSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(110))
@@ -141,7 +141,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section {
         case 0, 1: return 1
-        case 2: return goals.count
+        //case 2: return goals.count
         case 3: return upcomingEvents.count
         case 4: return memories.count
         case 5: return articles.count
@@ -161,17 +161,17 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             // Configure garden cell with DataStore values (if outlets are connected)
             let stats = dataStore.gardenStats
             cell.currentProgressLabel?.text = "\(stats.currentPoints)"
-            cell.totalGoalLabel?.text = "\(stats.totalPointsNeeded)"
+            //cell.totalGoalLabel?.text = "\(stats.totalPointsNeeded)"
             cell.pointsLabel?.text = "\(stats.pointsToNextLevel)"
             cell.levelLabel?.text = "to Level \(stats.nextLevel)"
             cell.progressView?.progress = stats.progress
             return cell
             
-        case 2:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeTodaysGoalCell", for: indexPath) as! HomeTodaysGoalCell
-            let data = goals[indexPath.row]
-            cell.configure(title: data.title, points: data.points, imageName: data.iconName, isCompleted: data.isCompleted)
-            return cell
+//        case 2:
+//            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeTodaysGoalCell", for: indexPath) as! HomeTodaysGoalCell
+//            let data = goals[indexPath.row]
+//            cell.configure(title: data.title, points: data.points, imageName: data.iconName, isCompleted: data.isCompleted)
+//            return cell
             
         case 3:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeUpcomingCell", for: indexPath) as! HomeUpcomingCell
@@ -202,9 +202,9 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         header.seeAllButton.setTitle("See All", for: .normal)
         
         switch indexPath.section {
-        case 2:
-            header.titleLabel.text = "Today's Goals"
-            header.seeAllButton.isHidden = true
+//        case 2:
+//            header.titleLabel.text = "Today's Goals"
+//            header.seeAllButton.isHidden = true
         case 3:
             header.titleLabel.text = "Upcoming"
             header.seeAllButton.isHidden = true
@@ -220,14 +220,13 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch indexPath.section {
-        case 2:
-            // Toggle goal completion
-            dataStore.toggleGoalCompletion(at: indexPath.row)
-            loadDataFromStore()
+//        case 2:
+//            // Toggle goal completion
+//            dataStore.toggleGoalCompletion(at: indexPath.row)
+//            loadDataFromStore()
             
         case 3:
-            print("Tapped upcoming event: \(upcomingEvents[indexPath.row].title)")
-            // Navigate to appointment details
+            // No navigation from home
             
         case 4:
             print("Tapped memory: \(memories[indexPath.row].description)")
