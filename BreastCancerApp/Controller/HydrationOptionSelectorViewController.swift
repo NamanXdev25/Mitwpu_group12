@@ -13,16 +13,15 @@ final class HydrationOptionSelectorViewController: UIViewController {
     var options: [String] = []
     var onSelect: ((Int) -> Void)?
 
-    // MARK: - Constants
-    private let cellHeight: CGFloat = 44 // 🔹 Change this to control row height
+    // MARK: - Layout
+    private let cellHeight: CGFloat = 44
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
         configureUI()
-        setupCollectionView()
-        setupDismissGesture()
+        configureCollectionView()
+        configureDismissGesture()
     }
 
     // MARK: - UI Setup
@@ -32,7 +31,7 @@ final class HydrationOptionSelectorViewController: UIViewController {
         subtitleLabel.text = subtitleText
     }
 
-    private func setupCollectionView() {
+    private func configureCollectionView() {
         collectionView.backgroundColor = .clear
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -53,13 +52,13 @@ final class HydrationOptionSelectorViewController: UIViewController {
         )
     }
 
-    private func setupDismissGesture() {
-        let tap = UITapGestureRecognizer(
+    private func configureDismissGesture() {
+        let tapGesture = UITapGestureRecognizer(
             target: self,
             action: #selector(dismissSelf)
         )
-        tap.cancelsTouchesInView = false
-        view.addGestureRecognizer(tap)
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
     }
 
     // MARK: - Actions
@@ -71,15 +70,11 @@ final class HydrationOptionSelectorViewController: UIViewController {
 // MARK: - UICollectionViewDataSource
 extension HydrationOptionSelectorViewController: UICollectionViewDataSource {
 
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        1
-    }
-
     func collectionView(
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
-        options.count + 1 // + Cancel
+        options.count + 1
     }
 
     func collectionView(
@@ -93,16 +88,13 @@ extension HydrationOptionSelectorViewController: UICollectionViewDataSource {
         ) as! HydrationOptionCollectionCell
 
         let isCancel = indexPath.item == options.count
-        let isFirst = indexPath.item == 0
-        let isLast = indexPath.item == options.count
-
         let text = isCancel ? "Cancel" : options[indexPath.item]
 
         cell.configure(
             text: text,
-            hideDivider: isLast,
-            isFirst: isFirst,
-            isLast: isLast
+            hideDivider: isCancel,
+            isFirst: indexPath.item == 0,
+            isLast: isCancel
         )
 
         return cell
@@ -118,8 +110,9 @@ extension HydrationOptionSelectorViewController: UICollectionViewDelegate {
     ) {
         dismiss(animated: true)
 
-        guard indexPath.item < options.count else { return }
-        onSelect?(indexPath.item)
+        if indexPath.item < options.count {
+            onSelect?(indexPath.item)
+        }
     }
 }
 

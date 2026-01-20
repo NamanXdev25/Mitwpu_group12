@@ -24,11 +24,11 @@ final class HydrationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "baground")
-        setupCollectionView()
+        configureCollectionView()
     }
 
     // MARK: - Setup
-    private func setupCollectionView() {
+    private func configureCollectionView() {
 
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.estimatedItemSize = .zero
@@ -36,18 +36,18 @@ final class HydrationViewController: UIViewController {
             layout.sectionInset = .zero
         }
 
+        collectionView.backgroundColor = UIColor(named: "baground")
+        collectionView.alwaysBounceVertical = true
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.alwaysBounceVertical = true
-        collectionView.backgroundColor = UIColor(named: "baground")
 
         collectionView.register(
-            UINib(nibName: "HydrationTopCardCell", bundle: nil),
+            UINib(nibName: CellReuseID.topCard, bundle: nil),
             forCellWithReuseIdentifier: CellReuseID.topCard
         )
 
         collectionView.register(
-            UINib(nibName: "HydrationChartCell", bundle: nil),
+            UINib(nibName: CellReuseID.chart, bundle: nil),
             forCellWithReuseIdentifier: CellReuseID.chart
         )
     }
@@ -56,63 +56,80 @@ final class HydrationViewController: UIViewController {
 // MARK: - UICollectionViewDataSource
 extension HydrationViewController: UICollectionViewDataSource {
 
-    func numberOfSections(in collectionView: UICollectionView) -> Int { 1 }
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        1
+    }
 
     func collectionView(
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
-    ) -> Int { 2 }
+    ) -> Int {
+        2
+    }
 
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
 
-        // MARK: - TOP CARD
         if indexPath.item == 0 {
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: CellReuseID.topCard,
-                for: indexPath
-            ) as! HydrationTopCardCell
-
-            let consumedML = HydrationModel.consumedTodayML()
-            let goalLiters = HydrationModel.currentGoal()
-            let cupML = Int(HydrationModel.currentCupSize() * 1000)
-
-            cell.configure(
-                consumedML: consumedML,
-                goal: goalLiters,
-                cupSize: cupML
-            )
-
-            cell.onGoalTapped = { [weak self] in
-                self?.showGoalSelector()
-            }
-
-            cell.onCupTapped = { [weak self] in
-                self?.showCupSelector()
-            }
-
-            cell.onDropTapped = { [weak self] in
-                guard let self else { return }
-
-                let cupML = Int(HydrationModel.currentCupSize() * 1000)
-
-                HydrationModel.addWaterML(cupML)
-                HydrationHistoryModel.addWaterML(cupML)
-
-                self.collectionView.reloadItems(
-                    at: [
-                        IndexPath(item: 0, section: 0),
-                        IndexPath(item: 1, section: 0)
-                    ]
-                )
-            }
-
-            return cell
+            return makeTopCardCell(for: indexPath)
         }
 
-        // MARK: - CHART
+        return makeChartCell(for: indexPath)
+    }
+
+    // MARK: - Cell Builders
+    private func makeTopCardCell(
+        for indexPath: IndexPath
+    ) -> UICollectionViewCell {
+
+        let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: CellReuseID.topCard,
+            for: indexPath
+        ) as! HydrationTopCardCell
+
+        let consumedML = HydrationModel.consumedTodayML()
+        let goalLiters = HydrationModel.currentGoal()
+        let cupML = Int(HydrationModel.currentCupSize() * 1000)
+
+        cell.configure(
+            consumedML: consumedML,
+            goal: goalLiters,
+            cupSize: cupML
+        )
+
+        cell.onGoalTapped = { [weak self] in
+            self?.showGoalSelector()
+        }
+
+        cell.onCupTapped = { [weak self] in
+            self?.showCupSelector()
+        }
+
+        cell.onDropTapped = { [weak self] in
+            guard let self else { return }
+
+            let cupML = Int(HydrationModel.currentCupSize() * 1000)
+
+            HydrationModel.addWaterML(cupML)
+            HydrationHistoryModel.addWaterML(cupML)
+
+            self.collectionView.reloadItems(
+                at: [
+                    IndexPath(item: 0, section: 0),
+                    IndexPath(item: 1, section: 0)
+                ]
+            )
+        }
+
+        return cell
+    }
+
+    private func makeChartCell(
+        for indexPath: IndexPath
+    ) -> UICollectionViewCell {
+
         let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: CellReuseID.chart,
             for: indexPath
@@ -143,7 +160,10 @@ extension HydrationViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-        CGSize(width: collectionView.bounds.width, height: 370)
+        CGSize(
+            width: collectionView.bounds.width,
+            height: 370
+        )
     }
 }
 
