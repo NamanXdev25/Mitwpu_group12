@@ -30,5 +30,19 @@ class DataPrivacyViewController: UIViewController {
     @IBAction func skipButtonTapped(_ sender: UIButton) {
         print("Skip tapped")
         // navigate to home screen
+        let storyboard = UIStoryboard(name: "TabBarMain", bundle: nil)
+
+        guard let tabBarController =
+                storyboard.instantiateInitialViewController()
+                as? UITabBarController else {
+            fatalError("TabBarMain must have UITabBarController as initial VC")
+        }
+
+        if let sceneDelegate =
+            UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+
+            sceneDelegate.window?.rootViewController = tabBarController
+            sceneDelegate.window?.makeKeyAndVisible()
+        }
     }
 }

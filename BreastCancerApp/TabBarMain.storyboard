@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="MOX-xY-Q2L">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="q8C-FJ-bTx">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
@@ -10,7 +10,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Item-->
+        <!--Logs-->
         <scene sceneID="VUO-lQ-OT9">
             <objects>
                 <viewController id="of2-DO-BT0" sceneMemberID="viewController">
@@ -20,11 +20,11 @@
                         <viewLayoutGuide key="safeArea" id="Jrc-yz-U5w"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="Q4b-VE-wXW"/>
+                    <tabBarItem key="tabBarItem" title="Logs" image="heart.text.clipboard" catalog="system" selectedImage="heart.text.clipboard.fill" id="Q4b-VE-wXW"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xRn-pT-vJA" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5516.7938931297704" y="84.507042253521135"/>
+            <point key="canvasLocation" x="6441.9847328244268" y="84.507042253521135"/>
         </scene>
         <!--Mindfulness-->
         <scene sceneID="FFs-qy-vfP">
@@ -74,7 +74,7 @@
                             <constraint firstItem="w1f-KZ-efs" firstAttribute="trailing" secondItem="kAz-tA-O7E" secondAttribute="trailing" id="bzI-yO-aXs"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" image="figure.mind.and.body.circle" catalog="system" selectedImage="figure.mind.and.body.circle.fill" id="6XI-HB-mBn"/>
+                    <tabBarItem key="tabBarItem" title="Mindfulness" image="figure.mind.and.body.circle" catalog="system" selectedImage="figure.mind.and.body.circle.fill" id="6XI-HB-mBn"/>
                     <navigationItem key="navigationItem" title="Mindfulness" largeTitleDisplayMode="always" id="AZC-3d-XZ1"/>
                     <connections>
                         <outlet property="collectionView" destination="jcA-E6-5Sx" id="2Je-z2-vXF"/>
@@ -83,7 +83,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6av-87-vPq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4545.801526717557" y="84.507042253521135"/>
+            <point key="canvasLocation" x="5472.5190839694651" y="84.507042253521135"/>
         </scene>
         <!--Item-->
         <scene sceneID="clY-5g-Vvp">
@@ -102,27 +102,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kbn-MT-U21" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3619.0839694656488" y="84.507042253521135"/>
-        </scene>
-        <!--Tab Bar Controller-->
-        <scene sceneID="IgW-NF-L4f">
-            <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="MOX-xY-Q2L" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="qed-Dc-sZe">
-                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    </tabBar>
-                    <connections>
-                        <segue destination="Xlj-HY-ju7" kind="relationship" relationship="viewControllers" id="eiY-Pk-uCU"/>
-                        <segue destination="of2-DO-BT0" kind="relationship" relationship="viewControllers" id="9Ax-di-K7v"/>
-                        <segue destination="tdT-jh-huK" kind="relationship" relationship="viewControllers" id="zBr-O6-Dc9"/>
-                    </connections>
-                </tabBarController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="4hU-xj-UaI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3961" y="-821"/>
+            <point key="canvasLocation" x="4545.801526717557" y="84.507042253521135"/>
         </scene>
         <!--Home View Controller-->
         <scene sceneID="KP0-NB-H5b">
@@ -169,13 +149,13 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GzN-cj-f4A" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2593" y="85"/>
+            <point key="canvasLocation" x="3518.320610687023" y="84.507042253521135"/>
         </scene>
-        <!--Item-->
+        <!--Home-->
         <scene sceneID="PEV-QJ-6ZZ">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="tdT-jh-huK" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="ucd-mN-gHd"/>
+                    <tabBarItem key="tabBarItem" title="Home" image="house" catalog="system" selectedImage="house.fill" id="ucd-mN-gHd"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="J9L-fK-DNH">
                         <rect key="frame" x="0.0" y="118" width="393" height="54"/>
@@ -188,14 +168,41 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="knT-8g-IFX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1810" y="85"/>
+            <point key="canvasLocation" x="2736.6412213740455" y="84.507042253521135"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="5oM-4W-KoP">
+            <objects>
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="q8C-FJ-bTx" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="nG9-Cg-KJi">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="tintColor" name="OnboardingPrimaryColor"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="tdT-jh-huK" kind="relationship" relationship="viewControllers" id="ojR-9I-8yx"/>
+                        <segue destination="Xlj-HY-ju7" kind="relationship" relationship="viewControllers" id="cUZ-P7-AGn"/>
+                        <segue destination="of2-DO-BT0" kind="relationship" relationship="viewControllers" id="nTp-ml-2Zl"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="03P-g1-xUt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4680" y="-1034"/>
         </scene>
     </scenes>
     <resources>
         <image name="figure.mind.and.body.circle" catalog="system" width="128" height="123"/>
         <image name="figure.mind.and.body.circle.fill" catalog="system" width="128" height="123"/>
+        <image name="heart.text.clipboard" catalog="system" width="103" height="128"/>
+        <image name="heart.text.clipboard.fill" catalog="system" width="103" height="128"/>
+        <image name="house" catalog="system" width="128" height="104"/>
+        <image name="house.fill" catalog="system" width="128" height="104"/>
         <namedColor name="BgColor">
             <color red="0.97254901960784312" green="0.94901960784313721" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="OnboardingPrimaryColor">
+            <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="logsbgcolor">
             <color red="0.97299998998641968" green="0.94900000095367432" blue="0.9570000171661377" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
