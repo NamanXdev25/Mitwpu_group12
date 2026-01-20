@@ -66,7 +66,7 @@
                                     <action selector="ChevronTapped:" destination="UFQ-Kk-BQu" eventType="touchUpInside" id="pSR-wH-UsE"/>
                                 </connections>
                             </button>
-                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.80000000000000004" translatesAutoresizingMaskIntoConstraints="NO" id="hCQ-xQ-MRK">
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.83999999999999997" translatesAutoresizingMaskIntoConstraints="NO" id="hCQ-xQ-MRK">
                                 <rect key="frame" x="16" y="100" width="327" height="4"/>
                                 <color key="progressTintColor" name="TabBarcolour"/>
                             </progressView>
@@ -82,8 +82,8 @@
                                 <color key="textColor" name="Memorycolor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="4000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="apL-3f-N4a">
-                                <rect key="frame" x="283" y="76" width="28" height="12"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="4200" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="apL-3f-N4a">
+                                <rect key="frame" x="284" y="76" width="27" height="12"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="10"/>
                                 <color key="textColor" name="Memorycolor"/>
                                 <nil key="highlightedColor"/>
@@ -154,7 +154,7 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGray2Color">
-            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

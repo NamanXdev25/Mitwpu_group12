@@ -34,43 +34,22 @@ class CompletionViewController: UIViewController {
     }
     
     @IBAction func homeButtonTapped(_ sender: UIButton) {
-        print("Going to Home Screen")
-        print("Onboarding Data Summary:")
-        print("========================================")
-        
-        print("Treatment Status: \(OnboardingData.shared.treatmentStatus ?? "None")")
-        print("Selected Hobbies: \(OnboardingData.shared.selectedHobbies)")
-        
-        if let treatmentStatus = OnboardingData.shared.treatmentStatus {
-            print("\nTreatment-Specific Data:")
-            
-            switch treatmentStatus {
-            case "Currently in treatment":
-                print("  - Diagnosis Date: \(formatDate(OnboardingData.shared.diagnosisDate))")
-                print("  - Current Age: \(OnboardingData.shared.currentAge ?? "None")")
-                print("  - Current Stage: \(OnboardingData.shared.currentStage ?? "None")")
-                
-            case "Under Observation":
-                print("  - Last Checkup Date: \(formatDate(OnboardingData.shared.lastCheckupDate))")
-                print("  - Follow-up Frequency: \(OnboardingData.shared.followUpFrequency ?? "None")")
-                
-            case "Post-treatment / in recovery":
-                print("  - Treatment Completion Date: \(formatDate(OnboardingData.shared.treatmentCompletionDate))")
-                print("  - Focus Areas: \(OnboardingData.shared.selectedInterests)")
-                
-            case "Prefer not to say":
-                print("  - Areas of Interest: \(OnboardingData.shared.selectedInterests)")
-                
-            default:
-                print("  - No additional data")
-            }
+
+        // Optional: persist onboarding completion later
+        // UserDefaults.standard.set(true, forKey: "didCompleteOnboarding")
+
+        let storyboard = UIStoryboard(name: "Home", bundle: nil)
+
+        guard let homeNav = storyboard.instantiateInitialViewController() as? UINavigationController else {
+            fatalError("Home storyboard must have a Navigation Controller as initial VC")
         }
-        
-        print("========================================")
-        print("Onboarding Complete!")
-        
-        navigationController?.popToRootViewController(animated: true)
+
+        if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+            sceneDelegate.window?.rootViewController = homeNav
+            sceneDelegate.window?.makeKeyAndVisible()
+        }
     }
+
 
     private func formatDate(_ date: Date?) -> String {
         guard let date = date else { return "None" }

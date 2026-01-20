@@ -14,7 +14,7 @@
         <!--Welcome View Controller-->
         <scene sceneID="oVF-3v-lkf">
             <objects>
-                <viewController id="opE-eu-7fL" customClass="WelcomeViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WelcomeViewController" id="opE-eu-7fL" customClass="WelcomeViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="avs-kp-VhI">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1157,7 +1157,7 @@
         <!--Navigation Controller-->
         <scene sceneID="YK3-rX-WQQ">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="f1h-d7-iev" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="OnboardingNavController" automaticallyAdjustsScrollViewInsets="NO" id="f1h-d7-iev" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="gUU-hP-NR8">
                         <rect key="frame" x="0.0" y="118" width="393" height="54"/>

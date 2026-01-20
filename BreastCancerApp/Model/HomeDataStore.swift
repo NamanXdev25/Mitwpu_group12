@@ -17,8 +17,8 @@ class HomeDataStore {
     
     
     var gardenStats: HealingGardenStats = HealingGardenStats(
-        currentPoints: 5200,
-        totalPointsNeeded: 6000,
+        currentPoints: 4200,
+        totalPointsNeeded: 5000,
         currentLevel: 1,
         nextLevel: 2
     )

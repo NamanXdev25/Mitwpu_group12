@@ -31,6 +31,9 @@
                                 <integer key="value" value="26"/>
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
+                        <connections>
+                            <action selector="continueTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="odh-eG-12G"/>
+                        </connections>
                     </button>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WsE-zK-l3Q">
                         <rect key="frame" x="20" y="80" width="335" height="10"/>

@@ -4,6 +4,7 @@
 //
 //  Created by Shloka on 20/01/26.
 //
+
 import UIKit
 
 class ProfileSetupViewController: UIViewController,
@@ -129,7 +130,14 @@ class ProfileSetupViewController: UIViewController,
         ) as! ProfileSetupContinueCollectionViewCell
 
         cell.footerLabel.text = "You’re not alone on this journey"
+
+        // ⬇️ THIS IS THE KEY
+        cell.onContinueTapped = { [weak self] in
+            self?.navigateToWelcome()
+        }
+
         return cell
+
     }
 
     // MARK: - UICollectionViewDelegateFlowLayout
@@ -203,4 +211,18 @@ class ProfileSetupViewController: UIViewController,
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true)
     }
+    
+    func navigateToWelcome() {
+        let storyboard = UIStoryboard(name: "OnboardingMain", bundle: nil)
+
+        guard let navController = storyboard.instantiateViewController(
+            withIdentifier: "OnboardingNavController"
+        ) as? UINavigationController else {
+            fatalError("OnboardingNavController ID missing")
+        }
+
+        navController.modalPresentationStyle = .fullScreen
+        present(navController, animated: true)
+    }
+
 }
