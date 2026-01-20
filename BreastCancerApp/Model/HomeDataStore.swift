@@ -33,8 +33,6 @@ class HomeDataStore {
         goals = loadJSON("Goals.json")
         upcomingEvents = loadJSON("Upcoming.json")
         memories = loadJSON("Memories.json")
-        
-        // Add these two lines instead:
         let response: ArticlesResponse = loadJSON("articles.json")
         articles = response.articles
     }
@@ -97,7 +95,7 @@ class HomeDataStore {
     }
     
     func addMemory(_ memory: HomeMemoryModel) {
-        memories.insert(memory, at: 0) // Add to beginning
+        memories.insert(memory, at: 0)
     }
     
     func addUpcomingEvent(_ event: HomeUpcomingModel) {
@@ -108,7 +106,7 @@ class HomeDataStore {
     func addPoints(_ points: Int) {
         gardenStats.currentPoints += points
         
-        // Level up logic
+        // level up logic
         if gardenStats.currentPoints >= gardenStats.totalPointsNeeded {
             levelUp()
         }

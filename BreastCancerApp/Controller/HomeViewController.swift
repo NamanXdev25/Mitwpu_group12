@@ -8,15 +8,15 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     var upcomingEvents: [HomeUpcomingModel] = []
     var memories: [HomeMemoryModel] = []
-    var articles: [ArticleModel] = []  // Changed to ArticleModel
+    var articles: [ArticleModel] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // 1. Load Data from DataStore
+        // load data (upcoming, memories, articles)
         loadDataFromStore()
         
-        // 2. Setup Collection View
+        // setup collection view
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.contentInsetAdjustmentBehavior = .never
@@ -26,7 +26,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // Refresh data when view appears (in case data changed)
+        // refresh data when view appears
         loadDataFromStore()
     }
     
@@ -35,7 +35,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         upcomingEvents = dataStore.getUpcomingEvents()
         memories = dataStore.getMemories()
         
-        // Load articles from ArticlesDataSource and take first 2
+        // load articles and display first 2
         let articlesDataSource = ArticlesDataSource()
         articlesDataSource.loadArticles()
         articles = Array(articlesDataSource.articles.prefix(2))
@@ -44,13 +44,11 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     }
     
     func registerCells() {
-        // Register cells using XIB names directly
+        // register cells
         collectionView.register(UINib(nibName: "HomeHeaderCell", bundle: nil), forCellWithReuseIdentifier: "HomeHeaderCell")
         collectionView.register(UINib(nibName: "HomeHealingGardenCell", bundle: nil), forCellWithReuseIdentifier: "HomeHealingGardenCell")
         collectionView.register(UINib(nibName: "HomeUpcomingCell", bundle: nil), forCellWithReuseIdentifier: "HomeUpcomingCell")
         collectionView.register(UINib(nibName: "HomeMemoryCell", bundle: nil), forCellWithReuseIdentifier: "HomeMemoryCell")
-        
-        // Use ArticleCell instead of HomeArticleCell
         collectionView.register(UINib(nibName: "ArticleCell", bundle: nil), forCellWithReuseIdentifier: "ArticleCell")
         
         collectionView.register(UINib(nibName: "HomeSectionHeaderView", bundle: nil),
@@ -150,7 +148,6 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeHealingGardenCell", for: indexPath) as! HomeHealingGardenCell
-            // Configure garden cell with DataStore values (if outlets are connected)
             let stats = dataStore.gardenStats
             cell.currentProgressLabel?.text = "\(stats.currentPoints)"
             cell.pointsLabel?.text = "\(stats.pointsToNextLevel)"
@@ -185,8 +182,6 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "HomeSectionHeaderView", for: indexPath) as! HomeSectionHeaderView
         header.seeAllButton.isHidden = false
         header.seeAllButton.setTitle("See All", for: .normal)
-        
-        // Add target for "See All" button
         header.seeAllButton.tag = indexPath.section
         header.seeAllButton.addTarget(self, action: #selector(seeAllTapped(_:)), for: .touchUpInside)
         
@@ -204,7 +199,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     }
     
     @objc func seeAllTapped(_ sender: UIButton) {
-        if sender.tag == 5 { // Articles section
+        if sender.tag == 5 { // articles section
             navigateToArticles()
         }
     }
@@ -223,7 +218,6 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             // Navigate to memory details
             
         case 5:
-            // Navigate to article detail
             let article = articles[indexPath.row]
             let storyboard = UIStoryboard(name: "ArticlesMain", bundle: nil)
             if let detailVC = storyboard.instantiateViewController(withIdentifier: "ArticleDetailViewController") as? ArticleDetailViewController {

@@ -4,22 +4,18 @@ class HomeHealingGardenCell: UICollectionViewCell {
     
     @IBOutlet weak var containerView: UIView!
     
-    // Title
-    @IBOutlet weak var titleLabel: UILabel!           // "Healing Garden"
+    @IBOutlet weak var titleLabel: UILabel!
     
-    // Left Side Info
-    @IBOutlet weak var pointsLabel: UILabel!          // "800"
-    @IBOutlet weak var flowerLabel: UILabel!          // Flower icon/emoji
-    @IBOutlet weak var levelLabel: UILabel!           // "to Level 2"
+    @IBOutlet weak var pointsLabel: UILabel!
+    @IBOutlet weak var flowerLabel: UILabel!
+    @IBOutlet weak var levelLabel: UILabel!
     
     @IBOutlet weak var ChevronButton: UIButton!
-    // Progress Bar
     @IBOutlet weak var progressView: UIProgressView!
     
-    // Right Side Stats
-    @IBOutlet weak var currentProgressLabel: UILabel! // "5200"
-    @IBOutlet weak var separatorLabel: UILabel!       // "/"
-    @IBOutlet weak var totalGoalLabel: UILabel!       // "6000"
+    @IBOutlet weak var currentProgressLabel: UILabel!
+    @IBOutlet weak var separatorLabel: UILabel!
+    @IBOutlet weak var totalGoalLabel: UILabel!       
     
     override func awakeFromNib() {
         super.awakeFromNib()

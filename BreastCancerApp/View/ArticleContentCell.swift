@@ -21,7 +21,6 @@ class ArticleContentCell: UICollectionViewCell {
         titleLabel.text = title
         contentLabel.text = content
         
-        // Force layout update
         setNeedsLayout()
         layoutIfNeeded()
     }
