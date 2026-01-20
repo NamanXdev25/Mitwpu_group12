@@ -23,36 +23,29 @@ struct HomeMemoryModel: Codable {
     let description: String
 }
 
-
-struct HomeArticleModel: Codable {
-    let title: String
-    let subtitle: String
-    let imageName: String
-}
-
-struct HealingGardenStats {
-    var currentPoints: Int
-    var totalPointsNeeded: Int
-    var currentLevel: Int
-    var nextLevel: Int
-    
-    var progress: Float {
-        return Float(currentPoints) / Float(totalPointsNeeded)
-    }
-    
-    var pointsToNextLevel: Int {
-        return totalPointsNeeded - currentPoints
-    }
-}
-
-struct UserProfile {
-    var name: String
-    var profileImageName: String?
-    var joinDate: Date
-    
-    init(name: String, profileImageName: String? = nil, joinDate: Date = Date()) {
-        self.name = name
-        self.profileImageName = profileImageName
-        self.joinDate = joinDate
-    }
-}
+//struct HealingGardenStats {
+//    var currentPoints: Int
+//    var totalPointsNeeded: Int
+//    var currentLevel: Int
+//    var nextLevel: Int
+//    
+//    var progress: Float {
+//        return Float(currentPoints) / Float(totalPointsNeeded)
+//    }
+//    
+//    var pointsToNextLevel: Int {
+//        return totalPointsNeeded - currentPoints
+//    }
+//}
+//
+//struct UserProfile {
+//    var name: String
+//    var profileImageName: String?
+//    var joinDate: Date
+//    
+//    init(name: String, profileImageName: String? = nil, joinDate: Date = Date()) {
+//        self.name = name
+//        self.profileImageName = profileImageName
+//        self.joinDate = joinDate
+//    }
+//}

@@ -143,7 +143,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         switch indexPath.section {
         case 0:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeHeaderCell", for: indexPath) as! HomeHeaderCell
-            cell.configure(name: dataStore.userProfile.name)
+            cell.configure(name: dataStore.userProfile?.name ?? "User")
             return cell
             
         case 1:

@@ -22,7 +22,54 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupCollectionView()
+        
+        // temp - auto-login for development
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+//            self.loginUser()
+//        }
     }
+    
+    func login(email: String, password: String) {
+
+        guard let profile = SampleProfilesManager.shared.sampleProfiles.first(
+            where: { $0.email == email && $0.password == password }
+        ) else {
+            print("❌ Invalid credentials")
+            return
+        }
+
+        HomeDataStore.shared.userProfile = profile
+        HomeDataStore.shared.gardenStats =
+            SampleProfilesManager.shared.getStatsForProfile(id: profile.id)
+
+        navigateToHome()
+    }
+    
+    func loginUser() {
+        // Pick first predefined profile
+        let profile = SampleProfilesManager.shared.sampleProfiles[0]
+
+        // Set it as active user
+        HomeDataStore.shared.userProfile = profile
+        HomeDataStore.shared.gardenStats =
+            SampleProfilesManager.shared.getStatsForProfile(id: profile.id)
+
+        navigateToHome()
+    }
+    
+    func navigateToHome() {
+        let storyboard = UIStoryboard(name: "Home", bundle: nil)
+
+        guard let navController = storyboard.instantiateInitialViewController() as? UINavigationController else {
+            fatalError("Home storyboard must have Navigation Controller as initial VC")
+        }
+
+        if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+            sceneDelegate.window?.rootViewController = navController
+            sceneDelegate.window?.makeKeyAndVisible()
+        }
+    }
+
 
     private func setupCollectionView() {
         collectionView.dataSource = self
@@ -89,10 +136,17 @@ extension LoginViewController: UICollectionViewDataSource {
             return cell
 
         case .form:
-            return collectionView.dequeueReusableCell(
+            let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "FormCollectionViewCell",
                 for: indexPath
             ) as! FormCollectionViewCell
+
+            cell.onLoginTapped = { [weak self] email, password in
+                self?.login(email: email, password: password)
+            }
+
+            return cell
+
 
         case .or:
             return collectionView.dequeueReusableCell(

@@ -7,6 +7,8 @@ class FormCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var eyeButton: UIButton!
     @IBOutlet weak var rememberMeButton: UIButton!
     @IBOutlet weak var loginButton: UIButton!
+    
+    var onLoginTapped: ((String, String) -> Void)?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -67,4 +69,11 @@ class FormCollectionViewCell: UICollectionViewCell {
             for: .normal
         )
     }
+    
+    @IBAction func didTapLogin(_ sender: UIButton) {
+        let email = emailTextField.text ?? ""
+        let password = passwordTextField.text ?? ""
+        onLoginTapped?(email, password)
+    }
+
 }

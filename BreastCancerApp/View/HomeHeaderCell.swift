@@ -21,7 +21,8 @@ class HomeHeaderCell: UICollectionViewCell {
     }
     
     func configure(name: String) {
-        greetingLabel.text = "Hello, \(name)!"
+        let firstName = name.components(separatedBy: " ").first ?? name
+        greetingLabel.text = "Hello, \(firstName)!"
     }
     
     

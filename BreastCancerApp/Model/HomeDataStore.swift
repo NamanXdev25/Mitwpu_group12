@@ -13,7 +13,7 @@ class HomeDataStore {
     private var articles: [ArticleModel] = []
     
     
-    var userProfile: UserProfile = UserProfile(name: "Sophie")
+    var userProfile: UserProfile?
     
     
     var gardenStats: HealingGardenStats = HealingGardenStats(
