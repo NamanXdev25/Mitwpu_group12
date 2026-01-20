@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="ActionButtonsCell" customModule="BreastCancerApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="280"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="393" height="280"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JFg-yO-eAn">
+                        <rect key="frame" x="20" y="28" width="353" height="232"/>
+                        <color key="backgroundColor" name="plusbuttoncolor"/>
+                        <state key="normal" title="Button"/>
+                        <buttonConfiguration key="configuration" style="plain" title="Add to Plan">
+                            <backgroundConfiguration key="background" cornerRadius="28"/>
+                            <fontDescription key="titleFontDescription" type="system" weight="semibold" pointSize="17"/>
+                            <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </buttonConfiguration>
+                        <connections>
+                            <action selector="addToPlanTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="jE0-2U-y77"/>
+                        </connections>
+                    </button>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="JFg-yO-eAn" secondAttribute="bottom" constant="20" id="E9B-Da-dYg"/>
+                <constraint firstItem="JFg-yO-eAn" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="20" id="VVD-UU-nia"/>
+                <constraint firstAttribute="trailing" secondItem="JFg-yO-eAn" secondAttribute="trailing" constant="20" id="iAJ-jx-8i8"/>
+                <constraint firstItem="JFg-yO-eAn" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="28" id="lfR-4A-dgW"/>
+            </constraints>
+            <size key="customSize" width="393" height="280"/>
+            <connections>
+                <outlet property="addToPlanButton" destination="JFg-yO-eAn" id="rza-RA-G88"/>
+            </connections>
+            <point key="canvasLocation" x="113.74045801526717" y="158.45070422535213"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <namedColor name="plusbuttoncolor">
+            <color red="0.9100000262260437" green="0.41600000858306885" blue="0.57300001382827759" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>
