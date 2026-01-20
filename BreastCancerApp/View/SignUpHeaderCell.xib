@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -10,20 +10,20 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="SignUpHeaderCell" customModule="BreastCancerApp">
-            <rect key="frame" x="0.0" y="0.0" width="305" height="147"/>
+            <rect key="frame" x="0.0" y="0.0" width="301" height="223"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="305" height="147"/>
+                <rect key="frame" x="0.0" y="0.0" width="301" height="223"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sign up" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="81v-Ko-VB7">
-                        <rect key="frame" x="24" y="40" width="257" height="40.666666666666657"/>
+                        <rect key="frame" x="24" y="80" width="253" height="40.666666666666657"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Let's keep it quick, just 2 steps and you're in" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jzE-tp-WaZ">
-                        <rect key="frame" x="24" y="88.666666666666671" width="257" height="38"/>
+                        <rect key="frame" x="24" y="128.66666666666666" width="253" height="38"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -35,17 +35,17 @@
                 <constraint firstItem="jzE-tp-WaZ" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="24" id="DkQ-k4-Gig"/>
                 <constraint firstAttribute="trailing" secondItem="81v-Ko-VB7" secondAttribute="trailing" constant="24" id="SkP-s9-RXI"/>
                 <constraint firstItem="81v-Ko-VB7" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="24" id="WaN-X5-CgX"/>
-                <constraint firstItem="81v-Ko-VB7" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="40" id="cFH-lh-fbE"/>
-                <constraint firstAttribute="bottom" secondItem="jzE-tp-WaZ" secondAttribute="bottom" constant="8" id="iUD-gG-r78"/>
+                <constraint firstItem="81v-Ko-VB7" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="80" id="cFH-lh-fbE"/>
+                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="jzE-tp-WaZ" secondAttribute="bottom" constant="8" id="iUD-gG-r78"/>
                 <constraint firstItem="jzE-tp-WaZ" firstAttribute="top" secondItem="81v-Ko-VB7" secondAttribute="bottom" constant="8" id="rmD-Ob-ydT"/>
                 <constraint firstAttribute="trailing" secondItem="jzE-tp-WaZ" secondAttribute="trailing" constant="24" id="xem-f9-Rrh"/>
             </constraints>
-            <size key="customSize" width="305" height="147"/>
+            <size key="customSize" width="301" height="223"/>
             <connections>
                 <outlet property="subtitleLabel" destination="jzE-tp-WaZ" id="kAk-k9-fHF"/>
                 <outlet property="titleLabel" destination="81v-Ko-VB7" id="G0j-yM-111"/>
             </connections>
-            <point key="canvasLocation" x="292.36641221374043" y="120.77464788732395"/>
+            <point key="canvasLocation" x="289.3129770992366" y="147.53521126760563"/>
         </collectionViewCell>
     </objects>
 </document>

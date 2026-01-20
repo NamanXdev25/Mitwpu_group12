@@ -1,10 +1,10 @@
 import UIKit
 
-class SignUpViewController: UIViewController {
+final class SignUpViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
 
-    // MARK: - Cell Types
+    // MARK: - Section Model
     enum SignUpItem {
         case header
         case form
@@ -12,7 +12,7 @@ class SignUpViewController: UIViewController {
         case social
     }
 
-    // MARK: - Data Source Order
+    // MARK: - Data Order (matches Figma)
     private let items: [SignUpItem] = [
         .header,
         .form,
@@ -28,18 +28,22 @@ class SignUpViewController: UIViewController {
         registerCells()
     }
 
-    // MARK: - Setup
+    // MARK: - CollectionView Setup
     private func setupCollectionView() {
+        collectionView.backgroundColor = .clear
         collectionView.dataSource = self
         collectionView.delegate = self
 
-        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.scrollDirection = .vertical
-            layout.minimumLineSpacing = 0
-            layout.sectionInset = .zero
-        }
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 0
+        layout.sectionInset = UIEdgeInsets(top: 16, left: 0, bottom: 24, right: 0)
+
+        collectionView.setCollectionViewLayout(layout, animated: false)
     }
 
+    // MARK: - Cell Registration
     private func registerCells() {
         collectionView.register(
             UINib(nibName: "SignUpHeaderCell", bundle: nil),
@@ -74,31 +78,33 @@ extension SignUpViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-        switch items[indexPath.item] {
+        let item = items[indexPath.item]
+
+        switch item {
 
         case .header:
             return collectionView.dequeueReusableCell(
                 withReuseIdentifier: "SignUpHeaderCell",
                 for: indexPath
-            ) as! SignUpHeaderCell
+            )
 
         case .form:
             return collectionView.dequeueReusableCell(
                 withReuseIdentifier: "SignUpFormCell",
                 for: indexPath
-            ) as! SignUpFormCell
+            )
 
         case .or:
             return collectionView.dequeueReusableCell(
                 withReuseIdentifier: "SignUpOrCell",
                 for: indexPath
-            ) as! SignUpOrCell
+            )
 
         case .social:
             return collectionView.dequeueReusableCell(
                 withReuseIdentifier: "SignUpSocialCell",
                 for: indexPath
-            ) as! SignUpSocialCell
+            )
         }
     }
 }
@@ -110,21 +116,22 @@ extension SignUpViewController: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
 
-        let width = collectionView.bounds.width
+        let screenWidth = collectionView.bounds.width
 
+        // Explicit pixel-driven heights (Figma-matched)
         switch items[indexPath.item] {
 
         case .header:
-            return CGSize(width: width, height: 160)
+            return CGSize(width: screenWidth, height: 180)
 
         case .form:
-            return CGSize(width: width, height: 540)
+            return CGSize(width: screenWidth, height: 360)
 
         case .or:
-            return CGSize(width: width, height: 44)
+            return CGSize(width: screenWidth, height: 40)
 
         case .social:
-            return CGSize(width: width, height: 220)
+            return CGSize(width: screenWidth, height: 220)
         }
     }
 }

@@ -64,14 +64,14 @@ class SignUpFormCell: UICollectionViewCell {
         signUpButton.setTitleColor(.white, for: .normal)
         signUpButton.layer.cornerRadius = 28
         signUpButton.layer.masksToBounds = true
-        signUpButton.adjustsImageWhenHighlighted = false
+//        signUpButton.adjustsImageWhenHighlighted = false
     }
 
     // MARK: - Checkbox Setup (CODE-ONLY)
     private func setupCheckbox() {
         agreeButton.setImage(UIImage(systemName: "square"), for: .normal)
         agreeButton.tintColor = .systemPink
-        agreeButton.adjustsImageWhenHighlighted = false
+//        agreeButton.adjustsImageWhenHighlighted = false
     }
 
     // MARK: - Actions
