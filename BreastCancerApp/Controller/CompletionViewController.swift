@@ -35,20 +35,25 @@ class CompletionViewController: UIViewController {
     
     @IBAction func homeButtonTapped(_ sender: UIButton) {
 
-        // Optional: persist onboarding completion later
+        // Optional: persist onboarding completion
         // UserDefaults.standard.set(true, forKey: "didCompleteOnboarding")
 
-        let storyboard = UIStoryboard(name: "Home", bundle: nil)
+        let storyboard = UIStoryboard(name: "TabBarMain", bundle: nil)
 
-        guard let homeNav = storyboard.instantiateInitialViewController() as? UINavigationController else {
-            fatalError("Home storyboard must have a Navigation Controller as initial VC")
+        guard let tabBarController =
+                storyboard.instantiateInitialViewController()
+                as? UITabBarController else {
+            fatalError("TabBarMain must have UITabBarController as initial VC")
         }
 
-        if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
-            sceneDelegate.window?.rootViewController = homeNav
+        if let sceneDelegate =
+            UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+
+            sceneDelegate.window?.rootViewController = tabBarController
             sceneDelegate.window?.makeKeyAndVisible()
         }
     }
+
 
 
     private func formatDate(_ date: Date?) -> String {

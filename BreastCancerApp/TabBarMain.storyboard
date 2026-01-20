@@ -11,22 +11,6 @@
     </dependencies>
     <scenes>
         <!--Item-->
-        <scene sceneID="AjZ-ap-EQg">
-            <objects>
-                <viewController id="d9a-hy-ZqM" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="bp0-VJ-G5X">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="zQL-RC-vrR"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="oWb-Qq-QLk"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="8YN-Rx-FSY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2428.2442748091603" y="84.507042253521135"/>
-        </scene>
-        <!--Item-->
         <scene sceneID="VUO-lQ-OT9">
             <objects>
                 <viewController id="of2-DO-BT0" sceneMemberID="viewController">
@@ -126,18 +110,85 @@
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="MOX-xY-Q2L" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="qed-Dc-sZe">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
                     <connections>
-                        <segue destination="d9a-hy-ZqM" kind="relationship" relationship="viewControllers" id="3cd-61-hfE"/>
                         <segue destination="Xlj-HY-ju7" kind="relationship" relationship="viewControllers" id="eiY-Pk-uCU"/>
                         <segue destination="of2-DO-BT0" kind="relationship" relationship="viewControllers" id="9Ax-di-K7v"/>
+                        <segue destination="tdT-jh-huK" kind="relationship" relationship="viewControllers" id="zBr-O6-Dc9"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4hU-xj-UaI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3961" y="-821"/>
+        </scene>
+        <!--Home View Controller-->
+        <scene sceneID="KP0-NB-H5b">
+            <objects>
+                <viewController id="2Qj-RJ-7sG" customClass="HomeViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="vOD-Nq-PzN">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="27e-x9-EPK">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                                <color key="backgroundColor" name="logsbgcolor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Vj5-d1-CIh">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="AI9-lq-fGO">
+                                        <rect key="frame" x="0.0" y="0.0" width="127.99999999999997" height="128"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="cQg-g0-xgu">
+                                            <rect key="frame" x="0.0" y="0.0" width="127.99999999999997" height="128"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </collectionViewCellContentView>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="b82-A5-G7p"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="27e-x9-EPK" secondAttribute="trailing" id="1DD-0E-rVQ"/>
+                            <constraint firstAttribute="bottom" secondItem="27e-x9-EPK" secondAttribute="bottom" id="NFz-LA-ehM"/>
+                            <constraint firstItem="27e-x9-EPK" firstAttribute="top" secondItem="vOD-Nq-PzN" secondAttribute="top" id="gBq-pC-Sdm"/>
+                            <constraint firstItem="27e-x9-EPK" firstAttribute="leading" secondItem="vOD-Nq-PzN" secondAttribute="leading" id="u8n-xS-b8R"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="gpz-dy-muv"/>
+                    <connections>
+                        <outlet property="collectionView" destination="27e-x9-EPK" id="fTT-HN-bco"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="GzN-cj-f4A" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2593" y="85"/>
+        </scene>
+        <!--Item-->
+        <scene sceneID="PEV-QJ-6ZZ">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="tdT-jh-huK" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="ucd-mN-gHd"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="J9L-fK-DNH">
+                        <rect key="frame" x="0.0" y="118" width="393" height="54"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="2Qj-RJ-7sG" kind="relationship" relationship="rootViewController" id="waz-Dv-Qao"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="knT-8g-IFX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1810" y="85"/>
         </scene>
     </scenes>
     <resources>
@@ -145,6 +196,9 @@
         <image name="figure.mind.and.body.circle.fill" catalog="system" width="128" height="123"/>
         <namedColor name="BgColor">
             <color red="0.97254901960784312" green="0.94901960784313721" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="logsbgcolor">
+            <color red="0.97299998998641968" green="0.94900000095367432" blue="0.9570000171661377" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

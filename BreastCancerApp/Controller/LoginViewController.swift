@@ -58,17 +58,22 @@ class LoginViewController: UIViewController {
     }
     
     func navigateToHome() {
-        let storyboard = UIStoryboard(name: "Home", bundle: nil)
+        let storyboard = UIStoryboard(name: "TabBarMain", bundle: nil)
 
-        guard let navController = storyboard.instantiateInitialViewController() as? UINavigationController else {
-            fatalError("Home storyboard must have Navigation Controller as initial VC")
+        guard let tabBarController =
+                storyboard.instantiateInitialViewController()
+                as? UITabBarController else {
+            fatalError("TabBarMain must have UITabBarController as initial VC")
         }
 
-        if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
-            sceneDelegate.window?.rootViewController = navController
+        if let sceneDelegate =
+            UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+
+            sceneDelegate.window?.rootViewController = tabBarController
             sceneDelegate.window?.makeKeyAndVisible()
         }
     }
+
 
 
     private func setupCollectionView() {
