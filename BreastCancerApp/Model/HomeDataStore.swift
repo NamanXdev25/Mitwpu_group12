@@ -1,5 +1,6 @@
 import Foundation
 
+
 class HomeDataStore {
     
     
@@ -9,7 +10,7 @@ class HomeDataStore {
     private var goals: [HomeTodaysGoalModel] = []
     private var upcomingEvents: [HomeUpcomingModel] = []
     private var memories: [HomeMemoryModel] = []
-    private var articles: [HomeArticleModel] = []
+    private var articles: [ArticleModel] = []
     
     
     var userProfile: UserProfile = UserProfile(name: "Sophie")
@@ -32,7 +33,10 @@ class HomeDataStore {
         goals = loadJSON("Goals.json")
         upcomingEvents = loadJSON("Upcoming.json")
         memories = loadJSON("Memories.json")
-        articles = loadJSON("Articles.json")
+        
+        // Add these two lines instead:
+        let response: ArticlesResponse = loadJSON("articles.json")
+        articles = response.articles
     }
     
     private func loadJSON<T: Decodable>(_ filename: String) -> T {
@@ -62,7 +66,7 @@ class HomeDataStore {
         return memories
     }
     
-    func getArticles() -> [HomeArticleModel] {
+    func getArticles() -> [ArticleModel] {
         return articles
     }
     

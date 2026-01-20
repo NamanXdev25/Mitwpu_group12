@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -28,20 +28,24 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="800" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tvi-KQ-Wn9">
-                                <rect key="frame" x="16" y="51" width="29.666666666666671" height="19.333333333333329"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="1000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tvi-KQ-Wn9">
+                                <rect key="frame" x="16" y="51" width="37" height="20"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
                                 <color key="textColor" systemColor="systemGray2Color"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text=" ✿" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lU9-yM-bls">
-                                <rect key="frame" x="46" y="51" width="19" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="🍀" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lU9-yM-bls">
+                                <rect key="frame" x="53" y="50.666666666666664" width="21" height="20.999999999999993"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="Tw3-fK-sF5"/>
+                                    <constraint firstAttribute="width" constant="21" id="UjR-VW-9yG"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" name="TabBarcolour"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="to Level 2" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3cU-cF-dqs">
-                                <rect key="frame" x="68" y="51" width="70" height="19.333333333333329"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="to next Garden" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3cU-cF-dqs">
+                                <rect key="frame" x="78" y="51" width="108" height="20"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
                                 <color key="textColor" systemColor="systemGray2Color"/>
                                 <nil key="highlightedColor"/>
@@ -62,7 +66,7 @@
                                     <action selector="ChevronTapped:" destination="UFQ-Kk-BQu" eventType="touchUpInside" id="pSR-wH-UsE"/>
                                 </connections>
                             </button>
-                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="hCQ-xQ-MRK">
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.80000000000000004" translatesAutoresizingMaskIntoConstraints="NO" id="hCQ-xQ-MRK">
                                 <rect key="frame" x="16" y="100" width="327" height="4"/>
                                 <color key="progressTintColor" name="TabBarcolour"/>
                             </progressView>
@@ -72,14 +76,14 @@
                                 <color key="textColor" name="Memorycolor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="6000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y8y-GA-Llc">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="5000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y8y-GA-Llc">
                                 <rect key="frame" x="317" y="76" width="26" height="12"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                 <color key="textColor" name="Memorycolor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="5200" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="apL-3f-N4a">
-                                <rect key="frame" x="284" y="76" width="27" height="12"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="4000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="apL-3f-N4a">
+                                <rect key="frame" x="283" y="76" width="28" height="12"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="10"/>
                                 <color key="textColor" name="Memorycolor"/>
                                 <nil key="highlightedColor"/>
@@ -88,11 +92,9 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="apL-3f-N4a" firstAttribute="top" secondItem="8Fw-iX-FRF" secondAttribute="top" constant="76" id="09H-UD-kIo"/>
-                            <constraint firstItem="3cU-cF-dqs" firstAttribute="top" secondItem="RKn-vI-0tw" secondAttribute="bottom" constant="4" id="0kx-sX-TCG"/>
                             <constraint firstAttribute="bottom" secondItem="hCQ-xQ-MRK" secondAttribute="bottom" constant="26" id="1IZ-K5-Lq5"/>
                             <constraint firstItem="RKn-vI-0tw" firstAttribute="top" secondItem="8Fw-iX-FRF" secondAttribute="top" constant="26" id="1ut-GL-vyD"/>
                             <constraint firstItem="ESA-tt-R4N" firstAttribute="leading" secondItem="apL-3f-N4a" secondAttribute="trailing" constant="1" id="2oS-1H-2TF"/>
-                            <constraint firstItem="lU9-yM-bls" firstAttribute="top" secondItem="RKn-vI-0tw" secondAttribute="bottom" constant="4" id="3Z6-8b-eOv"/>
                             <constraint firstItem="tvi-KQ-Wn9" firstAttribute="top" secondItem="RKn-vI-0tw" secondAttribute="bottom" constant="4" id="BeJ-Dw-bsM"/>
                             <constraint firstItem="y8y-GA-Llc" firstAttribute="centerY" secondItem="apL-3f-N4a" secondAttribute="centerY" id="Emw-4E-Uqm"/>
                             <constraint firstItem="RKn-vI-0tw" firstAttribute="leading" secondItem="8Fw-iX-FRF" secondAttribute="leading" constant="16" id="Gmy-D1-bqe"/>
@@ -103,9 +105,11 @@
                             <constraint firstAttribute="trailing" secondItem="y8y-GA-Llc" secondAttribute="trailing" constant="16" id="TEN-1w-Bsc"/>
                             <constraint firstItem="tvi-KQ-Wn9" firstAttribute="leading" secondItem="8Fw-iX-FRF" secondAttribute="leading" constant="16" id="VLd-Ga-ej7"/>
                             <constraint firstItem="lUW-em-8lu" firstAttribute="centerY" secondItem="RKn-vI-0tw" secondAttribute="centerY" id="aMj-0z-ahH"/>
-                            <constraint firstItem="3cU-cF-dqs" firstAttribute="leading" secondItem="lU9-yM-bls" secondAttribute="trailing" constant="3" id="bRr-F0-gjw"/>
-                            <constraint firstItem="lU9-yM-bls" firstAttribute="leading" secondItem="8Fw-iX-FRF" secondAttribute="leading" constant="46" id="fYt-s1-Q2h"/>
+                            <constraint firstItem="3cU-cF-dqs" firstAttribute="leading" secondItem="lU9-yM-bls" secondAttribute="trailing" constant="4" id="bRr-F0-gjw"/>
+                            <constraint firstItem="3cU-cF-dqs" firstAttribute="centerY" secondItem="lU9-yM-bls" secondAttribute="centerY" id="baO-vC-Vpx"/>
+                            <constraint firstItem="lU9-yM-bls" firstAttribute="leading" secondItem="tvi-KQ-Wn9" secondAttribute="trailing" id="fYt-s1-Q2h"/>
                             <constraint firstItem="ESA-tt-R4N" firstAttribute="top" secondItem="8Fw-iX-FRF" secondAttribute="top" constant="75" id="fnm-m2-xVk"/>
+                            <constraint firstItem="lU9-yM-bls" firstAttribute="centerY" secondItem="tvi-KQ-Wn9" secondAttribute="centerY" id="mW8-dl-IqJ"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">

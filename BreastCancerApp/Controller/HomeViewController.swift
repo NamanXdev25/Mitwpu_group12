@@ -6,10 +6,9 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     let dataStore = HomeDataStore.shared
     
-    //var goals: [HomeTodaysGoalModel] = []
     var upcomingEvents: [HomeUpcomingModel] = []
     var memories: [HomeMemoryModel] = []
-    var articles: [HomeArticleModel] = []
+    var articles: [ArticleModel] = []  // Changed to ArticleModel
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,23 +32,26 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     
     func loadDataFromStore() {
-        //goals = dataStore.getGoals()
         upcomingEvents = dataStore.getUpcomingEvents()
         memories = dataStore.getMemories()
-        articles = dataStore.getArticles()
+        
+        // Load articles from ArticlesDataSource and take first 2
+        let articlesDataSource = ArticlesDataSource()
+        articlesDataSource.loadArticles()
+        articles = Array(articlesDataSource.articles.prefix(2))
         
         collectionView.reloadData()
     }
     
     func registerCells() {
-
         // Register cells using XIB names directly
         collectionView.register(UINib(nibName: "HomeHeaderCell", bundle: nil), forCellWithReuseIdentifier: "HomeHeaderCell")
         collectionView.register(UINib(nibName: "HomeHealingGardenCell", bundle: nil), forCellWithReuseIdentifier: "HomeHealingGardenCell")
-        //collectionView.register(UINib(nibName: "HomeTodaysGoalCell", bundle: nil), forCellWithReuseIdentifier: "HomeTodaysGoalCell")
         collectionView.register(UINib(nibName: "HomeUpcomingCell", bundle: nil), forCellWithReuseIdentifier: "HomeUpcomingCell")
         collectionView.register(UINib(nibName: "HomeMemoryCell", bundle: nil), forCellWithReuseIdentifier: "HomeMemoryCell")
-        collectionView.register(UINib(nibName: "HomeArticleCell", bundle: nil), forCellWithReuseIdentifier: "HomeArticleCell")
+        
+        // Use ArticleCell instead of HomeArticleCell
+        collectionView.register(UINib(nibName: "ArticleCell", bundle: nil), forCellWithReuseIdentifier: "ArticleCell")
         
         collectionView.register(UINib(nibName: "HomeSectionHeaderView", bundle: nil),
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
@@ -62,7 +64,6 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             switch sectionIndex {
             case 0: return self.createHomeHeaderSection()
             case 1: return self.createGardenSection()
-            //case 2: return self.createGoalsSection()
             case 3: return self.createUpcomingSection()
             case 4: return self.createMemoriesSection()
             case 5: return self.createArticlesSection()
@@ -87,15 +88,6 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         section.contentInsets = NSDirectionalEdgeInsets(top: 6, leading: 0, bottom: 0, trailing: 0)
         return section
     }
-
-//    func createGoalsSection() -> NSCollectionLayoutSection {
-//        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(100))
-//        let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, subitems: [NSCollectionLayoutItem(layoutSize: itemSize)])
-//        let section = NSCollectionLayoutSection(group: group)
-//        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-//        addHeader(to: section)
-//        return section
-//    }
     
     func createUpcomingSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(110))
@@ -119,10 +111,11 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     }
 
     func createArticlesSection() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(280))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(270))
         let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, subitems: [NSCollectionLayoutItem(layoutSize: itemSize)])
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 50, trailing: 16)
+        section.interGroupSpacing = 0
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 50, trailing: 0)
         addHeader(to: section)
         return section
     }
@@ -141,7 +134,6 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section {
         case 0, 1: return 1
-        //case 2: return goals.count
         case 3: return upcomingEvents.count
         case 4: return memories.count
         case 5: return articles.count
@@ -161,17 +153,10 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             // Configure garden cell with DataStore values (if outlets are connected)
             let stats = dataStore.gardenStats
             cell.currentProgressLabel?.text = "\(stats.currentPoints)"
-            //cell.totalGoalLabel?.text = "\(stats.totalPointsNeeded)"
             cell.pointsLabel?.text = "\(stats.pointsToNextLevel)"
             cell.levelLabel?.text = "to Level \(stats.nextLevel)"
             cell.progressView?.progress = stats.progress
             return cell
-            
-//        case 2:
-//            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeTodaysGoalCell", for: indexPath) as! HomeTodaysGoalCell
-//            let data = goals[indexPath.row]
-//            cell.configure(title: data.title, points: data.points, imageName: data.iconName, isCompleted: data.isCompleted)
-//            return cell
             
         case 3:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeUpcomingCell", for: indexPath) as! HomeUpcomingCell
@@ -186,7 +171,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             return cell
             
         case 5:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeArticleCell", for: indexPath) as! HomeArticleCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ArticleCell", for: indexPath) as! ArticleCell
             let data = articles[indexPath.row]
             cell.configure(with: data)
             return cell
@@ -201,12 +186,13 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         header.seeAllButton.isHidden = false
         header.seeAllButton.setTitle("See All", for: .normal)
         
+        // Add target for "See All" button
+        header.seeAllButton.tag = indexPath.section
+        header.seeAllButton.addTarget(self, action: #selector(seeAllTapped(_:)), for: .touchUpInside)
+        
         switch indexPath.section {
-//        case 2:
-//            header.titleLabel.text = "Today's Goals"
-//            header.seeAllButton.isHidden = true
         case 3:
-            header.titleLabel.text = "Upcoming"
+            header.titleLabel.text = "Upcoming Appointment"
             header.seeAllButton.isHidden = true
         case 4:
             header.titleLabel.text = "Your Memories"
@@ -217,21 +203,40 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         return header
     }
     
+    @objc func seeAllTapped(_ sender: UIButton) {
+        if sender.tag == 5 { // Articles section
+            navigateToArticles()
+        }
+    }
+    
+    func navigateToArticles() {
+        let storyboard = UIStoryboard(name: "ArticlesMain", bundle: nil)
+        if let articlesVC = storyboard.instantiateViewController(withIdentifier: "ArticlesViewController") as? ArticlesViewController {
+            navigationController?.pushViewController(articlesVC, animated: true)
+        }
+    }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch indexPath.section {
-//        case 2:
-//            // Toggle goal completion
-//            dataStore.toggleGoalCompletion(at: indexPath.row)
-//            loadDataFromStore()
-            
         case 4:
             print("Tapped memory: \(memories[indexPath.row].description)")
             // Navigate to memory details
             
         case 5:
-            print("Tapped article: \(articles[indexPath.row].title)")
-            // Navigate to article details
+            // Navigate to article detail
+            let article = articles[indexPath.row]
+            let storyboard = UIStoryboard(name: "ArticlesMain", bundle: nil)
+            if let detailVC = storyboard.instantiateViewController(withIdentifier: "ArticleDetailViewController") as? ArticleDetailViewController {
+                detailVC.article = article
+                
+                let navController = UINavigationController(rootViewController: detailVC)
+                if let sheet = navController.sheetPresentationController {
+                    sheet.detents = [.large()]
+                    sheet.prefersGrabberVisible = true
+                    sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+                }
+                present(navController, animated: true)
+            }
             
         default:
             break
