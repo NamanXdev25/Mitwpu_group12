@@ -225,9 +225,6 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
 //            dataStore.toggleGoalCompletion(at: indexPath.row)
 //            loadDataFromStore()
             
-        case 3:
-            // No navigation from home
-            
         case 4:
             print("Tapped memory: \(memories[indexPath.row].description)")
             // Navigate to memory details
