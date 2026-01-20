@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="ProfileSetupContinueCollectionViewCell" customModule="BreastCancerApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="106"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="106"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uVx-xs-mac">
+                        <rect key="frame" x="20" y="16" width="335" height="52"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="52" id="MXm-vI-PpH"/>
+                        </constraints>
+                        <color key="tintColor" red="0.7763671875" green="0.37207034230000002" blue="0.4973144531" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <state key="normal" title="Button"/>
+                        <buttonConfiguration key="configuration" style="filled" title="Continue" cornerStyle="capsule">
+                            <fontDescription key="titleFontDescription" style="UICTFontTextStyleHeadline"/>
+                        </buttonConfiguration>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="26"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </button>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WsE-zK-l3Q">
+                        <rect key="frame" x="20" y="80" width="335" height="10"/>
+                        <string key="text">You’re not alone on this journey
+</string>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                        <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstItem="WsE-zK-l3Q" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="20" id="Pc9-Yw-6x7"/>
+                <constraint firstAttribute="trailing" secondItem="WsE-zK-l3Q" secondAttribute="trailing" constant="20" id="USD-ri-ZrS"/>
+                <constraint firstAttribute="bottom" secondItem="WsE-zK-l3Q" secondAttribute="bottom" constant="16" id="i51-kB-Fr7"/>
+                <constraint firstAttribute="trailing" secondItem="uVx-xs-mac" secondAttribute="trailing" constant="20" id="iKn-Ho-BE2"/>
+                <constraint firstItem="uVx-xs-mac" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="16" id="qKj-Ay-jzT"/>
+                <constraint firstItem="uVx-xs-mac" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="20" id="vWJ-zZ-cWt"/>
+                <constraint firstItem="WsE-zK-l3Q" firstAttribute="top" secondItem="uVx-xs-mac" secondAttribute="bottom" constant="12" id="yg7-U0-aFN"/>
+            </constraints>
+            <size key="customSize" width="385" height="232"/>
+            <connections>
+                <outlet property="continueButton" destination="uVx-xs-mac" id="Ty2-gD-9kg"/>
+                <outlet property="footerLabel" destination="WsE-zK-l3Q" id="Kts-f3-GDB"/>
+            </connections>
+            <point key="canvasLocation" x="394.6564885496183" y="217.60563380281693"/>
+        </collectionViewCell>
+    </objects>
+</document>
