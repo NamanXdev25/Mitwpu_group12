@@ -168,7 +168,11 @@
                             <constraint firstItem="Kfn-qe-Qn2" firstAttribute="top" secondItem="lsP-hJ-y9y" secondAttribute="top" id="f74-wY-XKi"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="3L6-Xg-6jK"/>
+                    <navigationItem key="navigationItem" id="3L6-Xg-6jK">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="line.3.horizontal.decrease" catalog="system" id="tzv-Yb-OFf">
+                            <color key="tintColor" name="pink"/>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="collectionView" destination="Kfn-qe-Qn2" id="1nv-iY-kif"/>
                     </connections>
@@ -176,6 +180,21 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="h4F-EH-IaM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2446.5648854961833" y="-15.492957746478874"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="0Ed-jh-frG">
+            <objects>
+                <viewController modalPresentationStyle="overFullScreen" id="LnN-x5-SQt" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ozg-vi-qby">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="5q2-vf-p6q"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="c5a-WD-r5r" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2396" y="781"/>
         </scene>
         <!--Test Record Detail View Controller-->
         <scene sceneID="wyS-cB-k3U">
@@ -499,6 +518,7 @@
         <image name="Gemini_Generated_Image_7grqus7grqus7grq" width="1024" height="1024"/>
         <image name="backward.fill" catalog="system" width="128" height="76"/>
         <image name="forward.fill" catalog="system" width="128" height="76"/>
+        <image name="line.3.horizontal.decrease" catalog="system" width="128" height="73"/>
         <image name="play.fill" catalog="system" width="120" height="128"/>
         <namedColor name="bg">
             <color red="0.97254901960784312" green="0.94901960784313721" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
