@@ -2,15 +2,13 @@ import Foundation
 
 struct HydrationHistoryModel {
 
-    // MARK: - Storage
-    private static let historyKey = "hydration_daily_history"   // stored in mL
+    private static let historyKey = "hydration_daily_history"
 
     enum Period {
         case weekly
         case monthly
     }
 
-   
     static func addWaterML(_ ml: Int) {
         var history = loadHistory()
         let todayKey = dateKey(for: Date())
@@ -18,7 +16,6 @@ struct HydrationHistoryModel {
         saveHistory(history)
     }
 
-    /// Average in liters (for charts)
     static func average(for period: Period) -> Double {
         let valuesML = chartValuesML(for: period)
         guard !valuesML.isEmpty else { return 0 }
@@ -26,22 +23,18 @@ struct HydrationHistoryModel {
         return avgML / 1000.0
     }
 
-    /// Chart values in liters
     static func chartValues(for period: Period) -> [Double] {
         chartValuesML(for: period).map { $0 / 1000.0 }
     }
-
-    // MARK: - Internal (mL)
 
     private static func chartValuesML(for period: Period) -> [Double] {
         let history = loadHistory()
         let today = Date()
 
         switch period {
-
         case .weekly:
             var calendar = Calendar.current
-            calendar.firstWeekday = 1 // Sunday
+            calendar.firstWeekday = 1
 
             let startOfWeek = calendar.date(
                 from: calendar.dateComponents(
@@ -70,8 +63,6 @@ struct HydrationHistoryModel {
             }
         }
     }
-
-    // MARK: - Persistence
 
     private static func loadHistory() -> [String: Double] {
         UserDefaults.standard.dictionary(forKey: historyKey) as? [String: Double] ?? [:]

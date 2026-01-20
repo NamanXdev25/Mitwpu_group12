@@ -2,18 +2,15 @@ import UIKit
 
 final class HydrationBarChartView: UIView {
 
-    // MARK: - Mode
     enum Mode {
         case weekly
         case monthly
     }
 
-    // MARK: - Data
     private var values: [Double] = []
     private var xLabels: [String] = []
     private var mode: Mode = .weekly
 
-    // MARK: - Scaling
     private var maxY: Double {
         max(4.0, (values.max() ?? 0).rounded(.up))
     }
@@ -26,7 +23,6 @@ final class HydrationBarChartView: UIView {
         }
     }
 
-    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .clear
@@ -37,24 +33,15 @@ final class HydrationBarChartView: UIView {
         backgroundColor = .clear
     }
 
-    // MARK: - Public API
-    func configure(
-        values: [Double],
-        labels: [String],
-        mode: Mode
-    ) {
+    func configure(values: [Double], labels: [String], mode: Mode) {
         self.values = values
         self.xLabels = labels
         self.mode = mode
         setNeedsDisplay()
     }
 
-    // MARK: - Drawing
     override func draw(_ rect: CGRect) {
-        guard
-            let ctx = UIGraphicsGetCurrentContext(),
-            !values.isEmpty
-        else { return }
+        guard let ctx = UIGraphicsGetCurrentContext(), !values.isEmpty else { return }
 
         let leftPadding: CGFloat = 36
         let bottomPadding: CGFloat = 28
@@ -66,18 +53,11 @@ final class HydrationBarChartView: UIView {
         drawBars(ctx, rect, leftPadding, chartHeight)
     }
 
-    // MARK: - Y Axis
-    private func drawYAxis(
-        _ ctx: CGContext,
-        _ rect: CGRect,
-        _ left: CGFloat,
-        _ height: CGFloat
-    ) {
+    private func drawYAxis(_ ctx: CGContext, _ rect: CGRect, _ left: CGFloat, _ height: CGFloat) {
         stride(from: 0.0, through: maxY, by: step).forEach { value in
             let y = yPosition(for: value, height)
 
-            let label = String(format: "%.1f", value)
-            label.draw(
+            String(format: "%.1f", value).draw(
                 at: CGPoint(x: 4, y: y - 7),
                 withAttributes: [
                     .font: UIFont.systemFont(ofSize: 10),
@@ -93,7 +73,6 @@ final class HydrationBarChartView: UIView {
         }
     }
 
-    // MARK: - X Axis
     private func drawXAxis(_ rect: CGRect, _ left: CGFloat) {
         let count = xLabels.count
         guard count > 0 else { return }
@@ -103,21 +82,13 @@ final class HydrationBarChartView: UIView {
         let slotWidth = usableWidth / CGFloat(count)
 
         for (index, label) in xLabels.enumerated() {
-
-            // Reduce clutter in monthly view
             if mode == .monthly, index % 5 != 0 { continue }
 
             let xCenter = left + CGFloat(index) * slotWidth + slotWidth / 2
-
-            let size = label.size(withAttributes: [
-                .font: UIFont.systemFont(ofSize: 10)
-            ])
+            let size = label.size(withAttributes: [.font: UIFont.systemFont(ofSize: 10)])
 
             label.draw(
-                at: CGPoint(
-                    x: xCenter - size.width / 2,
-                    y: rect.height - 20
-                ),
+                at: CGPoint(x: xCenter - size.width / 2, y: rect.height - 20),
                 withAttributes: [
                     .font: UIFont.systemFont(ofSize: 10),
                     .foregroundColor: UIColor.gray
@@ -126,13 +97,7 @@ final class HydrationBarChartView: UIView {
         }
     }
 
-    // MARK: - Bars
-    private func drawBars(
-        _ ctx: CGContext,
-        _ rect: CGRect,
-        _ left: CGFloat,
-        _ height: CGFloat
-    ) {
+    private func drawBars(_ ctx: CGContext, _ rect: CGRect, _ left: CGFloat, _ height: CGFloat) {
         let count = values.count
         guard count > 0 else { return }
 
@@ -148,19 +113,11 @@ final class HydrationBarChartView: UIView {
             let x = left + CGFloat(index) * slotWidth + (slotWidth - barWidth) / 2
             let y = rect.height - 28 - barHeight
 
-            let barRect = CGRect(
-                x: x,
-                y: y,
-                width: barWidth,
-                height: barHeight
-            )
-
             ctx.setFillColor(barColor.cgColor)
-            ctx.fill(barRect)
+            ctx.fill(CGRect(x: x, y: y, width: barWidth, height: barHeight))
         }
     }
 
-    // MARK: - Helpers
     private func yPosition(for value: Double, _ height: CGFloat) -> CGFloat {
         bounds.height - 28 - CGFloat(value / maxY) * height
     }

@@ -1,6 +1,6 @@
 import UIKit
 
-class GlassOptionCell: UIView {
+final class GlassOptionCell: UIView {
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var dividerView: UIView!
@@ -9,11 +9,8 @@ class GlassOptionCell: UIView {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-
         backgroundColor = .clear
-
-        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-        addGestureRecognizer(tap)
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
     }
 
     func configure(text: String, hideDivider: Bool) {
