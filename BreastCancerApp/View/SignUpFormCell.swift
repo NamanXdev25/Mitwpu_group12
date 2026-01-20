@@ -1,6 +1,6 @@
 import UIKit
 
-class SignUpFormCell: UICollectionViewCell {
+final class SignUpFormCell: UICollectionViewCell {
 
     // MARK: - Container Views
     @IBOutlet weak var emailContainerView: UIView!
@@ -18,19 +18,25 @@ class SignUpFormCell: UICollectionViewCell {
 
     // MARK: - State
     private var isPasswordVisible = false
-    private var isChecked = false   // ✅ checkbox state
+    private var isChecked = false
 
     // MARK: - Lifecycle
     override func awakeFromNib() {
         super.awakeFromNib()
-        setupUI()
+        setupTextFields()
         setupContainers()
-        setupLoginButton()
-        setupCheckbox()
+        setupSignUpButton()
+        setupCheckboxButton()
     }
 
-    // MARK: - UI Setup
-    private func setupUI() {
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        isChecked = false
+        updateCheckboxUI()
+    }
+
+    // MARK: - TextField Setup
+    private func setupTextFields() {
         emailTextField.borderStyle = .none
         passwordTextField.borderStyle = .none
         reenterPasswordTextField.borderStyle = .none
@@ -47,52 +53,62 @@ class SignUpFormCell: UICollectionViewCell {
             reenterPasswordContainerView
         ]
 
-        containers.forEach { container in
-            guard let view = container else { return }
-
+        containers.forEach { view in
+            guard let view = view else { return }
             view.layer.cornerRadius = 12
             view.layer.borderWidth = 1
             view.layer.borderColor = UIColor.systemPink.cgColor
-            view.layer.masksToBounds = true
             view.backgroundColor = .white
+            view.clipsToBounds = true
         }
     }
 
-    // MARK: - Login Button Styling
-    private func setupLoginButton() {
+    // MARK: - Sign Up Button Styling
+    private func setupSignUpButton() {
         signUpButton.backgroundColor = .systemPink
         signUpButton.setTitleColor(.white, for: .normal)
         signUpButton.layer.cornerRadius = 28
-        signUpButton.layer.masksToBounds = true
-//        signUpButton.adjustsImageWhenHighlighted = false
+        signUpButton.clipsToBounds = true
     }
 
-    // MARK: - Checkbox Setup (CODE-ONLY)
-    private func setupCheckbox() {
-        agreeButton.setImage(UIImage(systemName: "square"), for: .normal)
-        agreeButton.tintColor = .systemPink
-//        agreeButton.adjustsImageWhenHighlighted = false
+    // MARK: - Checkbox Setup (iOS 15+ SAFE)
+    private func setupCheckboxButton() {
+        var config = UIButton.Configuration.plain()
+        config.baseForegroundColor = .systemPink
+        config.contentInsets = NSDirectionalEdgeInsets(
+            top: 6, leading: 6, bottom: 6, trailing: 6
+        )
+        agreeButton.configuration = config
+        updateCheckboxUI()
+    }
+
+    private func updateCheckboxUI() {
+        var config = agreeButton.configuration ?? UIButton.Configuration.plain()
+        config.image = UIImage(
+            systemName: isChecked
+                ? "checkmark.square.fill"
+                : "square"
+        )
+        config.baseForegroundColor = .systemPink
+        agreeButton.configuration = config
     }
 
     // MARK: - Actions
 
-    // ✅ Checkbox toggle (pure code)
+    /// Checkbox toggle
     @IBAction func agreeTapped(_ sender: UIButton) {
         isChecked.toggle()
-
-        let imageName = isChecked ? "checkmark.square.fill" : "square"
-        sender.setImage(UIImage(systemName: imageName), for: .normal)
+        updateCheckboxUI()
     }
 
-    // 👁 Password visibility toggle
+    /// Password visibility toggle
     @IBAction func togglePasswordVisibility(_ sender: UIButton) {
         isPasswordVisible.toggle()
         passwordTextField.isSecureTextEntry = !isPasswordVisible
         reenterPasswordTextField.isSecureTextEntry = !isPasswordVisible
-        sender.isSelected = isPasswordVisible
     }
 
-    // 🔐 Sign Up
+    /// Sign Up action
     @IBAction func signUpTapped(_ sender: UIButton) {
         print("Email:", emailTextField.text ?? "")
         print("Password:", passwordTextField.text ?? "")

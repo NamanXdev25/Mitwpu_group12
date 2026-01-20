@@ -194,7 +194,7 @@
                             <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                         </userDefinedRuntimeAttributes>
                     </view>
-                    <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" ambiguous="YES" enabled="NO" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j8u-sY-mhr">
+                    <button opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" ambiguous="YES" enabled="NO" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="j8u-sY-mhr">
                         <rect key="frame" x="24" y="310" width="20" height="20"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="20" id="XAT-WC-CAW"/>
@@ -202,7 +202,7 @@
                         </constraints>
                         <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <state key="normal" title="Button"/>
-                        <buttonConfiguration key="configuration" style="plain" cornerStyle="small">
+                        <buttonConfiguration key="configuration" style="plain" cornerStyle="fixed">
                             <imageReference key="image" image="square" catalog="system" symbolScale="small"/>
                             <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" scale="small"/>
                             <color key="baseForegroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -240,6 +240,7 @@
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="iUi-z7-gWP" secondAttribute="trailing" constant="24" id="3nd-rv-55a"/>
                 <constraint firstItem="pGm-jT-TPw" firstAttribute="top" secondItem="PQQ-f8-Y8Z" secondAttribute="bottom" constant="6" id="6DK-8t-oIh"/>
