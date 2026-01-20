@@ -56,6 +56,9 @@
                             <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" scale="medium"/>
                             <color key="baseBackgroundColor" systemColor="systemPinkColor"/>
                         </buttonConfiguration>
+                        <connections>
+                            <action selector="cameraButtonTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="fPx-dr-eTQ"/>
+                        </connections>
                     </button>
                 </subviews>
             </view>
@@ -89,7 +92,7 @@
             <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemPinkColor">
-            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="viewFlipsideBackgroundColor">
             <color red="0.12156862745098039" green="0.12941176470588237" blue="0.14117647058823529" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

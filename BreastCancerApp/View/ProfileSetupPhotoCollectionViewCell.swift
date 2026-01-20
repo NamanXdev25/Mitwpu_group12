@@ -1,5 +1,9 @@
 import UIKit
 
+protocol ProfileSetupPhotoCellDelegate: AnyObject {
+    func didTapCameraButton()
+}
+
 class ProfileSetupPhotoCollectionViewCell: UICollectionViewCell {
 
     @IBOutlet weak var titleLabel: UILabel!
@@ -7,27 +11,31 @@ class ProfileSetupPhotoCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var cameraButton: UIButton!
     @IBOutlet weak var profileImageView: UIImageView!
 
+    weak var delegate: ProfileSetupPhotoCellDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        styleCameraButton()
+
+        // Camera button styling (already done)
+        cameraButton.backgroundColor = .systemPink
+        cameraButton.tintColor = .white
+        cameraButton.layer.borderWidth = 2
+        cameraButton.layer.borderColor = UIColor.white.cgColor
+        cameraButton.clipsToBounds = true
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        // Ensures perfect circle after AutoLayout
         cameraButton.layer.cornerRadius = cameraButton.bounds.height / 2
+        profileImageView.layer.cornerRadius = profileImageView.bounds.height / 2
+        profileImageView.clipsToBounds = true
     }
 
-    private func styleCameraButton() {
-       
-        cameraButton.backgroundColor = UIColor.systemPink
+    @IBAction func cameraButtonTapped(_ sender: UIButton) {
+        delegate?.didTapCameraButton()
+    }
 
-        cameraButton.tintColor = .white
-        cameraButton.layer.borderWidth = 2
-        cameraButton.layer.borderColor = UIColor.white.cgColor
-
-        cameraButton.clipsToBounds = true
-        cameraButton.layer.shadowOpacity = 0
+    func setProfileImage(_ image: UIImage) {
+        profileImageView.image = image
     }
 }

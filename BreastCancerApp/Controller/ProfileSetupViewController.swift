@@ -10,9 +10,16 @@ import UIKit
 class ProfileSetupViewController: UIViewController,
                                   UICollectionViewDelegate,
                                   UICollectionViewDataSource,
-                                  UICollectionViewDelegateFlowLayout {
+                                  UICollectionViewDelegateFlowLayout,
+                                  UIImagePickerControllerDelegate,
+                                  UINavigationControllerDelegate,
+                                  ProfileSetupPhotoCellDelegate {
 
     @IBOutlet weak var collectionView: UICollectionView!
+
+    // MARK: - Stored Properties
+
+    private var selectedProfileImage: UIImage?
 
     // MARK: - Lifecycle
 
@@ -23,12 +30,12 @@ class ProfileSetupViewController: UIViewController,
         collectionView.delegate = self
         collectionView.dataSource = self
 
-        // 🔹 Push entire content DOWN (matches Figma vertical spacing)
+        // 🔹 Push entire content down (Figma spacing)
         collectionView.contentInset = UIEdgeInsets(top: 40, left: 0, bottom: 0, right: 0)
         collectionView.scrollIndicatorInsets = collectionView.contentInset
         collectionView.contentInsetAdjustmentBehavior = .never
 
-        // 🔹 Force full-width layout behavior
+        // 🔹 Force full-width layout
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.sectionInset = .zero
             layout.minimumLineSpacing = 0
@@ -95,6 +102,13 @@ class ProfileSetupViewController: UIViewController,
 
             cell.titleLabel.text = "Profile Photo"
             cell.instructionLabel.text = "Click the camera to add a photo"
+            cell.delegate = self
+
+            // Set selected image if available
+            if let image = selectedProfileImage {
+                cell.setProfileImage(image)
+            }
+
             return cell
         }
 
@@ -111,7 +125,7 @@ class ProfileSetupViewController: UIViewController,
             return cell
         }
 
-        // 🔹 Cell 3 — Continue Button + Footer Label
+        // 🔹 Cell 3 — Continue Button + Footer
         let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: "ProfileSetupContinueCollectionViewCell",
             for: indexPath
@@ -129,19 +143,67 @@ class ProfileSetupViewController: UIViewController,
 
         let width = collectionView.bounds.width
 
-        if indexPath.item == 0 {
+        switch indexPath.item {
+        case 0:
+            return CGSize(width: width, height: 120)
+        case 1:
+            return CGSize(width: width, height: 160)
+        case 2:
+            return CGSize(width: width, height: 280)
+        default:
             return CGSize(width: width, height: 120)
         }
+    }
 
-        if indexPath.item == 1 {
-            return CGSize(width: width, height: 160)
+    // MARK: - ProfileSetupPhotoCellDelegate
+
+    func didTapCameraButton() {
+        let alert = UIAlertController(
+            title: "Profile Photo",
+            message: "Choose an option",
+            preferredStyle: .actionSheet
+        )
+
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            alert.addAction(UIAlertAction(title: "Take Photo", style: .default) { _ in
+                self.openImagePicker(sourceType: .camera)
+            })
         }
 
-        if indexPath.item == 2 {
-            return CGSize(width: width, height: 280)
+        alert.addAction(UIAlertAction(title: "Choose from Gallery", style: .default) { _ in
+            self.openImagePicker(sourceType: .photoLibrary)
+        })
+
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(alert, animated: true)
+    }
+
+    // MARK: - Image Picker Helpers
+
+    private func openImagePicker(sourceType: UIImagePickerController.SourceType) {
+        let picker = UIImagePickerController()
+        picker.sourceType = sourceType
+        picker.delegate = self
+        picker.allowsEditing = true
+        present(picker, animated: true)
+    }
+
+    func imagePickerController(_ picker: UIImagePickerController,
+                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+
+        if let editedImage = info[.editedImage] as? UIImage {
+            selectedProfileImage = editedImage
+        } else if let originalImage = info[.originalImage] as? UIImage {
+            selectedProfileImage = originalImage
         }
 
-        // 🔹 Continue + "You're not alone" (same XIB)
-        return CGSize(width: width, height: 120)
+        picker.dismiss(animated: true)
+
+        // Reload only the photo cell
+        collectionView.reloadItems(at: [IndexPath(item: 1, section: 0)])
+    }
+
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true)
     }
 }
