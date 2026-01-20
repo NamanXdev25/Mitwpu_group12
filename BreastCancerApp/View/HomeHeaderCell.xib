@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="HomeHeaderCell" id="Fnx-X0-bPa" userLabel="HomeHeaderCell" customClass="HomeHeaderCell" customModule="BreastCancerApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="300"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="393" height="300"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="HomescreenImage" translatesAutoresizingMaskIntoConstraints="NO" id="YXu-mZ-hOa">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="300"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="393" id="4ff-Hu-9P6"/>
+                            <constraint firstAttribute="height" constant="300" id="r0l-1K-h2W"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hello, Sophie!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q2G-yi-d1H">
+                        <rect key="frame" x="17" y="100" width="216.33333333333334" height="41"/>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="34"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You’re Nurturing your Strength" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jZ8-3J-1gr">
+                        <rect key="frame" x="17" y="145" width="216.33333333333334" height="18"/>
+                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                        <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="&quot;Every day may not be good, but there is something good in every day.&quot;" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nE0-JR-eri">
+                        <rect key="frame" x="37" y="185" width="319" height="40.666666666666657"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="319" id="EHY-Sb-zOl"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ProfilePhoto" translatesAutoresizingMaskIntoConstraints="NO" id="ObZ-nM-WWF">
+                        <rect key="frame" x="336" y="100" width="40" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="40" id="g6w-0w-3No"/>
+                            <constraint firstAttribute="width" constant="40" id="t2D-9c-K40"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="20"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </imageView>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Foe-oN-ynv">
+                        <rect key="frame" x="336" y="100" width="40" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="40" id="Eqp-cx-x0w"/>
+                            <constraint firstAttribute="height" constant="40" id="WyW-NF-cLa"/>
+                        </constraints>
+                        <state key="normal" title="Button"/>
+                        <buttonConfiguration key="configuration" style="plain"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="20"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                        <connections>
+                            <action selector="profileTapped:" destination="Fnx-X0-bPa" eventType="touchUpInside" id="QuQ-6I-RKa"/>
+                        </connections>
+                    </button>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ajm-mz-Sdc"/>
+            <constraints>
+                <constraint firstItem="jZ8-3J-1gr" firstAttribute="top" secondItem="q2G-yi-d1H" secondAttribute="bottom" constant="4" id="3hG-t5-1iM"/>
+                <constraint firstItem="nE0-JR-eri" firstAttribute="top" secondItem="jZ8-3J-1gr" secondAttribute="bottom" constant="22" id="7bm-L5-eKz"/>
+                <constraint firstItem="YXu-mZ-hOa" firstAttribute="leading" secondItem="Fnx-X0-bPa" secondAttribute="leading" id="8Ib-fC-2rG"/>
+                <constraint firstAttribute="bottom" secondItem="YXu-mZ-hOa" secondAttribute="bottom" id="BJ9-Tm-Pdq"/>
+                <constraint firstItem="ObZ-nM-WWF" firstAttribute="top" secondItem="Fnx-X0-bPa" secondAttribute="top" constant="100" id="GgN-1X-ilu"/>
+                <constraint firstAttribute="trailing" secondItem="Foe-oN-ynv" secondAttribute="trailing" constant="17" id="J5b-Fc-hPH"/>
+                <constraint firstItem="q2G-yi-d1H" firstAttribute="top" secondItem="Fnx-X0-bPa" secondAttribute="top" constant="100" id="XOd-O4-NFE"/>
+                <constraint firstItem="Foe-oN-ynv" firstAttribute="top" secondItem="Fnx-X0-bPa" secondAttribute="top" constant="100" id="acx-wD-MvS"/>
+                <constraint firstAttribute="trailing" secondItem="YXu-mZ-hOa" secondAttribute="trailing" id="bL8-EE-zFc"/>
+                <constraint firstItem="YXu-mZ-hOa" firstAttribute="top" secondItem="Fnx-X0-bPa" secondAttribute="top" id="egp-71-3nk"/>
+                <constraint firstItem="nE0-JR-eri" firstAttribute="centerX" secondItem="YXu-mZ-hOa" secondAttribute="centerX" id="fMm-ar-aWd"/>
+                <constraint firstAttribute="trailing" secondItem="ObZ-nM-WWF" secondAttribute="trailing" constant="17" id="htd-GX-8Wm"/>
+                <constraint firstItem="q2G-yi-d1H" firstAttribute="leading" secondItem="Fnx-X0-bPa" secondAttribute="leading" constant="17" id="sj6-bM-yYV"/>
+                <constraint firstItem="jZ8-3J-1gr" firstAttribute="leading" secondItem="Fnx-X0-bPa" secondAttribute="leading" constant="17" id="y1b-UO-Au1"/>
+            </constraints>
+            <size key="customSize" width="393" height="298"/>
+            <connections>
+                <outlet property="backgroundImageView" destination="YXu-mZ-hOa" id="K9C-eH-iri"/>
+                <outlet property="greetingLabel" destination="q2G-yi-d1H" id="p3b-1C-vkW"/>
+                <outlet property="profileButton" destination="Foe-oN-ynv" id="Eqg-H1-YCQ"/>
+                <outlet property="profileImageView" destination="ObZ-nM-WWF" id="XJF-oE-CG5"/>
+                <outlet property="quoteLabel" destination="nE0-JR-eri" id="CWG-Fx-0mg"/>
+                <outlet property="subGreetingLabel" destination="jZ8-3J-1gr" id="gjL-HR-zc0"/>
+            </connections>
+            <point key="canvasLocation" x="304.58015267175574" y="158.45070422535213"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="HomescreenImage" width="793" height="685"/>
+        <image name="ProfilePhoto" width="496" height="468"/>
+    </resources>
+</document>
