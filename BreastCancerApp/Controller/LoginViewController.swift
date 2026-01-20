@@ -121,7 +121,7 @@ extension LoginViewController: UICollectionViewDelegateFlowLayout {
         switch items[indexPath.item] {
 
         case .welcome:
-            return CGSize(width: width, height: 96)
+            return CGSize(width: width, height: 120)
 
         case .form:
             return CGSize(width: width, height: 360)

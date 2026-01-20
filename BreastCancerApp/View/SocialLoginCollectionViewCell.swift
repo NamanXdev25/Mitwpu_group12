@@ -21,17 +21,11 @@ class SocialLoginCollectionViewCell: UICollectionViewCell {
 
     private func setupUI() {
 
-        // Required because XIB contains Safe Area
         contentView.isUserInteractionEnabled = true
         isUserInteractionEnabled = true
-
-        // Google button style
         stylePillView(googleContainerView)
-
-        // Apple button style
         stylePillView(appleContainerView)
 
-        // Sign up button
         signUpButton.backgroundColor = .clear
         signUpButton.setTitleColor(UIColor(named: "Pink"), for: .normal)
         signUpButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
@@ -59,8 +53,6 @@ class SocialLoginCollectionViewCell: UICollectionViewCell {
         )
         appleContainerView.addGestureRecognizer(appleTap)
     }
-
-    // MARK: - Actions
 
     @objc private func didTapGoogle() {
         print("Google login tapped")

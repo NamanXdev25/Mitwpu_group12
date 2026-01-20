@@ -4,7 +4,6 @@
 //
 //  Created by Shloka on 20/01/26.
 //
-
 import UIKit
 
 class ProfileSetupViewController: UIViewController,
@@ -29,13 +28,11 @@ class ProfileSetupViewController: UIViewController,
 
         collectionView.delegate = self
         collectionView.dataSource = self
-
-        // 🔹 Push entire content down (Figma spacing)
         collectionView.contentInset = UIEdgeInsets(top: 40, left: 0, bottom: 0, right: 0)
         collectionView.scrollIndicatorInsets = collectionView.contentInset
         collectionView.contentInsetAdjustmentBehavior = .never
 
-        // 🔹 Force full-width layout
+
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.sectionInset = .zero
             layout.minimumLineSpacing = 0
