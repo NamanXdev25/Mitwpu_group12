@@ -10,9 +10,7 @@ struct HydrationHistoryModel {
         case monthly
     }
 
-    // MARK: - Public API
-
-    /// ✅ Add water in **milliliters**
+   
     static func addWaterML(_ ml: Int) {
         var history = loadHistory()
         let todayKey = dateKey(for: Date())

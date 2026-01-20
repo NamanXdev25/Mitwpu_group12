@@ -26,23 +26,38 @@ class HydrationTopCardCell: UICollectionViewCell {
         dropButton.addTarget(self, action: #selector(dropTapped), for: .touchUpInside)
     }
 
-    @objc private func goalTapped() { onGoalTapped?() }
-    @objc private func cupTapped() { onCupTapped?() }
-    @objc private func dropTapped() { onDropTapped?() }
+    @objc private func goalTapped() {
+        onGoalTapped?()
+    }
+
+    @objc private func cupTapped() {
+        onCupTapped?()
+    }
+
+    @objc private func dropTapped() {
+        onDropTapped?()
+    }
 
     func configure(consumedML: Int, goal: Double, cupSize: Int) {
 
+       
         let consumedLiters = Double(consumedML) / 1000.0
-        let remainingLiters = max(goal - consumedLiters, 0)
-        let progressValue = CGFloat(consumedLiters / goal)
 
-  
-        valueLabel.text = String(format: "%.1f L / %.1f L", consumedLiters, goal)
+        
+        let remainingLiters = max(goal - consumedLiters, 0)
+        let progressValue = goal > 0 ? CGFloat(consumedLiters / goal) : 0
+
+        
+        valueLabel.text = String(format: "%.1f L / %d mL", goal, cupSize)
+
+       
         remainingLabel.text = String(format: "Remaining %.1f L", remainingLiters)
 
+       
         goalValueButton.setTitle(String(format: "%.1f L", goal), for: .normal)
         cupValueButton.setTitle("\(cupSize) mL", for: .normal)
 
+        // Progress ring
         progressRingView.setProgress(progressValue, animated: true)
     }
 }

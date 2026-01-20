@@ -26,7 +26,7 @@ struct HydrationModel {
         return value == 0 ? defaultCupSize : value
     }
 
-    /// Consumed today in **milliliters**
+    
     static func consumedTodayML() -> Int {
         checkForDailyReset()
         return UserDefaults.standard.integer(forKey: consumedKey)
@@ -47,7 +47,7 @@ struct HydrationModel {
         UserDefaults.standard.set(cupSize, forKey: cupSizeKey)
     }
 
-    /// ✅ Add water in **milliliters**
+  
     static func addWaterML(_ ml: Int) {
         checkForDailyReset()
         let current = consumedTodayML()
