@@ -56,16 +56,12 @@ final class HydrationViewController: UIViewController {
 // MARK: - UICollectionViewDataSource
 extension HydrationViewController: UICollectionViewDataSource {
 
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        1
-    }
+    func numberOfSections(in collectionView: UICollectionView) -> Int { 1 }
 
     func collectionView(
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
-    ) -> Int {
-        2
-    }
+    ) -> Int { 2 }
 
     func collectionView(
         _ collectionView: UICollectionView,
@@ -74,12 +70,12 @@ extension HydrationViewController: UICollectionViewDataSource {
 
         if indexPath.item == 0 {
             return makeTopCardCell(for: indexPath)
+        } else {
+            return makeChartCell(for: indexPath)
         }
-
-        return makeChartCell(for: indexPath)
     }
 
-    // MARK: - Cell Builders
+    // MARK: - Top Card Cell
     private func makeTopCardCell(
         for indexPath: IndexPath
     ) -> UICollectionViewCell {
@@ -89,15 +85,7 @@ extension HydrationViewController: UICollectionViewDataSource {
             for: indexPath
         ) as! HydrationTopCardCell
 
-        let consumedML = HydrationModel.consumedTodayML()
-        let goalLiters = HydrationModel.currentGoal()
-        let cupML = Int(HydrationModel.currentCupSize() * 1000)
-
-        cell.configure(
-            consumedML: consumedML,
-            goal: goalLiters,
-            cupSize: cupML
-        )
+        configureTopCard(cell)
 
         cell.onGoalTapped = { [weak self] in
             self?.showGoalSelector()
@@ -115,17 +103,13 @@ extension HydrationViewController: UICollectionViewDataSource {
             HydrationModel.addWaterML(cupML)
             HydrationHistoryModel.addWaterML(cupML)
 
-            self.collectionView.reloadItems(
-                at: [
-                    IndexPath(item: 0, section: 0),
-                    IndexPath(item: 1, section: 0)
-                ]
-            )
+            self.reloadTopCardAndChart()
         }
 
         return cell
     }
 
+    // MARK: - Chart Cell
     private func makeChartCell(
         for indexPath: IndexPath
     ) -> UICollectionViewCell {
@@ -160,14 +144,36 @@ extension HydrationViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-        CGSize(
-            width: collectionView.bounds.width,
-            height: 370
+        CGSize(width: collectionView.bounds.width, height: 370)
+    }
+}
+
+// MARK: - Helpers
+extension HydrationViewController {
+
+    private func configureTopCard(_ cell: HydrationTopCardCell) {
+        let consumedML = HydrationModel.consumedTodayML()
+        let goalLiters = HydrationModel.currentGoal()
+        let cupML = Int(HydrationModel.currentCupSize() * 1000)
+
+        cell.configure(
+            consumedML: consumedML,
+            goal: goalLiters,
+            cupSize: cupML
+        )
+    }
+
+    private func reloadTopCardAndChart() {
+        collectionView.reloadItems(
+            at: [
+                IndexPath(item: 0, section: 0),
+                IndexPath(item: 1, section: 0)
+            ]
         )
     }
 }
 
-// MARK: - Selector Presentation
+// MARK: - Option Selector Presenter
 extension HydrationViewController {
 
     private func presentOptionSelector(
@@ -183,7 +189,6 @@ extension HydrationViewController {
 
         vc.modalPresentationStyle = .overFullScreen
         vc.modalTransitionStyle = .crossDissolve
-
         vc.titleText = title
         vc.subtitleText = subtitle
         vc.options = options
@@ -206,7 +211,7 @@ extension HydrationViewController {
             options: titles
         ) { [weak self] index in
             HydrationModel.setGoal(values[index])
-            self?.reloadTopCard()
+            self?.reloadTopCardAndChart()
         }
     }
 
@@ -220,13 +225,7 @@ extension HydrationViewController {
             options: titles
         ) { [weak self] index in
             HydrationModel.setCupSize(values[index])
-            self?.reloadTopCard()
+            self?.reloadTopCardAndChart()
         }
-    }
-
-    func reloadTopCard() {
-        collectionView.reloadItems(
-            at: [IndexPath(item: 0, section: 0)]
-        )
     }
 }

@@ -2,29 +2,23 @@ import UIKit
 
 final class HydrationOptionSelectorViewController: UIViewController {
 
-    // MARK: - Outlets
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var subtitleLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
 
-    // MARK: - Public Configuration
     var titleText: String = ""
     var subtitleText: String = ""
     var options: [String] = []
     var onSelect: ((Int) -> Void)?
 
-    // MARK: - Layout
-    private let cellHeight: CGFloat = 44
+    private let cellHeight: CGFloat = 35
 
-    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         configureCollectionView()
-        configureDismissGesture()
     }
 
-    // MARK: - UI Setup
     private func configureUI() {
         view.backgroundColor = .clear
         titleLabel.text = titleText
@@ -32,48 +26,19 @@ final class HydrationOptionSelectorViewController: UIViewController {
     }
 
     private func configureCollectionView() {
-        collectionView.backgroundColor = .clear
         collectionView.dataSource = self
         collectionView.delegate = self
 
-        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.scrollDirection = .vertical
-            layout.minimumLineSpacing = 0
-            layout.minimumInteritemSpacing = 0
-            layout.estimatedItemSize = .zero
-        }
-
         collectionView.register(
-            UINib(
-                nibName: "HydrationOptionCollectionCell",
-                bundle: nil
-            ),
+            UINib(nibName: "HydrationOptionCollectionCell", bundle: nil),
             forCellWithReuseIdentifier: "HydrationOptionCollectionCell"
         )
     }
-
-    private func configureDismissGesture() {
-        let tapGesture = UITapGestureRecognizer(
-            target: self,
-            action: #selector(dismissSelf)
-        )
-        tapGesture.cancelsTouchesInView = false
-        view.addGestureRecognizer(tapGesture)
-    }
-
-    // MARK: - Actions
-    @objc private func dismissSelf() {
-        dismiss(animated: true)
-    }
 }
 
-// MARK: - UICollectionViewDataSource
 extension HydrationOptionSelectorViewController: UICollectionViewDataSource {
 
-    func collectionView(
-        _ collectionView: UICollectionView,
-        numberOfItemsInSection section: Int
-    ) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         options.count + 1
     }
 
@@ -101,13 +66,9 @@ extension HydrationOptionSelectorViewController: UICollectionViewDataSource {
     }
 }
 
-// MARK: - UICollectionViewDelegate
 extension HydrationOptionSelectorViewController: UICollectionViewDelegate {
 
-    func collectionView(
-        _ collectionView: UICollectionView,
-        didSelectItemAt indexPath: IndexPath
-    ) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         dismiss(animated: true)
 
         if indexPath.item < options.count {
@@ -116,7 +77,6 @@ extension HydrationOptionSelectorViewController: UICollectionViewDelegate {
     }
 }
 
-// MARK: - UICollectionViewDelegateFlowLayout
 extension HydrationOptionSelectorViewController: UICollectionViewDelegateFlowLayout {
 
     func collectionView(
@@ -124,9 +84,6 @@ extension HydrationOptionSelectorViewController: UICollectionViewDelegateFlowLay
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-        CGSize(
-            width: collectionView.bounds.width,
-            height: cellHeight
-        )
+        CGSize(width: collectionView.bounds.width, height: cellHeight)
     }
 }

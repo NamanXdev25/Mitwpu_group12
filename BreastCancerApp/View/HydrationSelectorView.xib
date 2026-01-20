@@ -45,6 +45,9 @@
                 <constraint firstAttribute="bottom" secondItem="77l-5t-teu" secondAttribute="bottom" id="u2v-bz-gps"/>
             </constraints>
             <size key="customSize" width="354" height="185"/>
+            <connections>
+                <outlet property="titleLabel" destination="uAK-ys-MzF" id="Kyr-cx-Rst"/>
+            </connections>
             <point key="canvasLocation" x="370.9923664122137" y="144.01408450704227"/>
         </collectionViewCell>
     </objects>

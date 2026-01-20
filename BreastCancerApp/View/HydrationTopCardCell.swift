@@ -3,7 +3,6 @@ import UIKit
 final class HydrationTopCardCell: UICollectionViewCell {
 
     // MARK: - Outlets
-
     @IBOutlet private weak var progressRingView: CircularProgressView!
     @IBOutlet private weak var valueLabel: UILabel!
     @IBOutlet private weak var remainingLabel: UILabel!
@@ -11,13 +10,10 @@ final class HydrationTopCardCell: UICollectionViewCell {
     @IBOutlet private weak var goalValueButton: UIButton!
     @IBOutlet private weak var cupValueButton: UIButton!
 
-    // MARK: - Actions
-
+    // MARK: - Callbacks
     var onGoalTapped: (() -> Void)?
     var onCupTapped: (() -> Void)?
     var onDropTapped: (() -> Void)?
-
-    // MARK: - Lifecycle
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -30,10 +26,10 @@ final class HydrationTopCardCell: UICollectionViewCell {
         progressRingView.setProgress(0, animated: false)
     }
 
-    // MARK: - Configuration
-
+    // MARK: - Public Configure
     func configure(consumedML: Int, goal: Double, cupSize: Int) {
-        let consumedLiters = Double(consumedML) * 0.001
+
+        let consumedLiters = Double(consumedML) / 1000.0
         let remainingLiters = max(goal - consumedLiters, 0)
         let progress = goal > 0 ? CGFloat(consumedLiters / goal) : 0
 
@@ -46,12 +42,11 @@ final class HydrationTopCardCell: UICollectionViewCell {
         progressRingView.setProgress(progress, animated: true)
     }
 
-    // MARK: - Private Setup
-
+    // MARK: - Private
     private func configureProgressView() {
         progressRingView.lineWidth = 8
-        progressRingView.trackColor = UIColor(white: 0.92, alpha: 1.0)
-        progressRingView.progressColor = .bg
+        progressRingView.trackColor = UIColor(white: 0.92, alpha: 1)
+        progressRingView.progressColor = .systemPink
         progressRingView.backgroundColor = .clear
     }
 
@@ -61,17 +56,7 @@ final class HydrationTopCardCell: UICollectionViewCell {
         dropButton.addTarget(self, action: #selector(dropTapped), for: .touchUpInside)
     }
 
-    // MARK: - Selectors
-
-    @objc private func goalTapped() {
-        onGoalTapped?()
-    }
-
-    @objc private func cupTapped() {
-        onCupTapped?()
-    }
-
-    @objc private func dropTapped() {
-        onDropTapped?()
-    }
+    @objc private func goalTapped() { onGoalTapped?() }
+    @objc private func cupTapped() { onCupTapped?() }
+    @objc private func dropTapped() { onDropTapped?() }
 }

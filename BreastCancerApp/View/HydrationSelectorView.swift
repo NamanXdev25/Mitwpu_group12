@@ -1,17 +1,17 @@
-//
-//  HydrationSelectorView.swift
-//  BreastCancerApp
-//
-//  Created by Gayatri Goundadkar on 20/01/26.
-//
-
 import UIKit
 
-class HydrationSelectorView: UICollectionViewCell {
+final class HydrationSelectorView: UICollectionViewCell {
+
+    @IBOutlet private weak var titleLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
+    func configure(title: String, isSelected: Bool) {
+        titleLabel.text = title
+        titleLabel.textColor = isSelected ? .white : .black
+        contentView.backgroundColor = isSelected ? .systemPink : .clear
+        contentView.layer.cornerRadius = 12
+    }
 }
