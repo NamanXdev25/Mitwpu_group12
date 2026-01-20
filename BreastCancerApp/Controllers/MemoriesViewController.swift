@@ -28,10 +28,11 @@ final class MemoriesViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        title = "Memories"
+
         memories = MemoryStore.load()
         sortAndGroupMemories()
 
-        configureUI()
         configureCollectionView()
         configureAddButton()
     }
@@ -42,36 +43,6 @@ final class MemoriesViewController: UIViewController,
     }
 
     // MARK: - UI
-    private func configureUI() {
-        title = "Memories"
-
-        let filterButton = UIButton(type: .system)
-        filterButton.setImage(
-            UIImage(systemName: "line.3.horizontal.decrease"),
-            for: .normal
-        )
-        filterButton.tintColor = isFiltering
-            ? UIColor(named: "pink")
-            : .label
-        filterButton.addTarget(self, action: #selector(filterTapped), for: .touchUpInside)
-
-        let blur = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
-        blur.layer.cornerRadius = 18
-        blur.clipsToBounds = true
-        blur.translatesAutoresizingMaskIntoConstraints = false
-        blur.contentView.addSubview(filterButton)
-
-        filterButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            blur.widthAnchor.constraint(equalToConstant: 36),
-            blur.heightAnchor.constraint(equalToConstant: 36),
-            filterButton.centerXAnchor.constraint(equalTo: blur.contentView.centerXAnchor),
-            filterButton.centerYAnchor.constraint(equalTo: blur.contentView.centerYAnchor)
-        ])
-
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: blur)
-    }
-
     private func configureAddButton() {
         addButton.configuration = nil
         addButton.backgroundColor = .pink
@@ -85,11 +56,9 @@ final class MemoriesViewController: UIViewController,
         collectionView.delegate = self
 
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
         layout.minimumInteritemSpacing = 8
         layout.minimumLineSpacing = 8
         layout.sectionInset = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
-
         collectionView.setCollectionViewLayout(layout, animated: false)
 
         collectionView.register(
@@ -104,13 +73,17 @@ final class MemoriesViewController: UIViewController,
         )
     }
 
-    // MARK: - Filter
-    @objc private func filterTapped() {
+    // MARK: - Filter Button (BAR BUTTON ITEM)
+    @IBAction func filterTapped(_ sender: UIBarButtonItem) {
         isFiltering ? clearFilter() : presentFilterSheet()
     }
 
     private func presentFilterSheet() {
-        let pickerVC = MonthYearPickerViewController()
+        let storyboard = UIStoryboard(name: "memory", bundle: nil)
+
+        let pickerVC = storyboard.instantiateViewController(
+            withIdentifier: "MonthYearPickerViewController"
+        ) as! MonthYearPickerViewController
 
         pickerVC.onApply = { [weak self] month, year in
             self?.applyFilter(month: month, year: year)
@@ -119,7 +92,7 @@ final class MemoriesViewController: UIViewController,
         pickerVC.modalPresentationStyle = .pageSheet
 
         if let sheet = pickerVC.sheetPresentationController {
-            sheet.detents = [.custom { _ in 280 }]
+            sheet.detents = [.custom { _ in 300 }]
             sheet.prefersGrabberVisible = true
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
             sheet.preferredCornerRadius = 24
@@ -139,7 +112,6 @@ final class MemoriesViewController: UIViewController,
         }
 
         sortAndGroupMemories()
-        configureUI()
         collectionView.reloadData()
     }
 
@@ -150,11 +122,10 @@ final class MemoriesViewController: UIViewController,
         filteredMemories.removeAll()
 
         sortAndGroupMemories()
-        configureUI()
         collectionView.reloadData()
     }
 
-    // MARK: - Add
+    // MARK: - Add Memory
     @IBAction func addButtonTapped(_ sender: UIButton) {
         let storyboard = UIStoryboard(name: "memory", bundle: nil)
 
@@ -174,20 +145,15 @@ final class MemoriesViewController: UIViewController,
         }
 
         guard let popover = popup.popoverPresentationController else { return }
-
         popover.sourceView = sender
         popover.sourceRect = sender.bounds
-        popover.permittedArrowDirections = [.down, .up]
+        popover.permittedArrowDirections = [.up, .down]
         popover.delegate = popup
 
         present(popup, animated: true)
     }
 
-
-
-
-
-    // MARK: - Picker
+    // MARK: - Image Picker
     private func presentImagePicker(sourceType: UIImagePickerController.SourceType) {
         guard UIImagePickerController.isSourceTypeAvailable(sourceType) else { return }
         let picker = UIImagePickerController()
@@ -210,7 +176,6 @@ final class MemoriesViewController: UIViewController,
         }
     }
 
-    // MARK: - Navigation
     private func openAddMemoryScreen(with image: UIImage) {
         let storyboard = UIStoryboard(name: "memory", bundle: nil)
 
@@ -221,10 +186,8 @@ final class MemoriesViewController: UIViewController,
         addVC.image = image
         addVC.delegate = self
 
-        let navVC = UINavigationController(rootViewController: addVC)
-        present(navVC, animated: true)
+        present(UINavigationController(rootViewController: addVC), animated: true)
     }
-
 
     // MARK: - Delegates
     func didAddMemory(_ memory: Memory) {
@@ -245,13 +208,11 @@ final class MemoriesViewController: UIViewController,
     private func sortAndGroupMemories() {
         let source = isFiltering ? filteredMemories : memories
 
-        let grouped = Dictionary(grouping: source) {
+        groupedMemories = Dictionary(grouping: source) {
             calendar.startOfDay(for: $0.date)
         }
-
-        groupedMemories = grouped
-            .map { ($0.key, $0.value) }
-            .sorted { $0.0 > $1.0 }
+        .map { ($0.key, $0.value) }
+        .sorted { $0.0 > $1.0 }
     }
 
     // MARK: - CollectionView
@@ -282,55 +243,22 @@ final class MemoriesViewController: UIViewController,
         return cell
     }
 
-    // MARK: - Headers
-    func collectionView(_ collectionView: UICollectionView,
-                        viewForSupplementaryElementOfKind kind: String,
-                        at indexPath: IndexPath) -> UICollectionReusableView {
-
-        let header = collectionView.dequeueReusableSupplementaryView(
-            ofKind: kind,
-            withReuseIdentifier: MemoryHeaderView.reuseIdentifier,
-            for: indexPath
-        ) as! MemoryHeaderView
-
-        header.label.text = formattedDate(groupedMemories[indexPath.section].date)
-        return header
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        referenceSizeForHeaderInSection section: Int) -> CGSize {
-        CGSize(width: collectionView.bounds.width, height: 40)
-    }
-
-    // MARK: - Layout
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
 
         let itemsPerRow: CGFloat = 4
         let spacing: CGFloat = 8
-        let sectionInsets: CGFloat = 24
+        let totalSpacing = (itemsPerRow - 1) * spacing + 24
 
-        let totalSpacing = (itemsPerRow - 1) * spacing + sectionInsets
         let width = floor((collectionView.bounds.width - totalSpacing) / itemsPerRow)
-
         return CGSize(width: width, height: width)
-    }
-
-    // MARK: - Date Format
-    private func formattedDate(_ date: Date) -> String {
-        if calendar.isDateInToday(date) { return "Today" }
-        if calendar.isDateInYesterday(date) { return "Yesterday" }
-
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd MMM yyyy"
-        return formatter.string(from: date)
     }
 
     // MARK: - Viewer
     private func openViewer(section: Int, item: Int) {
         let storyboard = UIStoryboard(name: "memory", bundle: nil)
+
         let pageVC = storyboard.instantiateViewController(
             withIdentifier: "MemoryPageViewController"
         ) as! MemoryPageViewController

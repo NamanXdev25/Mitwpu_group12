@@ -68,7 +68,14 @@
                             <constraint firstItem="Ete-we-DK8" firstAttribute="trailing" secondItem="r2T-rf-INZ" secondAttribute="trailing" constant="16" id="uLy-mx-gTk"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Memories" id="YEm-wo-DfD"/>
+                    <navigationItem key="navigationItem" title="Memories" id="YEm-wo-DfD">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="line.3.horizontal.decrease" catalog="system" id="NVm-PA-K1B">
+                            <color key="tintColor" name="pink"/>
+                            <connections>
+                                <action selector="filterTapped:" destination="7AQ-1A-uOS" id="dS8-XA-E5C"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="addButton" destination="r2T-rf-INZ" id="a4w-Qf-GSk"/>
                         <outlet property="collectionView" destination="664-4C-ZzJ" id="cvh-Zi-8M4"/>
@@ -253,9 +260,98 @@
             </objects>
             <point key="canvasLocation" x="138.1679389312977" y="130.98591549295776"/>
         </scene>
+        <!--Month Year Picker View Controller-->
+        <scene sceneID="PoP-JN-QLs">
+            <objects>
+                <viewController storyboardIdentifier="MonthYearPickerViewController" id="BDO-rU-sI1" customClass="MonthYearPickerViewController" customModule="BreastCancerApp" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="wR9-Bi-JXz">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FCa-r2-qjh">
+                                <rect key="frame" x="0.0" y="584" width="393" height="200"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="tOp-4U-YrH"/>
+                                </constraints>
+                            </pickerView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uiT-H8-drX">
+                                <rect key="frame" x="0.0" y="528" width="393" height="56"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Noe-jd-TJg">
+                                        <rect key="frame" x="16.000000000000004" y="10.666666666666629" width="46.333333333333343" height="35"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="xmark" catalog="system">
+                                            <color key="baseForegroundColor" name="pink"/>
+                                        </buttonConfiguration>
+                                        <connections>
+                                            <action selector="cancelTapped:" destination="BDO-rU-sI1" eventType="touchUpInside" id="tj5-s0-x39"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fab-tQ-poF">
+                                        <rect key="frame" x="329.33333333333331" y="11" width="47.666666666666686" height="34.333333333333336"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="checkmark" catalog="system">
+                                            <color key="baseForegroundColor" name="pink"/>
+                                        </buttonConfiguration>
+                                        <connections>
+                                            <action selector="applyTapped:" destination="BDO-rU-sI1" eventType="touchUpInside" id="SmU-U1-qbK"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="56" id="31B-hu-xUr"/>
+                                    <constraint firstItem="fab-tQ-poF" firstAttribute="centerY" secondItem="uiT-H8-drX" secondAttribute="centerY" id="AaW-RB-hT3"/>
+                                    <constraint firstItem="Noe-jd-TJg" firstAttribute="centerY" secondItem="uiT-H8-drX" secondAttribute="centerY" id="EP3-fX-pgx"/>
+                                    <constraint firstItem="Noe-jd-TJg" firstAttribute="leading" secondItem="uiT-H8-drX" secondAttribute="leading" constant="16" id="mJt-Lr-OrV"/>
+                                    <constraint firstAttribute="trailing" secondItem="fab-tQ-poF" secondAttribute="trailing" constant="16" id="uuH-DW-5Ug"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="5mk-HT-LrS"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="5mk-HT-LrS" firstAttribute="trailing" secondItem="FCa-r2-qjh" secondAttribute="trailing" id="B42-EJ-kT4"/>
+                            <constraint firstItem="FCa-r2-qjh" firstAttribute="bottom" secondItem="5mk-HT-LrS" secondAttribute="bottom" id="DqU-qm-x02"/>
+                            <constraint firstItem="FCa-r2-qjh" firstAttribute="leading" secondItem="5mk-HT-LrS" secondAttribute="leading" id="Hio-0V-osM"/>
+                            <constraint firstItem="uiT-H8-drX" firstAttribute="leading" secondItem="5mk-HT-LrS" secondAttribute="leading" id="Ota-ZU-1Th"/>
+                            <constraint firstItem="FCa-r2-qjh" firstAttribute="top" secondItem="uiT-H8-drX" secondAttribute="bottom" id="OvE-Cl-j73"/>
+                            <constraint firstItem="5mk-HT-LrS" firstAttribute="trailing" secondItem="uiT-H8-drX" secondAttribute="trailing" id="xyo-8V-NYM"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="0UA-k2-LDa"/>
+                    <connections>
+                        <outlet property="pickerView" destination="FCa-r2-qjh" id="Smg-wP-BD5"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="GGE-az-gwU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1379.3893129770993" y="934.50704225352115"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Fcq-SH-htd">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="9ps-F4-1Qv" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="JIm-I3-pnX">
+                        <rect key="frame" x="0.0" y="118" width="393" height="54"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BDO-rU-sI1" kind="relationship" relationship="rootViewController" id="Zwv-Iq-XNC"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DC6-9C-GDg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="452.67175572519085" y="934.50704225352115"/>
+        </scene>
     </scenes>
     <resources>
+        <image name="checkmark" catalog="system" width="128" height="114"/>
+        <image name="line.3.horizontal.decrease" catalog="system" width="128" height="73"/>
         <image name="plus" catalog="system" width="128" height="113"/>
+        <image name="xmark" catalog="system" width="128" height="113"/>
         <namedColor name="bg">
             <color red="0.97254901960784312" green="0.94901960784313721" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
