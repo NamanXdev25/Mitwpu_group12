@@ -15,23 +15,19 @@ class FormCollectionViewCell: UICollectionViewCell {
 
     private func setupUI() {
 
-        // 🔴 CRITICAL (Safe Area present)
         contentView.isUserInteractionEnabled = true
         isUserInteractionEnabled = true
 
-        // TextFields
         emailTextField.isUserInteractionEnabled = true
         passwordTextField.isUserInteractionEnabled = true
         passwordTextField.isSecureTextEntry = true
 
-        // Borders
         applyBorder(to: emailTextField.superview)
         applyBorder(to: passwordTextField.superview)
 
-        // Eye button
         eyeButton.adjustsImageWhenHighlighted = false
 
-        // ✅ Checkbox — SF Symbols + Pink color
+        
         rememberMeButton.adjustsImageWhenHighlighted = false
         rememberMeButton.tintColor = UIColor(named: "Pink")
         rememberMeButton.setImage(
@@ -39,7 +35,6 @@ class FormCollectionViewCell: UICollectionViewCell {
             for: .normal
         )
 
-        // ✅ Login button — ALWAYS Pink
         loginButton.adjustsImageWhenHighlighted = false
         loginButton.backgroundColor = UIColor(named: "Pink")
         loginButton.setTitleColor(.white, for: .normal)
@@ -54,8 +49,6 @@ class FormCollectionViewCell: UICollectionViewCell {
         view.layer.borderColor = UIColor(named: "Pink")?.cgColor
         view.clipsToBounds = true
     }
-
-    // MARK: - Actions
 
     @IBAction func didTapEyeButton(_ sender: UIButton) {
         sender.isSelected.toggle()
