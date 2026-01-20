@@ -56,7 +56,7 @@ class ExerciseCalendarCell: UICollectionViewCell {
         calendarCollectionView.dataSource = self
         calendarCollectionView.delegate = self
         calendarCollectionView.backgroundColor = .clear
-        calendarCollectionView.isScrollEnabled = false // Calendars are usually static in height
+        calendarCollectionView.isScrollEnabled = false
         
         calendarCollectionView.register(
             UINib(nibName: "ExerciseCalendarDateCell", bundle: nil),
@@ -88,7 +88,7 @@ class ExerciseCalendarCell: UICollectionViewCell {
             totalSquares.append(String(i))
         }
         
-        // Pad to exactly 42 squares (6 rows) to match the Medication grid's consistent proportions
+        // Pad to exactly 42 squares (6 rows)
         while totalSquares.count < 42 {
             totalSquares.append("")
         }
@@ -210,7 +210,6 @@ extension ExerciseCalendarCell: UICollectionViewDataSource {
 // MARK: - UICollectionViewDelegateFlowLayout
 extension ExerciseCalendarCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        // Use exact width / 7 to match MedicationCalendar logic (avoids rounding gaps)
         let width = collectionView.frame.width / 7
         return CGSize(width: width, height: 44)
     }
@@ -228,8 +227,8 @@ extension ExerciseCalendarCell: UICollectionViewDelegateFlowLayout {
         let today = calendar.startOfDay(for: Date())
         let selected = calendar.startOfDay(for: date)
         
-        // Match Medication behavior: Prevent selection of future dates
-        if selected > today { return }
+        // Prevent selection of future dates AND today
+        if selected >= today { return }
         
         selectedDay = selected
         delegate?.calendarCell(self, didSelectDate: selected)

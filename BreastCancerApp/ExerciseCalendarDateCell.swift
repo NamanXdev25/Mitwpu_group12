@@ -34,27 +34,29 @@ class ExerciseCalendarDateCell: UICollectionViewCell {
         
         guard !day.isEmpty else { return }
         
-        // Future dates - disabled
-        if isFuture {
-            dayLabel.textColor = .lightGray
-            contentView.alpha = 0.5
+        // Future dates OR today - disabled (non-tappable)
+        if isFuture || isToday {
+            dayLabel.textColor = isToday ? .white : .lightGray
+            contentView.alpha = isToday ? 1.0 : 0.5
             dotView?.isHidden = true
             isUserInteractionEnabled = false
+            
+            // Show today's special appearance
+            if isToday {
+                selectionLayer.backgroundColor = UIColor(red: 0.85, green: 0.40, blue: 0.50, alpha: 1.0)
+                if hasPlan {
+                    dotView?.isHidden = false
+                    dotView?.backgroundColor = .white
+                }
+            }
             return
         }
         
+        // Past dates - tappable
         contentView.alpha = 1.0
         isUserInteractionEnabled = true
         
-        // Today - pink background, white text
-        if isToday {
-            selectionLayer.backgroundColor = UIColor(red: 0.85, green: 0.40, blue: 0.50, alpha: 1.0)
-            dayLabel.textColor = .white
-            if hasPlan {
-                dotView?.isHidden = false
-                dotView?.backgroundColor = .white
-            }
-        } else if isSelected {
+        if isSelected {
             // Selected past date - light pink background
             selectionLayer.backgroundColor = UIColor(named: "More_Exercise")
             dayLabel.textColor = .black
