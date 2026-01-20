@@ -35,27 +35,26 @@ class VideoGuideViewController: UIViewController {
 
     private func setupPlayer() {
         guard let url = Bundle.main.url(forResource: "self_exam", withExtension: "mp4") else {
-            print("Video not found in bundle: self_exam.mp4")
+            print("Video not found")
             return
         }
 
-        player = AVPlayer(url: url)
-        guard let player = player else { return }
+        let player = AVPlayer(url: url)
+        self.player = player
 
         let layer = AVPlayerLayer(player: player)
         layer.videoGravity = .resizeAspect
         playerLayer = layer
 
         actualVideoView.layer.masksToBounds = true
-        actualVideoView.clipsToBounds = true
         actualVideoView.layer.insertSublayer(layer, at: 0)
 
-        let interval = CMTime(seconds: 0.5, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+        let interval = CMTime(seconds: 0.25, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
         timeObserverToken = player.addPeriodicTimeObserver(
             forInterval: interval,
             queue: .main
         ) { [weak self] time in
-            guard let self = self,
+            guard let self,
                   !self.isSeeking,
                   let duration = player.currentItem?.duration.seconds,
                   duration > 0 else { return }
@@ -73,28 +72,21 @@ class VideoGuideViewController: UIViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        guard let layer = playerLayer else { return }
-
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
-        layer.frame = actualVideoView.bounds
-        layer.position = CGPoint(
-            x: actualVideoView.bounds.midX,
-            y: actualVideoView.bounds.midY
-        )
-        CATransaction.commit()
+        playerLayer?.frame = actualVideoView.bounds
     }
 
     private func resetPlayerToStart() {
-        guard let player = player else { return }
+        guard let player else { return }
         player.pause()
         player.seek(to: .zero)
         progressSlider.value = 0
         playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
     }
 
+    // MARK: - Play / Pause
+
     @IBAction func playPauseTapped(_ sender: UIButton) {
-        guard let player = player else { return }
+        guard let player else { return }
 
         if player.timeControlStatus == .playing {
             player.pause()
@@ -105,22 +97,44 @@ class VideoGuideViewController: UIViewController {
         }
     }
 
+    // MARK: - Slider Scrubbing
+
     @IBAction func progressTouchDown(_ sender: UISlider) {
         isSeeking = true
+        player?.pause()
+    }
+
+    @IBAction func progressValueChanged(_ sender: UISlider) {
+        guard let player,
+              let duration = player.currentItem?.duration.seconds,
+              duration > 0 else { return }
+
+        let seconds = Double(sender.value) * duration
+        let time = CMTime(seconds: seconds, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+
+        player.seek(
+            to: time,
+            toleranceBefore: .zero,
+            toleranceAfter: .zero
+        )
     }
 
     @IBAction func progressTouchUp(_ sender: UISlider) {
-        guard let player = player,
+        guard let player,
               let duration = player.currentItem?.duration.seconds,
               duration > 0 else {
             isSeeking = false
             return
         }
 
-        let seconds = Double(progressSlider.value) * duration
+        let seconds = Double(sender.value) * duration
         let time = CMTime(seconds: seconds, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
 
-        player.seek(to: time) { [weak self] _ in
+        player.seek(
+            to: time,
+            toleranceBefore: .zero,
+            toleranceAfter: .zero
+        ) { [weak self] _ in
             self?.isSeeking = false
         }
     }
@@ -129,7 +143,6 @@ class VideoGuideViewController: UIViewController {
         resetPlayerToStart()
     }
 
-  
     @IBAction func logSelfExamTapped(_ sender: UIButton) {
         performSegue(withIdentifier: "showObservations", sender: sender)
     }

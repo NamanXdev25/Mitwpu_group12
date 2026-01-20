@@ -43,32 +43,64 @@ final class TestHistoryViewController: UIViewController,
         collectionView.delegate = self
         collectionView.alwaysBounceVertical = true
 
-        // Year filter cell (XIB)
-        collectionView.register(
-            UINib(nibName: "YearFilterCell", bundle: nil),
-            forCellWithReuseIdentifier: YearFilterCell.reuseIdentifier
-        )
-
         // Record cell
         collectionView.register(
             UINib(nibName: "TestRecordCell", bundle: nil),
             forCellWithReuseIdentifier: "TestRecordCell"
         )
+
+        // Empty state cell
+        collectionView.register(
+            UINib(nibName: "EmptyStateCell", bundle: nil),
+            forCellWithReuseIdentifier: EmptyStateCell.reuseIdentifier
+        )
     }
 
+    // MARK: - Data Loading
     private func loadData() {
         records = Persistence.load()
         setupAvailableYears()
         filterRecords(for: selectedYear)
-        updateEmptyState()
         collectionView.reloadData()
     }
 
+    /// FINAL year rules:
+    /// - If NO records → current year ... current year + 5
+    /// - If records exist:
+    ///   - Start = earliest record year
+    ///   - End = max(current year + 5, latest record year)
     private func setupAvailableYears() {
         let calendar = Calendar.current
-        let years = records.map { calendar.component(.year, from: $0.date) }
-        availableYears = Array(Set(years)).sorted()
-        selectedYear = availableYears.last
+        let currentYear = calendar.component(.year, from: Date())
+        let minimumFutureYear = currentYear + 5
+
+        guard !records.isEmpty else {
+            availableYears = Array(currentYear...minimumFutureYear)
+            selectedYear = selectedYear ?? currentYear
+            return
+        }
+
+        let recordYears = records.map {
+            calendar.component(.year, from: $0.date)
+        }
+
+        guard
+            let earliestYear = recordYears.min(),
+            let latestRecordYear = recordYears.max()
+        else {
+            availableYears = Array(currentYear...minimumFutureYear)
+            selectedYear = selectedYear ?? currentYear
+            return
+        }
+
+        let endYear = max(minimumFutureYear, latestRecordYear)
+        availableYears = Array(earliestYear...endYear)
+
+        if let selectedYear, availableYears.contains(selectedYear) {
+            self.selectedYear = selectedYear
+        } else {
+            self.selectedYear = currentYear
+        }
     }
 
     private func observeNotifications() {
@@ -84,27 +116,31 @@ final class TestHistoryViewController: UIViewController,
         records = Persistence.load()
         setupAvailableYears()
         filterRecords(for: selectedYear)
-        updateEmptyState()
         collectionView.reloadData()
     }
 
-    // MARK: - Year Filtering
-    @objc private func didTapYearFilter() {
-        let alert = UIAlertController(title: "Select Year", message: nil, preferredStyle: .actionSheet)
+    // MARK: - Filter Button
+    @IBAction func filterButtonTapped(_ sender: UIBarButtonItem) {
+        let storyboard = UIStoryboard(name: "selfexam", bundle: nil)
+        guard let vc = storyboard.instantiateViewController(
+            withIdentifier: "YearFilterViewController"
+        ) as? YearFilterViewController else { return }
 
-        availableYears.forEach { year in
-            alert.addAction(UIAlertAction(title: "\(year)", style: .default) { [weak self] _ in
-                self?.selectedYear = year
-                self?.filterRecords(for: year)
-                self?.expandedIndexSet.removeAll()
-                self?.collectionView.reloadData()
-            })
+        vc.years = availableYears
+        vc.selectedYear = selectedYear
+
+        vc.onYearSelected = { [weak self] year in
+            guard let self else { return }
+            self.selectedYear = year
+            self.filterRecords(for: year)
+            self.expandedIndexSet.removeAll()
+            self.collectionView.reloadData()
         }
 
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        present(alert, animated: true)
+        present(vc, animated: true)
     }
 
+    // MARK: - Filtering
     private func filterRecords(for year: Int?) {
         guard let year else {
             filteredRecords = records
@@ -117,79 +153,40 @@ final class TestHistoryViewController: UIViewController,
         }
     }
 
-    // MARK: - Empty State
-    private func updateEmptyState() {
-        guard !filteredRecords.isEmpty else {
-            let emptyLabel = createEmptyStateLabel()
-            let container = UIView(frame: collectionView.bounds)
-            container.addSubview(emptyLabel)
-
-            NSLayoutConstraint.activate([
-                emptyLabel.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-                emptyLabel.centerYAnchor.constraint(equalTo: container.centerYAnchor),
-                emptyLabel.leadingAnchor.constraint(greaterThanOrEqualTo: container.leadingAnchor, constant: 24),
-                emptyLabel.trailingAnchor.constraint(lessThanOrEqualTo: container.trailingAnchor, constant: -24)
-            ])
-
-            collectionView.backgroundView = container
-            return
-        }
-
-        collectionView.backgroundView = nil
-    }
-
-    private func createEmptyStateLabel() -> UILabel {
-        let label = UILabel()
-        label.text = "Your log records will appear here."
-        label.font = .systemFont(ofSize: 16)
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }
-
     // MARK: - UICollectionViewDataSource
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        2
+        1
     }
 
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        section == 0 ? 1 : filteredRecords.count
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
+        return filteredRecords.isEmpty ? 1 : filteredRecords.count
     }
 
-    func collectionView(
-        _ collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath
-    ) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-        // Section 0 → Year filter cell
-        if indexPath.section == 0 {
+        // EMPTY STATE
+        if filteredRecords.isEmpty {
             let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: YearFilterCell.reuseIdentifier,
+                withReuseIdentifier: EmptyStateCell.reuseIdentifier,
                 for: indexPath
-            ) as! YearFilterCell
-
-            cell.yearButton.setTitle("\(selectedYear ?? 0)", for: .normal)
-            cell.yearButton.addTarget(self, action: #selector(didTapYearFilter), for: .touchUpInside)
+            ) as! EmptyStateCell
             return cell
         }
 
-        // Section 1 → Record cells
-        guard let cell = collectionView.dequeueReusableCell(
+        // RECORD CELL
+        let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: "TestRecordCell",
             for: indexPath
-        ) as? TestRecordCell else {
-            fatalError("TestRecordCell not registered")
-        }
+        ) as! TestRecordCell
 
         configureCell(cell, at: indexPath)
         return cell
     }
 
+    // MARK: - Cell Configuration
     private func configureCell(_ cell: TestRecordCell, at indexPath: IndexPath) {
-        cell.backgroundConfiguration = .clear()
-        cell.contentView.backgroundColor = .clear
-
         let record = filteredRecords[indexPath.item]
         let isExpanded = expandedIndexSet.contains(indexPath.item)
 
@@ -208,13 +205,17 @@ final class TestHistoryViewController: UIViewController,
     }
 
     // MARK: - UICollectionViewDelegate
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.section == 1 {
-            toggleExpansion(at: indexPath)
-        }
+    func collectionView(_ collectionView: UICollectionView,
+                        shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        return !filteredRecords.isEmpty
     }
 
-    // MARK: - Expansion Logic
+    func collectionView(_ collectionView: UICollectionView,
+                        didSelectItemAt indexPath: IndexPath) {
+        toggleExpansion(at: indexPath)
+    }
+
+    // MARK: - Expansion
     private func toggleExpansion(at indexPath: IndexPath) {
         expandedIndexSet.formSymmetricDifference([indexPath.item])
         collectionView.performBatchUpdates {
@@ -222,25 +223,14 @@ final class TestHistoryViewController: UIViewController,
         }
     }
 
-    // MARK: - Layout (native dividers, top divider removed for year cell)
+    // MARK: - Layout
     private func createLayout() -> UICollectionViewLayout {
         var config = UICollectionLayoutListConfiguration(appearance: .plain)
         config.showsSeparators = true
         config.backgroundColor = .clear
-        config.headerMode = .none
-
-       
-        config.itemSeparatorHandler = { indexPath, separator in
-            var separator = separator
-            if indexPath.section == 0 && indexPath.item == 0 {
-                separator.topSeparatorVisibility = .hidden
-            }
-            return separator
-        }
 
         config.trailingSwipeActionsConfigurationProvider = { [weak self] indexPath in
-            guard indexPath.section == 1 else { return nil }
-            return self?.createSwipeActions(for: indexPath)
+            self?.createSwipeActions(for: indexPath)
         }
 
         return UICollectionViewCompositionalLayout.list(using: config)
@@ -294,7 +284,6 @@ final class TestHistoryViewController: UIViewController,
         }, completion: { [weak self] _ in
             self?.setupAvailableYears()
             self?.filterRecords(for: self?.selectedYear)
-            self?.updateEmptyState()
             self?.collectionView.reloadData()
             completion(true)
         })
