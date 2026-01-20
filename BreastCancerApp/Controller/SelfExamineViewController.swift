@@ -1,8 +1,8 @@
 import UIKit
 
-class SelfExamineViewController: UIViewController {
+final class SelfExamineViewController: UIViewController {
 
-    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet private weak var collectionView: UICollectionView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,7 +34,6 @@ class SelfExamineViewController: UIViewController {
         )
 
         collectionView.setCollectionViewLayout(layout, animated: false)
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -50,7 +49,7 @@ extension SelfExamineViewController: UICollectionViewDataSource {
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
-        return 4
+        4
     }
 
     func collectionView(
@@ -58,12 +57,11 @@ extension SelfExamineViewController: UICollectionViewDataSource {
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
 
-        // UPDATED ORDER
-        let id: String = [
-            "SectionTitleCell",              // How to Self-Examine
-            "SelfExamCardsContainerCell",    // Horizontal cards
-            "GuidesCardCell",                // Video + Audio guides
-            "ActionsContainerCell"           // Bottom buttons
+        let id = [
+            "SectionTitleCell",
+            "SelfExamCardsContainerCell",
+            "GuidesCardCell",
+            "ActionsContainerCell"
         ][indexPath.item]
 
         let cell = collectionView.dequeueReusableCell(
@@ -101,13 +99,13 @@ extension SelfExamineViewController: UICollectionViewDelegateFlowLayout {
 
         switch indexPath.item {
         case 0:
-            return CGSize(width: width, height: 44)    // Section title
+            return CGSize(width: width, height: 44)
         case 1:
-            return CGSize(width: width, height: 200)   // Horizontal cards
+            return CGSize(width: width, height: 200)
         case 2:
-            return CGSize(width: width, height: 180)   // Guides
+            return CGSize(width: width, height: 180)
         case 3:
-            return CGSize(width: width, height: 140)   // Actions
+            return CGSize(width: width, height: 140)
         default:
             return CGSize(width: width, height: 60)
         }

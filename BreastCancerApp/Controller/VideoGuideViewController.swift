@@ -1,13 +1,13 @@
 import UIKit
 import AVFoundation
 
-class VideoGuideViewController: UIViewController {
+final class VideoGuideViewController: UIViewController {
 
-    @IBOutlet weak var videoContainerView: UIView!
-    @IBOutlet weak var actualVideoView: UIView!
-    @IBOutlet weak var playPauseButton: UIButton!
-    @IBOutlet weak var progressSlider: UISlider!
-    @IBOutlet weak var logSelfExamButton: UIButton!
+    @IBOutlet private weak var videoContainerView: UIView!
+    @IBOutlet private weak var actualVideoView: UIView!
+    @IBOutlet private weak var playPauseButton: UIButton!
+    @IBOutlet private weak var progressSlider: UISlider!
+    @IBOutlet private weak var logSelfExamButton: UIButton!
 
     private var player: AVPlayer?
     private var playerLayer: AVPlayerLayer?
@@ -28,6 +28,7 @@ class VideoGuideViewController: UIViewController {
         if let token = timeObserverToken {
             player?.removeTimeObserver(token)
         }
+
         NotificationCenter.default.removeObserver(self)
         player?.pause()
         player = nil
@@ -35,7 +36,6 @@ class VideoGuideViewController: UIViewController {
 
     private func setupPlayer() {
         guard let url = Bundle.main.url(forResource: "self_exam", withExtension: "mp4") else {
-            print("Video not found")
             return
         }
 
@@ -49,15 +49,21 @@ class VideoGuideViewController: UIViewController {
         actualVideoView.layer.masksToBounds = true
         actualVideoView.layer.insertSublayer(layer, at: 0)
 
-        let interval = CMTime(seconds: 0.25, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+        let interval = CMTime(
+            seconds: 0.25,
+            preferredTimescale: CMTimeScale(NSEC_PER_SEC)
+        )
+
         timeObserverToken = player.addPeriodicTimeObserver(
             forInterval: interval,
             queue: .main
         ) { [weak self] time in
-            guard let self,
-                  !self.isSeeking,
-                  let duration = player.currentItem?.duration.seconds,
-                  duration > 0 else { return }
+            guard
+                let self,
+                !self.isSeeking,
+                let duration = player.currentItem?.duration.seconds,
+                duration > 0
+            else { return }
 
             self.progressSlider.value = Float(time.seconds / duration)
         }
@@ -77,40 +83,55 @@ class VideoGuideViewController: UIViewController {
 
     private func resetPlayerToStart() {
         guard let player else { return }
+
         player.pause()
         player.seek(to: .zero)
         progressSlider.value = 0
-        playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        playPauseButton.setImage(
+            UIImage(systemName: "play.fill"),
+            for: .normal
+        )
     }
 
     // MARK: - Play / Pause
 
-    @IBAction func playPauseTapped(_ sender: UIButton) {
+    @IBAction private func playPauseTapped(_ sender: UIButton) {
         guard let player else { return }
 
         if player.timeControlStatus == .playing {
             player.pause()
-            playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+            playPauseButton.setImage(
+                UIImage(systemName: "play.fill"),
+                for: .normal
+            )
         } else {
             player.play()
-            playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+            playPauseButton.setImage(
+                UIImage(systemName: "pause.fill"),
+                for: .normal
+            )
         }
     }
 
     // MARK: - Slider Scrubbing
 
-    @IBAction func progressTouchDown(_ sender: UISlider) {
+    @IBAction private func progressTouchDown(_ sender: UISlider) {
         isSeeking = true
         player?.pause()
     }
 
-    @IBAction func progressValueChanged(_ sender: UISlider) {
-        guard let player,
-              let duration = player.currentItem?.duration.seconds,
-              duration > 0 else { return }
+    @IBAction private func progressValueChanged(_ sender: UISlider) {
+        guard
+            let player,
+            let duration = player.currentItem?.duration.seconds,
+            duration > 0
+        else { return }
 
         let seconds = Double(sender.value) * duration
-        let time = CMTime(seconds: seconds, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+        let time = CMTime(
+            seconds: seconds,
+            preferredTimescale: CMTimeScale(NSEC_PER_SEC)
+        )
 
         player.seek(
             to: time,
@@ -119,16 +140,21 @@ class VideoGuideViewController: UIViewController {
         )
     }
 
-    @IBAction func progressTouchUp(_ sender: UISlider) {
-        guard let player,
-              let duration = player.currentItem?.duration.seconds,
-              duration > 0 else {
+    @IBAction private func progressTouchUp(_ sender: UISlider) {
+        guard
+            let player,
+            let duration = player.currentItem?.duration.seconds,
+            duration > 0
+        else {
             isSeeking = false
             return
         }
 
         let seconds = Double(sender.value) * duration
-        let time = CMTime(seconds: seconds, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+        let time = CMTime(
+            seconds: seconds,
+            preferredTimescale: CMTimeScale(NSEC_PER_SEC)
+        )
 
         player.seek(
             to: time,
@@ -143,7 +169,7 @@ class VideoGuideViewController: UIViewController {
         resetPlayerToStart()
     }
 
-    @IBAction func logSelfExamTapped(_ sender: UIButton) {
+    @IBAction private func logSelfExamTapped(_ sender: UIButton) {
         performSegue(withIdentifier: "showObservations", sender: sender)
     }
 }

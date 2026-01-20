@@ -1,97 +1,104 @@
 import UIKit
 import AVFoundation
 
-class AudioGuideViewController: UIViewController {
+final class AudioGuideViewController: UIViewController {
 
-    @IBOutlet weak var artworkImageView: UIImageView!
-    @IBOutlet weak var playPauseButton: UIButton!
-    @IBOutlet weak var back5Button: UIButton!
-    @IBOutlet weak var forward5Button: UIButton!
-    @IBOutlet weak var progressSlider: UISlider!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var logSelfExamButton: UIButton!
+    @IBOutlet private weak var artworkImageView: UIImageView!
+    @IBOutlet private weak var playPauseButton: UIButton!
+    @IBOutlet private weak var back5Button: UIButton!
+    @IBOutlet private weak var forward5Button: UIButton!
+    @IBOutlet private weak var progressSlider: UISlider!
+    @IBOutlet private weak var titleLabel: UILabel!
+    @IBOutlet private weak var logSelfExamButton: UIButton!
 
     private var player: AVAudioPlayer?
-    private var timer: Timer?
+    private var progressTimer: Timer?
 
-    private let timerInterval: TimeInterval = 0.3
-    private let seekInterval: TimeInterval = 5.0
+    private let seekInterval: TimeInterval = 5
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupAudioPlayer()
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        progressTimer?.invalidate()
+    }
+
     private func setupAudioPlayer() {
-        guard let audioURL = Bundle.main.url(forResource: "audio_guide", withExtension: "mp3") else {
-            print("Audio file not found")
+        guard let url = Bundle.main.url(forResource: "audio_guide", withExtension: "mp3") else {
             return
         }
 
         do {
-            let audioPlayer = try AVAudioPlayer(contentsOf: audioURL)
+            let audioPlayer = try AVAudioPlayer(contentsOf: url)
             audioPlayer.prepareToPlay()
             player = audioPlayer
-            configureSlider(duration: audioPlayer.duration)
+            configureSlider(with: audioPlayer.duration)
         } catch {
-            print("Failed to load audio: \(error)")
+            player = nil
         }
     }
 
-    private func configureSlider(duration: TimeInterval) {
+    private func configureSlider(with duration: TimeInterval) {
         progressSlider.minimumValue = 0
         progressSlider.maximumValue = Float(duration)
         progressSlider.value = 0
     }
 
-    private func startTimer() {
-        timer?.invalidate()
-        timer = Timer.scheduledTimer(
-            withTimeInterval: timerInterval,
+    private func startProgressTimer() {
+        progressTimer?.invalidate()
+        progressTimer = Timer.scheduledTimer(
+            timeInterval: 0.3,
+            target: self,
+            selector: #selector(updateProgress),
+            userInfo: nil,
             repeats: true
-        ) { [weak self] _ in
-            self?.updateProgress()
-        }
+        )
     }
 
-    private func updateProgress() {
+    @objc private func updateProgress() {
         guard let player = player else { return }
+
         progressSlider.value = Float(player.currentTime)
 
         if !player.isPlaying {
-            timer?.invalidate()
+            progressTimer?.invalidate()
         }
     }
 
-    @IBAction func playPauseTapped(_ sender: UIButton) {
+    @IBAction private func playPauseTapped(_ sender: UIButton) {
         guard let player = player else { return }
 
         if player.isPlaying {
             player.pause()
         } else {
             player.play()
-            startTimer()
+            startProgressTimer()
         }
     }
 
-    @IBAction func back5Tapped(_ sender: UIButton) {
+    @IBAction private func back5Tapped(_ sender: UIButton) {
         guard let player = player else { return }
+
         player.currentTime = max(0, player.currentTime - seekInterval)
         updateProgress()
     }
 
-    @IBAction func forward5Tapped(_ sender: UIButton) {
+    @IBAction private func forward5Tapped(_ sender: UIButton) {
         guard let player = player else { return }
+
         player.currentTime = min(player.duration, player.currentTime + seekInterval)
         updateProgress()
     }
 
-    @IBAction func sliderValueChanged(_ sender: UISlider) {
+    @IBAction private func sliderValueChanged(_ sender: UISlider) {
         player?.currentTime = TimeInterval(sender.value)
         updateProgress()
     }
 
-    @IBAction func logSelfExamTapped(_ sender: UIButton) {
+    @IBAction private func logSelfExamTapped(_ sender: UIButton) {
         performSegue(withIdentifier: "showObservations", sender: sender)
     }
 }

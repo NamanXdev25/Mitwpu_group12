@@ -2,12 +2,10 @@ import UIKit
 
 final class YearFilterViewController: UIViewController {
 
-    // MARK: - Outlets
-    @IBOutlet weak var pickerView: UIPickerView!
-    @IBOutlet weak var cancelButton: UIButton!
-    @IBOutlet weak var doneButton: UIButton!
+    @IBOutlet private weak var pickerView: UIPickerView!
+    @IBOutlet private weak var cancelButton: UIButton!
+    @IBOutlet private weak var doneButton: UIButton!
 
-    // MARK: - Data
     var years: [Int] = [] {
         didSet {
             pickerView?.reloadAllComponents()
@@ -15,26 +13,19 @@ final class YearFilterViewController: UIViewController {
     }
 
     var selectedYear: Int?
-
-    /// Callback to send selected year back
     var onYearSelected: ((Int) -> Void)?
 
-    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
         view.backgroundColor = .clear
         setupPicker()
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
-        // Ensure picker selects correct row AFTER layout & reload
         selectInitialYearIfNeeded()
     }
 
-    // MARK: - Setup
     private func setupPicker() {
         pickerView.dataSource = self
         pickerView.delegate = self
@@ -50,12 +41,11 @@ final class YearFilterViewController: UIViewController {
         pickerView.selectRow(index, inComponent: 0, animated: false)
     }
 
-    // MARK: - Actions
-    @IBAction func cancelTapped(_ sender: UIButton) {
+    @IBAction private func cancelTapped(_ sender: UIButton) {
         dismiss(animated: true)
     }
 
-    @IBAction func doneTapped(_ sender: UIButton) {
+    @IBAction private func doneTapped(_ sender: UIButton) {
         guard !years.isEmpty else {
             dismiss(animated: true)
             return
@@ -74,19 +64,20 @@ final class YearFilterViewController: UIViewController {
     }
 }
 
-// MARK: - UIPickerViewDataSource
 extension YearFilterViewController: UIPickerViewDataSource {
 
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         1
     }
 
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    func pickerView(
+        _ pickerView: UIPickerView,
+        numberOfRowsInComponent component: Int
+    ) -> Int {
         years.count
     }
 }
 
-// MARK: - UIPickerViewDelegate
 extension YearFilterViewController: UIPickerViewDelegate {
 
     func pickerView(

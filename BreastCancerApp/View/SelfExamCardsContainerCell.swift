@@ -1,15 +1,13 @@
-
 import UIKit
 
-class SelfExamCardsContainerCell: UICollectionViewCell,
-                                  UICollectionViewDataSource,
-                                  UICollectionViewDelegate,
-                                  UICollectionViewDelegateFlowLayout {
+final class SelfExamCardsContainerCell: UICollectionViewCell,
+                                        UICollectionViewDataSource,
+                                        UICollectionViewDelegate,
+                                        UICollectionViewDelegateFlowLayout {
 
-    @IBOutlet weak var innerCollectionView: UICollectionView!
+    @IBOutlet private weak var innerCollectionView: UICollectionView!
 
-    // Model instances
-    let steps: [SelfExamStep] = [
+    private let steps: [SelfExamStep] = [
         SelfExamStep(
             title: "Lying down",
             description: "Use opposite hands to examine each breast with two fingertip pads, using small circular motions & covering entire area of breast.",
@@ -35,29 +33,37 @@ class SelfExamCardsContainerCell: UICollectionViewCell,
         innerCollectionView.showsHorizontalScrollIndicator = false
         innerCollectionView.backgroundColor = .clear
 
-        // Register card cell XIB (keep if using XIB) or ensure prototype cell exists
-        let nib = UINib(nibName: "SelfExamCardCell", bundle: nil)
-        innerCollectionView.register(nib, forCellWithReuseIdentifier: "SelfExamCardCell")
+        innerCollectionView.register(
+            UINib(nibName: "SelfExamCardCell", bundle: nil),
+            forCellWithReuseIdentifier: "SelfExamCardCell"
+        )
 
-        // Configure horizontal layout: 8pt gap, 16pt side insets
         if let layout = innerCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.scrollDirection = .horizontal
             layout.minimumLineSpacing = 8
-            layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+            layout.sectionInset = UIEdgeInsets(
+                top: 0,
+                left: 16,
+                bottom: 0,
+                right: 16
+            )
             layout.estimatedItemSize = .zero
         }
 
         innerCollectionView.reloadData()
     }
 
-    // MARK: - Data Source
-    func collectionView(_ collectionView: UICollectionView,
-                        numberOfItemsInSection section: Int) -> Int {
-        return steps.count
+    func collectionView(
+        _ collectionView: UICollectionView,
+        numberOfItemsInSection section: Int
+    ) -> Int {
+        steps.count
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
 
         let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: "SelfExamCardCell",
@@ -71,7 +77,6 @@ class SelfExamCardsContainerCell: UICollectionViewCell,
         cell.descriptionLabel.lineBreakMode = .byTruncatingTail
         cell.thumbnailImageView.image = UIImage(named: step.imageName)
 
-        // Appearance
         cell.cardView.layer.cornerRadius = 12
         cell.cardView.layer.masksToBounds = true
         cell.cardView.backgroundColor = .white
@@ -79,11 +84,12 @@ class SelfExamCardsContainerCell: UICollectionViewCell,
         return cell
     }
 
-    // MARK: - Layout
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-        // width = innerCollectionView width minus side insets (16 + 16)
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
+
         let width = collectionView.frame.width - 32
         let height = collectionView.frame.height
         return CGSize(width: width, height: height)

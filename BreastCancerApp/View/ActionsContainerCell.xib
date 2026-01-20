@@ -30,6 +30,7 @@
                                 <color key="tintColor" systemColor="labelColor"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="tinted" title="Log Self-Exam">
+                                    <fontDescription key="titleFontDescription" style="UICTFontTextStyleHeadline"/>
                                     <color key="baseBackgroundColor" name="pink"/>
                                 </buttonConfiguration>
                                 <userDefinedRuntimeAttributes>
@@ -42,13 +43,15 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L6s-Y3-B6M">
-                                <rect key="frame" x="106" y="88" width="140" height="35"/>
+                                <rect key="frame" x="106" y="88" width="140" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="140" id="yI1-7X-2IV"/>
                                 </constraints>
                                 <color key="tintColor" name="pink"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="View past Logs"/>
+                                <buttonConfiguration key="configuration" style="plain" title="View past Logs">
+                                    <fontDescription key="titleFontDescription" style="UICTFontTextStyleSubhead"/>
+                                </buttonConfiguration>
                                 <connections>
                                     <action selector="pastButtonTapped:" destination="gTV-IL-0wX" eventType="primaryActionTriggered" id="mq2-UV-eUg"/>
                                 </connections>
@@ -76,7 +79,7 @@
                 <outlet property="logButton" destination="06V-qK-fL1" id="bYz-be-Ixm"/>
                 <outlet property="pastButton" destination="L6s-Y3-B6M" id="jFl-j6-irN"/>
             </connections>
-            <point key="canvasLocation" x="145.03816793893128" y="56.338028169014088"/>
+            <point key="canvasLocation" x="143.5114503816794" y="56.338028169014088"/>
         </collectionViewCell>
     </objects>
     <resources>

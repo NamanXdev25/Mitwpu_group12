@@ -4,10 +4,8 @@ final class TestHistoryViewController: UIViewController,
                                        UICollectionViewDataSource,
                                        UICollectionViewDelegate {
 
-    // MARK: - Outlets
-    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet private weak var collectionView: UICollectionView!
 
-    // MARK: - Data
     private var records: [TestRecord] = []
     private var filteredRecords: [TestRecord] = []
     private var expandedIndexSet = Set<Int>()
@@ -15,7 +13,6 @@ final class TestHistoryViewController: UIViewController,
     private var availableYears: [Int] = []
     private var selectedYear: Int?
 
-    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
@@ -28,7 +25,6 @@ final class TestHistoryViewController: UIViewController,
         NotificationCenter.default.removeObserver(self)
     }
 
-    // MARK: - Setup
     private func setupNavigationBar() {
         let titleLabel = UILabel()
         titleLabel.text = "Log History"
@@ -43,20 +39,17 @@ final class TestHistoryViewController: UIViewController,
         collectionView.delegate = self
         collectionView.alwaysBounceVertical = true
 
-        // Record cell
         collectionView.register(
             UINib(nibName: "TestRecordCell", bundle: nil),
             forCellWithReuseIdentifier: "TestRecordCell"
         )
 
-        // Empty state cell
         collectionView.register(
             UINib(nibName: "EmptyStateCell", bundle: nil),
             forCellWithReuseIdentifier: EmptyStateCell.reuseIdentifier
         )
     }
 
-    // MARK: - Data Loading
     private func loadData() {
         records = Persistence.load()
         setupAvailableYears()
@@ -64,11 +57,6 @@ final class TestHistoryViewController: UIViewController,
         collectionView.reloadData()
     }
 
-    /// FINAL year rules:
-    /// - If NO records → current year ... current year + 5
-    /// - If records exist:
-    ///   - Start = earliest record year
-    ///   - End = max(current year + 5, latest record year)
     private func setupAvailableYears() {
         let calendar = Calendar.current
         let currentYear = calendar.component(.year, from: Date())
@@ -119,8 +107,7 @@ final class TestHistoryViewController: UIViewController,
         collectionView.reloadData()
     }
 
-    // MARK: - Filter Button
-    @IBAction func filterButtonTapped(_ sender: UIBarButtonItem) {
+    @IBAction private func filterButtonTapped(_ sender: UIBarButtonItem) {
         let storyboard = UIStoryboard(name: "selfexam", bundle: nil)
         guard let vc = storyboard.instantiateViewController(
             withIdentifier: "YearFilterViewController"
@@ -140,7 +127,6 @@ final class TestHistoryViewController: UIViewController,
         present(vc, animated: true)
     }
 
-    // MARK: - Filtering
     private func filterRecords(for year: Int?) {
         guard let year else {
             filteredRecords = records
@@ -153,20 +139,22 @@ final class TestHistoryViewController: UIViewController,
         }
     }
 
-    // MARK: - UICollectionViewDataSource
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         1
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        numberOfItemsInSection section: Int) -> Int {
-        return filteredRecords.isEmpty ? 1 : filteredRecords.count
+    func collectionView(
+        _ collectionView: UICollectionView,
+        numberOfItemsInSection section: Int
+    ) -> Int {
+        filteredRecords.isEmpty ? 1 : filteredRecords.count
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
 
-        // EMPTY STATE
         if filteredRecords.isEmpty {
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: EmptyStateCell.reuseIdentifier,
@@ -175,7 +163,6 @@ final class TestHistoryViewController: UIViewController,
             return cell
         }
 
-        // RECORD CELL
         let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: "TestRecordCell",
             for: indexPath
@@ -185,7 +172,6 @@ final class TestHistoryViewController: UIViewController,
         return cell
     }
 
-    // MARK: - Cell Configuration
     private func configureCell(_ cell: TestRecordCell, at indexPath: IndexPath) {
         let record = filteredRecords[indexPath.item]
         let isExpanded = expandedIndexSet.contains(indexPath.item)
@@ -204,18 +190,20 @@ final class TestHistoryViewController: UIViewController,
         }
     }
 
-    // MARK: - UICollectionViewDelegate
-    func collectionView(_ collectionView: UICollectionView,
-                        shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return !filteredRecords.isEmpty
+    func collectionView(
+        _ collectionView: UICollectionView,
+        shouldSelectItemAt indexPath: IndexPath
+    ) -> Bool {
+        !filteredRecords.isEmpty
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        didSelectItemAt indexPath: IndexPath) {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        didSelectItemAt indexPath: IndexPath
+    ) {
         toggleExpansion(at: indexPath)
     }
 
-    // MARK: - Expansion
     private func toggleExpansion(at indexPath: IndexPath) {
         expandedIndexSet.formSymmetricDifference([indexPath.item])
         collectionView.performBatchUpdates {
@@ -223,7 +211,6 @@ final class TestHistoryViewController: UIViewController,
         }
     }
 
-    // MARK: - Layout
     private func createLayout() -> UICollectionViewLayout {
         var config = UICollectionLayoutListConfiguration(appearance: .plain)
         config.showsSeparators = true
@@ -236,7 +223,10 @@ final class TestHistoryViewController: UIViewController,
         return UICollectionViewCompositionalLayout.list(using: config)
     }
 
-    private func createSwipeActions(for indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+    private func createSwipeActions(
+        for indexPath: IndexPath
+    ) -> UISwipeActionsConfiguration? {
+
         let deleteAction = UIContextualAction(
             style: .destructive,
             title: "Delete"
@@ -252,8 +242,10 @@ final class TestHistoryViewController: UIViewController,
         return configuration
     }
 
-    // MARK: - Delete
-    func confirmDelete(at indexPath: IndexPath, completion: @escaping (Bool) -> Void) {
+    func confirmDelete(
+        at indexPath: IndexPath,
+        completion: @escaping (Bool) -> Void
+    ) {
         let alert = UIAlertController(
             title: "Delete Record?",
             message: "Are you sure you want to delete this record?",
@@ -271,7 +263,10 @@ final class TestHistoryViewController: UIViewController,
         present(alert, animated: true)
     }
 
-    private func performDelete(at indexPath: IndexPath, completion: @escaping (Bool) -> Void) {
+    private func performDelete(
+        at indexPath: IndexPath,
+        completion: @escaping (Bool) -> Void
+    ) {
         let record = filteredRecords[indexPath.item]
         records.removeAll { $0.date == record.date }
         filteredRecords.remove(at: indexPath.item)

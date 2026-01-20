@@ -4,15 +4,14 @@ protocol ObservationsCollector {
     func collectObservations() -> [ObservationItem]
 }
 
-class ObservationsViewController: UIViewController {
+final class ObservationsViewController: UIViewController {
 
-    @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var doneBarButton: UIBarButtonItem!
+    @IBOutlet private weak var collectionView: UICollectionView!
+    @IBOutlet private weak var doneBarButton: UIBarButtonItem!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-       
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
@@ -27,11 +26,11 @@ class ObservationsViewController: UIViewController {
         collectionView.delegate = self
     }
 
-    @IBAction func doneBarButtonTapped(_ sender: UIBarButtonItem) {
+    @IBAction private func doneBarButtonTapped(_ sender: UIBarButtonItem) {
         doneTapped()
     }
 
-    @objc func doneTapped() {
+    private func doneTapped() {
         var observations: [ObservationItem] = []
 
         if let cell = collectionView.visibleCells.first,
@@ -61,23 +60,29 @@ class ObservationsViewController: UIViewController {
 
 extension ObservationsViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        numberOfItemsInSection section: Int
+    ) -> Int {
         1
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
 
-        return collectionView.dequeueReusableCell(
+        collectionView.dequeueReusableCell(
             withReuseIdentifier: "ObservationsContainerCell",
             for: indexPath
         ) as! ObservationsContainerCell
     }
 
-  
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
 
         let layout = collectionViewLayout as! UICollectionViewFlowLayout
         let horizontalInsets = layout.sectionInset.left + layout.sectionInset.right

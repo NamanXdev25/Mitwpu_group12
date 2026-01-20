@@ -1,12 +1,12 @@
 import UIKit
 
-class TestRecordCell: UICollectionViewCell {
-    
+final class TestRecordCell: UICollectionViewCell {
+
     // MARK: - Outlets
-    @IBOutlet weak var dateLabel: UILabel!
-    @IBOutlet weak var chevronButton: UIButton!
-    @IBOutlet weak var itemsStack: UIStackView!
-    @IBOutlet weak var separator: UIView!
+    @IBOutlet private weak var dateLabel: UILabel!
+    @IBOutlet private weak var chevronButton: UIButton!
+    @IBOutlet private weak var itemsStack: UIStackView!
+    @IBOutlet private weak var separator: UIView!
 
     // MARK: - Callbacks
     var onChevronTap: (() -> Void)?
@@ -15,7 +15,7 @@ class TestRecordCell: UICollectionViewCell {
     // MARK: - Private Properties
     private weak var detailsContainer: UIView?
     private weak var detailsStack: UIStackView?
-    
+
     private let containerCornerRadius: CGFloat = 12
     private let containerInsets = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
     private let rowHeight: CGFloat = 44
@@ -38,23 +38,20 @@ class TestRecordCell: UICollectionViewCell {
     private func setupSeparator() {
         separator.backgroundColor = UIColor(white: 0.85, alpha: 1)
         separator.isHidden = false
-        
-        // Debug: Print separator frame to see if it has size
-        print("Separator frame: \(separator.frame)")
-        print("Separator constraints: \(separator.constraints)")
-        
-        // Force a height if no height constraint exists
+
         if !separator.constraints.contains(where: { $0.firstAttribute == .height }) {
             separator.heightAnchor.constraint(equalToConstant: 1).isActive = true
         }
-        
-        // Ensure it's not transparent
+
         separator.alpha = 1.0
         separator.clipsToBounds = false
     }
-    
+
     private func setupGestures() {
-        let swipe = UISwipeGestureRecognizer(target: self, action: #selector(didSwipeLeft))
+        let swipe = UISwipeGestureRecognizer(
+            target: self,
+            action: #selector(didSwipeLeft)
+        )
         swipe.direction = .left
         contentView.addGestureRecognizer(swipe)
     }
@@ -71,7 +68,7 @@ class TestRecordCell: UICollectionViewCell {
         dateLabel.text = formatDate(date)
         clearDetails()
 
-        guard let details = details, !details.isEmpty else {
+        guard let details, !details.isEmpty else {
             rotateChevron(down: false, animated: false)
             return
         }
@@ -83,10 +80,10 @@ class TestRecordCell: UICollectionViewCell {
     private func addDetailsView(with details: [ObservationItem]) {
         let container = createDetailsContainer()
         let stack = createDetailsStack()
-        
+
         setupContainerConstraints(container: container, stack: stack)
         populateDetails(stack: stack, with: details)
-        
+
         itemsStack.addArrangedSubview(container)
         detailsContainer = container
         detailsStack = stack
@@ -128,33 +125,52 @@ class TestRecordCell: UICollectionViewCell {
     }
 
     // MARK: - Details Population
-    private func populateDetails(stack: UIStackView, with details: [ObservationItem]) {
+    private func populateDetails(
+        stack: UIStackView,
+        with details: [ObservationItem]
+    ) {
         for (index, item) in details.enumerated() {
-            let row = createDetailRow(title: item.title, value: item.value)
+            let row = createDetailRow(
+                title: item.title,
+                value: item.value
+            )
             stack.addArrangedSubview(row)
-            
+
             if index < details.count - 1 {
                 stack.addArrangedSubview(createDivider())
             }
         }
     }
 
-    private func createDetailRow(title: String, value: String) -> UIStackView {
+    private func createDetailRow(
+        title: String,
+        value: String
+    ) -> UIStackView {
         let row = UIStackView()
         row.axis = .horizontal
         row.spacing = 8
-        
-        let titleLabel = createLabel(text: title, alignment: .left)
-        let valueLabel = createLabel(text: value, alignment: .right)
-        
+
+        let titleLabel = createLabel(
+            text: title,
+            alignment: .left
+        )
+
+        let valueLabel = createLabel(
+            text: value,
+            alignment: .right
+        )
+
         row.addArrangedSubview(titleLabel)
         row.addArrangedSubview(valueLabel)
         row.heightAnchor.constraint(equalToConstant: rowHeight).isActive = true
-        
+
         return row
     }
 
-    private func createLabel(text: String, alignment: NSTextAlignment) -> UILabel {
+    private func createLabel(
+        text: String,
+        alignment: NSTextAlignment
+    ) -> UILabel {
         let label = UILabel()
         label.text = text
         label.font = .systemFont(ofSize: 16)
@@ -171,8 +187,10 @@ class TestRecordCell: UICollectionViewCell {
 
     // MARK: - Chevron Animation
     private func rotateChevron(down: Bool, animated: Bool) {
-        let transform = down ? CGAffineTransform(rotationAngle: .pi / 2) : .identity
-        
+        let transform = down
+            ? CGAffineTransform(rotationAngle: .pi / 2)
+            : .identity
+
         if animated {
             UIView.animate(withDuration: 0.22) {
                 self.chevronButton.transform = transform
@@ -183,7 +201,7 @@ class TestRecordCell: UICollectionViewCell {
     }
 
     // MARK: - Actions
-    @IBAction func chevronTapped(_ sender: UIButton) {
+    @IBAction private func chevronTapped(_ sender: UIButton) {
         let isExpanded = sender.transform != .identity
         rotateChevron(down: !isExpanded, animated: true)
         onChevronTap?()
