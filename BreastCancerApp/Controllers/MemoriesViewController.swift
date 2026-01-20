@@ -156,20 +156,27 @@ final class MemoriesViewController: UIViewController,
 
     // MARK: - Add
     @IBAction func addButtonTapped(_ sender: UIButton) {
-        let sheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(
+            title: "Add Memory",
+            message: "Choose an option",
+            preferredStyle: .alert
+        )
 
-        sheet.addAction(UIAlertAction(title: "Open Camera", style: .default) { _ in
+        alert.addAction(UIAlertAction(title: "Open Camera", style: .default) { _ in
             self.presentImagePicker(sourceType: .camera)
         })
 
-        sheet.addAction(UIAlertAction(title: "Add from Gallery", style: .default) { _ in
+        alert.addAction(UIAlertAction(title: "Add from Gallery", style: .default) { _ in
             self.presentImagePicker(sourceType: .photoLibrary)
         })
 
-        sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
 
-        present(sheet, animated: true)
+        present(alert, animated: true)
     }
+
+
+
 
     // MARK: - Picker
     private func presentImagePicker(sourceType: UIImagePickerController.SourceType) {
