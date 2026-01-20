@@ -5,21 +5,30 @@ final class CircularProgressView: UIView {
     private let progressLayer = CAShapeLayer()
     private let trackLayer = CAShapeLayer()
 
+    private var internalProgress: CGFloat = 0
+
     var lineWidth: CGFloat = 10 {
-        didSet { setNeedsLayout() }
+        didSet {
+            setNeedsLayout()
+        }
     }
 
     var trackColor: UIColor = UIColor(white: 0.92, alpha: 1.0) {
-        didSet { trackLayer.strokeColor = trackColor.cgColor }
+        didSet {
+            trackLayer.strokeColor = trackColor.cgColor
+        }
     }
 
     var progressColor: UIColor = .systemPink {
-        didSet { progressLayer.strokeColor = progressColor.cgColor }
+        didSet {
+            progressLayer.strokeColor = progressColor.cgColor
+        }
     }
 
-    var progress: CGFloat = 0 {
-        didSet {
-            progress = min(max(progress, 0), 1)
+    var progress: CGFloat {
+        get { internalProgress }
+        set {
+            internalProgress = min(max(newValue, 0), 1)
             updateProgress()
         }
     }
@@ -36,6 +45,7 @@ final class CircularProgressView: UIView {
 
     private func setupLayers() {
         backgroundColor = .clear
+        isOpaque = false
 
         trackLayer.fillColor = UIColor.clear.cgColor
         trackLayer.strokeColor = trackColor.cgColor
@@ -76,7 +86,7 @@ final class CircularProgressView: UIView {
     }
 
     private func updateProgress() {
-        progressLayer.strokeEnd = progress
+        progressLayer.strokeEnd = internalProgress
     }
 
     func setProgress(_ value: CGFloat, animated: Bool) {

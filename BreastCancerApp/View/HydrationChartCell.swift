@@ -31,20 +31,21 @@ final class HydrationChartCell: UICollectionViewCell {
     }
 
     func configure(average: Double, mode: HydrationChartMode) {
-        segmentedControl.selectedSegmentIndex = mode == .weekly ? 0 : 1
-        averageValueLabel.text = String(format: "%.1f L", average)
-
         switch mode {
         case .weekly:
+            segmentedControl.selectedSegmentIndex = 0
             let values = HydrationHistoryModel.chartValues(for: .weekly)
             let labels = ["S", "M", "T", "W", "T", "F", "S"]
             chartView.configure(values: values, labels: labels, mode: .weekly)
 
         case .monthly:
+            segmentedControl.selectedSegmentIndex = 1
             let values = HydrationHistoryModel.chartValues(for: .monthly)
             let labels = values.indices.map { "\($0 + 1)" }
             chartView.configure(values: values, labels: labels, mode: .monthly)
         }
+
+        averageValueLabel.text = String(format: "%.1f L", average)
     }
 
     @objc private func segmentChanged() {

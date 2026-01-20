@@ -17,20 +17,25 @@ final class HydrationBarChartView: UIView {
 
     private var step: Double {
         switch maxY {
-        case 0...4: return 0.5
-        case 4...8: return 1.0
-        default: return 2.0
+        case 0...4:
+            return 0.5
+        case 4...8:
+            return 1.0
+        default:
+            return 2.0
         }
     }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .clear
+        isOpaque = false
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         backgroundColor = .clear
+        isOpaque = false
     }
 
     func configure(values: [Double], labels: [String], mode: Mode) {
@@ -54,7 +59,7 @@ final class HydrationBarChartView: UIView {
     }
 
     private func drawYAxis(_ ctx: CGContext, _ rect: CGRect, _ left: CGFloat, _ height: CGFloat) {
-        stride(from: 0.0, through: maxY, by: step).forEach { value in
+        for value in stride(from: 0.0, through: maxY, by: step) {
             let y = yPosition(for: value, height)
 
             String(format: "%.1f", value).draw(
@@ -106,7 +111,7 @@ final class HydrationBarChartView: UIView {
         let slotWidth = usableWidth / CGFloat(count)
         let barWidth = slotWidth * 0.6
 
-        let barColor = UIColor(named: "bg") ?? UIColor.systemPink
+        let barColor = UIColor(named: "bg") ?? .systemPink
 
         for (index, value) in values.enumerated() {
             let barHeight = CGFloat(value / maxY) * height

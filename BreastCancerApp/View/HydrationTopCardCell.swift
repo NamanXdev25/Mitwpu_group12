@@ -2,6 +2,8 @@ import UIKit
 
 final class HydrationTopCardCell: UICollectionViewCell {
 
+    // MARK: - Outlets
+
     @IBOutlet private weak var progressRingView: CircularProgressView!
     @IBOutlet private weak var valueLabel: UILabel!
     @IBOutlet private weak var remainingLabel: UILabel!
@@ -9,28 +11,57 @@ final class HydrationTopCardCell: UICollectionViewCell {
     @IBOutlet private weak var goalValueButton: UIButton!
     @IBOutlet private weak var cupValueButton: UIButton!
 
+    // MARK: - Actions
+
     var onGoalTapped: (() -> Void)?
     var onCupTapped: (() -> Void)?
     var onDropTapped: (() -> Void)?
 
+    // MARK: - Lifecycle
+
     override func awakeFromNib() {
         super.awakeFromNib()
-        setupProgressView()
-        setupActions()
+        configureProgressView()
+        configureActions()
     }
 
-    private func setupProgressView() {
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        progressRingView.setProgress(0, animated: false)
+    }
+
+    // MARK: - Configuration
+
+    func configure(consumedML: Int, goal: Double, cupSize: Int) {
+        let consumedLiters = Double(consumedML) * 0.001
+        let remainingLiters = max(goal - consumedLiters, 0)
+        let progress = goal > 0 ? CGFloat(consumedLiters / goal) : 0
+
+        valueLabel.text = String(format: "%.1f L / %d mL", goal, cupSize)
+        remainingLabel.text = String(format: "Remaining %.1f L", remainingLiters)
+
+        goalValueButton.setTitle(String(format: "%.1f L", goal), for: .normal)
+        cupValueButton.setTitle("\(cupSize) mL", for: .normal)
+
+        progressRingView.setProgress(progress, animated: true)
+    }
+
+    // MARK: - Private Setup
+
+    private func configureProgressView() {
         progressRingView.lineWidth = 8
         progressRingView.trackColor = UIColor(white: 0.92, alpha: 1.0)
         progressRingView.progressColor = .bg
         progressRingView.backgroundColor = .clear
     }
 
-    private func setupActions() {
+    private func configureActions() {
         goalValueButton.addTarget(self, action: #selector(goalTapped), for: .touchUpInside)
         cupValueButton.addTarget(self, action: #selector(cupTapped), for: .touchUpInside)
         dropButton.addTarget(self, action: #selector(dropTapped), for: .touchUpInside)
     }
+
+    // MARK: - Selectors
 
     @objc private func goalTapped() {
         onGoalTapped?()
@@ -42,19 +73,5 @@ final class HydrationTopCardCell: UICollectionViewCell {
 
     @objc private func dropTapped() {
         onDropTapped?()
-    }
-
-    func configure(consumedML: Int, goal: Double, cupSize: Int) {
-        let consumedLiters = Double(consumedML) / 1000.0
-        let remainingLiters = max(goal - consumedLiters, 0)
-        let progress = goal > 0 ? CGFloat(consumedLiters / goal) : 0
-
-        valueLabel.text = String(format: "%.1f L / %d mL", goal, cupSize)
-        remainingLabel.text = String(format: "Remaining %.1f L", remainingLiters)
-
-        goalValueButton.setTitle(String(format: "%.1f L", goal), for: .normal)
-        cupValueButton.setTitle("\(cupSize) mL", for: .normal)
-
-        progressRingView.setProgress(progress, animated: true)
     }
 }

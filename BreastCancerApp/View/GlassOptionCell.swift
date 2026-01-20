@@ -2,15 +2,14 @@ import UIKit
 
 final class GlassOptionCell: UIView {
 
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var dividerView: UIView!
+    @IBOutlet private weak var titleLabel: UILabel!
+    @IBOutlet private weak var dividerView: UIView!
 
     var onTap: (() -> Void)?
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        backgroundColor = .clear
-        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
+        setupView()
     }
 
     func configure(text: String, hideDivider: Bool) {
@@ -18,7 +17,18 @@ final class GlassOptionCell: UIView {
         dividerView.isHidden = hideDivider
     }
 
+    // MARK: - Private
+
+    private func setupView() {
+        backgroundColor = .clear
+        isUserInteractionEnabled = true
+        addGestureRecognizer(
+            UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        )
+    }
+
     @objc private func handleTap() {
         onTap?()
     }
 }
+    
