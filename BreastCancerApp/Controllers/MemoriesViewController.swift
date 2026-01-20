@@ -156,24 +156,33 @@ final class MemoriesViewController: UIViewController,
 
     // MARK: - Add
     @IBAction func addButtonTapped(_ sender: UIButton) {
-        let alert = UIAlertController(
-            title: "Add Memory",
-            message: "Choose an option",
-            preferredStyle: .alert
-        )
+        let storyboard = UIStoryboard(name: "memory", bundle: nil)
 
-        alert.addAction(UIAlertAction(title: "Open Camera", style: .default) { _ in
-            self.presentImagePicker(sourceType: .camera)
-        })
+        let popup = storyboard.instantiateViewController(
+            withIdentifier: "AddMemoryPopupViewController"
+        ) as! AddMemoryPopupViewController
 
-        alert.addAction(UIAlertAction(title: "Add from Gallery", style: .default) { _ in
-            self.presentImagePicker(sourceType: .photoLibrary)
-        })
+        popup.modalPresentationStyle = .popover
+        popup.preferredContentSize = CGSize(width: 260, height: 150)
 
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        popup.onCamera = { [weak self] in
+            self?.presentImagePicker(sourceType: .camera)
+        }
 
-        present(alert, animated: true)
+        popup.onPhotos = { [weak self] in
+            self?.presentImagePicker(sourceType: .photoLibrary)
+        }
+
+        guard let popover = popup.popoverPresentationController else { return }
+
+        popover.sourceView = sender
+        popover.sourceRect = sender.bounds
+        popover.permittedArrowDirections = [.down, .up]
+        popover.delegate = popup
+
+        present(popup, animated: true)
     }
+
 
 
 
