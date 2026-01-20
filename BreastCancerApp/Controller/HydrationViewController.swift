@@ -6,7 +6,7 @@ enum HydrationChartMode {
     case monthly
 }
 
-class HydrationViewController: UIViewController {
+final class HydrationViewController: UIViewController {
 
     // MARK: - Reuse Identifiers
     private enum CellReuseID {
@@ -19,9 +19,6 @@ class HydrationViewController: UIViewController {
 
     // MARK: - State
     private var chartMode: HydrationChartMode = .weekly
-
-    // MARK: - Selector UI State
-    private var selectorOverlayView: UIView?
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -61,13 +58,17 @@ extension HydrationViewController: UICollectionViewDataSource {
 
     func numberOfSections(in collectionView: UICollectionView) -> Int { 1 }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        numberOfItemsInSection section: Int) -> Int { 2 }
+    func collectionView(
+        _ collectionView: UICollectionView,
+        numberOfItemsInSection section: Int
+    ) -> Int { 2 }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
 
-        // TOP CARD
+        // MARK: - TOP CARD
         if indexPath.item == 0 {
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: CellReuseID.topCard,
@@ -92,7 +93,6 @@ extension HydrationViewController: UICollectionViewDataSource {
                 self?.showCupSelector()
             }
 
-            // ✅ FIXED: increment strictly in mL
             cell.onDropTapped = { [weak self] in
                 guard let self else { return }
 
@@ -112,7 +112,7 @@ extension HydrationViewController: UICollectionViewDataSource {
             return cell
         }
 
-        // CHART
+        // MARK: - CHART
         let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: CellReuseID.chart,
             for: indexPath
@@ -138,127 +138,38 @@ extension HydrationViewController: UICollectionViewDataSource {
 // MARK: - UICollectionViewDelegateFlowLayout
 extension HydrationViewController: UICollectionViewDelegateFlowLayout {
 
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
         CGSize(width: collectionView.bounds.width, height: 370)
     }
 }
 
-// MARK: - Glass Selector (ONLY GlassOptionCell.xib)
+// MARK: - Selector Presentation
 extension HydrationViewController {
 
-    private func showSelector(
+    private func presentOptionSelector(
         title: String,
         subtitle: String,
         options: [String],
         onSelect: @escaping (Int) -> Void
     ) {
-
-        guard selectorOverlayView == nil else { return }
-
-        // Overlay
-        let overlay = UIView(frame: view.bounds)
-        overlay.backgroundColor = UIColor.black.withAlphaComponent(0.25)
-
-        let blur = UIVisualEffectView(
-            effect: UIBlurEffect(style: .systemUltraThinMaterial)
+        let vc = HydrationOptionSelectorViewController(
+            nibName: "HydrationOptionSelectorViewController",
+            bundle: nil
         )
-        blur.frame = overlay.bounds
-        blur.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        overlay.addSubview(blur)
 
-        // Card
-        let card = UIView()
-        card.backgroundColor = UIColor.white.withAlphaComponent(0.9)
-        card.layer.cornerRadius = 24
-        card.translatesAutoresizingMaskIntoConstraints = false
+        vc.modalPresentationStyle = .overFullScreen
+        vc.modalTransitionStyle = .crossDissolve
 
-        overlay.addSubview(card)
-        view.addSubview(overlay)
+        vc.titleText = title
+        vc.subtitleText = subtitle
+        vc.options = options
+        vc.onSelect = onSelect
 
-        NSLayoutConstraint.activate([
-            card.centerYAnchor.constraint(equalTo: overlay.centerYAnchor),
-            card.leadingAnchor.constraint(equalTo: overlay.leadingAnchor, constant: 24),
-            card.trailingAnchor.constraint(equalTo: overlay.trailingAnchor, constant: -24)
-        ])
-
-        // Stack
-        let stack = UIStackView()
-        stack.axis = .vertical
-        stack.spacing = 12
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        card.addSubview(stack)
-
-        NSLayoutConstraint.activate([
-            stack.topAnchor.constraint(equalTo: card.topAnchor, constant: 20),
-            stack.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 16),
-            stack.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -16),
-            stack.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -16)
-        ])
-
-        // Title
-        let titleLabel = UILabel()
-        titleLabel.text = title
-        titleLabel.font = .boldSystemFont(ofSize: 18)
-        titleLabel.textAlignment = .center
-
-        let subtitleLabel = UILabel()
-        subtitleLabel.text = subtitle
-        subtitleLabel.font = .systemFont(ofSize: 14)
-        subtitleLabel.textColor = .darkGray
-        subtitleLabel.textAlignment = .center
-
-        stack.addArrangedSubview(titleLabel)
-        stack.addArrangedSubview(subtitleLabel)
-
-        // OPTIONS
-        for (index, text) in options.enumerated() {
-            let cell = Bundle.main
-                .loadNibNamed("GlassOptionCell", owner: nil)?
-                .first as! GlassOptionCell
-
-            cell.configure(
-                text: text,
-                hideDivider: index == options.count - 1
-            )
-
-            cell.translatesAutoresizingMaskIntoConstraints = false
-            cell.heightAnchor.constraint(equalToConstant: 50).isActive = true
-
-            cell.onTap = { [weak self] in
-                self?.dismissSelector()
-                onSelect(index)
-            }
-
-            stack.addArrangedSubview(cell)
-        }
-
-        // Cancel
-        let cancelCell = Bundle.main
-            .loadNibNamed("GlassOptionCell", owner: nil)?
-            .first as! GlassOptionCell
-
-        cancelCell.configure(text: "Cancel", hideDivider: true)
-        cancelCell.translatesAutoresizingMaskIntoConstraints = false
-        cancelCell.heightAnchor.constraint(equalToConstant: 50).isActive = true
-
-        cancelCell.onTap = { [weak self] in
-            self?.dismissSelector()
-        }
-
-        stack.addArrangedSubview(cancelCell)
-
-        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissSelector))
-        overlay.addGestureRecognizer(tap)
-
-        selectorOverlayView = overlay
-    }
-
-    @objc private func dismissSelector() {
-        selectorOverlayView?.removeFromSuperview()
-        selectorOverlayView = nil
+        present(vc, animated: true)
     }
 }
 
@@ -269,13 +180,13 @@ extension HydrationViewController {
         let values = [1.5, 2.0, 2.5, 3.0, 3.5, 4.0]
         let titles = values.map { "\($0) L" }
 
-        showSelector(
+        presentOptionSelector(
             title: "Daily Goal",
             subtitle: "Select your daily water goal",
             options: titles
-        ) { index in
+        ) { [weak self] index in
             HydrationModel.setGoal(values[index])
-            self.reloadTopCard()
+            self?.reloadTopCard()
         }
     }
 
@@ -283,13 +194,13 @@ extension HydrationViewController {
         let values: [Double] = [0.1, 0.15, 0.2, 0.25, 0.3, 0.5]
         let titles = values.map { "\(Int($0 * 1000)) mL" }
 
-        showSelector(
+        presentOptionSelector(
             title: "Cup Size",
             subtitle: "Select your cup size",
             options: titles
-        ) { index in
+        ) { [weak self] index in
             HydrationModel.setCupSize(values[index])
-            self.reloadTopCard()
+            self?.reloadTopCard()
         }
     }
 
