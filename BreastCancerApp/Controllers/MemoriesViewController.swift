@@ -196,14 +196,19 @@ final class MemoriesViewController: UIViewController,
 
     // MARK: - Navigation
     private func openAddMemoryScreen(with image: UIImage) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let storyboard = UIStoryboard(name: "memory", bundle: nil)
+
         let addVC = storyboard.instantiateViewController(
             withIdentifier: "AddMemoryViewController"
         ) as! AddMemoryViewController
+
         addVC.image = image
         addVC.delegate = self
-        present(UINavigationController(rootViewController: addVC), animated: true)
+
+        let navVC = UINavigationController(rootViewController: addVC)
+        present(navVC, animated: true)
     }
+
 
     // MARK: - Delegates
     func didAddMemory(_ memory: Memory) {
@@ -309,7 +314,7 @@ final class MemoriesViewController: UIViewController,
 
     // MARK: - Viewer
     private func openViewer(section: Int, item: Int) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let storyboard = UIStoryboard(name: "memory", bundle: nil)
         let pageVC = storyboard.instantiateViewController(
             withIdentifier: "MemoryPageViewController"
         ) as! MemoryPageViewController

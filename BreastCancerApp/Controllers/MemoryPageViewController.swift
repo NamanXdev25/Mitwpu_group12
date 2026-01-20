@@ -29,7 +29,7 @@ final class MemoryPageViewController: UIPageViewController {
 
     // MARK: - Child Viewer VC
     private func viewerController(at index: Int) -> MemoryViewerViewController {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let storyboard = UIStoryboard(name: "memory", bundle: nil)
 
         let vc = storyboard.instantiateViewController(
             withIdentifier: "MemoryViewerViewController"
