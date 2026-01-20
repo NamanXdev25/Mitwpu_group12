@@ -16,9 +16,12 @@ final class AudioGuideViewController: UIViewController {
 
     private let seekInterval: TimeInterval = 5
 
+    // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupAudioPlayer()
+        configurePlayPauseButton(isPlaying: false)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -26,18 +29,22 @@ final class AudioGuideViewController: UIViewController {
         progressTimer?.invalidate()
     }
 
+    // MARK: - Audio Setup
+
     private func setupAudioPlayer() {
         guard let url = Bundle.main.url(forResource: "audio_guide", withExtension: "mp3") else {
+            print("Audio file not found")
             return
         }
 
         do {
             let audioPlayer = try AVAudioPlayer(contentsOf: url)
+            audioPlayer.delegate = self
             audioPlayer.prepareToPlay()
             player = audioPlayer
             configureSlider(with: audioPlayer.duration)
         } catch {
-            player = nil
+            print("Failed to load audio:", error)
         }
     }
 
@@ -46,6 +53,16 @@ final class AudioGuideViewController: UIViewController {
         progressSlider.maximumValue = Float(duration)
         progressSlider.value = 0
     }
+
+    // MARK: - UI Updates
+
+    private func configurePlayPauseButton(isPlaying: Bool) {
+        let imageName = isPlaying ? "pause.fill" : "play.fill"
+        let image = UIImage(systemName: imageName)
+        playPauseButton.setImage(image, for: .normal)
+    }
+
+    // MARK: - Progress Timer
 
     private func startProgressTimer() {
         progressTimer?.invalidate()
@@ -60,35 +77,33 @@ final class AudioGuideViewController: UIViewController {
 
     @objc private func updateProgress() {
         guard let player = player else { return }
-
         progressSlider.value = Float(player.currentTime)
-
-        if !player.isPlaying {
-            progressTimer?.invalidate()
-        }
     }
+
+    // MARK: - Actions
 
     @IBAction private func playPauseTapped(_ sender: UIButton) {
         guard let player = player else { return }
 
         if player.isPlaying {
             player.pause()
+            progressTimer?.invalidate()
+            configurePlayPauseButton(isPlaying: false)
         } else {
             player.play()
             startProgressTimer()
+            configurePlayPauseButton(isPlaying: true)
         }
     }
 
     @IBAction private func back5Tapped(_ sender: UIButton) {
         guard let player = player else { return }
-
         player.currentTime = max(0, player.currentTime - seekInterval)
         updateProgress()
     }
 
     @IBAction private func forward5Tapped(_ sender: UIButton) {
         guard let player = player else { return }
-
         player.currentTime = min(player.duration, player.currentTime + seekInterval)
         updateProgress()
     }
@@ -100,5 +115,15 @@ final class AudioGuideViewController: UIViewController {
 
     @IBAction private func logSelfExamTapped(_ sender: UIButton) {
         performSegue(withIdentifier: "showObservations", sender: sender)
+    }
+}
+
+// MARK: - AVAudioPlayerDelegate
+
+extension AudioGuideViewController: AVAudioPlayerDelegate {
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        progressTimer?.invalidate()
+        progressSlider.value = 0
+        configurePlayPauseButton(isPlaying: false)
     }
 }
