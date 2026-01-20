@@ -17,15 +17,15 @@
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="BWV-SS-BeW">
-                        <rect key="frame" x="16" y="105.66666666666667" width="28" height="28.000000000000014"/>
+                        <rect key="frame" x="4" y="105.66666666666667" width="28" height="28.000000000000014"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="28" id="MYm-ab-3bk"/>
                             <constraint firstAttribute="width" constant="28" id="lkW-8x-y0r"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gBp-jw-D2h">
-                        <rect key="frame" x="56" y="109" width="285" height="21"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <rect key="frame" x="44" y="109" width="297" height="21"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
@@ -37,7 +37,7 @@
                 <constraint firstItem="BWV-SS-BeW" firstAttribute="centerY" secondItem="gBp-jw-D2h" secondAttribute="centerY" id="ESY-GO-X6O"/>
                 <constraint firstAttribute="trailing" secondItem="gBp-jw-D2h" secondAttribute="trailing" constant="16" id="ScG-rD-Noy"/>
                 <constraint firstItem="gBp-jw-D2h" firstAttribute="leading" secondItem="BWV-SS-BeW" secondAttribute="trailing" constant="12" id="aGx-gl-v82"/>
-                <constraint firstItem="BWV-SS-BeW" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="f1k-32-dY9"/>
+                <constraint firstItem="BWV-SS-BeW" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="4" id="f1k-32-dY9"/>
             </constraints>
             <size key="customSize" width="357" height="239"/>
             <connections>

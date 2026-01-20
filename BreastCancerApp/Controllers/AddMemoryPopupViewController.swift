@@ -2,11 +2,14 @@ import UIKit
 
 final class AddMemoryPopupViewController: UIViewController {
 
+    // MARK: - Outlets
     @IBOutlet weak var collectionView: UICollectionView!
 
+    // MARK: - Callbacks
     var onCamera: (() -> Void)?
     var onPhotos: (() -> Void)?
 
+    // MARK: - Options
     private enum Option {
         case camera
         case photos
@@ -14,11 +17,22 @@ final class AddMemoryPopupViewController: UIViewController {
 
     private let options: [Option] = [.camera, .photos]
 
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureView()
+        configureCollectionView()
+    }
+}
 
+// MARK: - Configuration
+private extension AddMemoryPopupViewController {
+
+    func configureView() {
         view.backgroundColor = .clear
+    }
 
+    func configureCollectionView() {
         collectionView.backgroundColor = .clear
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -30,6 +44,7 @@ final class AddMemoryPopupViewController: UIViewController {
     }
 }
 
+// MARK: - UICollectionView DataSource & Delegate
 extension AddMemoryPopupViewController: UICollectionViewDataSource,
                                         UICollectionViewDelegateFlowLayout {
 
@@ -76,8 +91,9 @@ extension AddMemoryPopupViewController: UICollectionViewDataSource,
     }
 }
 
-// IMPORTANT: force popover on iPhone
+// MARK: - Force Popover on iPhone
 extension AddMemoryPopupViewController: UIPopoverPresentationControllerDelegate {
+
     func adaptivePresentationStyle(
         for controller: UIPresentationController
     ) -> UIModalPresentationStyle {
