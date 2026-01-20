@@ -17,26 +17,32 @@ final class SignUpFormCell: UICollectionViewCell {
     @IBOutlet weak var signUpButton: UIButton!
 
     // MARK: - State
-    private var isPasswordVisible = false
-    private var isChecked = false
+    private var isChecked: Bool = false
+    private var isPasswordVisible: Bool = false
 
     // MARK: - Lifecycle
     override func awakeFromNib() {
         super.awakeFromNib()
-        setupTextFields()
-        setupContainers()
-        setupSignUpButton()
-        setupCheckboxButton()
+        
+        agreeButton.backgroundColor = UIColor.red.withAlphaComponent(0.4)
+        agreeButton.layer.zPosition = 999
+
+        configureInteraction()
+        configureTextFields()
+        configureContainers()
+        configureCheckbox()
+        configureSignUpButton()
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        isChecked = false
-        updateCheckboxUI()
+    // MARK: - Interaction (VERY IMPORTANT)
+    private func configureInteraction() {
+        contentView.isUserInteractionEnabled = true
+        isUserInteractionEnabled = true
+        agreeButton.isUserInteractionEnabled = true
     }
 
-    // MARK: - TextField Setup
-    private func setupTextFields() {
+    // MARK: - TextFields
+    private func configureTextFields() {
         emailTextField.borderStyle = .none
         passwordTextField.borderStyle = .none
         reenterPasswordTextField.borderStyle = .none
@@ -45,8 +51,8 @@ final class SignUpFormCell: UICollectionViewCell {
         reenterPasswordTextField.isSecureTextEntry = true
     }
 
-    // MARK: - Container Styling
-    private func setupContainers() {
+    // MARK: - Containers
+    private func configureContainers() {
         let containers = [
             emailContainerView,
             passwordContainerView,
@@ -54,61 +60,65 @@ final class SignUpFormCell: UICollectionViewCell {
         ]
 
         containers.forEach { view in
-            guard let view = view else { return }
-            view.layer.cornerRadius = 12
-            view.layer.borderWidth = 1
-            view.layer.borderColor = UIColor.systemPink.cgColor
-            view.backgroundColor = .white
-            view.clipsToBounds = true
+            view?.layer.cornerRadius = 12
+            view?.layer.borderWidth = 1
+            view?.layer.borderColor = UIColor.systemPink.cgColor
+            view?.backgroundColor = .white
+            view?.clipsToBounds = true
         }
     }
 
-    // MARK: - Sign Up Button Styling
-    private func setupSignUpButton() {
+    // MARK: - Checkbox Setup (NO deprecated APIs)
+    private func configureCheckbox() {
+        agreeButton.backgroundColor = .clear
+        agreeButton.tintColor = .systemPink
+        agreeButton.setImage(
+            UIImage(systemName: "square"),
+            for: .normal
+        )
+    }
+
+    // MARK: - Sign Up Button
+    private func configureSignUpButton() {
         signUpButton.backgroundColor = .systemPink
         signUpButton.setTitleColor(.white, for: .normal)
         signUpButton.layer.cornerRadius = 28
         signUpButton.clipsToBounds = true
     }
 
-    // MARK: - Checkbox Setup (iOS 15+ SAFE)
-    private func setupCheckboxButton() {
-        var config = UIButton.Configuration.plain()
-        config.baseForegroundColor = .systemPink
-        config.contentInsets = NSDirectionalEdgeInsets(
-            top: 6, leading: 6, bottom: 6, trailing: 6
-        )
-        agreeButton.configuration = config
-        updateCheckboxUI()
-    }
-
-    private func updateCheckboxUI() {
-        var config = agreeButton.configuration ?? UIButton.Configuration.plain()
-        config.image = UIImage(
-            systemName: isChecked
-                ? "checkmark.square.fill"
-                : "square"
-        )
-        config.baseForegroundColor = .systemPink
-        agreeButton.configuration = config
-    }
-
     // MARK: - Actions
 
-    /// Checkbox toggle
+    /// ✅ Checkbox Tap (WORKING, RELIABLE)
     @IBAction func agreeTapped(_ sender: UIButton) {
         isChecked.toggle()
-        updateCheckboxUI()
+
+        if isChecked {
+            // Pink box + white tick
+            sender.setImage(
+                UIImage(systemName: "checkmark.square.fill"),
+                for: .normal
+            )
+            sender.tintColor = .white
+            sender.backgroundColor = .systemPink
+        } else {
+            // Empty square
+            sender.setImage(
+                UIImage(systemName: "square"),
+                for: .normal
+            )
+            sender.tintColor = .systemPink
+            sender.backgroundColor = .clear
+        }
     }
 
-    /// Password visibility toggle
+    /// 👁 Toggle password visibility
     @IBAction func togglePasswordVisibility(_ sender: UIButton) {
         isPasswordVisible.toggle()
         passwordTextField.isSecureTextEntry = !isPasswordVisible
         reenterPasswordTextField.isSecureTextEntry = !isPasswordVisible
     }
 
-    /// Sign Up action
+    /// 🔐 Sign Up
     @IBAction func signUpTapped(_ sender: UIButton) {
         print("Email:", emailTextField.text ?? "")
         print("Password:", passwordTextField.text ?? "")

@@ -4,7 +4,6 @@ final class SignUpViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
 
-    // MARK: - Section Model
     enum SignUpItem {
         case header
         case form
@@ -12,7 +11,6 @@ final class SignUpViewController: UIViewController {
         case social
     }
 
-    // MARK: - Data Order (matches Figma)
     private let items: [SignUpItem] = [
         .header,
         .form,
@@ -20,7 +18,6 @@ final class SignUpViewController: UIViewController {
         .social
     ]
 
-    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -28,7 +25,6 @@ final class SignUpViewController: UIViewController {
         registerCells()
     }
 
-    // MARK: - CollectionView Setup
     private func setupCollectionView() {
         collectionView.backgroundColor = .clear
         collectionView.dataSource = self
@@ -38,12 +34,11 @@ final class SignUpViewController: UIViewController {
         layout.scrollDirection = .vertical
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
-        layout.sectionInset = UIEdgeInsets(top: 16, left: 0, bottom: 24, right: 0)
+        layout.sectionInset = .zero
 
         collectionView.setCollectionViewLayout(layout, animated: false)
     }
 
-    // MARK: - Cell Registration
     private func registerCells() {
         collectionView.register(
             UINib(nibName: "SignUpHeaderCell", bundle: nil),
@@ -61,26 +56,24 @@ final class SignUpViewController: UIViewController {
         )
 
         collectionView.register(
-            UINib(nibName: "SignUpSocialCell", bundle: nil),
-            forCellWithReuseIdentifier: "SignUpSocialCell"
+            UINib(nibName: "SocialLoginCollectionViewCell", bundle: nil),
+            forCellWithReuseIdentifier: "SocialLoginCollectionViewCell"
         )
     }
 }
 
-// MARK: - UICollectionViewDataSource
+// MARK: - DataSource
 extension SignUpViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-        return items.count
+        items.count
     }
 
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-        let item = items[indexPath.item]
-
-        switch item {
+        switch items[indexPath.item] {
 
         case .header:
             return collectionView.dequeueReusableCell(
@@ -102,36 +95,34 @@ extension SignUpViewController: UICollectionViewDataSource {
 
         case .social:
             return collectionView.dequeueReusableCell(
-                withReuseIdentifier: "SignUpSocialCell",
+                withReuseIdentifier: "SocialLoginCollectionViewCell",
                 for: indexPath
             )
         }
     }
 }
 
-// MARK: - UICollectionViewDelegateFlowLayout
+// MARK: - Layout
 extension SignUpViewController: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
 
-        let screenWidth = collectionView.bounds.width
+        let width = collectionView.bounds.width
 
-        // Explicit pixel-driven heights (Figma-matched)
         switch items[indexPath.item] {
-
         case .header:
-            return CGSize(width: screenWidth, height: 180)
+            return CGSize(width: width, height: 180)
 
         case .form:
-            return CGSize(width: screenWidth, height: 360)
+            return CGSize(width: width, height: 360)
 
         case .or:
-            return CGSize(width: screenWidth, height: 40)
+            return CGSize(width: width, height: 30)
 
         case .social:
-            return CGSize(width: screenWidth, height: 220)
+            return CGSize(width: width, height: 240) // ✅ FIXED
         }
     }
 }

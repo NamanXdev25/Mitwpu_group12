@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="SocialLoginCollectionViewCell" customModule="BreastCancerApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="387" height="199"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="387" height="199"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Ey-eO-KaZ" userLabel="googleContainerView">
+                        <rect key="frame" x="16" y="16" width="355" height="56"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="google_icon" translatesAutoresizingMaskIntoConstraints="NO" id="nQq-jz-OAe">
+                                <rect key="frame" x="16" y="16" width="24" height="24"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="24" id="35U-5i-cv6"/>
+                                    <constraint firstAttribute="height" constant="24" id="KU6-dy-sLP"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Continue with Google" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QJB-dU-PWF">
+                                <rect key="frame" x="56" y="18" width="283" height="20.333333333333329"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="QJB-dU-PWF" firstAttribute="centerY" secondItem="2Ey-eO-KaZ" secondAttribute="centerY" id="BDG-MN-VFe"/>
+                            <constraint firstAttribute="height" constant="56" id="XES-Xv-BQF"/>
+                            <constraint firstItem="QJB-dU-PWF" firstAttribute="leading" secondItem="nQq-jz-OAe" secondAttribute="trailing" constant="16" id="bsR-iN-jw4"/>
+                            <constraint firstAttribute="trailing" secondItem="QJB-dU-PWF" secondAttribute="trailing" constant="16" id="eng-3U-XQu"/>
+                            <constraint firstItem="nQq-jz-OAe" firstAttribute="leading" secondItem="2Ey-eO-KaZ" secondAttribute="leading" constant="16" id="omU-h7-I68"/>
+                            <constraint firstItem="nQq-jz-OAe" firstAttribute="centerY" secondItem="2Ey-eO-KaZ" secondAttribute="centerY" id="zFZ-jR-FKN"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="12"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                <integer key="value" value="1"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ynQ-nl-yhn" userLabel="appleContainerView">
+                        <rect key="frame" x="16" y="88" width="355" height="56"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="apple.logo" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="dcq-Cc-yt6">
+                                <rect key="frame" x="16" y="16.333333333333332" width="24" height="22.333333333333339"/>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="24" id="Obp-QZ-ain"/>
+                                    <constraint firstAttribute="width" constant="24" id="qUG-V6-MqX"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Continue with Apple" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jfl-Fp-bAn">
+                                <rect key="frame" x="52" y="18" width="287" height="20"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="56" id="T3T-kb-7aa"/>
+                            <constraint firstAttribute="trailing" secondItem="jfl-Fp-bAn" secondAttribute="trailing" constant="16" id="VJf-4C-DLC"/>
+                            <constraint firstItem="jfl-Fp-bAn" firstAttribute="leading" secondItem="dcq-Cc-yt6" secondAttribute="trailing" constant="12" id="WfT-rr-YWK"/>
+                            <constraint firstItem="dcq-Cc-yt6" firstAttribute="centerY" secondItem="ynQ-nl-yhn" secondAttribute="centerY" id="Ytw-pE-rwV"/>
+                            <constraint firstItem="dcq-Cc-yt6" firstAttribute="leading" secondItem="ynQ-nl-yhn" secondAttribute="leading" constant="16" id="fuy-R4-OO6"/>
+                            <constraint firstItem="jfl-Fp-bAn" firstAttribute="centerY" secondItem="ynQ-nl-yhn" secondAttribute="centerY" id="qTB-dT-eMH"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="28"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                <integer key="value" value="1"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f2J-20-bQU">
+                        <rect key="frame" x="16" y="144" width="355" height="55"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fe6-pv-g30">
+                                <rect key="frame" x="201" y="13.333333333333341" width="111" height="28.333333333333329"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="tintColor" red="0.8447265625" green="0.4406738281" blue="0.5673828125" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Sign Up">
+                                    <fontDescription key="titleFontDescription" style="UICTFontTextStyleCaption1"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="didTapSignUp:" destination="gTV-IL-0wX" eventType="touchUpInside" id="6xo-5h-lFK"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Don't have an account?" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RxF-6E-mdu">
+                                <rect key="frame" x="64" y="16" width="133" height="24"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="RxF-6E-mdu" secondAttribute="bottom" constant="15" id="6W3-GN-Sfn"/>
+                            <constraint firstItem="RxF-6E-mdu" firstAttribute="top" secondItem="f2J-20-bQU" secondAttribute="top" constant="16" id="F6v-9h-qdB"/>
+                            <constraint firstItem="Fe6-pv-g30" firstAttribute="leading" secondItem="RxF-6E-mdu" secondAttribute="trailing" constant="4" id="ZFX-q7-HzB"/>
+                            <constraint firstItem="RxF-6E-mdu" firstAttribute="leading" secondItem="f2J-20-bQU" secondAttribute="leading" constant="64" id="bXq-eG-rzq"/>
+                            <constraint firstAttribute="trailing" secondItem="Fe6-pv-g30" secondAttribute="trailing" constant="43" id="j8n-E7-dKk"/>
+                            <constraint firstItem="Fe6-pv-g30" firstAttribute="centerY" secondItem="f2J-20-bQU" secondAttribute="centerY" id="tE1-SW-vAb"/>
+                        </constraints>
+                        <string key="userLabel">signupContainerView
+signupContainerView
+</string>
+                    </view>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="f2J-20-bQU" secondAttribute="bottom" id="8Dj-jn-g8b"/>
+                <constraint firstItem="2Ey-eO-KaZ" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="Et9-EV-WYO"/>
+                <constraint firstAttribute="trailing" secondItem="ynQ-nl-yhn" secondAttribute="trailing" constant="16" id="IYp-yr-EWY"/>
+                <constraint firstItem="ynQ-nl-yhn" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="NWd-Kk-IhU"/>
+                <constraint firstItem="f2J-20-bQU" firstAttribute="top" secondItem="ynQ-nl-yhn" secondAttribute="bottom" id="NqB-dV-PSg"/>
+                <constraint firstItem="ynQ-nl-yhn" firstAttribute="top" secondItem="2Ey-eO-KaZ" secondAttribute="bottom" constant="16" id="ZVT-vX-exE"/>
+                <constraint firstItem="f2J-20-bQU" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="ddv-x6-HeV"/>
+                <constraint firstAttribute="trailing" secondItem="2Ey-eO-KaZ" secondAttribute="trailing" constant="16" id="g6h-ZN-bE3"/>
+                <constraint firstItem="f2J-20-bQU" firstAttribute="leading" secondItem="ynQ-nl-yhn" secondAttribute="leading" id="vea-vQ-jjr"/>
+                <constraint firstItem="2Ey-eO-KaZ" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="16" id="zQt-QQ-uYi"/>
+            </constraints>
+            <size key="customSize" width="310" height="199"/>
+            <connections>
+                <outlet property="appleContainerView" destination="ynQ-nl-yhn" id="7de-eG-ARc"/>
+                <outlet property="googleContainerView" destination="2Ey-eO-KaZ" id="aib-eW-Mpi"/>
+                <outlet property="signUpButton" destination="Fe6-pv-g30" id="yLW-UM-IPi"/>
+                <outlet property="signupContainer" destination="f2J-20-bQU" id="6n1-0n-dmH"/>
+            </connections>
+            <point key="canvasLocation" x="176.33587786259542" y="153.16901408450704"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="apple.logo" catalog="system" width="105" height="128"/>
+        <image name="google_icon" width="500" height="500"/>
+    </resources>
+</document>

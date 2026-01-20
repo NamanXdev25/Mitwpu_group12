@@ -194,7 +194,7 @@
                             <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                         </userDefinedRuntimeAttributes>
                     </view>
-                    <button opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" ambiguous="YES" enabled="NO" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="j8u-sY-mhr">
+                    <button opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" ambiguous="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="j8u-sY-mhr">
                         <rect key="frame" x="24" y="310" width="20" height="20"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="20" id="XAT-WC-CAW"/>
@@ -202,16 +202,12 @@
                         </constraints>
                         <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <state key="normal" title="Button"/>
-                        <buttonConfiguration key="configuration" style="plain" cornerStyle="fixed">
-                            <imageReference key="image" image="square" catalog="system" symbolScale="small"/>
-                            <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" scale="small"/>
-                            <color key="baseForegroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        </buttonConfiguration>
+                        <buttonConfiguration key="configuration" style="plain" image="square" catalog="system" cornerStyle="fixed"/>
                         <connections>
                             <action selector="agreeTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="qyE-jS-Tn8"/>
                         </connections>
                     </button>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iUi-z7-gWP">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iUi-z7-gWP">
                         <rect key="frame" x="52" y="310" width="256" height="21"/>
                         <string key="text">I agree with terms and conditions
 </string>
@@ -220,9 +216,9 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MiU-9G-IBb">
-                        <rect key="frame" x="24" y="344" width="284" height="56"/>
+                        <rect key="frame" x="24" y="348" width="284" height="52"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="56" id="q2b-fR-Sqz"/>
+                            <constraint firstAttribute="height" constant="52" id="q2b-fR-Sqz"/>
                         </constraints>
                         <color key="tintColor" name="pink"/>
                         <state key="normal" title="Button"/>
@@ -256,7 +252,7 @@
                 <constraint firstItem="NQF-D5-PY8" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="8" id="cT7-8e-UMd"/>
                 <constraint firstItem="3DB-vL-Hrs" firstAttribute="top" secondItem="pGm-jT-TPw" secondAttribute="bottom" constant="8" id="ehA-ZM-M8M"/>
                 <constraint firstItem="iUi-z7-gWP" firstAttribute="top" secondItem="C0A-Sp-VAM" secondAttribute="bottom" constant="8" id="ezr-K3-dEb"/>
-                <constraint firstItem="MiU-9G-IBb" firstAttribute="top" secondItem="iUi-z7-gWP" secondAttribute="bottom" constant="8" id="f0X-V4-Biv"/>
+                <constraint firstItem="MiU-9G-IBb" firstAttribute="top" secondItem="iUi-z7-gWP" secondAttribute="bottom" id="f0X-V4-Biv"/>
                 <constraint firstItem="j8u-sY-mhr" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="24" id="f5b-95-1lZ"/>
                 <constraint firstItem="Sq8-eq-rdz" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="24" id="fpa-ac-6Hp"/>
                 <constraint firstItem="C0A-Sp-VAM" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="24" id="gUd-dL-gdV"/>
