@@ -2,52 +2,33 @@ import UIKit
 
 final class ProfileViewController: UIViewController {
 
-    // MARK: - Outlets
     @IBOutlet weak var collectionView: UICollectionView!
 
-    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupCollectionView()
-        registerCells()
-    }
 
-    // MARK: - Setup
-    private func setupCollectionView() {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.backgroundColor = .clear
-    }
 
-    private func registerCells() {
-        collectionView.register(
-            UINib(nibName: "ProfileHeaderCell", bundle: nil),
-            forCellWithReuseIdentifier: ProfileHeaderCell.reuseIdentifier
-        )
-
-        collectionView.register(
-            UINib(nibName: "HealthStatusCell", bundle: nil),
-            forCellWithReuseIdentifier: HealthStatusCell.reuseIdentifier
-        )
-
-        collectionView.register(
-            UINib(nibName: "NotificationsHeaderCell", bundle: nil),
-            forCellWithReuseIdentifier: NotificationsHeaderCell.reuseIdentifier
-        )
-
-        collectionView.register(
-            UINib(nibName: "NotificationTogglesCell", bundle: nil),
-            forCellWithReuseIdentifier: NotificationTogglesCell.reuseIdentifier
-        )
+        [
+            (ProfileHeaderCell.reuseIdentifier, "ProfileHeaderCell"),
+            (HealthStatusCell.reuseIdentifier, "HealthStatusCell"),
+            (NotificationsHeaderCell.reuseIdentifier, "NotificationsHeaderCell"),
+            (NotificationTogglesCell.reuseIdentifier, "NotificationTogglesCell")
+        ].forEach {
+            collectionView.register(
+                UINib(nibName: $0.1, bundle: nil),
+                forCellWithReuseIdentifier: $0.0
+            )
+        }
     }
 }
 
-// MARK: - UICollectionViewDataSource
 extension ProfileViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // Profile Header + Health Status + Notifications Header + Toggles
-        return 4
+        4
     }
 
     func collectionView(
@@ -97,7 +78,6 @@ extension ProfileViewController: UICollectionViewDataSource {
     }
 }
 
-// MARK: - UICollectionViewDelegateFlowLayout
 extension ProfileViewController: UICollectionViewDelegateFlowLayout {
 
     func collectionView(
@@ -110,13 +90,13 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
 
         switch indexPath.item {
         case 0:
-            return CGSize(width: width, height: 160) // Profile header
+            return CGSize(width: width, height: 160)
         case 1:
-            return CGSize(width: width, height: 72)  // Health status
+            return CGSize(width: width, height: 72)
         case 2:
-            return CGSize(width: width, height: 20)  // Notifications header (tight)
+            return CGSize(width: width, height: 20)
         default:
-            return CGSize(width: width, height: 208) // Notification toggles
+            return CGSize(width: width, height: 208)
         }
     }
 
@@ -137,16 +117,15 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.item == 1 {
-            let storyboard = UIStoryboard(name: "profile", bundle: nil)
-            let vc = storyboard.instantiateViewController(
-                withIdentifier: "HealthStatusViewController"
-            ) as! HealthStatusViewController
+        guard indexPath.item == 1 else { return }
 
-            let navController = UINavigationController(rootViewController: vc)
-            navController.modalPresentationStyle = .fullScreen
+        let storyboard = UIStoryboard(name: "profile", bundle: nil)
+        let vc = storyboard.instantiateViewController(
+            withIdentifier: "HealthStatusViewController"
+        ) as! HealthStatusViewController
 
-            present(navController, animated: true)
-        }
+        let navController = UINavigationController(rootViewController: vc)
+        navController.modalPresentationStyle = .fullScreen
+        present(navController, animated: true)
     }
 }

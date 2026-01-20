@@ -169,20 +169,10 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EyI-wk-VtJ">
-                                        <rect key="frame" x="0.0" y="43.666666666666686" width="341" height="0.3333333333333357"/>
-                                        <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="0.5" id="EQF-VZ-aKu"/>
-                                        </constraints>
-                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstItem="EyI-wk-VtJ" firstAttribute="leading" secondItem="mUM-9I-FaA" secondAttribute="leading" id="6yf-Kc-Ayt"/>
                                     <constraint firstItem="9zZ-VE-X4q" firstAttribute="centerY" secondItem="mUM-9I-FaA" secondAttribute="centerY" id="Iem-Sf-Mub"/>
-                                    <constraint firstAttribute="trailing" secondItem="EyI-wk-VtJ" secondAttribute="trailing" id="Jl5-MV-VAT"/>
-                                    <constraint firstAttribute="bottom" secondItem="EyI-wk-VtJ" secondAttribute="bottom" id="PWu-Py-iY5"/>
                                     <constraint firstAttribute="height" constant="44" id="PzS-vJ-c1a"/>
                                     <constraint firstItem="9zZ-VE-X4q" firstAttribute="leading" secondItem="mUM-9I-FaA" secondAttribute="leading" constant="16" id="TVd-in-FbW"/>
                                     <constraint firstAttribute="trailing" secondItem="R4B-vF-7Sb" secondAttribute="trailing" id="eXQ-gW-qeR"/>

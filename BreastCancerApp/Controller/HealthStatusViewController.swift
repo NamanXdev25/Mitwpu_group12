@@ -4,7 +4,6 @@ final class HealthStatusViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
 
-    // MARK: - State
     private var firstName = "Sophie"
     private var lastName = "Chen"
 
@@ -14,54 +13,10 @@ final class HealthStatusViewController: UIViewController {
 
     private weak var cardCell: HealthStatusCardCell?
 
-    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = UIColor(named: "bg")
-        configureNavigationBarAppearance()
-        configureNavigationBar()
-        setupCollectionView()
-        registerCells()
-    }
-
-    // MARK: - Collection View Setup
-    private func setupCollectionView() {
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.backgroundColor = .clear
-    }
-
-    private func registerCells() {
-        collectionView.register(
-            UINib(nibName: "ProfileHeaderCell", bundle: nil),
-            forCellWithReuseIdentifier: ProfileHeaderCell.reuseIdentifier
-        )
-
-        collectionView.register(
-            UINib(nibName: "HealthStatusCardCell", bundle: nil),
-            forCellWithReuseIdentifier: HealthStatusCardCell.reuseIdentifier
-        )
-    }
-
-    // MARK: - Navigation Bar Appearance
-    private func configureNavigationBarAppearance() {
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithTransparentBackground()
-        appearance.shadowColor = .clear
-
-        let pink = UIColor(named: "pink") ?? .systemPink
-
-        // Icons stay pink
-        navigationController?.navigationBar.tintColor = pink
-        navigationController?.navigationBar.standardAppearance = appearance
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
-    }
-
-    // MARK: - Navigation Bar Setup
-    private func configureNavigationBar() {
         navigationItem.title = "Health Status"
-
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             image: UIImage(systemName: "chevron.left"),
             style: .plain,
@@ -69,27 +24,27 @@ final class HealthStatusViewController: UIViewController {
             action: #selector(backTapped)
         )
 
-        let editButton = UIBarButtonItem(
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
             title: "Edit",
             style: .plain,
             target: self,
             action: #selector(editTapped)
         )
 
-        // 👇 Force Edit text to black
-        editButton.setTitleTextAttributes(
-            [.foregroundColor: UIColor.black],
-            for: .normal
-        )
-        editButton.setTitleTextAttributes(
-            [.foregroundColor: UIColor.black],
-            for: .highlighted
-        )
+        collectionView.dataSource = self
+        collectionView.delegate = self
 
-        navigationItem.rightBarButtonItem = editButton
+        [
+            (ProfileHeaderCell.reuseIdentifier, "ProfileHeaderCell"),
+            (HealthStatusCardCell.reuseIdentifier, "HealthStatusCardCell")
+        ].forEach {
+            collectionView.register(
+                UINib(nibName: $0.1, bundle: nil),
+                forCellWithReuseIdentifier: $0.0
+            )
+        }
     }
 
-    // MARK: - Actions
     @objc private func backTapped() {
         dismiss(animated: true)
     }
@@ -99,7 +54,6 @@ final class HealthStatusViewController: UIViewController {
     }
 }
 
-// MARK: - Edit Handling
 extension HealthStatusViewController {
 
     override func setEditing(_ editing: Bool, animated: Bool) {
@@ -121,7 +75,19 @@ extension HealthStatusViewController {
                 action: #selector(doneTapped)
             )
         } else {
-            configureNavigationBar()
+            navigationItem.leftBarButtonItem = UIBarButtonItem(
+                image: UIImage(systemName: "chevron.left"),
+                style: .plain,
+                target: self,
+                action: #selector(backTapped)
+            )
+
+            navigationItem.rightBarButtonItem = UIBarButtonItem(
+                title: "Edit",
+                style: .plain,
+                target: self,
+                action: #selector(editTapped)
+            )
         }
     }
 
@@ -144,7 +110,6 @@ extension HealthStatusViewController {
     }
 }
 
-// MARK: - UICollectionViewDataSource
 extension HealthStatusViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -190,7 +155,6 @@ extension HealthStatusViewController: UICollectionViewDataSource {
     }
 }
 
-// MARK: - UICollectionViewDelegateFlowLayout
 extension HealthStatusViewController: UICollectionViewDelegateFlowLayout {
 
     func collectionView(
@@ -221,6 +185,6 @@ extension HealthStatusViewController: UICollectionViewDelegateFlowLayout {
             return CGSize(width: width, height: 160)
         }
 
-        return CGSize(width: width, height: 420)
+        return CGSize(width: width, height: 340)
     }
 }
