@@ -1,163 +1,447 @@
+//import UIKit
 //
-//  MediactionCalendarViewController.swift
-//  Medication
+//class MedicationCalendarViewController: UIViewController {
 //
-//  Created by Naman Bhansali on 15/01/26.
+//    @IBOutlet weak var collectionView: UICollectionView!
+//    @IBOutlet weak var closeBarButton: UIBarButtonItem!
+//    
+//    // Properties tracking state
+//    var selectedDate = Date()
+//    private var selectedDay: Date?
+//    private var missedMedications: [Medication] = []
+//    private var completedMedications: [Medication] = []
+//    private var medicationDays: Set<Date> = []
+//    private var showCenteredMessage = false
+//    
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+//        setupCollectionView()
+//        loadMedicationDays()
+//        
+//        // Default to showing yesterday's data on launch
+//        let calendar = Calendar.current
+//        let yesterday = calendar.date(byAdding: .day, value: -1, to: calendar.startOfDay(for: Date())) ?? Date()
+//        updateDataForDate(yesterday)
+//    }
+//    
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        loadMedicationDays()
+//        collectionView.reloadData()
+//        adjustBottomInset()
+//    }
+//    
+//    override func viewDidLayoutSubviews() {
+//        super.viewDidLayoutSubviews()
+//        adjustBottomInset()
+//    }
+//    
+//    private func adjustBottomInset() {
+//        let tabBarHeight = tabBarController?.tabBar.frame.height ?? 49
+//        let extraPadding: CGFloat = 20
+//        collectionView.contentInset.bottom = tabBarHeight + extraPadding
+//        collectionView.verticalScrollIndicatorInsets.bottom = tabBarHeight + extraPadding
+//    }
+//    
+//    private func loadMedicationDays() {
+//        medicationDays.removeAll()
+//        let historyEntries = MedicationHistory.shared.getAllHistory()
+//        let calendar = Calendar.current
+//        
+//        for entry in historyEntries {
+//            let normalized = calendar.startOfDay(for: entry.date)
+//            medicationDays.insert(normalized)
+//        }
+//    }
+//    
+//    private func setupCollectionView() {
+//        collectionView.dataSource = self
+//        collectionView.delegate = self
+//        
+//        // REUSING SHARED EXERCISE COMPONENTS
+//        collectionView.register(UINib(nibName: "ExerciseCalendarCell", bundle: nil), forCellWithReuseIdentifier: "ExerciseCalendarCell")
+//        collectionView.register(UINib(nibName: "CenteredMessageCell", bundle: nil), forCellWithReuseIdentifier: "CenteredMessageCell")
+//        collectionView.register(UINib(nibName: "ExerciseSectionHeader", bundle: nil), forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "ExerciseSectionHeader")
+//        
+//        // USING THE NEW STATS CELL TO AVOID CONFLICT WITH MedicationItemCell
+//        collectionView.register(UINib(nibName: "MedicationStatsCell", bundle: nil), forCellWithReuseIdentifier: "MedicationStatsCell")
+//        
+//        collectionView.collectionViewLayout = createLayout()
+//    }
+//    
+//    private func createLayout() -> UICollectionViewLayout {
+//        return UICollectionViewCompositionalLayout { [weak self] (sectionIndex, _) -> NSCollectionLayoutSection? in
+//            guard let self = self else { return nil }
+//            
+//            if sectionIndex == 0 {
+//                return self.createCalendarSection()
+//            } else if self.showCenteredMessage && sectionIndex == 1 {
+//                return self.createCenteredMessageSection()
+//            } else {
+//                let hasItems = sectionIndex == 1 ? !self.missedMedications.isEmpty : !self.completedMedications.isEmpty
+//                let hasHeader = self.shouldShowHeader(for: sectionIndex)
+//                return self.createMedicationItemsSection(hasItems: hasItems, hasHeader: hasHeader)
+//            }
+//        }
+//    }
+//    
+//    // MARK: - Layout Sections (Logic matched with CalendarViewController)
+//    private func createCalendarSection() -> NSCollectionLayoutSection {
+//        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(350))
+//        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+//        
+//        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(350))
+//        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+//        
+//        let section = NSCollectionLayoutSection(group: group)
+//        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 16, trailing: 16)
+//        
+//        return section
+//    }
 //
+//    private func createCenteredMessageSection() -> NSCollectionLayoutSection {
+//        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(300))
+//        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+//        
+//        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(300))
+//        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+//        
+//        let section = NSCollectionLayoutSection(group: group)
+//        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 16, trailing: 16)
+//        
+//        return section
+//    }
+//
+//    private func createMedicationItemsSection(hasItems: Bool, hasHeader: Bool) -> NSCollectionLayoutSection {
+//        let height: CGFloat = hasItems ? 35 : 0.01 // Matched with CalendarViewController height
+//        
+//        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(height))
+//        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+//        
+//        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(height))
+//        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+//        
+//        let section = NSCollectionLayoutSection(group: group)
+//        section.interGroupSpacing = 0
+//        
+//        let headerHeight: NSCollectionLayoutDimension = hasHeader ? .estimated(44) : .absolute(0.01)
+//        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: headerHeight)
+//        let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+//        
+//        if hasHeader || hasItems {
+//            section.boundarySupplementaryItems = [header]
+//        }
+//        
+//        let bottomInset: CGFloat = hasItems ? 16 : 0
+//        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: bottomInset, trailing: 16)
+//        
+//        return section
+//    }
+//    
+//    private func shouldShowHeader(for section: Int) -> Bool {
+//        if showCenteredMessage { return false }
+//        if section == 1 { return !missedMedications.isEmpty }
+//        if section == 2 { return !completedMedications.isEmpty }
+//        return false
+//    }
+//
+//    private func updateDataForDate(_ date: Date) {
+//        selectedDay = date
+//        let calendar = Calendar.current
+//        let today = calendar.startOfDay(for: Date())
+//        let normalizedSelectedDate = calendar.startOfDay(for: date)
+//        
+//        // Logic: Stats only available for past dates (yesterday and earlier)
+//        if normalizedSelectedDate >= today {
+//            missedMedications = []
+//            completedMedications = []
+//            showCenteredMessage = true
+//            collectionView.reloadData()
+//            collectionView.collectionViewLayout.invalidateLayout()
+//            return
+//        }
+//        
+//        if let history = MedicationHistory.shared.getHistory(for: date) {
+//            let timeFormatter = DateFormatter()
+//            timeFormatter.dateFormat = "h:mm a"
+//            timeFormatter.locale = Locale(identifier: "en_US_POSIX")
+//            
+//            // AM/PM aware sorting in ascending order for both lists
+//            let sortedMeds = history.medications.sorted { med1, med2 in
+//                if let date1 = timeFormatter.date(from: med1.time),
+//                   let date2 = timeFormatter.date(from: med2.time) {
+//                    return date1 < date2
+//                }
+//                return med1.time < med2.time
+//            }
+//            
+//            missedMedications = sortedMeds.filter { !$0.isTaken }
+//            completedMedications = sortedMeds.filter { $0.isTaken }
+//            showCenteredMessage = (missedMedications.isEmpty && completedMedications.isEmpty)
+//        } else {
+//            missedMedications = []
+//            completedMedications = []
+//            showCenteredMessage = true
+//        }
+//        collectionView.reloadData()
+//        collectionView.collectionViewLayout.invalidateLayout()
+//    }
+//
+//    @IBAction func closeTapped(_ sender: UIBarButtonItem) {
+//        dismiss(animated: true)
+//    }
+//}
+//
+//// MARK: - UICollectionViewDataSource
+//extension MedicationCalendarViewController: UICollectionViewDataSource {
+//    func numberOfSections(in collectionView: UICollectionView) -> Int {
+//        return showCenteredMessage ? 2 : 3
+//    }
+//    
+//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        if section == 0 { return 1 }
+//        if showCenteredMessage && section == 1 { return 1 }
+//        if section == 1 { return missedMedications.count }
+//        return completedMedications.count
+//    }
+//    
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        if indexPath.section == 0 {
+//            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ExerciseCalendarCell", for: indexPath) as! ExerciseCalendarCell
+//            cell.configure(with: selectedDate, exerciseDays: medicationDays, selectedDay: selectedDay)
+//            cell.delegate = self
+//            cell.backgroundColor = .white
+//            cell.layer.cornerRadius = 12
+//            cell.layer.masksToBounds = true
+//            return cell
+//        }
+//        
+//        if showCenteredMessage && indexPath.section == 1 {
+//            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CenteredMessageCell", for: indexPath) as! CenteredMessageCell
+//            
+//            let calendar = Calendar.current
+//            let today = calendar.startOfDay(for: Date())
+//            let selected = selectedDay != nil ? calendar.startOfDay(for: selectedDay!) : today
+//            
+//            if selected >= today {
+//                cell.configure(message: "Stats will be available tomorrow")
+//            } else {
+//                cell.configure(message: "No medications scheduled for this day")
+//            }
+//            return cell
+//        }
+//        
+//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MedicationStatsCell", for: indexPath) as! MedicationStatsCell
+//        let med = indexPath.section == 1 ? missedMedications[indexPath.item] : completedMedications[indexPath.item]
+//        let count = indexPath.section == 1 ? missedMedications.count : completedMedications.count
+//        
+//        cell.configure(with: med, isFirst: indexPath.item == 0, isLast: indexPath.item == count - 1)
+//        
+//        return cell
+//    }
+//    
+//    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+//        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "ExerciseSectionHeader", for: indexPath) as! ExerciseSectionHeader
+//        if indexPath.section == 1 {
+//            header.configure(status: "Missed")
+//        } else if indexPath.section == 2 {
+//            header.configure(status: "Taken")
+//        }
+//        return header
+//    }
+//}
+//
+//// MARK: - ExerciseCalendarCellDelegate
+//extension MedicationCalendarViewController: ExerciseCalendarCellDelegate {
+//    func calendarCell(_ cell: ExerciseCalendarCell, didSelectDate date: Date) {
+//        updateDataForDate(date)
+//    }
+//    
+//    func calendarCell(_ cell: ExerciseCalendarCell, didChangeTo date: Date) {
+//        selectedDate = date
+//        selectedDay = nil
+//        showCenteredMessage = false
+//        collectionView.reloadData()
+//    }
+//    
+//    func calendarCellDidTapHeader(_ cell: ExerciseCalendarCell) {}
+//}
+//
+//extension MedicationCalendarViewController: UICollectionViewDelegate {}
+
 import UIKit
 
-class MedicationCalendarViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
+class MedicationCalendarViewController: UIViewController {
 
-    // MARK: - Outlets
-    @IBOutlet weak var monthLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var closeBarButton: UIBarButtonItem!
     
-    // Navigation arrows
-    @IBOutlet weak var previousMonth: UIButton!
-    @IBOutlet weak var nextMonth: UIButton!
-    
-    // Picker Outlets
-    @IBOutlet weak var pickerContainerView: UIView!
-    @IBOutlet weak var monthYearPicker: UIPickerView!
-    
-    // Header Interaction
-    @IBOutlet weak var headerToggleButton: UIButton!
-    @IBOutlet weak var chevronButton: UIButton!
-    
-    // Detail View Outlets
-    @IBOutlet weak var statusLabel: UILabel!
-    @IBOutlet weak var countLabel: UILabel!
-    @IBOutlet weak var missedTableView: UITableView!
-    
-    // Container and constraints
-    @IBOutlet weak var detailCardView: UIView!
-    @IBOutlet weak var tableViewHeightConstraint: NSLayoutConstraint!
-    @IBOutlet weak var detailCardHeightConstraint: NSLayoutConstraint!
-    
-    // MARK: - Properties
+    // Properties tracking state
     var selectedDate = Date()
-    var viewingDate = Date()
-    var totalSquares = [String]()
-    var missedMedications: [Medication] = []
+    private var selectedDay: Date?
+    private var missedMedications: [Medication] = []
+    private var completedMedications: [Medication] = []
+    private var medicationDays: Set<Date> = []
+    private var showCenteredMessage = false
     
-    // Picker Data
-    let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-    var years = [Int]()
-    
-    // MARK: - Constants for Dynamic Height
-    let cellHeight: CGFloat = 30
-    
-    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        setupYears()
         setupCollectionView()
-        setupTableView()
-        setupPicker()
+        loadMedicationDays()
         
-        setMonthView()
-        updateDetails(for: Date())
+        // Ensure no date is selected by default on launch
+        selectedDay = nil
+        showCenteredMessage = false
+        collectionView.reloadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setMonthView()
-        updateDetails(for: viewingDate)
+        loadMedicationDays()
+        collectionView.reloadData()
+        adjustBottomInset()
     }
     
-    // MARK: - Setup Methods
-    private func setupYears() {
-        let currentYear = Calendar.current.component(.year, from: Date())
-        years = Array((currentYear - 10)...currentYear)
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        adjustBottomInset()
+    }
+    
+    private func adjustBottomInset() {
+        let tabBarHeight = tabBarController?.tabBar.frame.height ?? 49
+        let extraPadding: CGFloat = 20
+        collectionView.contentInset.bottom = tabBarHeight + extraPadding
+        collectionView.verticalScrollIndicatorInsets.bottom = tabBarHeight + extraPadding
+    }
+    
+    private func loadMedicationDays() {
+        medicationDays.removeAll()
+        let historyEntries = MedicationHistory.shared.getAllHistory()
+        let calendar = Calendar.current
+        
+        for entry in historyEntries {
+            let normalized = calendar.startOfDay(for: entry.date)
+            medicationDays.insert(normalized)
+        }
     }
     
     private func setupCollectionView() {
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(UINib(nibName: "MedicationDateCell", bundle: nil), forCellWithReuseIdentifier: "MedicationDateCell")
         
-        let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 0
-        layout.minimumInteritemSpacing = 0
-        collectionView.collectionViewLayout = layout
-    }
-    
-    private func setupTableView() {
-        missedTableView.dataSource = self
-        missedTableView.delegate = self
-        missedTableView.separatorStyle = .none
-        missedTableView.isScrollEnabled = false
-        missedTableView.register(UINib(nibName: "MedicationCell", bundle: nil), forCellReuseIdentifier: "MedicationCell")
-    }
-    
-    private func setupPicker() {
-        monthYearPicker.dataSource = self
-        monthYearPicker.delegate = self
-        pickerContainerView.isHidden = true
-    }
-    
-    // MARK: - Calendar Methods
-    private func setMonthView() {
-        totalSquares.removeAll()
-        let daysInMonth = MedicationCalendarHelper().daysInMonth(date: selectedDate)
-        let firstDayOfMonth = MedicationCalendarHelper().firstOfMonth(date: selectedDate)
-        let startingSpaces = MedicationCalendarHelper().weekDay(date: firstDayOfMonth)
+        // REUSING SHARED EXERCISE COMPONENTS
+        collectionView.register(UINib(nibName: "ExerciseCalendarCell", bundle: nil), forCellWithReuseIdentifier: "ExerciseCalendarCell")
+        collectionView.register(UINib(nibName: "CenteredMessageCell", bundle: nil), forCellWithReuseIdentifier: "CenteredMessageCell")
+        collectionView.register(UINib(nibName: "ExerciseSectionHeader", bundle: nil), forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "ExerciseSectionHeader")
         
-        var count = 1
-        while count < startingSpaces {
-            totalSquares.append("")
-            count += 1
+        // USING THE NEW STATS CELL
+        collectionView.register(UINib(nibName: "MedicationStatsCell", bundle: nil), forCellWithReuseIdentifier: "MedicationStatsCell")
+        
+        collectionView.collectionViewLayout = createLayout()
+    }
+    
+    private func createLayout() -> UICollectionViewLayout {
+        return UICollectionViewCompositionalLayout { [weak self] (sectionIndex, _) -> NSCollectionLayoutSection? in
+            guard let self = self else { return nil }
+            
+            if sectionIndex == 0 {
+                return self.createCalendarSection()
+            } else if self.showCenteredMessage && sectionIndex == 1 {
+                return self.createCenteredMessageSection()
+            } else {
+                let hasItems = sectionIndex == 1 ? !self.missedMedications.isEmpty : !self.completedMedications.isEmpty
+                let hasHeader = self.shouldShowHeader(for: sectionIndex)
+                return self.createMedicationItemsSection(hasItems: hasItems, hasHeader: hasHeader)
+            }
+        }
+    }
+    
+    // MARK: - Layout Sections (Synchronized with CalendarViewController)
+    private func createCalendarSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(386))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(386))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 16, trailing: 16)
+        
+        return section
+    }
+
+    private func createCenteredMessageSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(300))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(300))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 16, trailing: 16)
+        
+        return section
+    }
+
+    private func createMedicationItemsSection(hasItems: Bool, hasHeader: Bool) -> NSCollectionLayoutSection {
+        let height: CGFloat = hasItems ? 35 : 0.01 // Identical height to ExerciseItemCell
+        
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(height))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(height))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.interGroupSpacing = 0
+        
+        let headerHeight: NSCollectionLayoutDimension = hasHeader ? .estimated(44) : .absolute(0.01)
+        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: headerHeight)
+        let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+        
+        if hasHeader || hasItems {
+            section.boundarySupplementaryItems = [header]
         }
         
-        for i in 1...daysInMonth {
-            totalSquares.append(String(i))
-        }
+        let bottomInset: CGFloat = hasItems ? 16 : 0
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: bottomInset, trailing: 16)
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMMM yyyy"
-        monthLabel.text = dateFormatter.string(from: selectedDate)
-        
-        collectionView.reloadData()
-        syncPickerToDate()
+        return section
     }
     
-    private func syncPickerToDate() {
+    private func shouldShowHeader(for section: Int) -> Bool {
+        if showCenteredMessage || selectedDay == nil { return false }
+        if section == 1 { return !missedMedications.isEmpty }
+        if section == 2 { return !completedMedications.isEmpty }
+        return false
+    }
+
+    private func updateDataForDate(_ date: Date) {
         let calendar = Calendar.current
-        let monthIndex = calendar.component(.month, from: selectedDate) - 1
-        let year = calendar.component(.year, from: selectedDate)
+        let today = calendar.startOfDay(for: Date())
+        let normalizedSelectedDate = calendar.startOfDay(for: date)
         
-        if let yearIndex = years.firstIndex(of: year) {
-            monthYearPicker.selectRow(monthIndex, inComponent: 0, animated: false)
-            monthYearPicker.selectRow(yearIndex, inComponent: 1, animated: false)
-        }
-    }
-    
-    private func updateDetails(for date: Date) {
-        viewingDate = date
-        
-        let calendar = Calendar.current
-        let isToday = calendar.isDateInToday(date)
-        let isFuture = date > Date()
-        
-        if isToday || isFuture {
-            detailCardView?.isHidden = true
+        // Blocking selection for today and future dates
+        if normalizedSelectedDate >= today {
+            // Though cells are non-tappable, this logic handles the data state safely
+            selectedDay = normalizedSelectedDate
+            missedMedications = []
+            completedMedications = []
+            showCenteredMessage = true
+            collectionView.reloadData()
+            collectionView.collectionViewLayout.invalidateLayout()
             return
         }
         
-        detailCardView?.isHidden = false
+        selectedDay = normalizedSelectedDate
         
         if let history = MedicationHistory.shared.getHistory(for: date) {
-        
-            let allMedications = history.medications
-            let unsortedMissed = allMedications.filter { !$0.isTaken }
+            let timeFormatter = DateFormatter()
+            timeFormatter.dateFormat = "h:mm a"
+            timeFormatter.locale = Locale(identifier: "en_US_POSIX")
             
-            missedMedications = unsortedMissed.sorted { med1, med2 in
-                let timeFormatter = DateFormatter()
-                timeFormatter.dateFormat = "h:mm a"
-                timeFormatter.locale = Locale(identifier: "en_US_POSIX")
-                
+            // Strictly AM/PM aware sorting in ascending order
+            let sortedMeds = history.medications.sorted { med1, med2 in
                 if let date1 = timeFormatter.date(from: med1.time),
                    let date2 = timeFormatter.date(from: med2.time) {
                     return date1 < date2
@@ -165,247 +449,103 @@ class MedicationCalendarViewController: UIViewController, UICollectionViewDataSo
                 return med1.time < med2.time
             }
             
-            let totalCount = allMedications.count
-            let missedCount = missedMedications.count
-            
-            if missedMedications.isEmpty {
-                statusLabel.text = "All medications taken"
-                countLabel.isHidden = true
-                missedTableView.isHidden = true
-            } else {
-                statusLabel.text = "Missed"
-                
-                let countText = "\(missedCount)/\(totalCount)"
-                let attributedString = NSMutableAttributedString(string: countText)
-                countLabel.attributedText = attributedString
-                countLabel.isHidden = false
-                missedTableView.isHidden = false
-            }
+            missedMedications = sortedMeds.filter { !$0.isTaken }
+            completedMedications = sortedMeds.filter { $0.isTaken }
+            showCenteredMessage = (missedMedications.isEmpty && completedMedications.isEmpty)
         } else {
-            // No medications planned for this day
-            statusLabel.text = "No medications planned"
-            countLabel.isHidden = true
             missedMedications = []
-            missedTableView.isHidden = true
+            completedMedications = []
+            showCenteredMessage = true
         }
         
-        missedTableView.reloadData()
-        updateCardHeight()
+        collectionView.reloadData()
+        collectionView.collectionViewLayout.invalidateLayout()
     }
-    
-    // MARK: - Dynamic Height
-    private func updateCardHeight() {
-        let numberOfItems = missedMedications.count
-        let tableHeight = CGFloat(numberOfItems) * cellHeight
-        
-        let screenHeight = UIScreen.main.bounds.height
-        let availableHeight = screenHeight * 0.2
-        let maxTableHeight = min(availableHeight, CGFloat(6) * cellHeight)
-        
-        let actualTableHeight = min(tableHeight, maxTableHeight)
-        
-        missedTableView.isScrollEnabled = numberOfItems > Int(maxTableHeight / cellHeight)
-        
-        tableViewHeightConstraint?.constant = actualTableHeight
-        
-        let topPadding: CGFloat = 8
-        let statusLabelHeight: CGFloat = 30
-        let statusToTableSpacing: CGFloat = 5
-        let bottomPadding: CGFloat = 16
-        
-        let totalHeight: CGFloat
-        if numberOfItems == 0 {
-            totalHeight = topPadding + statusLabelHeight + bottomPadding
-        } else {
-            totalHeight = topPadding + statusLabelHeight + statusToTableSpacing + actualTableHeight + bottomPadding
-        }
-        
-        detailCardHeightConstraint?.constant = totalHeight
-        
-        UIView.animate(withDuration: 0.3) {
-            self.view.layoutIfNeeded()
-        }
-    }
-    
-    // MARK: - IBActions
-    @IBAction func closeButtonTapped(_ sender: UIBarButtonItem) {
+
+    @IBAction func closeTapped(_ sender: UIBarButtonItem) {
         dismiss(animated: true)
-    }
-    
-    @IBAction func headerToggleButtonTapped(_ sender: UIButton) {
-        let isPickerVisible = !pickerContainerView.isHidden
-        
-        if isPickerVisible {
-            pickerContainerView.isHidden = true
-            collectionView.isHidden = false
-            monthLabel.textColor = .black
-            UIView.animate(withDuration: 0.3) {
-                self.chevronButton.transform = .identity
-            }
-        } else {
-            pickerContainerView.isHidden = false
-            collectionView.isHidden = true
-            monthLabel.textColor = UIColor(red: 0.85, green: 0.40, blue: 0.50, alpha: 1.0)
-            UIView.animate(withDuration: 0.3) {
-                self.chevronButton.transform = CGAffineTransform(rotationAngle: .pi / 2)
-            }
-            syncPickerToDate()
-        }
-    }
-    
-    @IBAction func previousMonthTapped(_ sender: UIButton) {
-        selectedDate = MedicationCalendarHelper().minusMonth(date: selectedDate)
-        setMonthView()
-    }
-    
-    @IBAction func nextMonthTapped(_ sender: UIButton) {
-        let nextMonthDate = MedicationCalendarHelper().plusMonth(date: selectedDate)
-        
-        let calendar = Calendar.current
-        let currentYear = calendar.component(.year, from: Date())
-        let currentMonth = calendar.component(.month, from: Date())
-        let nextYear = calendar.component(.year, from: nextMonthDate)
-        let nextMonthValue = calendar.component(.month, from: nextMonthDate)
-        
-        if nextYear < currentYear || (nextYear == currentYear && nextMonthValue <= currentMonth) {
-            selectedDate = nextMonthDate
-            setMonthView()
-        }
-    }
-    
-    // MARK: - UICollectionView DataSource & Delegate
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return totalSquares.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MedicationDateCell", for: indexPath) as! MedicationDateCell
-        let dayString = totalSquares[indexPath.item]
-        
-        var isSelected = false
-        var hasMedications = false
-        var isFutureDate = false
-        var isToday = false
-        
-        if let dayInt = Int(dayString) {
-            let cal = Calendar.current
-            var components = cal.dateComponents([.year, .month], from: selectedDate)
-            components.day = dayInt
-            
-            if let cellDate = cal.date(from: components) {
-                isSelected = cal.isDate(cellDate, inSameDayAs: viewingDate)
-                isToday = cal.isDateInToday(cellDate)
-                
-                if let history = MedicationHistory.shared.getHistory(for: cellDate) {
-                    hasMedications = !history.medications.isEmpty
-                }
-                
-                isFutureDate = cellDate > Date()
-            }
-        }
-        
-        cell.configure(day: dayString, isSelected: isSelected, hasMedications: hasMedications, isFuture: isFutureDate, isToday: isToday)
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let dayString = totalSquares[indexPath.item]
-        guard let dayInt = Int(dayString) else { return }
-        
-        let cal = Calendar.current
-        var components = cal.dateComponents([.year, .month], from: selectedDate)
-        components.day = dayInt
-        
-        if let newDate = cal.date(from: components) {
-            if newDate > Date() {
-                return
-            }
-            
-            if MedicationHistory.shared.getHistory(for: newDate) == nil {
-                return
-            }
-            
-            updateDetails(for: newDate)
-            collectionView.reloadData()
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = collectionView.frame.width / 7
-        return CGSize(width: width, height: 44)
-    }
-    
-    // MARK: - UITableView DataSource & Delegate
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return missedMedications.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MedicationCell", for: indexPath) as! MedicationCell
-        let medication = missedMedications[indexPath.row]
-        cell.configure(with: medication)
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return cellHeight
-    }
-    
-    // MARK: - UIPickerView DataSource & Delegate
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 2
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return component == 0 ? months.count : years.count
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return component == 0 ? months[row] : String(years[row])
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        let monthIndex = pickerView.selectedRow(inComponent: 0) + 1
-        let yearIndex = pickerView.selectedRow(inComponent: 1)
-        let year = years[yearIndex]
-        
-        let calendar = Calendar.current
-        let currentYear = calendar.component(.year, from: Date())
-        let currentMonth = calendar.component(.month, from: Date())
-        
-        if year == currentYear && monthIndex > currentMonth {
-            pickerView.selectRow(currentMonth - 1, inComponent: 0, animated: true)
-            return
-        }
-        
-        var components = DateComponents()
-        components.year = year
-        components.month = monthIndex
-        components.day = 1
-        
-        if let newDate = calendar.date(from: components) {
-            selectedDate = newDate
-            setMonthView()
-        }
     }
 }
 
-// MARK: - CalendarHelper
-class MedicationCalendarHelper {
-    let calendar = Calendar.current
-    func plusMonth(date: Date) -> Date {
-        return calendar.date(byAdding: .month, value: 1, to: date)!
+// MARK: - UICollectionViewDataSource
+extension MedicationCalendarViewController: UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        if selectedDay == nil { return 1 } // Only show calendar if nothing is selected
+        return showCenteredMessage ? 2 : 3
     }
-    func minusMonth(date: Date) -> Date {
-        return calendar.date(byAdding: .month, value: -1, to: date)!
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if section == 0 { return 1 }
+        if showCenteredMessage && section == 1 { return 1 }
+        if section == 1 { return missedMedications.count }
+        return completedMedications.count
     }
-    func daysInMonth(date: Date) -> Int {
-        return calendar.range(of: .day, in: .month, for: date)!.count
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if indexPath.section == 0 {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ExerciseCalendarCell", for: indexPath) as! ExerciseCalendarCell
+            cell.configure(with: selectedDate, exerciseDays: medicationDays, selectedDay: selectedDay)
+            cell.delegate = self
+            cell.backgroundColor = .white
+            cell.layer.cornerRadius = 12
+            cell.layer.masksToBounds = true
+            return cell
+        }
+        
+        if showCenteredMessage && indexPath.section == 1 {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CenteredMessageCell", for: indexPath) as! CenteredMessageCell
+            
+            let calendar = Calendar.current
+            let today = calendar.startOfDay(for: Date())
+            if let selected = selectedDay, selected >= today {
+                cell.configure(message: "Stats will be available tomorrow")
+            } else {
+                cell.configure(message: "No medications scheduled for this day")
+            }
+            return cell
+        }
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MedicationStatsCell", for: indexPath) as! MedicationStatsCell
+        let med = indexPath.section == 1 ? missedMedications[indexPath.item] : completedMedications[indexPath.item]
+        let count = indexPath.section == 1 ? missedMedications.count : completedMedications.count
+        
+        cell.configure(with: med, isFirst: indexPath.item == 0, isLast: indexPath.item == count - 1)
+        
+        return cell
     }
-    func firstOfMonth(date: Date) -> Date {
-        return calendar.date(from: calendar.dateComponents([.year, .month], from: date))!
-    }
-    func weekDay(date: Date) -> Int {
-        return calendar.dateComponents([.weekday], from: date).weekday!
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "ExerciseSectionHeader", for: indexPath) as! ExerciseSectionHeader
+        if indexPath.section == 1 {
+            header.configure(status: "Missed")
+        } else if indexPath.section == 2 {
+            header.configure(status: "Taken")
+        }
+        return header
     }
 }
+
+// MARK: - ExerciseCalendarCellDelegate
+extension MedicationCalendarViewController: ExerciseCalendarCellDelegate {
+    func calendarCell(_ cell: ExerciseCalendarCell, didSelectDate date: Date) {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let selected = calendar.startOfDay(for: date)
+        
+        // Block today and future dates from being selected
+        if selected >= today { return }
+        
+        updateDataForDate(date)
+    }
+    
+    func calendarCell(_ cell: ExerciseCalendarCell, didChangeTo date: Date) {
+        selectedDate = date
+        selectedDay = nil
+        showCenteredMessage = false
+        collectionView.reloadData()
+    }
+    
+    func calendarCellDidTapHeader(_ cell: ExerciseCalendarCell) {}
+}
+
+extension MedicationCalendarViewController: UICollectionViewDelegate {}
