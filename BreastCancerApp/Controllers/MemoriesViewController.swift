@@ -66,14 +66,15 @@ final class MemoriesViewController: UIViewController,
             forCellWithReuseIdentifier: MemoryImageCell.reuseIdentifier
         )
 
+        
         collectionView.register(
-            MemoryHeaderView.self,
+            UINib(nibName: "MemoryHeaderView", bundle: nil),
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: MemoryHeaderView.reuseIdentifier
         )
     }
 
-    // MARK: - Filter Button (BAR BUTTON ITEM)
+    // MARK: - Filter
     @IBAction func filterTapped(_ sender: UIBarButtonItem) {
         isFiltering ? clearFilter() : presentFilterSheet()
     }
@@ -250,8 +251,8 @@ final class MemoriesViewController: UIViewController,
         let itemsPerRow: CGFloat = 4
         let spacing: CGFloat = 8
         let totalSpacing = (itemsPerRow - 1) * spacing + 24
-
         let width = floor((collectionView.bounds.width - totalSpacing) / itemsPerRow)
+
         return CGSize(width: width, height: width)
     }
 

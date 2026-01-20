@@ -8,35 +8,44 @@ final class MemoryPageViewController: UIPageViewController {
 
     weak var deleteDelegate: MemoryDeleteDelegate?
 
-    private var currentIndex: Int = 0
+    private var currentIndex = 0
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        dataSource = self
-        delegate = self
-
-        view.backgroundColor = .white
-        currentIndex = startIndex
-
-        let startVC = viewerController(at: startIndex)
-        setViewControllers([startVC], direction: .forward, animated: false)
-
+        configurePageController()
+        configureInitialViewController()
         addGlassBackButton()
         addGlassDeleteButton()
     }
+}
 
-    // MARK: - Child Viewer VC
-    private func viewerController(at index: Int) -> MemoryViewerViewController {
+// MARK: - Configuration
+private extension MemoryPageViewController {
+
+    func configurePageController() {
+        dataSource = self
+        delegate = self
+        view.backgroundColor = .white
+        currentIndex = startIndex
+    }
+
+    func configureInitialViewController() {
+        let startVC = viewerController(at: startIndex)
+        setViewControllers([startVC], direction: .forward, animated: false)
+    }
+}
+
+// MARK: - Child Viewer VC
+private extension MemoryPageViewController {
+
+    func viewerController(at index: Int) -> MemoryViewerViewController {
         let storyboard = UIStoryboard(name: "memory", bundle: nil)
-
         let vc = storyboard.instantiateViewController(
             withIdentifier: "MemoryViewerViewController"
         ) as! MemoryViewerViewController
 
         let memory = memories[index]
-
         vc.image = memory.image
         vc.note = memory.note
         vc.view.tag = index
@@ -44,9 +53,12 @@ final class MemoryPageViewController: UIPageViewController {
 
         return vc
     }
+}
 
-    // MARK: - Glass Back Button
-    private func addGlassBackButton() {
+// MARK: - Glass Buttons
+private extension MemoryPageViewController {
+
+    func addGlassBackButton() {
         let blur = glassButton(
             systemImage: "chevron.left",
             action: #selector(backTapped)
@@ -55,13 +67,18 @@ final class MemoryPageViewController: UIPageViewController {
         view.addSubview(blur)
 
         NSLayoutConstraint.activate([
-            blur.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            blur.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12)
+            blur.leadingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.leadingAnchor,
+                constant: 16
+            ),
+            blur.topAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor,
+                constant: 12
+            )
         ])
     }
 
-    // MARK: - Glass Delete Button
-    private func addGlassDeleteButton() {
+    func addGlassDeleteButton() {
         let blur = glassButton(
             systemImage: "trash",
             action: #selector(deleteTapped)
@@ -70,23 +87,29 @@ final class MemoryPageViewController: UIPageViewController {
         view.addSubview(blur)
 
         NSLayoutConstraint.activate([
-            blur.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            blur.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
+            blur.trailingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+                constant: -16
+            ),
+            blur.bottomAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.bottomAnchor,
+                constant: -20
+            )
         ])
     }
 
-    // MARK: - Glass Button Factory
-    private func glassButton(systemImage: String, action: Selector) -> UIVisualEffectView {
-        let blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
-        let blurView = UIVisualEffectView(effect: blurEffect)
+    func glassButton(systemImage: String, action: Selector) -> UIVisualEffectView {
+        let blurView = UIVisualEffectView(
+            effect: UIBlurEffect(style: .systemUltraThinMaterial)
+        )
         blurView.translatesAutoresizingMaskIntoConstraints = false
         blurView.layer.cornerRadius = 22
         blurView.clipsToBounds = true
 
         let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(systemName: systemImage), for: .normal)
         button.tintColor = .label
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: action, for: .touchUpInside)
 
         blurView.contentView.addSubview(button)
@@ -94,20 +117,22 @@ final class MemoryPageViewController: UIPageViewController {
         NSLayoutConstraint.activate([
             blurView.widthAnchor.constraint(equalToConstant: 44),
             blurView.heightAnchor.constraint(equalToConstant: 44),
-
             button.centerXAnchor.constraint(equalTo: blurView.contentView.centerXAnchor),
             button.centerYAnchor.constraint(equalTo: blurView.contentView.centerYAnchor)
         ])
 
         return blurView
     }
+}
 
-    // MARK: - Actions
-    @objc private func backTapped() {
+// MARK: - Actions
+private extension MemoryPageViewController {
+
+    @objc func backTapped() {
         dismiss(animated: true)
     }
 
-    @objc private func deleteTapped() {
+    @objc func deleteTapped() {
         let alert = UIAlertController(
             title: "Delete Photo",
             message: "This photo will be permanently deleted.",
@@ -115,17 +140,16 @@ final class MemoryPageViewController: UIPageViewController {
         )
 
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-
-        alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
-            self.performDelete()
-        })
+        alert.addAction(
+            UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+                self?.performDelete()
+            }
+        )
 
         present(alert, animated: true)
     }
 
-    // MARK: - Delete Logic (Photos-style)
-    private func performDelete() {
-
+    func performDelete() {
         deleteDelegate?.didDeleteMemory(at: currentIndex)
         memories.remove(at: currentIndex)
 
@@ -134,13 +158,7 @@ final class MemoryPageViewController: UIPageViewController {
             return
         }
 
-        let nextIndex: Int
-        if currentIndex < memories.count {
-            nextIndex = currentIndex          // show right
-        } else {
-            nextIndex = memories.count - 1   // show left
-        }
-
+        let nextIndex = min(currentIndex, memories.count - 1)
         currentIndex = nextIndex
 
         let nextVC = viewerController(at: nextIndex)
@@ -155,7 +173,6 @@ extension MemoryPageViewController: UIPageViewControllerDataSource, UIPageViewCo
         _ pageViewController: UIPageViewController,
         viewControllerBefore viewController: UIViewController
     ) -> UIViewController? {
-
         let index = viewController.view.tag
         guard index > 0 else { return nil }
         return viewerController(at: index - 1)
@@ -165,7 +182,6 @@ extension MemoryPageViewController: UIPageViewControllerDataSource, UIPageViewCo
         _ pageViewController: UIPageViewController,
         viewControllerAfter viewController: UIViewController
     ) -> UIViewController? {
-
         let index = viewController.view.tag
         guard index < memories.count - 1 else { return nil }
         return viewerController(at: index + 1)
@@ -177,9 +193,8 @@ extension MemoryPageViewController: UIPageViewControllerDataSource, UIPageViewCo
         previousViewControllers: [UIViewController],
         transitionCompleted completed: Bool
     ) {
-        if completed,
-           let currentVC = viewControllers?.first {
-            currentIndex = currentVC.view.tag
-        }
+        guard completed,
+              let currentVC = viewControllers?.first else { return }
+        currentIndex = currentVC.view.tag
     }
 }

@@ -96,18 +96,27 @@
                             <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="sVS-JR-BfN">
                                 <rect key="frame" x="0.0" y="118" width="393" height="666"/>
                             </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f6p-Y9-nls">
+                                <rect key="frame" x="16.000000000000004" y="702" width="37.333333333333343" height="18"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="YCA-Sc-9RB"/>
                         <color key="backgroundColor" name="bg"/>
                         <constraints>
+                            <constraint firstItem="f6p-Y9-nls" firstAttribute="leading" secondItem="YCA-Sc-9RB" secondAttribute="leading" constant="16" id="Ofc-qO-cJs"/>
                             <constraint firstItem="YCA-Sc-9RB" firstAttribute="trailing" secondItem="sVS-JR-BfN" secondAttribute="trailing" id="PBz-AJ-b7S"/>
                             <constraint firstItem="YCA-Sc-9RB" firstAttribute="bottom" secondItem="sVS-JR-BfN" secondAttribute="bottom" id="XZe-JU-rEH"/>
                             <constraint firstItem="sVS-JR-BfN" firstAttribute="leading" secondItem="YCA-Sc-9RB" secondAttribute="leading" id="a79-tm-O9t"/>
                             <constraint firstItem="sVS-JR-BfN" firstAttribute="top" secondItem="YCA-Sc-9RB" secondAttribute="top" id="g5w-N6-kUI"/>
+                            <constraint firstItem="YCA-Sc-9RB" firstAttribute="bottom" secondItem="f6p-Y9-nls" secondAttribute="bottom" constant="64" id="gUY-tK-sGN"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="imageView" destination="sVS-JR-BfN" id="EDf-Yf-Sk0"/>
+                        <outlet property="noteLabel" destination="f6p-Y9-nls" id="bKL-gS-jf5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Vm-BM-aCX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -270,6 +279,7 @@
                         <subviews>
                             <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FCa-r2-qjh">
                                 <rect key="frame" x="0.0" y="584" width="393" height="200"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="200" id="tOp-4U-YrH"/>
                                 </constraints>
@@ -298,7 +308,7 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="56" id="31B-hu-xUr"/>
                                     <constraint firstItem="fab-tQ-poF" firstAttribute="centerY" secondItem="uiT-H8-drX" secondAttribute="centerY" id="AaW-RB-hT3"/>
@@ -309,7 +319,7 @@
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="5mk-HT-LrS"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="5mk-HT-LrS" firstAttribute="trailing" secondItem="FCa-r2-qjh" secondAttribute="trailing" id="B42-EJ-kT4"/>
                             <constraint firstItem="FCa-r2-qjh" firstAttribute="bottom" secondItem="5mk-HT-LrS" secondAttribute="bottom" id="DqU-qm-x02"/>

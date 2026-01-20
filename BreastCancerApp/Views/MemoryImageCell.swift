@@ -4,19 +4,14 @@ final class MemoryImageCell: UICollectionViewCell {
 
     static let reuseIdentifier = "MemoryImageCell"
 
-    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet private weak var imageView: UIImageView!
 
     var onTap: (() -> Void)?
 
     override func awakeFromNib() {
         super.awakeFromNib()
-
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-
-        imageView.isUserInteractionEnabled = true
-        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-        imageView.addGestureRecognizer(tap)
+        configureImageView()
+        configureGesture()
     }
 
     override func prepareForReuse() {
@@ -31,5 +26,20 @@ final class MemoryImageCell: UICollectionViewCell {
 
     @objc private func handleTap() {
         onTap?()
+    }
+}
+
+// MARK: - Private Configuration
+private extension MemoryImageCell {
+
+    func configureImageView() {
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.isUserInteractionEnabled = true
+    }
+
+    func configureGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        imageView.addGestureRecognizer(tapGesture)
     }
 }

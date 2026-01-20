@@ -2,43 +2,40 @@ import UIKit
 
 final class MemoryViewerViewController: UIViewController {
 
-    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet private weak var imageView: UIImageView!
+    @IBOutlet private weak var noteLabel: UILabel!
 
     var image: UIImage?
     var note: String?
 
-    private let noteLabel = UILabel()
-
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureView()
+        configureImageView()
+        configureNoteLabel()
+    }
+}
 
+// MARK: - Configuration
+private extension MemoryViewerViewController {
+
+    func configureView() {
         view.backgroundColor = .white
-        imageView.image = image
-
-        setupNoteLabel()
     }
 
-    // MARK: - Note (NO BACKGROUND, ABOVE DELETE)
-    private func setupNoteLabel() {
-        guard let note = note, !note.isEmpty else { return }
+    func configureImageView() {
+        imageView.image = image
+    }
+
+    func configureNoteLabel() {
+        guard let note, !note.isEmpty else {
+            noteLabel.isHidden = true
+            return
+        }
 
         noteLabel.text = note
         noteLabel.font = .systemFont(ofSize: 15)
         noteLabel.textColor = .label
         noteLabel.numberOfLines = 0
-        noteLabel.translatesAutoresizingMaskIntoConstraints = false
-
-        view.addSubview(noteLabel)
-
-        NSLayoutConstraint.activate([
-            noteLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            noteLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-
-            // ⬆️ MOVE ABOVE DELETE BUTTON AREA
-            noteLabel.bottomAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.bottomAnchor,
-                constant: -90
-            )
-        ])
     }
 }
