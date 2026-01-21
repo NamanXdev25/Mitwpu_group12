@@ -2,34 +2,34 @@ import UIKit
 
 class SignUpSocialCell: UICollectionViewCell {
 
-    // MARK: - Google
+    // Google
     @IBOutlet weak var googleContainerView: UIView!
     @IBOutlet weak var googleIconImageView: UIImageView!
     @IBOutlet weak var googleButton: UIButton!
 
-    // MARK: - Apple
+    // Apple
     @IBOutlet weak var appleContainerView: UIView!
     @IBOutlet weak var appleIconImageView: UIImageView!
     @IBOutlet weak var appleButton: UIButton!
 
-    // MARK: - Bottom Row
+    // Bottom Row
     @IBOutlet weak var haveAccountLabel: UILabel!
     @IBOutlet weak var signInButton: UIButton!
 
-    // MARK: - Lifecycle
+    // Lifecycle
     override func awakeFromNib() {
         super.awakeFromNib()
         setupUI()
     }
 
-    // MARK: - UI Setup
+    // UI Setup
     private func setupUI() {
         setupContainers()
         setupButtons()
         setupBottomRow()
     }
 
-    // MARK: - Container Styling
+    // Container Styling
     private func setupContainers() {
         [googleContainerView, appleContainerView].forEach { container in
             guard let view = container else { return }
@@ -42,7 +42,7 @@ class SignUpSocialCell: UICollectionViewCell {
         }
     }
 
-    // MARK: - Buttons
+    // Buttons
     private func setupButtons() {
         googleButton.setTitle("Continue with Google", for: .normal)
         googleButton.setTitleColor(.black, for: .normal)
@@ -55,7 +55,7 @@ class SignUpSocialCell: UICollectionViewCell {
         appleButton.backgroundColor = .clear
     }
 
-    // MARK: - Bottom Row
+    // Bottom Row
     private func setupBottomRow() {
         haveAccountLabel.text = "Have an account?"
         haveAccountLabel.textColor = .gray

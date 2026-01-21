@@ -37,7 +37,7 @@ final class SocialSignupCollectionViewCell: UICollectionViewCell {
         view.clipsToBounds = true
     }
 
-    // MARK: - Actions
+    // Actions
 
     @IBAction func didTapGoogle(_ sender: UIButton) {
         print("Google login tapped")

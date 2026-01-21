@@ -1,21 +1,14 @@
 import Foundation
 
-
 class HomeDataStore {
-    
-    
     static let shared = HomeDataStore()
-    
     
     private var goals: [HomeTodaysGoalModel] = []
     private var upcomingEvents: [HomeUpcomingModel] = []
     private var memories: [HomeMemoryModel] = []
     private var articles: [ArticleModel] = []
     
-    
     var userProfile: UserProfile?
-    
-    
     var gardenStats: HealingGardenStats = HealingGardenStats(
         currentPoints: 4200,
         totalPointsNeeded: 5000,
@@ -23,11 +16,9 @@ class HomeDataStore {
         nextLevel: 2
     )
     
-    
     private init() {
         loadDataFromJSON()
     }
-    
     
     private func loadDataFromJSON() {
         goals = loadJSON("Goals.json")
@@ -50,7 +41,6 @@ class HomeDataStore {
             fatalError("Failed to decode \(filename) from bundle: \(error)")
         }
     }
-    
     
     func getGoals() -> [HomeTodaysGoalModel] {
         return goals
@@ -82,7 +72,6 @@ class HomeDataStore {
             .compactMap { Int($0.points.filter { $0.isNumber }) }
             .reduce(0, +)
     }
-    
 
     func toggleGoalCompletion(at index: Int) {
         guard index < goals.count else { return }

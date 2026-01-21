@@ -7,8 +7,6 @@
 
 import UIKit
 
-import UIKit
-
 final class TopGradientView: UIView {
 
     private let gradientLayer = CAGradientLayer()

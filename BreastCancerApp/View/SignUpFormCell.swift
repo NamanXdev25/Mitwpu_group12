@@ -1,34 +1,34 @@
 import UIKit
 
-// MARK: - Delegate Protocol
+// Delegate Protocol
 protocol SignUpFormCellDelegate: AnyObject {
     func signUpFormCellDidTapSignUp(_ cell: SignUpFormCell, email: String, password: String, reenterPassword: String, agreedToTerms: Bool)
 }
 
 final class SignUpFormCell: UICollectionViewCell {
 
-    // MARK: - Container Views
+    // Container Views
     @IBOutlet weak var emailContainerView: UIView!
     @IBOutlet weak var passwordContainerView: UIView!
     @IBOutlet weak var reenterPasswordContainerView: UIView!
 
-    // MARK: - TextFields
+    // TextFields
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var reenterPasswordTextField: UITextField!
 
-    // MARK: - Buttons
+    // Buttons
     @IBOutlet weak var agreeButton: UIButton!
     @IBOutlet weak var signUpButton: UIButton!
 
-    // MARK: - Delegate
+    // Delegate
     weak var delegate: SignUpFormCellDelegate?
 
-    // MARK: - State
+    // State
     private var isChecked: Bool = false
     private var isPasswordVisible: Bool = false
 
-    // MARK: - Lifecycle
+    // Lifecycle
     override func awakeFromNib() {
         super.awakeFromNib()
         configureInteraction()
@@ -37,14 +37,14 @@ final class SignUpFormCell: UICollectionViewCell {
         configureCheckbox()
     }
 
-    // MARK: - Interaction (VERY IMPORTANT)
+    // Interaction
     private func configureInteraction() {
         contentView.isUserInteractionEnabled = true
         isUserInteractionEnabled = true
         agreeButton.isUserInteractionEnabled = true
     }
 
-    // MARK: - TextFields
+    // TextFields
     private func configureTextFields() {
         emailTextField.borderStyle = .none
         passwordTextField.borderStyle = .none
@@ -54,7 +54,7 @@ final class SignUpFormCell: UICollectionViewCell {
         reenterPasswordTextField.isSecureTextEntry = true
     }
 
-    // MARK: - Containers
+    // Containers
     private func configureContainers() {
         let containers = [
             emailContainerView,
@@ -71,7 +71,7 @@ final class SignUpFormCell: UICollectionViewCell {
         }
     }
 
-    // MARK: - Checkbox Setup
+    // Checkbox Setup
     private func configureCheckbox() {
         var config = UIButton.Configuration.plain()
         config.image = UIImage(systemName: "square")
@@ -102,13 +102,11 @@ final class SignUpFormCell: UICollectionViewCell {
         reenterPasswordTextField.isSecureTextEntry = !isPasswordVisible
     }
 
-    /// 🔥 Sign Up - Now calls delegate
     @IBAction func signUpTapped(_ sender: UIButton) {
         let email = emailTextField.text ?? ""
         let password = passwordTextField.text ?? ""
         let reenterPassword = reenterPasswordTextField.text ?? ""
         
-        // Basic validation
         guard !email.isEmpty else {
             showAlert(message: "Please enter your email")
             return
@@ -129,12 +127,10 @@ final class SignUpFormCell: UICollectionViewCell {
             return
         }
         
-        // Call delegate
         delegate?.signUpFormCellDidTapSignUp(self, email: email, password: password, reenterPassword: reenterPassword, agreedToTerms: isChecked)
     }
     
     private func showAlert(message: String) {
-        // Find the parent view controller
         var responder: UIResponder? = self
         while let next = responder?.next {
             if let viewController = next as? UIViewController {

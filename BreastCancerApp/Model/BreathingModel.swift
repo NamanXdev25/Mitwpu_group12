@@ -15,7 +15,6 @@ struct BreathingSession {
     let duration: String
     let imageName: String
     var isFavorite: Bool
-    
     let videoFileName: String
 }
 
