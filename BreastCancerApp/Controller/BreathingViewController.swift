@@ -18,7 +18,6 @@ class BreathingViewController: UIViewController {
     
     var selectedFilterIndex: Int = 0
 
-    // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
