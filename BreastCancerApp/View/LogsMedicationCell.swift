@@ -8,8 +8,20 @@ class LogsMedicationCell: UICollectionViewCell {
     @IBOutlet weak var instructionLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
     
+    // Closure to handle radio button tap
+    var onRadioButtonTapped: (() -> Void)?
+    
     override func awakeFromNib() {
         super.awakeFromNib()
+        setupRadioButton()
+    }
+    
+    private func setupRadioButton() {
+        radioButton.addTarget(self, action: #selector(radioButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func radioButtonTapped() {
+        onRadioButtonTapped?()
     }
     
     func configure(with model: MedicationModel) {
@@ -20,7 +32,6 @@ class LogsMedicationCell: UICollectionViewCell {
     }
     
     private func updateRadioButton(isCompleted: Bool) {
-       
         if isCompleted {
             radioButton.backgroundColor = UIColor(red: 0.910, green: 0.416, blue: 0.573, alpha: 1.0)
             radioButton.setImage(UIImage(systemName: "checkmark"), for: .normal)

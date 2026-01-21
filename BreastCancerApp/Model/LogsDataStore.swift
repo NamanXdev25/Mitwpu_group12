@@ -24,16 +24,6 @@ class LogsDataStore {
             date: formatCurrentDate()
         )
         
-        // Medications Data
-        medications = [
-            MedicationModel(
-                pillName: "Pill 2",
-                time: "2:00 PM",
-                instruction: "After Lunch",
-                isCompleted: false
-            )
-        ]
-        
         // Health Tracking Data
         healthTracking = [
             HealthTrackingModel(
@@ -129,16 +119,6 @@ class LogsDataStore {
         return nil
     }
     
-    private func extractDoctorName(from appointment: AppointmentItem) -> String {
-        // This method is no longer used, but keeping for backward compatibility
-        if appointment.category.contains("Doctor") {
-            return "Doctor Visit"
-        } else if appointment.category.contains("Chemo") {
-            return "Chemotherapy Session"
-        }
-        return appointment.category
-    }
-    
     // MARK: - Get Stats with Real-time Data
     func getStats() -> StatsModel {
         // Get Exercise Data
@@ -170,6 +150,144 @@ class LogsDataStore {
                 progress: exerciseProgress
             )
         )
+    }
+    
+    // MARK: - Get Next Medication (Latest untaken medicine)
+    func getNextMedication() -> MedicationModel? {
+        // Get today's medications from MedicationHistory
+        let history = MedicationHistory.shared.getHistory(for: Date())
+        
+        // If no history exists for today, initialize it with default medications
+        let allMedications: [Medication]
+        if let existingHistory = history {
+            allMedications = existingHistory.medications
+        } else {
+            // Load default medications for today
+            let defaultMedications = getDefaultMedications()
+            MedicationHistory.shared.saveMedications(defaultMedications, for: Date())
+            allMedications = defaultMedications
+        }
+        
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "h:mm a"
+        timeFormatter.locale = Locale(identifier: "en_US_POSIX")
+        
+        // Filter medications scheduled for today
+        let todaysMeds = allMedications.filter { $0.isScheduledFor(date: Date()) }
+        
+        // If no medications for today, return nil
+        if todaysMeds.isEmpty {
+            return nil
+        }
+        
+        // Get all untaken medications
+        let untakenMeds = todaysMeds.filter { !$0.isTaken }
+        
+        // Sort by time (ascending)
+        let sortedUntaken = untakenMeds.sorted { med1, med2 in
+            if let date1 = timeFormatter.date(from: med1.time),
+               let date2 = timeFormatter.date(from: med2.time) {
+                return date1 < date2
+            }
+            return med1.time < med2.time
+        }
+        
+        // Return the first (earliest) untaken medication
+        guard let nextMed = sortedUntaken.first else {
+            return nil
+        }
+        
+        // Convert to MedicationModel
+        return MedicationModel(
+            pillName: nextMed.name,
+            time: nextMed.time,
+            instruction: nextMed.note.isEmpty ? nextMed.repeatOption : nextMed.note,
+            isCompleted: nextMed.isTaken
+        )
+    }
+    
+    // MARK: - Get Default Medications
+    private func getDefaultMedications() -> [Medication] {
+        let calendar = Calendar.current
+        let weekday = calendar.component(.weekday, from: Date())
+        
+        var defaultMeds: [Medication] = [
+            Medication(name: "Aspirin", note: "Take with food", time: "8:00 AM", repeatOption: "Every Day", isTaken: false, reminderEnabled: true),
+            Medication(name: "Vitamin D", note: "Morning supplement", time: "9:00 AM", repeatOption: "Every Day", isTaken: false, reminderEnabled: true),
+            Medication(name: "Blood Pressure Med", note: "", time: "12:00 PM", repeatOption: "Every Day", isTaken: false, reminderEnabled: true),
+            Medication(name: "Thyroid Medicine", note: "Take on empty stomach", time: "7:00 AM", repeatOption: "Every Day", isTaken: false, reminderEnabled: true),
+            Medication(name: "Allergy Medicine", note: "Only if needed", time: "10:00 PM", repeatOption: "Every Day", isTaken: false, reminderEnabled: true)
+        ]
+        
+        // Add weekday-specific medications
+        if weekday == 2 { // Monday
+            defaultMeds.append(Medication(name: "Omega-3", note: "", time: "6:00 PM", repeatOption: "Every Mon", isTaken: false, reminderEnabled: false))
+        }
+        
+        return defaultMeds
+    }
+    
+    // MARK: - Check if all medications are taken
+    func areAllMedicationsTaken() -> Bool {
+        let history = MedicationHistory.shared.getHistory(for: Date())
+        
+        let allMedications: [Medication]
+        if let existingHistory = history {
+            allMedications = existingHistory.medications
+        } else {
+            // If no history, medications haven't been initialized yet
+            return false
+        }
+        
+        let todaysMeds = allMedications.filter { $0.isScheduledFor(date: Date()) }
+        
+        // If no medications scheduled for today, return false
+        if todaysMeds.isEmpty {
+            return false
+        }
+        
+        // Check if all are taken
+        return todaysMeds.allSatisfy { $0.isTaken }
+    }
+    
+    // MARK: - Check if any medications exist
+    func hasMedications() -> Bool {
+        let history = MedicationHistory.shared.getHistory(for: Date())
+        
+        let allMedications: [Medication]
+        if let existingHistory = history {
+            allMedications = existingHistory.medications
+        } else {
+            // Check if there would be default medications
+            let defaultMeds = getDefaultMedications()
+            return !defaultMeds.isEmpty
+        }
+        
+        let todaysMeds = allMedications.filter { $0.isScheduledFor(date: Date()) }
+        return !todaysMeds.isEmpty
+    }
+    
+    // MARK: - Toggle Medication Status
+    func toggleMedicationStatus(pillName: String, time: String) {
+        guard let history = MedicationHistory.shared.getHistory(for: Date()) else { return }
+        
+        var medications = history.medications
+        
+        // Find and toggle the medication
+        if let index = medications.firstIndex(where: {
+            $0.name == pillName && $0.time == time && $0.isScheduledFor(date: Date())
+        }) {
+            medications[index].isTaken.toggle()
+            
+            // Save back to history
+            MedicationHistory.shared.saveMedications(medications, for: Date())
+            
+            // Post notification to update MedicationViewController
+            NotificationCenter.default.post(
+                name: NSNotification.Name("MedicationDataUpdated"),
+                object: nil
+            )
+        }
     }
     
     func getMedications() -> [MedicationModel] {

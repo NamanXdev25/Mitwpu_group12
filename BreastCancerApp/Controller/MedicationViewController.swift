@@ -39,11 +39,32 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
         setupCollectionView()
         collectionView.setCollectionViewLayout(generateLayout(), animated: false)
         loadMedications()
+        setupNotificationObserver()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         collectionView.reloadData()
+    }
+    
+    private func setupNotificationObserver() {
+        // Listen for medication updates from LogViewController
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(medicationDataDidChange),
+            name: NSNotification.Name("MedicationDataUpdated"),
+            object: nil
+        )
+    }
+    
+    @objc private func medicationDataDidChange() {
+        // Reload medications from history
+        loadMedications()
+        collectionView.reloadData()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
     // MARK: - Setup
@@ -75,6 +96,7 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
         if let history = MedicationHistory.shared.getHistory(for: Date()) {
             allMedications = history.medications
         } else {
+            // If no history exists, initialize with dummy data
             loadDummyData()
         }
     }
@@ -95,6 +117,12 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
     // MARK: - Save Medications
     func saveMedications() {
         MedicationHistory.shared.saveMedications(allMedications, for: Date())
+        
+        // Post notification to update LogViewController
+        NotificationCenter.default.post(
+            name: NSNotification.Name("MedicationDataUpdated"),
+            object: nil
+        )
     }
 
     // MARK: - UICollectionViewDataSource

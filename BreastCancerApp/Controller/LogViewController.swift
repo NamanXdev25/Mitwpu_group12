@@ -43,6 +43,14 @@ class LogViewController: UIViewController, UICollectionViewDataSource, UICollect
             name: NSNotification.Name("AppointmentDataUpdated"),
             object: nil
         )
+        
+        // Listen for Medication updates
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(medicationDataDidChange),
+            name: NSNotification.Name("MedicationDataUpdated"),
+            object: nil
+        )
     }
     
     @objc private func exerciseDataDidChange() {
@@ -60,6 +68,11 @@ class LogViewController: UIViewController, UICollectionViewDataSource, UICollect
         collectionView.reloadSections(IndexSet(integer: 2))
     }
     
+    @objc private func medicationDataDidChange() {
+        // Reload medication section
+        collectionView.reloadSections(IndexSet(integer: 3))
+    }
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -69,6 +82,7 @@ class LogViewController: UIViewController, UICollectionViewDataSource, UICollect
         // Reload sections to reflect updated data
         collectionView.reloadSections(IndexSet(integer: 1)) // Stats
         collectionView.reloadSections(IndexSet(integer: 2)) // Appointments
+        collectionView.reloadSections(IndexSet(integer: 3)) // Medications
     }
     
     private func setupCollectionView() {
@@ -108,7 +122,7 @@ class LogViewController: UIViewController, UICollectionViewDataSource, UICollect
         case 0: return 1 // Header
         case 1: return 1 // Stats Row
         case 2: return 1 // Appointment (always show, either appointment or empty message)
-        case 3: return dataStore.getMedications().count
+        case 3: return 1 // Medication (always show one - either next med or empty message)
         case 4: return dataStore.getHealthTracking().count
         default: return 0
         }
@@ -144,11 +158,38 @@ class LogViewController: UIViewController, UICollectionViewDataSource, UICollect
             }
             
         case 3:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LogsMedicationCell", for: indexPath) as! LogsMedicationCell
-            if let medication = dataStore.getMedication(at: indexPath.row) {
-                cell.configure(with: medication)
+            // Check if all medications are taken
+            if dataStore.areAllMedicationsTaken() {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CenteredMessageCell", for: indexPath) as! CenteredMessageCell
+                cell.configure(message: "All medications taken")
+                return cell
             }
-            return cell
+            // Check if there are no medications at all
+            else if !dataStore.hasMedications() {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CenteredMessageCell", for: indexPath) as! CenteredMessageCell
+                cell.configure(message: "No medications added")
+                return cell
+            }
+            // Show next medication
+            else if let nextMed = dataStore.getNextMedication() {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LogsMedicationCell", for: indexPath) as! LogsMedicationCell
+                cell.configure(with: nextMed)
+                
+                // Handle tick button tap
+                cell.onRadioButtonTapped = { [weak self] in
+                    self?.dataStore.toggleMedicationStatus(pillName: nextMed.pillName, time: nextMed.time)
+                    // Reload this section to show next medication
+                    self?.collectionView.reloadSections(IndexSet(integer: 3))
+                }
+                
+                return cell
+            }
+            // Fallback (should not reach here)
+            else {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CenteredMessageCell", for: indexPath) as! CenteredMessageCell
+                cell.configure(message: "No medications for today")
+                return cell
+            }
             
         case 4:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LogsTrackingCell", for: indexPath) as! LogsTrackingCell
@@ -212,7 +253,7 @@ class LogViewController: UIViewController, UICollectionViewDataSource, UICollect
                 return section
             }
             
-            // SECTION 3: Medications
+            // SECTION 3: Medication (Single cell for next medication)
             else if sectionIndex == 3 {
                 let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)))
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(90)), subitems: [item])
