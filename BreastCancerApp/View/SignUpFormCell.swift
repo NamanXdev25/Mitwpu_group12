@@ -23,15 +23,13 @@ final class SignUpFormCell: UICollectionViewCell {
     // MARK: - Lifecycle
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-        agreeButton.backgroundColor = UIColor.red.withAlphaComponent(0.4)
-        agreeButton.layer.zPosition = 999
+       
 
         configureInteraction()
         configureTextFields()
         configureContainers()
         configureCheckbox()
-        configureSignUpButton()
+        //configureSignUpButton()
     }
 
     // MARK: - Interaction (VERY IMPORTANT)
@@ -62,56 +60,47 @@ final class SignUpFormCell: UICollectionViewCell {
         containers.forEach { view in
             view?.layer.cornerRadius = 12
             view?.layer.borderWidth = 1
-            view?.layer.borderColor = UIColor.systemPink.cgColor
+            view?.layer.borderColor = UIColor.brandPink.cgColor
             view?.backgroundColor = .white
             view?.clipsToBounds = true
         }
     }
 
-    // MARK: - Checkbox Setup (NO deprecated APIs)
+    // MARK: - Checkbox Setup
     private func configureCheckbox() {
-        agreeButton.backgroundColor = .clear
-        agreeButton.tintColor = .systemPink
-        agreeButton.setImage(
-            UIImage(systemName: "square"),
-            for: .normal
-        )
+        var config = UIButton.Configuration.plain()
+        config.image = UIImage(systemName: "square")
+        config.baseForegroundColor = .brandPink
+        config.background.backgroundColor = .clear
+        config.contentInsets = .zero
+
+        agreeButton.configuration = config
     }
+
+
 
     // MARK: - Sign Up Button
-    private func configureSignUpButton() {
-        signUpButton.backgroundColor = .systemPink
-        signUpButton.setTitleColor(.white, for: .normal)
-        signUpButton.layer.cornerRadius = 28
-        signUpButton.clipsToBounds = true
-    }
+//    private func configureSignUpButton() {
+//        signUpButton.backgroundColor = .brandPink
+//        signUpButton.setTitleColor(.white, for: .normal)
+//        //signUpButton.layer.cornerRadius = 28
+//        signUpButton.clipsToBounds = true
+//    }
 
-    // MARK: - Actions
-
-    /// ✅ Checkbox Tap (WORKING, RELIABLE)
     @IBAction func agreeTapped(_ sender: UIButton) {
         isChecked.toggle()
 
-        if isChecked {
-            // Pink box + white tick
-            sender.setImage(
-                UIImage(systemName: "checkmark.square.fill"),
-                for: .normal
-            )
-            sender.tintColor = .white
-            sender.backgroundColor = .systemPink
-        } else {
-            // Empty square
-            sender.setImage(
-                UIImage(systemName: "square"),
-                for: .normal
-            )
-            sender.tintColor = .systemPink
-            sender.backgroundColor = .clear
-        }
+        guard var config = sender.configuration else { return }
+
+        config.image = UIImage(
+            systemName: isChecked ? "checkmark.square.fill" : "square"
+        )
+        config.baseForegroundColor = .brandPink
+        config.background.backgroundColor = .clear
+
+        sender.configuration = config
     }
 
-    /// 👁 Toggle password visibility
     @IBAction func togglePasswordVisibility(_ sender: UIButton) {
         isPasswordVisible.toggle()
         passwordTextField.isSecureTextEntry = !isPasswordVisible
@@ -124,4 +113,8 @@ final class SignUpFormCell: UICollectionViewCell {
         print("Password:", passwordTextField.text ?? "")
         print("Agreed:", isChecked)
     }
+}
+
+extension UIColor {
+    static let brandPink = UIColor(named: "Pink")!
 }
