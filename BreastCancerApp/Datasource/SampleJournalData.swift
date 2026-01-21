@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import UIKit
 
 enum SampleJournalData {
     static var recent: [JournalEntry] {

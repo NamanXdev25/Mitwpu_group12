@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import UIKit
 
 enum JournalType: String, Codable {
     case regular
