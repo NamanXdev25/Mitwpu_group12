@@ -41,13 +41,17 @@ private extension MemoryPageViewController {
 
     func viewerController(at index: Int) -> MemoryViewerViewController {
         let storyboard = UIStoryboard(name: "memory", bundle: nil)
+
         let vc = storyboard.instantiateViewController(
             withIdentifier: "MemoryViewerViewController"
         ) as! MemoryViewerViewController
 
         let memory = memories[index]
+
         vc.image = memory.image
         vc.note = memory.note
+        vc.date = memory.date   
+
         vc.view.tag = index
         vc.view.backgroundColor = .white
 

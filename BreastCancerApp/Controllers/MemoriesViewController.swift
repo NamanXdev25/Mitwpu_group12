@@ -66,11 +66,10 @@ final class MemoriesViewController: UIViewController,
             forCellWithReuseIdentifier: MemoryImageCell.reuseIdentifier
         )
 
-        
         collectionView.register(
-            UINib(nibName: "MemoryHeaderView", bundle: nil),
+            UINib(nibName: "MemoryDateHeaderView", bundle: nil),
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: MemoryHeaderView.reuseIdentifier
+            withReuseIdentifier: MemoryDateHeaderView.reuseIdentifier
         )
     }
 
@@ -254,6 +253,34 @@ final class MemoriesViewController: UIViewController,
         let width = floor((collectionView.bounds.width - totalSpacing) / itemsPerRow)
 
         return CGSize(width: width, height: width)
+    }
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        viewForSupplementaryElementOfKind kind: String,
+        at indexPath: IndexPath
+    ) -> UICollectionReusableView {
+
+        guard kind == UICollectionView.elementKindSectionHeader else {
+            return UICollectionReusableView()
+        }
+
+        let header = collectionView.dequeueReusableSupplementaryView(
+            ofKind: kind,
+            withReuseIdentifier: MemoryDateHeaderView.reuseIdentifier,
+            for: indexPath
+        ) as! MemoryDateHeaderView
+
+        header.configure(with: groupedMemories[indexPath.section].date)
+        return header
+    }
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        referenceSizeForHeaderInSection section: Int
+    ) -> CGSize {
+        CGSize(width: collectionView.bounds.width, height: 36)
     }
 
     // MARK: - Viewer

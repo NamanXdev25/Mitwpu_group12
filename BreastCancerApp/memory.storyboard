@@ -102,19 +102,29 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Today" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XH1-aP-xxW">
+                                <rect key="frame" x="16" y="138" width="361" height="21"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="YCA-Sc-9RB"/>
                         <color key="backgroundColor" name="bg"/>
                         <constraints>
                             <constraint firstItem="f6p-Y9-nls" firstAttribute="leading" secondItem="YCA-Sc-9RB" secondAttribute="leading" constant="16" id="Ofc-qO-cJs"/>
                             <constraint firstItem="YCA-Sc-9RB" firstAttribute="trailing" secondItem="sVS-JR-BfN" secondAttribute="trailing" id="PBz-AJ-b7S"/>
+                            <constraint firstItem="XH1-aP-xxW" firstAttribute="top" secondItem="YCA-Sc-9RB" secondAttribute="top" constant="20" id="QXf-3B-BEy"/>
                             <constraint firstItem="YCA-Sc-9RB" firstAttribute="bottom" secondItem="sVS-JR-BfN" secondAttribute="bottom" id="XZe-JU-rEH"/>
                             <constraint firstItem="sVS-JR-BfN" firstAttribute="leading" secondItem="YCA-Sc-9RB" secondAttribute="leading" id="a79-tm-O9t"/>
                             <constraint firstItem="sVS-JR-BfN" firstAttribute="top" secondItem="YCA-Sc-9RB" secondAttribute="top" id="g5w-N6-kUI"/>
                             <constraint firstItem="YCA-Sc-9RB" firstAttribute="bottom" secondItem="f6p-Y9-nls" secondAttribute="bottom" constant="64" id="gUY-tK-sGN"/>
+                            <constraint firstItem="YCA-Sc-9RB" firstAttribute="trailing" secondItem="XH1-aP-xxW" secondAttribute="trailing" constant="16" id="jbS-lT-XV8"/>
+                            <constraint firstItem="XH1-aP-xxW" firstAttribute="leading" secondItem="YCA-Sc-9RB" secondAttribute="leading" constant="16" id="zl7-zW-d4N"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="dateLabel" destination="XH1-aP-xxW" id="elE-SC-OZq"/>
                         <outlet property="imageView" destination="sVS-JR-BfN" id="EDf-Yf-Sk0"/>
                         <outlet property="noteLabel" destination="f6p-Y9-nls" id="bKL-gS-jf5"/>
                     </connections>
@@ -369,7 +379,7 @@
             <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
         <systemColor name="opaqueSeparatorColor">
-            <color red="0.77647058820000003" green="0.77647058820000003" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.77647058823529413" green="0.77647058823529413" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
