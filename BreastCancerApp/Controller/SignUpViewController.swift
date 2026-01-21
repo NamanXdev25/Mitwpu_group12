@@ -60,6 +60,22 @@ final class SignUpViewController: UIViewController {
             forCellWithReuseIdentifier: "SocialLoginCollectionViewCell"
         )
     }
+    
+    // MARK: - Navigation
+    private func navigateToProfileSetup() {
+        let storyboard = UIStoryboard(name: "Login", bundle: nil)
+        
+        guard let profileSetupVC = storyboard.instantiateViewController(
+            withIdentifier: "ProfileSetupViewController"
+        ) as? ProfileSetupViewController else {
+            print("❌ Failed to instantiate ProfileSetupViewController")
+            return
+        }
+        
+        profileSetupVC.modalPresentationStyle = .fullScreen
+        profileSetupVC.modalTransitionStyle = .crossDissolve
+        present(profileSetupVC, animated: true)
+    }
 }
 
 // MARK: - DataSource
@@ -82,10 +98,14 @@ extension SignUpViewController: UICollectionViewDataSource {
             )
 
         case .form:
-            return collectionView.dequeueReusableCell(
+            let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "SignUpFormCell",
                 for: indexPath
-            )
+            ) as! SignUpFormCell
+            
+            // Set delegate
+            cell.delegate = self
+            return cell
 
         case .or:
             return collectionView.dequeueReusableCell(
@@ -122,7 +142,24 @@ extension SignUpViewController: UICollectionViewDelegateFlowLayout {
             return CGSize(width: width, height: 30)
 
         case .social:
-            return CGSize(width: width, height: 240) // ✅ FIXED
+            return CGSize(width: width, height: 240)
         }
+    }
+}
+
+// MARK: - SignUpFormCellDelegate
+extension SignUpViewController: SignUpFormCellDelegate {
+    
+    func signUpFormCellDidTapSignUp(_ cell: SignUpFormCell, email: String, password: String, reenterPassword: String, agreedToTerms: Bool) {
+        
+        print("✅ Sign Up Data:")
+        print("Email: \(email)")
+        print("Password: \(password)")
+        print("Agreed to Terms: \(agreedToTerms)")
+        
+        // Here you can add your sign-up logic (API call, Firebase, etc.)
+        // For now, we'll just navigate to ProfileSetup
+        
+        navigateToProfileSetup()
     }
 }

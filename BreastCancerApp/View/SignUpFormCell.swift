@@ -1,5 +1,10 @@
 import UIKit
 
+// MARK: - Delegate Protocol
+protocol SignUpFormCellDelegate: AnyObject {
+    func signUpFormCellDidTapSignUp(_ cell: SignUpFormCell, email: String, password: String, reenterPassword: String, agreedToTerms: Bool)
+}
+
 final class SignUpFormCell: UICollectionViewCell {
 
     // MARK: - Container Views
@@ -16,6 +21,9 @@ final class SignUpFormCell: UICollectionViewCell {
     @IBOutlet weak var agreeButton: UIButton!
     @IBOutlet weak var signUpButton: UIButton!
 
+    // MARK: - Delegate
+    weak var delegate: SignUpFormCellDelegate?
+
     // MARK: - State
     private var isChecked: Bool = false
     private var isPasswordVisible: Bool = false
@@ -23,13 +31,10 @@ final class SignUpFormCell: UICollectionViewCell {
     // MARK: - Lifecycle
     override func awakeFromNib() {
         super.awakeFromNib()
-       
-
         configureInteraction()
         configureTextFields()
         configureContainers()
         configureCheckbox()
-        //configureSignUpButton()
     }
 
     // MARK: - Interaction (VERY IMPORTANT)
@@ -77,16 +82,6 @@ final class SignUpFormCell: UICollectionViewCell {
         agreeButton.configuration = config
     }
 
-
-
-    // MARK: - Sign Up Button
-//    private func configureSignUpButton() {
-//        signUpButton.backgroundColor = .brandPink
-//        signUpButton.setTitleColor(.white, for: .normal)
-//        //signUpButton.layer.cornerRadius = 28
-//        signUpButton.clipsToBounds = true
-//    }
-
     @IBAction func agreeTapped(_ sender: UIButton) {
         isChecked.toggle()
 
@@ -107,11 +102,49 @@ final class SignUpFormCell: UICollectionViewCell {
         reenterPasswordTextField.isSecureTextEntry = !isPasswordVisible
     }
 
-    /// 🔐 Sign Up
+    /// 🔥 Sign Up - Now calls delegate
     @IBAction func signUpTapped(_ sender: UIButton) {
-        print("Email:", emailTextField.text ?? "")
-        print("Password:", passwordTextField.text ?? "")
-        print("Agreed:", isChecked)
+        let email = emailTextField.text ?? ""
+        let password = passwordTextField.text ?? ""
+        let reenterPassword = reenterPasswordTextField.text ?? ""
+        
+        // Basic validation
+        guard !email.isEmpty else {
+            showAlert(message: "Please enter your email")
+            return
+        }
+        
+        guard !password.isEmpty else {
+            showAlert(message: "Please enter a password")
+            return
+        }
+        
+        guard password == reenterPassword else {
+            showAlert(message: "Passwords don't match")
+            return
+        }
+        
+        guard isChecked else {
+            showAlert(message: "Please agree to terms and conditions")
+            return
+        }
+        
+        // Call delegate
+        delegate?.signUpFormCellDidTapSignUp(self, email: email, password: password, reenterPassword: reenterPassword, agreedToTerms: isChecked)
+    }
+    
+    private func showAlert(message: String) {
+        // Find the parent view controller
+        var responder: UIResponder? = self
+        while let next = responder?.next {
+            if let viewController = next as? UIViewController {
+                let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                viewController.present(alert, animated: true)
+                return
+            }
+            responder = next
+        }
     }
 }
 

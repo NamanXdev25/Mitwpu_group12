@@ -25,23 +25,13 @@
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="intro_image" translatesAutoresizingMaskIntoConstraints="NO" id="MzW-8D-PQF">
                                         <rect key="frame" x="0.0" y="0.0" width="393" height="400"/>
                                     </imageView>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="79B-NI-lPD" userLabel="gradientView">
-                                        <rect key="frame" x="0.0" y="280" width="393" height="120"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="120" id="ncG-4Z-pgu"/>
-                                        </constraints>
-                                    </view>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="79B-NI-lPD" firstAttribute="leading" secondItem="xr1-XT-fi9" secondAttribute="leading" id="4p3-rg-87h"/>
                                     <constraint firstItem="MzW-8D-PQF" firstAttribute="leading" secondItem="xr1-XT-fi9" secondAttribute="leading" id="6fA-uA-GzC"/>
                                     <constraint firstAttribute="height" constant="400" id="KvG-f9-C2S"/>
                                     <constraint firstAttribute="bottom" secondItem="MzW-8D-PQF" secondAttribute="bottom" id="Mif-NM-WRA"/>
                                     <constraint firstAttribute="trailing" secondItem="MzW-8D-PQF" secondAttribute="trailing" id="X6f-fx-KWN"/>
                                     <constraint firstItem="MzW-8D-PQF" firstAttribute="top" secondItem="xr1-XT-fi9" secondAttribute="top" id="aQV-T3-wlm"/>
-                                    <constraint firstAttribute="trailing" secondItem="79B-NI-lPD" secondAttribute="trailing" id="eOU-Wz-mda"/>
-                                    <constraint firstAttribute="bottom" secondItem="79B-NI-lPD" secondAttribute="bottom" id="tSx-AT-naX"/>
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="elh-Mw-6io">
@@ -98,7 +88,6 @@
                     <navigationItem key="navigationItem" id="UkQ-6k-Ety"/>
                     <connections>
                         <outlet property="continueButton" destination="iq2-Sk-Hfh" id="b5s-lV-hcq"/>
-                        <outlet property="gradientView" destination="79B-NI-lPD" id="tRA-W4-cCC"/>
                         <outlet property="introImageView" destination="xr1-XT-fi9" id="QU5-30-Eqs"/>
                     </connections>
                 </viewController>

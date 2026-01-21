@@ -176,9 +176,11 @@
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="q8C-FJ-bTx" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="nG9-Cg-KJi">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="tintColor" name="OnboardingPrimaryColor"/>
+                        <color key="selectedImageTintColor" name="OnboardingPrimaryColor"/>
                     </tabBar>
                     <connections>
                         <segue destination="tdT-jh-huK" kind="relationship" relationship="viewControllers" id="ojR-9I-8yx"/>

@@ -59,7 +59,7 @@
         <!--Profile Setup View Controller-->
         <scene sceneID="qC9-O8-yVp">
             <objects>
-                <viewController id="NGf-qn-kV2" customClass="ProfileSetupViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ProfileSetupViewController" id="NGf-qn-kV2" customClass="ProfileSetupViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="uva-PC-lxS">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
