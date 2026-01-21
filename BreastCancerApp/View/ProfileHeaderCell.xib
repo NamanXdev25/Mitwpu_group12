@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -29,10 +31,28 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SkK-LQ-fVh">
+                        <rect key="frame" x="147" y="92" width="24" height="24"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="24" id="XFV-fY-r59"/>
+                            <constraint firstAttribute="width" constant="24" id="aPH-Bq-m2j"/>
+                        </constraints>
+                        <color key="tintColor" systemColor="systemPinkColor"/>
+                        <state key="normal" title="Button"/>
+                        <buttonConfiguration key="configuration" style="filled" cornerStyle="capsule">
+                            <imageReference key="image" image="camera" catalog="system" symbolScale="small"/>
+                            <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" scale="small"/>
+                        </buttonConfiguration>
+                        <connections>
+                            <action selector="cameraTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="2Aw-F1-CAl"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <constraints>
+                <constraint firstItem="8me-Dh-CKc" firstAttribute="top" secondItem="SkK-LQ-fVh" secondAttribute="bottom" constant="9" id="6Qm-rc-EFa"/>
+                <constraint firstItem="rYs-yn-ybS" firstAttribute="trailing" secondItem="SkK-LQ-fVh" secondAttribute="trailing" constant="-5" id="PDL-qW-3C2"/>
                 <constraint firstItem="rYs-yn-ybS" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="QUM-RN-vF1"/>
                 <constraint firstItem="8me-Dh-CKc" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="YOz-Bt-tr4"/>
                 <constraint firstItem="rYs-yn-ybS" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="iam-aF-uUL"/>
@@ -40,10 +60,17 @@
             </constraints>
             <size key="customSize" width="276" height="170"/>
             <connections>
+                <outlet property="cameraButton" destination="SkK-LQ-fVh" id="5Kb-CE-OCL"/>
                 <outlet property="nameLabel" destination="8me-Dh-CKc" id="cjY-EF-XNS"/>
                 <outlet property="profileImageView" destination="rYs-yn-ybS" id="ADC-0w-JiE"/>
             </connections>
             <point key="canvasLocation" x="311.4503816793893" y="195.77464788732397"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <image name="camera" catalog="system" width="128" height="93"/>
+        <systemColor name="systemPinkColor">
+            <color red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
 </document>

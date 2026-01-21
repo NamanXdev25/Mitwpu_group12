@@ -1,22 +1,36 @@
 import UIKit
 
-final class HealthStatusViewController: UIViewController {
+protocol HealthStatusViewControllerDelegate: AnyObject {
+    func didUpdateProfile(image: UIImage?, fullName: String)
+}
+
+final class HealthStatusViewController: UIViewController,
+                                       UICollectionViewDataSource,
+                                       UICollectionViewDelegateFlowLayout,
+                                       ProfileHeaderCellDelegate,
+                                       UIImagePickerControllerDelegate,
+                                       UINavigationControllerDelegate {
 
     @IBOutlet weak var collectionView: UICollectionView!
 
+    weak var delegate: HealthStatusViewControllerDelegate?
+
     private var firstName = "Sophie"
     private var lastName = "Chen"
+    private var profileImage: UIImage?
+    private var isEditingProfile = false
+
+    private weak var cardCell: HealthStatusCardCell?
 
     private var fullName: String {
         "\(firstName) \(lastName)"
     }
 
-    private weak var cardCell: HealthStatusCardCell?
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
         navigationItem.title = "Health Status"
+
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             image: UIImage(systemName: "chevron.left"),
             style: .plain,
@@ -33,6 +47,7 @@ final class HealthStatusViewController: UIViewController {
 
         collectionView.dataSource = self
         collectionView.delegate = self
+        collectionView.backgroundColor = .clear
 
         [
             (ProfileHeaderCell.reuseIdentifier, "ProfileHeaderCell"),
@@ -50,50 +65,30 @@ final class HealthStatusViewController: UIViewController {
     }
 
     @objc private func editTapped() {
-        setEditing(true, animated: true)
-    }
-}
+        isEditingProfile.toggle()
 
-extension HealthStatusViewController {
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: isEditingProfile ? "xmark" : "chevron.left"),
+            style: .plain,
+            target: self,
+            action: isEditingProfile ? #selector(cancelTapped) : #selector(backTapped)
+        )
 
-    override func setEditing(_ editing: Bool, animated: Bool) {
-        super.setEditing(editing, animated: animated)
-        cardCell?.setEditing(editing)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: isEditingProfile ? "checkmark" : "pencil"),
+            style: .plain,
+            target: self,
+            action: isEditingProfile ? #selector(doneTapped) : #selector(editTapped)
+        )
 
-        if editing {
-            navigationItem.leftBarButtonItem = UIBarButtonItem(
-                image: UIImage(systemName: "xmark"),
-                style: .plain,
-                target: self,
-                action: #selector(cancelTapped)
-            )
-
-            navigationItem.rightBarButtonItem = UIBarButtonItem(
-                image: UIImage(systemName: "checkmark"),
-                style: .plain,
-                target: self,
-                action: #selector(doneTapped)
-            )
-        } else {
-            navigationItem.leftBarButtonItem = UIBarButtonItem(
-                image: UIImage(systemName: "chevron.left"),
-                style: .plain,
-                target: self,
-                action: #selector(backTapped)
-            )
-
-            navigationItem.rightBarButtonItem = UIBarButtonItem(
-                title: "Edit",
-                style: .plain,
-                target: self,
-                action: #selector(editTapped)
-            )
-        }
+        cardCell?.setEditing(isEditingProfile)
+        collectionView.reloadItems(at: [IndexPath(item: 0, section: 0)])
     }
 
     @objc private func cancelTapped() {
         cardCell?.revertEdits()
-        setEditing(false, animated: true)
+        isEditingProfile = false
+        editTapped()
     }
 
     @objc private func doneTapped() {
@@ -105,21 +100,25 @@ extension HealthStatusViewController {
         }
 
         cardCell?.commitEdits()
-        setEditing(false, animated: true)
-        collectionView.reloadItems(at: [IndexPath(item: 0, section: 0)])
+
+        delegate?.didUpdateProfile(
+            image: profileImage,
+            fullName: fullName
+        )
+
+        dismiss(animated: true)
     }
-}
 
-extension HealthStatusViewController: UICollectionViewDataSource {
+    // MARK: - Collection View
 
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
         2
     }
 
-    func collectionView(
-        _ collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath
-    ) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath)
+    -> UICollectionViewCell {
 
         if indexPath.item == 0 {
             let cell = collectionView.dequeueReusableCell(
@@ -129,8 +128,11 @@ extension HealthStatusViewController: UICollectionViewDataSource {
 
             cell.configure(
                 name: fullName,
-                image: UIImage(named: "profile_placeholder")
+                image: profileImage,
+                isEditing: isEditingProfile
             )
+
+            cell.delegate = self
             return cell
         }
 
@@ -153,38 +155,76 @@ extension HealthStatusViewController: UICollectionViewDataSource {
 
         return cell
     }
-}
 
-extension HealthStatusViewController: UICollectionViewDelegateFlowLayout {
+    // MARK: - Layout
 
-    func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        insetForSectionAt section: Int
-    ) -> UIEdgeInsets {
-        UIEdgeInsets(top: 0, left: 16, bottom: 24, right: 16)
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+
+        let width = collectionView.bounds.width - 32
+        return indexPath.item == 0
+            ? CGSize(width: width, height: 160)
+            : CGSize(width: width, height: 340)
     }
 
-    func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        minimumLineSpacingForSectionAt section: Int
-    ) -> CGFloat {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
+        UIEdgeInsets(top: 16, left: 16, bottom: 24, right: 16)
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         16
     }
 
-    func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        sizeForItemAt indexPath: IndexPath
-    ) -> CGSize {
+    // MARK: - Camera
 
-        let width = collectionView.bounds.width - 32
+    func didTapCamera() {
+        guard isEditingProfile else { return }
 
-        if indexPath.item == 0 {
-            return CGSize(width: width, height: 160)
+        let alert = UIAlertController(
+            title: "Profile Photo",
+            message: nil,
+            preferredStyle: .actionSheet
+        )
+
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            alert.addAction(UIAlertAction(title: "Camera", style: .default) { _ in
+                self.openPicker(.camera)
+            })
         }
 
-        return CGSize(width: width, height: 340)
+        alert.addAction(UIAlertAction(title: "Gallery", style: .default) { _ in
+            self.openPicker(.photoLibrary)
+        })
+
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(alert, animated: true)
+    }
+
+    private func openPicker(_ source: UIImagePickerController.SourceType) {
+        let picker = UIImagePickerController()
+        picker.sourceType = source
+        picker.allowsEditing = true
+        picker.delegate = self
+        present(picker, animated: true)
+    }
+
+    func imagePickerController(_ picker: UIImagePickerController,
+                               didFinishPickingMediaWithInfo info:
+                               [UIImagePickerController.InfoKey : Any]) {
+
+        profileImage =
+            (info[.editedImage] ?? info[.originalImage]) as? UIImage
+
+        picker.dismiss(animated: true)
+        collectionView.reloadItems(at: [IndexPath(item: 0, section: 0)])
+    }
+
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true)
     }
 }

@@ -1,8 +1,14 @@
 import UIKit
 
-final class ProfileViewController: UIViewController {
+final class ProfileViewController: UIViewController,
+                                   UICollectionViewDataSource,
+                                   UICollectionViewDelegateFlowLayout,
+                                   HealthStatusViewControllerDelegate {
 
     @IBOutlet weak var collectionView: UICollectionView!
+
+    private var profileImage: UIImage?
+    private var fullName = "Sophie Chen"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,18 +29,25 @@ final class ProfileViewController: UIViewController {
             )
         }
     }
-}
 
-extension ProfileViewController: UICollectionViewDataSource {
+    // MARK: - Delegate callback
 
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func didUpdateProfile(image: UIImage?, fullName: String) {
+        self.profileImage = image
+        self.fullName = fullName
+        collectionView.reloadItems(at: [IndexPath(item: 0, section: 0)])
+    }
+
+    // MARK: - CollectionView
+
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
         4
     }
 
-    func collectionView(
-        _ collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath
-    ) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath)
+    -> UICollectionViewCell {
 
         switch indexPath.item {
 
@@ -45,9 +58,8 @@ extension ProfileViewController: UICollectionViewDataSource {
             ) as! ProfileHeaderCell
 
             cell.configure(
-                name: "Sophie Chen",
-                image: UIImage(named: "profile_placeholder")
-                    ?? UIImage(systemName: "person.crop.circle.fill")
+                name: fullName,
+                image: profileImage
             )
             return cell
 
@@ -76,53 +88,46 @@ extension ProfileViewController: UICollectionViewDataSource {
             )
         }
     }
-}
 
-extension ProfileViewController: UICollectionViewDelegateFlowLayout {
+    // MARK: - Layout
 
-    func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        sizeForItemAt indexPath: IndexPath
-    ) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
 
         let width = collectionView.bounds.width - 32
 
         switch indexPath.item {
-        case 0:
-            return CGSize(width: width, height: 160)
-        case 1:
-            return CGSize(width: width, height: 72)
-        case 2:
-            return CGSize(width: width, height: 20)
-        default:
-            return CGSize(width: width, height: 208)
+        case 0: return CGSize(width: width, height: 160)
+        case 1: return CGSize(width: width, height: 72)
+        case 2: return CGSize(width: width, height: 20)
+        default: return CGSize(width: width, height: 208)
         }
     }
 
-    func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        insetForSectionAt section: Int
-    ) -> UIEdgeInsets {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
         UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
     }
 
-    func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        minimumLineSpacingForSectionAt section: Int
-    ) -> CGFloat {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         8
     }
 
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView,
+                        didSelectItemAt indexPath: IndexPath) {
+
         guard indexPath.item == 1 else { return }
 
         let storyboard = UIStoryboard(name: "profile", bundle: nil)
         let vc = storyboard.instantiateViewController(
             withIdentifier: "HealthStatusViewController"
         ) as! HealthStatusViewController
+
+        vc.delegate = self
 
         let navController = UINavigationController(rootViewController: vc)
         navController.modalPresentationStyle = .fullScreen
