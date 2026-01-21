@@ -104,6 +104,9 @@ extension HydrationViewController: UICollectionViewDataSource {
             HydrationHistoryModel.addWaterML(cupML)
 
             self.reloadTopCardAndChart()
+            
+            // Notify Logs screen about hydration update
+            NotificationCenter.default.post(name: NSNotification.Name("HydrationDataUpdated"), object: nil)
         }
 
         return cell
@@ -212,6 +215,9 @@ extension HydrationViewController {
         ) { [weak self] index in
             HydrationModel.setGoal(values[index])
             self?.reloadTopCardAndChart()
+            
+            // Notify Logs screen about goal update
+            NotificationCenter.default.post(name: NSNotification.Name("HydrationDataUpdated"), object: nil)
         }
     }
 
@@ -226,6 +232,9 @@ extension HydrationViewController {
         ) { [weak self] index in
             HydrationModel.setCupSize(values[index])
             self?.reloadTopCardAndChart()
+            
+            // Notify Logs screen about cup size update
+            NotificationCenter.default.post(name: NSNotification.Name("HydrationDataUpdated"), object: nil)
         }
     }
 }

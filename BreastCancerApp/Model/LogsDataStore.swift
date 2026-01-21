@@ -67,29 +67,35 @@ class LogsDataStore {
         return appointment
     }
     
-    // UPDATED: Get stats from ExerciseManager
+    // MARK: - Get Stats with Real-time Data
     func getStats() -> StatsModel {
+        // Get Exercise Data
         let exerciseManager = ExerciseManager.shared
         let todayPlan = exerciseManager.currentDayPlan
-        
         let totalExercises = todayPlan.count
         let completedExercises = todayPlan.filter { $0.isCompleted }.count
-        let progress = totalExercises > 0 ? Float(completedExercises) / Float(totalExercises) : 0.0
+        let exerciseProgress = totalExercises > 0 ? Float(completedExercises) / Float(totalExercises) : 0.0
+        
+        // Get Hydration Data
+        let consumedML = HydrationModel.consumedTodayML()
+        let consumedLiters = Double(consumedML) / 1000.0
+        let goalLiters = HydrationModel.currentGoal()
+        let hydrationProgress = Float(consumedLiters / goalLiters)
         
         return StatsModel(
             hydration: StatsModel.StatItem(
                 title: "Hydration",
-                currentValue: "1.8",
-                goalValue: "3L",
+                currentValue: String(format: "%.1f", consumedLiters),
+                goalValue: String(format: "%.1fL", goalLiters),
                 subtitle: "Completed",
-                progress: 0.6
+                progress: min(hydrationProgress, 1.0) // Cap at 100%
             ),
             exercise: StatsModel.StatItem(
                 title: "Exercise",
                 currentValue: "\(completedExercises)",
                 goalValue: "\(totalExercises)",
                 subtitle: "Done",
-                progress: progress
+                progress: exerciseProgress
             )
         )
     }

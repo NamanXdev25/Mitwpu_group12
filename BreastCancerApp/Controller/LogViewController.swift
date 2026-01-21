@@ -20,29 +20,42 @@ class LogViewController: UIViewController, UICollectionViewDataSource, UICollect
     }
     
     private func setupNotificationObserver() {
-            NotificationCenter.default.addObserver(
-                self,
-                selector: #selector(exerciseDataDidChange),
-                name: ExerciseManager.exerciseDataDidChangeNotification,
-                object: nil
-            )
-        }
+        // Listen for Exercise updates
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(exerciseDataDidChange),
+            name: ExerciseManager.exerciseDataDidChangeNotification,
+            object: nil
+        )
         
-        @objc private func exerciseDataDidChange() {
-            // Reload only the stats section for better performance
-            collectionView.reloadSections(IndexSet(integer: 1))
-        }
-        
-        deinit {
-            NotificationCenter.default.removeObserver(self)
-        }
-    
-    override func viewWillAppear(_ animated: Bool) {
-            super.viewWillAppear(animated)
-            // Reload the stats section to reflect updated exercise data
-            collectionView.reloadSections(IndexSet(integer: 1))
+        // Listen for Hydration updates
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(hydrationDataDidChange),
+            name: NSNotification.Name("HydrationDataUpdated"),
+            object: nil
+        )
     }
     
+    @objc private func exerciseDataDidChange() {
+        // Reload only the stats section for better performance
+        collectionView.reloadSections(IndexSet(integer: 1))
+    }
+    
+    @objc private func hydrationDataDidChange() {
+        // Reload only the stats section for better performance
+        collectionView.reloadSections(IndexSet(integer: 1))
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // Reload the stats section to reflect updated data
+        collectionView.reloadSections(IndexSet(integer: 1))
+    }
     
     private func setupCollectionView() {
         collectionView.dataSource = self
@@ -206,6 +219,7 @@ class LogViewController: UIViewController, UICollectionViewDataSource, UICollect
         }
     }
 }
+
 // MARK: - LogsStatsRowCell Delegate
 extension LogViewController: LogsStatsRowCellDelegate {
     func didTapExercise() {
@@ -217,15 +231,15 @@ extension LogViewController: LogsStatsRowCellDelegate {
     
     func didTapHydration() {
         let storyboard = UIStoryboard(name: "hydration", bundle: nil)
-            if let hydrationVC = storyboard.instantiateViewController(withIdentifier: "HydrationViewController") as? HydrationViewController {
-                navigationController?.pushViewController(hydrationVC, animated: true)
-            }
+        if let hydrationVC = storyboard.instantiateViewController(withIdentifier: "HydrationViewController") as? HydrationViewController {
+            navigationController?.pushViewController(hydrationVC, animated: true)
+        }
     }
 }
+
 // MARK: - LogsTrackingCell Delegate
 extension LogViewController: LogsTrackingCellDelegate {
     func didTapTrackingCell(with model: HealthTrackingModel) {
-        // Check which cell was tapped based on the title or add an identifier to HealthTrackingModel
         if model.title == "Self-Exam Steps" {
             let storyboard = UIStoryboard(name: "selfexam", bundle: nil)
             guard let selfexamVC = storyboard.instantiateViewController(
@@ -234,39 +248,34 @@ extension LogViewController: LogsTrackingCellDelegate {
             
             navigationController?.pushViewController(selfexamVC, animated: true)
         } else if model.title == "Track Your Symptoms" {
-            // Navigate to symptom tracking screen
-             let storyboard = UIStoryboard(name: "symptomMain", bundle: nil)
+            let storyboard = UIStoryboard(name: "symptomMain", bundle: nil)
             guard let symptomVC = storyboard.instantiateViewController(
                withIdentifier: "SymptomsViewController"
              ) as? SymptomsViewController else { return }
-                navigationController?.pushViewController(symptomVC, animated: true)
-            print("Navigate to Symptom Tracking")
+            navigationController?.pushViewController(symptomVC, animated: true)
         }
     }
 }
+
 // MARK: - LogsSectionHeader Delegate
 extension LogViewController: LogsSectionHeaderDelegate {
     func didTapManageButton(for section: Int) {
         switch section {
         case 2: // Appointments
-            // Navigate to manage appointments screen
             let storyboard = UIStoryboard(name: "Appointments", bundle: nil)
             if let appointmentsVC = storyboard.instantiateViewController(
                 withIdentifier: "CalendarViewController"
             ) as? AppointmentsViewController {
                 navigationController?.pushViewController(appointmentsVC, animated: true)
             }
-            print("Navigate to Manage Appointments")
             
         case 3: // Medications
-            // Navigate to manage medications screen
             let storyboard = UIStoryboard(name: "Medication", bundle: nil)
             if let medicationsVC = storyboard.instantiateViewController(
                 withIdentifier: "MedicationViewController"
             ) as? MedicationViewController {
                 navigationController?.pushViewController(medicationsVC, animated: true)
             }
-            print("Navigate to Manage Medications")
             
         default:
             break
