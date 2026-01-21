@@ -29,7 +29,7 @@
                                 </constraints>
                                 <color key="tintColor" systemColor="labelColor"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="tinted" title="Log Self-Exam">
+                                <buttonConfiguration key="configuration" style="tinted" title="Log Self-Exam" cornerStyle="capsule">
                                     <fontDescription key="titleFontDescription" style="UICTFontTextStyleHeadline"/>
                                     <color key="baseBackgroundColor" name="pink"/>
                                 </buttonConfiguration>
