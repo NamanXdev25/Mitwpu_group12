@@ -1,0 +1,30 @@
+[
+  {
+    "id": "1",
+    "title": "Diaphragmatic Breathing",
+    "subtitle": "Every Tue",
+    "time": "3 min",
+    "isCompleted": true
+  },
+  {
+    "id": "2",
+    "title": "Shoulder Rolls",
+    "subtitle": "Every Tue",
+    "time": "1 min",
+    "isCompleted": false
+  },
+  {
+    "id": "3",
+    "title": "Chin Tucks",
+    "subtitle": "Every Tue",
+    "time": "1 min",
+    "isCompleted": false
+  },
+  {
+    "id": "4",
+    "title": "Seated Marching",
+    "subtitle": "Every Day",
+    "time": "2 min",
+    "isCompleted": false
+  }
+]
