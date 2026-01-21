@@ -64,6 +64,7 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="LXY-U7-5Ue" firstAttribute="centerY" secondItem="2dW-tN-Ofc" secondAttribute="centerY" id="0Gq-w7-KJu"/>
                             <constraint firstItem="2dW-tN-Ofc" firstAttribute="top" secondItem="Uvu-45-gf7" secondAttribute="bottom" constant="5" id="0cp-aV-HdI"/>
                             <constraint firstItem="Vot-Iy-wUO" firstAttribute="leading" secondItem="bwP-3b-nhe" secondAttribute="leading" constant="16" id="443-V0-eIg"/>
                             <constraint firstItem="Hgn-TT-TxJ" firstAttribute="centerY" secondItem="5lI-RE-csw" secondAttribute="centerY" id="Fc9-oJ-YHD"/>
@@ -117,7 +118,7 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGray2Color">
-            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
