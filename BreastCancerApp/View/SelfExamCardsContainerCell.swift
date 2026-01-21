@@ -40,12 +40,12 @@ final class SelfExamCardsContainerCell: UICollectionViewCell,
 
         if let layout = innerCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.scrollDirection = .horizontal
-            layout.minimumLineSpacing = 8
+            layout.minimumLineSpacing = 10
             layout.sectionInset = UIEdgeInsets(
                 top: 0,
-                left: 16,
+                left: 0,
                 bottom: 0,
-                right: 16
+                right: 0
             )
             layout.estimatedItemSize = .zero
         }
@@ -73,7 +73,7 @@ final class SelfExamCardsContainerCell: UICollectionViewCell,
         let step = steps[indexPath.item]
         cell.titleLabel.text = step.title
         cell.descriptionLabel.text = step.description
-        cell.descriptionLabel.numberOfLines = 3
+        cell.descriptionLabel.numberOfLines = 0
         cell.descriptionLabel.lineBreakMode = .byTruncatingTail
         cell.thumbnailImageView.image = UIImage(named: step.imageName)
 

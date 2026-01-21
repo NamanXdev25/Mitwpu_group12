@@ -428,7 +428,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Gemini_Generated_Image_7grqus7grqus7grq" translatesAutoresizingMaskIntoConstraints="NO" id="6LA-C5-ocU">
-                                <rect key="frame" x="46.666666666666657" y="197" width="300" height="305"/>
+                                <rect key="frame" x="46.666666666666657" y="197.00000000000003" width="300" height="322.66666666666674"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="7hW-bn-pX1"/>
                                 </constraints>
@@ -439,10 +439,10 @@
                                 </userDefinedRuntimeAttributes>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="QpQ-R5-vgx">
-                                <rect key="frame" x="112" y="510" width="169" height="44"/>
+                                <rect key="frame" x="112" y="519.66666666666663" width="169" height="34.333333333333371"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tGo-os-srQ">
-                                        <rect key="frame" x="0.0" y="0.0" width="41" height="44"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="43" height="34.333333333333336"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="backward.fill" catalog="system">
                                             <color key="baseForegroundColor" name="pink"/>
@@ -452,25 +452,17 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dIP-cS-4bT">
-                                        <rect key="frame" x="61" y="0.0" width="44" height="44"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="44" id="i6i-BM-pAB"/>
-                                            <constraint firstAttribute="width" constant="44" id="iyc-Lb-ZlR"/>
-                                        </constraints>
+                                        <rect key="frame" x="63" y="0.0" width="43.333333333333343" height="34.333333333333336"/>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" image="play.fill" catalog="system" title="Button">
+                                        <buttonConfiguration key="configuration" style="plain" image="play.fill" catalog="system">
                                             <color key="baseForegroundColor" name="pink"/>
                                         </buttonConfiguration>
                                         <connections>
                                             <action selector="playPauseTapped:" destination="fcE-Hy-pA7" eventType="touchUpInside" id="2bu-vJ-Xak"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1jT-cF-T2r">
-                                        <rect key="frame" x="125" y="0.0" width="44" height="44"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="44" id="0dN-eY-k3B"/>
-                                            <constraint firstAttribute="width" constant="44" id="EDE-Kj-4kN"/>
-                                        </constraints>
+                                    <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1jT-cF-T2r">
+                                        <rect key="frame" x="126.33333333333336" y="0.0" width="42.666666666666671" height="34.333333333333336"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="forward.fill" catalog="system">
                                             <color key="baseForegroundColor" name="pink"/>
@@ -481,9 +473,11 @@
                                     </button>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="1jT-cF-T2r" firstAttribute="leading" secondItem="dIP-cS-4bT" secondAttribute="trailing" constant="20" id="ME7-zJ-IFW"/>
-                                    <constraint firstItem="dIP-cS-4bT" firstAttribute="leading" secondItem="tGo-os-srQ" secondAttribute="trailing" constant="20" id="Sol-vc-7rs"/>
+                                    <constraint firstItem="dIP-cS-4bT" firstAttribute="centerX" secondItem="QpQ-R5-vgx" secondAttribute="centerX" id="9mn-cO-IDp"/>
+                                    <constraint firstItem="1jT-cF-T2r" firstAttribute="centerY" secondItem="dIP-cS-4bT" secondAttribute="centerY" id="TGm-Q4-ZO3"/>
+                                    <constraint firstItem="1jT-cF-T2r" firstAttribute="leading" secondItem="dIP-cS-4bT" secondAttribute="trailing" constant="20" id="Wwf-9a-4yl"/>
                                     <constraint firstItem="tGo-os-srQ" firstAttribute="centerY" secondItem="dIP-cS-4bT" secondAttribute="centerY" id="cTR-0w-wFn"/>
+                                    <constraint firstItem="dIP-cS-4bT" firstAttribute="leading" secondItem="tGo-os-srQ" secondAttribute="trailing" constant="20" id="etK-Q7-ln7"/>
                                 </constraints>
                             </stackView>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="GC9-mi-1f4">
@@ -540,7 +534,7 @@
                             <constraint firstItem="6LA-C5-ocU" firstAttribute="centerX" secondItem="imP-Yo-E4U" secondAttribute="centerX" id="rHq-ZI-GdG"/>
                             <constraint firstItem="GC9-mi-1f4" firstAttribute="top" secondItem="QpQ-R5-vgx" secondAttribute="bottom" constant="8" id="rXw-kh-6YV"/>
                             <constraint firstItem="S6N-gm-gIV" firstAttribute="bottom" secondItem="LCQ-vn-78M" secondAttribute="bottom" constant="87.666666666666629" id="u95-uk-r5c"/>
-                            <constraint firstItem="QpQ-R5-vgx" firstAttribute="top" secondItem="6LA-C5-ocU" secondAttribute="bottom" constant="8" id="zMX-46-TFQ"/>
+                            <constraint firstItem="QpQ-R5-vgx" firstAttribute="top" secondItem="6LA-C5-ocU" secondAttribute="bottom" id="zMX-46-TFQ"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Audio Guide" id="ezX-8w-7hS"/>
@@ -562,7 +556,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="KqS-3D-mRG"/>
-        <segue reference="2v3-Ab-dfR"/>
+        <segue reference="CpE-OU-g1Q"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Gemini_Generated_Image_7grqus7grqus7grq" width="1024" height="1024"/>
