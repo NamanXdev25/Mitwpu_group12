@@ -1,0 +1,91 @@
+//
+//  UserProfile.swift
+//  BreastCancerApp
+//
+//  Created by SDC-USER on 21/01/26.
+//
+import UIKit
+
+struct UserProfile: Codable {
+    // MARK: - Identity
+    var firstName: String
+    var lastName: String
+    var profileImageBase64: String?  // Store image as base64 string for JSON
+    
+    // MARK: - Medical Information
+    var diagnosisDate: String  // Store as string "dd MMM yyyy"
+    var gender: String
+    var age: Int
+    var cancerStage: String
+    var treatmentState: String
+    
+    // MARK: - Notification Settings
+    var exerciseNotificationsEnabled: Bool
+    var hydrationNotificationsEnabled: Bool
+    var appointmentsNotificationsEnabled: Bool
+    var medicationsNotificationsEnabled: Bool
+    
+    // MARK: - Computed Properties (not stored in JSON)
+    var fullName: String {
+        "\(firstName) \(lastName)"
+    }
+    
+    var profileImage: UIImage? {
+        get {
+            guard let base64 = profileImageBase64,
+                  let data = Data(base64Encoded: base64) else {
+                return nil
+            }
+            return UIImage(data: data)
+        }
+        set {
+            if let image = newValue,
+               let data = image.jpegData(compressionQuality: 0.8) {
+                profileImageBase64 = data.base64EncodedString()
+            } else {
+                profileImageBase64 = nil
+            }
+        }
+    }
+    
+    var diagnosisDateObject: Date? {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd MMM yyyy"
+        return formatter.date(from: diagnosisDate)
+    }
+    
+    var ageString: String {
+        "\(age)"
+    }
+    
+    // MARK: - Initializer
+    init(
+        firstName: String = "Sophie",
+        lastName: String = "Chen",
+        profileImage: UIImage? = nil,
+        diagnosisDate: String = "12 Aug 2024",
+        gender: String = "Female",
+        age: Int = 32,
+        cancerStage: String = "Stage II",
+        treatmentState: String = "Ongoing",
+        exerciseNotificationsEnabled: Bool = false,
+        hydrationNotificationsEnabled: Bool = false,
+        appointmentsNotificationsEnabled: Bool = false,
+        medicationsNotificationsEnabled: Bool = false
+    ) {
+        self.firstName = firstName
+        self.lastName = lastName
+        self.diagnosisDate = diagnosisDate
+        self.gender = gender
+        self.age = age
+        self.cancerStage = cancerStage
+        self.treatmentState = treatmentState
+        self.exerciseNotificationsEnabled = exerciseNotificationsEnabled
+        self.hydrationNotificationsEnabled = hydrationNotificationsEnabled
+        self.appointmentsNotificationsEnabled = appointmentsNotificationsEnabled
+        self.medicationsNotificationsEnabled = medicationsNotificationsEnabled
+        
+        // Set profile image
+        self.profileImage = profileImage
+    }
+}

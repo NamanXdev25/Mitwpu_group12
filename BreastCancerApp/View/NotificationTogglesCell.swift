@@ -9,6 +9,9 @@ final class NotificationTogglesCell: UICollectionViewCell {
     @IBOutlet private weak var hydrationSwitch: UISwitch!
     @IBOutlet private weak var appointmentsSwitch: UISwitch!
     @IBOutlet private weak var medicationsSwitch: UISwitch!
+    
+    // Data source reference
+    private let dataSource = UserProfileDataSource.shared
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -19,6 +22,12 @@ final class NotificationTogglesCell: UICollectionViewCell {
         cardView.backgroundColor = .white
         cardView.layer.cornerRadius = 12
         cardView.clipsToBounds = true
+        
+        // Add actions to switches
+        exerciseSwitch.addTarget(self, action: #selector(exerciseSwitchChanged), for: .valueChanged)
+        hydrationSwitch.addTarget(self, action: #selector(hydrationSwitchChanged), for: .valueChanged)
+        appointmentsSwitch.addTarget(self, action: #selector(appointmentsSwitchChanged), for: .valueChanged)
+        medicationsSwitch.addTarget(self, action: #selector(medicationsSwitchChanged), for: .valueChanged)
     }
 
     override func prepareForReuse() {
@@ -39,5 +48,27 @@ final class NotificationTogglesCell: UICollectionViewCell {
         hydrationSwitch.isOn = hydrationEnabled
         appointmentsSwitch.isOn = appointmentsEnabled
         medicationsSwitch.isOn = medicationsEnabled
+    }
+    
+    // MARK: - Switch Actions
+    
+    @objc private func exerciseSwitchChanged(_ sender: UISwitch) {
+        dataSource.updateNotificationSettings(exercise: sender.isOn)
+        print("💪 Exercise notifications: \(sender.isOn)")
+    }
+    
+    @objc private func hydrationSwitchChanged(_ sender: UISwitch) {
+        dataSource.updateNotificationSettings(hydration: sender.isOn)
+        print("💧 Hydration notifications: \(sender.isOn)")
+    }
+    
+    @objc private func appointmentsSwitchChanged(_ sender: UISwitch) {
+        dataSource.updateNotificationSettings(appointments: sender.isOn)
+        print("📅 Appointments notifications: \(sender.isOn)")
+    }
+    
+    @objc private func medicationsSwitchChanged(_ sender: UISwitch) {
+        dataSource.updateNotificationSettings(medications: sender.isOn)
+        print("💊 Medications notifications: \(sender.isOn)")
     }
 }

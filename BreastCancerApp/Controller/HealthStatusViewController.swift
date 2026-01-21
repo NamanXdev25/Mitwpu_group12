@@ -14,17 +14,12 @@ final class HealthStatusViewController: UIViewController,
     @IBOutlet weak var collectionView: UICollectionView!
 
     weak var delegate: HealthStatusViewControllerDelegate?
-
-    private var firstName = "Sophie"
-    private var lastName = "Chen"
-    private var profileImage: UIImage?
+    
+    // Data source reference
+    private let dataSource = UserProfileDataSource.shared
+    
     private var isEditingProfile = false
-
     private weak var cardCell: HealthStatusCardCell?
-
-    private var fullName: String {
-        "\(firstName) \(lastName)"
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,6 +53,22 @@ final class HealthStatusViewController: UIViewController,
                 forCellWithReuseIdentifier: $0.0
             )
         }
+        
+        // Listen for profile updates
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(profileDidUpdate),
+            name: UserProfileDataSource.profileDidUpdateNotification,
+            object: nil
+        )
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc private func profileDidUpdate() {
+        collectionView.reloadData()
     }
 
     @objc private func backTapped() {
@@ -94,16 +105,33 @@ final class HealthStatusViewController: UIViewController,
     @objc private func doneTapped() {
         view.endEditing(true)
 
+        // Get updated data from card cell
         if let updated = cardCell?.currentName {
-            firstName = updated.first
-            lastName = updated.last
+            // Update basic info
+            UserProfileDataSource.shared.updateBasicInfo(
+                firstName: updated.first,
+                lastName: updated.last,
+                profileImage: dataSource.userProfile.profileImage
+            )
+        }
+        
+        // Get all medical info from card cell
+        if let medicalInfo = cardCell?.currentMedicalInfo {
+            UserProfileDataSource.shared.updateMedicalInfo(
+                diagnosisDate: medicalInfo.diagnosisDate,
+                gender: medicalInfo.gender,
+                age: Int(medicalInfo.age) ?? dataSource.userProfile.age,
+                cancerStage: medicalInfo.cancerStage,
+                treatmentState: medicalInfo.treatmentState
+            )
         }
 
         cardCell?.commitEdits()
 
+        // Notify delegate with updated info
         delegate?.didUpdateProfile(
-            image: profileImage,
-            fullName: fullName
+            image: dataSource.userProfile.profileImage,
+            fullName: dataSource.userProfile.fullName
         )
 
         dismiss(animated: true)
@@ -120,6 +148,8 @@ final class HealthStatusViewController: UIViewController,
                         cellForItemAt indexPath: IndexPath)
     -> UICollectionViewCell {
 
+        let profile = dataSource.userProfile
+
         if indexPath.item == 0 {
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ProfileHeaderCell.reuseIdentifier,
@@ -127,8 +157,8 @@ final class HealthStatusViewController: UIViewController,
             ) as! ProfileHeaderCell
 
             cell.configure(
-                name: fullName,
-                image: profileImage,
+                name: profile.fullName,
+                image: profile.profileImage,
                 isEditing: isEditingProfile
             )
 
@@ -144,13 +174,13 @@ final class HealthStatusViewController: UIViewController,
         cardCell = cell
 
         cell.configure(
-            firstName: firstName,
-            lastName: lastName,
-            diagnosisDate: "12 Aug 2024",
-            gender: "Female",
-            age: "32",
-            cancerStage: "Stage II",
-            treatmentState: "Ongoing"
+            firstName: profile.firstName,
+            lastName: profile.lastName,
+            diagnosisDate: profile.diagnosisDate,
+            gender: profile.gender,
+            age: profile.ageString,
+            cancerStage: profile.cancerStage,
+            treatmentState: profile.treatmentState
         )
 
         return cell
@@ -217,8 +247,14 @@ final class HealthStatusViewController: UIViewController,
                                didFinishPickingMediaWithInfo info:
                                [UIImagePickerController.InfoKey : Any]) {
 
-        profileImage =
-            (info[.editedImage] ?? info[.originalImage]) as? UIImage
+        let image = (info[.editedImage] ?? info[.originalImage]) as? UIImage
+        
+        // Update profile image through data source
+        UserProfileDataSource.shared.updateBasicInfo(
+            firstName: dataSource.userProfile.firstName,
+            lastName: dataSource.userProfile.lastName,
+            profileImage: image
+        )
 
         picker.dismiss(animated: true)
         collectionView.reloadItems(at: [IndexPath(item: 0, section: 0)])

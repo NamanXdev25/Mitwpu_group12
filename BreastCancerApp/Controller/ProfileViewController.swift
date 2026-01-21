@@ -6,9 +6,9 @@ final class ProfileViewController: UIViewController,
                                    HealthStatusViewControllerDelegate {
 
     @IBOutlet weak var collectionView: UICollectionView!
-
-    private var profileImage: UIImage?
-    private var fullName = "Sophie Chen"
+    
+    // Data source reference
+    private let dataSource = UserProfileDataSource.shared
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,14 +28,37 @@ final class ProfileViewController: UIViewController,
                 forCellWithReuseIdentifier: $0.0
             )
         }
+        
+        // Listen for profile updates
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(profileDidUpdate),
+            name: UserProfileDataSource.profileDidUpdateNotification,
+            object: nil
+        )
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc private func profileDidUpdate() {
+        collectionView.reloadData()
     }
 
     // MARK: - Delegate callback
 
     func didUpdateProfile(image: UIImage?, fullName: String) {
-        self.profileImage = image
-        self.fullName = fullName
-        collectionView.reloadItems(at: [IndexPath(item: 0, section: 0)])
+        // Update through data source
+        let names = fullName.split(separator: " ")
+        let firstName = String(names.first ?? "")
+        let lastName = names.count > 1 ? String(names.last ?? "") : ""
+        
+        UserProfileDataSource.shared.updateBasicInfo(
+            firstName: firstName,
+            lastName: lastName,
+            profileImage: image
+        )
     }
 
     // MARK: - CollectionView
@@ -49,6 +72,8 @@ final class ProfileViewController: UIViewController,
                         cellForItemAt indexPath: IndexPath)
     -> UICollectionViewCell {
 
+        let profile = dataSource.userProfile
+
         switch indexPath.item {
 
         case 0:
@@ -58,8 +83,8 @@ final class ProfileViewController: UIViewController,
             ) as! ProfileHeaderCell
 
             cell.configure(
-                name: fullName,
-                image: profileImage
+                name: profile.fullName,
+                image: profile.profileImage
             )
             return cell
 
@@ -82,10 +107,18 @@ final class ProfileViewController: UIViewController,
             return cell
 
         default:
-            return collectionView.dequeueReusableCell(
+            let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: NotificationTogglesCell.reuseIdentifier,
                 for: indexPath
+            ) as! NotificationTogglesCell
+            
+            cell.configure(
+                exerciseEnabled: profile.exerciseNotificationsEnabled,
+                hydrationEnabled: profile.hydrationNotificationsEnabled,
+                appointmentsEnabled: profile.appointmentsNotificationsEnabled,
+                medicationsEnabled: profile.medicationsNotificationsEnabled
             )
+            return cell
         }
     }
 

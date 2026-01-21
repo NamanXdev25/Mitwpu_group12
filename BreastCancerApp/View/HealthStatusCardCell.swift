@@ -45,7 +45,7 @@ final class HealthStatusCardCell: UICollectionViewCell {
         editableFields.forEach {
             $0.borderStyle = .none
             $0.backgroundColor = .clear
-            $0.textColor = .systemBlue
+            $0.textColor = UIColor(named: "pink")
             $0.textAlignment = .right
         }
         setEditing(false)
@@ -95,5 +95,32 @@ final class HealthStatusCardCell: UICollectionViewCell {
             return nil
         }
         return (first, last)
+    }
+    
+    // NEW: Return all medical info
+    var currentMedicalInfo: (
+        diagnosisDate: String,
+        gender: String,
+        age: String,
+        cancerStage: String,
+        treatmentState: String
+    )? {
+        guard
+            let diagnosisDate = diagnosisDateTextField.text,
+            let gender = genderTextField.text,
+            let age = ageTextField.text,
+            let cancerStage = cancerStageTextField.text,
+            let treatmentState = treatmentStateTextField.text
+        else {
+            return nil
+        }
+        
+        return (
+            diagnosisDate: diagnosisDate,
+            gender: gender,
+            age: age,
+            cancerStage: cancerStage,
+            treatmentState: treatmentState
+        )
     }
 }
