@@ -29,22 +29,10 @@ class LoginViewController: UIViewController {
         guard let profile = SampleProfilesManager.shared.sampleProfiles.first(
             where: { $0.email == email && $0.password == password }
         ) else {
-            print("❌ Invalid credentials")
+            print("Invalid credentials")
             return
         }
 
-        HomeDataStore.shared.userProfile = profile
-        HomeDataStore.shared.gardenStats =
-            SampleProfilesManager.shared.getStatsForProfile(id: profile.id)
-
-        navigateToHome()
-    }
-    
-    func loginUser() {
-        // Pick first predefined profile
-        let profile = SampleProfilesManager.shared.sampleProfiles[0]
-
-        // Set it as active user
         HomeDataStore.shared.userProfile = profile
         HomeDataStore.shared.gardenStats =
             SampleProfilesManager.shared.getStatsForProfile(id: profile.id)
@@ -68,8 +56,6 @@ class LoginViewController: UIViewController {
             sceneDelegate.window?.makeKeyAndVisible()
         }
     }
-
-
 
     private func setupCollectionView() {
         collectionView.dataSource = self
@@ -113,7 +99,7 @@ class LoginViewController: UIViewController {
     }
 }
 
-// MARK: - DataSource
+// DataSource
 extension LoginViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView,
@@ -163,7 +149,7 @@ extension LoginViewController: UICollectionViewDataSource {
     }
 }
 
-// MARK: - Layout
+// Layout
 extension LoginViewController: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView,

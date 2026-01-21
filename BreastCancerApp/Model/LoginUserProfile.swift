@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - User Profile Model
+// User Profile model
 struct UserProfile {
     let id: String
     let name: String

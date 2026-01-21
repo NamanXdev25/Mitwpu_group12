@@ -174,7 +174,6 @@ extension JournalCalendarViewController: JournalCalendarCellDelegate {
     }
     
     func calendarCellDidTapHeader(_ cell: JournalCalendarCell) {
-        // The cell handles the picker toggle internally now
-        // No need to do anything here
+        
     }
 }

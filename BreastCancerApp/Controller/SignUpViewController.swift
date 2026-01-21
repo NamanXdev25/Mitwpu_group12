@@ -68,7 +68,7 @@ final class SignUpViewController: UIViewController {
         guard let profileSetupVC = storyboard.instantiateViewController(
             withIdentifier: "ProfileSetupViewController"
         ) as? ProfileSetupViewController else {
-            print("❌ Failed to instantiate ProfileSetupViewController")
+            print("Failed to instantiate ProfileSetupViewController")
             return
         }
         
@@ -147,18 +147,17 @@ extension SignUpViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-// MARK: - SignUpFormCellDelegate
+// SignUpFormCellDelegate
 extension SignUpViewController: SignUpFormCellDelegate {
     
     func signUpFormCellDidTapSignUp(_ cell: SignUpFormCell, email: String, password: String, reenterPassword: String, agreedToTerms: Bool) {
         
-        print("✅ Sign Up Data:")
+        print("Sign Up Data:")
         print("Email: \(email)")
         print("Password: \(password)")
         print("Agreed to Terms: \(agreedToTerms)")
         
-        // Here you can add your sign-up logic (API call, Firebase, etc.)
-        // For now, we'll just navigate to ProfileSetup
+        // Signup API after review
         
         navigateToProfileSetup()
     }

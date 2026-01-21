@@ -17,11 +17,7 @@ class ProfileSetupViewController: UIViewController,
 
     @IBOutlet weak var collectionView: UICollectionView!
 
-    // Stored Properties
-
     private var selectedProfileImage: UIImage?
-
-    // Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,7 +38,6 @@ class ProfileSetupViewController: UIViewController,
         }
 
         // Cell Registrations
-
         collectionView.register(
             UINib(nibName: "ProfileSetupWelcomeCollectionViewCell", bundle: nil),
             forCellWithReuseIdentifier: "ProfileSetupWelcomeCollectionViewCell"
@@ -70,7 +65,6 @@ class ProfileSetupViewController: UIViewController,
     }
 
     // UICollectionViewDataSource
-
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
         return 4
@@ -139,7 +133,6 @@ class ProfileSetupViewController: UIViewController,
     }
 
     // UICollectionViewDelegateFlowLayout
-
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -159,7 +152,6 @@ class ProfileSetupViewController: UIViewController,
     }
 
     // ProfileSetupPhotoCellDelegate
-
     func didTapCameraButton() {
         let alert = UIAlertController(
             title: "Profile Photo",
@@ -182,7 +174,6 @@ class ProfileSetupViewController: UIViewController,
     }
 
     // Image Picker Helpers
-
     private func openImagePicker(sourceType: UIImagePickerController.SourceType) {
         let picker = UIImagePickerController()
         picker.sourceType = sourceType
