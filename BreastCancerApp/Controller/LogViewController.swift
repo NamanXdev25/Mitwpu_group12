@@ -195,7 +195,7 @@ class LogViewController: UIViewController, UICollectionViewDataSource, UICollect
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LogsTrackingCell", for: indexPath) as! LogsTrackingCell
             if let tracking = dataStore.getHealthTrackingItem(at: indexPath.row) {
                 cell.configure(with: tracking)
-//                cell.delegate = self
+                cell.delegate = self
             }
             return cell
             
@@ -301,24 +301,24 @@ extension LogViewController: LogsStatsRowCellDelegate {
 }
 
 //// MARK: - LogsTrackingCell Delegate
-//extension LogViewController: LogsTrackingCellDelegate {
-//    func didTapTrackingCell(with model: HealthTrackingModel) {
-//        if model.title == "Self-Exam Steps" {
-//            let storyboard = UIStoryboard(name: "selfexam", bundle: nil)
-//            guard let selfexamVC = storyboard.instantiateViewController(
-//                withIdentifier: "SelfExamineViewController"
-//            ) as? SelfExamineViewController else { return }
-//            
-//            navigationController?.pushViewController(selfexamVC, animated: true)
-//        } else if model.title == "Track Your Symptoms" {
-//            let storyboard = UIStoryboard(name: "symptomMain", bundle: nil)
-//            guard let symptomVC = storyboard.instantiateViewController(
-//               withIdentifier: "SymptomsViewController"
-//             ) as? SymptomsViewController else { return }
-//            navigationController?.pushViewController(symptomVC, animated: true)
-//        }
-//    }
-//}
+extension LogViewController: LogsTrackingCellDelegate {
+    func didTapTrackingCell(with model: HealthTrackingModel) {
+        if model.title == "Self-Exam Steps" {
+            let storyboard = UIStoryboard(name: "selfexam", bundle: nil)
+            guard let selfexamVC = storyboard.instantiateViewController(
+                withIdentifier: "SelfExamineViewController"
+            ) as? SelfExamineViewController else { return }
+            
+            navigationController?.pushViewController(selfexamVC, animated: true)
+        } else if model.title == "Track Your Symptoms" {
+            let storyboard = UIStoryboard(name: "symptomMain", bundle: nil)
+            guard let symptomVC = storyboard.instantiateViewController(
+               withIdentifier: "SymptomsViewController"
+             ) as? SymptomsViewController else { return }
+            navigationController?.pushViewController(symptomVC, animated: true)
+        }
+    }
+}
 
 // MARK: - LogsSectionHeader Delegate
 extension LogViewController: LogsSectionHeaderDelegate {
