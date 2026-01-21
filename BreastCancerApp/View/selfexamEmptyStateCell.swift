@@ -1,6 +1,6 @@
 import UIKit
 
-final class EmptyStateCell: UICollectionViewCell {
+final class selfexamEmptyStateCell: UICollectionViewCell {
 
     static let reuseIdentifier = "EmptyStateCell"
 

@@ -46,7 +46,7 @@ final class TestHistoryViewController: UIViewController,
 
         collectionView.register(
             UINib(nibName: "EmptyStateCell", bundle: nil),
-            forCellWithReuseIdentifier: EmptyStateCell.reuseIdentifier
+            forCellWithReuseIdentifier: selfexamEmptyStateCell.reuseIdentifier
         )
     }
 
@@ -157,9 +157,9 @@ final class TestHistoryViewController: UIViewController,
 
         if filteredRecords.isEmpty {
             let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: EmptyStateCell.reuseIdentifier,
+                withReuseIdentifier: selfexamEmptyStateCell.reuseIdentifier,
                 for: indexPath
-            ) as! EmptyStateCell
+            ) as! selfexamEmptyStateCell
             return cell
         }
 

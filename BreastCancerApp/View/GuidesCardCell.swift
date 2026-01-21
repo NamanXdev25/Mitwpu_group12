@@ -1,52 +1,72 @@
 import UIKit
 
 protocol GuidesCardCellDelegate: AnyObject {
-    func guidesCellDidTapVideo(_ cell: GuidesCardCell)
-    func guidesCellDidTapAudio(_ cell: GuidesCardCell)
+    func guidesCardCellDidTapVideoGuide(_ cell: GuidesCardCell)
+    func guidesCardCellDidTapAudioGuide(_ cell: GuidesCardCell)
 }
 
 final class GuidesCardCell: UICollectionViewCell {
 
+    // MARK: - Card
     @IBOutlet private weak var cardView: UIView!
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var divider1: UIView!
-    @IBOutlet private weak var row1Label: UILabel!
     @IBOutlet private weak var divider2: UIView!
-    @IBOutlet private weak var row2Label: UILabel!
-    @IBOutlet private weak var row1Chevron: UIImageView!
-    @IBOutlet private weak var row2Chevron: UIImageView!
+
+    // MARK: - Video Guide Row
+    @IBOutlet private weak var videoRowView: UIView!
+    @IBOutlet private weak var videoGuideLabel: UILabel!
+    @IBOutlet private weak var videoChevronButton: UIButton!
+
+    // MARK: - Audio Guide Row
+    @IBOutlet private weak var audioRowView: UIView!
+    
+    @IBOutlet private weak var audioGuideLabel: UILabel!
+
+    
+    @IBOutlet private weak var audioChevronButton: UIButton!
 
     weak var delegate: GuidesCardCellDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        configureGestures()
+        setupUI()
+        setupGestures()
     }
 
-    private func configureGestures() {
-        row1Label.isUserInteractionEnabled = true
-        row2Label.isUserInteractionEnabled = true
+    // MARK: - Setup
 
-        row1Label.addGestureRecognizer(
-            UITapGestureRecognizer(
-                target: self,
-                action: #selector(videoTapped)
-            )
+    private func setupUI() {
+        // Buttons are visual only
+        videoChevronButton.isUserInteractionEnabled = false
+        audioChevronButton.isUserInteractionEnabled = false
+    }
+
+    private func setupGestures() {
+        videoRowView.isUserInteractionEnabled = true
+        audioRowView.isUserInteractionEnabled = true
+
+        let videoTapGesture = UITapGestureRecognizer(
+            target: self,
+            action: #selector(videoRowTapped)
         )
 
-        row2Label.addGestureRecognizer(
-            UITapGestureRecognizer(
-                target: self,
-                action: #selector(audioTapped)
-            )
+        let audioTapGesture = UITapGestureRecognizer(
+            target: self,
+            action: #selector(audioRowTapped)
         )
+
+        videoRowView.addGestureRecognizer(videoTapGesture)
+        audioRowView.addGestureRecognizer(audioTapGesture)
     }
 
-    @objc private func videoTapped() {
-        delegate?.guidesCellDidTapVideo(self)
+    // MARK: - Actions
+
+    @objc private func videoRowTapped() {
+        delegate?.guidesCardCellDidTapVideoGuide(self)
     }
 
-    @objc private func audioTapped() {
-        delegate?.guidesCellDidTapAudio(self)
+    @objc private func audioRowTapped() {
+        delegate?.guidesCardCellDidTapAudioGuide(self)
     }
 }

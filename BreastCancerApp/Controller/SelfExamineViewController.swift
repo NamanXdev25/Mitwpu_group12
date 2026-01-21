@@ -37,10 +37,9 @@ final class SelfExamineViewController: UIViewController {
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Segues preserved exactly.
+        // Segues preserved exactly as requested
     }
 }
-
 
 // MARK: - UICollectionViewDataSource
 extension SelfExamineViewController: UICollectionViewDataSource {
@@ -57,25 +56,25 @@ extension SelfExamineViewController: UICollectionViewDataSource {
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
 
-        let id = [
+        let identifiers = [
             "SectionTitleCell",
             "SelfExamCardsContainerCell",
             "GuidesCardCell",
             "ActionsContainerCell"
-        ][indexPath.item]
+        ]
 
         let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: id,
+            withReuseIdentifier: identifiers[indexPath.item],
             for: indexPath
         )
 
         switch (indexPath.item, cell) {
 
-        case (2, let c as GuidesCardCell):
-            c.delegate = self
+        case (2, let guidesCell as GuidesCardCell):
+            guidesCell.delegate = self
 
-        case (3, let c as ActionsContainerCell):
-            c.delegate = self
+        case (3, let actionsCell as ActionsContainerCell):
+            actionsCell.delegate = self
 
         default:
             break
@@ -84,7 +83,6 @@ extension SelfExamineViewController: UICollectionViewDataSource {
         return cell
     }
 }
-
 
 // MARK: - UICollectionViewDelegateFlowLayout
 extension SelfExamineViewController: UICollectionViewDelegateFlowLayout {
@@ -112,19 +110,17 @@ extension SelfExamineViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-
 // MARK: - GuidesCardCellDelegate
 extension SelfExamineViewController: GuidesCardCellDelegate {
 
-    func guidesCellDidTapVideo(_ cell: GuidesCardCell) {
+    func guidesCardCellDidTapVideoGuide(_ cell: GuidesCardCell) {
         performSegue(withIdentifier: "ShowVideoGuide", sender: cell)
     }
 
-    func guidesCellDidTapAudio(_ cell: GuidesCardCell) {
+    func guidesCardCellDidTapAudioGuide(_ cell: GuidesCardCell) {
         performSegue(withIdentifier: "ShowAudioGuide", sender: cell)
     }
 }
-
 
 // MARK: - ActionsContainerCellDelegate
 extension SelfExamineViewController: ActionsContainerCellDelegate {

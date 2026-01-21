@@ -200,7 +200,7 @@
                                 </constraints>
                             </pickerView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lwc-Gu-aN1">
-                                <rect key="frame" x="0.0" y="562" width="393" height="50"/>
+                                <rect key="frame" x="-5" y="567" width="403" height="50"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gvY-ki-7L3">
                                         <rect key="frame" x="16.000000000000004" y="8" width="46.333333333333343" height="34.333333333333336"/>
@@ -213,7 +213,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FVb-dp-AtO">
-                                        <rect key="frame" x="329.33333333333331" y="8" width="47.666666666666686" height="34.333333333333336"/>
+                                        <rect key="frame" x="339.33333333333331" y="8" width="47.666666666666686" height="34.333333333333336"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="checkmark" catalog="system">
                                             <color key="baseForegroundColor" name="pink"/>
@@ -241,10 +241,10 @@
                         <viewLayoutGuide key="safeArea" id="5q2-vf-p6q"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="5q2-vf-p6q" firstAttribute="trailing" secondItem="Lwc-Gu-aN1" secondAttribute="trailing" id="BRm-7V-C2M"/>
-                            <constraint firstItem="Nes-Nw-4Zc" firstAttribute="top" secondItem="Lwc-Gu-aN1" secondAttribute="bottom" id="RhA-O7-luu"/>
+                            <constraint firstItem="5q2-vf-p6q" firstAttribute="trailing" secondItem="Lwc-Gu-aN1" secondAttribute="trailing" constant="-5" id="BRm-7V-C2M"/>
+                            <constraint firstItem="Nes-Nw-4Zc" firstAttribute="top" secondItem="Lwc-Gu-aN1" secondAttribute="bottom" constant="-5" id="RhA-O7-luu"/>
                             <constraint firstAttribute="bottom" secondItem="Nes-Nw-4Zc" secondAttribute="bottom" id="a08-X7-ddQ"/>
-                            <constraint firstItem="Lwc-Gu-aN1" firstAttribute="leading" secondItem="5q2-vf-p6q" secondAttribute="leading" id="aTe-uM-xCu"/>
+                            <constraint firstItem="Lwc-Gu-aN1" firstAttribute="leading" secondItem="5q2-vf-p6q" secondAttribute="leading" constant="-5" id="aTe-uM-xCu"/>
                             <constraint firstItem="Nes-Nw-4Zc" firstAttribute="leading" secondItem="5q2-vf-p6q" secondAttribute="leading" id="it3-ye-ECG"/>
                             <constraint firstItem="Nes-Nw-4Zc" firstAttribute="trailing" secondItem="5q2-vf-p6q" secondAttribute="trailing" id="yYm-qW-L3J"/>
                         </constraints>

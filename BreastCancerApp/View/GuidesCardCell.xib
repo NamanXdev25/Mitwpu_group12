@@ -50,14 +50,6 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="n2t-8l-Jmb">
-                                                <rect key="frame" x="395" y="20" width="12" height="16.333333333333329"/>
-                                                <color key="tintColor" name="gray"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="12" id="AaU-kG-xYJ"/>
-                                                    <constraint firstAttribute="height" constant="20" id="QYo-Y7-Cv2"/>
-                                                </constraints>
-                                            </imageView>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="i2C-ah-RA8">
                                                 <rect key="frame" x="8" y="0.0" width="379" height="1"/>
                                                 <color key="backgroundColor" name="gray"/>
@@ -65,17 +57,27 @@
                                                     <constraint firstAttribute="height" constant="1" id="efX-5m-ldl"/>
                                                 </constraints>
                                             </view>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ulO-0Q-x2w">
+                                                <rect key="frame" x="371" y="18" width="20" height="20"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="20" id="X4x-9n-UW2"/>
+                                                    <constraint firstAttribute="height" constant="20" id="zsg-3Y-LGP"/>
+                                                </constraints>
+                                                <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" image="chevron.right" catalog="system"/>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="FuO-3x-MOt" secondAttribute="trailing" constant="8" id="6QK-2i-d8Q"/>
+                                            <constraint firstAttribute="trailing" secondItem="ulO-0Q-x2w" secondAttribute="trailing" constant="16" id="Bmo-Je-cFL"/>
                                             <constraint firstItem="i2C-ah-RA8" firstAttribute="top" secondItem="IFr-48-K14" secondAttribute="top" id="Cjp-5f-kOi"/>
-                                            <constraint firstAttribute="trailing" secondItem="n2t-8l-Jmb" secondAttribute="trailing" id="DAj-wU-5fO"/>
+                                            <constraint firstItem="ulO-0Q-x2w" firstAttribute="centerY" secondItem="IFr-48-K14" secondAttribute="centerY" id="IDJ-28-suz"/>
                                             <constraint firstAttribute="height" constant="56" id="WQB-yJ-xv2"/>
-                                            <constraint firstItem="n2t-8l-Jmb" firstAttribute="leading" secondItem="i2C-ah-RA8" secondAttribute="trailing" constant="8" id="bbN-Xw-Yb7"/>
+                                            <constraint firstAttribute="trailing" secondItem="i2C-ah-RA8" secondAttribute="trailing" constant="20" id="ZmL-Bk-aNv"/>
                                             <constraint firstItem="i2C-ah-RA8" firstAttribute="leading" secondItem="IFr-48-K14" secondAttribute="leading" constant="8" id="d0H-Qy-Aoo"/>
                                             <constraint firstItem="FuO-3x-MOt" firstAttribute="leading" secondItem="IFr-48-K14" secondAttribute="leading" constant="8" id="ghB-Jz-iea"/>
-                                            <constraint firstItem="n2t-8l-Jmb" firstAttribute="centerY" secondItem="IFr-48-K14" secondAttribute="centerY" id="gtZ-Qt-k5n"/>
                                             <constraint firstItem="FuO-3x-MOt" firstAttribute="centerY" secondItem="IFr-48-K14" secondAttribute="centerY" id="tbS-j6-LTF"/>
                                         </constraints>
                                     </view>
@@ -88,14 +90,6 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="p51-Ve-ZVL">
-                                                <rect key="frame" x="395" y="20" width="12" height="16.333333333333329"/>
-                                                <color key="tintColor" name="gray"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="20" id="f44-gC-BDd"/>
-                                                    <constraint firstAttribute="width" constant="12" id="xVo-ly-xiS"/>
-                                                </constraints>
-                                            </imageView>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FPQ-2F-guf">
                                                 <rect key="frame" x="8" y="0.0" width="379" height="1"/>
                                                 <color key="backgroundColor" name="gray"/>
@@ -103,14 +97,24 @@
                                                     <constraint firstAttribute="height" constant="1" id="7I7-h2-2eS"/>
                                                 </constraints>
                                             </view>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XNj-VA-0Ky">
+                                                <rect key="frame" x="371" y="18" width="20" height="20"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="20" id="39K-v1-QXy"/>
+                                                    <constraint firstAttribute="height" constant="20" id="jLF-gD-tGA"/>
+                                                </constraints>
+                                                <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" image="chevron.right" catalog="system"/>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
-                                            <constraint firstItem="p51-Ve-ZVL" firstAttribute="centerY" secondItem="rlD-zu-7EH" secondAttribute="centerY" id="Adw-fB-i5a"/>
+                                            <constraint firstItem="XNj-VA-0Ky" firstAttribute="centerY" secondItem="rlD-zu-7EH" secondAttribute="centerY" id="Dqp-0f-l2o"/>
                                             <constraint firstAttribute="trailing" secondItem="Lga-40-Usx" secondAttribute="trailing" constant="8" id="LIw-DL-TMU"/>
-                                            <constraint firstAttribute="trailing" secondItem="p51-Ve-ZVL" secondAttribute="trailing" id="QU0-7l-037"/>
-                                            <constraint firstItem="p51-Ve-ZVL" firstAttribute="leading" secondItem="FPQ-2F-guf" secondAttribute="trailing" constant="8" id="gye-qT-vpo"/>
+                                            <constraint firstAttribute="trailing" secondItem="FPQ-2F-guf" secondAttribute="trailing" constant="20" id="OcY-7t-8X7"/>
                                             <constraint firstAttribute="height" constant="56" id="kR5-hx-YMZ"/>
+                                            <constraint firstAttribute="trailing" secondItem="XNj-VA-0Ky" secondAttribute="trailing" constant="16" id="m6C-xA-Bnc"/>
                                             <constraint firstItem="FPQ-2F-guf" firstAttribute="leading" secondItem="rlD-zu-7EH" secondAttribute="leading" constant="8" id="nCH-cd-KEt"/>
                                             <constraint firstItem="FPQ-2F-guf" firstAttribute="top" secondItem="rlD-zu-7EH" secondAttribute="top" id="oJt-xb-S0x"/>
                                             <constraint firstItem="Lga-40-Usx" firstAttribute="centerY" secondItem="rlD-zu-7EH" secondAttribute="centerY" id="t7D-YD-Wql"/>
@@ -144,14 +148,16 @@
             </constraints>
             <size key="customSize" width="435" height="262"/>
             <connections>
-                <outlet property="cardView" destination="5et-n4-1yI" id="ILR-xJ-YST"/>
-                <outlet property="divider1" destination="i2C-ah-RA8" id="RCI-nL-R5o"/>
-                <outlet property="divider2" destination="FPQ-2F-guf" id="nKd-4m-0as"/>
-                <outlet property="row1Chevron" destination="n2t-8l-Jmb" id="8Gy-R5-9LP"/>
-                <outlet property="row1Label" destination="FuO-3x-MOt" id="LFf-wu-kWc"/>
-                <outlet property="row2Chevron" destination="p51-Ve-ZVL" id="5Kt-tO-C6i"/>
-                <outlet property="row2Label" destination="Lga-40-Usx" id="9TN-4j-vn1"/>
-                <outlet property="titleLabel" destination="2ll-Yd-xV0" id="bNp-fI-RVe"/>
+                <outlet property="audioChevronButton" destination="XNj-VA-0Ky" id="3yo-XS-xwe"/>
+                <outlet property="audioGuideLabel" destination="Lga-40-Usx" id="vnd-Kk-3ZV"/>
+                <outlet property="audioRowView" destination="rlD-zu-7EH" id="rp8-r8-f5I"/>
+                <outlet property="cardView" destination="Uln-lU-gu5" id="DB1-KY-Md9"/>
+                <outlet property="divider1" destination="i2C-ah-RA8" id="Yy1-tM-r9J"/>
+                <outlet property="divider2" destination="FPQ-2F-guf" id="P05-6r-Ixu"/>
+                <outlet property="titleLabel" destination="2ll-Yd-xV0" id="jNj-JE-e7w"/>
+                <outlet property="videoChevronButton" destination="ulO-0Q-x2w" id="tCg-bd-iBx"/>
+                <outlet property="videoGuideLabel" destination="FuO-3x-MOt" id="4Tm-va-Eaj"/>
+                <outlet property="videoRowView" destination="IFr-48-K14" id="8Nx-da-rHV"/>
             </connections>
             <point key="canvasLocation" x="489" y="93"/>
         </collectionViewCell>
