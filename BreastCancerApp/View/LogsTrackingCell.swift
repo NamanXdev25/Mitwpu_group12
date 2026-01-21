@@ -21,9 +21,13 @@ class LogsTrackingCell: UICollectionViewCell {
     }
     
     private func setupTapGesture() {
+        // Container tap gesture
         let tap = UITapGestureRecognizer(target: self, action: #selector(cellTapped))
         containerView.addGestureRecognizer(tap)
         containerView.isUserInteractionEnabled = true
+        
+        // Chevron button target
+        chevronButton.addTarget(self, action: #selector(cellTapped), for: .touchUpInside)
     }
     
     @objc private func cellTapped() {

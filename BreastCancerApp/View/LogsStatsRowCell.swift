@@ -26,33 +26,34 @@ class LogsStatsRowCell: UICollectionViewCell {
     private let pinkColor = UIColor(named: "TabBarcolour")!
     
     weak var delegate: LogsStatsRowCellDelegate?
-            
-            // Your existing code and outlets...
-            
-            // Add this method - call it from your configure method or awakeFromNib
-            func setupTapGestures() {
-                // Replace 'exerciseView' and 'hydrationView' with your actual outlet names
-                let exerciseTap = UITapGestureRecognizer(target: self, action: #selector(exerciseTapped))
-                exerciseContainer.addGestureRecognizer(exerciseTap)
-                exerciseContainer.isUserInteractionEnabled = true
-                
-                let hydrationTap = UITapGestureRecognizer(target: self, action: #selector(hydrationTapped))
-                hydrationContainer.addGestureRecognizer(hydrationTap)
-                hydrationContainer.isUserInteractionEnabled = true
-            }
-            
-            @objc private func exerciseTapped() {
-                delegate?.didTapExercise()
-            }
-            
-            @objc private func hydrationTapped() {
-                delegate?.didTapHydration()
-            }
-    
     
     override func awakeFromNib() {
         super.awakeFromNib()
         setupTapGestures()
+    }
+    
+    func setupTapGestures() {
+        // Exercise container tap
+        let exerciseTap = UITapGestureRecognizer(target: self, action: #selector(exerciseTapped))
+        exerciseContainer.addGestureRecognizer(exerciseTap)
+        exerciseContainer.isUserInteractionEnabled = true
+        
+        // Hydration container tap
+        let hydrationTap = UITapGestureRecognizer(target: self, action: #selector(hydrationTapped))
+        hydrationContainer.addGestureRecognizer(hydrationTap)
+        hydrationContainer.isUserInteractionEnabled = true
+        
+        // Chevron button targets
+        exerciseChevron.addTarget(self, action: #selector(exerciseTapped), for: .touchUpInside)
+        hydrationChevron.addTarget(self, action: #selector(hydrationTapped), for: .touchUpInside)
+    }
+    
+    @objc private func exerciseTapped() {
+        delegate?.didTapExercise()
+    }
+    
+    @objc private func hydrationTapped() {
+        delegate?.didTapHydration()
     }
     
     func configure(with model: StatsModel) {
