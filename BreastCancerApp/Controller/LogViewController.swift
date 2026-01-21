@@ -216,7 +216,10 @@ extension LogViewController: LogsStatsRowCellDelegate {
     }
     
     func didTapHydration() {
-        // Handle hydration tap if needed
+        let storyboard = UIStoryboard(name: "hydration", bundle: nil)
+            if let hydrationVC = storyboard.instantiateViewController(withIdentifier: "HydrationViewController") as? HydrationViewController {
+                navigationController?.pushViewController(hydrationVC, animated: true)
+            }
     }
 }
 // MARK: - LogsTrackingCell Delegate
