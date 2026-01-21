@@ -2,8 +2,7 @@ import UIKit
 
 final class ProfileViewController: UIViewController,
                                    UICollectionViewDataSource,
-                                   UICollectionViewDelegateFlowLayout,
-                                   HealthStatusViewControllerDelegate {
+                                   UICollectionViewDelegateFlowLayout {
 
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -28,8 +27,7 @@ final class ProfileViewController: UIViewController,
                 forCellWithReuseIdentifier: $0.0
             )
         }
-        
-        // Listen for profile updates
+
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(profileDidUpdate),
@@ -37,31 +35,16 @@ final class ProfileViewController: UIViewController,
             object: nil
         )
     }
-    
+
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    
+
     @objc private func profileDidUpdate() {
         collectionView.reloadData()
     }
 
-    // MARK: - Delegate callback
-
-    func didUpdateProfile(image: UIImage?, fullName: String) {
-        // Update through data source
-        let names = fullName.split(separator: " ")
-        let firstName = String(names.first ?? "")
-        let lastName = names.count > 1 ? String(names.last ?? "") : ""
-        
-        UserProfileDataSource.shared.updateBasicInfo(
-            firstName: firstName,
-            lastName: lastName,
-            profileImage: image
-        )
-    }
-
-    // MARK: - CollectionView
+    // MARK: - CollectionView DataSource
 
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
@@ -111,7 +94,7 @@ final class ProfileViewController: UIViewController,
                 withReuseIdentifier: NotificationTogglesCell.reuseIdentifier,
                 for: indexPath
             ) as! NotificationTogglesCell
-            
+
             cell.configure(
                 exerciseEnabled: profile.exerciseNotificationsEnabled,
                 hydrationEnabled: profile.hydrationNotificationsEnabled,
@@ -150,6 +133,8 @@ final class ProfileViewController: UIViewController,
         8
     }
 
+    // MARK: - Navigation
+
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath) {
 
@@ -159,8 +144,6 @@ final class ProfileViewController: UIViewController,
         let vc = storyboard.instantiateViewController(
             withIdentifier: "HealthStatusViewController"
         ) as! HealthStatusViewController
-
-        vc.delegate = self
 
         let navController = UINavigationController(rootViewController: vc)
         navController.modalPresentationStyle = .fullScreen

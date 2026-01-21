@@ -326,43 +326,9 @@
                                     <constraint firstItem="DW6-or-0GB" firstAttribute="centerY" secondItem="hYl-dD-5yO" secondAttribute="centerY" id="ydF-rU-FNQ"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ECp-76-2s0" userLabel="rowLastName">
-                                <rect key="frame" x="16" y="324" width="345" height="44"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Treatment completion date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wF7-HH-EjM">
-                                        <rect key="frame" x="16" y="13" width="184.66666666666666" height="18"/>
-                                        <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sophie" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qOB-m9-Sap">
-                                        <rect key="frame" x="281.66666666666669" y="13" width="47.333333333333314" height="18"/>
-                                        <color key="tintColor" name="bg"/>
-                                        <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                                        <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <textField hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="sgl-ND-NMJ">
-                                        <rect key="frame" x="310.66666666666669" y="11" width="34.333333333333314" height="22"/>
-                                        <color key="textColor" name="AccentColor"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
-                                    </textField>
-                                </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="7Wn-oe-g7o"/>
-                                    <constraint firstItem="wF7-HH-EjM" firstAttribute="leading" secondItem="ECp-76-2s0" secondAttribute="leading" constant="16" id="A12-Ah-Quv"/>
-                                    <constraint firstItem="qOB-m9-Sap" firstAttribute="centerY" secondItem="ECp-76-2s0" secondAttribute="centerY" id="KcY-I9-cnI"/>
-                                    <constraint firstItem="sgl-ND-NMJ" firstAttribute="centerY" secondItem="ECp-76-2s0" secondAttribute="centerY" id="VUT-sT-bXU"/>
-                                    <constraint firstAttribute="trailing" secondItem="sgl-ND-NMJ" secondAttribute="trailing" id="las-gR-ltw"/>
-                                    <constraint firstItem="wF7-HH-EjM" firstAttribute="centerY" secondItem="ECp-76-2s0" secondAttribute="centerY" id="oWd-MJ-uaw"/>
-                                    <constraint firstAttribute="trailing" secondItem="qOB-m9-Sap" secondAttribute="trailing" constant="16" id="pqI-gc-DfZ"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="ECp-76-2s0" secondAttribute="trailing" constant="16" id="0zm-ui-Rfn"/>
                             <constraint firstItem="Ngs-a9-hiS" firstAttribute="top" secondItem="KUr-d2-zKz" secondAttribute="bottom" id="59q-K1-CRy"/>
                             <constraint firstItem="Vtd-yc-tcI" firstAttribute="trailing" secondItem="KDa-Zn-iXJ" secondAttribute="trailing" id="8b1-fw-vho"/>
                             <constraint firstItem="mUM-9I-FaA" firstAttribute="centerX" secondItem="Vtd-yc-tcI" secondAttribute="centerX" id="A4C-Ks-Rvb"/>
@@ -374,7 +340,6 @@
                             <constraint firstItem="KUr-d2-zKz" firstAttribute="trailing" secondItem="Ngs-a9-hiS" secondAttribute="trailing" id="XG2-rl-IFq"/>
                             <constraint firstItem="Vtd-yc-tcI" firstAttribute="leading" secondItem="KDa-Zn-iXJ" secondAttribute="leading" id="XT8-2O-idu"/>
                             <constraint firstItem="mUM-9I-FaA" firstAttribute="leading" secondItem="ERE-y3-BMa" secondAttribute="leading" constant="14" id="YNR-f8-UeJ"/>
-                            <constraint firstItem="ECp-76-2s0" firstAttribute="top" secondItem="mUM-9I-FaA" secondAttribute="bottom" id="eVn-9f-KGd"/>
                             <constraint firstItem="5qB-wN-3RZ" firstAttribute="trailing" secondItem="hYl-dD-5yO" secondAttribute="trailing" id="jW5-ig-1J3"/>
                             <constraint firstItem="mUM-9I-FaA" firstAttribute="centerX" secondItem="hYl-dD-5yO" secondAttribute="centerX" id="k7W-7N-PfO"/>
                             <constraint firstItem="KUr-d2-zKz" firstAttribute="leading" secondItem="Ngs-a9-hiS" secondAttribute="leading" id="kL7-fB-gux"/>
@@ -385,7 +350,6 @@
                             <constraint firstItem="mUM-9I-FaA" firstAttribute="top" secondItem="hYl-dD-5yO" secondAttribute="bottom" id="uCO-ZE-Gne"/>
                             <constraint firstAttribute="trailing" secondItem="KDa-Zn-iXJ" secondAttribute="trailing" constant="16" id="vJ3-YB-Qck"/>
                             <constraint firstItem="hYl-dD-5yO" firstAttribute="top" secondItem="5qB-wN-3RZ" secondAttribute="bottom" id="wVE-jZ-5Yw"/>
-                            <constraint firstItem="ECp-76-2s0" firstAttribute="leading" secondItem="ERE-y3-BMa" secondAttribute="leading" constant="16" id="yl9-p1-Vmi"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -416,8 +380,6 @@
                 <outlet property="genderValueLabel" destination="8LK-zM-Ujc" id="OJb-3v-K8v"/>
                 <outlet property="lastNameTextField" destination="ttj-5e-OaR" id="6h8-xz-Yzv"/>
                 <outlet property="lastNameValueLabel" destination="nB5-Ux-kUa" id="O5J-CT-xLx"/>
-                <outlet property="treatmentCompletionDateTextField" destination="sgl-ND-NMJ" id="jiz-Bn-9SU"/>
-                <outlet property="treatmentCompletionDateValueLabel" destination="wF7-HH-EjM" id="MHy-v7-pth"/>
                 <outlet property="treatmentStateTextField" destination="R4B-vF-7Sb" id="IZm-m5-RaK"/>
                 <outlet property="treatmentStateValueLabel" destination="PzI-Bj-cdx" id="3Ux-7N-Pax"/>
             </connections>

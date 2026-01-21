@@ -14,10 +14,8 @@ final class HealthStatusViewController: UIViewController,
     @IBOutlet weak var collectionView: UICollectionView!
 
     weak var delegate: HealthStatusViewControllerDelegate?
-    
-    // Data source reference
+
     private let dataSource = UserProfileDataSource.shared
-    
     private var isEditingProfile = false
     private weak var cardCell: HealthStatusCardCell?
 
@@ -53,22 +51,9 @@ final class HealthStatusViewController: UIViewController,
                 forCellWithReuseIdentifier: $0.0
             )
         }
-        
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(profileDidUpdate),
-            name: UserProfileDataSource.profileDidUpdateNotification,
-            object: nil
-        )
     }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-    
-    @objc private func profileDidUpdate() {
-        collectionView.reloadData()
-    }
+
+    // MARK: - Navigation
 
     @objc private func backTapped() {
         dismiss(animated: true)
@@ -92,7 +77,7 @@ final class HealthStatusViewController: UIViewController,
         )
 
         cardCell?.setEditing(isEditingProfile)
-        collectionView.reloadItems(at: [IndexPath(item: 0, section: 0)])
+        updateHeaderEditingState() 
     }
 
     @objc private func cancelTapped() {
@@ -111,16 +96,6 @@ final class HealthStatusViewController: UIViewController,
                 profileImage: dataSource.userProfile.profileImage
             )
         }
-        
-        if let medicalInfo = cardCell?.currentMedicalInfo {
-            UserProfileDataSource.shared.updateMedicalInfo(
-                diagnosisDate: medicalInfo.diagnosisDate,
-                gender: medicalInfo.gender,
-                age: Int(medicalInfo.age) ?? dataSource.userProfile.age,
-                cancerStage: medicalInfo.cancerStage,
-                treatmentState: medicalInfo.treatmentState
-            )
-        }
 
         cardCell?.commitEdits()
 
@@ -132,7 +107,23 @@ final class HealthStatusViewController: UIViewController,
         dismiss(animated: true)
     }
 
-    // MARK: - Collection View
+    // MARK: - Header Update (IMPORTANT)
+
+    private func updateHeaderEditingState() {
+        guard let header = collectionView.cellForItem(
+            at: IndexPath(item: 0, section: 0)
+        ) as? ProfileHeaderCell else { return }
+
+        let profile = dataSource.userProfile
+        header.configure(
+            name: profile.fullName,
+            image: profile.profileImage,
+            isEditing: isEditingProfile
+        )
+        header.delegate = self
+    }
+
+    // MARK: - Collection View DataSource
 
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
@@ -140,8 +131,7 @@ final class HealthStatusViewController: UIViewController,
     }
 
     func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath)
-    -> UICollectionViewCell {
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
         let profile = dataSource.userProfile
 
@@ -156,7 +146,6 @@ final class HealthStatusViewController: UIViewController,
                 image: profile.profileImage,
                 isEditing: isEditingProfile
             )
-
             cell.delegate = self
             return cell
         }
@@ -168,18 +157,18 @@ final class HealthStatusViewController: UIViewController,
 
         cardCell = cell
 
-       
         cell.configure(
             firstName: profile.firstName,
             lastName: profile.lastName,
-            diagnosisDate: profile.diagnosisDate,
+            diagnosisDate: "12 Aug 2024",
             gender: profile.gender,
             age: profile.ageString,
             cancerStage: profile.cancerStage,
-            treatmentState: profile.treatmentState,
-            treatmentCompletionDate: profile.treatmentCompletionDate
+            treatmentState: "Ongoing"
         )
 
+
+        cell.setEditing(isEditingProfile)
         return cell
     }
 
@@ -192,7 +181,7 @@ final class HealthStatusViewController: UIViewController,
         let width = collectionView.bounds.width - 32
         return indexPath.item == 0
             ? CGSize(width: width, height: 160)
-            : CGSize(width: width, height: 322)
+            : CGSize(width: width, height: 345)
     }
 
     func collectionView(_ collectionView: UICollectionView,
@@ -245,7 +234,7 @@ final class HealthStatusViewController: UIViewController,
                                [UIImagePickerController.InfoKey : Any]) {
 
         let image = (info[.editedImage] ?? info[.originalImage]) as? UIImage
-        
+
         UserProfileDataSource.shared.updateBasicInfo(
             firstName: dataSource.userProfile.firstName,
             lastName: dataSource.userProfile.lastName,
@@ -253,7 +242,7 @@ final class HealthStatusViewController: UIViewController,
         )
 
         picker.dismiss(animated: true)
-        collectionView.reloadItems(at: [IndexPath(item: 0, section: 0)])
+        updateHeaderEditingState()
     }
 
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
