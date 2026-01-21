@@ -54,7 +54,6 @@ final class HealthStatusViewController: UIViewController,
             )
         }
         
-        // Listen for profile updates
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(profileDidUpdate),
@@ -105,9 +104,7 @@ final class HealthStatusViewController: UIViewController,
     @objc private func doneTapped() {
         view.endEditing(true)
 
-        // Get updated data from card cell
         if let updated = cardCell?.currentName {
-            // Update basic info
             UserProfileDataSource.shared.updateBasicInfo(
                 firstName: updated.first,
                 lastName: updated.last,
@@ -115,7 +112,6 @@ final class HealthStatusViewController: UIViewController,
             )
         }
         
-        // Get all medical info from card cell
         if let medicalInfo = cardCell?.currentMedicalInfo {
             UserProfileDataSource.shared.updateMedicalInfo(
                 diagnosisDate: medicalInfo.diagnosisDate,
@@ -128,7 +124,6 @@ final class HealthStatusViewController: UIViewController,
 
         cardCell?.commitEdits()
 
-        // Notify delegate with updated info
         delegate?.didUpdateProfile(
             image: dataSource.userProfile.profileImage,
             fullName: dataSource.userProfile.fullName
@@ -173,6 +168,7 @@ final class HealthStatusViewController: UIViewController,
 
         cardCell = cell
 
+       
         cell.configure(
             firstName: profile.firstName,
             lastName: profile.lastName,
@@ -180,7 +176,8 @@ final class HealthStatusViewController: UIViewController,
             gender: profile.gender,
             age: profile.ageString,
             cancerStage: profile.cancerStage,
-            treatmentState: profile.treatmentState
+            treatmentState: profile.treatmentState,
+            treatmentCompletionDate: profile.treatmentCompletionDate
         )
 
         return cell
@@ -195,7 +192,7 @@ final class HealthStatusViewController: UIViewController,
         let width = collectionView.bounds.width - 32
         return indexPath.item == 0
             ? CGSize(width: width, height: 160)
-            : CGSize(width: width, height: 340)
+            : CGSize(width: width, height: 322)
     }
 
     func collectionView(_ collectionView: UICollectionView,
@@ -249,7 +246,6 @@ final class HealthStatusViewController: UIViewController,
 
         let image = (info[.editedImage] ?? info[.originalImage]) as? UIImage
         
-        // Update profile image through data source
         UserProfileDataSource.shared.updateBasicInfo(
             firstName: dataSource.userProfile.firstName,
             lastName: dataSource.userProfile.lastName,

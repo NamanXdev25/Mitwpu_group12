@@ -4,6 +4,8 @@ final class HealthStatusCardCell: UICollectionViewCell {
 
     static let reuseIdentifier = "HealthStatusCardCell"
 
+    // MARK: - Value Labels (View mode)
+
     @IBOutlet private weak var firstNameValueLabel: UILabel!
     @IBOutlet private weak var lastNameValueLabel: UILabel!
     @IBOutlet private weak var diagnosisDateValueLabel: UILabel!
@@ -11,6 +13,9 @@ final class HealthStatusCardCell: UICollectionViewCell {
     @IBOutlet private weak var ageValueLabel: UILabel!
     @IBOutlet private weak var cancerStageValueLabel: UILabel!
     @IBOutlet private weak var treatmentStateValueLabel: UILabel!
+    @IBOutlet private weak var treatmentCompletionDateValueLabel: UILabel! // NEW
+
+    // MARK: - TextFields (Edit mode)
 
     @IBOutlet private weak var firstNameTextField: UITextField!
     @IBOutlet private weak var lastNameTextField: UITextField!
@@ -19,6 +24,9 @@ final class HealthStatusCardCell: UICollectionViewCell {
     @IBOutlet private weak var ageTextField: UITextField!
     @IBOutlet private weak var cancerStageTextField: UITextField!
     @IBOutlet private weak var treatmentStateTextField: UITextField!
+    @IBOutlet private weak var treatmentCompletionDateTextField: UITextField! // NEW
+
+    // MARK: - Collections
 
     private lazy var valueLabels: [UILabel] = [
         firstNameValueLabel,
@@ -27,7 +35,8 @@ final class HealthStatusCardCell: UICollectionViewCell {
         genderValueLabel,
         ageValueLabel,
         cancerStageValueLabel,
-        treatmentStateValueLabel
+        treatmentStateValueLabel,
+        treatmentCompletionDateValueLabel
     ]
 
     private lazy var editableFields: [UITextField] = [
@@ -37,19 +46,29 @@ final class HealthStatusCardCell: UICollectionViewCell {
         genderTextField,
         ageTextField,
         cancerStageTextField,
-        treatmentStateTextField
+        treatmentStateTextField,
+        treatmentCompletionDateTextField
     ]
+
+    // MARK: - Lifecycle
 
     override func awakeFromNib() {
         super.awakeFromNib()
+
         editableFields.forEach {
             $0.borderStyle = .none
             $0.backgroundColor = .clear
             $0.textColor = UIColor(named: "pink")
             $0.textAlignment = .right
         }
+
+       
+        treatmentCompletionDateTextField.placeholder = "—"
+
         setEditing(false)
     }
+
+    // MARK: - Configuration
 
     func configure(
         firstName: String,
@@ -58,7 +77,8 @@ final class HealthStatusCardCell: UICollectionViewCell {
         gender: String,
         age: String,
         cancerStage: String,
-        treatmentState: String
+        treatmentState: String,
+        treatmentCompletionDate: String
     ) {
         let values = [
             firstName,
@@ -67,12 +87,22 @@ final class HealthStatusCardCell: UICollectionViewCell {
             gender,
             age,
             cancerStage,
-            treatmentState
+            treatmentState,
+            treatmentCompletionDate
         ]
 
-        zip(valueLabels, values).forEach { $0.text = $1 }
-        zip(editableFields, values).forEach { $0.text = $1 }
+        // View mode: show "—" if empty
+        zip(valueLabels, values).forEach { label, value in
+            label.text = value.isEmpty ? "—" : value
+        }
+
+        // Edit mode: EMPTY field, never "—"
+        zip(editableFields, values).forEach { field, value in
+            field.text = value.isEmpty ? "" : value
+        }
     }
+
+    // MARK: - Editing
 
     func setEditing(_ editing: Bool) {
         valueLabels.forEach { $0.isHidden = editing }
@@ -80,47 +110,43 @@ final class HealthStatusCardCell: UICollectionViewCell {
     }
 
     func commitEdits() {
-        zip(editableFields, valueLabels).forEach { $1.text = $0.text }
+        zip(editableFields, valueLabels).forEach { field, label in
+            label.text = field.text?.isEmpty == false ? field.text : "—"
+        }
     }
 
     func revertEdits() {
-        zip(valueLabels, editableFields).forEach { $1.text = $0.text }
+        zip(valueLabels, editableFields).forEach { label, field in
+            field.text = label.text == "—" ? "" : label.text
+        }
     }
+
+    // MARK: - Data Accessors
 
     var currentName: (first: String, last: String)? {
         guard
             let first = firstNameTextField.text,
             let last = lastNameTextField.text
-        else {
-            return nil
-        }
+        else { return nil }
+
         return (first, last)
     }
-    
-    // NEW: Return all medical info
+
     var currentMedicalInfo: (
         diagnosisDate: String,
         gender: String,
         age: String,
         cancerStage: String,
-        treatmentState: String
-    )? {
-        guard
-            let diagnosisDate = diagnosisDateTextField.text,
-            let gender = genderTextField.text,
-            let age = ageTextField.text,
-            let cancerStage = cancerStageTextField.text,
-            let treatmentState = treatmentStateTextField.text
-        else {
-            return nil
-        }
-        
-        return (
-            diagnosisDate: diagnosisDate,
-            gender: gender,
-            age: age,
-            cancerStage: cancerStage,
-            treatmentState: treatmentState
+        treatmentState: String,
+        treatmentCompletionDate: String
+    ) {
+        (
+            diagnosisDate: diagnosisDateTextField.text ?? "",
+            gender: genderTextField.text ?? "",
+            age: ageTextField.text ?? "",
+            cancerStage: cancerStageTextField.text ?? "",
+            treatmentState: treatmentStateTextField.text ?? "",
+            treatmentCompletionDate: treatmentCompletionDateTextField.text ?? ""
         )
     }
 }

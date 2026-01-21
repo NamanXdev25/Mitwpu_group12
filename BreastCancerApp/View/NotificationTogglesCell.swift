@@ -54,21 +54,21 @@ final class NotificationTogglesCell: UICollectionViewCell {
     
     @objc private func exerciseSwitchChanged(_ sender: UISwitch) {
         dataSource.updateNotificationSettings(exercise: sender.isOn)
-        print("💪 Exercise notifications: \(sender.isOn)")
+        print(" Exercise notifications: \(sender.isOn)")
     }
     
     @objc private func hydrationSwitchChanged(_ sender: UISwitch) {
         dataSource.updateNotificationSettings(hydration: sender.isOn)
-        print("💧 Hydration notifications: \(sender.isOn)")
+        print("Hydration notifications: \(sender.isOn)")
     }
     
     @objc private func appointmentsSwitchChanged(_ sender: UISwitch) {
         dataSource.updateNotificationSettings(appointments: sender.isOn)
-        print("📅 Appointments notifications: \(sender.isOn)")
+        print("Appointments notifications: \(sender.isOn)")
     }
     
     @objc private func medicationsSwitchChanged(_ sender: UISwitch) {
         dataSource.updateNotificationSettings(medications: sender.isOn)
-        print("💊 Medications notifications: \(sender.isOn)")
+        print("Medications notifications: \(sender.isOn)")
     }
 }

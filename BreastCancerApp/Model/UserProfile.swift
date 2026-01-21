@@ -1,35 +1,32 @@
-//
-//  UserProfile.swift
-//  BreastCancerApp
-//
-//  Created by SDC-USER on 21/01/26.
-//
 import UIKit
 
 struct UserProfile: Codable {
+
     // MARK: - Identity
     var firstName: String
     var lastName: String
-    var profileImageBase64: String?  // Store image as base64 string for JSON
-    
+    var profileImageBase64: String?
+
     // MARK: - Medical Information
-    var diagnosisDate: String  // Store as string "dd MMM yyyy"
+    var diagnosisDate: String
     var gender: String
     var age: Int
     var cancerStage: String
     var treatmentState: String
-    
+    var treatmentCompletionDate: String
+
     // MARK: - Notification Settings
     var exerciseNotificationsEnabled: Bool
     var hydrationNotificationsEnabled: Bool
     var appointmentsNotificationsEnabled: Bool
     var medicationsNotificationsEnabled: Bool
-    
+
     // MARK: - Computed Properties (not stored in JSON)
+
     var fullName: String {
         "\(firstName) \(lastName)"
     }
-    
+
     var profileImage: UIImage? {
         get {
             guard let base64 = profileImageBase64,
@@ -47,18 +44,19 @@ struct UserProfile: Codable {
             }
         }
     }
-    
+
     var diagnosisDateObject: Date? {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd MMM yyyy"
         return formatter.date(from: diagnosisDate)
     }
-    
+
     var ageString: String {
         "\(age)"
     }
-    
+
     // MARK: - Initializer
+
     init(
         firstName: String = "Sophie",
         lastName: String = "Chen",
@@ -68,6 +66,7 @@ struct UserProfile: Codable {
         age: Int = 32,
         cancerStage: String = "Stage II",
         treatmentState: String = "Ongoing",
+        treatmentCompletionDate: String = "",  
         exerciseNotificationsEnabled: Bool = false,
         hydrationNotificationsEnabled: Bool = false,
         appointmentsNotificationsEnabled: Bool = false,
@@ -80,12 +79,13 @@ struct UserProfile: Codable {
         self.age = age
         self.cancerStage = cancerStage
         self.treatmentState = treatmentState
+        self.treatmentCompletionDate = treatmentCompletionDate
+
         self.exerciseNotificationsEnabled = exerciseNotificationsEnabled
         self.hydrationNotificationsEnabled = hydrationNotificationsEnabled
         self.appointmentsNotificationsEnabled = appointmentsNotificationsEnabled
         self.medicationsNotificationsEnabled = medicationsNotificationsEnabled
-        
-        // Set profile image
+
         self.profileImage = profileImage
     }
 }
