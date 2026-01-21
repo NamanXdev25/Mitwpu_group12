@@ -21,6 +21,8 @@ class JournalCalendarCell: UICollectionViewCell {
     @IBOutlet weak var headerToggleButton: UIButton!
     @IBOutlet weak var chevronButton: UIButton!
     @IBOutlet weak var calendarCollectionView: UICollectionView!
+    @IBOutlet weak var pickerContainerView: UIView!
+    @IBOutlet weak var monthYearPicker: UIPickerView!
     
     weak var delegate: JournalCalendarCellDelegate?
     
@@ -29,9 +31,26 @@ class JournalCalendarCell: UICollectionViewCell {
     var totalSquares = [String]()
     var journalDays: Set<Date> = []
     
+    // Picker data
+    let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    var years = [Int]()
+    
     override func awakeFromNib() {
         super.awakeFromNib()
+        setupYears()
         setupCollectionView()
+        setupPicker()
+    }
+    
+    private func setupYears() {
+        let currentYear = Calendar.current.component(.year, from: Date())
+        years = Array((currentYear - 10)...(currentYear + 10))
+    }
+    
+    private func setupPicker() {
+        monthYearPicker.dataSource = self
+        monthYearPicker.delegate = self
+        pickerContainerView.isHidden = true
     }
     
     private func setupCollectionView() {
@@ -80,6 +99,7 @@ class JournalCalendarCell: UICollectionViewCell {
         monthLabel.text = dateFormatter.string(from: selectedDate)
         
         calendarCollectionView.reloadData()
+        syncPickerToDate()
     }
     
     @IBAction func previousMonthTapped(_ sender: UIButton) {
@@ -96,6 +116,38 @@ class JournalCalendarCell: UICollectionViewCell {
     
     @IBAction func headerToggleTapped(_ sender: UIButton) {
         delegate?.calendarCellDidTapHeader(self)
+        
+        let isPickerVisible = !pickerContainerView.isHidden
+        
+        if isPickerVisible {
+            // Hide picker, show calendar
+            pickerContainerView.isHidden = true
+            calendarCollectionView.isHidden = false
+            monthLabel.textColor = .label
+            UIView.animate(withDuration: 0.3) {
+                self.chevronButton.transform = .identity
+            }
+        } else {
+            // Show picker, hide calendar
+            pickerContainerView.isHidden = false
+            calendarCollectionView.isHidden = true
+            monthLabel.textColor = UIColor(named: "PrimaryColor") ?? UIColor(red: 0.91, green: 0.42, blue: 0.57, alpha: 1.0)
+            UIView.animate(withDuration: 0.3) {
+                self.chevronButton.transform = CGAffineTransform(rotationAngle: .pi / 2)
+            }
+            syncPickerToDate()
+        }
+    }
+    
+    private func syncPickerToDate() {
+        let calendar = Calendar.current
+        let monthIndex = calendar.component(.month, from: selectedDate) - 1
+        let year = calendar.component(.year, from: selectedDate)
+        
+        if let yearIndex = years.firstIndex(of: year) {
+            monthYearPicker.selectRow(monthIndex, inComponent: 0, animated: false)
+            monthYearPicker.selectRow(yearIndex, inComponent: 1, animated: false)
+        }
     }
 }
 
@@ -175,6 +227,40 @@ extension JournalCalendarCell: UICollectionViewDelegateFlowLayout {
         selectedDay = selected
         delegate?.calendarCell(self, didSelectDate: selected)
         calendarCollectionView.reloadData()
+    }
+}
+
+// MARK: - UIPickerViewDataSource & Delegate
+extension JournalCalendarCell: UIPickerViewDataSource, UIPickerViewDelegate {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 2
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        if component == 0 { return months.count }
+        return years.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        if component == 0 { return months[row] }
+        return String(years[row])
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        let monthIndex = pickerView.selectedRow(inComponent: 0) + 1
+        let yearIndex = pickerView.selectedRow(inComponent: 1)
+        let year = years[yearIndex]
+        
+        var components = DateComponents()
+        components.year = year
+        components.month = monthIndex
+        components.day = 1
+        
+        if let newDate = Calendar.current.date(from: components) {
+            selectedDate = newDate
+            updateMonthView()
+            delegate?.calendarCell(self, didChangeTo: newDate)
+        }
     }
 }
 

@@ -7,34 +7,23 @@
 
 import UIKit
 
-class JournalCalendarViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
+class JournalCalendarViewController: UIViewController {
     
     @IBOutlet weak var journalsCollectionView: UICollectionView!
     @IBOutlet weak var closeButton: UIBarButtonItem!
-    @IBOutlet weak var pickerContainerView: UIView!
-    @IBOutlet weak var monthYearPicker: UIPickerView!
     
     // Variables
     var selectedDate = Date()
     private var selectedDay: Date?
     private var filteredJournals: [JournalEntry] = []
     private var journalDays: Set<Date> = []
-    private var isPickerVisible = false
-    
-    // Calendar data for picker
-    let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-    var years = [Int]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupJournalsCollectionView()
-        setupPicker()
         
         journalDays = JournalStore.shared.entries.journalDays
-        
-        let currentYear = Calendar.current.component(.year, from: Date())
-        years = Array((currentYear - 10)...(currentYear + 10))
     }
     
     private func setupJournalsCollectionView() {
@@ -114,13 +103,6 @@ class JournalCalendarViewController: UIViewController, UIPickerViewDataSource, U
         return section
     }
     
-    private func setupPicker() {
-        monthYearPicker.dataSource = self
-        monthYearPicker.delegate = self
-        pickerContainerView.isHidden = true
-        pickerContainerView.layer.cornerRadius = 20
-    }
-    
     @IBAction func closeTapped(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
@@ -131,59 +113,6 @@ class JournalCalendarViewController: UIViewController, UIPickerViewDataSource, U
         label.textColor = .secondaryLabel
         label.textAlignment = .center
         return label
-    }
-    
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 2
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        if component == 0 { return months.count }
-        return years.count
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        if component == 0 { return months[row] }
-        return String(years[row])
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        let monthIndex = pickerView.selectedRow(inComponent: 0) + 1
-        let yearIndex = pickerView.selectedRow(inComponent: 1)
-        let year = years[yearIndex]
-        
-        var components = DateComponents()
-        components.year = year
-        components.month = monthIndex
-        components.day = 1
-        
-        if let newDate = Calendar.current.date(from: components) {
-            selectedDate = newDate
-            journalsCollectionView.reloadSections(IndexSet(integer: 0))
-        }
-    }
-    
-    private func syncPickerToDate() {
-        let calendar = Calendar.current
-        let monthIndex = calendar.component(.month, from: selectedDate) - 1
-        let year = calendar.component(.year, from: selectedDate)
-        
-        if let yearIndex = years.firstIndex(of: year) {
-            monthYearPicker.selectRow(monthIndex, inComponent: 0, animated: false)
-            monthYearPicker.selectRow(yearIndex, inComponent: 1, animated: false)
-        }
-    }
-    
-    private func togglePicker() {
-        isPickerVisible.toggle()
-        
-        UIView.animate(withDuration: 0.3) {
-            self.pickerContainerView.isHidden = !self.isPickerVisible
-        }
-        
-        if isPickerVisible {
-            syncPickerToDate()
-        }
     }
 }
 
@@ -240,22 +169,12 @@ extension JournalCalendarViewController: JournalCalendarCellDelegate {
         selectedDate = date
         filteredJournals.removeAll()
         selectedDay = nil
+        journalsCollectionView.backgroundView = nil
         journalsCollectionView.reloadSections(IndexSet(integer: 1))
     }
     
     func calendarCellDidTapHeader(_ cell: JournalCalendarCell) {
-        togglePicker()
-        
-        // chevron rotation
-        if let indexPath = journalsCollectionView.indexPath(for: cell),
-           let calendarCell = journalsCollectionView.cellForItem(at: indexPath) as? JournalCalendarCell {
-            UIView.animate(withDuration: 0.3) {
-                if self.isPickerVisible {
-                    calendarCell.chevronButton.transform = CGAffineTransform(rotationAngle: .pi / 2)
-                } else {
-                    calendarCell.chevronButton.transform = .identity
-                }
-            }
-        }
+        // The cell handles the picker toggle internally now
+        // No need to do anything here
     }
 }
