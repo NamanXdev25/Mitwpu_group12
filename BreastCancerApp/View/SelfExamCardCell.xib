@@ -35,8 +35,8 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7CT-Pu-7mt">
-                                <rect key="frame" x="144" y="58.000000000000007" width="173" height="19.333333333333336"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7CT-Pu-7mt">
+                                <rect key="frame" x="144" y="58" width="173" height="139"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -45,13 +45,14 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="UG6-2i-NUu" firstAttribute="top" secondItem="kPp-Ld-zcB" secondAttribute="top" constant="30" id="0xI-mW-Jep"/>
+                            <constraint firstItem="7CT-Pu-7mt" firstAttribute="leading" secondItem="hfc-D6-oyQ" secondAttribute="trailing" constant="12" id="6Lz-TC-URz"/>
                             <constraint firstItem="UG6-2i-NUu" firstAttribute="leading" secondItem="hfc-D6-oyQ" secondAttribute="trailing" constant="12" id="9NY-65-4us"/>
                             <constraint firstItem="7CT-Pu-7mt" firstAttribute="top" secondItem="UG6-2i-NUu" secondAttribute="bottom" constant="8" id="DJe-TY-TRr"/>
                             <constraint firstAttribute="trailing" secondItem="7CT-Pu-7mt" secondAttribute="trailing" constant="8" id="F4b-0l-Bja"/>
                             <constraint firstItem="hfc-D6-oyQ" firstAttribute="top" secondItem="kPp-Ld-zcB" secondAttribute="top" constant="12" id="WtL-5K-Wak"/>
                             <constraint firstAttribute="bottom" secondItem="hfc-D6-oyQ" secondAttribute="bottom" constant="12" id="ZFO-Yg-kFj"/>
                             <constraint firstItem="hfc-D6-oyQ" firstAttribute="leading" secondItem="kPp-Ld-zcB" secondAttribute="leading" constant="12" id="aXg-kO-2ib"/>
-                            <constraint firstItem="7CT-Pu-7mt" firstAttribute="leading" secondItem="hfc-D6-oyQ" secondAttribute="trailing" constant="12" id="awv-Mv-Ib6"/>
+                            <constraint firstAttribute="bottom" secondItem="7CT-Pu-7mt" secondAttribute="bottom" constant="12" id="nkj-lK-yGh"/>
                             <constraint firstAttribute="trailing" secondItem="UG6-2i-NUu" secondAttribute="trailing" constant="12" id="u65-4d-Rcs"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>

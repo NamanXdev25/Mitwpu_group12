@@ -10,8 +10,10 @@ final class TestHistoryViewController: UIViewController,
     private var filteredRecords: [TestRecord] = []
     private var expandedIndexSet = Set<Int>()
 
-    private var availableYears: [Int] = []
     private var selectedYear: Int?
+    private var earliestLogYear: Int?
+
+    // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,106 +27,62 @@ final class TestHistoryViewController: UIViewController,
         NotificationCenter.default.removeObserver(self)
     }
 
+    // MARK: - Navigation Bar
+
     private func setupNavigationBar() {
         let titleLabel = UILabel()
         titleLabel.text = "Log History"
         titleLabel.font = .systemFont(ofSize: 17, weight: .semibold)
         titleLabel.textAlignment = .center
         navigationItem.titleView = titleLabel
+
+        // remove nav bar hairline
+        if let navBar = navigationController?.navigationBar {
+            navBar.setBackgroundImage(UIImage(), for: .default)
+            navBar.shadowImage = UIImage()
+            navBar.isTranslucent = true
+            navBar.backgroundColor = .clear
+        }
     }
+
+    // MARK: - Collection View
 
     private func setupCollectionView() {
         collectionView.collectionViewLayout = createLayout()
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.alwaysBounceVertical = true
+        collectionView.backgroundColor = .clear
 
         collectionView.register(
             UINib(nibName: "TestRecordCell", bundle: nil),
             forCellWithReuseIdentifier: "TestRecordCell"
         )
-
-        collectionView.register(
-            UINib(nibName: "EmptyStateCell", bundle: nil),
-            forCellWithReuseIdentifier: selfexamEmptyStateCell.reuseIdentifier
-        )
     }
+
+    // MARK: - Data
 
     private func loadData() {
         records = Persistence.load()
-        setupAvailableYears()
+        computeEarliestLogYear()
         filterRecords(for: selectedYear)
         collectionView.reloadData()
+        updateEmptyState()
     }
 
-    private func setupAvailableYears() {
+    private func computeEarliestLogYear() {
         let calendar = Calendar.current
-        let currentYear = calendar.component(.year, from: Date())
-        let minimumFutureYear = currentYear + 5
 
         guard !records.isEmpty else {
-            availableYears = Array(currentYear...minimumFutureYear)
-            selectedYear = selectedYear ?? currentYear
+            let currentYear = calendar.component(.year, from: Date())
+            earliestLogYear = currentYear
+            selectedYear = currentYear
             return
         }
 
-        let recordYears = records.map {
-            calendar.component(.year, from: $0.date)
-        }
-
-        guard
-            let earliestYear = recordYears.min(),
-            let latestRecordYear = recordYears.max()
-        else {
-            availableYears = Array(currentYear...minimumFutureYear)
-            selectedYear = selectedYear ?? currentYear
-            return
-        }
-
-        let endYear = max(minimumFutureYear, latestRecordYear)
-        availableYears = Array(earliestYear...endYear)
-
-        if let selectedYear, availableYears.contains(selectedYear) {
-            self.selectedYear = selectedYear
-        } else {
-            self.selectedYear = currentYear
-        }
-    }
-
-    private func observeNotifications() {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleTestRecordAdded),
-            name: .testRecordAdded,
-            object: nil
-        )
-    }
-
-    @objc private func handleTestRecordAdded(_ notification: Notification) {
-        records = Persistence.load()
-        setupAvailableYears()
-        filterRecords(for: selectedYear)
-        collectionView.reloadData()
-    }
-
-    @IBAction private func filterButtonTapped(_ sender: UIBarButtonItem) {
-        let storyboard = UIStoryboard(name: "selfexam", bundle: nil)
-        guard let vc = storyboard.instantiateViewController(
-            withIdentifier: "YearFilterViewController"
-        ) as? YearFilterViewController else { return }
-
-        vc.years = availableYears
-        vc.selectedYear = selectedYear
-
-        vc.onYearSelected = { [weak self] year in
-            guard let self else { return }
-            self.selectedYear = year
-            self.filterRecords(for: year)
-            self.expandedIndexSet.removeAll()
-            self.collectionView.reloadData()
-        }
-
-        present(vc, animated: true)
+        let years = records.map { calendar.component(.year, from: $0.date) }
+        earliestLogYear = years.min()
+        selectedYear = selectedYear ?? years.max()
     }
 
     private func filterRecords(for year: Int?) {
@@ -139,6 +97,59 @@ final class TestHistoryViewController: UIViewController,
         }
     }
 
+    // MARK: - Empty State (🔥 KEY FIX)
+
+    private func updateEmptyState() {
+        if filteredRecords.isEmpty {
+            let nib = UINib(nibName: "selfexamEmptyStateCell", bundle: nil)
+            let view = nib.instantiate(withOwner: nil).first as! UIView
+            collectionView.backgroundView = view
+        } else {
+            collectionView.backgroundView = nil
+        }
+    }
+
+    // MARK: - Notifications
+
+    private func observeNotifications() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleTestRecordAdded),
+            name: .testRecordAdded,
+            object: nil
+        )
+    }
+
+    @objc private func handleTestRecordAdded(_ notification: Notification) {
+        loadData()
+    }
+
+    // MARK: - Filter Button
+
+    @IBAction private func filterButtonTapped(_ sender: UIBarButtonItem) {
+        let storyboard = UIStoryboard(name: "selfexam", bundle: nil)
+
+        guard let vc = storyboard.instantiateViewController(
+            withIdentifier: "YearFilterViewController"
+        ) as? YearFilterViewController else { return }
+
+        vc.earliestLogYear = earliestLogYear
+        vc.selectedYear = selectedYear
+
+        vc.onYearSelected = { [weak self] year in
+            guard let self else { return }
+            self.selectedYear = year
+            self.filterRecords(for: year)
+            self.expandedIndexSet.removeAll()
+            self.collectionView.reloadData()
+            self.updateEmptyState()
+        }
+
+        present(vc, animated: true)
+    }
+
+    // MARK: - UICollectionViewDataSource
+
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         1
     }
@@ -147,21 +158,13 @@ final class TestHistoryViewController: UIViewController,
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
-        filteredRecords.isEmpty ? 1 : filteredRecords.count
+        filteredRecords.count   // ✅ NO fake empty cell
     }
 
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
-
-        if filteredRecords.isEmpty {
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: selfexamEmptyStateCell.reuseIdentifier,
-                for: indexPath
-            ) as! selfexamEmptyStateCell
-            return cell
-        }
 
         let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: "TestRecordCell",
@@ -192,13 +195,6 @@ final class TestHistoryViewController: UIViewController,
 
     func collectionView(
         _ collectionView: UICollectionView,
-        shouldSelectItemAt indexPath: IndexPath
-    ) -> Bool {
-        !filteredRecords.isEmpty
-    }
-
-    func collectionView(
-        _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
         toggleExpansion(at: indexPath)
@@ -211,6 +207,8 @@ final class TestHistoryViewController: UIViewController,
         }
     }
 
+    // MARK: - Layout (NO TOP DIVIDER)
+
     private func createLayout() -> UICollectionViewLayout {
         var config = UICollectionLayoutListConfiguration(appearance: .plain)
         config.showsSeparators = true
@@ -222,6 +220,8 @@ final class TestHistoryViewController: UIViewController,
 
         return UICollectionViewCompositionalLayout.list(using: config)
     }
+
+    // MARK: - Swipe Actions
 
     private func createSwipeActions(
         for indexPath: IndexPath
@@ -242,7 +242,9 @@ final class TestHistoryViewController: UIViewController,
         return configuration
     }
 
-    func confirmDelete(
+    // MARK: - Delete (CRASH FIXED)
+
+    private func confirmDelete(
         at indexPath: IndexPath,
         completion: @escaping (Bool) -> Void
     ) {
@@ -252,11 +254,12 @@ final class TestHistoryViewController: UIViewController,
             preferredStyle: .alert
         )
 
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { _ in
-            completion(false)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) {
+            _ in completion(false)
         })
 
-        alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: "Delete", style: .destructive) {
+            [weak self] _ in
             self?.performDelete(at: indexPath, completion: completion)
         })
 
@@ -270,17 +273,12 @@ final class TestHistoryViewController: UIViewController,
         let record = filteredRecords[indexPath.item]
         records.removeAll { $0.date == record.date }
         filteredRecords.remove(at: indexPath.item)
-
-        try? Persistence.save(records)
         expandedIndexSet.removeAll()
 
-        collectionView.performBatchUpdates({
-            collectionView.deleteItems(at: [indexPath])
-        }, completion: { [weak self] _ in
-            self?.setupAvailableYears()
-            self?.filterRecords(for: self?.selectedYear)
-            self?.collectionView.reloadData()
-            completion(true)
-        })
+        try? Persistence.save(records)
+
+        // ✅ SAFE reload (no batch crash when empty)
+        loadData()
+        completion(true)
     }
 }

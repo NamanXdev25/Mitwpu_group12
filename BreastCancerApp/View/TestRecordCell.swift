@@ -210,4 +210,9 @@ final class TestRecordCell: UICollectionViewCell {
     @objc private func didSwipeLeft(_ gesture: UISwipeGestureRecognizer) {
         onRequestDelete?()
     }
+    
+    func setSeparatorHidden(_ hidden: Bool) {
+        separator.isHidden = hidden
+    }
+
 }
