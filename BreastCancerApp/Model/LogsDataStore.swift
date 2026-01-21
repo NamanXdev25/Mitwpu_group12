@@ -3,7 +3,6 @@ import Foundation
 class LogsDataStore {
     
     private var header: HeaderModel
-    private var appointment: AppointmentModel
     private var medications: [MedicationModel] = []
     private var healthTracking: [HealthTrackingModel] = []
     
@@ -12,7 +11,6 @@ class LogsDataStore {
     private init() {
         // Initialize with default values
         self.header = HeaderModel(title: "", date: "")
-        self.appointment = AppointmentModel(title: "", doctorName: "", dateAndYear: "", time: "")
         
         // Load sample data
         loadSampleData()
@@ -23,15 +21,7 @@ class LogsDataStore {
         // Header Data
         header = HeaderModel(
             title: "Logs",
-            date: "Mon 20 Apr"
-        )
-        
-        // Appointment Data
-        appointment = AppointmentModel(
-            title: "Oncology Check-Up",
-            doctorName: "Dr. Sarah Johnson",
-            dateAndYear: "22 Apr 2025",
-            time: "10:30 AM"
+            date: formatCurrentDate()
         )
         
         // Medications Data
@@ -59,12 +49,94 @@ class LogsDataStore {
         ]
     }
     
+    private func formatCurrentDate() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEE dd MMM"
+        return formatter.string(from: Date())
+    }
+    
     func getHeader() -> HeaderModel {
         return header
     }
     
-    func getAppointment() -> AppointmentModel {
-        return appointment
+    func getAppointment() -> AppointmentModel? {
+        // Get the nearest upcoming appointment
+        return getNearestAppointment()
+    }
+    
+    // MARK: - Get Nearest Upcoming Appointment
+    private func getNearestAppointment() -> AppointmentModel? {
+        let calendar = Calendar.current
+        let now = Date()
+        
+        // Get all appointments from AppointmentManager
+        let allDates = AppointmentManager.shared.getAllDatesWithAppointments()
+        
+        var nearestAppointment: AppointmentItem?
+        var nearestDate: Date?
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "h:mm a"
+        timeFormatter.locale = Locale(identifier: "en_US_POSIX")
+        
+        // Loop through all dates
+        for dateString in allDates {
+            guard let date = dateFormatter.date(from: dateString) else { continue }
+            
+            // Get appointments for this date
+            let appointments = AppointmentManager.shared.getAppointments(for: date)
+            
+            for appointment in appointments {
+                // Parse the appointment time
+                guard let time = timeFormatter.date(from: appointment.time) else { continue }
+                
+                // Combine date and time
+                let dateComponents = calendar.dateComponents([.year, .month, .day], from: date)
+                let timeComponents = calendar.dateComponents([.hour, .minute], from: time)
+                
+                var fullComponents = dateComponents
+                fullComponents.hour = timeComponents.hour
+                fullComponents.minute = timeComponents.minute
+                
+                guard let fullDate = calendar.date(from: fullComponents) else { continue }
+                
+                // Only consider future appointments
+                if fullDate > now {
+                    if nearestDate == nil || fullDate < nearestDate! {
+                        nearestDate = fullDate
+                        nearestAppointment = appointment
+                    }
+                }
+            }
+        }
+        
+        // Convert to AppointmentModel if found
+        if let appointment = nearestAppointment {
+            // Use note as doctorName, or show category if note is empty
+            let displayText = !appointment.note.isEmpty ? appointment.note : appointment.category
+            
+            return AppointmentModel(
+                title: appointment.title,
+                doctorName: displayText,
+                dateAndYear: appointment.date,
+                time: appointment.time
+            )
+        }
+        
+        return nil
+    }
+    
+    private func extractDoctorName(from appointment: AppointmentItem) -> String {
+        // This method is no longer used, but keeping for backward compatibility
+        if appointment.category.contains("Doctor") {
+            return "Doctor Visit"
+        } else if appointment.category.contains("Chemo") {
+            return "Chemotherapy Session"
+        }
+        return appointment.category
     }
     
     // MARK: - Get Stats with Real-time Data

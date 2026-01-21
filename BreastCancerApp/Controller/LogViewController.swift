@@ -35,6 +35,14 @@ class LogViewController: UIViewController, UICollectionViewDataSource, UICollect
             name: NSNotification.Name("HydrationDataUpdated"),
             object: nil
         )
+        
+        // Listen for Appointment updates
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(appointmentDataDidChange),
+            name: NSNotification.Name("AppointmentDataUpdated"),
+            object: nil
+        )
     }
     
     @objc private func exerciseDataDidChange() {
@@ -47,14 +55,20 @@ class LogViewController: UIViewController, UICollectionViewDataSource, UICollect
         collectionView.reloadSections(IndexSet(integer: 1))
     }
     
+    @objc private func appointmentDataDidChange() {
+        // Reload appointment section
+        collectionView.reloadSections(IndexSet(integer: 2))
+    }
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // Reload the stats section to reflect updated data
-        collectionView.reloadSections(IndexSet(integer: 1))
+        // Reload sections to reflect updated data
+        collectionView.reloadSections(IndexSet(integer: 1)) // Stats
+        collectionView.reloadSections(IndexSet(integer: 2)) // Appointments
     }
     
     private func setupCollectionView() {
@@ -73,6 +87,7 @@ class LogViewController: UIViewController, UICollectionViewDataSource, UICollect
         collectionView.register(UINib(nibName: "LogsHeaderCell", bundle: nil), forCellWithReuseIdentifier: "LogsHeaderCell")
         collectionView.register(UINib(nibName: "LogsStatsRowCell", bundle: nil), forCellWithReuseIdentifier: "LogsStatsRowCell")
         collectionView.register(UINib(nibName: "LogsAppointmentCell", bundle: nil), forCellWithReuseIdentifier: "LogsAppointmentCell")
+        collectionView.register(UINib(nibName: "CenteredMessageCell", bundle: nil), forCellWithReuseIdentifier: "CenteredMessageCell")
         collectionView.register(UINib(nibName: "LogsMedicationCell", bundle: nil), forCellWithReuseIdentifier: "LogsMedicationCell")
         collectionView.register(UINib(nibName: "LogsTrackingCell", bundle: nil), forCellWithReuseIdentifier: "LogsTrackingCell")
         
@@ -92,7 +107,7 @@ class LogViewController: UIViewController, UICollectionViewDataSource, UICollect
         switch section {
         case 0: return 1 // Header
         case 1: return 1 // Stats Row
-        case 2: return 1 // Appointment
+        case 2: return 1 // Appointment (always show, either appointment or empty message)
         case 3: return dataStore.getMedications().count
         case 4: return dataStore.getHealthTracking().count
         default: return 0
@@ -116,10 +131,17 @@ class LogViewController: UIViewController, UICollectionViewDataSource, UICollect
             return cell
             
         case 2:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LogsAppointmentCell", for: indexPath) as! LogsAppointmentCell
-            let appointmentData = dataStore.getAppointment()
-            cell.configure(with: appointmentData)
-            return cell
+            if let appointmentData = dataStore.getAppointment() {
+                // Show appointment if available
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LogsAppointmentCell", for: indexPath) as! LogsAppointmentCell
+                cell.configure(with: appointmentData)
+                return cell
+            } else {
+                // Show empty message if no appointments
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CenteredMessageCell", for: indexPath) as! CenteredMessageCell
+                cell.configure(message: "No appointments scheduled")
+                return cell
+            }
             
         case 3:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LogsMedicationCell", for: indexPath) as! LogsMedicationCell

@@ -466,6 +466,9 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
                 self.appointmentsContainerView.isHidden = true
             }
             
+            NotificationCenter.default.post(name: NSNotification.Name("AppointmentDataUpdated"), object: nil)
+
+            
             completion(true)
         }
         
@@ -535,6 +538,8 @@ extension AppointmentsViewController: AddAppointmentDelegate {
             }
             
             updateAppointmentsList(for: appointmentDate)
+            NotificationCenter.default.post(name: NSNotification.Name("AppointmentDataUpdated"), object: nil)
+
         }
     }
 }
