@@ -1,6 +1,6 @@
 import UIKit
 
-final class SocialLoginCollectionViewCell: UICollectionViewCell {
+final class SocialSignupCollectionViewCell: UICollectionViewCell {
 
     @IBOutlet weak var googleContainerView: UIView!
     @IBOutlet weak var appleContainerView: UIView!
