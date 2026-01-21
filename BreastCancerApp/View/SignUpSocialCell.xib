@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SignUpSocialCell" id="gTV-IL-0wX" customClass="SignUpSocialCell" customModule="BreastCancerApp">
+            <rect key="frame" x="0.0" y="0.0" width="491" height="173"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="491" height="173"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L63-1c-yxR">
+                        <rect key="frame" x="16" y="0.0" width="459" height="52"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="google_icon" translatesAutoresizingMaskIntoConstraints="NO" id="TsU-a3-PQb">
+                                <rect key="frame" x="24" y="16" width="20" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="dVo-0m-MvT"/>
+                                    <constraint firstAttribute="width" constant="20" id="ks5-17-hh1"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="11g-G0-QHx">
+                                <rect key="frame" x="56" y="0.0" width="391" height="52"/>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Continue with Google" titleAlignment="center">
+                                    <fontDescription key="titleFontDescription" style="UICTFontTextStyleHeadline"/>
+                                </buttonConfiguration>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="52" id="5hf-eS-AAd"/>
+                            <constraint firstAttribute="bottom" secondItem="11g-G0-QHx" secondAttribute="bottom" id="C3K-mY-5Wv"/>
+                            <constraint firstAttribute="trailing" secondItem="11g-G0-QHx" secondAttribute="trailing" constant="12" id="JJq-dt-boz"/>
+                            <constraint firstItem="11g-G0-QHx" firstAttribute="top" secondItem="L63-1c-yxR" secondAttribute="top" id="P0Y-5U-aTf"/>
+                            <constraint firstItem="11g-G0-QHx" firstAttribute="leading" secondItem="TsU-a3-PQb" secondAttribute="trailing" constant="12" id="TVl-5T-FLr"/>
+                            <constraint firstItem="11g-G0-QHx" firstAttribute="centerY" secondItem="L63-1c-yxR" secondAttribute="centerY" id="Tag-nb-m8V"/>
+                            <constraint firstItem="TsU-a3-PQb" firstAttribute="leading" secondItem="L63-1c-yxR" secondAttribute="leading" constant="24" id="YfE-wk-rsN"/>
+                            <constraint firstItem="TsU-a3-PQb" firstAttribute="centerY" secondItem="L63-1c-yxR" secondAttribute="centerY" id="lsP-rw-Y8H"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="26"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                <integer key="value" value="1"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="layer.borderColor">
+                                <color key="value" name="pink"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AML-Zy-t8P">
+                        <rect key="frame" x="16" y="60" width="459" height="52"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="apple_icon" translatesAutoresizingMaskIntoConstraints="NO" id="mLa-yU-vRS">
+                                <rect key="frame" x="16" y="16" width="20" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="20" id="0sR-Su-X0l"/>
+                                    <constraint firstAttribute="height" constant="20" id="cZZ-0r-BOI"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WAz-4Z-d0r">
+                                <rect key="frame" x="48" y="0.0" width="399" height="52"/>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Continue with Apple" titleAlignment="center">
+                                    <fontDescription key="titleFontDescription" style="UICTFontTextStyleHeadline"/>
+                                </buttonConfiguration>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="WAz-4Z-d0r" firstAttribute="top" secondItem="AML-Zy-t8P" secondAttribute="top" id="5Sh-ZV-lKo"/>
+                            <constraint firstItem="mLa-yU-vRS" firstAttribute="centerY" secondItem="AML-Zy-t8P" secondAttribute="centerY" id="HDc-VO-vmA"/>
+                            <constraint firstAttribute="trailing" secondItem="WAz-4Z-d0r" secondAttribute="trailing" constant="12" id="JNr-it-DSs"/>
+                            <constraint firstItem="mLa-yU-vRS" firstAttribute="leading" secondItem="AML-Zy-t8P" secondAttribute="leading" constant="16" id="ht4-Hk-pOw"/>
+                            <constraint firstAttribute="height" constant="52" id="mem-e9-Nde"/>
+                            <constraint firstItem="WAz-4Z-d0r" firstAttribute="leading" secondItem="mLa-yU-vRS" secondAttribute="trailing" constant="12" id="ph6-D4-EBJ"/>
+                            <constraint firstAttribute="bottom" secondItem="WAz-4Z-d0r" secondAttribute="bottom" id="uYk-qs-akg"/>
+                            <constraint firstItem="WAz-4Z-d0r" firstAttribute="centerY" secondItem="AML-Zy-t8P" secondAttribute="centerY" id="umU-lR-weH"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="26"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                <integer key="value" value="1"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="layer.borderColor">
+                                <color key="value" name="pink"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cmZ-uF-Px6">
+                        <rect key="frame" x="231" y="132" width="80" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="21" id="9Qx-zW-7Hx"/>
+                            <constraint firstAttribute="width" constant="80" id="HMQ-vq-cLk"/>
+                        </constraints>
+                        <color key="tintColor" name="pink"/>
+                        <state key="normal" title="Button"/>
+                        <buttonConfiguration key="configuration" style="plain" title="Sign in"/>
+                    </button>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Have an account?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qcm-gv-Tc4">
+                        <rect key="frame" x="90" y="132" width="141" height="21"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstItem="Qcm-gv-Tc4" firstAttribute="top" secondItem="AML-Zy-t8P" secondAttribute="bottom" constant="20" id="1zd-kV-2xb"/>
+                <constraint firstAttribute="trailing" secondItem="AML-Zy-t8P" secondAttribute="trailing" constant="16" id="2Yz-fB-3Bl"/>
+                <constraint firstItem="AML-Zy-t8P" firstAttribute="top" secondItem="L63-1c-yxR" secondAttribute="bottom" constant="8" id="3Oe-W6-fgv"/>
+                <constraint firstItem="AML-Zy-t8P" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="4E1-Ei-MeH"/>
+                <constraint firstItem="cmZ-uF-Px6" firstAttribute="leading" secondItem="Qcm-gv-Tc4" secondAttribute="trailing" id="4Yu-6M-ClZ"/>
+                <constraint firstItem="Qcm-gv-Tc4" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="90" id="5nD-kC-KvY"/>
+                <constraint firstItem="cmZ-uF-Px6" firstAttribute="top" secondItem="AML-Zy-t8P" secondAttribute="bottom" constant="20" id="8jH-GZ-qPx"/>
+                <constraint firstItem="cmZ-uF-Px6" firstAttribute="centerY" secondItem="Qcm-gv-Tc4" secondAttribute="centerY" id="WWe-bp-f1t"/>
+                <constraint firstItem="L63-1c-yxR" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="WjN-oI-HuH"/>
+                <constraint firstItem="L63-1c-yxR" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="sqv-dP-wfS"/>
+                <constraint firstAttribute="trailing" secondItem="L63-1c-yxR" secondAttribute="trailing" constant="16" id="wl1-5w-KFN"/>
+            </constraints>
+            <size key="customSize" width="491" height="173"/>
+            <connections>
+                <outlet property="appleButton" destination="WAz-4Z-d0r" id="D52-m2-tIf"/>
+                <outlet property="appleContainerView" destination="AML-Zy-t8P" id="Fse-er-crS"/>
+                <outlet property="appleIconImageView" destination="mLa-yU-vRS" id="ZcY-sQ-2Lh"/>
+                <outlet property="googleButton" destination="11g-G0-QHx" id="6Iw-cj-pba"/>
+                <outlet property="googleContainerView" destination="L63-1c-yxR" id="rX4-4G-pPH"/>
+                <outlet property="googleIconImageView" destination="TsU-a3-PQb" id="Gdx-BY-Agf"/>
+                <outlet property="haveAccountLabel" destination="Qcm-gv-Tc4" id="1mB-da-tw4"/>
+                <outlet property="signInButton" destination="cmZ-uF-Px6" id="S5c-cj-HCB"/>
+            </connections>
+            <point key="canvasLocation" x="475.57251908396944" y="196.83098591549296"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="apple_icon" width="3400" height="4400"/>
+        <image name="google_icon" width="500" height="500"/>
+        <namedColor name="pink">
+            <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

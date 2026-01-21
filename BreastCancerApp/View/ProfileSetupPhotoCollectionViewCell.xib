@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="ProfileSetupPhotoCollectionViewCell" customModule="BreastCancerApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="407" height="182"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="407" height="182"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Profile Photo" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QjN-UM-KKg">
+                        <rect key="frame" x="152.33333333333334" y="7.9999999999999982" width="102.66666666666666" height="20.333333333333329"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" highlighted="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ysc-8k-1Ub">
+                        <rect key="frame" x="143.66666666666666" y="32.000000000000007" width="119.99999999999997" height="118.66666666666669"/>
+                        <color key="tintColor" name="Pink"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="120" id="7eB-Zl-ekv"/>
+                            <constraint firstAttribute="height" constant="120" id="IMm-5L-p4T"/>
+                        </constraints>
+                        <imageReference key="image" image="person.circle.fill" catalog="system" symbolScale="default" renderingMode="original"/>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Click the camera to add a photo" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lOP-vz-JUX">
+                        <rect key="frame" x="16" y="153.33333333333334" width="375" height="13.333333333333343"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
+                        <color key="textColor" systemColor="viewFlipsideBackgroundColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VBj-lY-8Zp">
+                        <rect key="frame" x="229" y="112.33333333333331" width="32" height="32"/>
+                        <color key="backgroundColor" systemColor="systemPinkColor"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="32" id="8S7-OJ-fOU"/>
+                            <constraint firstAttribute="width" constant="32" id="Whr-zL-tqj"/>
+                        </constraints>
+                        <color key="tintColor" systemColor="systemPinkColor"/>
+                        <state key="normal" title="Button"/>
+                        <buttonConfiguration key="configuration" style="filled" image="camera" catalog="system" cornerStyle="capsule">
+                            <backgroundConfiguration key="background">
+                                <color key="strokeColor" systemColor="systemPinkColor"/>
+                            </backgroundConfiguration>
+                            <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" scale="medium"/>
+                            <color key="baseBackgroundColor" systemColor="systemPinkColor"/>
+                        </buttonConfiguration>
+                        <connections>
+                            <action selector="cameraButtonTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="fPx-dr-eTQ"/>
+                        </connections>
+                    </button>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstItem="lOP-vz-JUX" firstAttribute="top" secondItem="Ysc-8k-1Ub" secondAttribute="bottom" constant="2" id="2DC-Cm-4A1"/>
+                <constraint firstItem="Ysc-8k-1Ub" firstAttribute="top" secondItem="QjN-UM-KKg" secondAttribute="bottom" constant="3" id="3Qr-t3-CTe"/>
+                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="lOP-vz-JUX" secondAttribute="bottom" constant="8" id="7xq-cu-OB3"/>
+                <constraint firstItem="lOP-vz-JUX" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="Gu6-Qi-9me"/>
+                <constraint firstItem="QjN-UM-KKg" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="PUT-su-XT3"/>
+                <constraint firstAttribute="trailing" secondItem="lOP-vz-JUX" secondAttribute="trailing" constant="16" id="Ste-ZN-S4b"/>
+                <constraint firstItem="QjN-UM-KKg" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="8" id="Vv2-o3-i4C"/>
+                <constraint firstItem="VBj-lY-8Zp" firstAttribute="trailing" secondItem="Ysc-8k-1Ub" secondAttribute="trailing" constant="-2.6666666666666572" id="ed5-i1-Aba"/>
+                <constraint firstItem="Ysc-8k-1Ub" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="wnO-r4-lEs"/>
+                <constraint firstItem="VBj-lY-8Zp" firstAttribute="bottom" secondItem="Ysc-8k-1Ub" secondAttribute="bottom" constant="-6.9999999999999716" id="yOo-r3-T9R"/>
+            </constraints>
+            <size key="customSize" width="407" height="182"/>
+            <connections>
+                <outlet property="cameraButton" destination="VBj-lY-8Zp" id="bm4-DQ-9nw"/>
+                <outlet property="instructionLabel" destination="lOP-vz-JUX" id="Jbx-7Y-3Ug"/>
+                <outlet property="profileImageView" destination="Ysc-8k-1Ub" id="9DY-um-caW"/>
+                <outlet property="titleLabel" destination="QjN-UM-KKg" id="9Ac-YL-4I3"/>
+            </connections>
+            <point key="canvasLocation" x="-384" y="82"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="camera" catalog="system" width="128" height="93"/>
+        <image name="person.circle.fill" catalog="system" width="128" height="123"/>
+        <namedColor name="Pink">
+            <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemPinkColor">
+            <color red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="viewFlipsideBackgroundColor">
+            <color red="0.12156862745098039" green="0.12941176470588237" blue="0.14117647058823529" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>
