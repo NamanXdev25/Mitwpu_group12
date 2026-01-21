@@ -22,11 +22,6 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupCollectionView()
-        
-        // temp - auto-login for development
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-//            self.loginUser()
-//        }
     }
     
     func login(email: String, password: String) {

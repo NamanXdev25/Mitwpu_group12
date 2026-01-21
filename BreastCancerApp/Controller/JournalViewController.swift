@@ -53,8 +53,6 @@ class JournalViewController: UIViewController {
         )
 
         setupDataSourceCallbacks()
-        
-        // create initial snapshot
         journalDataSource.applySnapshot()
     }
     
@@ -280,7 +278,7 @@ extension JournalViewController {
 
         collectionView.setCollectionViewLayout(layout, animated: false)
 
-        // Register all XIBs
+        // register all XIBs
         collectionView.register(
             UINib(nibName: "JournalStreakCell", bundle: nil),
             forCellWithReuseIdentifier: JournalStreakCell.reuseIdentifier

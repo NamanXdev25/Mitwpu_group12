@@ -17,11 +17,11 @@ class ProfileSetupViewController: UIViewController,
 
     @IBOutlet weak var collectionView: UICollectionView!
 
-    // MARK: - Stored Properties
+    // Stored Properties
 
     private var selectedProfileImage: UIImage?
 
-    // MARK: - Lifecycle
+    // Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,7 +41,7 @@ class ProfileSetupViewController: UIViewController,
             layout.estimatedItemSize = .zero
         }
 
-        // MARK: - Cell Registrations
+        // Cell Registrations
 
         collectionView.register(
             UINib(nibName: "ProfileSetupWelcomeCollectionViewCell", bundle: nil),
@@ -69,7 +69,7 @@ class ProfileSetupViewController: UIViewController,
         collectionView.collectionViewLayout.invalidateLayout()
     }
 
-    // MARK: - UICollectionViewDataSource
+    // UICollectionViewDataSource
 
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
@@ -79,7 +79,7 @@ class ProfileSetupViewController: UIViewController,
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-        // 🔹 Cell 0 — Welcome Header
+        // Cell 0 — Welcome Header
         if indexPath.item == 0 {
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "ProfileSetupWelcomeCollectionViewCell",
@@ -91,7 +91,7 @@ class ProfileSetupViewController: UIViewController,
             return cell
         }
 
-        // 🔹 Cell 1 — Profile Photo
+        // Cell 1 — Profile Photo
         if indexPath.item == 1 {
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "ProfileSetupPhotoCollectionViewCell",
@@ -110,7 +110,7 @@ class ProfileSetupViewController: UIViewController,
             return cell
         }
 
-        // 🔹 Cell 2 — Form Fields
+        // Cell 2 — Form Fields
         if indexPath.item == 2 {
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "ProfileSetupFormCollectionViewCell",
@@ -123,15 +123,13 @@ class ProfileSetupViewController: UIViewController,
             return cell
         }
 
-        // 🔹 Cell 3 — Continue Button + Footer
+        // Cell 3 — Continue Button + Footer
         let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: "ProfileSetupContinueCollectionViewCell",
             for: indexPath
         ) as! ProfileSetupContinueCollectionViewCell
 
         cell.footerLabel.text = "You’re not alone on this journey"
-
-        // ⬇️ THIS IS THE KEY
         cell.onContinueTapped = { [weak self] in
             self?.navigateToWelcome()
         }
@@ -140,7 +138,7 @@ class ProfileSetupViewController: UIViewController,
 
     }
 
-    // MARK: - UICollectionViewDelegateFlowLayout
+    // UICollectionViewDelegateFlowLayout
 
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
@@ -160,7 +158,7 @@ class ProfileSetupViewController: UIViewController,
         }
     }
 
-    // MARK: - ProfileSetupPhotoCellDelegate
+    // ProfileSetupPhotoCellDelegate
 
     func didTapCameraButton() {
         let alert = UIAlertController(
@@ -183,7 +181,7 @@ class ProfileSetupViewController: UIViewController,
         present(alert, animated: true)
     }
 
-    // MARK: - Image Picker Helpers
+    // Image Picker Helpers
 
     private func openImagePicker(sourceType: UIImagePickerController.SourceType) {
         let picker = UIImagePickerController()

@@ -75,7 +75,7 @@ extension Collection where Element == JournalEntry {
             }
         }
 
-        // Enforce minimum streak length = 2
+        // minimum streak length = 2
         return streak >= 2 ? streak : 0
     }
 
@@ -103,7 +103,7 @@ extension Collection where Element == JournalEntry {
         )
     }
 
-    // Journals for a specific day
+    // journals by date
     func journals(on date: Date) -> [JournalEntry] {
         let calendar = Calendar.current
         let target = calendar.startOfDay(for: date)

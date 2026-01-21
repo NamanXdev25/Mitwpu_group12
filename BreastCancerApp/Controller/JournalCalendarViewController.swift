@@ -16,7 +16,7 @@ class JournalCalendarViewController: UIViewController, UICollectionViewDataSourc
     @IBOutlet weak var nextMonth: UIButton!
     @IBOutlet weak var pickerContainerView: UIView!
     @IBOutlet weak var monthYearPicker: UIPickerView!
-    @IBOutlet weak var headerToggleButton: UIButton! // invisible button over "Month Year"
+    @IBOutlet weak var headerToggleButton: UIButton!
     @IBOutlet weak var chevronButton: UIButton!
     
     // variables

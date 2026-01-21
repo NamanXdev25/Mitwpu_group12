@@ -13,13 +13,13 @@ class JourneyDetailsViewController: UIViewController {
     @IBOutlet weak var progressBar: ProgressBarView!
     @IBOutlet weak var nextButton: UIButton!
     @IBOutlet weak var datePicker: UIDatePicker!
-    @IBOutlet weak var ageButton: UIButton! // button that shows selected age with chevron
-    @IBOutlet weak var agePickerView: UIView! // container view for age picker
+    @IBOutlet weak var ageButton: UIButton!
+    @IBOutlet weak var agePickerView: UIView!
     @IBOutlet weak var agePicker: UIPickerView!
-    @IBOutlet weak var stageButton: UIButton! // button that shows selected stage with chevron
-    @IBOutlet weak var stagePickerView: UIView! // container view for stage picker
+    @IBOutlet weak var stageButton: UIButton!
+    @IBOutlet weak var stagePickerView: UIView!
     @IBOutlet weak var stagePicker: UIPickerView!
-    @IBOutlet weak var overlayView: UIView! // overlay for dimming
+    @IBOutlet weak var overlayView: UIView!
     
     private var selectedAge: String?
     private var selectedStage: String?
@@ -49,7 +49,7 @@ class JourneyDetailsViewController: UIViewController {
         datePicker.addTarget(self, action: #selector(datePickerChanged), for: .valueChanged)
         
         overlayView.isHidden = true
-        overlayView.alpha = 0.5 // semi-transparent overlay
+        overlayView.alpha = 0.5
         agePickerView.isHidden = true
         stagePickerView.isHidden = true
     }

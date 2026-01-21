@@ -58,22 +58,21 @@ class FavoriteSessionCell: UICollectionViewCell {
     }
 }
 
-// MARK: - Fading Material View (Pure UIKit approach)
+// Fadin material view
 final class FadingMaterialView: UIVisualEffectView {
-    // gradient manner opacity
+    
     override func layoutSubviews() {
         super.layoutSubviews()
-        let maskLayer = CAGradientLayer() // Used internally as a mask 
+        let maskLayer = CAGradientLayer()
         maskLayer.frame = self.bounds
         maskLayer.colors = [UIColor.clear.cgColor, UIColor.white.cgColor]
         
-        // Blur starts 30% down for a smooth upper-edge blend
         maskLayer.locations = [0.3, 1.0]
         self.layer.mask = maskLayer
     }
 }
 
-// MARK: - Helper Extension 
+// Helper Extension 
 extension UIImage {
     var isDark: Bool {
         guard let cgImage = self.cgImage else { return false }

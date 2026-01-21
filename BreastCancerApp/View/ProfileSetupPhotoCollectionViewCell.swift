@@ -16,7 +16,6 @@ class ProfileSetupPhotoCollectionViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        // Camera button styling (already done)
         cameraButton.backgroundColor = .systemPink
         cameraButton.tintColor = .white
         cameraButton.layer.borderWidth = 2

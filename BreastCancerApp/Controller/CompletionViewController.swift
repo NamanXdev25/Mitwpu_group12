@@ -35,9 +35,6 @@ class CompletionViewController: UIViewController {
     
     @IBAction func homeButtonTapped(_ sender: UIButton) {
 
-        // Optional: persist onboarding completion
-        // UserDefaults.standard.set(true, forKey: "didCompleteOnboarding")
-
         let storyboard = UIStoryboard(name: "TabBarMain", bundle: nil)
 
         guard let tabBarController =

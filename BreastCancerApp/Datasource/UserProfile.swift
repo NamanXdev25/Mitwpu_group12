@@ -12,7 +12,7 @@ struct UserProfile {
     let id: String
     let name: String
     let email: String
-    let password: String   // ⬅️ ADD THIS
+    let password: String
     let treatmentStatus: String
     let hobbies: [String]
     let profileImageName: String?
@@ -28,7 +28,7 @@ struct UserProfile {
     let interests: [String]?
 }
 
-// MARK: - Healing Garden Stats
+// healing garden stats
 struct HealingGardenStats {
     var currentPoints: Int
     var totalPointsNeeded: Int
@@ -44,13 +44,11 @@ struct HealingGardenStats {
     }
 }
 
-// MARK: - Sample Profiles Manager
+// sample profiles
 class SampleProfilesManager {
     static let shared = SampleProfilesManager()
     
     private init() {}
-    
-    // Predefined sample profiles - each following different treatment paths
     let sampleProfiles: [UserProfile] = [
 
         UserProfile(
@@ -87,9 +85,8 @@ class SampleProfilesManager {
             interests: nil
         )
     ]
-
     
-    // Get profile stats for each sample profile
+    // profiles stats for each sample profile type
     func getStatsForProfile(id: String) -> HealingGardenStats {
         switch id {
         case "profile_1": // Currently in treatment

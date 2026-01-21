@@ -9,7 +9,6 @@
 import Foundation
 import UIKit
 
-// The Blueprint for a single session
 struct BreathingSession {
     let title: String
     let category: String
@@ -17,24 +16,18 @@ struct BreathingSession {
     let imageName: String
     var isFavorite: Bool
     
-    // The name of the video file (we will use this later)
     let videoFileName: String
 }
 
-//  The Data Manager
 class BreathingDataManager {
     
-    // SECTION 0: Favorites (Start Empty)
     func getFavoriteSessions() -> [BreathingSession] {
         return []
     }
     
-    // SECTION 1: Filters
     func getFilterTags() -> [String] {
         return ["All", "Meditation", "Stress Relief", "Sleep", "Wellness", "Gratitude"]
     }
-    
-    // SECTION 2: All Sessions
     
     func getAllSessions() -> [BreathingSession] {
         return [

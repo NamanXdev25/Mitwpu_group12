@@ -25,7 +25,6 @@ class BreathingPlayerViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        // a transparent appearance
         let appearance = UINavigationBarAppearance()
         appearance.configureWithTransparentBackground()
         appearance.backgroundColor = .clear
@@ -42,7 +41,6 @@ class BreathingPlayerViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        // restore the navigation bar to black title when leaving this screen
         let defaultAppearance = UINavigationBarAppearance()
         defaultAppearance.configureWithDefaultBackground()
         
@@ -53,7 +51,6 @@ class BreathingPlayerViewController: UIViewController {
         navigationController?.navigationBar.compactAppearance = defaultAppearance
     }
 
-    // view lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -191,12 +188,10 @@ class BreathingPlayerViewController: UIViewController {
             player?.pause()
             isPlaying = false
             
-            //ensure circle is full pink
             timerView.setFullProgress()
             
             timerView.showMessage("A quiet bloom marks your moment of peace")
             
-            //keeps Play Button hidden so user can read the text
             playButton.isHidden = true
             UIView.animate(withDuration: 0.3) { self.backgroundImageView.alpha = 1 }
             
@@ -221,7 +216,7 @@ class BreathingPlayerViewController: UIViewController {
         player?.play()
     }
     
-    // MARK: - View State Updates
+    // View State Updates
     func showBackground() {
         UIView.animate(withDuration: 0.3) {
             self.backgroundImageView.alpha = 1

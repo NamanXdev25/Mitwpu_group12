@@ -15,7 +15,6 @@ class WelcomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //applyGradient()
     }
     
     override func viewDidLayoutSubviews() {
@@ -33,22 +32,4 @@ class WelcomeViewController: UIViewController {
         mask.locations = [0.0, 0.45, 1.0]
         introImageView.layer.mask = mask
     }
-    
-//    private func applyGradient() {
-//        gradientView.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
-//
-//        let gradient = CAGradientLayer()
-//        gradient.frame = gradientView.bounds
-//
-//        gradient.colors = [
-//            UIColor.clear.cgColor,
-//            UIColor.white.cgColor
-//        ]
-//
-//        gradient.locations = [0.0, 1.0]
-//        gradient.startPoint = CGPoint(x: 0.5, y: 0.0)
-//        gradient.endPoint   = CGPoint(x: 0.5, y: 1.0)
-//
-//        gradientView.layer.addSublayer(gradient)
-//    }
 }

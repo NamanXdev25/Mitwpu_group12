@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -22,13 +22,13 @@
                         <rect key="frame" x="16" y="5" width="208" height="236"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pDK-1v-LFT">
-                                <rect key="frame" x="12" y="166" width="33" height="16"/>
+                                <rect key="frame" x="12" y="160" width="33" height="16"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
                                 <color key="textColor" name="Memorycolor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lig-d4-Tjd">
-                                <rect key="frame" x="12" y="196" width="37.333333333333336" height="18"/>
+                                <rect key="frame" x="12" y="176" width="184" height="18"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -49,10 +49,11 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="pDK-1v-LFT" firstAttribute="leading" secondItem="ZcV-R9-zIG" secondAttribute="leading" constant="12" id="FTB-rn-C90"/>
+                            <constraint firstAttribute="trailing" secondItem="Lig-d4-Tjd" secondAttribute="trailing" constant="12" id="Rec-K5-UH3"/>
                             <constraint firstItem="nag-Hu-PRZ" firstAttribute="leading" secondItem="ZcV-R9-zIG" secondAttribute="leading" constant="12" id="Sku-7q-Rhu"/>
                             <constraint firstAttribute="trailing" secondItem="nag-Hu-PRZ" secondAttribute="trailing" constant="12" id="Z32-k2-eWi"/>
-                            <constraint firstItem="Lig-d4-Tjd" firstAttribute="top" secondItem="pDK-1v-LFT" secondAttribute="bottom" constant="14" id="Z5H-d0-y5h"/>
-                            <constraint firstItem="pDK-1v-LFT" firstAttribute="top" secondItem="nag-Hu-PRZ" secondAttribute="bottom" constant="14" id="bcZ-PO-fwQ"/>
+                            <constraint firstItem="Lig-d4-Tjd" firstAttribute="top" secondItem="pDK-1v-LFT" secondAttribute="bottom" id="Z5H-d0-y5h"/>
+                            <constraint firstItem="pDK-1v-LFT" firstAttribute="top" secondItem="nag-Hu-PRZ" secondAttribute="bottom" constant="8" id="bcZ-PO-fwQ"/>
                             <constraint firstItem="nag-Hu-PRZ" firstAttribute="top" secondItem="ZcV-R9-zIG" secondAttribute="top" constant="12" id="pzD-f7-qqy"/>
                             <constraint firstItem="Lig-d4-Tjd" firstAttribute="leading" secondItem="ZcV-R9-zIG" secondAttribute="leading" constant="12" id="tOF-DV-gMn"/>
                         </constraints>

@@ -14,7 +14,6 @@ class HeaderView: UICollectionReusableView {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // No special styling needed yet
     }
     
     func configureHeader(text: String) {

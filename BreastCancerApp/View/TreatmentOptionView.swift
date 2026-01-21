@@ -52,7 +52,7 @@ class TreatmentOptionView: UIView {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         addGestureRecognizer(tapGesture)
         
-        // Initial state
+        // initial state
         updateSelectionState()
     }
     

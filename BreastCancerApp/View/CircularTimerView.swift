@@ -2,16 +2,15 @@ import UIKit
 
 class CircularTimerView: UIView {
 
-    // MARK: - Properties
+    // Properties
     private let glassContainer = UIView()
     private let blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
     private let timerLabel = UILabel()
-    private let staticBorderView = UIView() //thin white background ring
+    private let staticBorderView = UIView()
     
-    // Progress tracking
     private var progress: CGFloat = 0.0 {
         didSet {
-            setNeedsDisplay() // Redraws the moving border whenever progress changes
+            setNeedsDisplay()
         }
     }
 
@@ -30,23 +29,19 @@ class CircularTimerView: UIView {
     private func setupView() {
         self.backgroundColor = .clear
         
-        //  Setup the Glass Circle
         glassContainer.clipsToBounds = true
         glassContainer.translatesAutoresizingMaskIntoConstraints = false
         addSubview(glassContainer)
         
-        //  Add Blur Effect
         blurEffectView.translatesAutoresizingMaskIntoConstraints = false
         glassContainer.addSubview(blurEffectView)
         
-        //  Static White Outer Ring (The "Track")
         staticBorderView.backgroundColor = .clear
-        staticBorderView.layer.borderWidth = 2.0 // Thin border as requested
+        staticBorderView.layer.borderWidth = 2.0
         staticBorderView.layer.borderColor = UIColor.white.withAlphaComponent(0.2).cgColor
         staticBorderView.translatesAutoresizingMaskIntoConstraints = false
         glassContainer.addSubview(staticBorderView)
         
-        // Timer Text
         timerLabel.font = UIFont.monospacedDigitSystemFont(ofSize: 28, weight: .bold)
         timerLabel.textColor = .white
         timerLabel.textAlignment = .center
@@ -86,15 +81,12 @@ class CircularTimerView: UIView {
         glassContainer.layer.cornerRadius = radius
         staticBorderView.layer.cornerRadius = radius
     }
-
-    // MARK: - Custom Drawing (The Moving Border)
     
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         
         guard progress > 0 else { return }
         
-        // Calculate the path for the thin pink border
         let center = CGPoint(x: bounds.midX, y: bounds.midY)
         let radius = (glassContainer.frame.width / 2)
         let startAngle = -CGFloat.pi / 2
@@ -107,12 +99,12 @@ class CircularTimerView: UIView {
                                 clockwise: true)
         
         pinkColor.setStroke()
-        path.lineWidth = 10.0 // Thin moving border
+        path.lineWidth = 10.0
         path.lineCapStyle = .round
         path.stroke()
     }
 
-    // MARK: - Public Helper Methods (Fixed Errors)
+    // Helper Methods
 
     // Hides/Shows the timer text (Fixes togglePlayPause error)
     func setTimerTextHidden(_ hidden: Bool) {
