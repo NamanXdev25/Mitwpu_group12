@@ -10,7 +10,6 @@ import UIKit
 class WelcomeViewController: UIViewController {
     
     @IBOutlet weak var continueButton: UIButton!
-    @IBOutlet weak var gradientView: UIView!
     
     @IBOutlet weak var introImageView: UIView!
     override func viewDidLoad() {

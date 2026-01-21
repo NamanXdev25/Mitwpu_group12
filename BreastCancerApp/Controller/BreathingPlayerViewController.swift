@@ -17,11 +17,11 @@ class BreathingPlayerViewController: UIViewController {
     var isFirstPlay = true
    
     var timer: Timer?
-    var secondsRemaining = 300 // 5 mins
+    var secondsRemaining = 300
     var totalSessionDuration = 300
     var isTimerRunning = false
 
-    // MARK: - Navigation Bar Configuration
+    // nav bar config
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -53,7 +53,7 @@ class BreathingPlayerViewController: UIViewController {
         navigationController?.navigationBar.compactAppearance = defaultAppearance
     }
 
-    // MARK: - View Lifecycle
+    // view lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -63,7 +63,7 @@ class BreathingPlayerViewController: UIViewController {
         timerView.reset()
     }
 
-    // MARK: - Binds model data to ui
+    // bind data
     func setupData() {
         guard let session = session else { return }
         self.title = session.title
@@ -76,7 +76,7 @@ class BreathingPlayerViewController: UIViewController {
         totalSessionDuration = 300
         secondsRemaining = totalSessionDuration
     }
-    //MARK : - Sets up video playback sys and media coordination
+    
     func prepareVideo() {
         guard let session = session else { return }
         
@@ -103,7 +103,6 @@ class BreathingPlayerViewController: UIViewController {
         view.addGestureRecognizer(tapGesture)
     }
       
-    // MARK: - Interaction Logic
     @objc func screenTapped() {
         if !isFirstPlay {
             togglePlayPause()
