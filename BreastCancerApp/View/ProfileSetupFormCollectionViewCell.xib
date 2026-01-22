@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="ProfileSetupFormCollectionViewCell" customModule="BreastCancerApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="293"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="293"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your First Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qXU-E1-JET">
+                        <rect key="frame" x="16" y="16" width="343" height="18"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L40-zT-2l8" userLabel=" First Name View">
+                        <rect key="frame" x="16" y="40" width="343" height="52"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Your First Name" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BxR-Vt-CPB">
+                                <rect key="frame" x="12" y="0.0" width="319" height="52"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="44" id="pJv-R5-Xpt"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="52" id="6ny-Ga-e2i"/>
+                            <constraint firstAttribute="bottom" secondItem="BxR-Vt-CPB" secondAttribute="bottom" id="8bq-lI-keN"/>
+                            <constraint firstItem="BxR-Vt-CPB" firstAttribute="leading" secondItem="L40-zT-2l8" secondAttribute="leading" constant="12" id="N5e-O5-UD2"/>
+                            <constraint firstItem="BxR-Vt-CPB" firstAttribute="top" secondItem="L40-zT-2l8" secondAttribute="top" id="dkU-28-erF"/>
+                            <constraint firstAttribute="trailing" secondItem="BxR-Vt-CPB" secondAttribute="trailing" constant="12" id="pxI-3m-fUj"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="12"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                <integer key="value" value="1"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="layer.borderColor">
+                                <color key="value" name="Pink"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your Last Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DvI-5P-kNS">
+                        <rect key="frame" x="16" y="98" width="343" height="18"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                        <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ek6-gu-Qzk" userLabel="Last Name View">
+                        <rect key="frame" x="16" y="122" width="343" height="52"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter your Last Name" textAlignment="natural" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="iQJ-tb-YXW">
+                                <rect key="frame" x="12" y="0.0" width="319" height="52"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="44" id="egQ-e7-A0e"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="iQJ-tb-YXW" secondAttribute="bottom" id="DLy-de-vGY"/>
+                            <constraint firstAttribute="trailing" secondItem="iQJ-tb-YXW" secondAttribute="trailing" constant="12" id="PBs-bP-Snd"/>
+                            <constraint firstItem="iQJ-tb-YXW" firstAttribute="leading" secondItem="Ek6-gu-Qzk" secondAttribute="leading" constant="12" id="RLL-rI-vFa"/>
+                            <constraint firstItem="iQJ-tb-YXW" firstAttribute="top" secondItem="Ek6-gu-Qzk" secondAttribute="top" id="X8v-5e-uOB"/>
+                            <constraint firstAttribute="height" constant="52" id="sic-Ur-egc"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="12"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                <integer key="value" value="1"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="layer.borderColor">
+                                <color key="value" name="Pink"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your Gender" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Rc-BT-Ckx">
+                        <rect key="frame" x="16" y="180" width="343" height="18"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                        <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kkT-QB-rKf" userLabel="Gender View">
+                        <rect key="frame" x="16" y="204" width="343" height="52"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter your Gender" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Chd-yz-Kam">
+                                <rect key="frame" x="12" y="0.0" width="319" height="52"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="44" id="Rby-iD-VKy"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="52" id="2jD-UK-bfy"/>
+                            <constraint firstAttribute="bottom" secondItem="Chd-yz-Kam" secondAttribute="bottom" id="Akq-Uj-NSC"/>
+                            <constraint firstAttribute="trailing" secondItem="Chd-yz-Kam" secondAttribute="trailing" constant="12" id="FKz-bx-2V0"/>
+                            <constraint firstItem="Chd-yz-Kam" firstAttribute="leading" secondItem="kkT-QB-rKf" secondAttribute="leading" constant="12" id="h02-k5-Bfp"/>
+                            <constraint firstItem="Chd-yz-Kam" firstAttribute="top" secondItem="kkT-QB-rKf" secondAttribute="top" id="mpc-1A-5SY"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="12"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                <integer key="value" value="1"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="layer.borderColor">
+                                <color key="value" name="Pink"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="kkT-QB-rKf" secondAttribute="bottom" constant="16" id="2j4-TT-Lq0"/>
+                <constraint firstAttribute="trailing" secondItem="L40-zT-2l8" secondAttribute="trailing" constant="16" id="4lk-8J-n0C"/>
+                <constraint firstItem="L40-zT-2l8" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="50a-ej-CZM"/>
+                <constraint firstItem="Ek6-gu-Qzk" firstAttribute="top" secondItem="DvI-5P-kNS" secondAttribute="bottom" constant="6" id="I6X-Ye-8Kf"/>
+                <constraint firstAttribute="trailing" secondItem="Ek6-gu-Qzk" secondAttribute="trailing" constant="16" id="KaA-wx-I2z"/>
+                <constraint firstItem="Ek6-gu-Qzk" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="LwO-pD-jSO"/>
+                <constraint firstAttribute="trailing" secondItem="DvI-5P-kNS" secondAttribute="trailing" constant="16" id="P6b-tR-Wrj"/>
+                <constraint firstItem="qXU-E1-JET" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="16" id="ST2-45-v3g"/>
+                <constraint firstItem="DvI-5P-kNS" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="UpB-dz-3Vr"/>
+                <constraint firstItem="L40-zT-2l8" firstAttribute="top" secondItem="qXU-E1-JET" secondAttribute="bottom" constant="6" id="WXe-Ci-IlK"/>
+                <constraint firstAttribute="trailing" secondItem="1Rc-BT-Ckx" secondAttribute="trailing" constant="16" id="eeT-6T-dfG"/>
+                <constraint firstItem="1Rc-BT-Ckx" firstAttribute="top" secondItem="Ek6-gu-Qzk" secondAttribute="bottom" constant="6" id="gbv-oO-cn0"/>
+                <constraint firstAttribute="trailing" secondItem="kkT-QB-rKf" secondAttribute="trailing" constant="16" id="iI1-OR-MOH"/>
+                <constraint firstItem="DvI-5P-kNS" firstAttribute="top" secondItem="L40-zT-2l8" secondAttribute="bottom" constant="6" id="n2D-Ny-g5Q"/>
+                <constraint firstAttribute="trailing" secondItem="qXU-E1-JET" secondAttribute="trailing" constant="16" id="qNE-Fk-he8"/>
+                <constraint firstItem="qXU-E1-JET" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="rox-UE-b8x"/>
+                <constraint firstItem="kkT-QB-rKf" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="tIx-mS-l0L"/>
+                <constraint firstItem="kkT-QB-rKf" firstAttribute="top" secondItem="1Rc-BT-Ckx" secondAttribute="bottom" constant="6" id="xIp-nf-gbS"/>
+                <constraint firstItem="1Rc-BT-Ckx" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="zbJ-Dg-4eu"/>
+            </constraints>
+            <size key="customSize" width="375" height="293"/>
+            <connections>
+                <outlet property="firstNameContainerView" destination="L40-zT-2l8" id="BfR-il-nc8"/>
+                <outlet property="firstNameLabel" destination="qXU-E1-JET" id="EFb-bi-8kn"/>
+                <outlet property="firstNameTextField" destination="BxR-Vt-CPB" id="PLi-DM-zle"/>
+                <outlet property="genderContainerView" destination="kkT-QB-rKf" id="Mc2-U9-PlT"/>
+                <outlet property="genderLabel" destination="1Rc-BT-Ckx" id="DQa-y5-rwb"/>
+                <outlet property="genderTextField" destination="Chd-yz-Kam" id="QOC-Si-EMp"/>
+                <outlet property="lastNameContainerView" destination="Ek6-gu-Qzk" id="N3z-Ip-B0e"/>
+                <outlet property="lastNameLabel" destination="DvI-5P-kNS" id="EZ7-eG-JMJ"/>
+                <outlet property="lastNameTextField" destination="iQJ-tb-YXW" id="pLX-JF-QVz"/>
+            </connections>
+            <point key="canvasLocation" x="325.95419847328242" y="140.49295774647888"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <namedColor name="Pink">
+            <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

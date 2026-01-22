@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Complete Hydration",
+    "points": "Get 10 points",
+    "iconName": "Today's Plan 1",
+    "isCompleted": true
+  },
+  {
+    "title": "Complete Exercise goal",
+    "points": "Get 20 points",
+    "iconName": "Today's Plan 2",
+    "isCompleted": true
+  },
+  {
+    "title": "Practice Mindfulness",
+    "points": "Get 15 points",
+    "iconName": "Today's Plan 3",
+    "isCompleted": true
+  }
+]
