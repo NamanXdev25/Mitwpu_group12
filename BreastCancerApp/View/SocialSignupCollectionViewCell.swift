@@ -5,9 +5,11 @@ final class SocialSignupCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var googleContainerView: UIView!
     @IBOutlet weak var appleContainerView: UIView!
     @IBOutlet weak var signupContainer: UIView!
-
     @IBOutlet weak var signUpButton: UIButton!
     @IBOutlet weak var donthaveAccountLabel: UILabel!
+    
+    // Add closure for Sign In action
+    var onSignInTapped: (() -> Void)?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -23,16 +25,12 @@ final class SocialSignupCollectionViewCell: UICollectionViewCell {
     private func setupUI() {
         stylePillView(googleContainerView)
         stylePillView(appleContainerView)
-
-        signUpButton.backgroundColor = .clear
-        signUpButton.setTitleColor(UIColor(named: "pink"), for: .normal)
-        signUpButton.titleLabel?.font = .systemFont(ofSize: 14, weight: .semibold)
     }
 
     private func stylePillView(_ view: UIView) {
         view.layer.cornerRadius = 28
         view.layer.borderWidth = 1
-        view.layer.borderColor = UIColor(named: "pink")?.cgColor
+        view.layer.borderColor = UIColor(named: "Pink")?.cgColor
         view.backgroundColor = .white
         view.clipsToBounds = true
     }
@@ -49,5 +47,6 @@ final class SocialSignupCollectionViewCell: UICollectionViewCell {
 
     @IBAction func didTapSignUp(_ sender: UIButton) {
         print("Sign In tapped")
+        onSignInTapped?()
     }
 }

@@ -27,11 +27,6 @@ class SocialLoginCollectionViewCell: UICollectionViewCell {
         isUserInteractionEnabled = true
         stylePillView(googleContainerView)
         stylePillView(appleContainerView)
-
-        signUpButton.backgroundColor = .clear
-        signUpButton.setTitleColor(UIColor(named: "Pink"), for: .normal)
-        signUpButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
-        signUpButton.adjustsImageWhenHighlighted = false
     }
 
     private func stylePillView(_ view: UIView) {

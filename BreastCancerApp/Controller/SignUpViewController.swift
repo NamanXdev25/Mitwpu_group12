@@ -29,6 +29,12 @@ final class SignUpViewController: UIViewController {
         collectionView.backgroundColor = .clear
         collectionView.dataSource = self
         collectionView.delegate = self
+        collectionView.contentInset = UIEdgeInsets(
+            top: 0,
+            left: 0,
+            bottom: 40,
+            right: 0
+        )
 
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -56,8 +62,8 @@ final class SignUpViewController: UIViewController {
         )
 
         collectionView.register(
-            UINib(nibName: "SocialLoginCollectionViewCell", bundle: nil),
-            forCellWithReuseIdentifier: "SocialLoginCollectionViewCell"
+            UINib(nibName: "SocialSignupCollectionViewCell", bundle: nil),
+            forCellWithReuseIdentifier: "SocialSignupCollectionViewCell"
         )
     }
     
@@ -114,10 +120,16 @@ extension SignUpViewController: UICollectionViewDataSource {
             )
 
         case .social:
-            return collectionView.dequeueReusableCell(
-                withReuseIdentifier: "SocialLoginCollectionViewCell",
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "SocialSignupCollectionViewCell",
                 for: indexPath
-            )
+            ) as! SocialSignupCollectionViewCell
+            
+            cell.onSignInTapped = { [weak self] in
+                self?.dismiss(animated: true)
+            }
+            
+            return cell
         }
     }
 }
