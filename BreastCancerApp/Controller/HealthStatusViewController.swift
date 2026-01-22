@@ -77,13 +77,34 @@ final class HealthStatusViewController: UIViewController,
         )
 
         cardCell?.setEditing(isEditingProfile)
-        updateHeaderEditingState() 
+        updateHeaderEditingState()
     }
 
     @objc private func cancelTapped() {
+        // Revert any changes made
         cardCell?.revertEdits()
+        
+        // Exit editing mode
         isEditingProfile = false
-        editTapped()
+        
+        // Update navigation bar buttons to non-editing state
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "chevron.left"),
+            style: .plain,
+            target: self,
+            action: #selector(backTapped)
+        )
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            title: "Edit",
+            style: .plain,
+            target: self,
+            action: #selector(editTapped)
+        )
+        
+        // Update cells to display mode
+        cardCell?.setEditing(false)
+        updateHeaderEditingState()
     }
 
     @objc private func doneTapped() {
@@ -104,7 +125,27 @@ final class HealthStatusViewController: UIViewController,
             fullName: dataSource.userProfile.fullName
         )
 
-        dismiss(animated: true)
+        // Exit editing mode without dismissing the screen
+        isEditingProfile = false
+        
+        // Update navigation bar buttons to non-editing state
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "chevron.left"),
+            style: .plain,
+            target: self,
+            action: #selector(backTapped)
+        )
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            title: "Edit",
+            style: .plain,
+            target: self,
+            action: #selector(editTapped)
+        )
+        
+        // Update cells to display mode
+        cardCell?.setEditing(false)
+        updateHeaderEditingState()
     }
 
     // MARK: - Header Update (IMPORTANT)

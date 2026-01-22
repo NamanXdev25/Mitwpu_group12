@@ -44,7 +44,7 @@
                         <buttonConfiguration key="configuration" style="filled" cornerStyle="capsule">
                             <imageReference key="image" image="camera" catalog="system" symbolScale="small"/>
                             <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" scale="small"/>
-                            <color key="baseBackgroundColor" systemColor="systemPinkColor"/>
+                            <color key="baseBackgroundColor" name="pink"/>
                         </buttonConfiguration>
                         <connections>
                             <action selector="cameraTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="2Aw-F1-CAl"/>
@@ -76,7 +76,7 @@
             <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemPinkColor">
-            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

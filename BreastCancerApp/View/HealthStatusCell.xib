@@ -21,7 +21,7 @@
                         <rect key="frame" x="16" y="8" width="248" height="77"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Health Status" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="22G-1r-5Bb">
-                                <rect key="frame" x="16" y="29.666666666666664" width="92.666666666666671" height="18"/>
+                                <rect key="frame" x="0.0" y="29.666666666666664" width="92.666666666666671" height="18"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -37,7 +37,7 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="22G-1r-5Bb" firstAttribute="leading" secondItem="SVr-zX-i7Q" secondAttribute="leading" constant="16" id="ad6-Zq-asN"/>
+                            <constraint firstItem="22G-1r-5Bb" firstAttribute="leading" secondItem="SVr-zX-i7Q" secondAttribute="leading" id="ad6-Zq-asN"/>
                             <constraint firstAttribute="trailing" secondItem="8Cs-C9-ohN" secondAttribute="trailing" constant="16" id="bhj-ha-FqP"/>
                             <constraint firstItem="8Cs-C9-ohN" firstAttribute="centerY" secondItem="SVr-zX-i7Q" secondAttribute="centerY" id="dAq-mT-mq4"/>
                             <constraint firstItem="22G-1r-5Bb" firstAttribute="centerY" secondItem="SVr-zX-i7Q" secondAttribute="centerY" id="gNu-I1-YhB"/>

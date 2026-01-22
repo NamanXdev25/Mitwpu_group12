@@ -12,14 +12,14 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="HealthStatusCardCell" customModule="BreastCancerApp">
-            <rect key="frame" x="0.0" y="0.0" width="377" height="419"/>
+            <rect key="frame" x="0.0" y="0.0" width="377" height="340"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="377" height="419"/>
+                <rect key="frame" x="0.0" y="0.0" width="377" height="340"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ERE-y3-BMa" userLabel="cardView">
-                        <rect key="frame" x="0.0" y="0.0" width="377" height="419"/>
+                        <rect key="frame" x="0.0" y="0.0" width="377" height="340"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KDa-Zn-iXJ" userLabel="rowFirstName">
                                 <rect key="frame" x="16" y="16" width="345" height="44"/>
@@ -173,26 +173,16 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HFt-RT-h8u">
-                                        <rect key="frame" x="0.0" y="43.666666666666686" width="349" height="0.3333333333333357"/>
-                                        <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="0.5" id="O58-Ub-srH"/>
-                                        </constraints>
-                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstItem="HFt-RT-h8u" firstAttribute="leading" secondItem="mUM-9I-FaA" secondAttribute="leading" id="Gbz-32-MDB"/>
                                     <constraint firstItem="9zZ-VE-X4q" firstAttribute="centerY" secondItem="mUM-9I-FaA" secondAttribute="centerY" id="Iem-Sf-Mub"/>
                                     <constraint firstAttribute="height" constant="44" id="PzS-vJ-c1a"/>
                                     <constraint firstItem="9zZ-VE-X4q" firstAttribute="leading" secondItem="mUM-9I-FaA" secondAttribute="leading" constant="16" id="TVd-in-FbW"/>
                                     <constraint firstAttribute="trailing" secondItem="R4B-vF-7Sb" secondAttribute="trailing" id="eXQ-gW-qeR"/>
-                                    <constraint firstAttribute="trailing" secondItem="HFt-RT-h8u" secondAttribute="trailing" id="gaA-rL-dup"/>
                                     <constraint firstAttribute="trailing" secondItem="PzI-Bj-cdx" secondAttribute="trailing" constant="16" id="heL-vU-dEO"/>
                                     <constraint firstItem="R4B-vF-7Sb" firstAttribute="centerY" secondItem="mUM-9I-FaA" secondAttribute="centerY" id="lDe-bh-ooT"/>
                                     <constraint firstItem="PzI-Bj-cdx" firstAttribute="centerY" secondItem="mUM-9I-FaA" secondAttribute="centerY" id="sRy-Sc-FIX"/>
-                                    <constraint firstAttribute="bottom" secondItem="HFt-RT-h8u" secondAttribute="bottom" id="wQT-GG-Q20"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KUr-d2-zKz" userLabel="rowLastName">
@@ -366,7 +356,7 @@
                 <constraint firstItem="ERE-y3-BMa" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="niT-t7-mvQ"/>
                 <constraint firstItem="ERE-y3-BMa" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="uQM-a7-dVg"/>
             </constraints>
-            <size key="customSize" width="377" height="419"/>
+            <size key="customSize" width="377" height="340"/>
             <connections>
                 <outlet property="ageTextField" destination="Ms5-0F-CSY" id="I2u-ih-8cP"/>
                 <outlet property="ageValueLabel" destination="PPd-hR-lip" id="ziA-WN-bSN"/>
@@ -383,7 +373,7 @@
                 <outlet property="treatmentStateTextField" destination="R4B-vF-7Sb" id="IZm-m5-RaK"/>
                 <outlet property="treatmentStateValueLabel" destination="PzI-Bj-cdx" id="3Ux-7N-Pax"/>
             </connections>
-            <point key="canvasLocation" x="-66.412213740458014" y="160.21126760563382"/>
+            <point key="canvasLocation" x="-66.412213740458014" y="132.3943661971831"/>
         </collectionViewCell>
     </objects>
     <resources>

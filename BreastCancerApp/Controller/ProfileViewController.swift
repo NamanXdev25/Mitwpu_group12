@@ -117,7 +117,7 @@ final class ProfileViewController: UIViewController,
         case 0: return CGSize(width: width, height: 160)
         case 1: return CGSize(width: width, height: 72)
         case 2: return CGSize(width: width, height: 20)
-        default: return CGSize(width: width, height: 208)
+        default: return CGSize(width: width, height: 193)
         }
     }
 
