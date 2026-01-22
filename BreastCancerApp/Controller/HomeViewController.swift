@@ -51,6 +51,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         collectionView.register(UINib(nibName: "HomeHealingGardenCell", bundle: nil), forCellWithReuseIdentifier: "HomeHealingGardenCell")
         collectionView.register(UINib(nibName: "HomeUpcomingCell", bundle: nil), forCellWithReuseIdentifier: "HomeUpcomingCell")
         collectionView.register(UINib(nibName: "HomeMemoryCell", bundle: nil), forCellWithReuseIdentifier: "HomeMemoryCell")
+        collectionView.register(UINib(nibName: "CenteredMessageCell", bundle: nil), forCellWithReuseIdentifier: "CenteredMessageCell")
         collectionView.register(UINib(nibName: "ArticleCell", bundle: nil), forCellWithReuseIdentifier: "ArticleCell")
         
         collectionView.register(UINib(nibName: "HomeSectionHeaderView", bundle: nil),
@@ -99,15 +100,25 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     }
 
     func createMemoriesSection() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(218), heightDimension: .absolute(236))
-        let groupSize = NSCollectionLayoutSize(widthDimension: .estimated(700), heightDimension: .absolute(236))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [NSCollectionLayoutItem(layoutSize: itemSize)])
-        group.interItemSpacing = .fixed(15)
-        let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .continuous
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 16)
-        addHeader(to: section)
-        return section
+        // Check if memories are empty to show placeholder
+        if memories.isEmpty {
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(120))
+            let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, subitems: [NSCollectionLayoutItem(layoutSize: itemSize)])
+            let section = NSCollectionLayoutSection(group: group)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+            addHeader(to: section)
+            return section
+        } else {
+            let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(218), heightDimension: .absolute(236))
+            let groupSize = NSCollectionLayoutSize(widthDimension: .estimated(700), heightDimension: .absolute(236))
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [NSCollectionLayoutItem(layoutSize: itemSize)])
+            group.interItemSpacing = .fixed(15)
+            let section = NSCollectionLayoutSection(group: group)
+            section.orthogonalScrollingBehavior = .continuous
+            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 16)
+            addHeader(to: section)
+            return section
+        }
     }
 
     func createArticlesSection() -> NSCollectionLayoutSection {
@@ -115,7 +126,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, subitems: [NSCollectionLayoutItem(layoutSize: itemSize)])
         let section = NSCollectionLayoutSection(group: group)
         section.interGroupSpacing = 0
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 50, trailing: 0)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 0, bottom: 80, trailing: 16)
         addHeader(to: section)
         return section
     }
@@ -135,7 +146,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         switch section {
         case 0, 1: return 1
         case 3: return upcomingEvents.count
-        case 4: return memories.count
+        case 4: return memories.isEmpty ? 1 : memories.count  // Show 1 placeholder if empty
         case 5: return articles.count
         default: return 0
         }
@@ -166,10 +177,17 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             return cell
             
         case 4:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeMemoryCell", for: indexPath) as! HomeMemoryCell
-            let memory = memories[indexPath.row]
-            cell.configureWithMemory(memory)
-            return cell
+            if memories.isEmpty {
+                // Show placeholder cell
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CenteredMessageCell", for: indexPath) as! CenteredMessageCell
+                cell.configure(message: "Add Memories")
+                return cell
+            } else {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeMemoryCell", for: indexPath) as! HomeMemoryCell
+                let memory = memories[indexPath.row]
+                cell.configureWithMemory(memory)
+                return cell
+            }
             
         case 5:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ArticleCell", for: indexPath) as! ArticleCell
@@ -195,7 +213,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             header.seeAllButton.isHidden = true
         case 4:
             header.titleLabel.text = "Your Memories"
-            header.seeAllButton.isHidden = memories.isEmpty  // hide if no memories
+            header.seeAllButton.isHidden = false  // Always show "See All" button for memories
         case 5:
             header.titleLabel.text = "Articles"
         default: break
@@ -278,17 +296,22 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch indexPath.section {
         case 4:
-            // Navigate to memory details
-            let storyboard = UIStoryboard(name: "memory", bundle: nil)
-            let pageVC = storyboard.instantiateViewController(
-                withIdentifier: "MemoryPageViewController"
-            ) as! MemoryPageViewController
-            
-            pageVC.memories = memories
-            pageVC.startIndex = indexPath.row
-            pageVC.modalPresentationStyle = .fullScreen
-            
-            present(pageVC, animated: true)
+            if memories.isEmpty {
+                // Navigate to memories screen to add new memory
+                navigateToMemories()
+            } else {
+                // Navigate to memory details
+                let storyboard = UIStoryboard(name: "memory", bundle: nil)
+                let pageVC = storyboard.instantiateViewController(
+                    withIdentifier: "MemoryPageViewController"
+                ) as! MemoryPageViewController
+                
+                pageVC.memories = memories
+                pageVC.startIndex = indexPath.row
+                pageVC.modalPresentationStyle = .fullScreen
+                
+                present(pageVC, animated: true)
+            }
             
         case 5:
             let article = articles[indexPath.row]
