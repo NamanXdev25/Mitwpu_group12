@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MedicationStatsCell" id="mt4-sz-UEp" customClass="MedicationStatsCell" customModule="BreastCancerApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="354" height="44"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="354" height="44"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VkO-yr-Xkj">
+                        <rect key="frame" x="0.0" y="0.0" width="354" height="44"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="13"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5nN-OZ-e3m">
+                        <rect key="frame" x="16" y="11.666666666666664" width="78.666666666666671" height="21"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="waK-f2-Fff">
+                        <rect key="frame" x="254.66666666666666" y="11.666666666666664" width="83.333333333333343" height="21"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="o9v-X6-eeS"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="waK-f2-Fff" firstAttribute="centerY" secondItem="mt4-sz-UEp" secondAttribute="centerY" id="2Pb-cB-e73"/>
+                <constraint firstItem="VkO-yr-Xkj" firstAttribute="top" secondItem="mt4-sz-UEp" secondAttribute="top" id="6M3-eJ-4Ix"/>
+                <constraint firstAttribute="trailing" secondItem="VkO-yr-Xkj" secondAttribute="trailing" id="KD9-1t-svF"/>
+                <constraint firstItem="5nN-OZ-e3m" firstAttribute="centerY" secondItem="mt4-sz-UEp" secondAttribute="centerY" id="Srw-IO-6bN"/>
+                <constraint firstAttribute="bottom" secondItem="VkO-yr-Xkj" secondAttribute="bottom" id="Zas-OR-g3V"/>
+                <constraint firstAttribute="trailing" secondItem="waK-f2-Fff" secondAttribute="trailing" constant="16" id="mMU-po-jza"/>
+                <constraint firstItem="VkO-yr-Xkj" firstAttribute="leading" secondItem="mt4-sz-UEp" secondAttribute="leading" id="tnm-eR-Hn8"/>
+                <constraint firstItem="5nN-OZ-e3m" firstAttribute="leading" secondItem="mt4-sz-UEp" secondAttribute="leading" constant="16" id="xlg-hY-qEX"/>
+            </constraints>
+            <size key="customSize" width="354" height="50"/>
+            <connections>
+                <outlet property="containerView" destination="VkO-yr-Xkj" id="mQ5-Kj-yrf"/>
+                <outlet property="timeLabel" destination="waK-f2-Fff" id="mat-va-wNh"/>
+                <outlet property="titleLabel" destination="5nN-OZ-e3m" id="zq9-D1-fg0"/>
+            </connections>
+            <point key="canvasLocation" x="259.5419847328244" y="122.53521126760565"/>
+        </collectionViewCell>
+    </objects>
+</document>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ActionsContainerCell" id="gTV-IL-0wX" customClass="ActionsContainerCell" customModule="BreastCancerApp">
+            <rect key="frame" x="0.0" y="0.0" width="352" height="154"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="352" height="154"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kSy-t4-3Wg">
+                        <rect key="frame" x="0.0" y="0.0" width="352" height="154"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="06V-qK-fL1">
+                                <rect key="frame" x="66" y="12" width="220" height="48"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="220" id="AFc-9l-YJx"/>
+                                    <constraint firstAttribute="height" constant="48" id="eS6-vO-cjp"/>
+                                </constraints>
+                                <color key="tintColor" systemColor="labelColor"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="tinted" title="Log Self-Exam" cornerStyle="capsule">
+                                    <fontDescription key="titleFontDescription" style="UICTFontTextStyleHeadline"/>
+                                    <color key="baseBackgroundColor" name="TabBarcolor1"/>
+                                </buttonConfiguration>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="Layer.cornerRadius">
+                                        <integer key="value" value="24"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="logButtonTapped:" destination="gTV-IL-0wX" eventType="primaryActionTriggered" id="qfJ-Hx-hgy"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L6s-Y3-B6M">
+                                <rect key="frame" x="106" y="88" width="140" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="140" id="yI1-7X-2IV"/>
+                                </constraints>
+                                <color key="tintColor" name="pink"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="View past Logs">
+                                    <fontDescription key="titleFontDescription" style="UICTFontTextStyleSubhead"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="pastButtonTapped:" destination="gTV-IL-0wX" eventType="primaryActionTriggered" id="mq2-UV-eUg"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" name="baground"/>
+                        <constraints>
+                            <constraint firstItem="06V-qK-fL1" firstAttribute="top" secondItem="kSy-t4-3Wg" secondAttribute="top" constant="12" id="QDL-Q7-Ll7"/>
+                            <constraint firstItem="L6s-Y3-B6M" firstAttribute="top" secondItem="06V-qK-fL1" secondAttribute="bottom" constant="28" id="cCy-Ez-PNs"/>
+                            <constraint firstItem="06V-qK-fL1" firstAttribute="centerX" secondItem="kSy-t4-3Wg" secondAttribute="centerX" id="eEx-rF-c5h"/>
+                            <constraint firstItem="L6s-Y3-B6M" firstAttribute="centerX" secondItem="06V-qK-fL1" secondAttribute="centerX" id="gQA-OW-n87"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="kSy-t4-3Wg" secondAttribute="bottom" id="LAN-4F-CS8"/>
+                <constraint firstItem="kSy-t4-3Wg" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="Wo5-9F-t6k"/>
+                <constraint firstItem="kSy-t4-3Wg" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="ZwN-Pq-JNX"/>
+                <constraint firstAttribute="trailing" secondItem="kSy-t4-3Wg" secondAttribute="trailing" id="oMi-ig-uUM"/>
+            </constraints>
+            <size key="customSize" width="352" height="154"/>
+            <connections>
+                <outlet property="logButton" destination="06V-qK-fL1" id="bYz-be-Ixm"/>
+                <outlet property="pastButton" destination="L6s-Y3-B6M" id="jFl-j6-irN"/>
+            </connections>
+            <point key="canvasLocation" x="143.5114503816794" y="56.338028169014088"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <namedColor name="TabBarcolor1">
+            <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+        <namedColor name="baground">
+            <color red="0.97254901960784312" green="0.94901960784313721" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+        <namedColor name="pink">
+            <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
