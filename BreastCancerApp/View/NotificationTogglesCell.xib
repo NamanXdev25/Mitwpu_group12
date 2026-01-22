@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -32,7 +32,7 @@
                                     </label>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VlA-Ex-ndF">
                                         <rect key="frame" x="210" y="10" width="63" height="28"/>
-                                        <color key="onTintColor" name="pink"/>
+                                        <color key="onTintColor" name="Pink"/>
                                     </switch>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b5P-Rj-xcn">
                                         <rect key="frame" x="16" y="47.666666666666664" width="255" height="0.3333333333333357"/>
@@ -65,7 +65,7 @@
                                     </label>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0wG-wb-ldA">
                                         <rect key="frame" x="210" y="10" width="63" height="28"/>
-                                        <color key="onTintColor" name="pink"/>
+                                        <color key="onTintColor" name="Pink"/>
                                     </switch>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="92u-cA-1hM">
                                         <rect key="frame" x="16" y="47.666666666666671" width="255" height="0.3333333333333357"/>
@@ -98,7 +98,7 @@
                                     </label>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AF4-f8-a3o">
                                         <rect key="frame" x="210" y="10" width="63" height="28"/>
-                                        <color key="onTintColor" name="pink"/>
+                                        <color key="onTintColor" name="Pink"/>
                                     </switch>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ARc-2z-ebw">
                                         <rect key="frame" x="16" y="47.666666666666657" width="255" height="0.3333333333333357"/>
@@ -131,7 +131,7 @@
                                     </label>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MWW-rD-QLl">
                                         <rect key="frame" x="210" y="10" width="63" height="28"/>
-                                        <color key="onTintColor" name="pink"/>
+                                        <color key="onTintColor" name="Pink"/>
                                     </switch>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -186,7 +186,7 @@
         </collectionViewCell>
     </objects>
     <resources>
-        <namedColor name="pink">
+        <namedColor name="Pink">
             <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemBackgroundColor">

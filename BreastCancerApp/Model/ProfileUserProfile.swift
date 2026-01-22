@@ -1,6 +1,6 @@
 import UIKit
 
-struct UserProfile: Codable {
+struct ProfileUserProfile: Codable {
 
     // MARK: - Identity
     var firstName: String

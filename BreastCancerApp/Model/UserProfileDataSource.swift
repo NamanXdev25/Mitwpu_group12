@@ -4,7 +4,7 @@ import UIKit
 class UserProfileDataSource {
 
     static let shared = UserProfileDataSource()
-    private(set) var userProfile: UserProfile
+    private(set) var userProfile: ProfileUserProfile
     private let userProfileKey = "savedUserProfile"
     static let profileDidUpdateNotification = Notification.Name("UserProfileDidUpdate")
 
@@ -16,14 +16,14 @@ class UserProfileDataSource {
             self.userProfile = defaultProfile
             print(" Loaded profile from JSON")
         } else {
-            self.userProfile = UserProfile()
+            self.userProfile = ProfileUserProfile()
             print(" Using hardcoded default profile")
         }
     }
 
     // MARK: - Update Profile
 
-    func updateProfile(_ profile: UserProfile) {
+    func updateProfile(_ profile: ProfileUserProfile) {
         self.userProfile = profile
         saveToUserDefaults()
         notifyProfileUpdate()
@@ -110,21 +110,21 @@ class UserProfileDataSource {
         }
     }
 
-    private static func loadFromUserDefaults() -> UserProfile? {
+    private static func loadFromUserDefaults() -> ProfileUserProfile? {
         guard let data = UserDefaults.standard.data(forKey: "savedUserProfile") else {
             return nil
         }
 
         do {
             let decoder = JSONDecoder()
-            return try decoder.decode(UserProfile.self, from: data)
+            return try decoder.decode(ProfileUserProfile.self, from: data)
         } catch {
             print(" Failed to load profile from UserDefaults: \(error)")
             return nil
         }
     }
 
-    private static func loadFromJSON() -> UserProfile? {
+    private static func loadFromJSON() -> ProfileUserProfile? {
         guard let url = Bundle.main.url(forResource: "defaultUser", withExtension: "json"),
               let data = try? Data(contentsOf: url) else {
             print(" Could not find defaultUser.json")
@@ -133,7 +133,7 @@ class UserProfileDataSource {
 
         do {
             let decoder = JSONDecoder()
-            return try decoder.decode(UserProfile.self, from: data)
+            return try decoder.decode(ProfileUserProfile.self, from: data)
         } catch {
             print(" Failed to decode JSON: \(error)")
             return nil
