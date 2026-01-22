@@ -23,7 +23,7 @@ class HomeDataStore {
     private func loadDataFromJSON() {
         goals = loadJSON("Goals.json")
         upcomingEvents = loadJSON("Upcoming.json")
-        memories = loadJSON("Memories.json")
+        //memories = loadJSON("Memories.json")
         let response: ArticlesResponse = loadJSON("articles.json")
         articles = response.articles
     }
