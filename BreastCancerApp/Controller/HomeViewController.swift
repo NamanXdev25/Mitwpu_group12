@@ -146,6 +146,8 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         case 0:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeHeaderCell", for: indexPath) as! HomeHeaderCell
             cell.configure(name: dataStore.userProfile?.name ?? "User")
+            // Set delegate
+            cell.delegate = self
             return cell
             
         case 1:
@@ -223,6 +225,30 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         }
     }
     
+    // MARK: - Profile Navigation
+    func navigateToProfile() {
+        let storyboard = UIStoryboard(name: "profile", bundle: nil)
+        
+        // Get the ProfileViewController
+        if let profileVC = storyboard.instantiateViewController(withIdentifier: "ProfileViewController") as? ProfileViewController {
+            
+            // Wrap in navigation controller for modal presentation
+            let navController = UINavigationController(rootViewController: profileVC)
+            
+            // Set modal presentation style to automatic (card style on iOS 13+)
+            navController.modalPresentationStyle = .automatic
+            
+            // Optional: Configure sheet presentation for more control
+            if let sheet = navController.sheetPresentationController {
+                sheet.detents = [.large()]
+                sheet.prefersGrabberVisible = true
+                sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+            }
+            
+            present(navController, animated: true)
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch indexPath.section {
         case 4:
@@ -256,5 +282,12 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         default:
             break
         }
+    }
+}
+
+// MARK: - HomeHeaderCellDelegate
+extension HomeViewController: HomeHeaderCellDelegate {
+    func homeHeaderCellDidTapProfile(_ cell: HomeHeaderCell) {
+        navigateToProfile()
     }
 }

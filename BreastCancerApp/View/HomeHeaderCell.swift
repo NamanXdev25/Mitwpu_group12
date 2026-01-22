@@ -1,5 +1,9 @@
 import UIKit
 
+protocol HomeHeaderCellDelegate: AnyObject {
+    func homeHeaderCellDidTapProfile(_ cell: HomeHeaderCell)
+}
+
 class HomeHeaderCell: UICollectionViewCell {
     
     @IBOutlet weak var backgroundImageView: UIImageView!
@@ -13,7 +17,9 @@ class HomeHeaderCell: UICollectionViewCell {
     @IBOutlet weak var quoteLabel: UILabel!
     
     private var gradientLayer: CAGradientLayer?
-
+    
+    // MARK: - Delegate
+    weak var delegate: HomeHeaderCellDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -54,7 +60,7 @@ class HomeHeaderCell: UICollectionViewCell {
     
     @IBAction func profileTapped(_ sender: UIButton) {
         print("Profile tapped!")
+        // Notify delegate
+        delegate?.homeHeaderCellDidTapProfile(self)
     }
 }
-
-

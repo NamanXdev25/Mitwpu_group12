@@ -15,6 +15,9 @@ final class ProfileViewController: UIViewController,
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.backgroundColor = .clear
+        
+        // Setup close button action
+        setupNavigationBar()
 
         [
             (ProfileHeaderCell.reuseIdentifier, "ProfileHeaderCell"),
@@ -38,6 +41,19 @@ final class ProfileViewController: UIViewController,
 
     deinit {
         NotificationCenter.default.removeObserver(self)
+    }
+    
+    // MARK: - Navigation Bar Setup
+    
+    private func setupNavigationBar() {
+        // The close button is already in the storyboard
+        // We just need to connect its action
+        navigationItem.leftBarButtonItem?.target = self
+        navigationItem.leftBarButtonItem?.action = #selector(closeTapped)
+    }
+    
+    @objc private func closeTapped() {
+        dismiss(animated: true)
     }
 
     @objc private func profileDidUpdate() {
