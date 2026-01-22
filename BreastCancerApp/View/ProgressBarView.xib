@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ProgressBarView" customModule="BreastCancerApp" customModuleProvider="target"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sRF-ps-Zlf">
+                    <rect key="frame" x="0.0" y="118" width="393" height="666"/>
+                    <color key="backgroundColor" systemColor="systemGray4Color"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                            <integer key="value" value="4"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </view>
+                <view tag="100" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m1U-zr-Xrw">
+                    <rect key="frame" x="0.0" y="118" width="98" height="666"/>
+                    <color key="backgroundColor" name="OnboardingPrimaryColor"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="98" id="V09-0a-3AM"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                            <integer key="value" value="4"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="sRF-ps-Zlf" secondAttribute="bottom" id="10T-Qc-tet"/>
+                <constraint firstItem="m1U-zr-Xrw" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="Kzh-HE-hbX"/>
+                <constraint firstItem="sRF-ps-Zlf" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="NBa-Pj-Won"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="m1U-zr-Xrw" secondAttribute="bottom" id="Pxe-Hh-RTk"/>
+                <constraint firstItem="sRF-ps-Zlf" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="X7O-le-eAt"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="sRF-ps-Zlf" secondAttribute="trailing" id="tE4-Ks-b3d"/>
+                <constraint firstItem="m1U-zr-Xrw" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="yAl-QP-Mes"/>
+            </constraints>
+            <point key="canvasLocation" x="-54" y="107"/>
+        </view>
+    </objects>
+    <resources>
+        <namedColor name="OnboardingPrimaryColor">
+            <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray4Color">
+            <color red="0.81960784310000001" green="0.81960784310000001" blue="0.83921568629999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

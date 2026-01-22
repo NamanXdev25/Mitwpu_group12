@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="ProfileSetupWelcomeCollectionViewCell" customModule="BreastCancerApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="302" height="148"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="302" height="148"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Sg-2H-1qf">
+                        <rect key="frame" x="82.666666666666671" y="23.999999999999996" width="136.66666666666663" height="40.666666666666657"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Let's set up your profile" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L2S-Th-m8W">
+                        <rect key="frame" x="70.333333333333329" y="72.666666666666671" width="161.66666666666669" height="18"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                        <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstItem="0Sg-2H-1qf" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="6Zb-0b-CDb"/>
+                <constraint firstItem="L2S-Th-m8W" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="W1w-c6-V48"/>
+                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="L2S-Th-m8W" secondAttribute="bottom" constant="16" id="YP7-Rz-ltj"/>
+                <constraint firstItem="L2S-Th-m8W" firstAttribute="top" secondItem="0Sg-2H-1qf" secondAttribute="bottom" constant="8" id="cjR-Td-fMU"/>
+                <constraint firstItem="0Sg-2H-1qf" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="24" id="v1D-yE-jce"/>
+            </constraints>
+            <size key="customSize" width="302" height="148"/>
+            <connections>
+                <outlet property="subtitleLabel" destination="L2S-Th-m8W" id="qHY-3e-vPE"/>
+                <outlet property="titleLabel" destination="0Sg-2H-1qf" id="a4t-Rt-u8q"/>
+            </connections>
+            <point key="canvasLocation" x="156" y="45"/>
+        </collectionViewCell>
+    </objects>
+</document>

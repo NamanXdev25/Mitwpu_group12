@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="q8C-FJ-bTx">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Logs-->
+        <scene sceneID="VUO-lQ-OT9">
+            <objects>
+                <viewController id="of2-DO-BT0" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="WCU-hE-N6L">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="Jrc-yz-U5w"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Logs" image="heart.text.clipboard" catalog="system" selectedImage="heart.text.clipboard.fill" id="Q4b-VE-wXW"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xRn-pT-vJA" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="6441.9847328244268" y="84.507042253521135"/>
+        </scene>
+        <!--Mindfulness-->
+        <scene sceneID="FFs-qy-vfP">
+            <objects>
+                <viewController storyboardIdentifier="MindfulnessViewController" title="Mindfulness" id="fdm-e1-HH3" customClass="MindfulnessViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="2Xe-hO-suP">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kAz-tA-O7E">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="300"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="300" id="rcc-Hw-Boy"/>
+                                </constraints>
+                            </view>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="jcA-E6-5Sx">
+                                <rect key="frame" x="0.0" y="300" width="393" height="552"/>
+                                <color key="backgroundColor" name="BgColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="wjY-zN-QCa">
+                                    <size key="itemSize" width="353" height="357"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="w1f-KZ-efs"/>
+                        <color key="backgroundColor" name="BgColor"/>
+                        <constraints>
+                            <constraint firstItem="jcA-E6-5Sx" firstAttribute="top" secondItem="kAz-tA-O7E" secondAttribute="bottom" id="1rO-65-KII"/>
+                            <constraint firstAttribute="bottom" secondItem="jcA-E6-5Sx" secondAttribute="bottom" id="3HV-CK-IVS"/>
+                            <constraint firstItem="kAz-tA-O7E" firstAttribute="leading" secondItem="w1f-KZ-efs" secondAttribute="leading" id="TXz-DB-Rvv"/>
+                            <constraint firstItem="kAz-tA-O7E" firstAttribute="top" secondItem="2Xe-hO-suP" secondAttribute="top" id="Y8A-Lr-CDR"/>
+                            <constraint firstItem="jcA-E6-5Sx" firstAttribute="trailing" secondItem="w1f-KZ-efs" secondAttribute="trailing" id="Zbm-Wo-i6l"/>
+                            <constraint firstItem="jcA-E6-5Sx" firstAttribute="leading" secondItem="w1f-KZ-efs" secondAttribute="leading" id="aXa-y0-RBX"/>
+                            <constraint firstItem="w1f-KZ-efs" firstAttribute="trailing" secondItem="kAz-tA-O7E" secondAttribute="trailing" id="bzI-yO-aXs"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Mindfulness" image="figure.mind.and.body.circle" catalog="system" selectedImage="figure.mind.and.body.circle.fill" id="6XI-HB-mBn"/>
+                    <navigationItem key="navigationItem" title="Mindfulness" largeTitleDisplayMode="always" id="AZC-3d-XZ1"/>
+                    <connections>
+                        <outlet property="collectionView" destination="jcA-E6-5Sx" id="2Je-z2-vXF"/>
+                        <outlet property="gradientView" destination="kAz-tA-O7E" id="6Ij-Q9-aEg"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6av-87-vPq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5472.5190839694651" y="84.507042253521135"/>
+        </scene>
+        <!--Item-->
+        <scene sceneID="clY-5g-Vvp">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Xlj-HY-ju7" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="Zhm-TT-9qe"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="sdW-Jr-UAX">
+                        <rect key="frame" x="0.0" y="118" width="393" height="106"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="fdm-e1-HH3" kind="relationship" relationship="rootViewController" id="JYE-0A-ZP1"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kbn-MT-U21" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4545.801526717557" y="84.507042253521135"/>
+        </scene>
+        <!--Home View Controller-->
+        <scene sceneID="KP0-NB-H5b">
+            <objects>
+                <viewController id="2Qj-RJ-7sG" customClass="HomeViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="vOD-Nq-PzN">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="27e-x9-EPK">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                                <color key="backgroundColor" name="logsbgcolor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Vj5-d1-CIh">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="b82-A5-G7p"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="27e-x9-EPK" secondAttribute="trailing" id="1DD-0E-rVQ"/>
+                            <constraint firstAttribute="bottom" secondItem="27e-x9-EPK" secondAttribute="bottom" id="NFz-LA-ehM"/>
+                            <constraint firstItem="27e-x9-EPK" firstAttribute="top" secondItem="vOD-Nq-PzN" secondAttribute="top" id="gBq-pC-Sdm"/>
+                            <constraint firstItem="27e-x9-EPK" firstAttribute="leading" secondItem="vOD-Nq-PzN" secondAttribute="leading" id="u8n-xS-b8R"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="gpz-dy-muv"/>
+                    <connections>
+                        <outlet property="collectionView" destination="27e-x9-EPK" id="fTT-HN-bco"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="GzN-cj-f4A" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3518.320610687023" y="84.507042253521135"/>
+        </scene>
+        <!--Home-->
+        <scene sceneID="PEV-QJ-6ZZ">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="tdT-jh-huK" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Home" image="house" catalog="system" selectedImage="house.fill" id="ucd-mN-gHd"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="J9L-fK-DNH">
+                        <rect key="frame" x="0.0" y="118" width="393" height="54"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="2Qj-RJ-7sG" kind="relationship" relationship="rootViewController" id="waz-Dv-Qao"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="knT-8g-IFX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2736.6412213740455" y="84.507042253521135"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="5oM-4W-KoP">
+            <objects>
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="q8C-FJ-bTx" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="nG9-Cg-KJi">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="tintColor" name="OnboardingPrimaryColor"/>
+                        <color key="selectedImageTintColor" name="OnboardingPrimaryColor"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="tdT-jh-huK" kind="relationship" relationship="viewControllers" id="ojR-9I-8yx"/>
+                        <segue destination="Xlj-HY-ju7" kind="relationship" relationship="viewControllers" id="cUZ-P7-AGn"/>
+                        <segue destination="of2-DO-BT0" kind="relationship" relationship="viewControllers" id="nTp-ml-2Zl"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="03P-g1-xUt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4680" y="-1034"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="figure.mind.and.body.circle" catalog="system" width="128" height="123"/>
+        <image name="figure.mind.and.body.circle.fill" catalog="system" width="128" height="123"/>
+        <image name="heart.text.clipboard" catalog="system" width="103" height="128"/>
+        <image name="heart.text.clipboard.fill" catalog="system" width="103" height="128"/>
+        <image name="house" catalog="system" width="128" height="104"/>
+        <image name="house.fill" catalog="system" width="128" height="104"/>
+        <namedColor name="BgColor">
+            <color red="0.97254901960784312" green="0.94901960784313721" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="OnboardingPrimaryColor">
+            <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="logsbgcolor">
+            <color red="0.97299998998641968" green="0.94900000095367432" blue="0.9570000171661377" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

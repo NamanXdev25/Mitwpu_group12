@@ -2,10 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Allow gallery access to set profile photo</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Allow camera access to set profile photo</string>
+  <string>This app needs camera access to set your profile photo and add memories.</string>
+
+  <key>NSPhotoLibraryUsageDescription</key>
+  <string>This app needs photo library access to select your profile photo.</string>
+
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsTabbedSceneCollection</key>
