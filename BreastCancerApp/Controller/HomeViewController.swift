@@ -245,8 +245,34 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
                 sheet.prefersScrollingExpandsWhenScrolledToEdge = false
             }
             
-            present(navController, animated: true)
+            present(navController, animated: true) {
+                // Add observer to refresh when profile updates
+                NotificationCenter.default.addObserver(
+                    self,
+                    selector: #selector(self.refreshProfileData),
+                    name: UserProfileDataSource.profileDidUpdateNotification,
+                    object: nil
+                )
+            }
         }
+    }
+    
+    // MARK: - Profile Update Handler
+    
+    @objc private func refreshProfileData() {
+        // Reload the header cell to reflect updated profile photo
+        if let headerCell = collectionView.cellForItem(at: IndexPath(item: 0, section: 0)) as? HomeHeaderCell {
+            headerCell.configure(name: dataStore.userProfile?.name ?? "User")
+            
+            // Update profile image
+            if let profileImage = UserProfileDataSource.shared.userProfile.profileImage {
+                headerCell.profileImageView.image = profileImage
+            }
+        }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

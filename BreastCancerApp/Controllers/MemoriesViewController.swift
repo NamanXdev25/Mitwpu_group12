@@ -34,7 +34,6 @@ final class MemoriesViewController: UIViewController,
         sortAndGroupMemories()
 
         configureCollectionView()
-        configureAddButton()
     }
 
     override func viewDidLayoutSubviews() {
@@ -42,13 +41,7 @@ final class MemoriesViewController: UIViewController,
         addButton.layer.cornerRadius = addButton.bounds.height / 2
     }
 
-    // MARK: - UI
-    private func configureAddButton() {
-        addButton.configuration = nil
-        addButton.backgroundColor = .pink
-        addButton.setImage(UIImage(systemName: "plus"), for: .normal)
-        addButton.tintColor = .white
-    }
+    
 
     private func configureCollectionView() {
         collectionView.backgroundColor = .clear

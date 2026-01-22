@@ -55,6 +55,11 @@ class HomeHeaderCell: UICollectionViewCell {
     func configure(name: String) {
         let firstName = name.components(separatedBy: " ").first ?? name
         greetingLabel.text = "Hello, \(firstName)!"
+        
+        // Load the current profile image from data source
+        if let profileImage = UserProfileDataSource.shared.userProfile.profileImage {
+            profileImageView.image = profileImage
+        }
     }
     
     
