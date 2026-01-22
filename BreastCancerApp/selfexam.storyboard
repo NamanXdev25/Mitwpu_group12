@@ -6,7 +6,6 @@
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
-        <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -27,18 +26,7 @@
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
-                                <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="kvB-wH-XtU">
-                                        <rect key="frame" x="65.666666666666671" y="0.0" width="262" height="161"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="hMM-E1-AzU">
-                                            <rect key="frame" x="0.0" y="0.0" width="262" height="161"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                        </collectionViewCellContentView>
-                                        <color key="backgroundColor" name="baground"/>
-                                        <size key="customSize" width="262" height="161"/>
-                                    </collectionViewCell>
-                                </cells>
+                                <cells/>
                                 <connections>
                                     <outlet property="dataSource" destination="puu-Zo-Jeq" id="TsU-Eb-geb"/>
                                     <outlet property="delegate" destination="puu-Zo-Jeq" id="ykJ-Nq-sxY"/>
@@ -73,11 +61,11 @@
             <objects>
                 <viewController storyboardIdentifier="ObservationsViewController" id="SFl-U8-WC4" customClass="ObservationsViewController" customModule="BreastCancerApp" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="pdS-3q-OFY">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="783"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="cNK-M3-DRC">
-                                <rect key="frame" x="0.0" y="172" width="393" height="612"/>
+                                <rect key="frame" x="0.0" y="59" width="393" height="724"/>
                                 <color key="backgroundColor" name="baground"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="de0-2d-12E">
                                     <size key="itemSize" width="128" height="128"/>
@@ -85,16 +73,7 @@
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
-                                <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="RrA-ip-1la">
-                                        <rect key="frame" x="0.0" y="0.0" width="127.99999999999997" height="128"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="rI6-hB-5XD">
-                                            <rect key="frame" x="0.0" y="0.0" width="127.99999999999997" height="128"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                        </collectionViewCellContentView>
-                                    </collectionViewCell>
-                                </cells>
+                                <cells/>
                                 <connections>
                                     <outlet property="dataSource" destination="SFl-U8-WC4" id="YWJ-36-ydT"/>
                                     <outlet property="delegate" destination="SFl-U8-WC4" id="bFy-YG-Xt2"/>
@@ -121,7 +100,7 @@
                     <connections>
                         <outlet property="collectionView" destination="cNK-M3-DRC" id="13V-ny-JbT"/>
                         <outlet property="doneBarButton" destination="DxV-ov-YOJ" id="JI6-dp-R5j"/>
-                        <segue destination="fcE-Hy-pA7" kind="show" id="F95-aZ-lai"/>
+                        <segue destination="fcE-Hy-pA7" kind="show" identifier="selfexam.storyboard" id="F95-aZ-lai"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bnr-x4-NWc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -145,19 +124,7 @@
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
-                                <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="V3M-Lx-XGM">
-                                        <rect key="frame" x="94.666666666666671" y="0.0" width="204" height="173"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="wdY-g9-aZV">
-                                            <rect key="frame" x="0.0" y="0.0" width="204" height="173"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <color key="backgroundColor" name="baground"/>
-                                        </collectionViewCellContentView>
-                                        <color key="backgroundColor" name="baground"/>
-                                        <size key="customSize" width="204" height="173"/>
-                                    </collectionViewCell>
-                                </cells>
+                                <cells/>
                             </collectionView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="lsP-hJ-y9y"/>
@@ -424,11 +391,11 @@
             <objects>
                 <viewController storyboardIdentifier="AudioGuideVC" id="fcE-Hy-pA7" customClass="AudioGuideViewController" customModule="BreastCancerApp" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="imP-Yo-E4U">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="793"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Gemini_Generated_Image_7grqus7grqus7grq" translatesAutoresizingMaskIntoConstraints="NO" id="6LA-C5-ocU">
-                                <rect key="frame" x="46.666666666666657" y="197.00000000000003" width="300" height="322.66666666666674"/>
+                                <rect key="frame" x="46.666666666666657" y="84.000000000000028" width="300" height="444.66666666666674"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="7hW-bn-pX1"/>
                                 </constraints>
@@ -439,7 +406,7 @@
                                 </userDefinedRuntimeAttributes>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="QpQ-R5-vgx">
-                                <rect key="frame" x="112" y="519.66666666666663" width="169" height="34.333333333333371"/>
+                                <rect key="frame" x="112" y="528.66666666666663" width="169" height="34.333333333333371"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tGo-os-srQ">
                                         <rect key="frame" x="0.0" y="0.0" width="43" height="34.333333333333336"/>
@@ -481,7 +448,7 @@
                                 </constraints>
                             </stackView>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="GC9-mi-1f4">
-                                <rect key="frame" x="52" y="562" width="289" height="34"/>
+                                <rect key="frame" x="52" y="571" width="289" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="34" id="O99-bB-eC9"/>
                                 </constraints>
@@ -491,7 +458,7 @@
                                 </connections>
                             </slider>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Finished your self-exam?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oxS-QE-Oek">
-                                <rect key="frame" x="101.66666666666667" y="604" width="189.66666666666663" height="20.333333333333371"/>
+                                <rect key="frame" x="101.66666666666667" y="613" width="189.66666666666663" height="20.333333333333371"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20.333333333333371" id="g3T-lN-ziN"/>
                                 </constraints>
@@ -500,7 +467,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LCQ-vn-78M">
-                                <rect key="frame" x="86.666666666666686" y="644.33333333333337" width="220" height="52"/>
+                                <rect key="frame" x="86.666666666666686" y="653.33333333333337" width="220" height="52"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="52" id="KTB-W8-CGV"/>
                                     <constraint firstAttribute="width" constant="220" id="tKp-yU-LH9"/>
@@ -555,7 +522,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="KqS-3D-mRG"/>
+        <segue reference="F95-aZ-lai"/>
         <segue reference="CpE-OU-g1Q"/>
     </inferredMetricsTieBreakers>
     <resources>
