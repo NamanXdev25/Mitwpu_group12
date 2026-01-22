@@ -51,7 +51,7 @@ class ExerciseViewController: UIViewController, UICollectionViewDataSource, UICo
         let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(40))
         let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
         
-        section.supplementariesFollowContentInsets = false
+//        section.supplementariesFollowContentInsets = false
         header.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
         
         section.boundarySupplementaryItems = [header]

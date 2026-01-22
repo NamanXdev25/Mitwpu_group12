@@ -18,7 +18,7 @@ final class ActionsContainerCell: UICollectionViewCell {
     }
 
     private func configureUI() {
-        let pink = UIColor(named: "pink") ?? .systemPink
+        let pink = UIColor(named: "TabBarcolor1")
 
         logButton.setTitle("Log Self-Exam", for: .normal)
         logButton.setTitleColor(.white, for: .normal)

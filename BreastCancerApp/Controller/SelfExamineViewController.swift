@@ -97,7 +97,7 @@ extension SelfExamineViewController: UICollectionViewDelegateFlowLayout {
 
         switch indexPath.item {
         case 0:
-            return CGSize(width: width, height: 44)
+            return CGSize(width: width, height: 45)
         case 1:
             return CGSize(width: width, height: 200)
         case 2:

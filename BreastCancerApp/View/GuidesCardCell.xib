@@ -45,7 +45,7 @@
                                         <rect key="frame" x="0.0" y="118" width="407" height="56"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Video Guide" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FuO-3x-MOt">
-                                                <rect key="frame" x="8" y="19" width="391" height="18"/>
+                                                <rect key="frame" x="8" y="23" width="391" height="18"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -58,7 +58,7 @@
                                                 </constraints>
                                             </view>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ulO-0Q-x2w">
-                                                <rect key="frame" x="371" y="18" width="20" height="20"/>
+                                                <rect key="frame" x="371" y="24" width="20" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="20" id="X4x-9n-UW2"/>
                                                     <constraint firstAttribute="height" constant="20" id="zsg-3Y-LGP"/>
@@ -73,19 +73,19 @@
                                             <constraint firstAttribute="trailing" secondItem="FuO-3x-MOt" secondAttribute="trailing" constant="8" id="6QK-2i-d8Q"/>
                                             <constraint firstAttribute="trailing" secondItem="ulO-0Q-x2w" secondAttribute="trailing" constant="16" id="Bmo-Je-cFL"/>
                                             <constraint firstItem="i2C-ah-RA8" firstAttribute="top" secondItem="IFr-48-K14" secondAttribute="top" id="Cjp-5f-kOi"/>
-                                            <constraint firstItem="ulO-0Q-x2w" firstAttribute="centerY" secondItem="IFr-48-K14" secondAttribute="centerY" id="IDJ-28-suz"/>
                                             <constraint firstAttribute="height" constant="56" id="WQB-yJ-xv2"/>
+                                            <constraint firstItem="FuO-3x-MOt" firstAttribute="top" secondItem="i2C-ah-RA8" secondAttribute="bottom" constant="22" id="YLK-e5-oqd"/>
                                             <constraint firstAttribute="trailing" secondItem="i2C-ah-RA8" secondAttribute="trailing" constant="20" id="ZmL-Bk-aNv"/>
                                             <constraint firstItem="i2C-ah-RA8" firstAttribute="leading" secondItem="IFr-48-K14" secondAttribute="leading" constant="8" id="d0H-Qy-Aoo"/>
                                             <constraint firstItem="FuO-3x-MOt" firstAttribute="leading" secondItem="IFr-48-K14" secondAttribute="leading" constant="8" id="ghB-Jz-iea"/>
-                                            <constraint firstItem="FuO-3x-MOt" firstAttribute="centerY" secondItem="IFr-48-K14" secondAttribute="centerY" id="tbS-j6-LTF"/>
+                                            <constraint firstItem="ulO-0Q-x2w" firstAttribute="centerY" secondItem="FuO-3x-MOt" secondAttribute="centerY" constant="2" id="oyB-o6-VSQ"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rlD-zu-7EH">
                                         <rect key="frame" x="0.0" y="182" width="407" height="56"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Audio Guide" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lga-40-Usx">
-                                                <rect key="frame" x="8" y="19" width="391" height="18"/>
+                                                <rect key="frame" x="8" y="22" width="391" height="18"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -98,7 +98,7 @@
                                                 </constraints>
                                             </view>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XNj-VA-0Ky">
-                                                <rect key="frame" x="371" y="18" width="20" height="20"/>
+                                                <rect key="frame" x="371" y="21" width="20" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="20" id="39K-v1-QXy"/>
                                                     <constraint firstAttribute="height" constant="20" id="jLF-gD-tGA"/>
@@ -110,14 +110,14 @@
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
-                                            <constraint firstItem="XNj-VA-0Ky" firstAttribute="centerY" secondItem="rlD-zu-7EH" secondAttribute="centerY" id="Dqp-0f-l2o"/>
+                                            <constraint firstItem="XNj-VA-0Ky" firstAttribute="centerY" secondItem="Lga-40-Usx" secondAttribute="centerY" id="6MP-nM-ukB"/>
                                             <constraint firstAttribute="trailing" secondItem="Lga-40-Usx" secondAttribute="trailing" constant="8" id="LIw-DL-TMU"/>
                                             <constraint firstAttribute="trailing" secondItem="FPQ-2F-guf" secondAttribute="trailing" constant="20" id="OcY-7t-8X7"/>
                                             <constraint firstAttribute="height" constant="56" id="kR5-hx-YMZ"/>
                                             <constraint firstAttribute="trailing" secondItem="XNj-VA-0Ky" secondAttribute="trailing" constant="16" id="m6C-xA-Bnc"/>
                                             <constraint firstItem="FPQ-2F-guf" firstAttribute="leading" secondItem="rlD-zu-7EH" secondAttribute="leading" constant="8" id="nCH-cd-KEt"/>
                                             <constraint firstItem="FPQ-2F-guf" firstAttribute="top" secondItem="rlD-zu-7EH" secondAttribute="top" id="oJt-xb-S0x"/>
-                                            <constraint firstItem="Lga-40-Usx" firstAttribute="centerY" secondItem="rlD-zu-7EH" secondAttribute="centerY" id="t7D-YD-Wql"/>
+                                            <constraint firstItem="Lga-40-Usx" firstAttribute="top" secondItem="FPQ-2F-guf" secondAttribute="bottom" constant="21" id="oOP-D2-4K9"/>
                                             <constraint firstItem="Lga-40-Usx" firstAttribute="leading" secondItem="rlD-zu-7EH" secondAttribute="leading" constant="8" id="zaA-z9-nqP"/>
                                         </constraints>
                                     </view>

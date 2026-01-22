@@ -23,7 +23,7 @@ class ExerciseCell: UICollectionViewCell {
         nameButton.titleLabel?.font = .systemFont(ofSize: 12, weight: .bold)
         nameButton.contentHorizontalAlignment = .center
         nameButton.contentVerticalAlignment = .center
-        nameButton.contentEdgeInsets = UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8)
+//        nameButton.contentEdgeInsets = UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8)
         
         nameButton.isUserInteractionEnabled = true
     }
