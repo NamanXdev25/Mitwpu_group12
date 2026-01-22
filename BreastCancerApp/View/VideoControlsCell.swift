@@ -43,7 +43,7 @@ class VideoControlsCell: UICollectionViewCell {
         let iconName = isLooping ? "repeat.1" : "repeat"
         replayButton.setImage(UIImage(systemName: iconName, withConfiguration: config), for: .normal)
         
-        let color = UIColor(red: 0.95, green: 0.45, blue: 0.55, alpha: 1.0)
+        let color = UIColor(named: "plusbuttoncolor")
         replayButton.tintColor = color
     }
     

@@ -41,7 +41,7 @@
                                 </cells>
                             </collectionView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2n4-gk-bv9">
-                                <rect key="frame" x="313" y="644" width="60" height="60"/>
+                                <rect key="frame" x="313" y="724" width="60" height="60"/>
                                 <color key="backgroundColor" name="MedicationPrimaryColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="60" id="4Ad-QQ-HTX"/>
@@ -63,7 +63,7 @@
                         <color key="backgroundColor" name="MedicationBackgroundcolor"/>
                         <constraints>
                             <constraint firstItem="jWi-ox-kOt" firstAttribute="leading" secondItem="mP8-X3-A3S" secondAttribute="leading" constant="16" id="6Y2-X0-iAX"/>
-                            <constraint firstItem="mP8-X3-A3S" firstAttribute="bottom" secondItem="2n4-gk-bv9" secondAttribute="bottom" constant="80" id="ZB7-m4-FB9"/>
+                            <constraint firstItem="mP8-X3-A3S" firstAttribute="bottom" secondItem="2n4-gk-bv9" secondAttribute="bottom" id="ZB7-m4-FB9"/>
                             <constraint firstItem="mP8-X3-A3S" firstAttribute="trailing" secondItem="jWi-ox-kOt" secondAttribute="trailing" constant="16" id="bC8-aK-3HD"/>
                             <constraint firstItem="mP8-X3-A3S" firstAttribute="trailing" secondItem="2n4-gk-bv9" secondAttribute="trailing" constant="20" id="fQl-so-agc"/>
                             <constraint firstItem="jWi-ox-kOt" firstAttribute="bottom" secondItem="mP8-X3-A3S" secondAttribute="bottom" constant="88" id="lZ4-3d-hXb"/>
@@ -430,13 +430,13 @@
             <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemGray2Color">
-            <color red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray5Color">
-            <color red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGrayColor">
-            <color red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
