@@ -9,22 +9,6 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Logs-->
-        <scene sceneID="VUO-lQ-OT9">
-            <objects>
-                <viewController id="of2-DO-BT0" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="WCU-hE-N6L">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="Jrc-yz-U5w"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Logs" image="heart.text.clipboard" catalog="system" selectedImage="heart.text.clipboard.fill" id="Q4b-VE-wXW"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="xRn-pT-vJA" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="6441.9847328244268" y="84.507042253521135"/>
-        </scene>
         <!--Mindfulness-->
         <scene sceneID="FFs-qy-vfP">
             <objects>
@@ -165,12 +149,69 @@
                     <connections>
                         <segue destination="tdT-jh-huK" kind="relationship" relationship="viewControllers" id="ojR-9I-8yx"/>
                         <segue destination="Xlj-HY-ju7" kind="relationship" relationship="viewControllers" id="cUZ-P7-AGn"/>
-                        <segue destination="of2-DO-BT0" kind="relationship" relationship="viewControllers" id="nTp-ml-2Zl"/>
+                        <segue destination="3I3-Dx-Lko" kind="relationship" relationship="viewControllers" id="cNK-4d-A8X"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="03P-g1-xUt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4680" y="-1034"/>
+        </scene>
+        <!--Log View Controller-->
+        <scene sceneID="v6I-EX-n9g">
+            <objects>
+                <viewController id="ADO-2m-yIS" customClass="LogViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="qFt-iD-Egw">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="bh2-7G-mef">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                                <color key="backgroundColor" name="logsbgcolor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="87q-D5-d6c">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="z2s-md-sQR"/>
+                        <color key="backgroundColor" name="logsbgcolor"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="bh2-7G-mef" secondAttribute="bottom" id="du5-Lo-D7P"/>
+                            <constraint firstItem="bh2-7G-mef" firstAttribute="leading" secondItem="qFt-iD-Egw" secondAttribute="leading" id="fFK-US-3bX"/>
+                            <constraint firstItem="bh2-7G-mef" firstAttribute="top" secondItem="qFt-iD-Egw" secondAttribute="top" id="hcr-wG-gRL"/>
+                            <constraint firstAttribute="trailing" secondItem="bh2-7G-mef" secondAttribute="trailing" id="jcj-im-Wfx"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="skh-ay-CsU"/>
+                    <connections>
+                        <outlet property="collectionView" destination="bh2-7G-mef" id="zcc-tV-ONf"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2Tx-sA-gbc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="7257" y="85"/>
+        </scene>
+        <!--Logs-->
+        <scene sceneID="zkO-xg-f2X">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="3I3-Dx-Lko" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Logs" image="heart.text.clipboard" catalog="system" selectedImage="heart.text.clipboard.fill" id="liO-yT-K2B"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="AW0-D7-e3T">
+                        <rect key="frame" x="0.0" y="118" width="393" height="54"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="ADO-2m-yIS" kind="relationship" relationship="rootViewController" id="7xB-Y2-AIG"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="moF-2w-Cf9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="6331" y="85"/>
         </scene>
     </scenes>
     <resources>
