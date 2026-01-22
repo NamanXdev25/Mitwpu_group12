@@ -178,7 +178,9 @@ class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
     func showBenefitsPopover(from anchorButton: UIButton, benefits: [String], precautions: [String]) {
         dismissPopover(animated: false)
 
-        guard let window = view.window ?? UIApplication.shared.windows.first else { return }
+        guard let window = view.window ?? view.window?.windowScene?.windows.first else {
+            return
+        }
 
         let bg = UIView(frame: window.bounds)
         bg.backgroundColor = UIColor(white: 0.0, alpha: 0.18)

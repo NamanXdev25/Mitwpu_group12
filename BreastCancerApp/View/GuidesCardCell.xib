@@ -58,7 +58,7 @@
                                                 </constraints>
                                             </view>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ulO-0Q-x2w">
-                                                <rect key="frame" x="371" y="24" width="20" height="20"/>
+                                                <rect key="frame" x="371" y="22" width="20" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="20" id="X4x-9n-UW2"/>
                                                     <constraint firstAttribute="height" constant="20" id="zsg-3Y-LGP"/>
@@ -78,7 +78,7 @@
                                             <constraint firstAttribute="trailing" secondItem="i2C-ah-RA8" secondAttribute="trailing" constant="20" id="ZmL-Bk-aNv"/>
                                             <constraint firstItem="i2C-ah-RA8" firstAttribute="leading" secondItem="IFr-48-K14" secondAttribute="leading" constant="8" id="d0H-Qy-Aoo"/>
                                             <constraint firstItem="FuO-3x-MOt" firstAttribute="leading" secondItem="IFr-48-K14" secondAttribute="leading" constant="8" id="ghB-Jz-iea"/>
-                                            <constraint firstItem="ulO-0Q-x2w" firstAttribute="centerY" secondItem="FuO-3x-MOt" secondAttribute="centerY" constant="2" id="oyB-o6-VSQ"/>
+                                            <constraint firstItem="ulO-0Q-x2w" firstAttribute="centerY" secondItem="FuO-3x-MOt" secondAttribute="centerY" id="oyB-o6-VSQ"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rlD-zu-7EH">
