@@ -27,17 +27,17 @@ class FormCollectionViewCell: UICollectionViewCell {
         applyBorder(to: emailTextField.superview)
         applyBorder(to: passwordTextField.superview)
 
-        eyeButton.adjustsImageWhenHighlighted = false
+        //eyeButton.adjustsImageWhenHighlighted = false
 
         
-        rememberMeButton.adjustsImageWhenHighlighted = false
+        //rememberMeButton.adjustsImageWhenHighlighted = false
         rememberMeButton.tintColor = UIColor(named: "Pink")
         rememberMeButton.setImage(
             UIImage(systemName: "square"),
             for: .normal
         )
 
-        loginButton.adjustsImageWhenHighlighted = false
+        //loginButton.adjustsImageWhenHighlighted = false
         loginButton.backgroundColor = UIColor(named: "Pink")
         loginButton.setTitleColor(.white, for: .normal)
         loginButton.layer.cornerRadius = 26
