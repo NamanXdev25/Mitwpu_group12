@@ -7,7 +7,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     let dataStore = HomeDataStore.shared
     
     var upcomingEvents: [HomeUpcomingModel] = []
-    var memories: [HomeMemoryModel] = []
+    var memories: [Memory] = []
     var articles: [ArticleModel] = []
 
     override func viewDidLoad() {
@@ -33,7 +33,9 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     func loadDataFromStore() {
         upcomingEvents = dataStore.getUpcomingEvents()
-        memories = dataStore.getMemories()
+        
+        // Load memories from MemoryStore and take first 5
+        memories = Array(MemoryStore.load().prefix(5))
         
         // load articles and display first 2
         let articlesDataSource = ArticlesDataSource()
@@ -163,8 +165,8 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             
         case 4:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeMemoryCell", for: indexPath) as! HomeMemoryCell
-            let data = memories[indexPath.row]
-            cell.configure(with: data)
+            let memory = memories[indexPath.row]
+            cell.configureWithMemory(memory)
             return cell
             
         case 5:
@@ -191,6 +193,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             header.seeAllButton.isHidden = true
         case 4:
             header.titleLabel.text = "Your Memories"
+            header.seeAllButton.isHidden = memories.isEmpty  // hide if no memories
         case 5:
             header.titleLabel.text = "Articles"
         default: break
@@ -199,8 +202,17 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     }
     
     @objc func seeAllTapped(_ sender: UIButton) {
-        if sender.tag == 5 { // articles section
+        if sender.tag == 4 { // memories section
+            navigateToMemories()
+        } else if sender.tag == 5 { // articles section
             navigateToArticles()
+        }
+    }
+    
+    func navigateToMemories() {
+        let storyboard = UIStoryboard(name: "memory", bundle: nil)
+        if let memoriesVC = storyboard.instantiateViewController(identifier: "MemoriesViewController") as? MemoriesViewController {
+            navigationController?.pushViewController(memoriesVC, animated: true)
         }
     }
     
@@ -214,8 +226,17 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch indexPath.section {
         case 4:
-            print("Tapped memory: \(memories[indexPath.row].description)")
             // Navigate to memory details
+            let storyboard = UIStoryboard(name: "memory", bundle: nil)
+            let pageVC = storyboard.instantiateViewController(
+                withIdentifier: "MemoryPageViewController"
+            ) as! MemoryPageViewController
+            
+            pageVC.memories = memories
+            pageVC.startIndex = indexPath.row
+            pageVC.modalPresentationStyle = .fullScreen
+            
+            present(pageVC, animated: true)
             
         case 5:
             let article = articles[indexPath.row]
