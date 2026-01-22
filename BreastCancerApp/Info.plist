@@ -3,11 +3,15 @@
 <plist version="1.0">
 <dict>
 	<key>NSCameraUsageDescription</key>
-	<string>This app needs camera access to add memories and set your profile photo.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app needs photo library access to select your profile photo.</string>
+  <string>This app needs camera access to set your profile photo and add memories.</string>
+
+  <key>NSPhotoLibraryUsageDescription</key>
+  <string>This app needs photo library access to select your profile photo.</string>
+
 	<key>UIApplicationSceneManifest</key>
 	<dict>
+		<key>UIApplicationSupportsTabbedSceneCollection</key>
+		<false/>
 		<key>UIApplicationSupportsMultipleScenes</key>
 		<false/>
 		<key>UISceneConfigurations</key>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="HealthStatusCell" customModule="BreastCancerApp">
+            <rect key="frame" x="0.0" y="0.0" width="280" height="93"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="280" height="93"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SVr-zX-i7Q">
+                        <rect key="frame" x="16" y="8" width="248" height="77"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Health Status" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="22G-1r-5Bb">
+                                <rect key="frame" x="0.0" y="29.666666666666664" width="92.666666666666671" height="18"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="8Cs-C9-ohN">
+                                <rect key="frame" x="220" y="30.666666666666664" width="12" height="16.333333333333336"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="Rb5-Ka-kwj"/>
+                                    <constraint firstAttribute="width" constant="12" id="WXN-Rg-PCo"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="22G-1r-5Bb" firstAttribute="leading" secondItem="SVr-zX-i7Q" secondAttribute="leading" id="ad6-Zq-asN"/>
+                            <constraint firstAttribute="trailing" secondItem="8Cs-C9-ohN" secondAttribute="trailing" constant="16" id="bhj-ha-FqP"/>
+                            <constraint firstItem="8Cs-C9-ohN" firstAttribute="centerY" secondItem="SVr-zX-i7Q" secondAttribute="centerY" id="dAq-mT-mq4"/>
+                            <constraint firstItem="22G-1r-5Bb" firstAttribute="centerY" secondItem="SVr-zX-i7Q" secondAttribute="centerY" id="gNu-I1-YhB"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="12"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="SVr-zX-i7Q" secondAttribute="bottom" constant="8" id="UtF-Wd-Pg9"/>
+                <constraint firstItem="SVr-zX-i7Q" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="8" id="cnM-W1-miQ"/>
+                <constraint firstItem="SVr-zX-i7Q" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="nif-VV-r04"/>
+                <constraint firstAttribute="trailing" secondItem="SVr-zX-i7Q" secondAttribute="trailing" constant="16" id="o0n-1O-9B7"/>
+            </constraints>
+            <size key="customSize" width="280" height="93"/>
+            <connections>
+                <outlet property="chevronImageView" destination="8Cs-C9-ohN" id="Snz-ci-Rsa"/>
+                <outlet property="titleLabel" destination="22G-1r-5Bb" id="dPK-Sq-b3I"/>
+            </connections>
+            <point key="canvasLocation" x="314.50381679389312" y="168.66197183098592"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="chevron.right" catalog="system" width="97" height="128"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

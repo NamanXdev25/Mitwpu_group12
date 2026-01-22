@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="els-tT-Lco">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Profile View Controller-->
+        <scene sceneID="YHu-Xm-L9g">
+            <objects>
+                <viewController modalPresentationStyle="fullScreen" id="els-tT-Lco" customClass="ProfileViewController" customModule="BreastCancerApp" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="T88-WN-qmc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ugo-Up-R5N">
+                                <rect key="frame" x="0.0" y="118" width="393" height="666"/>
+                                <color key="backgroundColor" name="bg"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="qHz-9z-0pM">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="39H-LI-igA">
+                                        <rect key="frame" x="0.0" y="0.0" width="127.99999999999997" height="128"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="9nW-O0-27X">
+                                            <rect key="frame" x="0.0" y="0.0" width="127.99999999999997" height="128"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </collectionViewCellContentView>
+                                    </collectionViewCell>
+                                </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="els-tT-Lco" id="A6q-LF-vgV"/>
+                                    <outlet property="delegate" destination="els-tT-Lco" id="IR6-X8-ZtV"/>
+                                </connections>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="kFa-cB-Iq3"/>
+                        <color key="backgroundColor" name="bg"/>
+                        <constraints>
+                            <constraint firstItem="ugo-Up-R5N" firstAttribute="trailing" secondItem="kFa-cB-Iq3" secondAttribute="trailing" id="27b-9Q-Wuc"/>
+                            <constraint firstItem="ugo-Up-R5N" firstAttribute="bottom" secondItem="kFa-cB-Iq3" secondAttribute="bottom" id="CXf-pd-Y0S"/>
+                            <constraint firstItem="ugo-Up-R5N" firstAttribute="top" secondItem="kFa-cB-Iq3" secondAttribute="top" id="pzj-Ik-MPW"/>
+                            <constraint firstItem="ugo-Up-R5N" firstAttribute="leading" secondItem="kFa-cB-Iq3" secondAttribute="leading" id="zJ3-1W-Ntc"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="p2W-3n-UWT"/>
+                    <connections>
+                        <outlet property="collectionView" destination="ugo-Up-R5N" id="yR4-Mz-wv0"/>
+                        <segue destination="xKW-gD-z7M" kind="show" identifier="ShowHealthStatus" id="2Ro-h8-LUu"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="62W-Rn-9Zn" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1064.885496183206" y="130.98591549295776"/>
+        </scene>
+        <!--Health Status-->
+        <scene sceneID="W4z-9Y-B2g">
+            <objects>
+                <viewController storyboardIdentifier="HealthStatusViewController" id="xKW-gD-z7M" customClass="HealthStatusViewController" customModule="BreastCancerApp" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="gDj-i0-LtW">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="qMQ-TT-mnf">
+                                <rect key="frame" x="0.0" y="172" width="393" height="612"/>
+                                <color key="backgroundColor" name="bg"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="LRR-Qm-hxy">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="jfG-cq-Nup"/>
+                        <color key="backgroundColor" name="bg"/>
+                        <constraints>
+                            <constraint firstItem="jfG-cq-Nup" firstAttribute="trailing" secondItem="qMQ-TT-mnf" secondAttribute="trailing" id="NhV-f4-gE2"/>
+                            <constraint firstItem="qMQ-TT-mnf" firstAttribute="top" secondItem="jfG-cq-Nup" secondAttribute="top" id="UVq-ZW-cDR"/>
+                            <constraint firstItem="jfG-cq-Nup" firstAttribute="bottom" secondItem="qMQ-TT-mnf" secondAttribute="bottom" id="fxb-6M-nmi"/>
+                            <constraint firstItem="qMQ-TT-mnf" firstAttribute="leading" secondItem="jfG-cq-Nup" secondAttribute="leading" id="ngw-Qk-Sp4"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Health Status" id="YWS-pe-eCt"/>
+                    <connections>
+                        <outlet property="collectionView" destination="qMQ-TT-mnf" id="APV-3b-Lpv"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6nS-6i-Iuj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3028.2442748091603" y="114.78873239436621"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="hRr-ke-bSF">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="RWh-xn-wYT" sceneMemberID="viewController">
+                    <string key="storyboardIdentifier">HealthStatusNavigationController
+</string>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="x2r-Jw-qRT">
+                        <rect key="frame" x="0.0" y="118" width="393" height="54"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="xKW-gD-z7M" kind="relationship" relationship="rootViewController" id="WGB-vt-an3"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="P3b-oj-ygm" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2101.5267175572517" y="114.78873239436621"/>
+        </scene>
+    </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="WGB-vt-an3"/>
+    </inferredMetricsTieBreakers>
+    <resources>
+        <namedColor name="bg">
+            <color red="0.97254901960784312" green="0.94901960784313721" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+    </resources>
+</document>
