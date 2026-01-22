@@ -115,7 +115,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             group.interItemSpacing = .fixed(15)
             let section = NSCollectionLayoutSection(group: group)
             section.orthogonalScrollingBehavior = .continuous
-            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 16)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
             addHeader(to: section)
             return section
         }
@@ -126,7 +126,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, subitems: [NSCollectionLayoutItem(layoutSize: itemSize)])
         let section = NSCollectionLayoutSection(group: group)
         section.interGroupSpacing = 0
-        section.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 0, bottom: 80, trailing: 16)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 0, bottom: 80, trailing: 0)
         addHeader(to: section)
         return section
     }
@@ -180,7 +180,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             if memories.isEmpty {
                 // Show placeholder cell
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CenteredMessageCell", for: indexPath) as! CenteredMessageCell
-                cell.configure(message: "Add Memories")
+                cell.configure(message: "No Memories Added Yet")
                 return cell
             } else {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeMemoryCell", for: indexPath) as! HomeMemoryCell

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -19,7 +19,7 @@
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="664-4C-ZzJ">
                                 <rect key="frame" x="0.0" y="172" width="393" height="612"/>
-                                <color key="backgroundColor" name="bg"/>
+                                <color key="backgroundColor" name="baground"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="eTf-0Q-8tT">
                                     <size key="itemSize" width="128" height="128"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -43,7 +43,7 @@
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Ete-we-DK8"/>
-                        <color key="backgroundColor" name="bg"/>
+                        <color key="backgroundColor" name="baground"/>
                         <constraints>
                             <constraint firstItem="664-4C-ZzJ" firstAttribute="leading" secondItem="Ete-we-DK8" secondAttribute="leading" id="5o7-xs-q3w"/>
                             <constraint firstItem="Ete-we-DK8" firstAttribute="bottom" secondItem="664-4C-ZzJ" secondAttribute="bottom" id="NCo-aB-fWj"/>
@@ -96,7 +96,7 @@
                             </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="YCA-Sc-9RB"/>
-                        <color key="backgroundColor" name="bg"/>
+                        <color key="backgroundColor" name="baground"/>
                         <constraints>
                             <constraint firstItem="f6p-Y9-nls" firstAttribute="leading" secondItem="YCA-Sc-9RB" secondAttribute="leading" constant="16" id="Ofc-qO-cJs"/>
                             <constraint firstItem="YCA-Sc-9RB" firstAttribute="trailing" secondItem="sVS-JR-BfN" secondAttribute="trailing" id="PBz-AJ-b7S"/>
@@ -334,7 +334,7 @@
         <namedColor name="Pink">
             <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="bg">
+        <namedColor name="baground">
             <color red="0.97254901960784312" green="0.94901960784313721" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
         <namedColor name="pink">

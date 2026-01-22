@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="els-tT-Lco">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="els-tT-Lco">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -19,7 +19,7 @@
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ugo-Up-R5N">
                                 <rect key="frame" x="0.0" y="172" width="393" height="612"/>
-                                <color key="backgroundColor" name="bg"/>
+                                <color key="backgroundColor" name="baground"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="qHz-9z-0pM">
                                     <size key="itemSize" width="128" height="128"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -43,7 +43,7 @@
                             </collectionView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="kFa-cB-Iq3"/>
-                        <color key="backgroundColor" name="bg"/>
+                        <color key="backgroundColor" name="baground"/>
                         <constraints>
                             <constraint firstItem="ugo-Up-R5N" firstAttribute="trailing" secondItem="kFa-cB-Iq3" secondAttribute="trailing" id="27b-9Q-Wuc"/>
                             <constraint firstItem="ugo-Up-R5N" firstAttribute="bottom" secondItem="kFa-cB-Iq3" secondAttribute="bottom" id="CXf-pd-Y0S"/>
@@ -74,7 +74,7 @@
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="qMQ-TT-mnf">
                                 <rect key="frame" x="0.0" y="172" width="393" height="612"/>
-                                <color key="backgroundColor" name="bg"/>
+                                <color key="backgroundColor" name="baground"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="LRR-Qm-hxy">
                                     <size key="itemSize" width="128" height="128"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -85,7 +85,7 @@
                             </collectionView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="jfG-cq-Nup"/>
-                        <color key="backgroundColor" name="bg"/>
+                        <color key="backgroundColor" name="baground"/>
                         <constraints>
                             <constraint firstItem="jfG-cq-Nup" firstAttribute="trailing" secondItem="qMQ-TT-mnf" secondAttribute="trailing" id="NhV-f4-gE2"/>
                             <constraint firstItem="qMQ-TT-mnf" firstAttribute="top" secondItem="jfG-cq-Nup" secondAttribute="top" id="UVq-ZW-cDR"/>
@@ -127,7 +127,7 @@
         <segue reference="2Ro-h8-LUu"/>
     </inferredMetricsTieBreakers>
     <resources>
-        <namedColor name="bg">
+        <namedColor name="baground">
             <color red="0.97254901960784312" green="0.94901960784313721" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
     </resources>
