@@ -91,19 +91,19 @@
                         <rect key="frame" x="16" y="144" width="355" height="55"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fe6-pv-g30">
-                                <rect key="frame" x="201" y="13.333333333333341" width="111" height="28.333333333333329"/>
+                                <rect key="frame" x="213" y="13.333333333333341" width="99" height="28.333333333333329"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" red="0.8447265625" green="0.4406738281" blue="0.5673828125" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Sign Up">
+                                <buttonConfiguration key="configuration" style="plain" title="Sign In">
                                     <fontDescription key="titleFontDescription" style="UICTFontTextStyleCaption1"/>
                                 </buttonConfiguration>
                                 <connections>
                                     <action selector="didTapSignUp:" destination="gTV-IL-0wX" eventType="touchUpInside" id="6xo-5h-lFK"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Don't have an account?" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RxF-6E-mdu">
-                                <rect key="frame" x="64" y="16" width="133" height="24"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Already have an account?" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RxF-6E-mdu">
+                                <rect key="frame" x="64" y="16" width="145" height="24"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>

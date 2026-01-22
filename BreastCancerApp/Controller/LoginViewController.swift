@@ -23,6 +23,18 @@ class LoginViewController: UIViewController {
         view.backgroundColor = .white
         setupCollectionView()
     }
+
+    func goToSignUp() {
+        print("goToSignUp")
+        let storyboard = UIStoryboard(name: "signupMain", bundle: nil)
+        let vc = storyboard.instantiateViewController(
+            withIdentifier: "SignUpViewController"
+        )
+        
+        vc.modalPresentationStyle = .fullScreen
+        vc.modalTransitionStyle = .crossDissolve
+        present(vc, animated: true)
+    }
     
     func login(email: String, password: String) {
 
@@ -141,10 +153,17 @@ extension LoginViewController: UICollectionViewDataSource {
             ) as! OrSeparatorCollectionViewCell
 
         case .social:
-            return collectionView.dequeueReusableCell(
+            let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "SocialLoginCollectionViewCell",
                 for: indexPath
             ) as! SocialLoginCollectionViewCell
+            
+            cell.onSignUpTapped = { [weak self] in
+                self?.goToSignUp()
+            }
+            
+            return cell
+
         }
     }
 }

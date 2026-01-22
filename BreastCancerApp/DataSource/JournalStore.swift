@@ -83,9 +83,9 @@ extension Collection where Element == JournalEntry {
     var journalsThisWeek: Int {
         let calendar = Calendar.current
         let now = Date()
-        guard let weekStart = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: now)) else {
-            return 0
-        }
+//        guard let weekStart = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: now)) else {
+//            return 0
+//        }
 
         return self.filter {
             calendar.isDate($0.date, equalTo: now, toGranularity: .weekOfYear)

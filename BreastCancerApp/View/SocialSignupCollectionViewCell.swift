@@ -48,6 +48,6 @@ final class SocialSignupCollectionViewCell: UICollectionViewCell {
     }
 
     @IBAction func didTapSignUp(_ sender: UIButton) {
-        print("Sign up tapped")
+        print("Sign In tapped")
     }
 }
