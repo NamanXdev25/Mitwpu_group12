@@ -202,6 +202,20 @@ class ProfileSetupViewController: UIViewController,
     }
     
     func navigateToWelcome() {
+        // Save the user's name to OnboardingData before proceeding
+        if let formCell = collectionView.cellForItem(at: IndexPath(item: 2, section: 0))
+            as? ProfileSetupFormCollectionViewCell {
+            
+            let firstName = formCell.firstNameTextField.text ?? ""
+            let lastName = formCell.lastNameTextField.text ?? ""
+            
+            // Combine first and last name
+            let fullName = "\(firstName) \(lastName)".trimmingCharacters(in: .whitespaces)
+            OnboardingData.shared.userName = fullName.isEmpty ? "User" : fullName
+            
+            print("📝 Saved user name: \(OnboardingData.shared.userName)")
+        }
+        
         let storyboard = UIStoryboard(name: "OnboardingMain", bundle: nil)
 
         guard let navController = storyboard.instantiateViewController(

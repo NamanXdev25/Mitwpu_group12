@@ -17,6 +17,9 @@ class CompletionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        
+        // Transfer onboarding data to user profile
+        transferOnboardingDataToProfile()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -33,8 +36,23 @@ class CompletionViewController: UIViewController {
         titleLabel.text = "You're all set,\n\(userName)!"
     }
     
+    // MARK: - Data Transfer
+    
+    /// Transfers all onboarding data to the user profile system
+    private func transferOnboardingDataToProfile() {
+        print("🔄 Starting onboarding data transfer...")
+        
+        // Use the centralized transfer method
+        UserProfileDataSource.shared.transferFromOnboarding()
+        
+        print("✅ Onboarding data successfully transferred to profile")
+        
+        // Optional: Mark onboarding as completed in UserDefaults
+        UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
+    }
+    
     @IBAction func homeButtonTapped(_ sender: UIButton) {
-
+        // Navigate to main tab bar
         let storyboard = UIStoryboard(name: "TabBarMain", bundle: nil)
 
         guard let tabBarController =
@@ -48,10 +66,10 @@ class CompletionViewController: UIViewController {
 
             sceneDelegate.window?.rootViewController = tabBarController
             sceneDelegate.window?.makeKeyAndVisible()
+            
+            print("🏠 Navigated to home screen")
         }
     }
-
-
 
     private func formatDate(_ date: Date?) -> String {
         guard let date = date else { return "None" }

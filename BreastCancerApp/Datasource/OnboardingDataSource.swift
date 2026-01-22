@@ -12,7 +12,7 @@ struct OnboardingDataSource {
     // Treatment Options
     static let treatmentOptions = [
         "Currently in treatment",
-        "Under Observation",
+        //"Under Observation",
         "Post-treatment / in recovery",
         "Prefer not to say"
     ]

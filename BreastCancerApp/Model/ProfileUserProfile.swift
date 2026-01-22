@@ -24,7 +24,10 @@ struct ProfileUserProfile: Codable {
     // MARK: - Computed Properties (not stored in JSON)
 
     var fullName: String {
-        "\(firstName) \(lastName)"
+        if lastName.isEmpty {
+            return firstName
+        }
+        return "\(firstName) \(lastName)"
     }
 
     var profileImage: UIImage? {
@@ -54,6 +57,13 @@ struct ProfileUserProfile: Codable {
     var ageString: String {
         "\(age)"
     }
+    
+    var treatmentCompletionDateObject: Date? {
+        guard !treatmentCompletionDate.isEmpty else { return nil }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd MMM yyyy"
+        return formatter.date(from: treatmentCompletionDate)
+    }
 
     // MARK: - Initializer
 
@@ -66,7 +76,7 @@ struct ProfileUserProfile: Codable {
         age: Int = 32,
         cancerStage: String = "Stage II",
         treatmentState: String = "Ongoing",
-        treatmentCompletionDate: String = "",  
+        treatmentCompletionDate: String = "",
         exerciseNotificationsEnabled: Bool = false,
         hydrationNotificationsEnabled: Bool = false,
         appointmentsNotificationsEnabled: Bool = false,

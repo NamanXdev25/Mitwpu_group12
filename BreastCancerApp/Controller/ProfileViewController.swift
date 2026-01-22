@@ -19,6 +19,7 @@ final class ProfileViewController: UIViewController,
         // Setup close button action
         setupNavigationBar()
 
+        // Register cells
         [
             (ProfileHeaderCell.reuseIdentifier, "ProfileHeaderCell"),
             (HealthStatusCell.reuseIdentifier, "HealthStatusCell"),
@@ -31,12 +32,28 @@ final class ProfileViewController: UIViewController,
             )
         }
 
+        // Listen for profile updates
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(profileDidUpdate),
             name: UserProfileDataSource.profileDidUpdateNotification,
             object: nil
         )
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // Show close button only on this screen (not on pushed screens)
+        if navigationController?.viewControllers.first == self {
+            navigationItem.leftBarButtonItem?.target = self
+            navigationItem.leftBarButtonItem?.action = #selector(closeTapped)
+        }
+        
+        // Reload data to show latest profile information
+        collectionView.reloadData()
+        
+        print("📱 Profile screen appeared - displaying latest data")
     }
 
     deinit {
@@ -56,21 +73,12 @@ final class ProfileViewController: UIViewController,
         navigationItem.hidesBackButton = false
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        // Show close button only on this screen (not on pushed screens)
-        if navigationController?.viewControllers.first == self {
-            navigationItem.leftBarButtonItem?.target = self
-            navigationItem.leftBarButtonItem?.action = #selector(closeTapped)
-        }
-    }
-    
     @objc private func closeTapped() {
         dismiss(animated: true)
     }
 
     @objc private func profileDidUpdate() {
+        print("🔄 Profile updated - reloading collection view")
         collectionView.reloadData()
     }
 

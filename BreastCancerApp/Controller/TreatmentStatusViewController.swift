@@ -87,11 +87,11 @@ class TreatmentStatusViewController: UIViewController {
         switch index {
         case 0: // Currently in treatment
             identifier = "showJourneyDetails"
-        case 1: // Under Observation
-            identifier = "showUnderObservation"
-        case 2: // Post-treatment / in recovery
+//        case 1: // Under Observation
+//            identifier = "showUnderObservation"
+        case 1: // Post-treatment / in recovery
             identifier = "showPostTreatment"
-        case 3: // Prefer not to say
+        case 2: // Prefer not to say
             identifier = "showPreferNotToSay"
         default:
             return
