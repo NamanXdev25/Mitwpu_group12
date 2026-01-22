@@ -24,12 +24,9 @@ final class HealthStatusViewController: UIViewController,
 
         navigationItem.title = "Health Status"
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "chevron.left"),
-            style: .plain,
-            target: self,
-            action: #selector(backTapped)
-        )
+        // IMPORTANT: Remove the custom left bar button item
+        // This allows the default back button to appear
+        navigationItem.leftBarButtonItem = nil
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             title: "Edit",
@@ -55,19 +52,17 @@ final class HealthStatusViewController: UIViewController,
 
     // MARK: - Navigation
 
-    @objc private func backTapped() {
-        dismiss(animated: true)
-    }
-
     @objc private func editTapped() {
         isEditingProfile.toggle()
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: isEditingProfile ? "xmark" : "chevron.left"),
+        // In edit mode: show cancel (X) button on left
+        // In normal mode: use default back button (nil)
+        navigationItem.leftBarButtonItem = isEditingProfile ? UIBarButtonItem(
+            image: UIImage(systemName: "xmark"),
             style: .plain,
             target: self,
-            action: isEditingProfile ? #selector(cancelTapped) : #selector(backTapped)
-        )
+            action: #selector(cancelTapped)
+        ) : nil
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             image: UIImage(systemName: isEditingProfile ? "checkmark" : "pencil"),
@@ -88,12 +83,7 @@ final class HealthStatusViewController: UIViewController,
         isEditingProfile = false
         
         // Update navigation bar buttons to non-editing state
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "chevron.left"),
-            style: .plain,
-            target: self,
-            action: #selector(backTapped)
-        )
+        navigationItem.leftBarButtonItem = nil // Use default back button
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             title: "Edit",
@@ -129,12 +119,7 @@ final class HealthStatusViewController: UIViewController,
         isEditingProfile = false
         
         // Update navigation bar buttons to non-editing state
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "chevron.left"),
-            style: .plain,
-            target: self,
-            action: #selector(backTapped)
-        )
+        navigationItem.leftBarButtonItem = nil // Use default back button
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             title: "Edit",

@@ -50,6 +50,20 @@ final class ProfileViewController: UIViewController,
         // We just need to connect its action
         navigationItem.leftBarButtonItem?.target = self
         navigationItem.leftBarButtonItem?.action = #selector(closeTapped)
+        
+        // Ensure the close button only appears on the root view controller
+        // This prevents it from showing on pushed view controllers
+        navigationItem.hidesBackButton = false
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // Show close button only on this screen (not on pushed screens)
+        if navigationController?.viewControllers.first == self {
+            navigationItem.leftBarButtonItem?.target = self
+            navigationItem.leftBarButtonItem?.action = #selector(closeTapped)
+        }
     }
     
     @objc private func closeTapped() {
@@ -161,8 +175,7 @@ final class ProfileViewController: UIViewController,
             withIdentifier: "HealthStatusViewController"
         ) as! HealthStatusViewController
 
-        let navController = UINavigationController(rootViewController: vc)
-        navController.modalPresentationStyle = .fullScreen
-        present(navController, animated: true)
+        // Push onto the existing navigation stack (within the modal)
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
