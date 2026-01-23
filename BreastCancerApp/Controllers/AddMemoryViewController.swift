@@ -35,7 +35,7 @@ final class AddMemoryViewController: UIViewController {
             action: #selector(doneTapped)
         )
 
-        doneButton.tintColor = UIColor(named: "Pink")
+        doneButton.tintColor = UIColor(named: "MedicationPrimaryColor")
         navigationItem.rightBarButtonItem = doneButton
     }
 

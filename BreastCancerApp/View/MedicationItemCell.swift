@@ -18,6 +18,8 @@ class MedicationItemCell: UICollectionViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        checkButton.layer.borderWidth = 2
+        checkButton.layer.borderColor = UIColor.systemGray4.cgColor
 
     }
 
@@ -33,14 +35,13 @@ class MedicationItemCell: UICollectionViewCell {
         let checkColor = UIColor(named: "MedicationPrimaryColor")
         
         if med.isTaken {
-            checkButton.backgroundColor = checkColor
+            checkButton.backgroundColor = .white
             checkButton.layer.borderWidth = 0
-            checkButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
-            checkButton.tintColor = .white
+            checkButton.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+            checkButton.tintColor = checkColor
         } else {
             checkButton.backgroundColor = .clear
             checkButton.layer.borderWidth = 2
-            checkButton.layer.borderColor = UIColor.systemGray4.cgColor
             checkButton.setImage(nil, for: .normal)
         }
     }

@@ -32,10 +32,10 @@ class PlanCell: UICollectionViewCell {
         let checkcolor = UIColor(named: "plusbuttoncolor")!
         
         if item.isCompleted {
-            checkButton.backgroundColor = checkcolor
+            checkButton.backgroundColor = .white
             checkButton.layer.borderWidth = 0
-            checkButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
-            checkButton.tintColor = .white
+            checkButton.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+            checkButton.tintColor = checkcolor
         } else {
             checkButton.backgroundColor = .clear
             checkButton.layer.borderWidth = 2
