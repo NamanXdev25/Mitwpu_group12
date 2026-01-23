@@ -3,6 +3,7 @@
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -43,8 +44,9 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ProfilePhoto" translatesAutoresizingMaskIntoConstraints="NO" id="ObZ-nM-WWF">
-                        <rect key="frame" x="336" y="100" width="40" height="40"/>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.crop.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="ObZ-nM-WWF">
+                        <rect key="frame" x="336" y="100.66666666666667" width="40" height="38.666666666666671"/>
+                        <color key="tintColor" name="ArticlesPrimaryColor"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="40" id="g6w-0w-3No"/>
                             <constraint firstAttribute="width" constant="40" id="t2D-9c-K40"/>
@@ -108,6 +110,9 @@
     </objects>
     <resources>
         <image name="HomescreenImage" width="793" height="685"/>
-        <image name="ProfilePhoto" width="496" height="468"/>
+        <image name="person.crop.circle.fill" catalog="system" width="128" height="123"/>
+        <namedColor name="ArticlesPrimaryColor">
+            <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>
