@@ -56,35 +56,27 @@ class OnboardingData {
                !selectedHobbies.isEmpty
     }
     
-    // MARK: - Helper Methods for Profile Transfer
-    
-    /// Converts the current age string (e.g., "26-35") to an approximate integer age
     func getApproximateAge() -> Int {
-        guard let ageRange = currentAge else { return 32 } // default
+        guard let ageRange = currentAge else { return 32 }
         
-        // Parse age range strings like "26-35", "18-25", etc.
         if ageRange.contains("-") {
             let components = ageRange.split(separator: "-")
             if components.count == 2,
                let lowerBound = Int(components[0]),
                let upperBound = Int(components[1]) {
-                // Return the midpoint of the range
                 return (lowerBound + upperBound) / 2
             }
         }
         
-        // Handle special cases
         if ageRange.lowercased().contains("below 18") {
             return 16
         }
         if ageRange.contains("75+") {
             return 77
         }
-        
-        return 32 // fallback default
+        return 32
     }
     
-    /// Formats a Date to the profile's expected string format
     func formatDateForProfile(_ date: Date?) -> String {
         guard let date = date else { return "" }
         let formatter = DateFormatter()
@@ -92,7 +84,6 @@ class OnboardingData {
         return formatter.string(from: date)
     }
     
-    /// Determines the treatment state based on onboarding selection
     func getTreatmentState() -> String {
         guard let status = treatmentStatus else { return "Unknown" }
         

@@ -31,23 +31,16 @@ class CompletionViewController: UIViewController {
     private func setupUI() {
         progressBar.setProgress(4, animated: false)
         
-        // personalize with user's name
+        // personalize with user's first name only
         let userName = OnboardingData.shared.userName
-        titleLabel.text = "You're all set,\n\(userName)!"
+        let firstName = userName.components(separatedBy: " ").first ?? "User"
+        titleLabel.text = "You're all set,\n\(firstName)!"
     }
     
-    // MARK: - Data Transfer
-    
-    /// Transfers all onboarding data to the user profile system
     private func transferOnboardingDataToProfile() {
-        print("🔄 Starting onboarding data transfer...")
-        
-        // Use the centralized transfer method
+        print("Starting onboarding data transfer...")
         UserProfileDataSource.shared.transferFromOnboarding()
-        
-        print("✅ Onboarding data successfully transferred to profile")
-        
-        // Optional: Mark onboarding as completed in UserDefaults
+        print("Onboarding data successfully transferred to profile")
         UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
     }
     
@@ -67,7 +60,7 @@ class CompletionViewController: UIViewController {
             sceneDelegate.window?.rootViewController = tabBarController
             sceneDelegate.window?.makeKeyAndVisible()
             
-            print("🏠 Navigated to home screen")
+            print("Navigated to home screen")
         }
     }
 
