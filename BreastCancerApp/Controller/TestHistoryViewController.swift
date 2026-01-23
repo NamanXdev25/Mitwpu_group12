@@ -97,7 +97,7 @@ final class TestHistoryViewController: UIViewController,
         }
     }
 
-    // MARK: - Empty State (🔥 KEY FIX)
+    // MARK: - Empty State
 
     private func updateEmptyState() {
         if filteredRecords.isEmpty {
@@ -158,7 +158,7 @@ final class TestHistoryViewController: UIViewController,
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
-        filteredRecords.count   // ✅ NO fake empty cell
+        filteredRecords.count
     }
 
     func collectionView(
@@ -207,7 +207,7 @@ final class TestHistoryViewController: UIViewController,
         }
     }
 
-    // MARK: - Layout (NO TOP DIVIDER)
+    // MARK: - Layout
 
     private func createLayout() -> UICollectionViewLayout {
         var config = UICollectionLayoutListConfiguration(appearance: .plain)
@@ -242,7 +242,7 @@ final class TestHistoryViewController: UIViewController,
         return configuration
     }
 
-    // MARK: - Delete (CRASH FIXED)
+    // MARK: - Delete
 
     private func confirmDelete(
         at indexPath: IndexPath,
@@ -277,7 +277,6 @@ final class TestHistoryViewController: UIViewController,
 
         try? Persistence.save(records)
 
-        // ✅ SAFE reload (no batch crash when empty)
         loadData()
         completion(true)
     }
