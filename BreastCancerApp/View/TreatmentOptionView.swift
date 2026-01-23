@@ -63,7 +63,7 @@ class TreatmentOptionView: UIView {
     private func updateSelectionState() {
         if isSelectedOption {
             contentView.borderWidth = 2
-            contentView.borderColor = UIColor(named: "PrimaryPink")
+            contentView.borderColor = UIColor(named: "OnboardingPrimaryColor")
             checkmarkImageView.isHidden = false
         } else {
             contentView.borderWidth = 0

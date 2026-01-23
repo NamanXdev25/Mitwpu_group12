@@ -23,7 +23,6 @@ final class HydrationViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(named: "baground")
         configureCollectionView()
     }
 
@@ -36,7 +35,6 @@ final class HydrationViewController: UIViewController {
             layout.sectionInset = .zero
         }
 
-        collectionView.backgroundColor = UIColor(named: "baground")
         collectionView.alwaysBounceVertical = true
         collectionView.dataSource = self
         collectionView.delegate = self

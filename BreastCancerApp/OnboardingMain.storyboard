@@ -34,19 +34,19 @@
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="elh-Mw-6io">
-                                <rect key="frame" x="40" y="440" width="313" height="41"/>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                <rect key="frame" x="40" y="440" width="313" height="33.666666666666686"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="App Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bts-Ul-YWg">
-                                <rect key="frame" x="40" y="485" width="313" height="41"/>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Blossom" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bts-Ul-YWg">
+                                <rect key="frame" x="40" y="473.66666666666669" width="313" height="43.000000000000057"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="36"/>
                                 <color key="textColor" name="OnboardingPrimaryColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This app is designed to support you through awareness, recovery, and self-care — one step at a time." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qh6-fE-L2d" userLabel="description">
-                                <rect key="frame" x="40" y="550" width="313" height="64.333333333333371"/>
+                                <rect key="frame" x="40" y="540.66666666666663" width="313" height="64.333333333333371"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -76,7 +76,7 @@
                             <constraint firstItem="qh6-fE-L2d" firstAttribute="leading" secondItem="xXj-U8-YVo" secondAttribute="leading" constant="40" id="Wyz-QN-x2F"/>
                             <constraint firstItem="xXj-U8-YVo" firstAttribute="bottom" secondItem="iq2-Sk-Hfh" secondAttribute="bottom" constant="50" id="Ys0-75-spE"/>
                             <constraint firstItem="elh-Mw-6io" firstAttribute="leading" secondItem="xXj-U8-YVo" secondAttribute="leading" constant="40" id="Z3W-Lp-4tT"/>
-                            <constraint firstItem="bts-Ul-YWg" firstAttribute="top" secondItem="elh-Mw-6io" secondAttribute="bottom" constant="4" id="dhz-el-Li9"/>
+                            <constraint firstItem="bts-Ul-YWg" firstAttribute="top" secondItem="elh-Mw-6io" secondAttribute="bottom" id="dhz-el-Li9"/>
                             <constraint firstItem="xXj-U8-YVo" firstAttribute="trailing" secondItem="bts-Ul-YWg" secondAttribute="trailing" constant="40" id="gqt-eO-Vux"/>
                             <constraint firstItem="qh6-fE-L2d" firstAttribute="top" secondItem="bts-Ul-YWg" secondAttribute="bottom" constant="24" id="lDK-31-J35"/>
                             <constraint firstItem="xXj-U8-YVo" firstAttribute="trailing" secondItem="iq2-Sk-Hfh" secondAttribute="trailing" constant="96" id="qaW-vh-lIx"/>
@@ -1144,7 +1144,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="nef-ZQ-JBb"/>
+        <segue reference="MlO-rP-gUO"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="chevron.up.chevron.down" catalog="system" width="109" height="128"/>
