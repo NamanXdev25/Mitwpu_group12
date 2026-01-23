@@ -22,8 +22,8 @@ class HomeDataStore {
     
     private func loadDataFromJSON() {
         goals = loadJSON("Goals.json")
-        upcomingEvents = loadJSON("Upcoming.json")
-        //memories = loadJSON("Memories.json")
+        // Remove the upcomingEvents loading from JSON since we'll get it from AppointmentManager
+        // upcomingEvents = loadJSON("Upcoming.json")
         let response: ArticlesResponse = loadJSON("articles.json")
         articles = response.articles
     }
@@ -46,8 +46,77 @@ class HomeDataStore {
         return goals
     }
     
+    // MARK: - Get Nearest Upcoming Appointment (Real-time from AppointmentManager)
+    func getUpcomingAppointment() -> HomeUpcomingModel? {
+        let calendar = Calendar.current
+        let now = Date()
+        
+        // Get all appointments from AppointmentManager
+        let allDates = AppointmentManager.shared.getAllDatesWithAppointments()
+        
+        var nearestAppointment: AppointmentItem?
+        var nearestDate: Date?
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "h:mm a"
+        timeFormatter.locale = Locale(identifier: "en_US_POSIX")
+        
+        // Loop through all dates
+        for dateString in allDates {
+            guard let date = dateFormatter.date(from: dateString) else { continue }
+            
+            // Get appointments for this date
+            let appointments = AppointmentManager.shared.getAppointments(for: date)
+            
+            for appointment in appointments {
+                // Parse the appointment time
+                guard let time = timeFormatter.date(from: appointment.time) else { continue }
+                
+                // Combine date and time
+                let dateComponents = calendar.dateComponents([.year, .month, .day], from: date)
+                let timeComponents = calendar.dateComponents([.hour, .minute], from: time)
+                
+                var fullComponents = dateComponents
+                fullComponents.hour = timeComponents.hour
+                fullComponents.minute = timeComponents.minute
+                
+                guard let fullDate = calendar.date(from: fullComponents) else { continue }
+                
+                // Only consider future appointments
+                if fullDate > now {
+                    if nearestDate == nil || fullDate < nearestDate! {
+                        nearestDate = fullDate
+                        nearestAppointment = appointment
+                    }
+                }
+            }
+        }
+        
+        // Convert to HomeUpcomingModel if found
+        if let appointment = nearestAppointment {
+            // Use note as doctorName, or show category if note is empty
+            let displayText = !appointment.note.isEmpty ? appointment.note : appointment.category
+            
+            return HomeUpcomingModel(
+                title: appointment.title,
+                doctorName: displayText,
+                date: appointment.date,
+                time: appointment.time
+            )
+        }
+        
+        return nil
+    }
+    
     func getUpcomingEvents() -> [HomeUpcomingModel] {
-        return upcomingEvents
+        // Return as array for compatibility with existing code
+        if let appointment = getUpcomingAppointment() {
+            return [appointment]
+        }
+        return []
     }
     
     func getMemories() -> [HomeMemoryModel] {

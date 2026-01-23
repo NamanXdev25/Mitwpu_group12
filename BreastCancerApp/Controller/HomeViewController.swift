@@ -6,12 +6,15 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     let dataStore = HomeDataStore.shared
     
-    var upcomingEvents: [HomeUpcomingModel] = []
+    var upcomingAppointment: HomeUpcomingModel?
     var memories: [Memory] = []
     var articles: [ArticleModel] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Setup notification observer for appointment updates
+        setupNotificationObserver()
         
         // load data (upcoming, memories, articles)
         loadDataFromStore()
@@ -30,9 +33,31 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         loadDataFromStore()
     }
     
+    // MARK: - Notification Observer
+    private func setupNotificationObserver() {
+        // Listen for Appointment updates
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(appointmentDataDidChange),
+            name: NSNotification.Name("AppointmentDataUpdated"),
+            object: nil
+        )
+    }
+    
+    @objc private func appointmentDataDidChange() {
+        // Reload appointment data
+        upcomingAppointment = dataStore.getUpcomingAppointment()
+        // Reload the upcoming appointment section
+        collectionView.reloadSections(IndexSet(integer: 3))
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
     
     func loadDataFromStore() {
-        upcomingEvents = dataStore.getUpcomingEvents()
+        // Load upcoming appointment from AppointmentManager
+        upcomingAppointment = dataStore.getUpcomingAppointment()
         
         // Load memories from MemoryStore and take first 5
         memories = Array(MemoryStore.load().prefix(5))
@@ -145,7 +170,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section {
         case 0, 1: return 1
-        case 3: return upcomingEvents.count
+        case 3: return 1 // Always show 1 item (either appointment or empty message)
         case 4: return memories.isEmpty ? 1 : memories.count  // Show 1 placeholder if empty
         case 5: return articles.count
         default: return 0
@@ -171,10 +196,18 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             return cell
             
         case 3:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeUpcomingCell", for: indexPath) as! HomeUpcomingCell
-            let data = upcomingEvents[indexPath.row]
-            cell.configure(with: data)
-            return cell
+            // Check if appointment exists
+            if let appointment = upcomingAppointment {
+                // Show appointment cell
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeUpcomingCell", for: indexPath) as! HomeUpcomingCell
+                cell.configure(with: appointment)
+                return cell
+            } else {
+                // Show empty message cell
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CenteredMessageCell", for: indexPath) as! CenteredMessageCell
+                cell.configure(message: "No appointments scheduled")
+                return cell
+            }
             
         case 4:
             if memories.isEmpty {
@@ -287,10 +320,6 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
                 headerCell.profileImageView.image = profileImage
             }
         }
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
