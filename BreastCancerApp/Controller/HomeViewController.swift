@@ -181,8 +181,11 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         switch indexPath.section {
         case 0:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeHeaderCell", for: indexPath) as! HomeHeaderCell
-            cell.configure(name: dataStore.userProfile?.name ?? "User")
-            // Set delegate
+            
+            // FIXED: Use firstName directly from UserProfileDataSource
+            let firstName = UserProfileDataSource.shared.userProfile.firstName
+            cell.configure(name: firstName)
+            
             cell.delegate = self
             return cell
             
@@ -311,11 +314,13 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     // MARK: - Profile Update Handler
     
     @objc private func refreshProfileData() {
-        // Reload the header cell to reflect updated profile photo
+        // Reload header cell to reflect updated profile photo & name
         if let headerCell = collectionView.cellForItem(at: IndexPath(item: 0, section: 0)) as? HomeHeaderCell {
-            headerCell.configure(name: dataStore.userProfile?.name ?? "User")
+            // FIXED: Use firstName directly from UserProfileDataSource
+            let firstName = UserProfileDataSource.shared.userProfile.firstName
+            headerCell.configure(name: firstName)
             
-            // Update profile image
+            // update profile image
             if let profileImage = UserProfileDataSource.shared.userProfile.profileImage {
                 headerCell.profileImageView.image = profileImage
             }

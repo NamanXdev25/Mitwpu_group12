@@ -45,11 +45,98 @@ class LoginViewController: UIViewController {
             return
         }
 
-        HomeDataStore.shared.userProfile = profile
+        // FIXED: Convert UserProfile to ProfileUserProfile and save to UserProfileDataSource
+        convertAndSaveProfile(profile)
+        
+        // Update garden stats
         HomeDataStore.shared.gardenStats =
             SampleProfilesManager.shared.getStatsForProfile(id: profile.id)
+        
+        // Set login flag
+        UserDefaults.standard.set(true, forKey: "isLoggedIn")
 
         navigateToHome()
+    }
+    
+    // MARK: - Profile Conversion Helper
+    private func convertAndSaveProfile(_ loginProfile: UserProfile) {
+        // Extract first and last name
+        let nameParts = loginProfile.name.split(separator: " ")
+        let firstName = nameParts.first.map(String.init) ?? "User"
+        let lastName = nameParts.count > 1 ? nameParts.dropFirst().joined(separator: " ") : ""
+        
+        // Format dates
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd MMM yyyy"
+        
+        let diagnosisDateString = loginProfile.diagnosisDate.map { dateFormatter.string(from: $0) } ?? "NA"
+        let treatmentCompletionDateString = loginProfile.treatmentCompletionDate.map { dateFormatter.string(from: $0) } ?? ""
+        
+        // Determine age from currentAge string
+        let age = extractAge(from: loginProfile.currentAge)
+        
+        // Map treatment status to treatment state
+        let treatmentState = mapTreatmentStatus(loginProfile.treatmentStatus)
+        
+        // Create ProfileUserProfile
+        let profileUserProfile = ProfileUserProfile(
+            firstName: firstName,
+            lastName: lastName,
+            profileImage: nil, // Profile image can be loaded separately if needed
+            diagnosisDate: diagnosisDateString,
+            gender: "Female", // Default value, can be extracted if available in UserProfile
+            age: age,
+            cancerStage: loginProfile.currentStage ?? "NA",
+            treatmentState: treatmentState,
+            treatmentCompletionDate: treatmentCompletionDateString,
+            exerciseNotificationsEnabled: false,
+            hydrationNotificationsEnabled: false,
+            appointmentsNotificationsEnabled: false,
+            medicationsNotificationsEnabled: false
+        )
+        
+        // Save to UserProfileDataSource
+        UserProfileDataSource.shared.updateProfile(profileUserProfile)
+        
+        print("✅ Profile converted and saved for login user: \(firstName)")
+    }
+    
+    // Helper: Extract age from age range string
+    private func extractAge(from ageString: String?) -> Int {
+        guard let ageString = ageString else { return 32 }
+        
+        if ageString.contains("-") {
+            let components = ageString.split(separator: "-")
+            if components.count == 2,
+               let lowerBound = Int(components[0]),
+               let upperBound = Int(components[1]) {
+                return (lowerBound + upperBound) / 2
+            }
+        }
+        
+        if ageString.lowercased().contains("below 18") {
+            return 16
+        }
+        if ageString.contains("75+") {
+            return 77
+        }
+        return 32
+    }
+    
+    // Helper: Map treatment status to treatment state
+    private func mapTreatmentStatus(_ status: String) -> String {
+        switch status {
+        case "Currently in treatment":
+            return "Ongoing"
+        case "Under Observation":
+            return "Observation"
+        case "Post-treatment / in recovery":
+            return "Completed"
+        case "Prefer not to say":
+            return "Not Specified"
+        default:
+            return "Unknown"
+        }
     }
     
     func navigateToHome() {
@@ -111,7 +198,7 @@ class LoginViewController: UIViewController {
     }
 }
 
-// DataSource
+// MARK: - DataSource
 extension LoginViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView,
@@ -145,7 +232,6 @@ extension LoginViewController: UICollectionViewDataSource {
 
             return cell
 
-
         case .or:
             return collectionView.dequeueReusableCell(
                 withReuseIdentifier: "OrSeparatorCollectionViewCell",
@@ -163,12 +249,11 @@ extension LoginViewController: UICollectionViewDataSource {
             }
             
             return cell
-
         }
     }
 }
 
-// Layout
+// MARK: - Layout
 extension LoginViewController: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView,

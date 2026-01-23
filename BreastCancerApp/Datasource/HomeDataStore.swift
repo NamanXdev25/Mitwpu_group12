@@ -8,7 +8,11 @@ class HomeDataStore {
     private var memories: [HomeMemoryModel] = []
     private var articles: [ArticleModel] = []
     
-    var userProfile: UserProfile?
+    // FIXED: Reference UserProfileDataSource instead of storing separately
+    var userProfile: ProfileUserProfile {
+        return UserProfileDataSource.shared.userProfile
+    }
+    
     var gardenStats: HealingGardenStats = HealingGardenStats(
         currentPoints: 4200,
         totalPointsNeeded: 5000,
@@ -22,8 +26,6 @@ class HomeDataStore {
     
     private func loadDataFromJSON() {
         goals = loadJSON("Goals.json")
-        // Remove the upcomingEvents loading from JSON since we'll get it from AppointmentManager
-        // upcomingEvents = loadJSON("Upcoming.json")
         let response: ArticlesResponse = loadJSON("articles.json")
         articles = response.articles
     }
