@@ -27,8 +27,8 @@ final class MemoriesViewController: UIViewController,
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        title = "Memories"
+//
+//        title = "Memories"
 
         memories = MemoryStore.load()
         sortAndGroupMemories()

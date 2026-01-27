@@ -9,14 +9,8 @@
       "breathing": [
         {"title":"Gentle Focus","description":"A soft breathing session to keep your good energy steady.","buttonText":"Begin"},
         {"title":"Healing Reflections","description":"A calm space to breathe and appreciate your positive moments.","buttonText":"Begin"},
-        {"title":"Calmer Mind","description":"A steady breath pattern to keep your mind clear.","buttonText":"Begin"},
-        {"title":"Inner Calm","description":"A grounding breath to help you enjoy this peaceful mood.","buttonText":"Begin"},
-        {"title":"Gentle Recharge","description":"Light breathing to refresh your mind without slowing down your day.","buttonText":"Begin"},
-        {"title":"Nausea Relief","description":"Gentle paced breathing to relax the body and maintain ease.","buttonText":"Begin"},
         {"title":"Morning Appreciation","description":"A warm breathing ritual to lift your spirits even more.","buttonText":"Begin"},
-        {"title":"Release Tension","description":"Small stretches paired with breath to keep your body relaxed.","buttonText":"Begin"},
-        {"title":"Calm Drift","description":"Slow, soothing breathwork to stay centered and light.","buttonText":"Begin"},
-        {"title":"Peaceful Night","description":"Soft breathing for unwinding and settling into rest.","buttonText":"Begin"}
+        {"title":"Calm Drift","description":"Slow, soothing breathwork to stay centered and light.","buttonText":"Begin"}
       ],
       "journaling": [
         {"title":"A good moment today","description":"Write about one thing that made you feel good or proud.","buttonText":"Begin"},
@@ -53,14 +47,10 @@
       "breathing": [
         {"title":"Gentle Focus","description":"A slow breathing session to ease heavy emotions.","buttonText":"Begin"},
         {"title":"Healing Reflections","description":"Breathe with softness and acknowledge how you feel.","buttonText":"Begin"},
-        {"title":"Calmer Mind","description":"Settle emotional waves with steady, quiet breathing.","buttonText":"Begin"},
         {"title":"Inner Calm","description":"A grounding breath to help you find emotional balance.","buttonText":"Begin"},
         {"title":"Gentle Recharge","description":"Soft breathwork to lighten emotional heaviness.","buttonText":"Begin"},
-        {"title":"Nausea Relief","description":"A calm breathing rhythm to soothe emotional tension.","buttonText":"Begin"},
-        {"title":"Morning Appreciation","description":"Gentle breaths focusing on small things that still feel okay.","buttonText":"Begin"},
         {"title":"Release Tension","description":"Slow breaths paired with letting go of tightness.","buttonText":"Begin"},
-        {"title":"Calm Drift","description":"A warm breath flow to relax sadness-tensed muscles.","buttonText":"Begin"},
-        {"title":"Peaceful Night","description":"Soothing breaths to help you settle and rest.","buttonText":"Begin"}
+        {"title":"Calm Drift","description":"A warm breath flow to relax sadness-tensed muscles.","buttonText":"Begin"}
       ],
       "journaling": [
         {"title":"Name the feeling","description":"Write what the sadness feels like in your body.","buttonText":"Begin"},
@@ -99,12 +89,8 @@
         {"title":"Healing Reflections","description":"A soothing rhythm to help your nervous system settle.","buttonText":"Begin"},
         {"title":"Calmer Mind","description":"Steady breaths to quiet the anxious loop.","buttonText":"Begin"},
         {"title":"Inner Calm","description":"A grounding breath to bring you back to the present.","buttonText":"Begin"},
-        {"title":"Gentle Recharge","description":"Soft breathing to reduce tension and restlessness.","buttonText":"Begin"},
-        {"title":"Nausea Relief","description":"A paced breath for anxiety-linked stomach tension.","buttonText":"Begin"},
-        {"title":"Morning Appreciation","description":"Breathing practice to start shifting anxiety gently.","buttonText":"Begin"},
         {"title":"Release Tension","description":"Breaths paired with shoulder relaxation.","buttonText":"Begin"},
-        {"title":"Calm Drift","description":"A slow, continuous breath to ease agitation.","buttonText":"Begin"},
-        {"title":"Peaceful Night","description":"A settling practice for anxious evenings.","buttonText":"Begin"}
+        {"title":"Calm Drift","description":"A slow, continuous breath to ease agitation.","buttonText":"Begin"}
       ],
       "journaling": [
         {"title":"Worry dump","description":"Write all your worries without stopping for 2 minutes.","buttonText":"Begin"},
@@ -139,14 +125,10 @@
         "buttonText": "Next"
       },
       "breathing": [
-        {"title":"Gentle Focus","description":"Soft breaths to help your body loosen and rest.","buttonText":"Begin"},
         {"title":"Healing Reflections","description":"A calming session to soothe exhaustion.","buttonText":"Begin"},
         {"title":"Calmer Mind","description":"Slow breaths to reduce mental fatigue.","buttonText":"Begin"},
         {"title":"Inner Calm","description":"A grounding breath to bring ease back to the body.","buttonText":"Begin"},
         {"title":"Gentle Recharge","description":"A mild breathing reset to restore a bit of energy.","buttonText":"Begin"},
-        {"title":"Nausea Relief","description":"Calm pacing to ease tired-body discomfort.","buttonText":"Begin"},
-        {"title":"Morning Appreciation","description":"Breathing practice to gently boost morning energy.","buttonText":"Begin"},
-        {"title":"Release Tension","description":"Slow breaths paired with soft shoulder relaxation.","buttonText":"Begin"},
         {"title":"Calm Drift","description":"A sleepy, slow rhythm perfect for tired evenings.","buttonText":"Begin"},
         {"title":"Peaceful Night","description":"A settling breath session to help you unwind.","buttonText":"Begin"}
       ],

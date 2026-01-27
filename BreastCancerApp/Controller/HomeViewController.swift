@@ -248,7 +248,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             header.titleLabel.text = "Upcoming Appointment"
             header.seeAllButton.isHidden = true
         case 4:
-            header.titleLabel.text = "Your Memories"
+            header.titleLabel.text = "Your Moments"
             header.seeAllButton.isHidden = false  // Always show "See All" button for memories
         case 5:
             header.titleLabel.text = "Articles"

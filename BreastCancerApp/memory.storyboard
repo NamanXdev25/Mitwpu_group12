@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Memories-->
+        <!--Moments-->
         <scene sceneID="QM4-rt-AQc">
             <objects>
                 <viewController storyboardIdentifier="MemoriesViewController" id="7AQ-1A-uOS" customClass="MemoriesViewController" customModule="BreastCancerApp" sceneMemberID="viewController">
@@ -55,7 +55,7 @@
                             <constraint firstItem="Ete-we-DK8" firstAttribute="trailing" secondItem="r2T-rf-INZ" secondAttribute="trailing" constant="16" id="uLy-mx-gTk"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Memories" id="YEm-wo-DfD">
+                    <navigationItem key="navigationItem" title="Moments" id="YEm-wo-DfD">
                         <barButtonItem key="rightBarButtonItem" title="Item" image="line.3.horizontal.decrease" catalog="system" id="NVm-PA-K1B">
                             <color key="tintColor" name="pink"/>
                             <connections>

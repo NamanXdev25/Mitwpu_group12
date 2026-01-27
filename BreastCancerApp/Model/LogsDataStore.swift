@@ -20,7 +20,7 @@ class LogsDataStore {
     func loadSampleData() {
         // Header Data
         header = HeaderModel(
-            title: "Logs",
+            title: "Insights",
             date: formatCurrentDate()
         )
         
