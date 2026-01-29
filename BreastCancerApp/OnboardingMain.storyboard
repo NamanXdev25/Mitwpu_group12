@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Iw0-rQ-y4A">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="oa1-nA-CFR">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
@@ -123,9 +123,9 @@
                                 </connections>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="onboarding_mindfulness" translatesAutoresizingMaskIntoConstraints="NO" id="gPE-ax-bED">
-                                <rect key="frame" x="16" y="189" width="361" height="280"/>
+                                <rect key="frame" x="16" y="189" width="361" height="240"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="280" id="bSH-d7-oAr"/>
+                                    <constraint firstAttribute="height" constant="240" id="bSH-d7-oAr"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -147,19 +147,19 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mindfulness" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wgE-Vx-g2r">
-                                <rect key="frame" x="40" y="485" width="313" height="40.666666666666629"/>
+                                <rect key="frame" x="40" y="445" width="313" height="40.666666666666686"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Find calm and track your emotional wellness." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="smn-Wf-Rwe">
-                                <rect key="frame" x="16" y="533.66666666666663" width="361" height="20.333333333333371"/>
+                                <rect key="frame" x="16" y="493.66666666666669" width="361" height="20.333333333333314"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                <nil key="textColor"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="uNc-ZZ-E3z">
-                                <rect key="frame" x="16" y="578" width="361" height="84"/>
+                                <rect key="frame" x="16" y="538" width="361" height="124"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="dVc-cS-SLs">
                                     <size key="itemSize" width="128" height="128"/>
@@ -214,7 +214,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hY9-d7-adR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3516.7938931297708" y="928.87323943661977"/>
+            <point key="canvasLocation" x="2592" y="929"/>
         </scene>
         <!--Data Privacy View Controller-->
         <scene sceneID="AHd-GF-nlA">
@@ -1264,6 +1264,250 @@
             </objects>
             <point key="canvasLocation" x="2591.6030534351144" y="235.91549295774649"/>
         </scene>
+        <!--Onboarding Health View Controller-->
+        <scene sceneID="g8u-X4-Q1W">
+            <objects>
+                <viewController storyboardIdentifier="OnboardingGardenViewController" id="oa1-nA-CFR" customClass="OnboardingHealthViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="oGx-yp-uKY">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ojy-S1-hwq" customClass="ProgressBarView" customModule="BreastCancerApp" customModuleProvider="target">
+                                <rect key="frame" x="16" y="130" width="361" height="8"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="8" id="p28-YU-F0w"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vjo-WP-RCb">
+                                <rect key="frame" x="320" y="146" width="57" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="Oyu-sx-wxg"/>
+                                </constraints>
+                                <color key="tintColor" name="OnboardingPrimaryColor"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Skip"/>
+                                <connections>
+                                    <action selector="skipButtonTapped:" destination="wVm-5M-AsJ" eventType="touchUpInside" id="duJ-Cs-YLG"/>
+                                </connections>
+                            </button>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="onboarding_garden" translatesAutoresizingMaskIntoConstraints="NO" id="wBf-bz-5kH">
+                                <rect key="frame" x="16" y="189" width="361" height="240"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="240" id="2hn-Dc-G82"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="25"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UGY-tI-Luf">
+                                <rect key="frame" x="96" y="678" width="201" height="56"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="56" id="E2B-BH-rWk"/>
+                                </constraints>
+                                <color key="tintColor" name="OnboardingPrimaryColor"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Next" cornerStyle="capsule"/>
+                                <connections>
+                                    <action selector="nextButtonTapped:" destination="oa1-nA-CFR" eventType="touchUpInside" id="2rR-0i-sV3"/>
+                                    <action selector="nextButtonTapped:" destination="O8o-bU-xUQ" eventType="touchUpInside" id="oWn-Fk-sbv"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Track Your Health" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7F4-yP-Z88">
+                                <rect key="frame" x="40" y="445" width="313" height="40.666666666666686"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stay on top of your wellness and daily health needs." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oR2-3r-DKi">
+                                <rect key="frame" x="16" y="493.66666666666669" width="361" height="42.333333333333314"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="kjz-4a-apr">
+                                <rect key="frame" x="16" y="560" width="361" height="102"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="MTX-Pa-y1p">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="TmT-lY-xad">
+                                        <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="mFS-3k-rk5">
+                                            <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </collectionViewCellContentView>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="h4P-KZ-g6l"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="7F4-yP-Z88" firstAttribute="top" secondItem="wBf-bz-5kH" secondAttribute="bottom" constant="16" id="1eu-PV-YYz"/>
+                            <constraint firstItem="UGY-tI-Luf" firstAttribute="top" secondItem="kjz-4a-apr" secondAttribute="bottom" constant="16" id="2r8-i7-mQL"/>
+                            <constraint firstItem="7F4-yP-Z88" firstAttribute="leading" secondItem="h4P-KZ-g6l" secondAttribute="leading" constant="40" id="4vk-1b-DzQ"/>
+                            <constraint firstItem="UGY-tI-Luf" firstAttribute="leading" secondItem="h4P-KZ-g6l" secondAttribute="leading" constant="96" id="5WQ-nQ-jLo"/>
+                            <constraint firstItem="oR2-3r-DKi" firstAttribute="top" secondItem="7F4-yP-Z88" secondAttribute="bottom" constant="8" id="75g-XY-SBr"/>
+                            <constraint firstItem="h4P-KZ-g6l" firstAttribute="trailing" secondItem="kjz-4a-apr" secondAttribute="trailing" constant="16" id="9Ht-Fv-Tx7"/>
+                            <constraint firstItem="h4P-KZ-g6l" firstAttribute="trailing" secondItem="UGY-tI-Luf" secondAttribute="trailing" constant="96" id="CT0-0g-4jX"/>
+                            <constraint firstItem="oR2-3r-DKi" firstAttribute="leading" secondItem="h4P-KZ-g6l" secondAttribute="leading" constant="16" id="NIZ-h0-Ebr"/>
+                            <constraint firstItem="h4P-KZ-g6l" firstAttribute="trailing" secondItem="Ojy-S1-hwq" secondAttribute="trailing" constant="16" id="SBu-UR-aVq"/>
+                            <constraint firstItem="h4P-KZ-g6l" firstAttribute="trailing" secondItem="Vjo-WP-RCb" secondAttribute="trailing" constant="16" id="VQ9-Ti-1Yu"/>
+                            <constraint firstItem="h4P-KZ-g6l" firstAttribute="trailing" secondItem="oR2-3r-DKi" secondAttribute="trailing" constant="16" id="VQp-6X-6vL"/>
+                            <constraint firstItem="Ojy-S1-hwq" firstAttribute="leading" secondItem="h4P-KZ-g6l" secondAttribute="leading" constant="16" id="YBL-q6-12b"/>
+                            <constraint firstItem="Ojy-S1-hwq" firstAttribute="top" secondItem="h4P-KZ-g6l" secondAttribute="top" constant="12" id="Zn7-tT-Bg3"/>
+                            <constraint firstItem="h4P-KZ-g6l" firstAttribute="trailing" secondItem="7F4-yP-Z88" secondAttribute="trailing" constant="40" id="gbD-ug-c4E"/>
+                            <constraint firstItem="wBf-bz-5kH" firstAttribute="top" secondItem="Vjo-WP-RCb" secondAttribute="bottom" constant="8" id="nLt-7h-zWh"/>
+                            <constraint firstItem="kjz-4a-apr" firstAttribute="leading" secondItem="h4P-KZ-g6l" secondAttribute="leading" constant="16" id="nU8-Hz-yhJ"/>
+                            <constraint firstItem="h4P-KZ-g6l" firstAttribute="bottom" secondItem="UGY-tI-Luf" secondAttribute="bottom" constant="50" id="opC-R1-2GP"/>
+                            <constraint firstItem="Vjo-WP-RCb" firstAttribute="top" secondItem="Ojy-S1-hwq" secondAttribute="bottom" constant="8" id="rn9-Xt-mr8"/>
+                            <constraint firstItem="kjz-4a-apr" firstAttribute="top" secondItem="oR2-3r-DKi" secondAttribute="bottom" constant="24" id="uQS-Kb-PKq"/>
+                            <constraint firstItem="h4P-KZ-g6l" firstAttribute="trailing" secondItem="wBf-bz-5kH" secondAttribute="trailing" constant="16" id="wpg-u4-iC4"/>
+                            <constraint firstItem="wBf-bz-5kH" firstAttribute="leading" secondItem="h4P-KZ-g6l" secondAttribute="leading" constant="16" id="z8F-kS-nf7"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="V97-SI-Nd3"/>
+                    <connections>
+                        <outlet property="collectionView" destination="kjz-4a-apr" id="XY4-L5-ztk"/>
+                        <outlet property="mindfulnessImage" destination="wBf-bz-5kH" id="TiW-ew-rLb"/>
+                        <outlet property="nextButton" destination="UGY-tI-Luf" id="KzD-bP-OUW"/>
+                        <outlet property="progressBar" destination="Ojy-S1-hwq" id="vWp-cO-sHy"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="c0Q-lB-eNI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4324" y="929"/>
+        </scene>
+        <!--Onboarding Health View Controller-->
+        <scene sceneID="XzF-Sq-lQx">
+            <objects>
+                <viewController storyboardIdentifier="OnboardingHealthViewController" id="4O0-jb-AEs" customClass="OnboardingHealthViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="xEN-3c-9fh">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pec-fe-JV4" customClass="ProgressBarView" customModule="BreastCancerApp" customModuleProvider="target">
+                                <rect key="frame" x="16" y="130" width="361" height="8"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="8" id="biD-vh-o7h"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b9S-WT-gaI">
+                                <rect key="frame" x="320" y="146" width="57" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="i09-T2-f2R"/>
+                                </constraints>
+                                <color key="tintColor" name="OnboardingPrimaryColor"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Skip"/>
+                                <connections>
+                                    <action selector="skipButtonTapped:" destination="wVm-5M-AsJ" eventType="touchUpInside" id="qCh-Qh-wL1"/>
+                                </connections>
+                            </button>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="onboarding_health" translatesAutoresizingMaskIntoConstraints="NO" id="shf-n2-DoK">
+                                <rect key="frame" x="16" y="189" width="361" height="240"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="240" id="cq9-py-X6f"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="25"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RJc-TM-h1G">
+                                <rect key="frame" x="96" y="678" width="201" height="56"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="56" id="OMI-O8-8Wg"/>
+                                </constraints>
+                                <color key="tintColor" name="OnboardingPrimaryColor"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Next" cornerStyle="capsule"/>
+                                <connections>
+                                    <action selector="nextButtonTapped:" destination="4O0-jb-AEs" eventType="touchUpInside" id="0wE-bv-obV"/>
+                                    <action selector="nextButtonTapped:" destination="O8o-bU-xUQ" eventType="touchUpInside" id="MEZ-J8-Xuc"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Track Your Health" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rto-gb-M4D">
+                                <rect key="frame" x="40" y="445" width="313" height="40.666666666666686"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stay on top of your wellness and daily health needs." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wK6-k8-q1e">
+                                <rect key="frame" x="16" y="493.66666666666669" width="361" height="42.333333333333314"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="GQe-3P-UCz">
+                                <rect key="frame" x="16" y="560" width="361" height="102"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="4RW-SY-sjX">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="K2W-wE-Frm">
+                                        <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="4C1-CE-KcT">
+                                            <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </collectionViewCellContentView>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Nne-bX-Ixg"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="pec-fe-JV4" firstAttribute="top" secondItem="Nne-bX-Ixg" secondAttribute="top" constant="12" id="0Zn-02-bga"/>
+                            <constraint firstItem="RJc-TM-h1G" firstAttribute="leading" secondItem="Nne-bX-Ixg" secondAttribute="leading" constant="96" id="3SU-1z-dPV"/>
+                            <constraint firstItem="GQe-3P-UCz" firstAttribute="leading" secondItem="Nne-bX-Ixg" secondAttribute="leading" constant="16" id="KXX-GF-B5f"/>
+                            <constraint firstItem="GQe-3P-UCz" firstAttribute="top" secondItem="wK6-k8-q1e" secondAttribute="bottom" constant="24" id="LS6-4R-akn"/>
+                            <constraint firstItem="Nne-bX-Ixg" firstAttribute="trailing" secondItem="Rto-gb-M4D" secondAttribute="trailing" constant="40" id="MUO-N3-iyp"/>
+                            <constraint firstItem="Nne-bX-Ixg" firstAttribute="trailing" secondItem="b9S-WT-gaI" secondAttribute="trailing" constant="16" id="Ps4-Il-GGr"/>
+                            <constraint firstItem="pec-fe-JV4" firstAttribute="leading" secondItem="Nne-bX-Ixg" secondAttribute="leading" constant="16" id="Pwg-eZ-kka"/>
+                            <constraint firstItem="Nne-bX-Ixg" firstAttribute="trailing" secondItem="wK6-k8-q1e" secondAttribute="trailing" constant="16" id="ShU-YZ-ZJq"/>
+                            <constraint firstItem="RJc-TM-h1G" firstAttribute="top" secondItem="GQe-3P-UCz" secondAttribute="bottom" constant="16" id="WSF-Rj-XZc"/>
+                            <constraint firstItem="shf-n2-DoK" firstAttribute="leading" secondItem="Nne-bX-Ixg" secondAttribute="leading" constant="16" id="Yrd-Ub-0gG"/>
+                            <constraint firstItem="Nne-bX-Ixg" firstAttribute="trailing" secondItem="shf-n2-DoK" secondAttribute="trailing" constant="16" id="dVH-jT-Ddv"/>
+                            <constraint firstItem="Nne-bX-Ixg" firstAttribute="trailing" secondItem="pec-fe-JV4" secondAttribute="trailing" constant="16" id="hZz-UR-EPp"/>
+                            <constraint firstItem="wK6-k8-q1e" firstAttribute="leading" secondItem="Nne-bX-Ixg" secondAttribute="leading" constant="16" id="i1R-J5-s93"/>
+                            <constraint firstItem="Nne-bX-Ixg" firstAttribute="trailing" secondItem="GQe-3P-UCz" secondAttribute="trailing" constant="16" id="kDT-fW-jZd"/>
+                            <constraint firstItem="Nne-bX-Ixg" firstAttribute="trailing" secondItem="RJc-TM-h1G" secondAttribute="trailing" constant="96" id="lEF-8w-8fV"/>
+                            <constraint firstItem="Rto-gb-M4D" firstAttribute="leading" secondItem="Nne-bX-Ixg" secondAttribute="leading" constant="40" id="mws-cQ-FfL"/>
+                            <constraint firstItem="b9S-WT-gaI" firstAttribute="top" secondItem="pec-fe-JV4" secondAttribute="bottom" constant="8" id="p4g-ZK-x24"/>
+                            <constraint firstItem="Nne-bX-Ixg" firstAttribute="bottom" secondItem="RJc-TM-h1G" secondAttribute="bottom" constant="50" id="rue-CB-Pnp"/>
+                            <constraint firstItem="shf-n2-DoK" firstAttribute="top" secondItem="b9S-WT-gaI" secondAttribute="bottom" constant="8" id="sfA-2R-6fN"/>
+                            <constraint firstItem="wK6-k8-q1e" firstAttribute="top" secondItem="Rto-gb-M4D" secondAttribute="bottom" constant="8" id="wLR-MU-drf"/>
+                            <constraint firstItem="Rto-gb-M4D" firstAttribute="top" secondItem="shf-n2-DoK" secondAttribute="bottom" constant="16" id="zfp-ze-7mE"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="onl-mP-4nE"/>
+                    <connections>
+                        <outlet property="collectionView" destination="GQe-3P-UCz" id="SHc-xu-LId"/>
+                        <outlet property="mindfulnessImage" destination="shf-n2-DoK" id="GrG-8a-eXE"/>
+                        <outlet property="nextButton" destination="RJc-TM-h1G" id="xEx-Ds-3GH"/>
+                        <outlet property="progressBar" destination="pec-fe-JV4" id="WUX-2Z-dJR"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3qY-Ad-3ZK" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3518" y="929"/>
+        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="MlO-rP-gUO"/>
@@ -1273,6 +1517,8 @@
         <image name="dataPrivacy_heart" width="500" height="500"/>
         <image name="final_flower" width="500" height="500"/>
         <image name="intro_image" width="1024" height="1024"/>
+        <image name="onboarding_garden" width="864" height="1184"/>
+        <image name="onboarding_health" width="1016" height="806"/>
         <image name="onboarding_mindfulness" width="1024" height="1024"/>
         <namedColor name="OnboardingPrimaryColor">
             <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

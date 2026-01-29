@@ -1,13 +1,13 @@
 //
-//  OnboardingMindfulnessViewController.swift
+//  OnboardingHealthViewController.swift
 //  BreastCancerApp
 //
-//  Created by Shivani Dinesh on 27/01/26.
+//  Created by Shivani Dinesh on 28/01/26.
 //
 
 import UIKit
 
-class OnboardingMindfulnessViewController: UIViewController {
+class OnboardingHealthViewController: UIViewController {
     
     // MARK: - IBOutlets
     @IBOutlet weak var collectionView: UICollectionView!
@@ -16,7 +16,7 @@ class OnboardingMindfulnessViewController: UIViewController {
     @IBOutlet weak var mindfulnessImage: UIView!
     
     // MARK: - Properties
-    private let features = OnboardingFeature.mindfulnessFeatures
+    private let features = OnboardingFeature.healthFeatures
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -72,12 +72,11 @@ class OnboardingMindfulnessViewController: UIViewController {
     // MARK: - Actions
     @IBAction func nextButtonTapped(_ sender: UIButton) {
         // Navigate to next screen
-        performSegue(withIdentifier: "showNext", sender: nil)
+        performSegue(withIdentifier: "showHobbies", sender: nil)
     }
 }
 
-// MARK: - UICollectionViewDataSource
-extension OnboardingMindfulnessViewController: UICollectionViewDataSource {
+extension OnboardingHealthViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return features.count
@@ -98,8 +97,7 @@ extension OnboardingMindfulnessViewController: UICollectionViewDataSource {
     }
 }
 
-// MARK: - UICollectionViewDelegate
-extension OnboardingMindfulnessViewController: UICollectionViewDelegate {
+extension OnboardingHealthViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // Optional: Handle cell selection if needed
@@ -107,8 +105,7 @@ extension OnboardingMindfulnessViewController: UICollectionViewDelegate {
     }
 }
 
-// MARK: - UICollectionViewDelegateFlowLayout
-extension OnboardingMindfulnessViewController: UICollectionViewDelegateFlowLayout {
+extension OnboardingHealthViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = collectionView.frame.width - 32 // Accounting for padding

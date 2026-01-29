@@ -46,19 +46,61 @@ struct OnboardingFeature {
             title: "Get mood-based suggestions",
             iconName: "face.smiling",
 //            iconTintColor: UIColor(named: "ArticlesPrimaryColor") ?? .systemPink,
-//            backgroundColor: UIColor(red: 0.848, green: 0.691, blue: 0.768, alpha: 0.55)
+//            backgroundColor: UIColor(named: "pastel_pink")!
         ),
         OnboardingFeature(
             title: "Journal your thoughts",
             iconName: "book.closed",
 //            iconTintColor: UIColor(named: "ArticlesPrimaryColor") ?? .systemPink,
-//            backgroundColor: UIColor(red: 0.848, green: 0.691, blue: 0.768, alpha: 0.55)
+//            backgroundColor: UIColor(named: "pastel_pink")!
         ),
         OnboardingFeature(
             title: "Breathing Exercises",
             iconName: "wind",
 //            iconTintColor: UIColor(named: "ArticlesPrimaryColor") ?? .systemPink,
-//            backgroundColor: UIColor(red: 0.848, green: 0.691, blue: 0.768, alpha: 0.55)
+//            backgroundColor: UIColor(named: "pastel_pink")!
+        )
+    ]
+    
+    static let healthFeatures: [OnboardingFeature] = [
+        OnboardingFeature(
+            title: "Track appointments",
+            iconName: "calendar",
+//            iconTintColor: .systemTeal,
+//            backgroundColor: UIColor(named: "pastel_blue")!
+        ),
+        OnboardingFeature(
+            title: "Log exercise",
+            iconName: "figure.cooldown",
+//            iconTintColor: .systemTeal,
+//            backgroundColor: UIColor(named: "pastel_blue")!
+        ),
+        OnboardingFeature(
+            title: "Monitor hydration",
+            iconName: "drop",
+//            iconTintColor: .systemTeal,
+//            backgroundColor: UIColor(named: "pastel_blue")!
+        ),
+        OnboardingFeature(
+            title: "Manage medications",
+            iconName: "pills",
+//            iconTintColor: .systemTeal,
+//            backgroundColor: UIColor(named: "pastel_blue")!
+        )
+    ]
+    
+    static let gardenFeatures: [OnboardingFeature] = [
+        OnboardingFeature(
+            title: "Complete daily goals to earn coins",
+            iconName: "checkmark.circle",
+//            iconTintColor: UIColor(named: "ArticlesPrimaryColor") ?? .systemPink,
+//            backgroundColor: UIColor(named: "pastel_green")!
+        ),
+        OnboardingFeature(
+            title: "Grow your garden",
+            iconName: "camera.macro",
+//            iconTintColor: UIColor(named: "ArticlesPrimaryColor") ?? .systemPink,
+//            backgroundColor: UIColor(named: "pastel_green")!
         )
     ]
 }
