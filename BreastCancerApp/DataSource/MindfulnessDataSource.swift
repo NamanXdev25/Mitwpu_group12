@@ -1,13 +1,7 @@
-//
-//  MindfulnessDataSource.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 10/12/25.
-//
-
 import UIKit
 
 class MindfulnessDataSource: NSObject, UICollectionViewDataSource {
+
     weak var viewController: MindfulnessViewController?
 
     init(viewController: MindfulnessViewController) {
@@ -18,80 +12,104 @@ class MindfulnessDataSource: NSObject, UICollectionViewDataSource {
         return MindfulnessViewController.Section.allCases.count
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        numberOfItemsInSection section: Int) -> Int {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        numberOfItemsInSection section: Int
+    ) -> Int {
 
-        guard let vc = viewController else { return 0 }
         let sec = MindfulnessViewController.Section(rawValue: section)!
 
         switch sec {
-        case .emotions:
-            return vc.selectedEmotionIndex == nil ? 1 : 0
+        case .positiveMomentsHeader:
+            return 1
 
-        case .slideCard:
-            return vc.selectedEmotionIndex == nil ? 0 : 1
+        case .memories:
+            return 3
 
         case .explore:
             return 3
         }
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let vc = viewController else {
-            fatalError("Missing VC")
-        }
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
 
         let sec = MindfulnessViewController.Section(rawValue: indexPath.section)!
+
         switch sec {
 
-        case .emotions:
+        // MARK: - HEADER
+        case .positiveMomentsHeader:
             let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "EmotionPickerCell",
+                withReuseIdentifier: "PositiveMomentsHeaderCell",
                 for: indexPath
-            ) as! EmotionPickerCell
+            ) as! PositiveMomentsHeaderCell
 
-            cell.didSelectEmotion = { [weak vc] index in
-                vc?.handleEmotionTap(index)
+            cell.onManageTap = {
+                print("View All tapped")
             }
+
             return cell
 
-        case .slideCard:
+        // MARK: - MEMORY IMAGES (UNCHANGED)
+        case .memories:
             let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "MindfulnessSlideCardCell",
+                withReuseIdentifier: "HomeMemoryCell",
                 for: indexPath
-            ) as! MindfulnessSlideCardCell
+            ) as! HomeMemoryCell
 
-            cell.configure(initialSlidesCount: vc.slides.count)
+            let models: [HomeMemoryModel] = [
+                HomeMemoryModel(
+                    imageName: "memory_1",
+                    date: "Apr 14",
+                    description: "Beautiful day at the park. Feeling grateful."
+                ),
+                HomeMemoryModel(
+                    imageName: "memory_2",
+                    date: "Apr 10",
+                    description: "Quality time with loved ones. These moments matter."
+                ),
+                HomeMemoryModel(
+                    imageName: "memory_3",
+                    date: "Apr 05",
+                    description: "A calm evening walk to clear my mind."
+                )
+            ]
+
+            cell.configure(with: models[indexPath.item])
             return cell
 
+        // MARK: - EXPLORE
         case .explore:
             if indexPath.item == 0 {
-                let cell = collectionView.dequeueReusableCell(
+                return collectionView.dequeueReusableCell(
                     withReuseIdentifier: "MindfulnessExploreLabelCell",
                     for: indexPath
-                ) as! MindfulnessExploreLabelCell
-                return cell
-            } else {
-                let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: "MindfulnessExploreCell",
-                    for: indexPath
-                ) as! MindfulnessExploreCell
-
-                if indexPath.item == 1 {
-                    cell.configure(
-                        title: "Breathing Sessions",
-                        subtitle: "Short guided sessions to help you relax and manage anxiety",
-                        icon: UIImage(named: "Breathing")!
-                    )
-                } else {
-                    cell.configure(
-                        title: "Journaling",
-                        subtitle: "A space to write, reflect, and understand your day",
-                        icon: UIImage(named: "Journal")!
-                    )
-                }
-                return cell
+                )
             }
+
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "MindfulnessExploreCell",
+                for: indexPath
+            ) as! MindfulnessExploreCell
+
+            if indexPath.item == 1 {
+                cell.configure(
+                    title: "Breathing Sessions",
+                    subtitle: "Short guided sessions to help you relax and manage anxiety",
+                    icon: UIImage(named: "Breathing")!
+                )
+            } else {
+                cell.configure(
+                    title: "Journaling",
+                    subtitle: "A space to write, reflect, and understand your day",
+                    icon: UIImage(named: "Journal")!
+                )
+            }
+
+            return cell
         }
     }
 }
