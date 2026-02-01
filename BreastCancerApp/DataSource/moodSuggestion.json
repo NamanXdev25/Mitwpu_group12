@@ -14,7 +14,7 @@
       ],
       "journaling": [
         {"title":"A good moment today","description":"Write about one thing that made you feel good or proud.","buttonText":"Begin"},
-        {"title":"People who uplift you","description":"List someone who brings joy and why they matter.","buttonText":"Begin"},
+        {"title":"People who uplift you","description":"Write about someone who brings joy and why they matter.","buttonText":"Begin"},
         {"title":"Today’s small win","description":"Describe a tiny success and how it improved your mood.","buttonText":"Begin"},
         {"title":"Joy snapshot","description":"Write about a moment you wish you could freeze.","buttonText":"Begin"},
         {"title":"Gratitude pause","description":"Note three things you’re thankful for right now.","buttonText":"Begin"},
