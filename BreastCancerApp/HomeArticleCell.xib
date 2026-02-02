@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="HomeArticleCell" id="gTV-IL-0wX" customClass="HomeArticleCell" customModule="BreastCancerApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="361" height="273"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="361" height="273"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KZs-H0-OAe">
+                        <rect key="frame" x="0.0" y="0.0" width="361" height="273"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Article 1" translatesAutoresizingMaskIntoConstraints="NO" id="5uV-Pr-MM4">
+                                <rect key="frame" x="0.0" y="0.0" width="361" height="175"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="175" id="h5m-hF-Ktc"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Debunking Common Breast Cancer Myths" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JNd-iN-ePT">
+                                <rect key="frame" x="16" y="203" width="329" height="20"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="You should know about the truth behind myths associated with Breast Cancer" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4zP-h8-LIm">
+                                <rect key="frame" x="16" y="227" width="329" height="38"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="4zP-h8-LIm" secondAttribute="trailing" constant="16" id="535-zq-Fsd"/>
+                            <constraint firstItem="4zP-h8-LIm" firstAttribute="leading" secondItem="KZs-H0-OAe" secondAttribute="leading" constant="16" id="5hT-sc-gJ0"/>
+                            <constraint firstAttribute="trailing" secondItem="JNd-iN-ePT" secondAttribute="trailing" constant="16" id="BPi-uU-rEK"/>
+                            <constraint firstItem="JNd-iN-ePT" firstAttribute="top" secondItem="5uV-Pr-MM4" secondAttribute="bottom" constant="28" id="Gm3-XB-RBA"/>
+                            <constraint firstItem="JNd-iN-ePT" firstAttribute="leading" secondItem="KZs-H0-OAe" secondAttribute="leading" constant="16" id="H8F-Jg-ix3"/>
+                            <constraint firstItem="4zP-h8-LIm" firstAttribute="top" secondItem="JNd-iN-ePT" secondAttribute="bottom" constant="4" id="Keq-fa-vP5"/>
+                            <constraint firstAttribute="trailing" secondItem="5uV-Pr-MM4" secondAttribute="trailing" id="S08-q1-7ci"/>
+                            <constraint firstItem="5uV-Pr-MM4" firstAttribute="leading" secondItem="KZs-H0-OAe" secondAttribute="leading" id="SIr-3V-YMH"/>
+                            <constraint firstAttribute="bottom" secondItem="4zP-h8-LIm" secondAttribute="bottom" constant="8" id="bTX-3f-WDA"/>
+                            <constraint firstItem="5uV-Pr-MM4" firstAttribute="top" secondItem="KZs-H0-OAe" secondAttribute="top" id="gHe-hd-1Ii"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="13"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="KZs-H0-OAe" secondAttribute="bottom" id="Qq7-CY-94U"/>
+                <constraint firstAttribute="trailing" secondItem="KZs-H0-OAe" secondAttribute="trailing" id="T04-FS-NJD"/>
+                <constraint firstItem="KZs-H0-OAe" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="W6v-b4-fvD"/>
+                <constraint firstItem="KZs-H0-OAe" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="s6n-3k-F8B"/>
+            </constraints>
+            <size key="customSize" width="361" height="273"/>
+            <connections>
+                <outlet property="ArticleContainerView" destination="KZs-H0-OAe" id="9Sk-sw-c2w"/>
+                <outlet property="ArticleImageView" destination="5uV-Pr-MM4" id="TM9-GM-W0q"/>
+                <outlet property="ArticleSubheadLabel" destination="4zP-h8-LIm" id="wwZ-MA-2Ns"/>
+                <outlet property="ArticleTitleLable" destination="JNd-iN-ePT" id="IFT-Zc-fq4"/>
+            </connections>
+            <point key="canvasLocation" x="64.885496183206101" y="120.77464788732395"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="Article 1" width="1024" height="1024"/>
+    </resources>
+</document>

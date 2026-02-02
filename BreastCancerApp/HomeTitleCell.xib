@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="HomeTitleCell" id="gTV-IL-0wX" customClass="HomeTitleCell" customModule="BreastCancerApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="361" height="56"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="361" height="56"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Home" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zS5-84-Oc3">
+                        <rect key="frame" x="0.0" y="14.999999999999996" width="88.333333333333329" height="40.666666666666657"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7VM-yn-wzH">
+                        <rect key="frame" x="321" y="15.333333333333336" width="40" height="40"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="40" id="uj6-5H-7cE"/>
+                            <constraint firstAttribute="width" constant="40" id="vzF-aM-SZq"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="20"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ProfilePhoto" translatesAutoresizingMaskIntoConstraints="NO" id="QGY-ib-XHI">
+                        <rect key="frame" x="321" y="15.333333333333336" width="40" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="40" id="ake-m2-8Pc"/>
+                            <constraint firstAttribute="width" constant="40" id="htZ-Zq-2OY"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="20"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </imageView>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="odo-Wf-0tC">
+                        <rect key="frame" x="321" y="15.333333333333336" width="40" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="40" id="Y2p-dU-VaN"/>
+                            <constraint firstAttribute="width" constant="40" id="w4L-qR-Ym0"/>
+                        </constraints>
+                        <state key="normal" title="Button"/>
+                        <buttonConfiguration key="configuration" style="plain"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="20"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </button>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstItem="zS5-84-Oc3" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="3ka-LS-hM1"/>
+                <constraint firstItem="7VM-yn-wzH" firstAttribute="centerY" secondItem="zS5-84-Oc3" secondAttribute="centerY" id="7WG-vr-RH6"/>
+                <constraint firstAttribute="trailing" secondItem="QGY-ib-XHI" secondAttribute="trailing" id="O8x-pM-pzN"/>
+                <constraint firstItem="QGY-ib-XHI" firstAttribute="centerY" secondItem="zS5-84-Oc3" secondAttribute="centerY" id="QhV-bu-eMB"/>
+                <constraint firstItem="zS5-84-Oc3" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="15" id="SG8-ev-YkI"/>
+                <constraint firstAttribute="trailing" secondItem="odo-Wf-0tC" secondAttribute="trailing" id="Z0p-ZT-TVY"/>
+                <constraint firstItem="odo-Wf-0tC" firstAttribute="centerY" secondItem="zS5-84-Oc3" secondAttribute="centerY" id="lEa-5W-y9N"/>
+                <constraint firstAttribute="trailing" secondItem="7VM-yn-wzH" secondAttribute="trailing" id="n8U-h4-Ehc"/>
+            </constraints>
+            <size key="customSize" width="393" height="18"/>
+            <connections>
+                <outlet property="HomeLabel" destination="zS5-84-Oc3" id="7UL-oE-8Ya"/>
+                <outlet property="ProfileButton" destination="odo-Wf-0tC" id="Eto-YC-Rj2"/>
+                <outlet property="ProfileImageView" destination="QGY-ib-XHI" id="EZu-DI-Sg4"/>
+                <outlet property="ProfileView" destination="7VM-yn-wzH" id="M3v-4c-cX6"/>
+            </connections>
+            <point key="canvasLocation" x="353.43511450381681" y="88.732394366197184"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="ProfilePhoto" width="298" height="276"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
