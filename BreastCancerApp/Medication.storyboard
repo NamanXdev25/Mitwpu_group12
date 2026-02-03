@@ -51,11 +51,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Medication" largeTitleDisplayMode="never" id="8YD-jO-cTU">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="Drk-Te-GJN">
-                            <connections>
-                                <action selector="addButtonTapped:" destination="BQn-dE-dnr" id="il9-J3-EUt"/>
-                            </connections>
-                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="Drk-Te-GJN"/>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>

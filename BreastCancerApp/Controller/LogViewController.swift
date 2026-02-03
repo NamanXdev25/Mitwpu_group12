@@ -337,7 +337,16 @@ extension LogViewController: LogsSectionHeaderDelegate {
             if let medicationsVC = storyboard.instantiateViewController(
                 withIdentifier: "MedicationViewController"
             ) as? MedicationViewController {
-                navigationController?.pushViewController(medicationsVC, animated: true)
+                // Wrap in navigation controller for modal presentation
+                let navController = UINavigationController(rootViewController: medicationsVC)
+                navController.modalPresentationStyle = .pageSheet
+                
+                if let sheet = navController.sheetPresentationController {
+                    sheet.detents = [.large()]
+                    sheet.prefersGrabberVisible = true
+                }
+                
+                present(navController, animated: true)
             }
             
         default:
