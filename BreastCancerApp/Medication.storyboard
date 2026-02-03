@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="jWi-ox-kOt">
-                                <rect key="frame" x="16" y="156" width="361" height="716"/>
+                                <rect key="frame" x="16" y="156" width="361" height="628"/>
                                 <color key="backgroundColor" name="MedicationBackgroundcolor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="12" id="EyM-Ni-UW1">
                                     <size key="itemSize" width="291" height="213"/>
@@ -40,47 +40,25 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2n4-gk-bv9">
-                                <rect key="frame" x="313" y="724" width="60" height="60"/>
-                                <color key="backgroundColor" name="MedicationPrimaryColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="60" id="4Ad-QQ-HTX"/>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="60" id="GAh-TW-3BY"/>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="60" id="pgP-s6-yV8"/>
-                                    <constraint firstAttribute="height" constant="60" id="wj6-HP-rdf"/>
-                                </constraints>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" image="plus" catalog="system">
-                                    <backgroundConfiguration key="background" cornerRadius="30"/>
-                                </buttonConfiguration>
-                                <connections>
-                                    <action selector="addButtonTapped:" destination="BQn-dE-dnr" eventType="touchUpInside" id="vyU-B0-jg4"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="mP8-X3-A3S"/>
                         <color key="backgroundColor" name="MedicationBackgroundcolor"/>
                         <constraints>
                             <constraint firstItem="jWi-ox-kOt" firstAttribute="leading" secondItem="mP8-X3-A3S" secondAttribute="leading" constant="16" id="6Y2-X0-iAX"/>
-                            <constraint firstItem="mP8-X3-A3S" firstAttribute="bottom" secondItem="2n4-gk-bv9" secondAttribute="bottom" id="ZB7-m4-FB9"/>
                             <constraint firstItem="mP8-X3-A3S" firstAttribute="trailing" secondItem="jWi-ox-kOt" secondAttribute="trailing" constant="16" id="bC8-aK-3HD"/>
-                            <constraint firstItem="mP8-X3-A3S" firstAttribute="trailing" secondItem="2n4-gk-bv9" secondAttribute="trailing" constant="20" id="fQl-so-agc"/>
-                            <constraint firstItem="jWi-ox-kOt" firstAttribute="bottom" secondItem="mP8-X3-A3S" secondAttribute="bottom" constant="88" id="lZ4-3d-hXb"/>
+                            <constraint firstItem="jWi-ox-kOt" firstAttribute="bottom" secondItem="mP8-X3-A3S" secondAttribute="bottom" id="lZ4-3d-hXb"/>
                             <constraint firstItem="mP8-X3-A3S" firstAttribute="top" secondItem="jWi-ox-kOt" secondAttribute="top" constant="16" id="raN-TA-IVU"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Medication" largeTitleDisplayMode="never" id="8YD-jO-cTU">
-                        <barButtonItem key="rightBarButtonItem" title="Item" image="calendar" catalog="system" id="Drk-Te-GJN">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="Drk-Te-GJN">
                             <connections>
-                                <action selector="calendarButtonTapped:" destination="BQn-dE-dnr" id="bPQ-vW-FcD"/>
+                                <action selector="addButtonTapped:" destination="BQn-dE-dnr" id="il9-J3-EUt"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
-                        <outlet property="addButton" destination="2n4-gk-bv9" id="dbb-RP-0UF"/>
-                        <outlet property="calendarBarButton" destination="Drk-Te-GJN" id="DmA-6f-cDV"/>
                         <outlet property="collectionView" destination="jWi-ox-kOt" id="sHd-Tw-gpk"/>
                     </connections>
                 </viewController>
@@ -417,9 +395,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="calendar" catalog="system" width="128" height="107"/>
         <image name="chevron.up.chevron.down" catalog="system" width="109" height="128"/>
-        <image name="plus" catalog="system" width="128" height="113"/>
         <namedColor name="Backgroundcolor">
             <color red="0.97299998998641968" green="0.94900000095367432" blue="0.9570000171661377" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
