@@ -83,7 +83,7 @@ class MindfulnessViewController: UIViewController {
                     top: 16,
                     leading: 16,
                     bottom: 8,
-                    trailing: 16
+                    trailing: 8
                 )
                 return section
 
