@@ -13,7 +13,7 @@ class SymptomsViewController: UIViewController {
     
     private let dataSource = SymptomDataSource.shared
     private var userSymptoms: [Symptom] = []
-    private var selectedSymptoms: [String: Int] = [:]
+    private var selectedSymptoms: [String: (severity: Int, note: String)] = [:]
     private var todayLogs: [SymptomLog] = []
     
     private enum Section: Int, CaseIterable {
@@ -27,19 +27,20 @@ class SymptomsViewController: UIViewController {
         super.viewDidLoad()
         setupCollectionView()
         loadData()
+        
+        // Add tap gesture to dismiss keyboard
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         loadData()
     }
     
-    @IBAction func calendarTapped(_ sender: UIBarButtonItem) {
-        let storyboard = UIStoryboard(name: "symptomMain", bundle: nil)
-        let nav = storyboard.instantiateViewController(
-            withIdentifier: "CalendarNavController"
-        )
-        nav.modalPresentationStyle = .pageSheet
-        present(nav, animated: true)
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
     }
     
     private func setupCollectionView() {
@@ -86,13 +87,13 @@ class SymptomsViewController: UIViewController {
 
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(60)
+            heightDimension: .estimated(200)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(60)
+            heightDimension: .estimated(200)
         )
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: groupSize,
@@ -188,12 +189,13 @@ class SymptomsViewController: UIViewController {
     @objc private func logSymptomButtonTapped() {
         guard !selectedSymptoms.isEmpty else { return }
 
-        for (symptomId, severity) in selectedSymptoms {
+        for (symptomId, data) in selectedSymptoms {
             if let symptom = userSymptoms.first(where: { $0.id == symptomId }) {
                 dataSource.logSymptom(
                     symptomId: symptomId,
                     symptomName: symptom.name,
-                    severity: severity
+                    severity: data.severity,
+                    note: data.note
                 )
             }
         }
@@ -213,7 +215,7 @@ class SymptomsViewController: UIViewController {
         if selectedSymptoms[symptomId] != nil {
             selectedSymptoms.removeValue(forKey: symptomId)
         } else {
-            selectedSymptoms[symptomId] = 0
+            selectedSymptoms[symptomId] = (severity: 0, note: "")
         }
         let logIndexPath = IndexPath(item: index, section: Section.log.rawValue)
         collectionView.performBatchUpdates {
@@ -307,16 +309,29 @@ extension SymptomsViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SymptomSelectionCell", for: indexPath) as! SymptomSelectionCell
             let symptom = userSymptoms[indexPath.item]
             let isSelected = selectedSymptoms[symptom.id] != nil
-            let severity = selectedSymptoms[symptom.id] ?? 0
+            let severity = selectedSymptoms[symptom.id]?.severity ?? 0
+            let note = selectedSymptoms[symptom.id]?.note ?? ""
             
-            cell.configure(with: symptom, isSelected: isSelected, severity: severity)
+            cell.configure(with: symptom, isSelected: isSelected, severity: severity, note: note)
             
             cell.onCheckboxTapped = { [weak self] in
                 self?.toggleSymptomSelection(symptomId: symptom.id)
             }
             
             cell.onSliderChanged = { [weak self] severity in
-                self?.selectedSymptoms[symptom.id] = severity
+                guard let self = self else { return }
+                if var current = self.selectedSymptoms[symptom.id] {
+                    current.severity = severity
+                    self.selectedSymptoms[symptom.id] = current
+                }
+            }
+            
+            cell.onNoteChanged = { [weak self] note in
+                guard let self = self else { return }
+                if var current = self.selectedSymptoms[symptom.id] {
+                    current.note = note
+                    self.selectedSymptoms[symptom.id] = current
+                }
             }
             
             cell.onInfoTapped = { [weak self] in

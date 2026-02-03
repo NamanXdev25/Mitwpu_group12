@@ -12,21 +12,24 @@ struct SymptomLog {
     let symptomId: String
     let symptomName: String
     let severity: Int // 0-4 (0=mild, 4=severe)
+    let note: String
     let timestamp: Date
     
-    init(symptomId: String, symptomName: String, severity: Int) {
+    init(symptomId: String, symptomName: String, severity: Int, note: String = "") {
         self.id = UUID().uuidString
         self.symptomId = symptomId
         self.symptomName = symptomName
         self.severity = severity
+        self.note = note
         self.timestamp = Date()
     }
     
-    init(symptomId: String, symptomName: String, severity: Int, timestamp: Date) {
+    init(symptomId: String, symptomName: String, severity: Int, note: String = "", timestamp: Date) {
         self.id = UUID().uuidString
         self.symptomId = symptomId
         self.symptomName = symptomName
         self.severity = severity
+        self.note = note
         self.timestamp = timestamp
     }
 }

@@ -17,11 +17,13 @@ final class SymptomSelectionCell: UICollectionViewCell {
     @IBOutlet weak var severitySlider: UISlider!
     @IBOutlet weak var mildLabel: UILabel!
     @IBOutlet weak var severeLabel: UILabel!
+    @IBOutlet weak var noteTextView: UITextView!
 
     // Callbacks
     var onCheckboxTapped: (() -> Void)?
     var onInfoTapped: (() -> Void)?
     var onSliderChanged: ((Int) -> Void)?
+    var onNoteChanged: ((String) -> Void)?
 
     private var isSymptomSelected: Bool = false
 
@@ -34,11 +36,13 @@ final class SymptomSelectionCell: UICollectionViewCell {
         super.prepareForReuse()
         setSelected(false)
         severitySlider.value = 0
+        noteTextView.text = ""
     }
 
-    func configure(with symptom: Symptom, isSelected: Bool, severity: Int) {
+    func configure(with symptom: Symptom, isSelected: Bool, severity: Int, note: String = "") {
         symptomNameLabel.text = symptom.name
         severitySlider.value = Float(severity)
+        //noteTextView.text = note
         setSelected(isSelected)
     }
 
@@ -49,14 +53,18 @@ final class SymptomSelectionCell: UICollectionViewCell {
         severitySlider.maximumValue = 4
         severitySlider.isContinuous = true
 
+        // note text view config
+        noteTextView.delegate = self
+        noteTextView.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+
         // initial collapsed state
         sliderContainerView.isHidden = true
+        noteTextView.isHidden = true
 
         // Button actions
         checkboxButton.addTarget(self, action: #selector(checkboxTapped), for: .touchUpInside)
         infoButton.addTarget(self, action: #selector(infoTapped), for: .touchUpInside)
         severitySlider.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
-
     }
 
     // selection
@@ -70,6 +78,7 @@ final class SymptomSelectionCell: UICollectionViewCell {
             : .systemGray
 
         sliderContainerView.isHidden = !selected
+        noteTextView.isHidden = !selected
     }
 
     // actions
@@ -85,5 +94,21 @@ final class SymptomSelectionCell: UICollectionViewCell {
         let rounded = Int(sender.value.rounded())
         sender.value = Float(rounded)
         onSliderChanged?(rounded)
+    }
+}
+
+// MARK: - UITextViewDelegate
+extension SymptomSelectionCell: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        onNoteChanged?(textView.text)
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        // Dismiss keyboard on return
+        if text == "\n" {
+            textView.resignFirstResponder()
+            return false
+        }
+        return true
     }
 }

@@ -88,8 +88,8 @@ class SymptomDataSource {
     }
     
     // log section
-    func logSymptom(symptomId: String, symptomName: String, severity: Int) {
-        let log = SymptomLog(symptomId: symptomId, symptomName: symptomName, severity: severity)
+    func logSymptom(symptomId: String, symptomName: String, severity: Int, note: String = "") {
+        let log = SymptomLog(symptomId: symptomId, symptomName: symptomName, severity: severity, note: note)
         todayLogs.append(log)
     }
     
