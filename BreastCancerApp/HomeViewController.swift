@@ -957,11 +957,359 @@
 //  Created by Naman Bhansali on 02/02/26.
 //
 
+//import UIKit
+//
+//class HomeViewController: UIViewController {
+//
+//    @IBOutlet weak var HomeCollectionView: UICollectionView!
+//    
+//    // MARK: - Properties
+//    private var dataSource: UICollectionViewDiffableDataSource<HomeSectionType, HomeItem>!
+//    
+//    // MARK: - Lifecycle
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+//        
+//        print("🔍 DEBUG: viewDidLoad started")
+//        
+//        registerCells()
+//        setupCollectionView()
+//        configureDataSource()
+//        applySnapshot()
+//        
+//        print("✅ DEBUG: viewDidLoad completed")
+//    }
+//    
+//    // MARK: - Register Cells
+//    private func registerCells() {
+//        print("🔍 Registering cells...")
+//        
+//        let cellIdentifiers = [
+//            "HomeTitleCell",
+//            "HomeQuoteCell",
+//            "HomeMoodCell",
+//            "HomeSuggestionCell",
+//            "HomeArticleCell"
+//        ]
+//        
+//        for identifier in cellIdentifiers {
+//            let nib = UINib(nibName: identifier, bundle: nil)
+//            HomeCollectionView.register(nib, forCellWithReuseIdentifier: identifier)
+//            print("✅ Registered: \(identifier)")
+//        }
+//        
+//        let headerNib = UINib(nibName: "HomeHeaderCell", bundle: nil)
+//        HomeCollectionView.register(
+//            headerNib,
+//            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+//            withReuseIdentifier: "HomeHeaderCell"
+//        )
+//        print("✅ Registered: HomeHeaderCell")
+//    }
+//    
+//    // MARK: - Setup Collection View
+//    private func setupCollectionView() {
+//        HomeCollectionView.collectionViewLayout = createCompositionalLayout()
+//        HomeCollectionView.delegate = self
+//        HomeCollectionView.backgroundColor = UIColor(named: "logsbgcolor") ?? .systemBackground
+//        HomeCollectionView.contentInsetAdjustmentBehavior = .automatic
+//    }
+//    
+//    // MARK: - Create Compositional Layout
+//    private func createCompositionalLayout() -> UICollectionViewLayout {
+//        return UICollectionViewCompositionalLayout { (sectionIndex, environment) -> NSCollectionLayoutSection? in
+//            guard let sectionType = HomeSectionType(rawValue: sectionIndex) else { return nil }
+//            
+//            switch sectionType {
+//            case .title: return self.createTitleSection()
+//            case .quote: return self.createQuoteSection()
+//            case .mood: return self.createMoodSection()
+//            case .suggestion: return self.createSuggestionSection()
+//            case .articles: return self.createArticlesSection()
+//            }
+//        }
+//    }
+//    
+//    // MARK: - Section Layouts
+//    
+//    // FIXED: Title Section - Absolute height, no extra top padding
+//    private func createTitleSection() -> NSCollectionLayoutSection {
+//        print("📐 Title section: FIXED to 44pt height")
+//        
+//        let itemSize = NSCollectionLayoutSize(
+//            widthDimension: .fractionalWidth(1.0),
+//            heightDimension: .absolute(56)
+//        )
+//        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+//        
+//        let groupSize = NSCollectionLayoutSize(
+//            widthDimension: .fractionalWidth(1.0),
+//            heightDimension: .absolute(56)
+//        )
+//        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+//        
+//        let section = NSCollectionLayoutSection(group: group)
+//        // Minimal padding - let XIB handle internal spacing
+//        section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16)
+//        
+//        return section
+//    }
+//    
+//    // Quote Section
+//    private func createQuoteSection() -> NSCollectionLayoutSection {
+//        let itemSize = NSCollectionLayoutSize(
+//            widthDimension: .fractionalWidth(1.0),
+//            heightDimension: .estimated(100)
+//        )
+//        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+//        
+//        let groupSize = NSCollectionLayoutSize(
+//            widthDimension: .fractionalWidth(1.0),
+//            heightDimension: .estimated(100)
+//        )
+//        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+//        
+//        let section = NSCollectionLayoutSection(group: group)
+//        section.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 16, bottom: 8, trailing: 16)
+//        
+//        return section
+//    }
+//    
+//    // Mood Section
+//    private func createMoodSection() -> NSCollectionLayoutSection {
+//        let itemSize = NSCollectionLayoutSize(
+//            widthDimension: .fractionalWidth(1.0),
+//            heightDimension: .estimated(155)
+//        )
+//        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+//        
+//        let groupSize = NSCollectionLayoutSize(
+//            widthDimension: .fractionalWidth(1.0),
+//            heightDimension: .estimated(155)
+//        )
+//        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+//        
+//        let section = NSCollectionLayoutSection(group: group)
+//        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16)
+//        
+//        return section
+//    }
+//    
+//    // FIXED: Suggestion Section - VERTICAL scrolling (no horizontal)
+//    private func createSuggestionSection() -> NSCollectionLayoutSection {
+//        print("📐 Suggestion section: VERTICAL (no horizontal scrolling)")
+//        
+//        let itemSize = NSCollectionLayoutSize(
+//            widthDimension: .fractionalWidth(1.0),
+//            heightDimension: .estimated(116)
+//        )
+//        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+//        
+//        // CRITICAL: Width 1.0 = vertical scrolling only
+//        let groupSize = NSCollectionLayoutSize(
+//            widthDimension: .fractionalWidth(1.0),  // Full width = no horizontal scroll
+//            heightDimension: .estimated(116)
+//        )
+//        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+//        
+//        let section = NSCollectionLayoutSection(group: group)
+//        
+//        // NO orthogonalScrollingBehavior - we want vertical!
+//        
+//        section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 0, trailing: 16)
+//        section.interGroupSpacing = 12
+//        
+//        // Add header
+//        let headerSize = NSCollectionLayoutSize(
+//            widthDimension: .fractionalWidth(1.0),
+//            heightDimension: .estimated(52)
+//        )
+//        let header = NSCollectionLayoutBoundarySupplementaryItem(
+//            layoutSize: headerSize,
+//            elementKind: UICollectionView.elementKindSectionHeader,
+//            alignment: .top
+//        )
+//        section.boundarySupplementaryItems = [header]
+//        
+//        return section
+//    }
+//    
+//    // Articles Section
+//    private func createArticlesSection() -> NSCollectionLayoutSection {
+//        let itemSize = NSCollectionLayoutSize(
+//            widthDimension: .fractionalWidth(1.0),
+//            heightDimension: .estimated(273)
+//        )
+//        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+//        
+//        let groupSize = NSCollectionLayoutSize(
+//            widthDimension: .fractionalWidth(1.0),
+//            heightDimension: .estimated(273)
+//        )
+//        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+//        
+//        let section = NSCollectionLayoutSection(group: group)
+//        section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 80, trailing: 16)
+//        section.interGroupSpacing = 12
+//        
+//        // Add header
+//        let headerSize = NSCollectionLayoutSize(
+//            widthDimension: .fractionalWidth(1.0),
+//            heightDimension: .estimated(52)
+//        )
+//        let header = NSCollectionLayoutBoundarySupplementaryItem(
+//            layoutSize: headerSize,
+//            elementKind: UICollectionView.elementKindSectionHeader,
+//            alignment: .top
+//        )
+//        section.boundarySupplementaryItems = [header]
+//        
+//        return section
+//    }
+//    
+//    // MARK: - Configure Data Source
+//    private func configureDataSource() {
+//        dataSource = UICollectionViewDiffableDataSource<HomeSectionType, HomeItem>(
+//            collectionView: HomeCollectionView
+//        ) { (collectionView, indexPath, item) -> UICollectionViewCell? in
+//            
+//            print("🔍 Creating cell for section \(indexPath.section), item \(indexPath.item)")
+//            
+//            switch item.type {
+//            case .title:
+//                print("📱 Creating HomeTitleCell")
+//                let cell = collectionView.dequeueReusableCell(
+//                    withReuseIdentifier: "HomeTitleCell",
+//                    for: indexPath
+//                ) as! HomeTitleCell
+//                
+//                let profileImage = UIImage(named: "ProfilePhoto")
+//                cell.configure(title: "Home", profileImage: profileImage)
+//                print("✅ HomeTitleCell created with frame: \(cell.frame)")
+//                return cell
+//                
+//            case .quote(let quote):
+//                let cell = collectionView.dequeueReusableCell(
+//                    withReuseIdentifier: "HomeQuoteCell",
+//                    for: indexPath
+//                ) as! HomeQuoteCell
+//                cell.configure(quote: quote)
+//                return cell
+//                
+//            case .mood:
+//                let cell = collectionView.dequeueReusableCell(
+//                    withReuseIdentifier: "HomeMoodCell",
+//                    for: indexPath
+//                ) as! HomeMoodCell
+//                cell.configure(title: "How are you feeling right now?", moods: HomeModel.moods)
+//                return cell
+//                
+//            case .suggestion(let suggestion):
+//                let cell = collectionView.dequeueReusableCell(
+//                    withReuseIdentifier: "HomeSuggestionCell",
+//                    for: indexPath
+//                ) as! HomeSuggestionCell
+//                cell.configure(with: suggestion)
+//                return cell
+//                
+//            case .article(let article):
+//                let cell = collectionView.dequeueReusableCell(
+//                    withReuseIdentifier: "HomeArticleCell",
+//                    for: indexPath
+//                ) as! HomeArticleCell
+//                cell.configure(with: article)
+//                return cell
+//            }
+//        }
+//        
+//        // Configure headers
+//        dataSource.supplementaryViewProvider = { (collectionView, kind, indexPath) -> UICollectionReusableView? in
+//            
+//            guard kind == UICollectionView.elementKindSectionHeader else { return nil }
+//            
+//            let header = collectionView.dequeueReusableSupplementaryView(
+//                ofKind: kind,
+//                withReuseIdentifier: "HomeHeaderCell",
+//                for: indexPath
+//            ) as! HomeHeaderCell
+//            
+//            guard let sectionType = HomeSectionType(rawValue: indexPath.section) else { return header }
+//            
+//            switch sectionType {
+//            case .suggestion:
+//                header.configure(title: "Suggested For You")
+//            case .articles:
+//                header.configure(title: "Articles")
+//            default:
+//                break
+//            }
+//            
+//            return header
+//        }
+//    }
+//    
+//    // MARK: - Apply Snapshot
+//    private func applySnapshot() {
+//        var snapshot = NSDiffableDataSourceSnapshot<HomeSectionType, HomeItem>()
+//        
+//        snapshot.appendSections(HomeSectionType.allCases)
+//        
+//        snapshot.appendItems([HomeItem(type: .title)], toSection: .title)
+//        print("📊 Added title section: 1 item")
+//        
+//        snapshot.appendItems([HomeItem(type: .quote(HomeModel.quote))], toSection: .quote)
+//        
+//        snapshot.appendItems([HomeItem(type: .mood)], toSection: .mood)
+//        
+//        let suggestionItems = HomeModel.suggestions.map { HomeItem(type: .suggestion($0)) }
+//        snapshot.appendItems(suggestionItems, toSection: .suggestion)
+//        print("📊 Added suggestion section: \(suggestionItems.count) item(s)")
+//        
+//        let articleItems = HomeModel.articles.map { HomeItem(type: .article($0)) }
+//        snapshot.appendItems(articleItems, toSection: .articles)
+//        
+//        dataSource.apply(snapshot, animatingDifferences: false)
+//        
+//        print("✅ Snapshot applied!")
+//    }
+//}
+//
+//// MARK: - UICollectionViewDelegate
+//extension HomeViewController: UICollectionViewDelegate {
+//    
+//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//        guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
+//        
+//        switch item.type {
+//        case .suggestion(let suggestion):
+//            print("👆 Selected suggestion: \(suggestion.title)")
+//            
+//        case .article(let article):
+//            print("👆 Selected article: \(article.title)")
+//            
+//        default:
+//            break
+//        }
+//    }
+//    
+//    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+//        print("👀 Displaying cell at [\(indexPath.section), \(indexPath.item)] with frame: \(cell.frame)")
+//    }
+//}
+
+//
+//  HomeViewController.swift
+//  BreastCancerApp
+//
+//  Created by Naman Bhansali on 02/02/26.
+//
+
 import UIKit
 
 class HomeViewController: UIViewController {
 
     @IBOutlet weak var HomeCollectionView: UICollectionView!
+    @IBOutlet weak var ProfileButton: UIBarButtonItem!
     
     // MARK: - Properties
     private var dataSource: UICollectionViewDiffableDataSource<HomeSectionType, HomeItem>!
@@ -970,22 +1318,47 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("🔍 DEBUG: viewDidLoad started")
-        
+//        setupNavigationBar()
         registerCells()
         setupCollectionView()
         configureDataSource()
         applySnapshot()
-        
-        print("✅ DEBUG: viewDidLoad completed")
     }
     
+//    // MARK: - Navigation Bar
+//    private func setupNavigationBar() {
+//        // Large title "Home"
+//        navigationItem.title = "Home"
+//        navigationController?.navigationBar.prefersLargeTitles = true
+//        navigationItem.largeTitleDisplayMode = .always
+//        
+//        // Profile button on the right
+//        let profileImage = UIImage(named: "person.circle.fill") ?? UIImage(systemName: "person.circle.fill")
+//        let profileButton = UIBarButtonItem(
+//            image: profileImage,
+//            style: .plain,
+//            target: self,
+//            action: #selector(profileButtonTapped)
+//        )
+//        // Make it circular and sized nicely
+////        profileButton.tintColor = .systemGray
+//        navigationItem.rightBarButtonItem = profileButton
+//    }
+    
+//    @objc private func profileButtonTapped() {
+//        print("👆 Profile button tapped")
+//        // TODO: navigate to profile screen
+//    }
+//
+    
+    @IBAction func ProfileButtonTapped(_ sender: Any) {
+        print("👆 Profile button tapped")
+        
+    }
     // MARK: - Register Cells
     private func registerCells() {
-        print("🔍 Registering cells...")
-        
+        // HomeTitleCell removed — title is now in the navigation bar
         let cellIdentifiers = [
-            "HomeTitleCell",
             "HomeQuoteCell",
             "HomeMoodCell",
             "HomeSuggestionCell",
@@ -995,7 +1368,6 @@ class HomeViewController: UIViewController {
         for identifier in cellIdentifiers {
             let nib = UINib(nibName: identifier, bundle: nil)
             HomeCollectionView.register(nib, forCellWithReuseIdentifier: identifier)
-            print("✅ Registered: \(identifier)")
         }
         
         let headerNib = UINib(nibName: "HomeHeaderCell", bundle: nil)
@@ -1004,7 +1376,6 @@ class HomeViewController: UIViewController {
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: "HomeHeaderCell"
         )
-        print("✅ Registered: HomeHeaderCell")
     }
     
     // MARK: - Setup Collection View
@@ -1021,37 +1392,28 @@ class HomeViewController: UIViewController {
             guard let sectionType = HomeSectionType(rawValue: sectionIndex) else { return nil }
             
             switch sectionType {
-            case .title: return self.createTitleSection()
-            case .quote: return self.createQuoteSection()
-            case .mood: return self.createMoodSection()
-            case .suggestion: return self.createSuggestionSection()
-            case .articles: return self.createArticlesSection()
+            case .title:
+                // Return an empty zero-height section so rawValue indices stay aligned.
+                // No items will be added to it in the snapshot.
+                return self.createEmptySection()
+            case .quote:        return self.createQuoteSection()
+            case .mood:         return self.createMoodSection()
+            case .suggestion:   return self.createSuggestionSection()
+            case .articles:     return self.createArticlesSection()
             }
         }
     }
     
     // MARK: - Section Layouts
     
-    // FIXED: Title Section - Absolute height, no extra top padding
-    private func createTitleSection() -> NSCollectionLayoutSection {
-        print("📐 Title section: FIXED to 44pt height")
-        
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(56)
-        )
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(56)
-        )
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        
-        let section = NSCollectionLayoutSection(group: group)
-        // Minimal padding - let XIB handle internal spacing
-        section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16)
-        
+    // Empty placeholder so the .title rawValue (0) doesn't break the enum mapping
+    private func createEmptySection() -> NSCollectionLayoutSection {
+        let itemSize   = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(0))
+        let item       = NSCollectionLayoutItem(layoutSize: itemSize)
+        let groupSize  = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(0))
+        let group      = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        let section    = NSCollectionLayoutSection(group: group)
+        section.contentInsets = .zero
         return section
     }
     
@@ -1095,31 +1457,25 @@ class HomeViewController: UIViewController {
         return section
     }
     
-    // FIXED: Suggestion Section - VERTICAL scrolling (no horizontal)
+    // Suggestion Section
     private func createSuggestionSection() -> NSCollectionLayoutSection {
-        print("📐 Suggestion section: VERTICAL (no horizontal scrolling)")
-        
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .estimated(116)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
-        // CRITICAL: Width 1.0 = vertical scrolling only
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),  // Full width = no horizontal scroll
+            widthDimension: .fractionalWidth(1.0),
             heightDimension: .estimated(116)
         )
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
-        
-        // NO orthogonalScrollingBehavior - we want vertical!
-        
         section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 0, trailing: 16)
         section.interGroupSpacing = 12
         
-        // Add header
+        // Header
         let headerSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .estimated(52)
@@ -1152,7 +1508,7 @@ class HomeViewController: UIViewController {
         section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 80, trailing: 16)
         section.interGroupSpacing = 12
         
-        // Add header
+        // Header
         let headerSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .estimated(52)
@@ -1173,20 +1529,10 @@ class HomeViewController: UIViewController {
             collectionView: HomeCollectionView
         ) { (collectionView, indexPath, item) -> UICollectionViewCell? in
             
-            print("🔍 Creating cell for section \(indexPath.section), item \(indexPath.item)")
-            
             switch item.type {
             case .title:
-                print("📱 Creating HomeTitleCell")
-                let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: "HomeTitleCell",
-                    for: indexPath
-                ) as! HomeTitleCell
-                
-                let profileImage = UIImage(named: "ProfilePhoto")
-                cell.configure(title: "Home", profileImage: profileImage)
-                print("✅ HomeTitleCell created with frame: \(cell.frame)")
-                return cell
+                // Should never be dequeued — no items added to .title section
+                return UICollectionViewCell()
                 
             case .quote(let quote):
                 let cell = collectionView.dequeueReusableCell(
@@ -1254,23 +1600,18 @@ class HomeViewController: UIViewController {
         
         snapshot.appendSections(HomeSectionType.allCases)
         
-        snapshot.appendItems([HomeItem(type: .title)], toSection: .title)
-        print("📊 Added title section: 1 item")
+        // .title section intentionally left empty — handled by the nav bar now
         
         snapshot.appendItems([HomeItem(type: .quote(HomeModel.quote))], toSection: .quote)
-        
         snapshot.appendItems([HomeItem(type: .mood)], toSection: .mood)
         
         let suggestionItems = HomeModel.suggestions.map { HomeItem(type: .suggestion($0)) }
         snapshot.appendItems(suggestionItems, toSection: .suggestion)
-        print("📊 Added suggestion section: \(suggestionItems.count) item(s)")
         
         let articleItems = HomeModel.articles.map { HomeItem(type: .article($0)) }
         snapshot.appendItems(articleItems, toSection: .articles)
         
         dataSource.apply(snapshot, animatingDifferences: false)
-        
-        print("✅ Snapshot applied!")
     }
 }
 
@@ -1290,9 +1631,5 @@ extension HomeViewController: UICollectionViewDelegate {
         default:
             break
         }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        print("👀 Displaying cell at [\(indexPath.section), \(indexPath.item)] with frame: \(cell.frame)")
     }
 }
