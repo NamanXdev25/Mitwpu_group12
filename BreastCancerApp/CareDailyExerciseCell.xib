@@ -81,6 +81,13 @@
                 <constraint firstItem="cj9-s0-11d" firstAttribute="leading" secondItem="Lqb-Xa-O0V" secondAttribute="leading" id="wq4-Jl-AEC"/>
             </constraints>
             <size key="customSize" width="283" height="50"/>
+            <connections>
+                <outlet property="ExerciseBeginButton" destination="OdK-mB-lof" id="wc8-Ht-ZLN"/>
+                <outlet property="ExerciseContainer" destination="cj9-s0-11d" id="7dA-8A-QMU"/>
+                <outlet property="ExerciseIamge" destination="8hf-Z5-zD7" id="r1q-OG-N6b"/>
+                <outlet property="ExerciseTime" destination="vwk-qq-sCa" id="XIZ-bT-bEQ"/>
+                <outlet property="ExerciseTitle" destination="zMk-eU-YSh" id="p5Z-1B-Uim"/>
+            </connections>
             <point key="canvasLocation" x="243.51145038167937" y="100"/>
         </collectionViewCell>
     </objects>
@@ -88,10 +95,10 @@
         <image name="figure.mixed.cardio" catalog="system" width="118" height="128"/>
         <image name="play.fill" catalog="system" width="120" height="128"/>
         <namedColor name="ExerciseColor">
-            <color red="1" green="0.55294117647058827" blue="0.15686274509803921" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.55299997329711914" blue="0.15700000524520874" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="TabBarcolour">
-            <color red="0.90980392156862744" green="0.41568627450980389" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.9100000262260437" green="0.41600000858306885" blue="0.57300001382827759" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

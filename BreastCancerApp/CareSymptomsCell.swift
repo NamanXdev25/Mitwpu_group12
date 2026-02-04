@@ -9,6 +9,17 @@ import UIKit
 
 class CareSymptomsCell: UICollectionViewCell {
 
+    @IBOutlet weak var SymptomsContainer: UIView!
+    @IBOutlet weak var SymptomsLabel: UILabel!
+    
+    @IBOutlet weak var InsightCellCollectionView: UICollectionView!
+    
+    @IBOutlet weak var SeperatorView: UIView!
+    
+    
+    @IBOutlet weak var ViewInsightsButton: UIButton!
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

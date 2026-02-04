@@ -75,6 +75,13 @@
                 <constraint firstItem="to6-hE-ggb" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="xWy-m2-Xzc"/>
             </constraints>
             <size key="customSize" width="283" height="50"/>
+            <connections>
+                <outlet property="MedicationConatiner" destination="to6-hE-ggb" id="WAq-66-jGF"/>
+                <outlet property="MedicationImage" destination="rCw-T2-Qqv" id="ZdX-DR-GtT"/>
+                <outlet property="MedicationInfoButton" destination="FcB-3r-7zX" id="QBa-ou-oG7"/>
+                <outlet property="MedicationLabel" destination="67J-Qh-cab" id="SNk-Ia-qhn"/>
+                <outlet property="TakenLabel" destination="epA-XK-byU" id="0MT-mz-oyp"/>
+            </connections>
             <point key="canvasLocation" x="243.51145038167937" y="100"/>
         </collectionViewCell>
     </objects>
@@ -82,10 +89,10 @@
         <image name="info.circle" catalog="system" width="128" height="123"/>
         <image name="pills.fill" catalog="system" width="128" height="104"/>
         <namedColor name="PillsColor">
-            <color red="0.0" green="0.76470588235294112" blue="0.81568627450980391" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.76499998569488525" blue="0.81599998474121094" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="TabBarcolour">
-            <color red="0.90980392156862744" green="0.41568627450980389" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.9100000262260437" green="0.41600000858306885" blue="0.57300001382827759" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

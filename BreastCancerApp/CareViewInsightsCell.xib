@@ -69,6 +69,12 @@
                 <constraint firstAttribute="trailing" secondItem="EiO-0B-krz" secondAttribute="trailing" id="ygd-vB-9SA"/>
             </constraints>
             <size key="customSize" width="283" height="50"/>
+            <connections>
+                <outlet property="InsightCellChevronButton" destination="YbP-11-v8V" id="kfj-b4-EcM"/>
+                <outlet property="InsightCellImage" destination="CAr-fU-iGe" id="CID-xx-KmH"/>
+                <outlet property="InsightCellLabel" destination="vSj-3L-7vS" id="iYz-U3-ca1"/>
+                <outlet property="InsightsContainer" destination="EiO-0B-krz" id="Z4I-Zs-JdN"/>
+            </connections>
             <point key="canvasLocation" x="243.51145038167937" y="100"/>
         </collectionViewCell>
     </objects>
@@ -76,7 +82,7 @@
         <image name="chart.line.text.clipboard" catalog="system" width="103" height="128"/>
         <image name="chevron.right" catalog="system" width="97" height="128"/>
         <namedColor name="TabBarcolour">
-            <color red="0.90980392156862744" green="0.41568627450980389" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.9100000262260437" green="0.41600000858306885" blue="0.57300001382827759" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

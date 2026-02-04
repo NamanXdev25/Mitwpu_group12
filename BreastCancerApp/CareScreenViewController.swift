@@ -9,6 +9,8 @@ import UIKit
 
 class CareScreenViewController: UIViewController {
 
+    @IBOutlet weak var CareCollectionView: UICollectionView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
