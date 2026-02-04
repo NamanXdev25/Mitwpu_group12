@@ -47,6 +47,6 @@ class CareSymptomsCell: UICollectionViewCell, UICollectionViewDelegate, UICollec
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let text = symptoms[indexPath.item]
         let width = text.size(withAttributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)]).width + 30
-        return CGSize(width: width, height: 32)
+        return CGSize(width: width, height: 51)
     }
 }

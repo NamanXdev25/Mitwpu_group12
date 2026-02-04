@@ -22,7 +22,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="361" height="84"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="figure.mixed.cardio" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="8hf-Z5-zD7">
-                                <rect key="frame" x="18" y="26.333333333333329" width="50" height="31"/>
+                                <rect key="frame" x="8" y="26.333333333333329" width="50" height="31"/>
                                 <color key="tintColor" name="ExerciseColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="5ne-dU-32i"/>
@@ -30,13 +30,13 @@
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Daily Exercises" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zMk-eU-YSh">
-                                <rect key="frame" x="67.999999999999986" y="20" width="130.66666666666663" height="24"/>
+                                <rect key="frame" x="58" y="17" width="130.66666666666666" height="24"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="15 min" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vwk-qq-sCa">
-                                <rect key="frame" x="68" y="44" width="44.666666666666657" height="18"/>
+                                <rect key="frame" x="58" y="41" width="44.666666666666657" height="18"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                 <color key="textColor" systemColor="systemGrayColor"/>
                                 <nil key="highlightedColor"/>
@@ -57,14 +57,14 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="zMk-eU-YSh" firstAttribute="top" secondItem="cj9-s0-11d" secondAttribute="top" constant="20" id="4eZ-dk-8oi"/>
+                            <constraint firstItem="zMk-eU-YSh" firstAttribute="top" secondItem="cj9-s0-11d" secondAttribute="top" constant="17" id="4eZ-dk-8oi"/>
                             <constraint firstItem="zMk-eU-YSh" firstAttribute="leading" secondItem="8hf-Z5-zD7" secondAttribute="trailing" id="7U8-ny-siZ"/>
                             <constraint firstItem="vwk-qq-sCa" firstAttribute="top" secondItem="zMk-eU-YSh" secondAttribute="bottom" id="Iim-gR-Lwl"/>
                             <constraint firstItem="8hf-Z5-zD7" firstAttribute="centerY" secondItem="cj9-s0-11d" secondAttribute="centerY" id="ZnB-vv-u7a"/>
                             <constraint firstAttribute="trailing" secondItem="OdK-mB-lof" secondAttribute="trailing" constant="10" id="l9p-Af-I6a"/>
                             <constraint firstItem="OdK-mB-lof" firstAttribute="centerY" secondItem="8hf-Z5-zD7" secondAttribute="centerY" id="vit-6R-0NN"/>
                             <constraint firstItem="vwk-qq-sCa" firstAttribute="leading" secondItem="8hf-Z5-zD7" secondAttribute="trailing" id="vpa-da-CAq"/>
-                            <constraint firstItem="8hf-Z5-zD7" firstAttribute="leading" secondItem="cj9-s0-11d" secondAttribute="leading" constant="18" id="zMe-bA-A3m"/>
+                            <constraint firstItem="8hf-Z5-zD7" firstAttribute="leading" secondItem="cj9-s0-11d" secondAttribute="leading" constant="8" id="zMe-bA-A3m"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -81,7 +81,7 @@
                 <constraint firstAttribute="bottom" secondItem="cj9-s0-11d" secondAttribute="bottom" id="kAm-ju-50w"/>
                 <constraint firstItem="cj9-s0-11d" firstAttribute="leading" secondItem="Lqb-Xa-O0V" secondAttribute="leading" id="wq4-Jl-AEC"/>
             </constraints>
-            <size key="customSize" width="283" height="50"/>
+            <size key="customSize" width="283" height="41"/>
             <connections>
                 <outlet property="ExerciseBeginButton" destination="OdK-mB-lof" id="wc8-Ht-ZLN"/>
                 <outlet property="ExerciseContainer" destination="cj9-s0-11d" id="7dA-8A-QMU"/>
@@ -89,7 +89,7 @@
                 <outlet property="ExerciseTime" destination="vwk-qq-sCa" id="XIZ-bT-bEQ"/>
                 <outlet property="ExerciseTitle" destination="zMk-eU-YSh" id="p5Z-1B-Uim"/>
             </connections>
-            <point key="canvasLocation" x="243.51145038167937" y="100"/>
+            <point key="canvasLocation" x="243.51145038167937" y="96.83098591549296"/>
         </collectionViewCell>
     </objects>
     <resources>

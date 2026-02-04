@@ -6,11 +6,11 @@ class CircularProgressView: UIView {
     private var progressLayer = CAShapeLayer()
     private var trackLayer = CAShapeLayer()
     
-    @IBInspectable var progressColor: UIColor = UIColor.systemPink {
+    @IBInspectable var progressColor: UIColor = UIColor(named: "TabBarcolour") ?? UIColor.systemPink {
         didSet { progressLayer.strokeColor = progressColor.cgColor }
     }
     
-    @IBInspectable var trackColor: UIColor = UIColor.systemGray6 {
+    @IBInspectable var trackColor: UIColor = UIColor(named: "logsbgcolor") ?? UIColor.systemGray6 {
         didSet { trackLayer.strokeColor = trackColor.cgColor }
     }
     

@@ -11,30 +11,30 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CareInsightCell" id="gTV-IL-0wX" customClass="CareInsightCell" customModule="BreastCancerApp" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="111" height="53"/>
+            <rect key="frame" x="0.0" y="0.0" width="111" height="69"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="111" height="53"/>
+                <rect key="frame" x="0.0" y="0.0" width="111" height="69"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mAA-sZ-ICR">
-                        <rect key="frame" x="23" y="9" width="65" height="35"/>
+                        <rect key="frame" x="0.0" y="9" width="111" height="51"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4xV-jB-C0B">
-                                <rect key="frame" x="11.666666666666664" y="7" width="42" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <rect key="frame" x="38" y="17" width="35.333333333333343" height="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" name="SymptomsColor"/>
                         <constraints>
-                            <constraint firstItem="4xV-jB-C0B" firstAttribute="centerX" secondItem="mAA-sZ-ICR" secondAttribute="centerX" id="3mz-ut-bjJ"/>
-                            <constraint firstItem="4xV-jB-C0B" firstAttribute="centerY" secondItem="mAA-sZ-ICR" secondAttribute="centerY" id="siy-jg-CO1"/>
+                            <constraint firstItem="4xV-jB-C0B" firstAttribute="centerX" secondItem="mAA-sZ-ICR" secondAttribute="centerX" id="4ku-BK-IoR"/>
+                            <constraint firstItem="4xV-jB-C0B" firstAttribute="centerY" secondItem="mAA-sZ-ICR" secondAttribute="centerY" id="nMu-kH-nhA"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                <integer key="value" value="11"/>
+                                <integer key="value" value="17"/>
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </view>
@@ -46,14 +46,14 @@
                 <constraint firstItem="mAA-sZ-ICR" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="ekA-c9-fix"/>
                 <constraint firstItem="mAA-sZ-ICR" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="9" id="ffP-PC-EMd"/>
                 <constraint firstItem="mAA-sZ-ICR" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="ieb-Iy-quW"/>
-                <constraint firstItem="mAA-sZ-ICR" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="23" id="m0n-Jd-gKY"/>
+                <constraint firstItem="mAA-sZ-ICR" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="m0n-Jd-gKY"/>
             </constraints>
-            <size key="customSize" width="111" height="53"/>
+            <size key="customSize" width="111" height="69"/>
             <connections>
                 <outlet property="InsightLabel" destination="4xV-jB-C0B" id="EY8-gd-sYt"/>
                 <outlet property="InsightView" destination="mAA-sZ-ICR" id="bn5-aY-W6m"/>
             </connections>
-            <point key="canvasLocation" x="110.68702290076335" y="118.66197183098592"/>
+            <point key="canvasLocation" x="110.68702290076335" y="113.02816901408451"/>
         </collectionViewCell>
     </objects>
     <resources>

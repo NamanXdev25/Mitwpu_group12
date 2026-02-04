@@ -22,7 +22,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="361" height="84"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pills.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="rCw-T2-Qqv">
-                                <rect key="frame" x="18" y="27.666666666666668" width="50" height="28.999999999999982"/>
+                                <rect key="frame" x="8" y="27.666666666666668" width="50" height="28.999999999999982"/>
                                 <color key="tintColor" name="PillsColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="6CN-sa-yjF"/>
@@ -36,13 +36,13 @@
                                 <buttonConfiguration key="configuration" style="plain" image="info.circle" catalog="system"/>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Medication" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="67J-Qh-cab">
-                                <rect key="frame" x="68" y="20" width="97.333333333333314" height="24"/>
+                                <rect key="frame" x="57.999999999999993" y="17" width="97.333333333333314" height="24"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2/3 Taken" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="epA-XK-byU">
-                                <rect key="frame" x="68" y="44" width="66.666666666666686" height="18"/>
+                                <rect key="frame" x="58.000000000000007" y="41" width="66.666666666666686" height="18"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                 <color key="textColor" systemColor="systemGrayColor"/>
                                 <nil key="highlightedColor"/>
@@ -54,10 +54,10 @@
                             <constraint firstItem="rCw-T2-Qqv" firstAttribute="centerY" secondItem="to6-hE-ggb" secondAttribute="centerY" id="Ewi-MB-LZD"/>
                             <constraint firstItem="FcB-3r-7zX" firstAttribute="centerY" secondItem="rCw-T2-Qqv" secondAttribute="centerY" id="Ijo-bu-7pq"/>
                             <constraint firstItem="67J-Qh-cab" firstAttribute="leading" secondItem="rCw-T2-Qqv" secondAttribute="trailing" id="ToM-fN-ZFf"/>
-                            <constraint firstItem="67J-Qh-cab" firstAttribute="top" secondItem="to6-hE-ggb" secondAttribute="top" constant="20" id="X9G-cn-ouF"/>
+                            <constraint firstItem="67J-Qh-cab" firstAttribute="top" secondItem="to6-hE-ggb" secondAttribute="top" constant="17" id="X9G-cn-ouF"/>
                             <constraint firstItem="epA-XK-byU" firstAttribute="leading" secondItem="rCw-T2-Qqv" secondAttribute="trailing" id="eX6-mV-9Rt"/>
                             <constraint firstItem="epA-XK-byU" firstAttribute="top" secondItem="67J-Qh-cab" secondAttribute="bottom" id="iO0-oL-apL"/>
-                            <constraint firstItem="rCw-T2-Qqv" firstAttribute="leading" secondItem="to6-hE-ggb" secondAttribute="leading" constant="18" id="xxu-nn-lWs"/>
+                            <constraint firstItem="rCw-T2-Qqv" firstAttribute="leading" secondItem="to6-hE-ggb" secondAttribute="leading" constant="8" id="xxu-nn-lWs"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
