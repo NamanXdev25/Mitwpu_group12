@@ -72,7 +72,7 @@
             <connections>
                 <outlet property="InsightCellChevronButton" destination="YbP-11-v8V" id="kfj-b4-EcM"/>
                 <outlet property="InsightCellImage" destination="CAr-fU-iGe" id="CID-xx-KmH"/>
-                <outlet property="InsightCellLabel" destination="vSj-3L-7vS" id="iYz-U3-ca1"/>
+                <outlet property="InsightCellLabel" destination="hfW-Ka-KdM" id="XcH-ha-aZU"/>
                 <outlet property="InsightsContainer" destination="EiO-0B-krz" id="Z4I-Zs-JdN"/>
             </connections>
             <point key="canvasLocation" x="243.51145038167937" y="100"/>

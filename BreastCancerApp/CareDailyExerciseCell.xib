@@ -84,7 +84,7 @@
             <connections>
                 <outlet property="ExerciseBeginButton" destination="OdK-mB-lof" id="wc8-Ht-ZLN"/>
                 <outlet property="ExerciseContainer" destination="cj9-s0-11d" id="7dA-8A-QMU"/>
-                <outlet property="ExerciseIamge" destination="8hf-Z5-zD7" id="r1q-OG-N6b"/>
+                <outlet property="ExerciseImage" destination="8hf-Z5-zD7" id="nVq-4g-S6c"/>
                 <outlet property="ExerciseTime" destination="vwk-qq-sCa" id="XIZ-bT-bEQ"/>
                 <outlet property="ExerciseTitle" destination="zMk-eU-YSh" id="p5Z-1B-Uim"/>
             </connections>

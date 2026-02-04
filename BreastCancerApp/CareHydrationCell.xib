@@ -11,7 +11,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="CareHydrationCell" customModule="BreastCancerApp" customModuleProvider="target">
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CareHydrationCell" id="gTV-IL-0wX" customClass="CareHydrationCell" customModule="BreastCancerApp" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="361" height="209"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -24,7 +24,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cvR-Ph-CNT">
                                 <rect key="frame" x="0.0" y="0.0" width="361" height="100"/>
                                 <subviews>
-                                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="D9O-7e-wbq">
+                                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="D9O-7e-wbq" customClass="CircularProgressView" customModule="BreastCancerApp" customModuleProvider="target">
                                         <rect key="frame" x="16" y="15" width="70" height="70"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tie-Ph-nw9">
@@ -94,6 +94,11 @@
                                     <constraint firstItem="D9O-7e-wbq" firstAttribute="centerY" secondItem="cvR-Ph-CNT" secondAttribute="centerY" id="vb3-aQ-yp2"/>
                                     <constraint firstItem="4qw-dw-pA7" firstAttribute="leading" secondItem="D9O-7e-wbq" secondAttribute="trailing" constant="16" id="xz2-RF-gYe"/>
                                 </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="16"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6L6-Jf-MRj">
                                 <rect key="frame" x="0.0" y="100" width="361" height="109"/>
@@ -106,20 +111,89 @@
                                             <constraint firstAttribute="width" constant="329" id="mzx-b6-pBK"/>
                                         </constraints>
                                     </view>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Goal" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NFp-2L-6GC">
-                                        <rect key="frame" x="16" y="13" width="35" height="21"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Goal" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NFp-2L-6GC">
+                                        <rect key="frame" x="16" y="12.999999999999998" width="35" height="20.333333333333329"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3.0 L" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rEQ-jX-KtJ">
+                                        <rect key="frame" x="281.33333333333331" y="12.999999999999998" width="37.666666666666686" height="20.333333333333329"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="neG-dC-nmY">
+                                        <rect key="frame" x="324" y="12.666666666666671" width="18" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="TIq-sX-hd4"/>
+                                            <constraint firstAttribute="width" constant="18" id="ydR-Zs-9D1"/>
+                                        </constraints>
+                                        <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="chevron.up.chevron.down" catalog="system">
+                                            <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" scale="small"/>
+                                        </buttonConfiguration>
+                                    </button>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ca6-hf-F1c">
+                                        <rect key="frame" x="16" y="48" width="329" height="1"/>
+                                        <color key="backgroundColor" name="SeperatorColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="1" id="5MF-VU-9sG"/>
+                                            <constraint firstAttribute="width" constant="329" id="Dgm-U8-lrS"/>
+                                        </constraints>
+                                    </view>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cup Size" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hDn-81-IFR">
+                                        <rect key="frame" x="16" y="61.000000000000007" width="67.666666666666671" height="20.333333333333336"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="200 mL" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BOV-uQ-evh">
+                                        <rect key="frame" x="260" y="61.000000000000007" width="58.333333333333314" height="20.333333333333336"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S7u-tA-bnO">
+                                        <rect key="frame" x="323.33333333333331" y="60.666666666666657" width="18" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="18" id="0cW-gY-gp5"/>
+                                            <constraint firstAttribute="height" constant="21" id="ZFt-Fd-rkg"/>
+                                        </constraints>
+                                        <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="chevron.up.chevron.down" catalog="system">
+                                            <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" scale="small"/>
+                                        </buttonConfiguration>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstItem="rEQ-jX-KtJ" firstAttribute="centerY" secondItem="NFp-2L-6GC" secondAttribute="centerY" id="7sX-IU-5KI"/>
+                                    <constraint firstItem="rEQ-jX-KtJ" firstAttribute="leading" secondItem="NFp-2L-6GC" secondAttribute="trailing" constant="230.33000000000001" id="FGg-ts-MIo"/>
+                                    <constraint firstItem="ca6-hf-F1c" firstAttribute="top" secondItem="NFp-2L-6GC" secondAttribute="bottom" constant="14.67" id="IOg-7n-pBH"/>
+                                    <constraint firstItem="S7u-tA-bnO" firstAttribute="leading" secondItem="BOV-uQ-evh" secondAttribute="trailing" constant="5" id="JSh-Ry-RJT"/>
+                                    <constraint firstItem="BOV-uQ-evh" firstAttribute="centerY" secondItem="hDn-81-IFR" secondAttribute="centerY" id="KAE-Qt-fQK"/>
                                     <constraint firstAttribute="trailing" secondItem="9Yc-Sz-jDT" secondAttribute="trailing" constant="16" id="RNH-at-gKT"/>
+                                    <constraint firstItem="neG-dC-nmY" firstAttribute="leading" secondItem="rEQ-jX-KtJ" secondAttribute="trailing" constant="5" id="U2T-qu-RHy"/>
+                                    <constraint firstItem="S7u-tA-bnO" firstAttribute="centerY" secondItem="BOV-uQ-evh" secondAttribute="centerY" id="VHR-9P-jVx"/>
+                                    <constraint firstItem="hDn-81-IFR" firstAttribute="top" secondItem="ca6-hf-F1c" secondAttribute="bottom" constant="12" id="WEz-mt-ysi"/>
+                                    <constraint firstItem="NFp-2L-6GC" firstAttribute="leading" secondItem="6L6-Jf-MRj" secondAttribute="leading" constant="16" id="X6l-uo-boi"/>
                                     <constraint firstItem="9Yc-Sz-jDT" firstAttribute="leading" secondItem="6L6-Jf-MRj" secondAttribute="leading" constant="16" id="Zmg-GM-6m3"/>
+                                    <constraint firstItem="neG-dC-nmY" firstAttribute="centerY" secondItem="rEQ-jX-KtJ" secondAttribute="centerY" id="ckM-Xp-Asb"/>
+                                    <constraint firstItem="BOV-uQ-evh" firstAttribute="leading" secondItem="hDn-81-IFR" secondAttribute="trailing" constant="176.33000000000001" id="gON-I7-Xw5"/>
+                                    <constraint firstAttribute="trailing" secondItem="ca6-hf-F1c" secondAttribute="trailing" constant="16" id="gge-bG-oXw"/>
+                                    <constraint firstItem="hDn-81-IFR" firstAttribute="leading" secondItem="6L6-Jf-MRj" secondAttribute="leading" constant="16" id="qe1-io-R10"/>
+                                    <constraint firstItem="ca6-hf-F1c" firstAttribute="leading" secondItem="6L6-Jf-MRj" secondAttribute="leading" constant="16" id="xGV-Bx-5OY"/>
                                     <constraint firstItem="9Yc-Sz-jDT" firstAttribute="top" secondItem="6L6-Jf-MRj" secondAttribute="top" id="xJa-Uc-Kem"/>
+                                    <constraint firstItem="NFp-2L-6GC" firstAttribute="top" secondItem="9Yc-Sz-jDT" secondAttribute="bottom" constant="12" id="znc-Hc-zHG"/>
                                 </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="16"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </view>
                         </subviews>
                     </stackView>
@@ -133,10 +207,27 @@
                 <constraint firstAttribute="bottom" secondItem="phm-4G-Qfy" secondAttribute="bottom" id="hN2-59-PI3"/>
             </constraints>
             <size key="customSize" width="361" height="209"/>
+            <connections>
+                <outlet property="CupSizeChevronButton" destination="S7u-tA-bnO" id="gfu-yA-v2b"/>
+                <outlet property="CupsizeLabel" destination="hDn-81-IFR" id="45f-AV-7Dk"/>
+                <outlet property="GoalChevronButton" destination="neG-dC-nmY" id="pQp-ll-2NX"/>
+                <outlet property="GoalLabel" destination="NFp-2L-6GC" id="D2T-Ml-NFI"/>
+                <outlet property="Hydrationstepper" destination="OQH-TU-BzY" id="DZK-Yt-Ig7"/>
+                <outlet property="ViewStack" destination="Tie-Ph-nw9" id="pvR-Hh-K8b"/>
+                <outlet property="cupSizeValueLabel" destination="BOV-uQ-evh" id="P9t-rH-Txt"/>
+                <outlet property="currentProgressLabel" destination="6nH-In-FHG" id="aak-ro-z06"/>
+                <outlet property="detailContainerView" destination="6L6-Jf-MRj" id="AEk-Tp-U7J"/>
+                <outlet property="dropIconImageView" destination="JTL-0w-8cj" id="J6c-bY-Cp5"/>
+                <outlet property="goalValueLabel" destination="rEQ-jX-KtJ" id="Vec-6g-WJt"/>
+                <outlet property="headerView" destination="cvR-Ph-CNT" id="9G1-Yl-N6b"/>
+                <outlet property="hydrationLabel" destination="4qw-dw-pA7" id="lfa-gE-cr2"/>
+                <outlet property="progressView" destination="D9O-7e-wbq" id="isv-F3-AuF"/>
+            </connections>
             <point key="canvasLocation" x="241.98473282442748" y="137.67605633802819"/>
         </collectionViewCell>
     </objects>
     <resources>
+        <image name="chevron.up.chevron.down" catalog="system" width="109" height="128"/>
         <namedColor name="SeperatorColor">
             <color red="0.90200001001358032" green="0.90200001001358032" blue="0.90200001001358032" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
