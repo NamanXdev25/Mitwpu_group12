@@ -112,24 +112,24 @@
                                         </constraints>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Goal" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NFp-2L-6GC">
-                                        <rect key="frame" x="16" y="12.999999999999998" width="35" height="20.333333333333329"/>
+                                        <rect key="frame" x="16" y="13.999999999999998" width="35" height="20.333333333333329"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3.0 L" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rEQ-jX-KtJ">
-                                        <rect key="frame" x="281.33333333333331" y="12.999999999999998" width="37.666666666666686" height="20.333333333333329"/>
+                                        <rect key="frame" x="281.33333333333331" y="13.999999999999998" width="37.666666666666686" height="20.333333333333329"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
+                                        <color key="textColor" name="HydrationColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="neG-dC-nmY">
-                                        <rect key="frame" x="324" y="12.666666666666671" width="18" height="21"/>
+                                        <rect key="frame" x="324" y="13.666666666666671" width="18" height="21"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="21" id="TIq-sX-hd4"/>
                                             <constraint firstAttribute="width" constant="18" id="ydR-Zs-9D1"/>
                                         </constraints>
-                                        <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="tintColor" name="HydrationColor"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="chevron.up.chevron.down" catalog="system">
                                             <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" scale="small"/>
@@ -144,24 +144,24 @@
                                         </constraints>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cup Size" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hDn-81-IFR">
-                                        <rect key="frame" x="16" y="61.000000000000007" width="67.666666666666671" height="20.333333333333336"/>
+                                        <rect key="frame" x="16" y="62.000000000000007" width="67.666666666666671" height="20.333333333333336"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="200 mL" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BOV-uQ-evh">
-                                        <rect key="frame" x="260" y="61.000000000000007" width="58.333333333333314" height="20.333333333333336"/>
+                                        <rect key="frame" x="260" y="62.000000000000007" width="58.333333333333314" height="20.333333333333336"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
+                                        <color key="textColor" name="HydrationColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S7u-tA-bnO">
-                                        <rect key="frame" x="323.33333333333331" y="60.666666666666657" width="18" height="21"/>
+                                        <rect key="frame" x="323.33333333333331" y="61.666666666666657" width="18" height="21"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="18" id="0cW-gY-gp5"/>
                                             <constraint firstAttribute="height" constant="21" id="ZFt-Fd-rkg"/>
                                         </constraints>
-                                        <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="tintColor" name="HydrationColor"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" image="chevron.up.chevron.down" catalog="system">
                                             <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" scale="small"/>
@@ -172,13 +172,13 @@
                                 <constraints>
                                     <constraint firstItem="rEQ-jX-KtJ" firstAttribute="centerY" secondItem="NFp-2L-6GC" secondAttribute="centerY" id="7sX-IU-5KI"/>
                                     <constraint firstItem="rEQ-jX-KtJ" firstAttribute="leading" secondItem="NFp-2L-6GC" secondAttribute="trailing" constant="230.33000000000001" id="FGg-ts-MIo"/>
-                                    <constraint firstItem="ca6-hf-F1c" firstAttribute="top" secondItem="NFp-2L-6GC" secondAttribute="bottom" constant="14.67" id="IOg-7n-pBH"/>
                                     <constraint firstItem="S7u-tA-bnO" firstAttribute="leading" secondItem="BOV-uQ-evh" secondAttribute="trailing" constant="5" id="JSh-Ry-RJT"/>
+                                    <constraint firstItem="ca6-hf-F1c" firstAttribute="top" secondItem="NFp-2L-6GC" secondAttribute="bottom" constant="13.67" id="JoU-1q-xFQ"/>
                                     <constraint firstItem="BOV-uQ-evh" firstAttribute="centerY" secondItem="hDn-81-IFR" secondAttribute="centerY" id="KAE-Qt-fQK"/>
                                     <constraint firstAttribute="trailing" secondItem="9Yc-Sz-jDT" secondAttribute="trailing" constant="16" id="RNH-at-gKT"/>
                                     <constraint firstItem="neG-dC-nmY" firstAttribute="leading" secondItem="rEQ-jX-KtJ" secondAttribute="trailing" constant="5" id="U2T-qu-RHy"/>
                                     <constraint firstItem="S7u-tA-bnO" firstAttribute="centerY" secondItem="BOV-uQ-evh" secondAttribute="centerY" id="VHR-9P-jVx"/>
-                                    <constraint firstItem="hDn-81-IFR" firstAttribute="top" secondItem="ca6-hf-F1c" secondAttribute="bottom" constant="12" id="WEz-mt-ysi"/>
+                                    <constraint firstItem="hDn-81-IFR" firstAttribute="top" secondItem="ca6-hf-F1c" secondAttribute="bottom" constant="13" id="WEz-mt-ysi"/>
                                     <constraint firstItem="NFp-2L-6GC" firstAttribute="leading" secondItem="6L6-Jf-MRj" secondAttribute="leading" constant="16" id="X6l-uo-boi"/>
                                     <constraint firstItem="9Yc-Sz-jDT" firstAttribute="leading" secondItem="6L6-Jf-MRj" secondAttribute="leading" constant="16" id="Zmg-GM-6m3"/>
                                     <constraint firstItem="neG-dC-nmY" firstAttribute="centerY" secondItem="rEQ-jX-KtJ" secondAttribute="centerY" id="ckM-Xp-Asb"/>
@@ -187,7 +187,7 @@
                                     <constraint firstItem="hDn-81-IFR" firstAttribute="leading" secondItem="6L6-Jf-MRj" secondAttribute="leading" constant="16" id="qe1-io-R10"/>
                                     <constraint firstItem="ca6-hf-F1c" firstAttribute="leading" secondItem="6L6-Jf-MRj" secondAttribute="leading" constant="16" id="xGV-Bx-5OY"/>
                                     <constraint firstItem="9Yc-Sz-jDT" firstAttribute="top" secondItem="6L6-Jf-MRj" secondAttribute="top" id="xJa-Uc-Kem"/>
-                                    <constraint firstItem="NFp-2L-6GC" firstAttribute="top" secondItem="9Yc-Sz-jDT" secondAttribute="bottom" constant="12" id="znc-Hc-zHG"/>
+                                    <constraint firstItem="NFp-2L-6GC" firstAttribute="top" secondItem="9Yc-Sz-jDT" secondAttribute="bottom" constant="13" id="znc-Hc-zHG"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -228,6 +228,9 @@
     </objects>
     <resources>
         <image name="chevron.up.chevron.down" catalog="system" width="109" height="128"/>
+        <namedColor name="HydrationColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="SeperatorColor">
             <color red="0.90200001001358032" green="0.90200001001358032" blue="0.90200001001358032" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
