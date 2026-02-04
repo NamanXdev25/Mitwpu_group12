@@ -1,0 +1,40 @@
+{
+  "insights": [
+    {
+      "type": "hydration",
+      "title": "Hydration Summary",
+      "subtitle": "Goal: 3.0 Ltr",
+      "completedValue": "Completed: 2.0 Ltr",
+      "mainValue": "7.1 glasses"
+    },
+    {
+      "type": "exercise",
+      "title": "Exercise Consistency",
+      "subtitle": "This week",
+      "mainValue": "140 min",
+      "secondaryValue": "5 of 7"
+    },
+    {
+      "type": "medication",
+      "title": "Medication Adherence",
+      "subtitle": "Past 7 days",
+      "mainValue": "71%",
+      "medicationTaken": "5 doses taken",
+      "medicationMissed": "· 2 missed"
+    },
+    {
+          "type": "symptoms",
+          "title": "Symptoms Tracking",
+          "subtitle": "Past 7 days · Scale 1-10",
+          "dailyValues": [2, 4, 3, 5, 2, 6, 4],
+          "detailText": "Tap to view detailed symptom logs"
+        },
+    {
+          "type": "mood",
+          "title": "Mood Garden",
+          "subtitle": "January 2026",
+          "moodValues": ["peach", "yellow", "lightPink", "darkPink", "lightBlue", "peach"],
+          "detailText": "View History"
+        }
+  ]
+}
