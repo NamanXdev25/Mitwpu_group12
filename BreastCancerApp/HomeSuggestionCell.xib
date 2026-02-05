@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="HomeSuggestionCell" id="gTV-IL-0wX" customClass="HomeSuggestionCell" customModule="BreastCancerApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="361" height="108"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="361" height="108"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lNU-cc-Lyi">
+                        <rect key="frame" x="0.0" y="0.0" width="361" height="108"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BreathingSessionsImage" translatesAutoresizingMaskIntoConstraints="NO" id="AtC-SS-HuW">
+                                <rect key="frame" x="0.0" y="0.0" width="85" height="108"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="85" id="4fd-Kn-AAX"/>
+                                    <constraint firstAttribute="height" constant="108" id="sZT-xI-hwg"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Gentle Focus" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fXN-4Z-jbM">
+                                <rect key="frame" x="101" y="19" width="104.33333333333331" height="20.333333333333329"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="A soft breathing session to keep your energy steady." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A52-zc-cXx">
+                                <rect key="frame" x="101" y="39.333333333333336" width="200" height="38.000000000000007"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="485-gn-2c4"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                                <color key="textColor" systemColor="systemGrayColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="A52-zc-cXx" firstAttribute="leading" secondItem="AtC-SS-HuW" secondAttribute="trailing" constant="16" id="BKb-Vc-Sq1"/>
+                            <constraint firstItem="A52-zc-cXx" firstAttribute="top" secondItem="fXN-4Z-jbM" secondAttribute="bottom" id="Omv-NM-ZSQ"/>
+                            <constraint firstItem="fXN-4Z-jbM" firstAttribute="top" secondItem="lNU-cc-Lyi" secondAttribute="top" constant="19" id="U8y-em-XH2"/>
+                            <constraint firstItem="fXN-4Z-jbM" firstAttribute="leading" secondItem="AtC-SS-HuW" secondAttribute="trailing" constant="16" id="fJU-p0-K5J"/>
+                            <constraint firstItem="AtC-SS-HuW" firstAttribute="leading" secondItem="lNU-cc-Lyi" secondAttribute="leading" id="gb1-Sd-JbA"/>
+                            <constraint firstAttribute="bottom" secondItem="AtC-SS-HuW" secondAttribute="bottom" id="q0Q-9h-exp"/>
+                            <constraint firstItem="AtC-SS-HuW" firstAttribute="top" secondItem="lNU-cc-Lyi" secondAttribute="top" id="yrl-uc-X5g"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="13"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstItem="lNU-cc-Lyi" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="5A1-Ss-Zjt"/>
+                <constraint firstItem="lNU-cc-Lyi" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="PgI-dd-QO0"/>
+                <constraint firstAttribute="trailing" secondItem="lNU-cc-Lyi" secondAttribute="trailing" id="l1f-g8-xXh"/>
+                <constraint firstAttribute="bottom" secondItem="lNU-cc-Lyi" secondAttribute="bottom" id="xpR-j0-WwI"/>
+            </constraints>
+            <connections>
+                <outlet property="SuggestionImageView" destination="AtC-SS-HuW" id="lZ9-AP-qCl"/>
+                <outlet property="SuggestionSubheadLabel" destination="A52-zc-cXx" id="Iaj-oZ-4U4"/>
+                <outlet property="SuggestionTitleLabel" destination="fXN-4Z-jbM" id="VMs-fJ-88C"/>
+                <outlet property="SuggestionView" destination="lNU-cc-Lyi" id="VvH-xi-BHf"/>
+            </connections>
+            <point key="canvasLocation" x="64.885496183206101" y="117.60563380281691"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="BreathingSessionsImage" width="864" height="1184"/>
+        <systemColor name="systemGrayColor">
+            <color red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>
