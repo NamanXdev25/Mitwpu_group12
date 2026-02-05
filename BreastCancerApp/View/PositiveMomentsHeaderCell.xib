@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PositiveMomentsHeaderCell" id="gTV-IL-0wX" customClass="PositiveMomentsHeaderCell" customModule="BreastCancerApp">
+            <rect key="frame" x="0.0" y="0.0" width="350" height="130"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="350" height="130"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Little Moments" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qEd-Lh-eAw">
+                        <rect key="frame" x="4" y="8" width="119" height="114"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bdF-Yb-JCT">
+                        <rect key="frame" x="313.33333333333331" y="8" width="36.666666666666686" height="114"/>
+                        <color key="tintColor" systemColor="systemGrayColor"/>
+                        <state key="normal" title="Button"/>
+                        <buttonConfiguration key="configuration" style="plain" imagePlacement="trailing" title="">
+                            <imageReference key="image" image="chevron.right" catalog="system" symbolScale="medium"/>
+                        </buttonConfiguration>
+                    </button>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstItem="qEd-Lh-eAw" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="5dU-Sk-krq"/>
+                <constraint firstItem="bdF-Yb-JCT" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="P5G-6k-pOn"/>
+                <constraint firstAttribute="bottom" secondItem="bdF-Yb-JCT" secondAttribute="bottom" constant="8" id="YgD-Nk-dna"/>
+                <constraint firstAttribute="trailing" secondItem="bdF-Yb-JCT" secondAttribute="trailing" id="bFT-8h-7nP"/>
+                <constraint firstItem="qEd-Lh-eAw" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="4" id="bna-LT-bwB"/>
+                <constraint firstAttribute="bottom" secondItem="qEd-Lh-eAw" secondAttribute="bottom" constant="8" id="qUa-Mi-rcJ"/>
+            </constraints>
+            <size key="customSize" width="350" height="130"/>
+            <connections>
+                <outlet property="manageButton" destination="bdF-Yb-JCT" id="n2e-uj-yp3"/>
+                <outlet property="titleLabel" destination="qEd-Lh-eAw" id="lPq-tY-4dl"/>
+            </connections>
+            <point key="canvasLocation" x="48.854961832061065" y="124.64788732394366"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="chevron.right" catalog="system" width="97" height="128"/>
+        <systemColor name="systemGrayColor">
+            <color red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>
