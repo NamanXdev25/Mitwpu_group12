@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CareDailyExerciseCell" id="Lqb-Xa-O0V" customClass="CareDailyExerciseCell" customModule="BreastCancerApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="361" height="84"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="361" height="84"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cj9-s0-11d">
+                        <rect key="frame" x="0.0" y="0.0" width="361" height="84"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="figure.mixed.cardio" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="8hf-Z5-zD7">
+                                <rect key="frame" x="8" y="26.333333333333329" width="50" height="31"/>
+                                <color key="tintColor" name="ExerciseColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="5ne-dU-32i"/>
+                                    <constraint firstAttribute="width" constant="50" id="5xF-8Y-oId"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Daily Exercises" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zMk-eU-YSh">
+                                <rect key="frame" x="58" y="17" width="130.66666666666666" height="24"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="15 min" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vwk-qq-sCa">
+                                <rect key="frame" x="58" y="41" width="44.666666666666657" height="18"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                                <color key="textColor" systemColor="systemGrayColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OdK-mB-lof">
+                                <rect key="frame" x="260" y="25.000000000000004" width="91" height="34.333333333333343"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="34.329999999999998" id="3qT-VH-NLE"/>
+                                    <constraint firstAttribute="width" constant="91" id="PCv-ey-wgZ"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" image="play.fill" catalog="system" title=" Begin" cornerStyle="capsule">
+                                    <backgroundConfiguration key="background"/>
+                                    <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="baseBackgroundColor" name="TabBarcolour"/>
+                                </buttonConfiguration>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="zMk-eU-YSh" firstAttribute="top" secondItem="cj9-s0-11d" secondAttribute="top" constant="17" id="4eZ-dk-8oi"/>
+                            <constraint firstItem="zMk-eU-YSh" firstAttribute="leading" secondItem="8hf-Z5-zD7" secondAttribute="trailing" id="7U8-ny-siZ"/>
+                            <constraint firstItem="vwk-qq-sCa" firstAttribute="top" secondItem="zMk-eU-YSh" secondAttribute="bottom" id="Iim-gR-Lwl"/>
+                            <constraint firstItem="8hf-Z5-zD7" firstAttribute="centerY" secondItem="cj9-s0-11d" secondAttribute="centerY" id="ZnB-vv-u7a"/>
+                            <constraint firstAttribute="trailing" secondItem="OdK-mB-lof" secondAttribute="trailing" constant="10" id="l9p-Af-I6a"/>
+                            <constraint firstItem="OdK-mB-lof" firstAttribute="centerY" secondItem="8hf-Z5-zD7" secondAttribute="centerY" id="vit-6R-0NN"/>
+                            <constraint firstItem="vwk-qq-sCa" firstAttribute="leading" secondItem="8hf-Z5-zD7" secondAttribute="trailing" id="vpa-da-CAq"/>
+                            <constraint firstItem="8hf-Z5-zD7" firstAttribute="leading" secondItem="cj9-s0-11d" secondAttribute="leading" constant="8" id="zMe-bA-A3m"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="20"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="3L7-Fx-117"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="cj9-s0-11d" secondAttribute="trailing" id="8uw-bI-W6F"/>
+                <constraint firstItem="cj9-s0-11d" firstAttribute="top" secondItem="Lqb-Xa-O0V" secondAttribute="top" id="LqJ-jQ-8kk"/>
+                <constraint firstAttribute="bottom" secondItem="cj9-s0-11d" secondAttribute="bottom" id="kAm-ju-50w"/>
+                <constraint firstItem="cj9-s0-11d" firstAttribute="leading" secondItem="Lqb-Xa-O0V" secondAttribute="leading" id="wq4-Jl-AEC"/>
+            </constraints>
+            <size key="customSize" width="283" height="41"/>
+            <connections>
+                <outlet property="ExerciseBeginButton" destination="OdK-mB-lof" id="wc8-Ht-ZLN"/>
+                <outlet property="ExerciseContainer" destination="cj9-s0-11d" id="7dA-8A-QMU"/>
+                <outlet property="ExerciseImage" destination="8hf-Z5-zD7" id="nVq-4g-S6c"/>
+                <outlet property="ExerciseTime" destination="vwk-qq-sCa" id="XIZ-bT-bEQ"/>
+                <outlet property="ExerciseTitle" destination="zMk-eU-YSh" id="p5Z-1B-Uim"/>
+            </connections>
+            <point key="canvasLocation" x="243.51145038167937" y="96.83098591549296"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="figure.mixed.cardio" catalog="system" width="118" height="128"/>
+        <image name="play.fill" catalog="system" width="120" height="128"/>
+        <namedColor name="ExerciseColor">
+            <color red="1" green="0.55299997329711914" blue="0.15700000524520874" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="TabBarcolour">
+            <color red="0.9100000262260437" green="0.41600000858306885" blue="0.57300001382827759" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGrayColor">
+            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>
