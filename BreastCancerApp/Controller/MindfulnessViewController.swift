@@ -17,8 +17,8 @@ class MindfulnessViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Navigation title (replaces old static label)
-        title = "Mindfulness"
+//        // Navigation title (replaces old static label)
+//        title = "Mindfulness"
 
         collectionView.collectionViewLayout = createCompositionalLayout()
         collectionView.delegate = self
