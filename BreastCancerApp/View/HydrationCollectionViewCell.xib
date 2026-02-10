@@ -32,7 +32,7 @@
                                 <color key="textColor" systemColor="systemGrayColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XTg-W6-myu" userLabel="graph">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XTg-W6-myu" userLabel="graph" customClass="LineGraphView" customModule="BreastCancerApp" customModuleProvider="target">
                                 <rect key="frame" x="16" y="100" width="298" height="120"/>
                                 <color key="backgroundColor" red="0.8447265625" green="0.4406738281" blue="0.5673828125" alpha="0.37007592429577463" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
@@ -107,11 +107,12 @@
             <connections>
                 <outlet property="averageValueLabel" destination="RHa-Pa-VFe" id="Frh-RE-U7T"/>
                 <outlet property="graphContainerView" destination="XTg-W6-myu" id="ZqV-A6-6fU"/>
+                <outlet property="hydrationGraphView" destination="XTg-W6-myu" id="glJ-fW-MrT"/>
                 <outlet property="subtitle2Label" destination="STN-6T-Lvu" id="cw4-6s-uGq"/>
                 <outlet property="subtitleLabel" destination="hrf-O2-Ccm" id="QYQ-Vw-NIk"/>
                 <outlet property="titleLabel" destination="6uF-3c-Q2p" id="cOM-AC-xbf"/>
             </connections>
-            <point key="canvasLocation" x="269.46564885496184" y="200"/>
+            <point key="canvasLocation" x="268.70229007633588" y="200"/>
         </collectionViewCell>
     </objects>
     <resources>

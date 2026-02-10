@@ -7,15 +7,15 @@ class HealthInsightsViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         setupCollectionView()
         loadData()
+        
     }
     
     private func setupCollectionView() {
         
-        
-       
         let hydrationNib = UINib(nibName: "HydrationCollectionViewCell", bundle: nil)
         collectionView.register(hydrationNib, forCellWithReuseIdentifier: "HydrationCell")
         
@@ -24,16 +24,14 @@ class HealthInsightsViewController: UIViewController {
         
         let medicationNib = UINib(nibName: "MedicationCollectionViewCell", bundle: nil)
         collectionView.register(medicationNib, forCellWithReuseIdentifier: "MedicationCell")
-        let symptomNib = UINib(nibName: "SymptomCollectionViewCell", bundle: nil)
-            collectionView.register(symptomNib, forCellWithReuseIdentifier: "SymptomCell")
         
-        let moodNib = UINib(nibName: "MoodGardenCollectionViewCell", bundle: nil)
-        collectionView.register(moodNib, forCellWithReuseIdentifier: "MoodCell")
+        let symptomNib = UINib(nibName: "SymptomCollectionViewCell", bundle: nil)
+        collectionView.register(symptomNib, forCellWithReuseIdentifier: "SymptomCell")
         
         collectionView.dataSource = self
+        collectionView.delegate = self
         
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: view.frame.width - 32, height: 320)
         layout.sectionInset = UIEdgeInsets(top: 20, left: 16, bottom: 20, right: 16)
         layout.minimumLineSpacing = 20
         collectionView.collectionViewLayout = layout
@@ -45,10 +43,12 @@ class HealthInsightsViewController: UIViewController {
     }
 }
 
+// MARK: - UICollectionViewDataSource
 extension HealthInsightsViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return healthInsights.count
     }
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let insight = healthInsights[indexPath.item]
         
@@ -59,6 +59,11 @@ extension HealthInsightsViewController: UICollectionViewDataSource {
             cell.subtitleLabel.text = insight.subtitle
             cell.subtitle2Label.text = insight.completedValue
             cell.averageValueLabel.text = insight.mainValue
+            
+            cell.hydrationGraphView.graphType = .hydration
+            cell.hydrationGraphView.dataPoints = insight.dailyValues ?? []
+            cell.hydrationGraphView.valueFormatter = { insight.formatGraphValue($0) }
+            
             return cell
             
         case .exercise:
@@ -67,6 +72,9 @@ extension HealthInsightsViewController: UICollectionViewDataSource {
             cell.subtitleLabel.text = insight.subtitle
             cell.dayActiveValueLabel?.text = insight.secondaryValue
             cell.totalMinutesValueLabel?.text = insight.mainValue
+            
+            // Pass daily values from JSON to the bar graph
+            cell.exerciseGraphView.dataPoints = insight.dailyValues ?? []
             return cell
             
         case .medication:
@@ -76,6 +84,14 @@ extension HealthInsightsViewController: UICollectionViewDataSource {
             cell.adherenceRateLabel.text = insight.mainValue
             cell.dosesTakenLabel.text = insight.medicationTaken
             cell.dosesMissedLabel.text = insight.medicationMissed
+        
+            if let values = insight.dailyValues {
+                for (index, icon) in cell.statusIcons.enumerated() where index < values.count {
+                    let isTaken = values[index] == 1
+                    icon.image = UIImage(systemName: isTaken ? "checkmark.circle.fill" : "circle.fill")
+                    icon.tintColor = isTaken ? UIColor.systemPink : UIColor.systemGray4
+                }
+            }
             return cell
             
         case .symptoms:
@@ -83,22 +99,18 @@ extension HealthInsightsViewController: UICollectionViewDataSource {
             cell.titleLabel.text = insight.title
             cell.subtitleLabel.text = insight.subtitle
             cell.footerLabel?.text = insight.detailText
+            cell.symptomsGraphView.graphType = .symptoms
+            cell.symptomsGraphView.dataPoints = insight.dailyValues ?? []
+            
+            cell.symptomsGraphView.valueFormatter = { value in
+                return insight.formatGraphValue(value)
+            }
             return cell
             
-        case .mood:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MoodCell", for: indexPath) as! MoodGardenCollectionViewCell
-            cell.titleLabel.text = insight.title
-            cell.subtitleLabel.text = insight.subtitle
-            // detailText in your JSON contains "View History"
-            cell.viewHistoryButton.setTitle(insight.detailText, for: .normal)
-            
-            // NEW: Pass the mood data to draw the flowers!
-            cell.setupGarden(with: insight.moodValues)
-            
-            return cell
+        default:
+            return UICollectionViewCell()
         }
     }
-
 }
 
 extension HealthInsightsViewController: UICollectionViewDelegateFlowLayout {
@@ -107,12 +119,10 @@ extension HealthInsightsViewController: UICollectionViewDelegateFlowLayout {
         let insight = healthInsights[indexPath.item]
         
         switch insight.type {
-        case .mood:
-            return CGSize(width: width, height: 480) // Taller for the garden
         case .symptoms:
-            return CGSize(width: width, height: 380) // Taller for the triple graph
+            return CGSize(width: width, height: 300)
         default:
-            return CGSize(width: width, height: 320) // Standard for others
+            return CGSize(width: width, height: 320)
         }
     }
 }

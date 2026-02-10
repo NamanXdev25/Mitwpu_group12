@@ -18,7 +18,21 @@ class MedicationCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        
+        func configure(adherenceRate: String, taken: String, missed: String, values: [Int]?) {
+            adherenceRateLabel.text = adherenceRate
+            dosesTakenLabel.text = taken
+            dosesMissedLabel.text = missed
+            
+            if let values = values {
+                for (index, icon) in statusIcons.enumerated() {
+                    if index < values.count {
+                        let isTaken = values[index] == 1
+                        icon.image = UIImage(systemName: isTaken ? "checkmark.circle.fill" : "circle.fill")
+                        icon.tintColor = isTaken ? .systemPink : .systemGray4
+                    }
+                }
+            }
+        }
     }
-
 }

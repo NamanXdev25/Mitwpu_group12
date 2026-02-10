@@ -32,7 +32,7 @@
                                 <color key="textColor" systemColor="secondaryLabelColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view alpha="0.45000000000000001" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YMO-GB-XJh">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YMO-GB-XJh" customClass="BarGraphView" customModule="BreastCancerApp" customModuleProvider="target">
                                 <rect key="frame" x="16" y="79" width="298" height="120"/>
                                 <color key="backgroundColor" red="0.8447265625" green="0.4406738281" blue="0.5673828125" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
@@ -101,6 +101,7 @@
             <connections>
                 <outlet property="barChartContainerView" destination="YMO-GB-XJh" id="14I-tX-NnE"/>
                 <outlet property="dayActiveValueLabel" destination="2Lv-Lk-rTh" id="q6Z-n6-bgg"/>
+                <outlet property="exerciseGraphView" destination="YMO-GB-XJh" id="5Za-F4-ZBZ"/>
                 <outlet property="subtitleLabel" destination="nhS-X7-nef" id="dAJ-2J-T2v"/>
                 <outlet property="titleLabel" destination="fws-Hf-zoP" id="YOu-T2-J5p"/>
                 <outlet property="totalMinutesValueLabel" destination="bfP-UZ-L0l" id="Bys-2z-y4Y"/>

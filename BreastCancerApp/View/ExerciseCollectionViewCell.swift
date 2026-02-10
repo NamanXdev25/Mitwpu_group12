@@ -9,6 +9,7 @@ import UIKit
 
 class ExerciseCollectionViewCell: UICollectionViewCell {
 
+    @IBOutlet weak var exerciseGraphView: BarGraphView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var subtitleLabel: UILabel!
     @IBOutlet weak var barChartContainerView: UIView!

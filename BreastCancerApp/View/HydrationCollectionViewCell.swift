@@ -8,7 +8,9 @@
 import UIKit
 
 class HydrationCollectionViewCell: UICollectionViewCell {
-
+    
+    @IBOutlet weak var hydrationGraphView: LineGraphView!
+    
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var subtitleLabel: UILabel!
     @IBOutlet weak var subtitle2Label: UILabel!
