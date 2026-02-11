@@ -96,13 +96,13 @@
                                             <constraint firstAttribute="trailing" secondItem="Z4Z-qc-QxZ" secondAttribute="trailing" id="hXL-c4-42c"/>
                                         </constraints>
                                     </view>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" text="Add notes (optional)" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="nmE-Se-Bgk">
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="nmE-Se-Bgk">
                                         <rect key="frame" x="0.0" y="49" width="208" height="80"/>
                                         <color key="backgroundColor" systemColor="systemGray6Color"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="80" id="nL4-9t-x4b"/>
                                         </constraints>
-                                        <color key="textColor" systemColor="systemGrayColor"/>
+                                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                         <userDefinedRuntimeAttributes>

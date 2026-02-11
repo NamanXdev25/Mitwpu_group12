@@ -26,6 +26,7 @@ final class SymptomSelectionCell: UICollectionViewCell {
     var onNoteChanged: ((String) -> Void)?
 
     private var isSymptomSelected: Bool = false
+    private let placeholderText = "Add notes (optional)"
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -37,12 +38,21 @@ final class SymptomSelectionCell: UICollectionViewCell {
         setSelected(false)
         severitySlider.value = 0
         noteTextView.text = ""
+        setPlaceholder()
     }
 
     func configure(with symptom: Symptom, isSelected: Bool, severity: Int, note: String = "") {
         symptomNameLabel.text = symptom.name
         severitySlider.value = Float(severity)
-        //noteTextView.text = note
+        
+        // Configure note text view
+        if note.isEmpty {
+            setPlaceholder()
+        } else {
+            noteTextView.text = note
+            noteTextView.textColor = .label
+        }
+        
         setSelected(isSelected)
     }
 
@@ -56,6 +66,7 @@ final class SymptomSelectionCell: UICollectionViewCell {
         // note text view config
         noteTextView.delegate = self
         noteTextView.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        setPlaceholder()
 
         // initial collapsed state
         sliderContainerView.isHidden = true
@@ -65,6 +76,11 @@ final class SymptomSelectionCell: UICollectionViewCell {
         checkboxButton.addTarget(self, action: #selector(checkboxTapped), for: .touchUpInside)
         infoButton.addTarget(self, action: #selector(infoTapped), for: .touchUpInside)
         severitySlider.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
+    }
+    
+    private func setPlaceholder() {
+        noteTextView.text = placeholderText
+        noteTextView.textColor = .systemGray
     }
 
     // selection
@@ -79,6 +95,11 @@ final class SymptomSelectionCell: UICollectionViewCell {
 
         sliderContainerView.isHidden = !selected
         noteTextView.isHidden = !selected
+        
+        // Reset placeholder when deselected
+        if !selected {
+            setPlaceholder()
+        }
     }
 
     // actions
@@ -99,16 +120,34 @@ final class SymptomSelectionCell: UICollectionViewCell {
 
 // MARK: - UITextViewDelegate
 extension SymptomSelectionCell: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == placeholderText {
+            textView.text = ""
+            textView.textColor = .label
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            setPlaceholder()
+        }
+    }
+    
     func textViewDidChange(_ textView: UITextView) {
-        onNoteChanged?(textView.text)
+        let text = textView.text == placeholderText ? "" : textView.text ?? ""
+        onNoteChanged?(text)
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        // Dismiss keyboard on return
         if text == "\n" {
             textView.resignFirstResponder()
             return false
         }
-        return true
+        
+        let currentText = textView.text ?? ""
+        let prospectiveText = (currentText as NSString).replacingCharacters(in: range, with: text)
+        
+        let textToCount = currentText == placeholderText ? "" : prospectiveText
+        return textToCount.count <= 150
     }
 }

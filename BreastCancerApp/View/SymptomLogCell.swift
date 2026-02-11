@@ -12,7 +12,7 @@ class SymptomLogCell: UICollectionViewCell {
     @IBOutlet var symptomNameLabel: UILabel!
     @IBOutlet var severityLabel: UILabel!
     @IBOutlet var timeLabel: UILabel!
-    @IBOutlet var noteLabel: UILabel! // Add this outlet in XIB
+    @IBOutlet var noteLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -33,7 +33,20 @@ class SymptomLogCell: UICollectionViewCell {
             noteLabel.text = log.note
             noteLabel.isHidden = false
         } else {
+            noteLabel.text = nil
             noteLabel.isHidden = true
         }
+    }
+    
+    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+        setNeedsLayout()
+        layoutIfNeeded()
+        
+        let size = contentView.systemLayoutSizeFitting(layoutAttributes.size)
+        var frame = layoutAttributes.frame
+        frame.size.height = ceil(size.height)
+        layoutAttributes.frame = frame
+        
+        return layoutAttributes
     }
 }

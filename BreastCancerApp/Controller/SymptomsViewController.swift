@@ -191,11 +191,13 @@ class SymptomsViewController: UIViewController {
 
         for (symptomId, data) in selectedSymptoms {
             if let symptom = userSymptoms.first(where: { $0.id == symptomId }) {
+                // Only save note if it's not empty
+                let noteToSave = data.note.trimmingCharacters(in: .whitespacesAndNewlines)
                 dataSource.logSymptom(
                     symptomId: symptomId,
                     symptomName: symptom.name,
                     severity: data.severity,
-                    note: data.note
+                    note: noteToSave
                 )
             }
         }
