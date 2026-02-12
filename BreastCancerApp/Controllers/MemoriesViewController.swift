@@ -251,17 +251,27 @@ final class MemoriesViewController: UIViewController,
     // MARK: - Viewer
     private func openViewer(groupIndex: Int) {
         let storyboard = UIStoryboard(name: "memory", bundle: nil)
-
-        let pageVC = storyboard.instantiateViewController(
-            withIdentifier: "MemoryPageViewController"
-        ) as! MemoryPageViewController
-
+        
+        let navController = storyboard.instantiateViewController(
+            withIdentifier: "MonthMemoriesNavigationController"
+        ) as! UINavigationController
+        
+        let monthVC = navController.viewControllers.first as! MonthMemoriesViewController
+        
         let group = groupedMemories[groupIndex]
-        pageVC.memories = group.items
-        pageVC.startIndex = 0
-        pageVC.deleteDelegate = self
-        pageVC.modalPresentationStyle = .fullScreen
-
-        present(pageVC, animated: true)
+        monthVC.memories = group.items
+        monthVC.month = group.month
+        monthVC.year = group.year
+        
+        // Normal modal presentation with dimmed background
+        navController.modalPresentationStyle = .pageSheet
+        
+        // Optional: Configure the sheet presentation
+        if let sheet = navController.sheetPresentationController {
+            sheet.detents = [.large()]
+            sheet.prefersGrabberVisible = false
+        }
+        
+        present(navController, animated: true)
     }
 }

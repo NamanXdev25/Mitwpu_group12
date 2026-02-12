@@ -6,6 +6,7 @@
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -309,6 +310,53 @@
             </objects>
             <point key="canvasLocation" x="1379.3893129770993" y="934.50704225352115"/>
         </scene>
+        <!--Month-->
+        <scene sceneID="r8F-VX-xKD">
+            <objects>
+                <viewController storyboardIdentifier="MonthMemoriesViewController" id="UV9-4Q-FlT" customClass="MonthMemoriesViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="GR8-dj-JPx">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="yM4-66-MwE">
+                                <rect key="frame" x="0.0" y="172" width="393" height="612"/>
+                                <color key="backgroundColor" name="BgColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="z9X-W7-FY0">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="4em-DE-OuX">
+                                        <rect key="frame" x="0.0" y="0.0" width="127.99999999999997" height="128"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="mCL-Ed-fxk">
+                                            <rect key="frame" x="0.0" y="0.0" width="127.99999999999997" height="128"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </collectionViewCellContentView>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="2Hd-aY-eMP"/>
+                        <color key="backgroundColor" name="BgColor"/>
+                        <constraints>
+                            <constraint firstItem="2Hd-aY-eMP" firstAttribute="trailing" secondItem="yM4-66-MwE" secondAttribute="trailing" id="6LJ-7E-nbD"/>
+                            <constraint firstItem="yM4-66-MwE" firstAttribute="top" secondItem="2Hd-aY-eMP" secondAttribute="top" id="T1v-5c-6V0"/>
+                            <constraint firstItem="2Hd-aY-eMP" firstAttribute="bottom" secondItem="yM4-66-MwE" secondAttribute="bottom" id="foD-Ow-zHj"/>
+                            <constraint firstItem="yM4-66-MwE" firstAttribute="leading" secondItem="2Hd-aY-eMP" secondAttribute="leading" id="l4P-1A-QPE"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Month" id="QLT-5H-LgK"/>
+                    <connections>
+                        <outlet property="collectionView" destination="yM4-66-MwE" id="uEU-bb-wgj"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="GgN-h3-YWe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3202.2900763358775" y="934.50704225352115"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="Fcq-SH-htd">
             <objects>
@@ -327,12 +375,33 @@
             </objects>
             <point key="canvasLocation" x="452.67175572519085" y="934.50704225352115"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="n5c-Hw-bhr">
+            <objects>
+                <navigationController storyboardIdentifier="MonthMemoriesNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="cjS-hv-Oys" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="cc6-Nx-pIu">
+                        <rect key="frame" x="0.0" y="118" width="393" height="54"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="UV9-4Q-FlT" kind="relationship" relationship="rootViewController" id="dRO-Yn-qbL"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fO7-ev-PHE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2275.5725190839694" y="934.50704225352115"/>
+        </scene>
     </scenes>
     <resources>
         <image name="checkmark" catalog="system" width="128" height="114"/>
         <image name="line.3.horizontal.decrease" catalog="system" width="128" height="73"/>
         <image name="plus" catalog="system" width="128" height="113"/>
         <image name="xmark" catalog="system" width="128" height="113"/>
+        <namedColor name="BgColor">
+            <color red="0.97254901960784312" green="0.94901960784313721" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="Pink">
             <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
