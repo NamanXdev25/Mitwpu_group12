@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="7AQ-1A-uOS">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="664-4C-ZzJ">
-                                <rect key="frame" x="0.0" y="172" width="393" height="612"/>
+                                <rect key="frame" x="0.0" y="188" width="393" height="580"/>
                                 <color key="backgroundColor" name="baground"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="eTf-0Q-8tT">
                                     <size key="itemSize" width="128" height="128"/>
@@ -48,9 +48,9 @@
                         <color key="backgroundColor" name="baground"/>
                         <constraints>
                             <constraint firstItem="664-4C-ZzJ" firstAttribute="leading" secondItem="Ete-we-DK8" secondAttribute="leading" id="5o7-xs-q3w"/>
-                            <constraint firstItem="Ete-we-DK8" firstAttribute="bottom" secondItem="664-4C-ZzJ" secondAttribute="bottom" id="NCo-aB-fWj"/>
+                            <constraint firstItem="Ete-we-DK8" firstAttribute="bottom" secondItem="664-4C-ZzJ" secondAttribute="bottom" constant="16" id="NCo-aB-fWj"/>
                             <constraint firstItem="Ete-we-DK8" firstAttribute="bottom" secondItem="r2T-rf-INZ" secondAttribute="bottom" constant="24" id="Tdz-LH-SK7"/>
-                            <constraint firstItem="664-4C-ZzJ" firstAttribute="top" secondItem="Ete-we-DK8" secondAttribute="top" id="Yfb-UO-fRN"/>
+                            <constraint firstItem="664-4C-ZzJ" firstAttribute="top" secondItem="Ete-we-DK8" secondAttribute="top" constant="16" id="Yfb-UO-fRN"/>
                             <constraint firstItem="Ete-we-DK8" firstAttribute="trailing" secondItem="664-4C-ZzJ" secondAttribute="trailing" id="g0D-UF-lPf"/>
                             <constraint firstItem="Ete-we-DK8" firstAttribute="trailing" secondItem="r2T-rf-INZ" secondAttribute="trailing" constant="16" id="uLy-mx-gTk"/>
                         </constraints>
@@ -340,13 +340,13 @@
             <color red="0.97254901960784312" green="0.94901960784313721" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
         <namedColor name="pink">
-            <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="plusbuttoncolor">
             <color red="0.9100000262260437" green="0.41600000858306885" blue="0.57300001382827759" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="opaqueSeparatorColor">
-            <color red="0.77647058820000003" green="0.77647058820000003" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.77647058823529413" green="0.77647058823529413" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

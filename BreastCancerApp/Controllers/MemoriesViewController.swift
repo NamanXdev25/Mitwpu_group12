@@ -14,7 +14,7 @@ final class MemoriesViewController: UIViewController,
 
     // MARK: - Data
     private var memories: [Memory] = []
-    private var groupedMemories: [(date: Date, items: [Memory])] = []
+    private var groupedMemories: [(month: Int, year: Int, items: [Memory])] = []
 
     // MARK: - Filter State
     private var isFiltering = false
@@ -27,8 +27,6 @@ final class MemoriesViewController: UIViewController,
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-//
-//        title = "Memories"
 
         memories = MemoryStore.load()
         sortAndGroupMemories()
@@ -41,28 +39,20 @@ final class MemoriesViewController: UIViewController,
         addButton.layer.cornerRadius = addButton.bounds.height / 2
     }
 
-    
-
     private func configureCollectionView() {
         collectionView.backgroundColor = .clear
         collectionView.dataSource = self
         collectionView.delegate = self
 
         let layout = UICollectionViewFlowLayout()
-        layout.minimumInteritemSpacing = 8
-        layout.minimumLineSpacing = 8
-        layout.sectionInset = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 20
+        layout.sectionInset = UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
         collectionView.setCollectionViewLayout(layout, animated: false)
 
         collectionView.register(
-            UINib(nibName: "MemoryImageCell", bundle: nil),
-            forCellWithReuseIdentifier: MemoryImageCell.reuseIdentifier
-        )
-
-        collectionView.register(
-            UINib(nibName: "MemoryDateHeaderView", bundle: nil),
-            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: MemoryDateHeaderView.reuseIdentifier
+            UINib(nibName: "MemoryMonthGroupCell", bundle: nil),
+            forCellWithReuseIdentifier: MemoryMonthGroupCell.reuseIdentifier
         )
     }
 
@@ -197,40 +187,54 @@ final class MemoriesViewController: UIViewController,
         collectionView.reloadData()
     }
 
-    // MARK: - Grouping
+    // MARK: - Grouping (CHANGED TO MONTHLY)
     private func sortAndGroupMemories() {
         let source = isFiltering ? filteredMemories : memories
 
-        groupedMemories = Dictionary(grouping: source) {
-            calendar.startOfDay(for: $0.date)
+        // Group by month and year
+        let grouped = Dictionary(grouping: source) { memory -> String in
+            let components = calendar.dateComponents([.month, .year], from: memory.date)
+            return "\(components.year!)-\(components.month!)"
         }
-        .map { ($0.key, $0.value) }
-        .sorted { $0.0 > $1.0 }
+        
+        groupedMemories = grouped.map { key, memories in
+            let parts = key.split(separator: "-")
+            let year = Int(parts[0])!
+            let month = Int(parts[1])!
+            return (month: month, year: year, items: memories.sorted { $0.date > $1.date })
+        }
+        .sorted { a, b in
+            // Sort by year descending, then month descending
+            if a.year != b.year {
+                return a.year > b.year
+            }
+            return a.month > b.month
+        }
     }
 
     // MARK: - CollectionView
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        groupedMemories.count
+        1
     }
 
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-        groupedMemories[section].items.count
+        groupedMemories.count
     }
 
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
         let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: MemoryImageCell.reuseIdentifier,
+            withReuseIdentifier: MemoryMonthGroupCell.reuseIdentifier,
             for: indexPath
-        ) as! MemoryImageCell
+        ) as! MemoryMonthGroupCell
 
-        let memory = groupedMemories[indexPath.section].items[indexPath.item]
-        cell.configure(with: memory.image!)
+        let group = groupedMemories[indexPath.item]
+        cell.configure(with: group.items, month: group.month, year: group.year)
 
         cell.onTap = { [weak self] in
-            self?.openViewer(section: indexPath.section, item: indexPath.item)
+            self?.openViewer(groupIndex: indexPath.item)
         }
 
         return cell
@@ -240,56 +244,21 @@ final class MemoriesViewController: UIViewController,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
 
-        let itemsPerRow: CGFloat = 4
-        let spacing: CGFloat = 8
-        let totalSpacing = (itemsPerRow - 1) * spacing + 24
-        let width = floor((collectionView.bounds.width - totalSpacing) / itemsPerRow)
-
-        return CGSize(width: width, height: width)
-    }
-
-    func collectionView(
-        _ collectionView: UICollectionView,
-        viewForSupplementaryElementOfKind kind: String,
-        at indexPath: IndexPath
-    ) -> UICollectionReusableView {
-
-        guard kind == UICollectionView.elementKindSectionHeader else {
-            return UICollectionReusableView()
-        }
-
-        let header = collectionView.dequeueReusableSupplementaryView(
-            ofKind: kind,
-            withReuseIdentifier: MemoryDateHeaderView.reuseIdentifier,
-            for: indexPath
-        ) as! MemoryDateHeaderView
-
-        header.configure(with: groupedMemories[indexPath.section].date)
-        return header
-    }
-
-    func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        referenceSizeForHeaderInSection section: Int
-    ) -> CGSize {
-        CGSize(width: collectionView.bounds.width, height: 36)
+        let width = collectionView.bounds.width
+        return CGSize(width: width, height: 280)
     }
 
     // MARK: - Viewer
-    private func openViewer(section: Int, item: Int) {
+    private func openViewer(groupIndex: Int) {
         let storyboard = UIStoryboard(name: "memory", bundle: nil)
 
         let pageVC = storyboard.instantiateViewController(
             withIdentifier: "MemoryPageViewController"
         ) as! MemoryPageViewController
 
-        let flat = groupedMemories.flatMap { $0.items }
-        let startIndex = groupedMemories[..<section]
-            .reduce(0) { $0 + $1.items.count } + item
-
-        pageVC.memories = flat
-        pageVC.startIndex = startIndex
+        let group = groupedMemories[groupIndex]
+        pageVC.memories = group.items
+        pageVC.startIndex = 0
         pageVC.deleteDelegate = self
         pageVC.modalPresentationStyle = .fullScreen
 
