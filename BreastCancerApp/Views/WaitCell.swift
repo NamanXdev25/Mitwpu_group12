@@ -43,6 +43,10 @@ class WaitCell: UICollectionViewCell {
     private var currentDays: Int = 0
     private var feelingButtons: [UIButton] = []
     
+    // Color constants
+    private let lightPinkColor = UIColor(red: 0.99, green: 0.96, blue: 0.97, alpha: 1.0)
+    private let darkPinkColor = UIColor(red: 0.93, green: 0.45, blue: 0.64, alpha: 1.0)
+    
     var onSaveButtonTapped: (() -> Void)?
     var onCellHeightChanged: (() -> Void)?
     
@@ -72,19 +76,23 @@ class WaitCell: UICollectionViewCell {
         daysTextField.isUserInteractionEnabled = false
         daysTextField.text = ""
         
+        // IMPORTANT: Keep feelings labels always visible
+        feelingsQuestionLabel.isHidden = false
+        feelingsSubtitleLabel.isHidden = false
+        
         // Save button
         saveButton.isHidden = true
-        saveButton.backgroundColor = UIColor(red: 0.93, green: 0.45, blue: 0.64, alpha: 1.0)
+        saveButton.backgroundColor = darkPinkColor
         saveButton.setTitleColor(.white, for: .normal)
         saveButton.layer.cornerRadius = 12
         saveButton.clipsToBounds = true
         
-        // Success message
+        // Success message - shows "Support during waiting period"
         successMessageView.isHidden = true
-        successMessageView.layer.cornerRadius = 12
-        successMessageView.backgroundColor = UIColor(red: 0.99, green: 0.94, blue: 0.96, alpha: 1.0)
+        successMessageView.backgroundColor = .clear  // No background
+        successMessageLabel.isHidden = false  // Make sure label is visible
         
-        // Support title and suggestions
+        // Support title and suggestions - initially hidden
         supportTitleLabel.isHidden = true
         suggestionsContainerView.isHidden = true
     }
@@ -96,9 +104,9 @@ class WaitCell: UICollectionViewCell {
         ]
         
         for button in feelingButtons {
-            // Style for unselected state
-            button.backgroundColor = UIColor(red: 0.99, green: 0.96, blue: 0.97, alpha: 1.0)
-            button.setTitleColor(UIColor(red: 0.93, green: 0.45, blue: 0.64, alpha: 1.0), for: .normal)
+            // Style for unselected state - LIGHT PINK background, DARK PINK text
+            button.backgroundColor = lightPinkColor
+            button.setTitleColor(darkPinkColor, for: .normal)
             button.layer.cornerRadius = 20
             button.clipsToBounds = true
             button.contentEdgeInsets = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 16)
@@ -144,14 +152,14 @@ class WaitCell: UICollectionViewCell {
         let feeling = components.count > 1 ? components[1] : title
         
         if selectedFeelings.contains(feeling) {
-            // Deselect
+            // Deselect - LIGHT PINK background, DARK PINK text
             selectedFeelings.remove(feeling)
-            sender.backgroundColor = UIColor(red: 0.99, green: 0.96, blue: 0.97, alpha: 1.0)
-            sender.setTitleColor(UIColor(red: 0.93, green: 0.45, blue: 0.64, alpha: 1.0), for: .normal)
+            sender.backgroundColor = lightPinkColor
+            sender.setTitleColor(darkPinkColor, for: .normal)
         } else {
-            // Select
+            // Select - DARK PINK background, WHITE text
             selectedFeelings.insert(feeling)
-            sender.backgroundColor = UIColor(red: 0.93, green: 0.45, blue: 0.64, alpha: 1.0)
+            sender.backgroundColor = darkPinkColor
             sender.setTitleColor(.white, for: .normal)
         }
         
@@ -159,24 +167,32 @@ class WaitCell: UICollectionViewCell {
     }
     
     @objc private func saveButtonTapped() {
+        print("💾 Save button tapped")
+        
         // Hide save button
         saveButton.isHidden = true
         
-        // Show success message
+        // Show "Support during waiting period" label
         successMessageView.isHidden = false
+        successMessageLabel.isHidden = false
+        
+        print("✅ successMessageView hidden: \(successMessageView.isHidden)")
+        print("✅ successMessageLabel hidden: \(successMessageLabel.isHidden)")
+        print("✅ successMessageLabel text: \(successMessageLabel.text ?? "nil")")
         
         // Update status
         statusLabel.text = "Completed"
         statusLabel.backgroundColor = UIColor(red: 0.85, green: 0.95, blue: 0.85, alpha: 1.0)
         statusLabel.textColor = UIColor(red: 0.2, green: 0.6, blue: 0.2, alpha: 1.0)
         
-        // Show suggestions
-        supportTitleLabel.isHidden = false
+        // Show suggestions container
+        supportTitleLabel.isHidden = true  // Keep hidden - we use successMessageLabel
         suggestionsContainerView.isHidden = false
         
         // Update suggestions based on selected feelings
         updateSuggestions()
         
+        // Notify parent to update cell height
         onSaveButtonTapped?()
         onCellHeightChanged?()
     }
@@ -191,6 +207,8 @@ class WaitCell: UICollectionViewCell {
     }
     
     private func updateSuggestions() {
+        print("📝 Updating suggestions for feelings: \(selectedFeelings)")
+        
         // Default suggestions
         let allSuggestions = [
             Suggestion(
@@ -250,32 +268,35 @@ class WaitCell: UICollectionViewCell {
         if relevantSuggestions.count > 0 {
             suggestionTitleLabel.text = relevantSuggestions[0].title
             suggestionDescriptionLabel.text = relevantSuggestions[0].description
+            print("✅ Suggestion 1: \(relevantSuggestions[0].title)")
         }
         
         if relevantSuggestions.count > 1 {
             suggestion2TitleLabel.text = relevantSuggestions[1].title
             suggestion2DescriptionLabel.text = relevantSuggestions[1].description
+            print("✅ Suggestion 2: \(relevantSuggestions[1].title)")
         }
         
         if relevantSuggestions.count > 2 {
             suggestion3TitleLabel.text = relevantSuggestions[2].title
             suggestion3DescriptionLabel.text = relevantSuggestions[2].description
+            print("✅ Suggestion 3: \(relevantSuggestions[2].title)")
         }
     }
     
     func getCellHeight() -> CGFloat {
-        var height: CGFloat = 420 // Base height with feelings buttons
+        var height: CGFloat = 540 // Base height with all feeling buttons visible
         
         if !saveButton.isHidden {
             height += 70 // Add save button height
         }
         
         if !successMessageView.isHidden {
-            height += 80 // Add success message height
+            height += 60 // Add "Support during waiting period" label height
         }
         
         if !suggestionsContainerView.isHidden {
-            height += 330 // Add support title + 3 suggestion cards
+            height += 330 // Add 3 suggestion cards
         }
         
         return height
@@ -285,13 +306,18 @@ class WaitCell: UICollectionViewCell {
     func configure(with model: WaitModel) {
         statusLabel.text = model.status
         
+        // IMPORTANT: Always keep feelings labels visible
+        feelingsQuestionLabel.isHidden = false
+        feelingsSubtitleLabel.isHidden = false
+        
         if model.status == "Completed" {
             statusLabel.backgroundColor = UIColor(red: 0.85, green: 0.95, blue: 0.85, alpha: 1.0)
             statusLabel.textColor = UIColor(red: 0.2, green: 0.6, blue: 0.2, alpha: 1.0)
             
             // Show success message and suggestions
             successMessageView.isHidden = false
-            supportTitleLabel.isHidden = false
+            successMessageLabel.isHidden = false
+            supportTitleLabel.isHidden = true
             suggestionsContainerView.isHidden = false
             saveButton.isHidden = true
         } else {
@@ -323,11 +349,13 @@ class WaitCell: UICollectionViewCell {
             let feeling = components.count > 1 ? components[1] : title
             
             if selectedFeelings.contains(feeling) {
-                button.backgroundColor = UIColor(red: 0.93, green: 0.45, blue: 0.64, alpha: 1.0)
+                // Selected - DARK PINK background, WHITE text
+                button.backgroundColor = darkPinkColor
                 button.setTitleColor(.white, for: .normal)
             } else {
-                button.backgroundColor = UIColor(red: 0.99, green: 0.96, blue: 0.97, alpha: 1.0)
-                button.setTitleColor(UIColor(red: 0.93, green: 0.45, blue: 0.64, alpha: 1.0), for: .normal)
+                // Unselected - LIGHT PINK background, DARK PINK text
+                button.backgroundColor = lightPinkColor
+                button.setTitleColor(darkPinkColor, for: .normal)
             }
         }
     }

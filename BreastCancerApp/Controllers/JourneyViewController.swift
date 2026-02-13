@@ -7,6 +7,7 @@ class JourneyViewController: UIViewController {
     
     // MARK: - Properties
     private var diagnosisModel = DiagnosisModel()
+    private var waitModel = WaitModel()
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -26,9 +27,12 @@ class JourneyViewController: UIViewController {
     }
     
     private func setupCollectionView() {
-        // Register the XIB cell
-        let nib = UINib(nibName: "DiagnosisCell", bundle: nil)
-        collectionView.register(nib, forCellWithReuseIdentifier: "DiagnosisCell")
+        // Register the XIB cells
+        let diagnosisNib = UINib(nibName: "DiagnosisCell", bundle: nil)
+        collectionView.register(diagnosisNib, forCellWithReuseIdentifier: "DiagnosisCell")
+        
+        let waitNib = UINib(nibName: "WaitCell", bundle: nil)
+        collectionView.register(waitNib, forCellWithReuseIdentifier: "WaitCell")
         
         // Set delegates
         collectionView.delegate = self
@@ -55,42 +59,73 @@ extension JourneyViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1 // Just the diagnosis cell for now
+        return 2 // DiagnosisCell and WaitCell
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DiagnosisCell", for: indexPath) as? DiagnosisCell else {
-            print("❌ Failed to dequeue DiagnosisCell")
-            return UICollectionViewCell()
-        }
-        
-        print("✅ Cell dequeued successfully")
-        
-        // Configure the cell
-        cell.configure(with: diagnosisModel)
-        
-        // Handle date selection
-        cell.onDateSelected = { [weak self] date in
-            print("📅 Date selected: \(date)")
-            self?.diagnosisModel.diagnosisDate = date
-        }
-        
-        // Handle save button tap
-        cell.onSaveButtonTapped = { [weak self] in
-            print("💾 Save button tapped")
-            self?.diagnosisModel.status = "Completed"
-        }
-        
-        // Handle cell height changes
-        cell.onCellHeightChanged = { [weak self] in
-            print("📏 Cell height changed")
-            UIView.animate(withDuration: 0.3) {
-                self?.collectionView.collectionViewLayout.invalidateLayout()
+        if indexPath.item == 0 {
+            // First cell - DiagnosisCell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DiagnosisCell", for: indexPath) as? DiagnosisCell else {
+                print("❌ Failed to dequeue DiagnosisCell")
+                return UICollectionViewCell()
             }
+            
+            print("✅ DiagnosisCell dequeued successfully")
+            
+            // Configure the cell
+            cell.configure(with: diagnosisModel)
+            
+            // Handle date selection
+            cell.onDateSelected = { [weak self] date in
+                print("📅 Date selected: \(date)")
+                self?.diagnosisModel.diagnosisDate = date
+            }
+            
+            // Handle save button tap
+            cell.onSaveButtonTapped = { [weak self] in
+                print("💾 Save button tapped")
+                self?.diagnosisModel.status = "Completed"
+            }
+            
+            // Handle cell height changes
+            cell.onCellHeightChanged = { [weak self] in
+                print("📏 Cell height changed")
+                UIView.animate(withDuration: 0.3) {
+                    self?.collectionView.collectionViewLayout.invalidateLayout()
+                }
+            }
+            
+            return cell
+            
+        } else {
+            // Second cell - WaitCell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WaitCell", for: indexPath) as? WaitCell else {
+                print("❌ Failed to dequeue WaitCell")
+                return UICollectionViewCell()
+            }
+            
+            print("✅ WaitCell dequeued successfully")
+            
+            // Configure the cell
+            cell.configure(with: waitModel)
+            
+            // Handle save button tap
+            cell.onSaveButtonTapped = { [weak self] in
+                print("💾 Wait cell save button tapped")
+                self?.waitModel.status = "Completed"
+            }
+            
+            // Handle cell height changes
+            cell.onCellHeightChanged = { [weak self] in
+                print("📏 Wait cell height changed")
+                UIView.animate(withDuration: 0.3) {
+                    self?.collectionView.collectionViewLayout.invalidateLayout()
+                }
+            }
+            
+            return cell
         }
-        
-        return cell
     }
 }
 
@@ -109,13 +144,23 @@ extension JourneyViewController: UICollectionViewDelegateFlowLayout {
         print("✅ Calculated cell width: \(cellWidth)")
         
         // Get height based on cell state
-        var height: CGFloat = 180
+        var height: CGFloat = 200
         
-        if let cell = collectionView.cellForItem(at: indexPath) as? DiagnosisCell {
-            height = cell.getCellHeight()
+        if indexPath.item == 0 {
+            // DiagnosisCell
+            if let cell = collectionView.cellForItem(at: indexPath) as? DiagnosisCell {
+                height = cell.getCellHeight()
+            }
+        } else {
+            // WaitCell
+            if let cell = collectionView.cellForItem(at: indexPath) as? WaitCell {
+                height = cell.getCellHeight()
+            } else {
+                height = 500 // Default height for WaitCell
+            }
         }
         
-        print("✅ Cell height: \(height)")
+        print("✅ Cell height for item \(indexPath.item): \(height)")
         print("📦 Final size: width=\(cellWidth), height=\(height)")
         
         return CGSize(width: cellWidth, height: height)
