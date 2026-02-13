@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="zVO-Zc-f0R">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="GOX-oe-Yhd">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
@@ -109,7 +109,45 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="965.64885496183206" y="-7.042253521126761"/>
+            <point key="canvasLocation" x="1892.3664122137404" y="-7.042253521126761"/>
+        </scene>
+        <!--Exercise Plans-->
+        <scene sceneID="bPI-oH-uJ1">
+            <objects>
+                <viewController storyboardIdentifier="ExercisePlanCategoryViewController" id="wkk-ya-Vty" customClass="ExercisePlanCategoryViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="IOI-1S-XWS">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="udg-v1-6ky">
+                                <rect key="frame" x="0.0" y="188" width="393" height="596"/>
+                                <color key="backgroundColor" name="BackgroundColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="glp-Dc-aNZ">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="cfI-7j-rbi"/>
+                        <color key="backgroundColor" name="BackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="cfI-7j-rbi" firstAttribute="trailing" secondItem="udg-v1-6ky" secondAttribute="trailing" id="3zK-3M-BGk"/>
+                            <constraint firstItem="cfI-7j-rbi" firstAttribute="bottom" secondItem="udg-v1-6ky" secondAttribute="bottom" id="FM0-eX-fzu"/>
+                            <constraint firstItem="udg-v1-6ky" firstAttribute="leading" secondItem="cfI-7j-rbi" secondAttribute="leading" id="Ktf-KI-0mL"/>
+                            <constraint firstItem="udg-v1-6ky" firstAttribute="top" secondItem="cfI-7j-rbi" secondAttribute="top" constant="16" id="g0Y-Zi-bS4"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Exercise Plans" id="w2K-Bx-VkN"/>
+                    <connections>
+                        <outlet property="collectionView" destination="udg-v1-6ky" id="cLY-1X-aUw"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Rjh-jb-Y0e" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-158" y="-7"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="XqW-Rk-Eh9">
@@ -127,7 +165,25 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7AG-es-OdJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="38.931297709923662" y="-7.042253521126761"/>
+            <point key="canvasLocation" x="965.64885496183206" y="-7.042253521126761"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="sqn-Pf-hYH">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="GOX-oe-Yhd" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="btH-MK-pYl">
+                        <rect key="frame" x="0.0" y="118" width="393" height="54"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="wkk-ya-Vty" kind="relationship" relationship="rootViewController" id="Qak-c1-Byf"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5OO-mE-kzY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-961" y="-7"/>
         </scene>
     </scenes>
     <resources>
