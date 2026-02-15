@@ -55,6 +55,9 @@
                                     <color key="baseForegroundColor" name="TabBarcolour"/>
                                     <color key="baseBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
+                                <connections>
+                                    <action selector="viewInsightsButtonTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="pk1-kx-zDo"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
