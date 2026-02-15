@@ -20,7 +20,7 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KZs-H0-OAe">
                         <rect key="frame" x="0.0" y="0.0" width="361" height="273"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Article 1" translatesAutoresizingMaskIntoConstraints="NO" id="5uV-Pr-MM4">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="article_image_1" translatesAutoresizingMaskIntoConstraints="NO" id="5uV-Pr-MM4">
                                 <rect key="frame" x="0.0" y="0.0" width="361" height="175"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="361" id="3Cb-2W-duQ"/>
@@ -79,7 +79,7 @@
         </collectionViewCell>
     </objects>
     <resources>
-        <image name="Article 1" width="1024" height="1024"/>
+        <image name="article_image_1" width="2664" height="1460"/>
         <systemColor name="systemGrayColor">
             <color red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

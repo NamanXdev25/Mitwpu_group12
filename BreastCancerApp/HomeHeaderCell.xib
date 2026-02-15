@@ -3,6 +3,7 @@
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -22,18 +23,32 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="See all" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FNC-Hv-1oO">
+                        <rect key="frame" x="311" y="26" width="50" height="21"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" name="plusbuttoncolor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="lLB-Hk-SbA" secondAttribute="bottom" constant="5" id="74B-I9-8p3"/>
+                <constraint firstItem="FNC-Hv-1oO" firstAttribute="centerY" secondItem="lLB-Hk-SbA" secondAttribute="centerY" id="G6e-G9-B3O"/>
+                <constraint firstAttribute="trailing" secondItem="FNC-Hv-1oO" secondAttribute="trailing" id="gPZ-Kz-iAl"/>
                 <constraint firstItem="lLB-Hk-SbA" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="ghA-KA-LMB"/>
             </constraints>
             <size key="customSize" width="265" height="36"/>
             <connections>
                 <outlet property="HeaderTitleLabel" destination="lLB-Hk-SbA" id="4D9-1V-kLo"/>
+                <outlet property="seeAllLabel" destination="FNC-Hv-1oO" id="45T-KN-yvi"/>
             </connections>
             <point key="canvasLocation" x="254.19847328244273" y="114.78873239436621"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <namedColor name="plusbuttoncolor">
+            <color red="0.9100000262260437" green="0.41600000858306885" blue="0.57300001382827759" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
 </document>

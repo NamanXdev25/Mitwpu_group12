@@ -118,12 +118,12 @@ class HomeModel {
     // MARK: - Articles Data
     static let articles: [Article] = [
         Article(
-            imageName: "Article 1",
+            imageName: "article_image_1",
             title: "Debunking Common Breast Cancer Myths",
             subtitle: "You should know about the truth behind myths associated with Breast Cancer"
         ),
         Article(
-            imageName: "Article 2",
+            imageName: "article_image_2",
             title: "Implications of Dense Breast Tissue",
             subtitle: "You should know about the truth behind myths associated with Breast Cancer"
         )

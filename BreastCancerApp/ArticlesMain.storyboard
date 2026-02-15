@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="S4w-Cs-b4I">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Articles-->
+        <scene sceneID="nfq-Pd-yAm">
+            <objects>
+                <viewController storyboardIdentifier="ArticlesViewController" id="8tc-dx-zaB" customClass="ArticlesViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5H9-cL-DEP">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="c2G-Kg-8Zx">
+                                <rect key="frame" x="0.0" y="172" width="393" height="612"/>
+                                <color key="backgroundColor" name="ArticlesBackgroundColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="16" minimumInteritemSpacing="16" id="bcR-06-B37">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="16" maxX="0.0" maxY="16"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="R9R-M6-JWB"/>
+                        <color key="backgroundColor" name="ArticlesBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="R9R-M6-JWB" firstAttribute="trailing" secondItem="c2G-Kg-8Zx" secondAttribute="trailing" id="Ffc-H7-Gvw"/>
+                            <constraint firstItem="R9R-M6-JWB" firstAttribute="bottom" secondItem="c2G-Kg-8Zx" secondAttribute="bottom" id="OF7-cx-A6k"/>
+                            <constraint firstItem="c2G-Kg-8Zx" firstAttribute="top" secondItem="R9R-M6-JWB" secondAttribute="top" id="bE1-po-PG6"/>
+                            <constraint firstItem="c2G-Kg-8Zx" firstAttribute="leading" secondItem="R9R-M6-JWB" secondAttribute="leading" id="lt8-wT-Amf"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Articles" id="1Ce-D1-Kdz"/>
+                    <connections>
+                        <outlet property="collectionView" destination="c2G-Kg-8Zx" id="YYt-wT-IY6"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="d1C-3r-MqG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2854.1984732824426" y="-511.26760563380282"/>
+        </scene>
+        <!--Article-->
+        <scene sceneID="asG-RW-wG7">
+            <objects>
+                <viewController storyboardIdentifier="ArticleDetailViewController" title="Article" id="teO-I0-0bb" customClass="ArticleDetailViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Jgw-Pb-vgg">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ZLy-5m-cw9">
+                                <rect key="frame" x="0.0" y="172" width="393" height="612"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="v2B-RR-5xy">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="hdc-hu-4ct"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="hdc-hu-4ct" firstAttribute="trailing" secondItem="ZLy-5m-cw9" secondAttribute="trailing" id="CK6-z2-SEh"/>
+                            <constraint firstItem="ZLy-5m-cw9" firstAttribute="leading" secondItem="hdc-hu-4ct" secondAttribute="leading" id="ZEK-md-GG2"/>
+                            <constraint firstItem="ZLy-5m-cw9" firstAttribute="top" secondItem="hdc-hu-4ct" secondAttribute="top" id="uFU-a9-Jel"/>
+                            <constraint firstItem="hdc-hu-4ct" firstAttribute="bottom" secondItem="ZLy-5m-cw9" secondAttribute="bottom" id="xIr-WM-fhl"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Article" id="bqh-di-zsE">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="VsN-1l-VQt">
+                            <connections>
+                                <action selector="closeTapped:" destination="teO-I0-0bb" id="PiU-0f-n6a"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="collectionView" destination="ZLy-5m-cw9" id="7Md-bf-nmh"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="pK2-qE-CRD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4691" y="-511"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="hh1-uA-gJu">
+            <objects>
+                <navigationController storyboardIdentifier="ArticlesNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="S4w-Cs-b4I" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Eky-Kw-8tk">
+                        <rect key="frame" x="0.0" y="118" width="393" height="54"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="8tc-dx-zaB" kind="relationship" relationship="rootViewController" id="qNt-qh-4Dl"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Z9z-gk-cAd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1927.4809160305342" y="-511.26760563380282"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Zr9-xF-ofu">
+            <objects>
+                <navigationController storyboardIdentifier="ArticleDetailNavigationViewController" automaticallyAdjustsScrollViewInsets="NO" id="QWj-qW-y6V" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="R6f-of-C2g">
+                        <rect key="frame" x="0.0" y="118" width="393" height="54"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="teO-I0-0bb" kind="relationship" relationship="rootViewController" id="cxB-2Y-5sD"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6TF-Ra-nlx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3921" y="-511"/>
+        </scene>
+    </scenes>
+    <resources>
+        <namedColor name="ArticlesBackgroundColor">
+            <color red="0.97254901960784312" green="0.94901960784313721" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>
