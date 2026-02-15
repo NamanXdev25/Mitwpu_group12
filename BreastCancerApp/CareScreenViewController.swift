@@ -280,6 +280,7 @@ class CareScreenViewController: UIViewController {
         ) as! CareMedicationCell
         let image = imageName != nil ? UIImage(named: imageName!) : UIImage(systemName: "pills.fill")
         cell.configure(title: title, status: status, image: image)
+        cell.delegate = self
         return cell
     }
     
@@ -417,6 +418,25 @@ extension CareScreenViewController: UICollectionViewDelegate {
             
         default:
             break
+        }
+    }
+}
+
+extension CareScreenViewController: CareMedicationCellDelegate {
+    func careMedicationCellDidTap(_ cell: CareMedicationCell) {
+        // Navigate to MedicationViewController modally
+        let storyboard = UIStoryboard(name: "Medication", bundle: nil)
+        if let medicationVC = storyboard.instantiateViewController(withIdentifier: "MedicationViewController") as? MedicationViewController {
+            
+            let navController = UINavigationController(rootViewController: medicationVC)
+            
+            if let sheet = navController.sheetPresentationController {
+                sheet.detents = [.large()]
+                sheet.prefersGrabberVisible = true
+                sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+            }
+            
+            present(navController, animated: true)
         }
     }
 }
