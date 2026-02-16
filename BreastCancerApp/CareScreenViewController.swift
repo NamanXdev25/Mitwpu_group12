@@ -255,6 +255,7 @@ class CareScreenViewController: UIViewController {
             for: indexPath
         ) as! CareHeaderCell
         cell.configure(title: title, showManage: showManage)
+        cell.delegate = self
         return cell
     }
     
@@ -450,6 +451,26 @@ extension CareScreenViewController: CareSymptomsCellDelegate {
         if let symptomsVC = storyboard.instantiateViewController(withIdentifier: "SymptomsViewController") as? SymptomsViewController {
             
             let navController = UINavigationController(rootViewController: symptomsVC)
+            
+            if let sheet = navController.sheetPresentationController {
+                sheet.detents = [.large()]
+                sheet.prefersGrabberVisible = true
+                sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+            }
+            
+            present(navController, animated: true)
+        }
+    }
+}
+
+// MARK: - CareHeaderCellDelegate
+extension CareScreenViewController: CareHeaderCellDelegate {
+    func careHeaderCellDidTapManage(_ cell: CareHeaderCell) {
+        // Navigate to AppointmentsViewController modally
+        let storyboard = UIStoryboard(name: "Appointments", bundle: nil)
+        if let appointmentsVC = storyboard.instantiateViewController(withIdentifier: "AppointmentsViewController") as? AppointmentsViewController {
+            
+            let navController = UINavigationController(rootViewController: appointmentsVC)
             
             if let sheet = navController.sheetPresentationController {
                 sheet.detents = [.large()]
