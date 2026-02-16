@@ -17,15 +17,14 @@ class BreathingPlayerViewController: UIViewController {
     var isFirstPlay = true
    
     var timer: Timer?
-    var secondsRemaining = 300 // 5 mins
+    var secondsRemaining = 300
     var totalSessionDuration = 300
     var isTimerRunning = false
 
-    // MARK: - Navigation Bar Configuration
+    // nav bar config
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        // a transparent appearance
         let appearance = UINavigationBarAppearance()
         appearance.configureWithTransparentBackground()
         appearance.backgroundColor = .clear
@@ -42,7 +41,6 @@ class BreathingPlayerViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        // restore the navigation bar to black title when leaving this screen
         let defaultAppearance = UINavigationBarAppearance()
         defaultAppearance.configureWithDefaultBackground()
         
@@ -53,7 +51,6 @@ class BreathingPlayerViewController: UIViewController {
         navigationController?.navigationBar.compactAppearance = defaultAppearance
     }
 
-    // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -63,7 +60,7 @@ class BreathingPlayerViewController: UIViewController {
         timerView.reset()
     }
 
-    // MARK: - Binds model data to ui
+    // bind data
     func setupData() {
         guard let session = session else { return }
         self.title = session.title
@@ -76,7 +73,7 @@ class BreathingPlayerViewController: UIViewController {
         totalSessionDuration = 300
         secondsRemaining = totalSessionDuration
     }
-    //MARK : - Sets up video playback sys and media coordination
+    
     func prepareVideo() {
         guard let session = session else { return }
         
@@ -103,7 +100,6 @@ class BreathingPlayerViewController: UIViewController {
         view.addGestureRecognizer(tapGesture)
     }
       
-    // MARK: - Interaction Logic
     @objc func screenTapped() {
         if !isFirstPlay {
             togglePlayPause()
@@ -192,12 +188,10 @@ class BreathingPlayerViewController: UIViewController {
             player?.pause()
             isPlaying = false
             
-            //ensure circle is full pink
             timerView.setFullProgress()
             
             timerView.showMessage("A quiet bloom marks your moment of peace")
             
-            //keeps Play Button hidden so user can read the text
             playButton.isHidden = true
             UIView.animate(withDuration: 0.3) { self.backgroundImageView.alpha = 1 }
             
@@ -222,7 +216,7 @@ class BreathingPlayerViewController: UIViewController {
         player?.play()
     }
     
-    // MARK: - View State Updates
+    // View State Updates
     func showBackground() {
         UIView.animate(withDuration: 0.3) {
             self.backgroundImageView.alpha = 1

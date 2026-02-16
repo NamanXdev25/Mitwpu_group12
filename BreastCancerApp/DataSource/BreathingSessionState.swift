@@ -4,6 +4,7 @@
 //
 //  Created by Shloka on 16/12/25.
 //
+
 import Foundation
 
 final class BreathingSessionState {
@@ -24,7 +25,6 @@ final class BreathingSessionState {
 
     func start() {
         stop()
-
         isRunning = true
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             self?.tick()
