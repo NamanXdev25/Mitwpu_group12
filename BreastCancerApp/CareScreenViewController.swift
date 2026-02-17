@@ -883,6 +883,7 @@ class CareScreenViewController: UIViewController {
         ) as! CareDailyExerciseCell
         let image = imageName != nil ? UIImage(named: imageName!) : UIImage(systemName: "figure.mixed.cardio")
         cell.configure(title: title, duration: duration, image: image)
+        cell.delegate = self  
         return cell
     }
     
@@ -1097,6 +1098,16 @@ extension CareScreenViewController: CareViewInsightsCellDelegate {
         let storyboard = UIStoryboard(name: "Insights", bundle: nil)
         if let insightsVC = storyboard.instantiateViewController(withIdentifier: "HealthInsightsViewController") as? HealthInsightsViewController {
             navigationController?.pushViewController(insightsVC, animated: true)
+        }
+    }
+}
+
+// MARK: - CareDailyExerciseCellDelegate
+extension CareScreenViewController: CareDailyExerciseCellDelegate {
+    func careDailyExerciseCellDidTap(_ cell: CareDailyExerciseCell) {
+        let storyboard = UIStoryboard(name: "NewExercise", bundle: nil)
+        if let exerciseVC = storyboard.instantiateViewController(withIdentifier: "ExercisePlanCategoryViewController") as? ExercisePlanCategoryViewController {
+            navigationController?.pushViewController(exerciseVC, animated: true)
         }
     }
 }
