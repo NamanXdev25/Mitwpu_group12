@@ -237,9 +237,11 @@ class MindfulnessDataSource: NSObject, UICollectionViewDataSource {
                 )
                 
                 // Add journaling navigation if needed
-                cell.didTap = {
-                    print("Journaling tapped")
-                    // TODO: Add journaling navigation here
+                cell.didTap = { [weak self] in
+                    let storyboard = UIStoryboard(name: "JournalMain", bundle: nil)
+                    if let journalVC = storyboard.instantiateViewController(withIdentifier: "JournalViewController") as? JournalViewController {
+                        self?.viewController?.navigationController?.pushViewController(journalVC, animated: true)
+                    }
                 }
             }
 

@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Jiz-9b-xJk">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Journal-->
+        <scene sceneID="JVW-hF-dkL">
+            <objects>
+                <viewController storyboardIdentifier="JournalViewController" id="Jiz-9b-xJk" customClass="JournalViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="3DT-hl-gyE">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="lta-R8-Dn8">
+                                <rect key="frame" x="0.0" y="172" width="393" height="612"/>
+                                <color key="backgroundColor" name="BackgroundColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="HDY-dt-lVQ">
+                                    <size key="itemSize" width="265" height="234"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                                <connections>
+                                    <outlet property="dataSource" destination="Jiz-9b-xJk" id="JTf-mw-Fgd"/>
+                                    <outlet property="delegate" destination="Jiz-9b-xJk" id="9sT-HB-6yE"/>
+                                </connections>
+                            </collectionView>
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tlj-yg-RTM">
+                                <rect key="frame" x="317" y="708" width="56" height="56"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="56" id="dnF-IZ-IPN"/>
+                                    <constraint firstAttribute="height" constant="56" id="tac-ux-F9C"/>
+                                </constraints>
+                                <color key="tintColor" name="PrimaryColor"/>
+                                <size key="titleShadowOffset" width="0.0" height="4"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" image="plus" catalog="system" cornerStyle="capsule">
+                                    <directionalEdgeInsets key="contentInsets" top="12" leading="12" bottom="12" trailing="12"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="addJournalTapped" destination="Jiz-9b-xJk" eventType="touchUpInside" id="8lD-bw-Rt5"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="G9m-m8-5rA"/>
+                        <color key="backgroundColor" name="BackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="G9m-m8-5rA" firstAttribute="trailing" secondItem="lta-R8-Dn8" secondAttribute="trailing" id="7HS-9T-E8g"/>
+                            <constraint firstItem="G9m-m8-5rA" firstAttribute="bottom" secondItem="Tlj-yg-RTM" secondAttribute="bottom" constant="20" id="UUR-1J-0bv"/>
+                            <constraint firstItem="G9m-m8-5rA" firstAttribute="trailing" secondItem="Tlj-yg-RTM" secondAttribute="trailing" constant="20" id="VeM-tf-3t5"/>
+                            <constraint firstItem="G9m-m8-5rA" firstAttribute="bottom" secondItem="lta-R8-Dn8" secondAttribute="bottom" id="cdj-K4-M5L"/>
+                            <constraint firstItem="lta-R8-Dn8" firstAttribute="top" secondItem="G9m-m8-5rA" secondAttribute="top" id="isu-ei-Tjx"/>
+                            <constraint firstItem="lta-R8-Dn8" firstAttribute="leading" secondItem="G9m-m8-5rA" secondAttribute="leading" id="t6U-7m-aZI"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Journal" id="LEm-Tn-keQ">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="calendar" catalog="system" id="45r-v9-QRZ">
+                            <connections>
+                                <action selector="calendarTapped:" destination="Jiz-9b-xJk" id="TjE-QP-SwY"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <connections>
+                        <outlet property="addButton" destination="Tlj-yg-RTM" id="25S-JH-gBq"/>
+                        <outlet property="collectionView" destination="lta-R8-Dn8" id="Z2t-o2-Qjv"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="owB-CO-H6k" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1187.0229007633586" y="933.80281690140851"/>
+        </scene>
+        <!--All Journals-->
+        <scene sceneID="4u4-xg-Zi4">
+            <objects>
+                <viewController storyboardIdentifier="AllJournalsViewController" title="All Journals" id="ovP-4o-MHw" customClass="AllJournalsViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="9I8-ol-SxN">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="OWI-Lu-ngo">
+                                <rect key="frame" x="0.0" y="172" width="393" height="612"/>
+                                <color key="backgroundColor" name="BackgroundColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="mJm-Od-QW8">
+                                    <size key="itemSize" width="321" height="272"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="0O3-Hz-xG6"/>
+                        <color key="backgroundColor" name="BackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="OWI-Lu-ngo" firstAttribute="leading" secondItem="0O3-Hz-xG6" secondAttribute="leading" id="2a8-cy-mGi"/>
+                            <constraint firstItem="OWI-Lu-ngo" firstAttribute="top" secondItem="0O3-Hz-xG6" secondAttribute="top" id="9aP-fP-38l"/>
+                            <constraint firstItem="0O3-Hz-xG6" firstAttribute="trailing" secondItem="OWI-Lu-ngo" secondAttribute="trailing" id="HZd-QR-trd"/>
+                            <constraint firstItem="0O3-Hz-xG6" firstAttribute="bottom" secondItem="OWI-Lu-ngo" secondAttribute="bottom" id="ZCR-dK-aAw"/>
+                        </constraints>
+                    </view>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <connections>
+                        <outlet property="collectionView" destination="OWI-Lu-ngo" id="adS-Zd-4Te"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XDc-al-iYU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2006.8702290076335" y="933.80281690140851"/>
+        </scene>
+        <!--New Journal-->
+        <scene sceneID="wLE-Jd-Ojc">
+            <objects>
+                <viewController storyboardIdentifier="BlankJournalViewController" title="New Journal" id="XN8-cC-kga" customClass="BlankJournalViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Lyy-ac-oS6">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Title" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hKu-eh-qsP">
+                                <rect key="frame" x="24" y="124" width="345" height="34"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Start writing what's on your mind today..." textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="dZi-gp-IAI">
+                                <rect key="frame" x="24" y="158" width="345" height="582"/>
+                                <color key="textColor" systemColor="labelColor"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="I0I-rs-Hsu"/>
+                        <color key="backgroundColor" name="BackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="I0I-rs-Hsu" firstAttribute="trailing" secondItem="dZi-gp-IAI" secondAttribute="trailing" constant="24" id="25w-3T-P7w"/>
+                            <constraint firstItem="hKu-eh-qsP" firstAttribute="leading" secondItem="I0I-rs-Hsu" secondAttribute="leading" constant="24" id="9eW-Tw-ifo"/>
+                            <constraint firstItem="dZi-gp-IAI" firstAttribute="leading" secondItem="I0I-rs-Hsu" secondAttribute="leading" constant="24" id="SUF-Th-IzN"/>
+                            <constraint firstItem="I0I-rs-Hsu" firstAttribute="trailing" secondItem="hKu-eh-qsP" secondAttribute="trailing" constant="24" id="dZu-pA-0hs"/>
+                            <constraint firstItem="dZi-gp-IAI" firstAttribute="top" secondItem="hKu-eh-qsP" secondAttribute="bottom" id="gyU-vN-fF2"/>
+                            <constraint firstItem="hKu-eh-qsP" firstAttribute="top" secondItem="Lyy-ac-oS6" secondAttribute="top" constant="124" id="jdm-9I-ctg"/>
+                            <constraint firstItem="I0I-rs-Hsu" firstAttribute="bottom" secondItem="dZi-gp-IAI" secondAttribute="bottom" constant="44" id="nYS-40-dED"/>
+                        </constraints>
+                    </view>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="Title" id="2D8-Ov-qnF">
+                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="DG5-uZ-Jfp">
+                            <color key="tintColor" name="PrimaryColor"/>
+                            <connections>
+                                <action selector="doneTapped:" destination="XN8-cC-kga" id="uL1-kb-4y0"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="textView" destination="dZi-gp-IAI" id="Wyh-G4-wFG"/>
+                        <outlet property="titleField" destination="hKu-eh-qsP" id="Tuh-7x-Rwd"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SMv-nK-kgj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="260" y="1637"/>
+        </scene>
+        <!--Guided Reflection-->
+        <scene sceneID="lNd-1x-eUP">
+            <objects>
+                <viewController storyboardIdentifier="GuidedJournalViewController" title="Guided Reflection" id="IXY-Ji-Lkr" customClass="GuidedJournalViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Nid-zc-vAF">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MIND • SELF-AWARENESS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zJn-K1-RDr">
+                                <rect key="frame" x="24" y="188" width="345" height="14.333333333333343"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
+                                <color key="textColor" systemColor="systemGrayColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="1000" text="What thought has been taking up too much space in your mind lately?" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fbg-ko-Brm">
+                                <rect key="frame" x="24" y="210.33333333333334" width="345" height="101.66666666666666"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Start Writing..." textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="KOx-w0-WBW">
+                                <rect key="frame" x="24" y="312" width="353" height="160"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="160" id="wsp-rd-ydf"/>
+                                </constraints>
+                                <color key="textColor" systemColor="labelColor"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="ZCi-EN-Alx"/>
+                        <color key="backgroundColor" name="BackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="fbg-ko-Brm" secondAttribute="trailing" constant="24" id="9Ij-RN-icl"/>
+                            <constraint firstItem="ZCi-EN-Alx" firstAttribute="trailing" secondItem="KOx-w0-WBW" secondAttribute="trailing" constant="16" id="9Y2-XR-eOk"/>
+                            <constraint firstItem="KOx-w0-WBW" firstAttribute="top" secondItem="fbg-ko-Brm" secondAttribute="bottom" id="BUl-d8-m0O"/>
+                            <constraint firstItem="zJn-K1-RDr" firstAttribute="leading" secondItem="ZCi-EN-Alx" secondAttribute="leading" constant="24" id="Ltg-FF-Knz"/>
+                            <constraint firstItem="fbg-ko-Brm" firstAttribute="leading" secondItem="ZCi-EN-Alx" secondAttribute="leading" constant="24" id="iDl-KD-TgK"/>
+                            <constraint firstItem="KOx-w0-WBW" firstAttribute="leading" secondItem="ZCi-EN-Alx" secondAttribute="leading" constant="24" id="jGJ-JL-o5o"/>
+                            <constraint firstItem="fbg-ko-Brm" firstAttribute="top" secondItem="zJn-K1-RDr" secondAttribute="bottom" constant="8" id="kGP-k8-yws"/>
+                            <constraint firstItem="ZCi-EN-Alx" firstAttribute="trailing" secondItem="zJn-K1-RDr" secondAttribute="trailing" constant="24" id="r9C-uq-Say"/>
+                            <constraint firstItem="zJn-K1-RDr" firstAttribute="top" secondItem="ZCi-EN-Alx" secondAttribute="top" constant="16" id="rb6-Jq-Rp1"/>
+                        </constraints>
+                    </view>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="Guided Reflection" id="eO9-CN-CgX">
+                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="Htc-wZ-LhM">
+                            <color key="tintColor" name="PrimaryColor"/>
+                            <connections>
+                                <action selector="submitTapped:" destination="IXY-Ji-Lkr" id="GRZ-gi-MiF"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <connections>
+                        <outlet property="categoryLabel" destination="zJn-K1-RDr" id="8aE-kH-mu0"/>
+                        <outlet property="questionLabel" destination="fbg-ko-Brm" id="b5O-Sr-F8F"/>
+                        <outlet property="textView" destination="KOx-w0-WBW" id="DUt-5k-IM5"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RWn-RW-LDC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1185" y="1637"/>
+        </scene>
+        <!--Journal Calendar-->
+        <scene sceneID="Z8U-jt-ciu">
+            <objects>
+                <viewController storyboardIdentifier="CalendarViewController" id="iJQ-t8-vKg" customClass="JournalCalendarViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="qca-yY-Tpz">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ehh-49-nT1" userLabel="JournalCollectionView">
+                                <rect key="frame" x="0.0" y="172" width="393" height="612"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="fkU-Ey-bUe">
+                                    <size key="itemSize" width="217" height="165"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="79o-ID-u52"/>
+                        <color key="backgroundColor" red="0.97254901959999995" green="0.94901960780000005" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="79o-ID-u52" firstAttribute="bottom" secondItem="ehh-49-nT1" secondAttribute="bottom" id="e7u-Tt-lqW"/>
+                            <constraint firstItem="ehh-49-nT1" firstAttribute="top" secondItem="79o-ID-u52" secondAttribute="top" id="f0J-rG-0jq"/>
+                            <constraint firstItem="79o-ID-u52" firstAttribute="trailing" secondItem="ehh-49-nT1" secondAttribute="trailing" id="kLc-gp-ljN"/>
+                            <constraint firstItem="ehh-49-nT1" firstAttribute="leading" secondItem="79o-ID-u52" secondAttribute="leading" id="zSu-M9-myu"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Journal Calendar" id="4xL-V2-r8l">
+                        <barButtonItem key="leftBarButtonItem" systemItem="stop" id="vpy-gY-3h6">
+                            <connections>
+                                <action selector="closeTapped:" destination="iJQ-t8-vKg" id="Dr6-Mj-w9M"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <connections>
+                        <outlet property="closeButton" destination="vpy-gY-3h6" id="U5T-vu-z2N"/>
+                        <outlet property="journalsCollectionView" destination="ehh-49-nT1" id="1uP-z3-6l0"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rUm-8c-Zh7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2889" y="1637"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="wYu-Ha-isw">
+            <objects>
+                <navigationController storyboardIdentifier="CalendarNavController" automaticallyAdjustsScrollViewInsets="NO" id="ceu-rs-DIu" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="CHf-2E-Mmk">
+                        <rect key="frame" x="0.0" y="118" width="393" height="54"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="iJQ-t8-vKg" kind="relationship" relationship="rootViewController" id="MRB-iF-WhG"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LdF-EC-GgT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2006.8702290076335" y="1636.6197183098593"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="calendar" catalog="system" width="128" height="107"/>
+        <image name="plus" catalog="system" width="128" height="113"/>
+        <namedColor name="BackgroundColor">
+            <color red="0.97254901960784312" green="0.94901960784313721" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="PrimaryColor">
+            <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGrayColor">
+            <color red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

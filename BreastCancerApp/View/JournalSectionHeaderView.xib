@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="header_cell" id="U6b-Vx-4bR" customClass="JournalSectionHeaderView" customModule="BreastCancerApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="149"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XHF-rP-SdM" userLabel="titleLabel">
+                    <rect key="frame" x="16.000000000000004" y="106.33333333333333" width="43.333333333333343" height="20.333333333333329"/>
+                    <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cF0-vn-Xek">
+                    <rect key="frame" x="237" y="104.66666666666667" width="75" height="24.000000000000014"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="24" id="XXV-AZ-c4l"/>
+                    </constraints>
+                    <color key="tintColor" name="PrimaryColor"/>
+                    <state key="normal" title="Button"/>
+                    <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                    <connections>
+                        <action selector="seeAllButtonTapped:" destination="U6b-Vx-4bR" eventType="touchUpInside" id="zlf-K6-76C"/>
+                    </connections>
+                </button>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="VXr-Tz-HHm"/>
+            <constraints>
+                <constraint firstItem="XHF-rP-SdM" firstAttribute="leading" secondItem="VXr-Tz-HHm" secondAttribute="leading" constant="16" id="PB9-hr-tWo"/>
+                <constraint firstAttribute="trailing" secondItem="cF0-vn-Xek" secondAttribute="trailing" constant="8" id="iEt-mu-d4H"/>
+                <constraint firstItem="XHF-rP-SdM" firstAttribute="centerY" secondItem="VXr-Tz-HHm" secondAttribute="centerY" id="sNQ-ML-UNz"/>
+                <constraint firstItem="cF0-vn-Xek" firstAttribute="centerY" secondItem="XHF-rP-SdM" secondAttribute="centerY" id="xrk-XB-bNk"/>
+            </constraints>
+            <connections>
+                <outlet property="actionButton" destination="cF0-vn-Xek" id="vFk-BU-wSg"/>
+                <outlet property="titleLabel" destination="XHF-rP-SdM" id="RmR-34-0DS"/>
+            </connections>
+            <point key="canvasLocation" x="55" y="128"/>
+        </collectionReusableView>
+    </objects>
+    <resources>
+        <namedColor name="PrimaryColor">
+            <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>
