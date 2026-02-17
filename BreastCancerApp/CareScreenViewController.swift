@@ -1,10 +1,3 @@
-//
-//  CareScreenViewController.swift
-//  BreastCancerApp
-//
-//  Rewritten using DiffableDataSource pattern
-//
-
 import UIKit
 
 class CareScreenViewController: UIViewController {
@@ -13,8 +6,6 @@ class CareScreenViewController: UIViewController {
     
     // MARK: - Properties
     private var dataSource: UICollectionViewDiffableDataSource<CareSectionType, CareItem>!
-    
-    // Expansion state
     private var isHydrationExpanded = false
     
     // MARK: - Lifecycle
@@ -25,6 +16,96 @@ class CareScreenViewController: UIViewController {
         setupCollectionView()
         configureDataSource()
         applySnapshot()
+        
+        // Observe medication updates
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(medicationDataDidChange),
+            name: NSNotification.Name("MedicationDataUpdated"),
+            object: nil
+        )
+        
+        // Observe appointment updates
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(appointmentDataDidChange),
+            name: NSNotification.Name("AppointmentDataUpdated"),
+            object: nil
+        )
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        applySnapshot(animatingDifferences: false)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc private func medicationDataDidChange() {
+        applySnapshot(animatingDifferences: false)
+    }
+    
+    @objc private func appointmentDataDidChange() {
+        applySnapshot(animatingDifferences: false)
+    }
+    
+    // MARK: - Medication Status Helper
+    private func medicationStatus() -> String {
+        let today = Date()
+        MedicationHistory.shared.initializeTodayIfNeeded()
+        
+        if let history = MedicationHistory.shared.getHistory(for: today) {
+            let todaysMeds = history.medications.filter { $0.isScheduledFor(date: today) }
+            let taken = todaysMeds.filter { $0.isTaken }.count
+            let total = todaysMeds.count
+            if total == 0 { return "No medications Added" }
+            return "\(taken)/\(total) Taken"
+        }
+        return "No medications"
+    }
+    
+    // MARK: - Closest Appointment Helper
+    private func closestUpcomingAppointment() -> AppointmentItem? {
+        let today = Date()
+        let calendar = Calendar.current
+        
+        let keyFormatter = DateFormatter()
+        keyFormatter.dateFormat = "yyyy-MM-dd"
+        
+        let allDateKeys = AppointmentManager.shared.getAllDatesWithAppointments()
+        
+        var closestDate: Date? = nil
+        var closestAppointment: AppointmentItem? = nil
+        
+        for key in allDateKeys {
+            guard let date = keyFormatter.date(from: key) else { continue }
+            
+            let startOfDate = calendar.startOfDay(for: date)
+            let startOfToday = calendar.startOfDay(for: today)
+            guard startOfDate >= startOfToday else { continue }
+            
+            let appointments = AppointmentManager.shared.getAppointments(for: date)
+            guard !appointments.isEmpty else { continue }
+            
+            let timeFormatter = DateFormatter()
+            timeFormatter.dateFormat = "h:mm a"
+            timeFormatter.locale = Locale(identifier: "en_US_POSIX")
+            
+            let sorted = appointments.sorted {
+                guard let t1 = timeFormatter.date(from: $0.time),
+                      let t2 = timeFormatter.date(from: $1.time) else { return false }
+                return t1 < t2
+            }
+            
+            if closestDate == nil || startOfDate < closestDate! {
+                closestDate = startOfDate
+                closestAppointment = sorted.first
+            }
+        }
+        
+        return closestAppointment
     }
     
     // MARK: - Register Cells
@@ -59,158 +140,129 @@ class CareScreenViewController: UIViewController {
             guard let sectionType = CareSectionType(rawValue: sectionIndex) else { return nil }
             
             switch sectionType {
-            case .todayHeader:      return self.createHeaderSection()
-            case .hydration:        return self.createHydrationSection()
-            case .medication:       return self.createMedicationSection()
-            case .exercise:         return self.createExerciseSection()
-            case .symptoms:         return self.createSymptomsSection()
+            case .todayHeader:       return self.createHeaderSection()
+            case .hydration:         return self.createHydrationSection()
+            case .medication:        return self.createMedicationSection()
+            case .exercise:          return self.createExerciseSection()
+            case .symptoms:          return self.createSymptomsSection()
             case .appointmentHeader: return self.createHeaderSection()
-            case .appointments:     return self.createAppointmentsSection()
-            case .healthInsights:   return self.createHealthInsightsSection()
+            case .appointments:      return self.createAppointmentsSection()
+            case .healthInsights:    return self.createHealthInsightsSection()
             }
         }
     }
     
     // MARK: - Section Layouts
-    
-    // Header Section (for "Today" and "Appointments" headers)
     private func createHeaderSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .absolute(55)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .absolute(55)
         )
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
-        
         return section
     }
     
-    // Hydration Section
     private func createHydrationSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(209)  // Larger for expandable content
+            heightDimension: .estimated(209)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .estimated(209)
         )
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
-        
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 16, trailing: 16)
-        
         return section
     }
     
-    // Medication Section
     private func createMedicationSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .estimated(84)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .estimated(84)
         )
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
-        
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 10, trailing: 16)
-        
         return section
     }
     
-    // Exercise Section
     private func createExerciseSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .estimated(84)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .estimated(84)
         )
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
-        
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 10, trailing: 16)
-        
         return section
     }
     
-    // Symptoms Section
     private func createSymptomsSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .estimated(150)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .estimated(150)
         )
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
-        
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16)
-        
         return section
     }
     
-    // Appointments Section
     private func createAppointmentsSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .estimated(109)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .estimated(109)
         )
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
-        
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 22, trailing: 16)
-        section.interGroupSpacing = 12  // Space between multiple appointments
-        
+        section.interGroupSpacing = 12
         return section
     }
     
-    // Health Insights Section
     private func createHealthInsightsSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .estimated(56)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .estimated(56)
         )
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
-        
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 12, trailing: 16)
-        
         return section
     }
     
@@ -219,28 +271,21 @@ class CareScreenViewController: UIViewController {
         dataSource = UICollectionViewDiffableDataSource<CareSectionType, CareItem>(
             collectionView: CareCollectionView
         ) { [weak self] (collectionView, indexPath, item) -> UICollectionViewCell? in
-            
             guard let self = self else { return nil }
             
             switch item.type {
             case .header(let title, let showManage):
                 return self.configureHeaderCell(collectionView, indexPath: indexPath, title: title, showManage: showManage)
-                
             case .hydration:
                 return self.configureHydrationCell(collectionView, indexPath: indexPath)
-                
             case .medication(let title, let status, let imageName):
                 return self.configureMedicationCell(collectionView, indexPath: indexPath, title: title, status: status, imageName: imageName)
-                
             case .exercise(let title, let duration, let imageName):
                 return self.configureExerciseCell(collectionView, indexPath: indexPath, title: title, duration: duration, imageName: imageName)
-                
             case .symptoms(let title, let loggedSymptoms):
                 return self.configureSymptomsCell(collectionView, indexPath: indexPath, title: title, symptoms: loggedSymptoms)
-                
             case .appointment(let month, let day, let title, let doctor, let time):
                 return self.configureAppointmentCell(collectionView, indexPath: indexPath, month: month, day: day, title: title, doctor: doctor, time: time)
-                
             case .healthInsights:
                 return self.configureHealthInsightsCell(collectionView, indexPath: indexPath)
             }
@@ -248,7 +293,6 @@ class CareScreenViewController: UIViewController {
     }
     
     // MARK: - Cell Configuration Methods
-    
     private func configureHeaderCell(_ collectionView: UICollectionView, indexPath: IndexPath, title: String, showManage: Bool) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: "CareHeaderCell",
@@ -280,7 +324,7 @@ class CareScreenViewController: UIViewController {
             for: indexPath
         ) as! CareMedicationCell
         let image = imageName != nil ? UIImage(named: imageName!) : UIImage(systemName: "pills.fill")
-        cell.configure(title: title, status: status, image: image)
+        cell.configure(title: title, status: medicationStatus(), image: image)
         cell.delegate = self
         return cell
     }
@@ -310,7 +354,13 @@ class CareScreenViewController: UIViewController {
             withReuseIdentifier: "CareAppointmentsCell",
             for: indexPath
         ) as! CareAppointmentsCell
-        cell.configure(month: month, day: day, title: title, doctor: doctor, time: time)
+        cell.configure(
+            month: month,
+            day: day,
+            title: title,
+            doctor: doctor,
+            time: time
+        )
         return cell
     }
     
@@ -319,15 +369,12 @@ class CareScreenViewController: UIViewController {
             withReuseIdentifier: "CareViewInsightsCell",
             for: indexPath
         ) as! CareViewInsightsCell
-        // Configure with any data needed
         return cell
     }
     
     // MARK: - Apply Snapshot
     private func applySnapshot(animatingDifferences: Bool = false) {
         var snapshot = NSDiffableDataSourceSnapshot<CareSectionType, CareItem>()
-        
-        // Add all sections
         snapshot.appendSections(CareSectionType.allCases)
         
         // Today Header
@@ -344,7 +391,7 @@ class CareScreenViewController: UIViewController {
         snapshot.appendItems([
             CareItem(id: UUID(), type: .medication(
                 title: "Medication",
-                status: "2/3 Taken",
+                status: medicationStatus(),
                 imageName: nil
             ))
         ], toSection: .medication)
@@ -371,16 +418,46 @@ class CareScreenViewController: UIViewController {
             CareItem(id: UUID(), type: .header(title: "Appointments", showManage: true))
         ], toSection: .appointmentHeader)
         
-        // Appointments
-        snapshot.appendItems([
-            CareItem(id: UUID(), type: .appointment(
-                month: "JAN",
-                day: "28",
-                title: "Oncology Check-Up",
-                doctor: "Dr. Sarah Johnson",
-                time: "10:30 AM"
-            ))
-        ], toSection: .appointments)
+        // Appointments - closest upcoming or empty state
+        if let closest = closestUpcomingAppointment() {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd MMM yyyy"
+            
+            var month = ""
+            var day = ""
+            
+            if let date = dateFormatter.date(from: closest.date) {
+                let monthFormatter = DateFormatter()
+                monthFormatter.dateFormat = "MMM"
+                month = monthFormatter.string(from: date).uppercased()
+                
+                let dayFormatter = DateFormatter()
+                dayFormatter.dateFormat = "d"
+                day = dayFormatter.string(from: date)
+            }
+            
+            snapshot.appendItems([
+                CareItem(id: UUID(), type: .appointment(
+                    month: month,
+                    day: day,
+                    title: closest.title.isEmpty ? closest.category : closest.title,
+                    doctor: closest.note.isEmpty ? "No notes" : closest.note,
+                    time: closest.time
+                ))
+            ], toSection: .appointments)
+            
+        } else {
+            // No upcoming appointments — cell handles empty UI internally
+            snapshot.appendItems([
+                CareItem(id: UUID(), type: .appointment(
+                    month: "---",
+                    day: "--",
+                    title: "",
+                    doctor: "",
+                    time: ""
+                ))
+            ], toSection: .appointments)
+        }
         
         // Health Insights
         snapshot.appendItems([
@@ -399,45 +476,35 @@ extension CareScreenViewController: UICollectionViewDelegate {
         
         switch item.type {
         case .hydration:
-            // Toggle hydration expansion
             isHydrationExpanded.toggle()
             applySnapshot(animatingDifferences: true)
-            
         case .medication(let title, _, _):
             print("👆 Selected medication: \(title)")
-            
         case .exercise(let title, _, _):
             print("👆 Selected exercise: \(title)")
-            
         case .symptoms:
             print("👆 View all symptoms tapped")
-            
         case .appointment(_, _, let title, _, _):
             print("👆 Selected appointment: \(title)")
-            
         case .healthInsights:
             print("👆 View health insights tapped")
-            
         default:
             break
         }
     }
 }
 
+// MARK: - CareMedicationCellDelegate
 extension CareScreenViewController: CareMedicationCellDelegate {
     func careMedicationCellDidTap(_ cell: CareMedicationCell) {
-        // Navigate to MedicationViewController modally
         let storyboard = UIStoryboard(name: "Medication", bundle: nil)
         if let medicationVC = storyboard.instantiateViewController(withIdentifier: "MedicationViewController") as? MedicationViewController {
-            
             let navController = UINavigationController(rootViewController: medicationVC)
-            
             if let sheet = navController.sheetPresentationController {
                 sheet.detents = [.large()]
                 sheet.prefersGrabberVisible = true
                 sheet.prefersScrollingExpandsWhenScrolledToEdge = false
             }
-            
             present(navController, animated: true)
         }
     }
@@ -446,18 +513,14 @@ extension CareScreenViewController: CareMedicationCellDelegate {
 // MARK: - CareSymptomsCellDelegate
 extension CareScreenViewController: CareSymptomsCellDelegate {
     func careSymptomsCellDidTapViewInsights(_ cell: CareSymptomsCell) {
-        // Navigate to SymptomsViewController modally
         let storyboard = UIStoryboard(name: "symptomMain", bundle: nil)
         if let symptomsVC = storyboard.instantiateViewController(withIdentifier: "SymptomsViewController") as? SymptomsViewController {
-            
             let navController = UINavigationController(rootViewController: symptomsVC)
-            
             if let sheet = navController.sheetPresentationController {
                 sheet.detents = [.large()]
                 sheet.prefersGrabberVisible = true
                 sheet.prefersScrollingExpandsWhenScrolledToEdge = false
             }
-            
             present(navController, animated: true)
         }
     }
@@ -466,18 +529,14 @@ extension CareScreenViewController: CareSymptomsCellDelegate {
 // MARK: - CareHeaderCellDelegate
 extension CareScreenViewController: CareHeaderCellDelegate {
     func careHeaderCellDidTapManage(_ cell: CareHeaderCell) {
-        // Navigate to AppointmentsViewController modally
         let storyboard = UIStoryboard(name: "Appointments", bundle: nil)
         if let appointmentsVC = storyboard.instantiateViewController(withIdentifier: "AppointmentsViewController") as? AppointmentsViewController {
-            
             let navController = UINavigationController(rootViewController: appointmentsVC)
-            
             if let sheet = navController.sheetPresentationController {
                 sheet.detents = [.large()]
                 sheet.prefersGrabberVisible = true
                 sheet.prefersScrollingExpandsWhenScrolledToEdge = false
             }
-            
             present(navController, animated: true)
         }
     }
