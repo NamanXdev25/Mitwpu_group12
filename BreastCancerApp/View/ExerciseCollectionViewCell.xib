@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ExerciseCell" id="gTV-IL-0wX" customClass="ExerciseCollectionViewCell" customModule="BreastCancerApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="350" height="300"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="350" height="300"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="POX-df-EV3">
+                        <rect key="frame" x="10" y="10" width="330" height="280"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Exercise Consistency" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fws-Hf-zoP">
+                                <rect key="frame" x="16" y="16" width="179" height="22"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This week" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nhS-X7-nef">
+                                <rect key="frame" x="16" y="42" width="65" height="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" systemColor="secondaryLabelColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YMO-GB-XJh" customClass="BarGraphView" customModule="BreastCancerApp" customModuleProvider="target">
+                                <rect key="frame" x="16" y="79" width="298" height="140"/>
+                                <color key="backgroundColor" red="0.8447265625" green="0.4406738281" blue="0.5673828125" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="140" id="9Ba-Ds-mYn"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2S5-WV-zvD">
+                                <rect key="frame" x="16" y="239" width="298" height="1"/>
+                                <color key="backgroundColor" systemColor="systemGray4Color"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="rbq-W0-ow6"/>
+                                </constraints>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Days Active" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6It-jw-s9G">
+                                <rect key="frame" x="16" y="248" width="76" height="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" systemColor="secondaryLabelColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5 / 7" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Lv-Lk-rTh">
+                                <rect key="frame" x="285" y="248" width="29" height="17"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
+                                <color key="textColor" systemColor="secondaryLabelColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Total Minutes" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ge8-BO-kfD">
+                                <rect key="frame" x="16" y="273" width="87" height="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" systemColor="secondaryLabelColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="140 min" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bfP-UZ-L0l">
+                                <rect key="frame" x="260" y="273" width="54" height="17"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
+                                <color key="textColor" systemColor="secondaryLabelColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="2S5-WV-zvD" firstAttribute="top" secondItem="YMO-GB-XJh" secondAttribute="bottom" constant="20" id="598-Yi-tLE"/>
+                            <constraint firstItem="bfP-UZ-L0l" firstAttribute="firstBaseline" secondItem="Ge8-BO-kfD" secondAttribute="firstBaseline" id="9Yi-WP-7Gb"/>
+                            <constraint firstAttribute="trailing" secondItem="2S5-WV-zvD" secondAttribute="trailing" constant="16" id="DmF-ES-RIh"/>
+                            <constraint firstItem="YMO-GB-XJh" firstAttribute="top" secondItem="nhS-X7-nef" secondAttribute="bottom" constant="20" id="FB0-Xu-c9e"/>
+                            <constraint firstItem="fws-Hf-zoP" firstAttribute="top" secondItem="POX-df-EV3" secondAttribute="top" constant="16" id="MAO-zc-GXK"/>
+                            <constraint firstItem="nhS-X7-nef" firstAttribute="top" secondItem="fws-Hf-zoP" secondAttribute="bottom" constant="4" id="N9W-jU-ejY"/>
+                            <constraint firstAttribute="trailing" secondItem="2Lv-Lk-rTh" secondAttribute="trailing" constant="16" id="QLw-72-GfT"/>
+                            <constraint firstItem="Ge8-BO-kfD" firstAttribute="top" secondItem="6It-jw-s9G" secondAttribute="bottom" constant="8" id="SA6-5K-5b2"/>
+                            <constraint firstItem="nhS-X7-nef" firstAttribute="leading" secondItem="POX-df-EV3" secondAttribute="leading" constant="16" id="VZ3-pE-tcc"/>
+                            <constraint firstItem="Ge8-BO-kfD" firstAttribute="leading" secondItem="POX-df-EV3" secondAttribute="leading" constant="16" id="Wpb-xO-Ui6"/>
+                            <constraint firstItem="6It-jw-s9G" firstAttribute="top" secondItem="2S5-WV-zvD" secondAttribute="bottom" constant="8" id="az6-Gl-YTz"/>
+                            <constraint firstItem="2Lv-Lk-rTh" firstAttribute="firstBaseline" secondItem="6It-jw-s9G" secondAttribute="firstBaseline" id="cdU-oG-CD8"/>
+                            <constraint firstItem="fws-Hf-zoP" firstAttribute="leading" secondItem="POX-df-EV3" secondAttribute="leading" constant="16" id="gxL-B4-D7W"/>
+                            <constraint firstAttribute="trailing" secondItem="bfP-UZ-L0l" secondAttribute="trailing" constant="16" id="mrt-aG-vD6"/>
+                            <constraint firstItem="YMO-GB-XJh" firstAttribute="leading" secondItem="POX-df-EV3" secondAttribute="leading" constant="16" id="n7x-Aj-u34"/>
+                            <constraint firstItem="2S5-WV-zvD" firstAttribute="leading" secondItem="POX-df-EV3" secondAttribute="leading" constant="16" id="tiS-M7-IE1"/>
+                            <constraint firstAttribute="trailing" secondItem="YMO-GB-XJh" secondAttribute="trailing" constant="16" id="vzb-rg-GHz"/>
+                            <constraint firstItem="6It-jw-s9G" firstAttribute="leading" secondItem="POX-df-EV3" secondAttribute="leading" constant="16" id="zcY-AN-23X"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="16"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstItem="POX-df-EV3" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="10" id="05z-2D-Vgf"/>
+                <constraint firstItem="POX-df-EV3" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="10" id="2iN-Gh-cOJ"/>
+                <constraint firstAttribute="bottom" secondItem="POX-df-EV3" secondAttribute="bottom" constant="10" id="Oqz-RW-pR2"/>
+                <constraint firstAttribute="trailing" secondItem="POX-df-EV3" secondAttribute="trailing" constant="10" id="m9M-qN-svB"/>
+            </constraints>
+            <connections>
+                <outlet property="barChartContainerView" destination="YMO-GB-XJh" id="14I-tX-NnE"/>
+                <outlet property="dayActiveValueLabel" destination="2Lv-Lk-rTh" id="q6Z-n6-bgg"/>
+                <outlet property="exerciseGraphView" destination="YMO-GB-XJh" id="5Za-F4-ZBZ"/>
+                <outlet property="subtitleLabel" destination="nhS-X7-nef" id="dAJ-2J-T2v"/>
+                <outlet property="titleLabel" destination="fws-Hf-zoP" id="YOu-T2-J5p"/>
+                <outlet property="totalMinutesValueLabel" destination="bfP-UZ-L0l" id="Bys-2z-y4Y"/>
+            </connections>
+            <point key="canvasLocation" x="201.52671755725191" y="93.661971830985919"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <systemColor name="secondaryLabelColor">
+            <color red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray4Color">
+            <color red="0.81960784310000001" green="0.81960784310000001" blue="0.83921568629999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

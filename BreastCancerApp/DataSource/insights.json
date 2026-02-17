@@ -1,0 +1,36 @@
+{
+  "insights": [
+    {
+      "type": "hydration",
+      "title": "Hydration Summary",
+      "subtitle": "Goal: 3.0 Ltr",
+      "completedValue": "Completed: 2.0 Ltr",
+      "mainValue": "2100 ml",
+      "dailyValues": [1200, 1500, 800, 2200, 1800, 2500, 1600]
+    },
+    {
+      "type": "exercise",
+      "title": "Exercise Consistency",
+      "subtitle": "This week",
+      "mainValue": "140 min",
+      "secondaryValue": "5 of 7",
+      "dailyValues": [20, 30, 0, 45, 15, 30, 0]
+    },
+    {
+      "type": "medication",
+      "title": "Medication Adherence",
+      "subtitle": "Past 7 days",
+      "mainValue": "71%",
+      "medicationTaken": "5 doses taken",
+      "medicationMissed": "· 2 missed",
+      "dailyValues": [1, 1, 1, 1, 1, 0, 0]
+    },
+    {
+      "type": "symptoms",
+      "title": "Symptoms Tracking",
+      "subtitle": "Past 7 days · Scale 1-10",
+      "dailyValues": [2, 5, 4, 7, 3, 6, 4],
+      "detailText": "Tap to view detailed symptom logs"
+    }
+  ]
+}
