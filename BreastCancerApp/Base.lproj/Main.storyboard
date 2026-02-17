@@ -45,10 +45,128 @@
             </objects>
             <point key="canvasLocation" x="139" y="131"/>
         </scene>
+        <!--Hydration-->
+        <scene sceneID="1Os-sj-0Pn">
+            <objects>
+                <viewController storyboardIdentifier="HydrationDetailViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="DJW-yN-Hvb" customClass="HydrationDetailViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="fqc-3S-1UI">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="05z-Ht-v1a" userLabel="HeaderView">
+                                <rect key="frame" x="16" y="172" width="361" height="120"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Progress" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Anu-1V-vAB">
+                                        <rect key="frame" x="20" y="16" width="61" height="18"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <color key="textColor" systemColor="systemGrayColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2100 ml" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h8D-sC-ld0">
+                                        <rect key="frame" x="20" y="38" width="122" height="39"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="32"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Goal: 3.0 Ltr" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZsD-aI-jAS">
+                                        <rect key="frame" x="257" y="16" width="84" height="18"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <color key="textColor" systemColor="systemGrayColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="Anu-1V-vAB" firstAttribute="top" secondItem="05z-Ht-v1a" secondAttribute="top" constant="16" id="2Wr-hk-LP3"/>
+                                    <constraint firstItem="ZsD-aI-jAS" firstAttribute="top" secondItem="05z-Ht-v1a" secondAttribute="top" constant="16" id="HDI-2P-lpZ"/>
+                                    <constraint firstItem="h8D-sC-ld0" firstAttribute="leading" secondItem="05z-Ht-v1a" secondAttribute="leading" constant="20" id="IhP-ya-rXA"/>
+                                    <constraint firstItem="h8D-sC-ld0" firstAttribute="top" secondItem="Anu-1V-vAB" secondAttribute="bottom" constant="4" id="S2P-mO-p1p"/>
+                                    <constraint firstAttribute="trailing" secondItem="ZsD-aI-jAS" secondAttribute="trailing" constant="20" id="Wtk-cN-Hkt"/>
+                                    <constraint firstItem="Anu-1V-vAB" firstAttribute="leading" secondItem="05z-Ht-v1a" secondAttribute="leading" constant="20" id="ho7-TO-mYQ"/>
+                                    <constraint firstAttribute="height" constant="120" id="lc3-9O-uVL"/>
+                                </constraints>
+                            </view>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="jB5-tj-wRI">
+                                <rect key="frame" x="0.0" y="292" width="393" height="392"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <inset key="separatorInset" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SGp-bv-KIQ">
+                                <rect key="frame" x="20" y="726" width="353" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="PMP-8X-iEV"/>
+                                </constraints>
+                                <color key="tintColor" red="0.8447265625" green="0.4406738281" blue="0.5673828125" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Add Glass">
+                                    <fontDescription key="titleFontDescription" type="system" pointSize="17"/>
+                                </buttonConfiguration>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lTF-bS-tF3">
+                                <rect key="frame" x="20" y="784" width="353" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Save Changes"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="12"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="sOT-Py-SYe"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="sOT-Py-SYe" firstAttribute="bottom" secondItem="SGp-bv-KIQ" secondAttribute="bottom" constant="8" id="2NM-LE-DXA"/>
+                            <constraint firstAttribute="trailing" secondItem="lTF-bS-tF3" secondAttribute="trailing" constant="20" id="KOZ-31-m84"/>
+                            <constraint firstItem="lTF-bS-tF3" firstAttribute="top" secondItem="SGp-bv-KIQ" secondAttribute="bottom" constant="8" id="LQN-07-nWV"/>
+                            <constraint firstAttribute="trailing" secondItem="jB5-tj-wRI" secondAttribute="trailing" id="Me2-pr-aoS"/>
+                            <constraint firstItem="lTF-bS-tF3" firstAttribute="leading" secondItem="fqc-3S-1UI" secondAttribute="leading" constant="20" id="ZG6-Yg-6Nh"/>
+                            <constraint firstItem="sOT-Py-SYe" firstAttribute="trailing" secondItem="SGp-bv-KIQ" secondAttribute="trailing" constant="20" id="dDZ-4X-coV"/>
+                            <constraint firstItem="sOT-Py-SYe" firstAttribute="bottom" secondItem="jB5-tj-wRI" secondAttribute="bottom" constant="100" id="eld-Zj-hMn"/>
+                            <constraint firstItem="05z-Ht-v1a" firstAttribute="leading" secondItem="fqc-3S-1UI" secondAttribute="leadingMargin" id="jGd-9Z-QDA"/>
+                            <constraint firstItem="jB5-tj-wRI" firstAttribute="top" secondItem="05z-Ht-v1a" secondAttribute="bottom" id="muL-Vg-OQW"/>
+                            <constraint firstItem="05z-Ht-v1a" firstAttribute="top" secondItem="sOT-Py-SYe" secondAttribute="top" id="oqv-w1-Sll"/>
+                            <constraint firstItem="SGp-bv-KIQ" firstAttribute="leading" secondItem="sOT-Py-SYe" secondAttribute="leading" constant="20" id="uZ4-fU-tT7"/>
+                            <constraint firstItem="jB5-tj-wRI" firstAttribute="leading" secondItem="fqc-3S-1UI" secondAttribute="leading" id="zTU-hU-Knl"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="05z-Ht-v1a" secondAttribute="trailing" id="zts-GC-VY6"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Hydration" id="bfY-Ok-BAF">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="s1A-JL-EYo"/>
+                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="yBR-fD-loq">
+                            <color key="tintColor" red="0.8447265625" green="0.4406738281" blue="0.5673828125" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        </barButtonItem>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="sgj-5U-Sq0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1976.3358778625955" y="130.98591549295776"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Q4F-hg-uJq">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="AXH-E8-Hbh" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="pt2-6m-HmF">
+                        <rect key="frame" x="0.0" y="118" width="393" height="54"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="DJW-yN-Hvb" kind="relationship" relationship="rootViewController" id="1WB-cu-bcj"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6FY-ag-1mD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1049.6183206106871" y="130.98591549295776"/>
+        </scene>
     </scenes>
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGrayColor">
+            <color red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

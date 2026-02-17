@@ -119,10 +119,54 @@ extension HealthInsightsViewController: UICollectionViewDelegateFlowLayout {
         let insight = healthInsights[indexPath.item]
         
         switch insight.type {
-        case .symptoms:
-            return CGSize(width: width, height: 300)
+        case .symptoms, .exercise, .hydration, .medication:
+            
+            return CGSize(width: width, height: 320)
         default:
             return CGSize(width: width, height: 320)
         }
+    }
+    
+    // MARK: - Cell Selection
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let insight = healthInsights[indexPath.item]
+        
+        switch insight.type {
+        case .hydration:
+            presentHydrationDetail()
+        case .exercise:
+            // TODO: Implement exercise detail
+            break
+        case .medication:
+            // TODO: Implement medication detail
+            break
+        case .symptoms:
+            // TODO: Implement symptoms detail
+            break
+        }
+    }
+    
+    // MARK: - Navigation
+    private func presentHydrationDetail() {
+        // Instantiate the view controller from storyboard
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        guard let hydrationVC = storyboard.instantiateViewController(withIdentifier: "HydrationDetailViewController") as? HydrationDetailViewController else {
+            print("Error: Could not instantiate HydrationDetailViewController")
+            return
+        }
+        
+        // Embed in navigation controller
+        let navController = UINavigationController(rootViewController: hydrationVC)
+        navController.modalPresentationStyle = .pageSheet
+        
+        // Configure sheet presentation (iOS 15+)
+        if let sheet = navController.sheetPresentationController {
+            sheet.detents = [.large()]
+            sheet.prefersGrabberVisible = true
+            sheet.preferredCornerRadius = 20
+        }
+        
+        present(navController, animated: true)
     }
 }
