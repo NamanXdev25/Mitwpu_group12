@@ -1,47 +1,52 @@
 import UIKit
 
 class JourneyViewController: UIViewController {
-    
+
     // MARK: - IBOutlets
     @IBOutlet weak var collectionView: UICollectionView!
-    
+
     // MARK: - Properties
     private var diagnosisModel = DiagnosisModel()
     private var waitModel = WaitModel()
-    
+    private var treatmentModel = TreatmentModel()
+
+    private var cellHeights: [Int: CGFloat] = [
+        0: 200,
+        1: 540,
+        2: 140
+    ]
+
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
         setupNavigationBar()
     }
-    
+
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         collectionView.collectionViewLayout.invalidateLayout()
     }
-    
+
     // MARK: - Setup
     private func setupNavigationBar() {
         title = "Journey"
     }
-    
+
     private func setupCollectionView() {
-        // Register the XIB cells
         let diagnosisNib = UINib(nibName: "DiagnosisCell", bundle: nil)
         collectionView.register(diagnosisNib, forCellWithReuseIdentifier: "DiagnosisCell")
-        
+
         let waitNib = UINib(nibName: "WaitCell", bundle: nil)
         collectionView.register(waitNib, forCellWithReuseIdentifier: "WaitCell")
-        
-        // Set delegates
+
+        let treatmentNib = UINib(nibName: "TreatmentCell", bundle: nil)
+        collectionView.register(treatmentNib, forCellWithReuseIdentifier: "TreatmentCell")
+
         collectionView.delegate = self
         collectionView.dataSource = self
-        
-        // Set background color
         collectionView.backgroundColor = UIColor(red: 0.98, green: 0.95, blue: 0.95, alpha: 1.0)
-        
-        // Configure flow layout
+
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.estimatedItemSize = .zero
             layout.minimumLineSpacing = 16
@@ -49,81 +54,78 @@ class JourneyViewController: UIViewController {
             layout.sectionInset = UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
         }
     }
+
+    // MARK: - Height Update Helper
+    private func updateHeight(for index: Int, height: CGFloat) {
+        guard cellHeights[index] != height else { return }
+        cellHeights[index] = height
+        UIView.performWithoutAnimation {
+            self.collectionView.performBatchUpdates(nil)
+        }
+    }
 }
 
 // MARK: - UICollectionViewDataSource
 extension JourneyViewController: UICollectionViewDataSource {
-    
+
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 2 // DiagnosisCell and WaitCell
+        return 3
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
+
         if indexPath.item == 0 {
-            // First cell - DiagnosisCell
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DiagnosisCell", for: indexPath) as? DiagnosisCell else {
-                print("❌ Failed to dequeue DiagnosisCell")
                 return UICollectionViewCell()
             }
-            
-            print("✅ DiagnosisCell dequeued successfully")
-            
-            // Configure the cell
             cell.configure(with: diagnosisModel)
-            
-            // Handle date selection
             cell.onDateSelected = { [weak self] date in
-                print("📅 Date selected: \(date)")
                 self?.diagnosisModel.diagnosisDate = date
             }
-            
-            // Handle save button tap
             cell.onSaveButtonTapped = { [weak self] in
-                print("💾 Save button tapped")
                 self?.diagnosisModel.status = "Completed"
             }
-            
-            // Handle cell height changes
             cell.onCellHeightChanged = { [weak self] in
-                print("📏 Cell height changed")
-                UIView.animate(withDuration: 0.3) {
-                    self?.collectionView.collectionViewLayout.invalidateLayout()
-                }
+                guard let self = self else { return }
+                let height = cell.getCellHeight()
+                self.updateHeight(for: 0, height: height)
             }
-            
             return cell
-            
-        } else {
-            // Second cell - WaitCell
+
+        } else if indexPath.item == 1 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WaitCell", for: indexPath) as? WaitCell else {
-                print("❌ Failed to dequeue WaitCell")
                 return UICollectionViewCell()
             }
-            
-            print("✅ WaitCell dequeued successfully")
-            
-            // Configure the cell
             cell.configure(with: waitModel)
-            
-            // Handle save button tap
             cell.onSaveButtonTapped = { [weak self] in
-                print("💾 Wait cell save button tapped")
                 self?.waitModel.status = "Completed"
             }
-            
-            // Handle cell height changes
             cell.onCellHeightChanged = { [weak self] in
-                print("📏 Wait cell height changed")
-                UIView.animate(withDuration: 0.3) {
-                    self?.collectionView.collectionViewLayout.invalidateLayout()
-                }
+                guard let self = self else { return }
+                let height = cell.getCellHeight()
+                self.updateHeight(for: 1, height: height)
             }
-            
+            return cell
+
+        } else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TreatmentCell", for: indexPath) as? TreatmentCell else {
+                return UICollectionViewCell()
+            }
+            cell.configure(with: treatmentModel)
+            cell.onSaveButtonTapped = { [weak self] phase, index in
+                guard let self = self else { return }
+                self.treatmentModel.phases.append(phase)
+                print("💾 Treatment phase \(index + 1) saved")
+            }
+            cell.onCellHeightChanged = { [weak self] in
+                guard let self = self else { return }
+                let height = cell.getCellHeight()
+                self.updateHeight(for: 2, height: height)
+            }
             return cell
         }
     }
@@ -131,38 +133,12 @@ extension JourneyViewController: UICollectionViewDataSource {
 
 // MARK: - UICollectionViewDelegateFlowLayout
 extension JourneyViewController: UICollectionViewDelegateFlowLayout {
-    
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        // Use view.bounds.width instead of collectionView.bounds.width
         let totalWidth = view.bounds.width
-        let padding: CGFloat = 32 // 16 on each side
+        let padding: CGFloat = 32
         let cellWidth = totalWidth - padding
-        
-        print("📱 Screen width: \(UIScreen.main.bounds.width)")
-        print("📐 View width: \(view.bounds.width)")
-        print("✅ Calculated cell width: \(cellWidth)")
-        
-        // Get height based on cell state
-        var height: CGFloat = 200
-        
-        if indexPath.item == 0 {
-            // DiagnosisCell
-            if let cell = collectionView.cellForItem(at: indexPath) as? DiagnosisCell {
-                height = cell.getCellHeight()
-            }
-        } else {
-            // WaitCell
-            if let cell = collectionView.cellForItem(at: indexPath) as? WaitCell {
-                height = cell.getCellHeight()
-            } else {
-                height = 500 // Default height for WaitCell
-            }
-        }
-        
-        print("✅ Cell height for item \(indexPath.item): \(height)")
-        print("📦 Final size: width=\(cellWidth), height=\(height)")
-        
+        let height = cellHeights[indexPath.item] ?? 200
         return CGSize(width: cellWidth, height: height)
     }
 }
