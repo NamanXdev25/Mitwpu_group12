@@ -157,19 +157,22 @@ class MindfulnessDataSource: NSObject, UICollectionViewDataSource {
 
         switch sec {
 
-        // MARK: - HEADER
-        case .positiveMomentsHeader:
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "PositiveMomentsHeaderCell",
-                for: indexPath
-            ) as! PositiveMomentsHeaderCell
+            // MARK: - HEADER
+            case .positiveMomentsHeader:
+                let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: "PositiveMomentsHeaderCell",
+                    for: indexPath
+                ) as! PositiveMomentsHeaderCell
 
-            cell.onManageTap = {
-                print("View All tapped")
-            }
+                cell.onManageTap = { [weak self] in
+                    let storyboard = UIStoryboard(name: "memory", bundle: nil)
+                    if let memoriesVC = storyboard.instantiateViewController(withIdentifier: "MemoriesViewController") as? MemoriesViewController {
+                        self?.viewController?.navigationController?.pushViewController(memoriesVC, animated: true)
+                    }
+                }
 
-            return cell
-
+                return cell
+            
         // MARK: - MEMORY IMAGES (UNCHANGED)
         case .memories:
             let cell = collectionView.dequeueReusableCell(
