@@ -30,8 +30,10 @@ class NewExerciseViewController: UIViewController {
 
     // MARK: - Setup
     private func setupNavigationBar() {
-        title = "Exercise Plan"
-        navigationController?.setNavigationBarHidden(true, animated: false)
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        navigationItem.title = nil
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
     }
 
     private func setupData() {

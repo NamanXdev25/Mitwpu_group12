@@ -31,9 +31,13 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="awQ-b3-wwP">
                                 <rect key="frame" x="186.66666666666663" y="0.0" width="174.33333333333337" height="34.333333333333336"/>
+                                <color key="backgroundColor" name="PrimaryColor"/>
                                 <color key="tintColor" name="PrimaryColor"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="filled" title="Next"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Next">
+                                    <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="baseBackgroundColor" name="PrimaryColor"/>
+                                </buttonConfiguration>
                                 <connections>
                                     <action selector="nextTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="hti-1k-Vso"/>
                                 </connections>

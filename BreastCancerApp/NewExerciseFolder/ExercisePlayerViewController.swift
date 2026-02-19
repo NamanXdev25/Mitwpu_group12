@@ -332,9 +332,10 @@ extension ExercisePlayerViewController: ExercisePlayerDataSourceDelegate {
 
     func didTapMarkAsDone() {
         if let cell = collectionView.cellForItem(at: IndexPath(item: 0, section: 3)) as? ActionButtonsCell {
-            cell.setDone(true)
+            if cell.isDone {
+                showToast(message: "Exercise marked as done ✓")
+            }
         }
-        showToast(message: "Exercise marked as done ✓")
     }
 
     func didTapNext() {
