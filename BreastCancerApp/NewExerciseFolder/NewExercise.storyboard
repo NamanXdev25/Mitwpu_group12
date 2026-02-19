@@ -111,6 +111,44 @@
             </objects>
             <point key="canvasLocation" x="1892.3664122137404" y="-7.042253521126761"/>
         </scene>
+        <!--Exercise Player View Controller-->
+        <scene sceneID="K8c-os-Nad">
+            <objects>
+                <viewController storyboardIdentifier="ExercisePlayerViewController" id="Esw-Bl-yrX" customClass="ExercisePlayerViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="hNV-xR-VCs">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="HzN-hb-v4g">
+                                <rect key="frame" x="0.0" y="172" width="393" height="612"/>
+                                <color key="backgroundColor" name="BackgroundColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="12k-dl-U3i">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="bwF-J8-Adq"/>
+                        <color key="backgroundColor" name="BackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="HzN-hb-v4g" firstAttribute="leading" secondItem="bwF-J8-Adq" secondAttribute="leading" id="4t5-fK-3b8"/>
+                            <constraint firstItem="bwF-J8-Adq" firstAttribute="trailing" secondItem="HzN-hb-v4g" secondAttribute="trailing" id="5OK-v6-DSE"/>
+                            <constraint firstItem="HzN-hb-v4g" firstAttribute="top" secondItem="bwF-J8-Adq" secondAttribute="top" id="KHx-zi-NTf"/>
+                            <constraint firstItem="bwF-J8-Adq" firstAttribute="bottom" secondItem="HzN-hb-v4g" secondAttribute="bottom" id="Tf0-1L-WJS"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="Wlf-zy-46q"/>
+                    <connections>
+                        <outlet property="collectionView" destination="HzN-hb-v4g" id="kXf-Ii-XLD"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3US-zf-2jl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3706" y="-7"/>
+        </scene>
         <!--Exercise Plans-->
         <scene sceneID="bPI-oH-uJ1">
             <objects>
@@ -185,61 +223,23 @@
             </objects>
             <point key="canvasLocation" x="-961" y="-7"/>
         </scene>
-        <!--Title-->
-        <scene sceneID="ivS-KC-5Fq">
-            <objects>
-                <viewController storyboardIdentifier="ExerciseDetailViewController" id="92N-Je-pkX" customClass="ExerciseDetailViewController" customModule="AllExerciseFiles" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="RJ1-8E-QbE">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="4LM-LU-Ia3">
-                                <rect key="frame" x="0.0" y="172" width="393" height="680"/>
-                                <color key="backgroundColor" name="BackgroundColor"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="qED-pr-JpB">
-                                    <size key="itemSize" width="128" height="128"/>
-                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                </collectionViewFlowLayout>
-                                <cells/>
-                            </collectionView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="RlX-Xs-UfP"/>
-                        <color key="backgroundColor" name="BackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="4LM-LU-Ia3" firstAttribute="leading" secondItem="RlX-Xs-UfP" secondAttribute="leading" id="H64-fF-xvP"/>
-                            <constraint firstAttribute="bottom" secondItem="4LM-LU-Ia3" secondAttribute="bottom" id="LOT-RK-ook"/>
-                            <constraint firstItem="4LM-LU-Ia3" firstAttribute="top" secondItem="RlX-Xs-UfP" secondAttribute="top" id="jwn-uP-6Sa"/>
-                            <constraint firstItem="4LM-LU-Ia3" firstAttribute="trailing" secondItem="RlX-Xs-UfP" secondAttribute="trailing" id="nRT-CN-ze4"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" title="Title" id="gIm-EJ-bxK"/>
-                    <connections>
-                        <outlet property="collectionView" destination="4LM-LU-Ia3" id="Aiq-fo-b6L"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="o7p-Is-I2m" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3694" y="-7"/>
-        </scene>
         <!--Navigation Controller-->
-        <scene sceneID="IkM-qH-lFZ">
+        <scene sceneID="ddj-Ej-Tf5">
             <objects>
-                <navigationController storyboardIdentifier="ExerciseDetailNavigationViewController" automaticallyAdjustsScrollViewInsets="NO" id="0UT-Oh-jkX" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="ExercisePlayerNavController" automaticallyAdjustsScrollViewInsets="NO" id="Gqp-Kj-uxp" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="jRu-Ng-QTs">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="71n-Pg-QUF">
                         <rect key="frame" x="0.0" y="118" width="393" height="54"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="92N-Je-pkX" kind="relationship" relationship="rootViewController" id="3Rb-Xx-krk"/>
+                        <segue destination="Esw-Bl-yrX" kind="relationship" relationship="rootViewController" id="jmw-jj-JIZ"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="vdd-ny-i7A" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2ci-hH-2C9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2818" y="-7"/>
+            <point key="canvasLocation" x="2972" y="-7"/>
         </scene>
     </scenes>
     <resources>

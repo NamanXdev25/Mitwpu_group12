@@ -2,194 +2,178 @@ import UIKit
 import AVKit
 import AVFoundation
 
-class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
-    
+class ExercisePlayerViewController: UIViewController {
+
+    // MARK: - IBOutlets
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var CalendarButton: UIBarButtonItem!
-    
-    var exerciseData: DetailExerciseItem?
+
+    // MARK: - Public Properties (set by the presenting VC before pushing)
+    var exerciseModel: NewExerciseModel!
+    var exercisePlan: NewExercisePlan!
+    var currentIndex: Int = 0
+
+    // MARK: - Private Properties
+    private var dataSource: ExercisePlayerDataSource!
     weak var activeVideoCell: VideoPlayerCell?
-    
-    var totalDuration: Double = 1.0
-    
-    var currentVideoHeight: CGFloat = 350 {
+    private var totalDuration: Double = 1.0
+
+    private var currentVideoHeight: CGFloat = 350 {
         didSet {
             VideoPlayerCell.videoHeight = currentVideoHeight
             collectionView?.reloadSections(IndexSet(integer: 0))
         }
     }
-    
+
     private var popoverBackgroundView: UIView?
     private var popoverCardView: UIView?
     private var popoverArrow: CAShapeLayer?
-    
+
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        VideoPlayerCell.videoHeight = currentVideoHeight
-        setupCollectionView()
-        
         view.backgroundColor = UIColor(red: 0.96, green: 0.95, blue: 0.94, alpha: 1.0)
+        VideoPlayerCell.videoHeight = currentVideoHeight
+        title = exerciseModel.title
+        setupDataSource()
+        setupCollectionView()
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        collectionView.reloadSections(IndexSet(integer: 3))
-    }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        activeVideoCell?.player?.pause()
+        activeVideoCell?.pause()
         dismissPopover(animated: false)
     }
-    
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         dismissPopover(animated: false)
     }
-    
-    @IBAction func calendarButtonTapped(_ sender: UIBarButtonItem) {
-        let storyboard = UIStoryboard(name: "Exercise", bundle: nil)
-        
-        if let calendarNavController = storyboard.instantiateViewController(withIdentifier: "ExerciseCalendarnav") as? UINavigationController {
-            
-            calendarNavController.modalPresentationStyle = .pageSheet
-            if let sheet = calendarNavController.sheetPresentationController {
-                sheet.detents = [.large()]
-                sheet.prefersGrabberVisible = true
-            }
-            
-            self.present(calendarNavController, animated: true, completion: nil)
-        }
+
+    // MARK: - Setup
+    private func setupDataSource() {
+        dataSource = ExercisePlayerDataSource(
+            exercise: exerciseModel,
+            plan: exercisePlan,
+            index: currentIndex
+        )
+        dataSource.delegate = self
     }
-    
-    func setupCollectionView() {
+
+    private func setupCollectionView() {
         collectionView.collectionViewLayout = createLayout()
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        
-        collectionView.register(UINib(nibName: "VideoPlayerCell", bundle: nil), forCellWithReuseIdentifier: "VideoPlayerCell")
-        collectionView.register(UINib(nibName: "ExerciseInfoCell", bundle: nil), forCellWithReuseIdentifier: "ExerciseInfoCell")
-        collectionView.register(UINib(nibName: "VideoControlsCell", bundle: nil), forCellWithReuseIdentifier: "VideoControlsCell")
-        collectionView.register(UINib(nibName: "ActionButtonsCell", bundle: nil), forCellWithReuseIdentifier: "ActionButtonsCell")
+        collectionView.dataSource = dataSource
+        collectionView.delegate = dataSource
+        collectionView.backgroundColor = .clear
+
+        collectionView.register(
+            UINib(nibName: "VideoPlayerCell", bundle: nil),
+            forCellWithReuseIdentifier: "VideoPlayerCell")
+        collectionView.register(
+            UINib(nibName: "ExerciseInfoCell", bundle: nil),
+            forCellWithReuseIdentifier: "ExerciseInfoCell")
+        collectionView.register(
+            UINib(nibName: "VideoControlsCell", bundle: nil),
+            forCellWithReuseIdentifier: "VideoControlsCell")
+        collectionView.register(
+            UINib(nibName: "ActionButtonsCell", bundle: nil),
+            forCellWithReuseIdentifier: "ActionButtonsCell")
     }
-    
-    func createLayout() -> UICollectionViewLayout {
-        return UICollectionViewCompositionalLayout { (sectionIndex, env) -> NSCollectionLayoutSection? in
+
+    // MARK: - Compositional Layout
+    private func createLayout() -> UICollectionViewLayout {
+        UICollectionViewCompositionalLayout { [weak self] sectionIndex, _ in
+            guard let self else { return nil }
             switch sectionIndex {
-            case 0: return self.createVideoSection()
-            case 1: return self.createInfoSection()
-            case 2: return self.createControlsSection()
-            case 3: return self.createButtonsSection()
+            case 0: return self.videoSection()
+            case 1: return self.infoSection()
+            case 2: return self.controlsSection()
+            case 3: return self.buttonsSection()
             default: return nil
             }
         }
     }
-    
-    func createVideoSection() -> NSCollectionLayoutSection {
-        let totalHeight = VideoPlayerCell.videoHeight + 40
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(totalHeight))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, subitems: [item])
-        let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 45, bottom: 0, trailing: 45)
-        
-        return section
-    }
-    
-    func createInfoSection() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(180))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, subitems: [item])
-        let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-        
-        return section
-    }
-    
-    func createControlsSection() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(140))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, subitems: [item])
-        let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-        
-        return section
-    }
-    
-    func createButtonsSection() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(88))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: itemSize, subitems: [item])
-        let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 40, trailing: 0)
-        
-        return section
-    }
-    
-    func didAddExercise(_ exercise: PlanItem) {
-        ExerciseManager.shared.addPlanItem(exercise)
-        collectionView.reloadSections(IndexSet(integer: 3))
-        showToast(message: "Exercise added to plan")
-    }
-    
-    func showToast(message: String, duration: TimeInterval = 1.2) {
-        let toastLabel = UILabel()
-        toastLabel.text = message
-        toastLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
-        toastLabel.textAlignment = .center
-        toastLabel.alpha = 0
-        toastLabel.numberOfLines = 0
 
-        toastLabel.backgroundColor = UIColor(white: 0.12, alpha: 0.88)
-        toastLabel.textColor = .white
-        toastLabel.layer.cornerRadius = 14
-        toastLabel.layer.masksToBounds = true
+    private func videoSection() -> NSCollectionLayoutSection {
+        let h = VideoPlayerCell.videoHeight + 40
+        let size = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(h))
+        let section = NSCollectionLayoutSection(group: .vertical(layoutSize: size, subitems: [.init(layoutSize: size)]))
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 45, bottom: 0, trailing: 45)
+        return section
+    }
+
+    private func infoSection() -> NSCollectionLayoutSection {
+        let size = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(180))
+        return NSCollectionLayoutSection(group: .vertical(layoutSize: size, subitems: [.init(layoutSize: size)]))
+    }
+
+    private func controlsSection() -> NSCollectionLayoutSection {
+        let size = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(140))
+        return NSCollectionLayoutSection(group: .vertical(layoutSize: size, subitems: [.init(layoutSize: size)]))
+    }
+
+    private func buttonsSection() -> NSCollectionLayoutSection {
+        let size = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(88))
+        let section = NSCollectionLayoutSection(group: .vertical(layoutSize: size, subitems: [.init(layoutSize: size)]))
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 40, trailing: 0)
+        return section
+    }
+
+    // MARK: - Navigation
+    private func pushNextExercise() {
+        let nextIndex = currentIndex + 1
+        guard nextIndex < exercisePlan.exercises.count else { return }
+
+        let storyboard = UIStoryboard(name: "NewExercise", bundle: nil)
+        guard let nextVC = storyboard.instantiateViewController(
+            withIdentifier: "ExercisePlayerViewController") as? ExercisePlayerViewController
+        else { return }
+
+        nextVC.exercisePlan  = exercisePlan
+        nextVC.exerciseModel = exercisePlan.exercises[nextIndex]
+        nextVC.currentIndex  = nextIndex
+        navigationController?.pushViewController(nextVC, animated: true)
+    }
+
+    // MARK: - Toast
+    func showToast(message: String, duration: TimeInterval = 1.2) {
+        let label = UILabel()
+        label.text = message
+        label.font = .systemFont(ofSize: 14, weight: .semibold)
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.backgroundColor = UIColor(white: 0.12, alpha: 0.88)
+        label.textColor = .white
+        label.layer.cornerRadius = 14
+        label.layer.masksToBounds = true
 
         let padding: CGFloat = 16
-        let maxWidth = view.bounds.width - 60
-        let targetSize = CGSize(width: maxWidth - padding*2, height: CGFloat.greatestFiniteMagnitude)
-        var labelSize = toastLabel.sizeThatFits(targetSize)
-        labelSize.width += padding*2
-        labelSize.height += 12
+        var size = label.sizeThatFits(CGSize(width: view.bounds.width - 60 - padding * 2, height: .greatestFiniteMagnitude))
+        size.width += padding * 2
+        size.height += 12
+        label.frame = CGRect(x: (view.bounds.width - size.width) / 2,
+                             y: view.bounds.height - size.height - 140,
+                             width: size.width, height: size.height)
+        label.alpha = 0
+        view.addSubview(label)
 
-        toastLabel.frame = CGRect(x: (view.bounds.width - labelSize.width)/2,
-                                  y: view.bounds.height - (labelSize.height + 140),
-                                  width: labelSize.width,
-                                  height: labelSize.height)
-        toastLabel.alpha = 0.0
-        view.addSubview(toastLabel)
-
-        UIView.animate(withDuration: 0.18, animations: {
-            toastLabel.alpha = 1.0
-        }) { _ in
-            UIView.animate(withDuration: 0.18, delay: duration, options: [], animations: {
-                toastLabel.alpha = 0.0
-            }) { _ in
-                toastLabel.removeFromSuperview()
+        UIView.animate(withDuration: 0.18) { label.alpha = 1 } completion: { _ in
+            UIView.animate(withDuration: 0.18, delay: duration) { label.alpha = 0 } completion: { _ in
+                label.removeFromSuperview()
             }
         }
     }
-    
+
+    // MARK: - Benefits / Precautions Popover
     func showBenefitsPopover(from anchorButton: UIButton, benefits: [String], precautions: [String]) {
         dismissPopover(animated: false)
-
-        guard let window = view.window ?? view.window?.windowScene?.windows.first else {
-            return
-        }
+        guard let window = view.window else { return }
 
         let bg = UIView(frame: window.bounds)
-        bg.backgroundColor = UIColor(white: 0.0, alpha: 0.18)
-        bg.alpha = 0.0
+        bg.backgroundColor = UIColor(white: 0, alpha: 0.18)
+        bg.alpha = 0
         window.addSubview(bg)
         popoverBackgroundView = bg
-
-        let tap = UITapGestureRecognizer(target: self, action: #selector(backgroundTapped(_:)))
-        bg.addGestureRecognizer(tap)
+        bg.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(backgroundTapped)))
 
         let card = UIView()
         card.backgroundColor = .white
@@ -204,9 +188,7 @@ class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
         card.addSubview(scroll)
 
         let stack = UIStackView()
-        stack.axis = .vertical
-        stack.spacing = 12
-        stack.alignment = .fill
+        stack.axis = .vertical; stack.spacing = 12; stack.alignment = .fill
         stack.translatesAutoresizingMaskIntoConstraints = false
         scroll.addSubview(stack)
 
@@ -215,7 +197,6 @@ class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
             scroll.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 12),
             scroll.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -12),
             scroll.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -12),
-
             stack.topAnchor.constraint(equalTo: scroll.topAnchor),
             stack.leadingAnchor.constraint(equalTo: scroll.leadingAnchor),
             stack.trailingAnchor.constraint(equalTo: scroll.trailingAnchor),
@@ -224,324 +205,139 @@ class ExercisePlayerViewController: UIViewController, AddExerciseDelegate {
         ])
 
         func makeHeader(_ text: String) -> UILabel {
-            let lbl = UILabel()
-            lbl.text = text
-            lbl.font = .systemFont(ofSize: 18, weight: .semibold)
-            lbl.textColor = .black
-            return lbl
+            let l = UILabel(); l.text = text
+            l.font = .systemFont(ofSize: 18, weight: .semibold); l.textColor = .black
+            return l
         }
-        func makeBulletRow(icon: UIImage?, text: String) -> UIView {
-            let h = UIStackView()
-            h.axis = .horizontal
-            h.spacing = 10
-            h.alignment = .center
-
-            let iv = UIImageView(image: icon)
-            iv.tintColor = .systemGray
-            iv.contentMode = .scaleAspectFit
+        func makeRow(systemIcon: String, text: String) -> UIView {
+            let h = UIStackView(); h.axis = .horizontal; h.spacing = 10; h.alignment = .center
+            let iv = UIImageView(image: UIImage(systemName: systemIcon))
+            iv.tintColor = .systemGray; iv.contentMode = .scaleAspectFit
             iv.translatesAutoresizingMaskIntoConstraints = false
             iv.widthAnchor.constraint(equalToConstant: 26).isActive = true
             iv.heightAnchor.constraint(equalToConstant: 26).isActive = true
-            iv.layer.cornerRadius = 13
-            iv.clipsToBounds = true
+            iv.layer.cornerRadius = 13; iv.clipsToBounds = true
             iv.backgroundColor = UIColor.systemGray4.withAlphaComponent(0.25)
-
-            let lbl = UILabel()
-            lbl.text = text
-            lbl.font = .systemFont(ofSize: 15)
-            lbl.textColor = .darkGray
-            lbl.numberOfLines = 0
-
-            h.addArrangedSubview(iv)
-            h.addArrangedSubview(lbl)
+            let l = UILabel(); l.text = text; l.font = .systemFont(ofSize: 15)
+            l.textColor = .darkGray; l.numberOfLines = 0
+            h.addArrangedSubview(iv); h.addArrangedSubview(l)
             return h
         }
 
         stack.addArrangedSubview(makeHeader("View Benefits"))
-        for b in benefits {
-            stack.addArrangedSubview(makeBulletRow(icon: UIImage(systemName: "checkmark"), text: b))
-        }
-
+        benefits.forEach { stack.addArrangedSubview(makeRow(systemIcon: "checkmark", text: $0)) }
         let spacer = UIView()
         spacer.heightAnchor.constraint(equalToConstant: 6).isActive = true
         stack.addArrangedSubview(spacer)
-
         stack.addArrangedSubview(makeHeader("View Precautions"))
-        for p in precautions {
-            stack.addArrangedSubview(makeBulletRow(icon: UIImage(systemName: "exclamationmark"), text: p))
-        }
+        precautions.forEach { stack.addArrangedSubview(makeRow(systemIcon: "exclamationmark", text: $0)) }
 
-        card.layoutIfNeeded()
-        let estimatedRowHeight: CGFloat = 50
-        let targetHeight = min(420, CGFloat((benefits.count + precautions.count)) * estimatedRowHeight + 120)
-
-        let anchorRectInWindow = anchorButton.convert(anchorButton.bounds, to: window)
+        let targetHeight = min(420, CGFloat(benefits.count + precautions.count) * 50 + 120)
+        let anchorRect = anchorButton.convert(anchorButton.bounds, to: window)
         let cardWidth: CGFloat = min(290, window.bounds.width - 40)
+        let leadingX = max(20, anchorRect.minX - 10 - cardWidth)
+        let centerY = max(20 + targetHeight / 2, min(window.bounds.height - 20 - targetHeight / 2, anchorRect.midY))
 
-        card.widthAnchor.constraint(equalToConstant: cardWidth).isActive = true
-        card.heightAnchor.constraint(equalToConstant: targetHeight).isActive = true
-
-        let desiredLeading = anchorRectInWindow.minX - 10 - cardWidth
-        let minLeading: CGFloat = 20
-        let leadingX = max(minLeading, desiredLeading)
-        card.leadingAnchor.constraint(equalTo: window.leadingAnchor, constant: leadingX).isActive = true
-
-        let desiredCenterY = anchorRectInWindow.midY
-        let halfHeight = targetHeight / 2
-        let minCenterY = 20 + halfHeight
-        let maxCenterY = window.bounds.height - 20 - halfHeight
-        let centerY = max(minCenterY, min(maxCenterY, desiredCenterY))
-        card.centerYAnchor.constraint(equalTo: window.topAnchor, constant: centerY).isActive = true
-
-        popoverArrow?.removeFromSuperlayer()
-        popoverArrow = nil
+        NSLayoutConstraint.activate([
+            card.widthAnchor.constraint(equalToConstant: cardWidth),
+            card.heightAnchor.constraint(equalToConstant: targetHeight),
+            card.leadingAnchor.constraint(equalTo: window.leadingAnchor, constant: leadingX),
+            card.centerYAnchor.constraint(equalTo: window.topAnchor, constant: centerY)
+        ])
 
         DispatchQueue.main.async { [weak self] in
-            guard let self = self, let window = self.view.window else { return }
-            guard let card = self.popoverCardView else { return }
-
-            let anchorRect = anchorButton.convert(anchorButton.bounds, to: window)
-            window.layoutIfNeeded()
-            card.layoutIfNeeded()
-            let cardFrame = card.frame
-
-            let arrowWidth: CGFloat = 10
-            let arrowHeight: CGFloat = 18
-            let verticalInset: CGFloat = 12
-
-            let unclampedTipY = anchorRect.midY
-            let minTipY = cardFrame.minY + verticalInset + arrowHeight/2
-            let maxTipY = cardFrame.maxY - verticalInset - arrowHeight/2
-            let tipY = max(minTipY, min(maxTipY, unclampedTipY))
-
-            let baseX = cardFrame.maxX
-            let tipX = baseX + arrowWidth
-
-            let p = UIBezierPath()
-            p.move(to: CGPoint(x: baseX, y: tipY - arrowHeight/2))
-            p.addLine(to: CGPoint(x: tipX, y: tipY))
-            p.addLine(to: CGPoint(x: baseX, y: tipY + arrowHeight/2))
-            p.close()
-
-            let arrowLayer = CAShapeLayer()
-            arrowLayer.path = p.cgPath
-            arrowLayer.fillColor = UIColor.white.cgColor
-            arrowLayer.shadowColor = UIColor.black.cgColor
-            arrowLayer.shadowOpacity = 0.08
-            arrowLayer.shadowOffset = CGSize(width: 0, height: 2)
-            arrowLayer.shadowRadius = 6
-            arrowLayer.name = "popoverArrow"
-
-            if let superlayer = card.layer.superlayer {
-                superlayer.insertSublayer(arrowLayer, below: card.layer)
-            } else {
-                window.layer.addSublayer(arrowLayer)
-            }
-
-            self.popoverArrow = arrowLayer
+            guard let self, let window = self.view.window, let card = self.popoverCardView else { return }
+            window.layoutIfNeeded(); card.layoutIfNeeded()
+            let cf = card.frame
+            let tipY = max(cf.minY + 18, min(cf.maxY - 18, anchorRect.midY))
+            let path = UIBezierPath()
+            path.move(to: CGPoint(x: cf.maxX, y: tipY - 9))
+            path.addLine(to: CGPoint(x: cf.maxX + 10, y: tipY))
+            path.addLine(to: CGPoint(x: cf.maxX, y: tipY + 9))
+            path.close()
+            let arrow = CAShapeLayer()
+            arrow.path = path.cgPath; arrow.fillColor = UIColor.white.cgColor
+            arrow.name = "popoverArrow"
+            card.layer.superlayer?.insertSublayer(arrow, below: card.layer)
+            self.popoverArrow = arrow
         }
 
         card.transform = CGAffineTransform(scaleX: 0.96, y: 0.96).translatedBy(x: 0, y: -8)
-        card.alpha = 0.0
-        UIView.animate(withDuration: 0.18, delay: 0, options: [.curveEaseOut], animations: {
-            bg.alpha = 1.0
-            card.transform = .identity
-            card.alpha = 1.0
-        }, completion: nil)
-    }
-    
-    @objc private func backgroundTapped(_ g: UITapGestureRecognizer) {
-        dismissPopover(animated: true)
+        card.alpha = 0
+        UIView.animate(withDuration: 0.18, delay: 0, options: .curveEaseOut) {
+            bg.alpha = 1; card.transform = .identity; card.alpha = 1
+        }
     }
 
+    @objc private func backgroundTapped() { dismissPopover() }
+
     private func dismissPopover(animated: Bool = true) {
-        if let arrow = popoverArrow {
-            arrow.removeFromSuperlayer()
-            popoverArrow = nil
+        popoverArrow?.removeFromSuperlayer(); popoverArrow = nil
+        guard let card = popoverCardView else {
+            popoverBackgroundView?.removeFromSuperview(); popoverBackgroundView = nil; return
         }
-        if let card = popoverCardView {
-            let cleanup = {
-                card.removeFromSuperview()
-                self.popoverCardView = nil
-            }
-            if animated {
-                UIView.animate(withDuration: 0.14, animations: {
-                    card.alpha = 0.0
-                    self.popoverBackgroundView?.alpha = 0.0
-                    card.transform = CGAffineTransform(scaleX: 0.96, y: 0.96).translatedBy(x: 0, y: -6)
-                }) { _ in
-                    cleanup()
-                    self.popoverBackgroundView?.removeFromSuperview()
-                    self.popoverBackgroundView = nil
-                }
-            } else {
-                cleanup()
-                popoverBackgroundView?.removeFromSuperview()
-                popoverBackgroundView = nil
-            }
-        } else {
-            popoverBackgroundView?.removeFromSuperview()
-            popoverBackgroundView = nil
+        let cleanup = { [weak self] in
+            card.removeFromSuperview(); self?.popoverCardView = nil
+            self?.popoverBackgroundView?.removeFromSuperview(); self?.popoverBackgroundView = nil
         }
+        if animated {
+            UIView.animate(withDuration: 0.14, animations: {
+                card.alpha = 0; self.popoverBackgroundView?.alpha = 0
+                card.transform = CGAffineTransform(scaleX: 0.96, y: 0.96).translatedBy(x: 0, y: -6)
+            }, completion: { _ in cleanup() })
+        } else { cleanup() }
     }
 }
 
-extension ExercisePlayerViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 4
+// MARK: - ExercisePlayerDataSourceDelegate
+extension ExercisePlayerViewController: ExercisePlayerDataSourceDelegate {
+
+    func didConfigureVideoCell(_ cell: VideoPlayerCell) {
+        activeVideoCell = cell
     }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        switch indexPath.section {
-        case 0:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "VideoPlayerCell", for: indexPath) as! VideoPlayerCell
-            
-            self.activeVideoCell = cell
-            
-            cell.onDurationChanged = { [weak self] seconds in
-                guard let self = self else { return }
-                self.totalDuration = seconds
-                DispatchQueue.main.async {
-                    self.collectionView.reloadSections(IndexSet(integer: 2))
-                }
-            }
-            
-            cell.configure(videoName: "sample_video", imageName: exerciseData?.imageName ?? "girl_stretch")
-            
-            return cell
-            
-        case 1:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ExerciseInfoCell", for: indexPath) as! ExerciseInfoCell
-            cell.configure(
-                title: exerciseData?.title ?? "Wall Climb Stretch",
-                description: "A gentle exercise to improve shoulder mobility and range of motion after surgery.",
-                level: "Beginner"
-            )
-            
-            cell.onInfoTap = { [weak self] infoButton in
-                guard let self = self else { return }
-                let benefits = [
-                    "Improves shoulder flexibility",
-                    "Reduces stiffness",
-                    "Enhances range of motion",
-                    "Promotes lymphatic drainage"
-                ]
-                let precautions = [
-                    "Stop if you feel sharp pain",
-                    "Keep breathing steadily",
-                    "Move slowly and controlled",
-                    "Stay within your comfort zone"
-                ]
-                self.showBenefitsPopover(from: infoButton, benefits: benefits, precautions: precautions)
-            }
-            
-            return cell
-            
-        case 2:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "VideoControlsCell", for: indexPath) as! VideoControlsCell
-            cell.configure(currentTime: 0, totalTime: Int(self.totalDuration))
-            
-            cell.onPlayPause = { [weak self] in self?.togglePlayPause() }
-            cell.onRestart = { [weak self] in self?.restartVideo() }
-            cell.onLoop = { [weak self] isLooping in self?.toggleLoop(enabled: isLooping) }
-            cell.onSeek = { [weak self] progress in self?.seekToProgress(progress) }
-            
-            return cell
-            
-        case 3:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ActionButtonsCell", for: indexPath) as! ActionButtonsCell
-            
-            let alreadyAdded = (exerciseData != nil) ? ExerciseManager.shared.containsExercise(id: exerciseData!.id) : false
-            cell.setAdded(alreadyAdded)
-            
-            cell.onAddToPlan = { [weak self] in
-                guard let self = self, let detail = self.exerciseData else { return }
-                
-                if ExerciseManager.shared.containsExercise(id: detail.id) {
-                    let alert = UIAlertController(
-                        title: "Remove Exercise",
-                        message: "Are you sure you want to remove this exercise from your plan?",
-                        preferredStyle: .alert
-                    )
-                    
-                    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-                    
-                    let removeAction = UIAlertAction(title: "Remove", style: .destructive) { _ in
-                        ExerciseManager.shared.removeExercisesById(detail.id)
-                        self.collectionView.reloadSections(IndexSet(integer: 3))
-                        self.showToast(message: "Exercise removed from plan")
-                    }
-                    
-                    alert.addAction(cancelAction)
-                    alert.addAction(removeAction)
-                    
-                    self.present(alert, animated: true, completion: nil)
-                    
-                } else {
-                    let storyboard = UIStoryboard(name: "Exercise", bundle: nil)
-                    
-                    if let addNavController = storyboard.instantiateViewController(withIdentifier: "AddExercisenav") as? UINavigationController {
-                        
-                        if let addVC = addNavController.viewControllers.first as? AddExerciseViewController {
-                            addVC.delegate = self
-                            addVC.initialName = detail.title
-                            addVC.initialID = detail.id
-                            addVC.isNameEditable = false
-                        }
-                        
-                        addNavController.modalPresentationStyle = .pageSheet
-                        if let sheet = addNavController.sheetPresentationController {
-                            sheet.detents = [.large()]
-                            sheet.prefersGrabberVisible = true
-                        }
-                        
-                        self.present(addNavController, animated: true, completion: nil)
-                    }
-                }
-            }
-            
-            cell.onSetReminder = { [weak self] in self?.setReminder() }
-            
-            return cell
-            
-        default:
-            return UICollectionViewCell()
+
+    func didUpdateTotalDuration(_ seconds: Double) {
+        totalDuration = seconds
+        DispatchQueue.main.async {
+            self.collectionView.reloadSections(IndexSet(integer: 2))
         }
     }
-    
-    func togglePlayPause() {
-        if let player = activeVideoCell?.player {
-            if player.timeControlStatus == .playing {
-                activeVideoCell?.pause()
-            } else {
-                activeVideoCell?.play()
-            }
-        }
+
+    func didTapInfo(from button: UIButton) {
+        // These can later be moved into NewExerciseModel as properties
+        let benefits    = ["Improves shoulder flexibility", "Reduces stiffness",
+                           "Enhances range of motion",     "Promotes lymphatic drainage"]
+        let precautions = ["Stop if you feel sharp pain",  "Keep breathing steadily",
+                           "Move slowly and controlled",   "Stay within your comfort zone"]
+        showBenefitsPopover(from: button, benefits: benefits, precautions: precautions)
     }
-    
-    func restartVideo() {
+
+    func didTogglePlayPause() {
+        guard let player = activeVideoCell?.player else { return }
+        player.timeControlStatus == .playing ? activeVideoCell?.pause() : activeVideoCell?.play()
+    }
+
+    func didRestart() {
         activeVideoCell?.seek(to: 0)
         activeVideoCell?.play()
     }
-    
-   
-    func toggleLoop(enabled: Bool) {
+
+    func didToggleLoop(enabled: Bool) {
         activeVideoCell?.isLooping = enabled
     }
-    
-    func seekToProgress(_ progress: Float) {
-        let targetTime = Double(progress) * self.totalDuration
-        activeVideoCell?.seek(to: targetTime)
+
+    func didSeek(toProgress progress: Float) {
+        activeVideoCell?.seek(to: Double(progress) * totalDuration)
     }
-    
-    func setReminder() {
-        let alert = UIAlertController(title: "Set Reminder", message: "Reminder feature coming soon!", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
+
+    func didTapMarkAsDone() {
+        if let cell = collectionView.cellForItem(at: IndexPath(item: 0, section: 3)) as? ActionButtonsCell {
+            cell.setDone(true)
+        }
+        showToast(message: "Exercise marked as done ✓")
+    }
+
+    func didTapNext() {
+        pushNextExercise()
     }
 }
