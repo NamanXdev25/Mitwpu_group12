@@ -1,10 +1,3 @@
-//
-//  HomeModel.swift
-//  BreastCancerApp
-//
-//  Created by Naman Bhansali on 03/02/26.
-//
-
 import UIKit
 
 // MARK: - Home Section Types
@@ -20,7 +13,7 @@ enum HomeSectionType: Int, CaseIterable {
 struct HomeItem: Hashable {
     let id = UUID()
     let type: ItemType
-    
+
     enum ItemType: Hashable {
         case title
         case quote(String)
@@ -28,13 +21,13 @@ struct HomeItem: Hashable {
         case suggestion(Suggestion)
         case article(Article)
     }
-    
+
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
-    
+
     static func == (lhs: HomeItem, rhs: HomeItem) -> Bool {
-        return lhs.id == rhs.id
+        lhs.id == rhs.id
     }
 }
 
@@ -42,15 +35,6 @@ struct HomeItem: Hashable {
 struct Mood: Hashable {
     let imageName: String
     let title: String
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(imageName)
-        hasher.combine(title)
-    }
-    
-    static func == (lhs: Mood, rhs: Mood) -> Bool {
-        return lhs.imageName == rhs.imageName && lhs.title == rhs.title
-    }
 }
 
 // MARK: - Suggestion Model
@@ -58,18 +42,6 @@ struct Suggestion: Hashable {
     let imageName: String
     let title: String
     let subtitle: String
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(imageName)
-        hasher.combine(title)
-        hasher.combine(subtitle)
-    }
-    
-    static func == (lhs: Suggestion, rhs: Suggestion) -> Bool {
-        return lhs.imageName == rhs.imageName &&
-               lhs.title == rhs.title &&
-               lhs.subtitle == rhs.subtitle
-    }
 }
 
 // MARK: - Article Model
@@ -77,23 +49,11 @@ struct Article: Hashable {
     let imageName: String
     let title: String
     let subtitle: String
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(imageName)
-        hasher.combine(title)
-        hasher.combine(subtitle)
-    }
-    
-    static func == (lhs: Article, rhs: Article) -> Bool {
-        return lhs.imageName == rhs.imageName &&
-               lhs.title == rhs.title &&
-               lhs.subtitle == rhs.subtitle
-    }
 }
 
 // MARK: - Home Data Model
 class HomeModel {
-    
+
     // MARK: - Mood Data
     static let moods: [Mood] = [
         Mood(imageName: "ExcitedImage", title: "Excited"),
@@ -102,19 +62,122 @@ class HomeModel {
         Mood(imageName: "TiredImage", title: "Tired"),
         Mood(imageName: "AnxiousImage", title: "Anxious")
     ]
-    
+
     // MARK: - Quote Data
     static let quote = "My body and I are working together beautifully"
-    
-    // MARK: - Suggestion Data (ONLY ONE ITEM NOW)
-    static let suggestions: [Suggestion] = [
+
+    // MARK: - Suggestion Images (fixed per category)
+    private static let breathingImageName = "BreathingSessionsImage"
+    private static let journalingImageName = "Journal"
+    private static let hobbyImageName = "Cooking"
+
+    // Different breathing title per mood
+    private static func preferredBreathingTitle(for moodKey: String) -> String {
+        switch moodKey.lowercased() {
+        case "happy":
+            return "Inner Calm"
+        case "sad":
+            return "Healing Reflections"
+        case "anxious":
+            return "Calmer Mind"
+        case "tired":
+            return "Gentle Recharge"
+        case "excited":
+            return "Morning Appreciation"
+        default:
+            return "Gentle Focus"
+        }
+    }
+
+    private static func breathingItem(
+        for moodKey: String,
+        from content: HomeMoodSuggestionContent
+    ) -> HomeMoodSuggestionItem? {
+        let preferred = preferredBreathingTitle(for: moodKey)
+        return content.breathing.first(where: { $0.title == preferred }) ?? content.breathing.first
+    }
+
+    // Initial load -> only breathing suggestion
+    static func initialSuggestion(for moodKey: String) -> [Suggestion] {
+        guard let content = HomeMoodSuggestionLoader.shared.moodContent(for: moodKey),
+              let breathing = breathingItem(for: moodKey, from: content) else {
+            return [
+                Suggestion(
+                    imageName: breathingImageName,
+                    title: "Gentle Focus",
+                    subtitle: "A soft breathing session to keep your energy steady."
+                )
+            ]
+        }
+
+        return [
+            Suggestion(
+                imageName: breathingImageName,
+                title: breathing.title,
+                subtitle: breathing.description
+            )
+        ]
+    }
+
+    // After mood tap -> breathing + journaling + hobby (3 cards)
+    static func suggestions(for moodKey: String) -> [Suggestion] {
+        guard let content = HomeMoodSuggestionLoader.shared.moodContent(for: moodKey) else {
+            return fallbackSuggestions
+        }
+
+        var output: [Suggestion] = []
+
+        if let breathing = breathingItem(for: moodKey, from: content) {
+            output.append(
+                Suggestion(
+                    imageName: breathingImageName,
+                    title: breathing.title,
+                    subtitle: breathing.description
+                )
+            )
+        }
+
+        if let journaling = content.journaling.first {
+            output.append(
+                Suggestion(
+                    imageName: journalingImageName,
+                    title: journaling.title,
+                    subtitle: journaling.description
+                )
+            )
+        }
+
+        if let hobby = content.hobby.first {
+            output.append(
+                Suggestion(
+                    imageName: hobbyImageName,
+                    title: hobby.title,
+                    subtitle: hobby.description
+                )
+            )
+        }
+
+        return output.isEmpty ? fallbackSuggestions : output
+    }
+
+    private static let fallbackSuggestions: [Suggestion] = [
         Suggestion(
             imageName: "BreathingSessionsImage",
             title: "Gentle Focus",
             subtitle: "A soft breathing session to keep your energy steady."
+        ),
+        Suggestion(
+            imageName: "Journal",
+            title: "Today’s small win",
+            subtitle: "Describe a tiny success and how it improved your mood."
+        ),
+        Suggestion(
+            imageName: "Cooking",
+            title: "Cooking",
+            subtitle: "Make a snack you love and enjoy the process."
         )
     ]
-    
+
     // MARK: - Articles Data
     static let articles: [Article] = [
         Article(
