@@ -49,8 +49,8 @@ class LoginViewController: UIViewController {
         convertAndSaveProfile(profile)
         
         // Update garden stats
-        HomeDataStore.shared.gardenStats =
-            SampleProfilesManager.shared.getStatsForProfile(id: profile.id)
+//        HomeDataStore.shared.gardenStats =
+//            SampleProfilesManager.shared.getStatsForProfile(id: profile.id)
         
         // Set login flag
         UserDefaults.standard.set(true, forKey: "isLoggedIn")
