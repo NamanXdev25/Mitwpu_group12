@@ -31,6 +31,15 @@ class OnboardingData {
     // hobbies
     var selectedHobbies: [String] = []
     
+    // Currently in treatment
+    var currentTreatmentPhase: String?
+
+    // Post-treatment
+    var maintenanceTherapy: String? // "Yes" or "No"
+
+    // Shared current focus
+    var currentFocus: [String] = []
+    
     private init() {}
     
     // Reset all data
@@ -45,6 +54,9 @@ class OnboardingData {
         followUpFrequency = nil
         treatmentCompletionDate = nil
         selectedInterests.removeAll()
+        currentTreatmentPhase = nil
+        maintenanceTherapy = nil
+        currentFocus.removeAll()
     }
     
     // Check if onboarding is complete

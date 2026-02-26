@@ -78,10 +78,36 @@ struct OnboardingDataSource {
         InterestOption(title: "Prevention", icon: "magnifyingglass.circle.fill"),
         InterestOption(title: "Learning", icon: "book.circle.fill")
     ]
+
+    static let treatmentPhases = [
+        "Recently Diagnosed",
+        "Chemotherapy",
+        "Surgery",
+        "Radiation Therapy",
+        "Hormone Therapy"
+    ]
+
+    static let maintenanceTherapyOptions = [
+        "Yes",
+        "No"
+    ]
+
+    static let currentFocusOptions = [
+        FocusOption(title: "Exercise",          icon: "figure.walk"),
+        FocusOption(title: "Breathing",         icon: "wind"),
+        FocusOption(title: "Journaling",        icon: "book.closed"),
+        FocusOption(title: "Routine Tracking",  icon: "checklist")
+    ]
 }
 
 // Interest Option Model
 struct InterestOption {
+    let title: String
+    let icon: String
+}
+
+// current focus option model
+struct FocusOption {
     let title: String
     let icon: String
 }
