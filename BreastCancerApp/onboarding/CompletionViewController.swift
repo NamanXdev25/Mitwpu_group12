@@ -46,7 +46,7 @@ class CompletionViewController: UIViewController {
     
     @IBAction func homeButtonTapped(_ sender: UIButton) {
         // Navigate to main tab bar
-        let storyboard = UIStoryboard(name: "TabBarMain", bundle: nil)
+        let storyboard = UIStoryboard(name: "TabbarMain", bundle: nil)
 
         guard let tabBarController =
                 storyboard.instantiateInitialViewController()

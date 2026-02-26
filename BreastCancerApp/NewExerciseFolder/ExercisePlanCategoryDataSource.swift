@@ -118,28 +118,44 @@ extension ExercisePlanCategoryDataSource: UICollectionViewDelegate {
     }
 }
 
-// MARK: - UICollectionViewDelegateFlowLayout
-extension ExercisePlanCategoryDataSource: UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: collectionView.bounds.width, height: 50)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = collectionView.bounds.width
-        let itemWidth = (width - 48) / 2 // 16 leading + 16 trailing + 16 spacing = 48
-        return CGSize(width: itemWidth, height: 180)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 16
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 16
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 16, bottom: 24, right: 16)
-    }
-}
+//// MARK: - UICollectionViewDelegateFlowLayout
+//extension ExercisePlanCategoryDataSource: UICollectionViewDelegateFlowLayout {
+//    
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+//        return CGSize(width: collectionView.bounds.width, height: 50)
+//    }
+//    
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+//        let width = collectionView.bounds.width
+//        let section = sections[indexPath.section]
+//        let category = section.categories[indexPath.item]
+//        let itemWidth = (width - 48) / 2
+//
+//        // Measure how tall the subtitle will be
+//        let subtitleFont = UIFont.preferredFont(forTextStyle: .subheadline)
+//        let labelWidth = itemWidth - 32 // 16pt padding each side
+//        let boundingSize = CGSize(width: labelWidth, height: .greatestFiniteMagnitude)
+//        let subtitleHeight = (category.subtitle as NSString).boundingRect(
+//            with: boundingSize,
+//            options: [.usesLineFragmentOrigin, .usesFontLeading],
+//            attributes: [.font: subtitleFont],
+//            context: nil
+//        ).height
+//
+//        // 100 image + 12 gap + 20 title + 4 spacing + subtitle + 16 bottom padding
+//        let totalHeight = 100 + 12 + 20 + 4 + ceil(subtitleHeight) + 16
+//        return CGSize(width: itemWidth, height: max(totalHeight, 180))
+//    }
+//    
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+//        return 16
+//    }
+//    
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+//        return 16
+//    }
+//    
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+//        return UIEdgeInsets(top: 0, left: 16, bottom: 24, right: 16)
+//    }
+//}

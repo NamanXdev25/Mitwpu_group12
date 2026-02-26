@@ -21,8 +21,7 @@ class ExercisePlanCategoryCell: UICollectionViewCell {
         titleLabel.text = category.title
         subtitleLabel.text = category.subtitle
         
-        // Set image if available, otherwise keep placeholder background
-        if let imageName = category.imageName {
+        if let imageName = category.headerImageName {
             imageView.image = UIImage(named: imageName)
         } else {
             imageView.image = nil

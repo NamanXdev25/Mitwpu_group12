@@ -17,7 +17,7 @@
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y7f-f1-x6S">
-                        <rect key="frame" x="16.000000000000004" y="16" width="43.333333333333343" height="16"/>
+                        <rect key="frame" x="0.0" y="16" width="43.333333333333336" height="16"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -28,7 +28,7 @@
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="y7f-f1-x6S" secondAttribute="bottom" constant="8" id="0OS-pb-gug"/>
                 <constraint firstItem="y7f-f1-x6S" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="16" id="64k-zo-moc"/>
-                <constraint firstItem="y7f-f1-x6S" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="aLI-gc-Fqb"/>
+                <constraint firstItem="y7f-f1-x6S" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="aLI-gc-Fqb"/>
             </constraints>
             <size key="customSize" width="170" height="172"/>
             <connections>

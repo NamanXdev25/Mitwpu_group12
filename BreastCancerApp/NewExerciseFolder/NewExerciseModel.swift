@@ -32,35 +32,35 @@ extension NewExercisePlan {
         note: "Note: Start the day after surgery and continue for 7 days unless your doctor says otherwise.",
         exercises: [
             NewExerciseModel(
-                imageName: "wall_climb",
+                imageName: "wall_climbing",
                 title: "Wall Climb Stretch",
                 category: "Chest Mobility",
                 difficulty: "Low",
                 duration: "1 min"
             ),
             NewExerciseModel(
-                imageName: "shoulder_rolls",
+                imageName: "shoulder_blade_squeeze",
                 title: "Shoulder Rolls",
                 category: "Chest Mobility",
                 difficulty: "Low",
                 duration: "1 min"
             ),
             NewExerciseModel(
-                imageName: "chest_opening",
+                imageName: "chest_open",
                 title: "Chest-Opening Breaths",
                 category: "Chest Mobility",
                 difficulty: "Low",
                 duration: "1 min"
             ),
             NewExerciseModel(
-                imageName: "corner_stretch",
+                imageName: "girl_stretch",
                 title: "Corner Stretch",
                 category: "Chest Mobility",
                 difficulty: "Medium",
                 duration: "2 min"
             ),
             NewExerciseModel(
-                imageName: "scapular_retractions",
+                imageName: "shoulder_blade_squeeze",
                 title: "Scapular Retractions",
                 category: "Chest Mobility",
                 difficulty: "Medium",
@@ -76,21 +76,21 @@ extension NewExercisePlan {
         note: nil,
         exercises: [
             NewExerciseModel(
-                imageName: "arm_stretch",
+                imageName: "arm_lift",
                 title: "Arm stretch",
                 category: "Chest Mobility",
                 difficulty: "Low",
                 duration: "1 min"
             ),
             NewExerciseModel(
-                imageName: "elbows_together",
+                imageName: "posture_alignment_against_wall",
                 title: "Elbows together",
                 category: "Chest Mobility",
                 difficulty: "Medium",
                 duration: "2 min"
             ),
             NewExerciseModel(
-                imageName: "elbows_push_back",
+                imageName: "chest_open",
                 title: "Elbows push back",
                 category: "Chest Mobility",
                 difficulty: "Medium",
@@ -104,7 +104,7 @@ extension NewExercisePlan {
                 duration: "3 min"
             ),
             NewExerciseModel(
-                imageName: "wall_crawl",
+                imageName: "wall_climbing",
                 title: "Wall crawl",
                 category: "Chest Mobility",
                 difficulty: "High",

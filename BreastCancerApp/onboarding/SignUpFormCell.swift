@@ -145,5 +145,5 @@ final class SignUpFormCell: UICollectionViewCell {
 }
 
 extension UIColor {
-    static let brandPink = UIColor(named: "Pink")!
+    static let brandPink = UIColor(named: "primary_color")!
 }
