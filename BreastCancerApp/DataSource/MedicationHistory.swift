@@ -6,7 +6,7 @@ class MedicationHistory {
     private let repository: MedicationHistoryRepository
     private var history: [String: MedicationHistoryEntry]
 
-    init(repository: MedicationHistoryRepository = UserDefaultsMedicationHistoryRepository()) {
+    init(repository: MedicationHistoryRepository = FirestoreMedicationHistoryRepository()) {
         self.repository = repository
         self.history = repository.loadHistory()
 

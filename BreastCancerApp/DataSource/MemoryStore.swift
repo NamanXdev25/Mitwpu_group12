@@ -5,7 +5,7 @@ final class MemoryStore {
 
     private let repository: MemoryRepository
 
-    init(repository: MemoryRepository = UserDefaultsMemoryRepository()) {
+    init(repository: MemoryRepository = FirestoreMemoryRepository()) {
         self.repository = repository
     }
 

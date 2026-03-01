@@ -6,7 +6,7 @@ class HydrationDataManager {
     private let repository: HydrationRepository
     private(set) var entries: [HydrationEntry] = []
 
-    init(repository: HydrationRepository = UserDefaultsHydrationRepository()) {
+    init(repository: HydrationRepository = FirestoreHydrationRepository()) {
         self.repository = repository
         self.entries = repository.loadEntries()
 

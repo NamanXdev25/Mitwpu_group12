@@ -114,3 +114,43 @@ final class UserDefaultsHydrationRepository: HydrationRepository {
         userDefaults.set(encoded, forKey: key)
     }
 }
+
+final class UserDefaultsSymptomRepository: SymptomRepository {
+    private let userDefaults: UserDefaults
+    private let logsKey: String
+    private let idsKey: String
+
+    init(
+        userDefaults: UserDefaults = .standard,
+        logsKey: String = "symptom_logs_v1",
+        idsKey: String = "symptom_user_ids_v1"
+    ) {
+        self.userDefaults = userDefaults
+        self.logsKey = logsKey
+        self.idsKey = idsKey
+    }
+
+    func loadLogs() -> [SymptomLog] {
+        guard
+            let data = userDefaults.data(forKey: logsKey),
+            let decoded = try? JSONDecoder().decode([SymptomLogFirestoreDTO].self, from: data)
+        else {
+            return []
+        }
+        return decoded.map(SymptomLog.init(dto:))
+    }
+
+    func saveLogs(_ logs: [SymptomLog]) {
+        let dto = logs.map { $0.toDTO() }
+        guard let data = try? JSONEncoder().encode(dto) else { return }
+        userDefaults.set(data, forKey: logsKey)
+    }
+
+    func loadUserSymptomIDs() -> [String] {
+        userDefaults.stringArray(forKey: idsKey) ?? []
+    }
+
+    func saveUserSymptomIDs(_ ids: [String]) {
+        userDefaults.set(ids, forKey: idsKey)
+    }
+}

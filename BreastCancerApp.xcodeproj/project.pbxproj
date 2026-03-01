@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		64C623872F548C6F0092494A /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 64C623862F548C6F0092494A /* FirebaseCore */; };
+		64C623892F548C860092494A /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 64C623882F548C860092494A /* FirebaseFirestore */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		64E778AE2ECE2D6600B7826F /* BreastCancerApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BreastCancerApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		64E778EA2ECE372300B7826F /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
@@ -37,17 +42,27 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				64C623872F548C6F0092494A /* FirebaseCore in Frameworks */,
+				64C623892F548C860092494A /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		64C623852F548C6F0092494A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		64E778A52ECE2D6600B7826F = {
 			isa = PBXGroup;
 			children = (
 				64E778EA2ECE372300B7826F /* .gitignore */,
 				64E778B02ECE2D6600B7826F /* BreastCancerApp */,
+				64C623852F548C6F0092494A /* Frameworks */,
 				64E778AF2ECE2D6600B7826F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -80,6 +95,8 @@
 			);
 			name = BreastCancerApp;
 			packageProductDependencies = (
+				64C623862F548C6F0092494A /* FirebaseCore */,
+				64C623882F548C860092494A /* FirebaseFirestore */,
 			);
 			productName = BreastCancerApp;
 			productReference = 64E778AE2ECE2D6600B7826F /* BreastCancerApp.app */;
@@ -109,6 +126,9 @@
 			);
 			mainGroup = 64E778A52ECE2D6600B7826F;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				64C623842F548B9F0092494A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 64E778AF2ECE2D6600B7826F /* Products */;
 			projectDirPath = "";
@@ -147,7 +167,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = A8WRG5GB9D;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BreastCancerApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BreastCancer;
@@ -177,7 +197,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = A8WRG5GB9D;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BreastCancerApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BreastCancer;
@@ -341,6 +361,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		64C623842F548B9F0092494A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.10.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		64C623862F548C6F0092494A /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 64C623842F548B9F0092494A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		64C623882F548C860092494A /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 64C623842F548B9F0092494A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 64E778A62ECE2D6600B7826F /* Project object */;
 }

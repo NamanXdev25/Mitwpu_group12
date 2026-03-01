@@ -26,3 +26,10 @@ protocol HydrationRepository {
     func loadEntries() -> [HydrationEntry]
     func saveEntries(_ entries: [HydrationEntry])
 }
+
+protocol SymptomRepository {
+    func loadLogs() -> [SymptomLog]
+    func saveLogs(_ logs: [SymptomLog])
+    func loadUserSymptomIDs() -> [String]
+    func saveUserSymptomIDs(_ ids: [String])
+}
