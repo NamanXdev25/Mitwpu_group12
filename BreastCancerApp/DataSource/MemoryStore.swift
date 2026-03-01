@@ -1,26 +1,27 @@
 import Foundation
 
 final class MemoryStore {
+    static let shared = MemoryStore()
 
-    private static let key = "saved_memories"
+    private let repository: MemoryRepository
+
+    init(repository: MemoryRepository = UserDefaultsMemoryRepository()) {
+        self.repository = repository
+    }
+
+    func save(_ memories: [Memory]) {
+        repository.saveMemories(memories)
+    }
+
+    func load() -> [Memory] {
+        repository.loadMemories()
+    }
 
     static func save(_ memories: [Memory]) {
-        let encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = .iso8601
-
-        if let data = try? encoder.encode(memories) {
-            UserDefaults.standard.set(data, forKey: key)
-        }
+        shared.save(memories)
     }
 
     static func load() -> [Memory] {
-        guard let data = UserDefaults.standard.data(forKey: key) else {
-            return []
-        }
-
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
-
-        return (try? decoder.decode([Memory].self, from: data)) ?? []
+        shared.load()
     }
 }

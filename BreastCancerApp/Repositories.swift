@@ -1,0 +1,28 @@
+//
+//  Repositories.swift
+//  BreastCancerApp
+//
+//  Created by Naman Bhansali on 01/03/26.
+//
+
+import Foundation
+
+protocol AppointmentRepository {
+    func loadAppointments() -> [String: [AppointmentItem]]
+    func saveAppointments(_ appointments: [String: [AppointmentItem]])
+}
+
+protocol MedicationHistoryRepository {
+    func loadHistory() -> [String: MedicationHistoryEntry]
+    func saveHistory(_ history: [String: MedicationHistoryEntry])
+}
+
+protocol MemoryRepository {
+    func loadMemories() -> [Memory]
+    func saveMemories(_ memories: [Memory])
+}
+
+protocol HydrationRepository {
+    func loadEntries() -> [HydrationEntry]
+    func saveEntries(_ entries: [HydrationEntry])
+}

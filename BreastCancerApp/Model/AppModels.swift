@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import UIKit
 import CoreGraphics
 
 // MARK: - Care
@@ -192,14 +191,6 @@ struct AppointmentItem {
     let reminderEnabled: Bool
     let note: String
     let colorIndex: Int
-
-    var indicatorColor: UIColor {
-        AppointmentType(rawValue: colorIndex)?.color ?? .systemOrange
-    }
-
-    var appointmentType: AppointmentType? {
-        AppointmentType(rawValue: colorIndex)
-    }
 }
 
 enum AppointmentType: Int, CaseIterable {
@@ -219,16 +210,8 @@ enum AppointmentType: Int, CaseIterable {
         case .doctorVisit: return "Doctor Visit"
         }
     }
-
-    var color: UIColor {
-        let chemoColor = UIColor(named: "chemotherapyindicator")!
-        let doctorVisitColor = UIColor(named: "DoctorVisitindicator")!
-        switch self {
-        case .chemotherapy: return chemoColor
-        case .doctorVisit: return doctorVisitColor
-        }
-    }
 }
+
 
 struct AppointmentItemCodable: Codable {
     let id: String
@@ -382,13 +365,32 @@ extension JournalEntry {
 
 // MARK: - Medication
 
-struct Medication {
+struct Medication: Codable, Identifiable {
+    let id: String
     var name: String
     var note: String
     var time: String
     var repeatOption: String
-    var isTaken: Bool = false
-    var reminderEnabled: Bool = true
+    var isTaken: Bool
+    var reminderEnabled: Bool
+
+    init(
+        id: String = UUID().uuidString,
+        name: String,
+        note: String,
+        time: String,
+        repeatOption: String,
+        isTaken: Bool = false,
+        reminderEnabled: Bool = true
+    ) {
+        self.id = id
+        self.name = name
+        self.note = note
+        self.time = time
+        self.repeatOption = repeatOption
+        self.isTaken = isTaken
+        self.reminderEnabled = reminderEnabled
+    }
 
     func isScheduledFor(date: Date) -> Bool {
         let calendar = Calendar.current
@@ -412,16 +414,32 @@ struct Medication {
     }
 }
 
-struct MedicationHistoryEntry {
+struct MedicationHistoryEntry: Codable, Identifiable {
+    let id: String
     let date: Date
     var medications: [Medication]
     var taken: Int
     var goal: Int
+
+    init(
+        id: String = UUID().uuidString,
+        date: Date,
+        medications: [Medication],
+        taken: Int,
+        goal: Int
+    ) {
+        self.id = id
+        self.date = date
+        self.medications = medications
+        self.taken = taken
+        self.goal = goal
+    }
 }
+
 
 // MARK: - Symptoms
 
-struct Symptom: Codable {
+struct Symptom: Codable, Identifiable {
     let id: String
     let name: String
     let description: String
@@ -439,7 +457,7 @@ struct SymptomsData: Codable {
     let symptoms: [Symptom]
 }
 
-struct SymptomLog {
+struct SymptomLog: Codable, Identifiable {
     let id: String
     let symptomId: String
     let symptomName: String
@@ -447,17 +465,15 @@ struct SymptomLog {
     let note: String
     let timestamp: Date
 
-    init(symptomId: String, symptomName: String, severity: Int, note: String = "") {
-        self.id = UUID().uuidString
-        self.symptomId = symptomId
-        self.symptomName = symptomName
-        self.severity = severity
-        self.note = note
-        self.timestamp = Date()
-    }
-
-    init(symptomId: String, symptomName: String, severity: Int, note: String = "", timestamp: Date) {
-        self.id = UUID().uuidString
+    init(
+        id: String = UUID().uuidString,
+        symptomId: String,
+        symptomName: String,
+        severity: Int,
+        note: String = "",
+        timestamp: Date = Date()
+    ) {
+        self.id = id
         self.symptomId = symptomId
         self.symptomName = symptomName
         self.severity = severity
@@ -466,6 +482,7 @@ struct SymptomLog {
     }
 }
 
+
 // MARK: - Insights
 
 enum InsightType: String, Codable {
@@ -473,7 +490,7 @@ enum InsightType: String, Codable {
 }
 
 struct HealthInsight: Codable, Identifiable {
-    let id: UUID
+    let id: String
     let type: InsightType
     let title: String
     let subtitle: String?
@@ -486,23 +503,120 @@ struct HealthInsight: Codable, Identifiable {
     let dailyValues: [Int]?
 
     enum CodingKeys: String, CodingKey {
-        case type, title, subtitle, mainValue, completedValue, secondaryValue
-        case medicationTaken, medicationMissed, detailText, dailyValues
+        case id
+        case type
+        case title
+        case subtitle
+        case mainValue
+        case completedValue
+        case secondaryValue
+        case medicationTaken
+        case medicationMissed
+        case detailText
+        case dailyValues
+    }
+
+    init(
+        id: String? = nil,
+        type: InsightType,
+        title: String,
+        subtitle: String? = nil,
+        mainValue: String? = nil,
+        completedValue: String? = nil,
+        secondaryValue: String? = nil,
+        medicationTaken: String? = nil,
+        medicationMissed: String? = nil,
+        detailText: String? = nil,
+        dailyValues: [Int]? = nil
+    ) {
+        self.type = type
+        self.title = title
+        self.subtitle = subtitle
+        self.mainValue = mainValue
+        self.completedValue = completedValue
+        self.secondaryValue = secondaryValue
+        self.medicationTaken = medicationTaken
+        self.medicationMissed = medicationMissed
+        self.detailText = detailText
+        self.dailyValues = dailyValues
+        self.id = id ?? HealthInsight.makeStableId(
+            type: type,
+            title: title,
+            subtitle: subtitle,
+            mainValue: mainValue,
+            completedValue: completedValue,
+            secondaryValue: secondaryValue,
+            medicationTaken: medicationTaken,
+            medicationMissed: medicationMissed,
+            detailText: detailText,
+            dailyValues: dailyValues
+        )
     }
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = UUID()
-        self.type = try container.decode(InsightType.self, forKey: .type)
-        self.title = try container.decode(String.self, forKey: .title)
-        self.subtitle = try container.decodeIfPresent(String.self, forKey: .subtitle)
-        self.mainValue = try container.decodeIfPresent(String.self, forKey: .mainValue)
-        self.completedValue = try container.decodeIfPresent(String.self, forKey: .completedValue)
-        self.secondaryValue = try container.decodeIfPresent(String.self, forKey: .secondaryValue)
-        self.medicationTaken = try container.decodeIfPresent(String.self, forKey: .medicationTaken)
-        self.medicationMissed = try container.decodeIfPresent(String.self, forKey: .medicationMissed)
-        self.detailText = try container.decodeIfPresent(String.self, forKey: .detailText)
-        self.dailyValues = try container.decodeIfPresent([Int].self, forKey: .dailyValues)
+
+        let type = try container.decode(InsightType.self, forKey: .type)
+        let title = try container.decode(String.self, forKey: .title)
+        let subtitle = try container.decodeIfPresent(String.self, forKey: .subtitle)
+        let mainValue = try container.decodeIfPresent(String.self, forKey: .mainValue)
+        let completedValue = try container.decodeIfPresent(String.self, forKey: .completedValue)
+        let secondaryValue = try container.decodeIfPresent(String.self, forKey: .secondaryValue)
+        let medicationTaken = try container.decodeIfPresent(String.self, forKey: .medicationTaken)
+        let medicationMissed = try container.decodeIfPresent(String.self, forKey: .medicationMissed)
+        let detailText = try container.decodeIfPresent(String.self, forKey: .detailText)
+        let dailyValues = try container.decodeIfPresent([Int].self, forKey: .dailyValues)
+
+        self.type = type
+        self.title = title
+        self.subtitle = subtitle
+        self.mainValue = mainValue
+        self.completedValue = completedValue
+        self.secondaryValue = secondaryValue
+        self.medicationTaken = medicationTaken
+        self.medicationMissed = medicationMissed
+        self.detailText = detailText
+        self.dailyValues = dailyValues
+        self.id = try container.decodeIfPresent(String.self, forKey: .id)
+            ?? HealthInsight.makeStableId(
+                type: type,
+                title: title,
+                subtitle: subtitle,
+                mainValue: mainValue,
+                completedValue: completedValue,
+                secondaryValue: secondaryValue,
+                medicationTaken: medicationTaken,
+                medicationMissed: medicationMissed,
+                detailText: detailText,
+                dailyValues: dailyValues
+            )
+    }
+
+    private static func makeStableId(
+        type: InsightType,
+        title: String,
+        subtitle: String?,
+        mainValue: String?,
+        completedValue: String?,
+        secondaryValue: String?,
+        medicationTaken: String?,
+        medicationMissed: String?,
+        detailText: String?,
+        dailyValues: [Int]?
+    ) -> String {
+        let parts: [String] = [
+            type.rawValue,
+            title,
+            subtitle ?? "",
+            mainValue ?? "",
+            completedValue ?? "",
+            secondaryValue ?? "",
+            medicationTaken ?? "",
+            medicationMissed ?? "",
+            detailText ?? "",
+            (dailyValues ?? []).map(String.init).joined(separator: ",")
+        ]
+        return parts.joined(separator: "|")
     }
 
     func formatGraphValue(_ value: Int) -> String {
@@ -522,6 +636,7 @@ struct HealthInsight: Codable, Identifiable {
         }
     }
 }
+
 
 struct HealthInsightResponse: Codable {
     let insights: [HealthInsight]
@@ -553,18 +668,20 @@ enum ReflectionCategory: String, Codable, CaseIterable {
 
 // MARK: - Memory
 
-struct Memory: Codable {
+struct Memory: Codable, Identifiable {
+    let id: String
     let imageData: Data?
     let date: Date
     let note: String?
 
-    var image: UIImage? {
-        guard let data = imageData else { return nil }
-        return UIImage(data: data)
-    }
-
-    init(image: UIImage?, date: Date, note: String?) {
-        self.imageData = image?.jpegData(compressionQuality: 0.8)
+    init(
+        id: String = UUID().uuidString,
+        imageData: Data?,
+        date: Date,
+        note: String?
+    ) {
+        self.id = id
+        self.imageData = imageData
         self.date = date
         self.note = note
     }
