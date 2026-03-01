@@ -41,6 +41,15 @@ enum FirestorePath {
     static func symptoms(_ userId: String) -> CollectionReference {
         Firestore.firestore().collection("users").document(userId).collection("symptoms")
     }
+    
+    static func journals(_ userId: String) -> CollectionReference {
+        Firestore.firestore().collection("users").document(userId).collection("journals")
+    }
+
+    static func breathing(_ userId: String) -> CollectionReference {
+        Firestore.firestore().collection("users").document(userId).collection("breathing")
+    }
+
 
 }
 

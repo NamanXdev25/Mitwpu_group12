@@ -3,6 +3,12 @@
 //
 //  Created by Shloka on 28/11/25.
 //
+//
+//  BreathingViewController.swift
+//
+//  Created by Shloka on 28/11/25.
+//
+
 import UIKit
 
 class BreathingViewController: UIViewController {
@@ -21,9 +27,10 @@ class BreathingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        favoriteSessions = dataManager.getFavoriteSessions()
-        filterTags = dataManager.getFilterTags()
+        // Load all sessions first, then derive favorites from it
         allSessions = dataManager.getAllSessions()
+        favoriteSessions = allSessions.filter { $0.isFavorite }
+        filterTags = dataManager.getFilterTags()
         
         filteredSessions = allSessions
         registerCells()
@@ -253,6 +260,9 @@ extension BreathingViewController: SessionCellDelegate {
             
             let isEmptyNow = favoriteSessions.isEmpty
             
+            // Persist favorites
+            dataManager.saveFavoriteTitles(from: allSessions)
+            
             //  Update UI
             collectionView.performBatchUpdates {
                 if let index = indexInFiltered {
@@ -281,6 +291,10 @@ extension BreathingViewController: SessionCellDelegate {
                 favorites: &favoriteSessions,
                 filtered: &filteredSessions
             )
+            
+            // Persist favorites
+            dataManager.saveFavoriteTitles(from: allSessions)
+            
             collectionView.performBatchUpdates {
                 collectionView.reloadSections(IndexSet(integer: 0))
                 collectionView.reloadSections(IndexSet(integer: 2))

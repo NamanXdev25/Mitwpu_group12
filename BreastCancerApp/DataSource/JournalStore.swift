@@ -1,50 +1,50 @@
-//
-//  JournalStore.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 28/11/25.
-//
-
 import Foundation
 
 class JournalStore {
-
     static let shared = JournalStore()
 
-    private init() {
+    private let repository: JournalRepository
+    private(set) var entries: [JournalEntry] = []
+
+    init(repository: JournalRepository = FirestoreJournalRepository()) {
+        self.repository = repository
         load()
     }
 
-    private(set) var entries: [JournalEntry] = []
-
-    // load
     func load() {
-        self.entries = SampleJournalData.all
+        let saved = repository.loadEntries()
+        if saved.isEmpty {
+            entries = SampleJournalData.all
+            persist()
+        } else {
+            entries = saved.sorted { $0.date > $1.date }
+        }
     }
-    // add
+
+    private func persist() {
+        repository.saveEntries(entries)
+    }
+
     func add(_ entry: JournalEntry) {
         entries.insert(entry, at: 0)
+        persist()
     }
-    // update
+
     func update(_ entry: JournalEntry) {
         if let index = entries.firstIndex(where: { $0.id == entry.id }) {
             entries[index] = entry
+            entries.sort { $0.date > $1.date }
+            persist()
         }
     }
-    // delete
+
     func delete(_ entry: JournalEntry) {
         entries.removeAll(where: { $0.id == entry.id })
+        persist()
     }
 }
 
 extension Collection where Element == JournalEntry {
-
-    // Normalize date to midnight (remove time)
-    private func normalized(_ date: Date) -> Date {
-        Calendar.current.startOfDay(for: date)
-    }
-
-    // streak calculation
     var streakCount: Int {
         guard count >= 2 else { return 0 }
 
@@ -75,25 +75,18 @@ extension Collection where Element == JournalEntry {
             }
         }
 
-        // minimum streak length = 2
         return streak >= 2 ? streak : 0
     }
 
-    // week's journal count
     var journalsThisWeek: Int {
         let calendar = Calendar.current
         let now = Date()
-//        guard let weekStart = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: now)) else {
-//            return 0
-//        }
 
         return self.filter {
             calendar.isDate($0.date, equalTo: now, toGranularity: .weekOfYear)
         }.count
-
     }
-    
-    // All dates (normalized) where at least one journal exists
+
     var journalDays: Set<Date> {
         let calendar = Calendar.current
         return Set(
@@ -103,7 +96,6 @@ extension Collection where Element == JournalEntry {
         )
     }
 
-    // journals by date
     func journals(on date: Date) -> [JournalEntry] {
         let calendar = Calendar.current
         let target = calendar.startOfDay(for: date)
@@ -121,5 +113,3 @@ extension Array where Element == JournalEntry {
         }
     }
 }
-
-

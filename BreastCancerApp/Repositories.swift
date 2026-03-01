@@ -1,10 +1,3 @@
-//
-//  Repositories.swift
-//  BreastCancerApp
-//
-//  Created by Naman Bhansali on 01/03/26.
-//
-
 import Foundation
 
 protocol AppointmentRepository {
@@ -32,4 +25,14 @@ protocol SymptomRepository {
     func saveLogs(_ logs: [SymptomLog])
     func loadUserSymptomIDs() -> [String]
     func saveUserSymptomIDs(_ ids: [String])
+}
+
+protocol JournalRepository {
+    func loadEntries() -> [JournalEntry]
+    func saveEntries(_ entries: [JournalEntry])
+}
+
+protocol BreathingRepository {
+    func loadFavoriteTitles() -> Set<String>
+    func saveFavoriteTitles(_ titles: Set<String>)
 }

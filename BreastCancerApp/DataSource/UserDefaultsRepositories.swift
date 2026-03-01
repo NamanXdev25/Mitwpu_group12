@@ -154,3 +154,47 @@ final class UserDefaultsSymptomRepository: SymptomRepository {
         userDefaults.set(ids, forKey: idsKey)
     }
 }
+
+final class UserDefaultsJournalRepository: JournalRepository {
+    private let userDefaults: UserDefaults
+    private let key: String
+
+    init(userDefaults: UserDefaults = .standard, key: String = "journal_entries_v1") {
+        self.userDefaults = userDefaults
+        self.key = key
+    }
+
+    func loadEntries() -> [JournalEntry] {
+        guard
+            let data = userDefaults.data(forKey: key),
+            let decoded = try? JSONDecoder().decode([JournalEntryFirestoreDTO].self, from: data)
+        else {
+            return []
+        }
+        return decoded.map(JournalEntry.init(dto:)).sorted { $0.date > $1.date }
+    }
+
+    func saveEntries(_ entries: [JournalEntry]) {
+        let dto = entries.map { $0.toDTO() }
+        guard let encoded = try? JSONEncoder().encode(dto) else { return }
+        userDefaults.set(encoded, forKey: key)
+    }
+}
+
+final class UserDefaultsBreathingRepository: BreathingRepository {
+    private let userDefaults: UserDefaults
+    private let key: String
+
+    init(userDefaults: UserDefaults = .standard, key: String = "breathing_favorites_v1") {
+        self.userDefaults = userDefaults
+        self.key = key
+    }
+
+    func loadFavoriteTitles() -> Set<String> {
+        Set(userDefaults.stringArray(forKey: key) ?? [])
+    }
+
+    func saveFavoriteTitles(_ titles: Set<String>) {
+        userDefaults.set(Array(titles), forKey: key)
+    }
+}

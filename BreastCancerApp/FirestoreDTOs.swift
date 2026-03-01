@@ -208,3 +208,41 @@ extension HydrationEntry {
         )
     }
 }
+
+// MARK: - Journal
+
+struct JournalEntryFirestoreDTO: Codable {
+    let id: String
+    let title: String
+    let body: String
+    let dateEpoch: TimeInterval
+    let type: String
+    let question: String?
+    let category: String?
+}
+
+extension JournalEntry {
+    init(dto: JournalEntryFirestoreDTO) {
+        self.init(
+            id: UUID(uuidString: dto.id) ?? UUID(),
+            title: dto.title,
+            body: dto.body,
+            date: Date(timeIntervalSince1970: dto.dateEpoch),
+            type: JournalType(rawValue: dto.type) ?? .regular,
+            question: dto.question,
+            category: dto.category
+        )
+    }
+
+    func toDTO() -> JournalEntryFirestoreDTO {
+        JournalEntryFirestoreDTO(
+            id: id.uuidString,
+            title: title,
+            body: body,
+            dateEpoch: date.timeIntervalSince1970,
+            type: type.rawValue,
+            question: question,
+            category: category
+        )
+    }
+}
