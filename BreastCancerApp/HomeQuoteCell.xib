@@ -22,12 +22,12 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                <integer key="value" value="13"/>
+                                <integer key="value" value="20"/>
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="My body and I are working together beautifully" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P7E-tc-cXe">
-                        <rect key="frame" x="31" y="29" width="300" height="43"/>
+                        <rect key="frame" x="30.666666666666657" y="29.000000000000004" width="300" height="42.333333333333343"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="300" id="YhE-bU-MEG"/>
                         </constraints>

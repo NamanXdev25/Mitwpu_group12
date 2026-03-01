@@ -116,6 +116,7 @@ enum HomeSectionType: Int, CaseIterable {
     case title = 0
     case quote
     case mood
+    case journal
     case suggestion
     case articles
 }
@@ -128,6 +129,7 @@ struct HomeItem: Hashable {
         case title
         case quote(String)
         case mood
+        case journal(Suggestion)
         case suggestion(Suggestion)
         case article(Article)
     }
@@ -140,6 +142,7 @@ struct HomeItem: Hashable {
         lhs.id == rhs.id
     }
 }
+
 
 struct Mood: Hashable {
     let imageName: String
@@ -176,9 +179,25 @@ struct HomeMoodSuggestionContent: Decodable {
 
 struct HomeMoodSuggestionItem: Decodable {
     let title: String
-    let description: String
+    let description: String?
     let image: String?
+
+    enum CodingKeys: String, CodingKey {
+        case title
+        case description
+        case subtitle
+        case image
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        title = try container.decode(String.self, forKey: .title)
+        description = try container.decodeIfPresent(String.self, forKey: .description)
+            ?? container.decodeIfPresent(String.self, forKey: .subtitle)
+        image = try container.decodeIfPresent(String.self, forKey: .image)
+    }
 }
+
 
 // MARK: - Appointments
 

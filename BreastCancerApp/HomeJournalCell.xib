@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="HomeJournalCell" customModule="BreastCancerApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="361" height="108"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="361" height="108"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ix2-CC-BRB">
+                        <rect key="frame" x="0.0" y="0.0" width="361" height="108"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Write about someone who brings joy and why they matter." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fzF-fV-BSH">
+                                <rect key="frame" x="16" y="19.999999999999996" width="310" height="40.666666666666657"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="310" id="CE7-Ky-YuL"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Start Writing..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BeN-92-hbd">
+                                <rect key="frame" x="16" y="74" width="94" height="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" systemColor="systemGrayColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1N2-F5-w8v">
+                                <rect key="frame" x="311.66666666666669" y="65.333333333333329" width="41.333333333333314" height="34.333333333333329"/>
+                                <color key="tintColor" systemColor="systemGrayColor"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain">
+                                    <imageReference key="image" image="microphone.fill" catalog="system" symbolScale="medium"/>
+                                </buttonConfiguration>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="BeN-92-hbd" secondAttribute="bottom" constant="17" id="I8D-Dc-IXj"/>
+                            <constraint firstItem="1N2-F5-w8v" firstAttribute="centerY" secondItem="BeN-92-hbd" secondAttribute="centerY" id="Jz0-cn-aHu"/>
+                            <constraint firstItem="fzF-fV-BSH" firstAttribute="top" secondItem="Ix2-CC-BRB" secondAttribute="top" constant="20" id="MUT-R3-EyA"/>
+                            <constraint firstAttribute="trailing" secondItem="1N2-F5-w8v" secondAttribute="trailing" constant="8" id="h4L-al-d37"/>
+                            <constraint firstItem="fzF-fV-BSH" firstAttribute="leading" secondItem="Ix2-CC-BRB" secondAttribute="leading" constant="16" id="qrv-J7-iin"/>
+                            <constraint firstItem="BeN-92-hbd" firstAttribute="leading" secondItem="Ix2-CC-BRB" secondAttribute="leading" constant="16" id="xnV-qx-OzC"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="20"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="Ix2-CC-BRB" secondAttribute="trailing" id="GV1-LN-gLx"/>
+                <constraint firstAttribute="bottom" secondItem="Ix2-CC-BRB" secondAttribute="bottom" id="h8D-EA-ptJ"/>
+                <constraint firstItem="Ix2-CC-BRB" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="jxN-aC-Hb2"/>
+                <constraint firstItem="Ix2-CC-BRB" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="nAq-xO-IUg"/>
+            </constraints>
+            <connections>
+                <outlet property="StartwritingLabel" destination="BeN-92-hbd" id="bbB-mH-8MZ"/>
+                <outlet property="TitleLabel" destination="fzF-fV-BSH" id="390-NN-YSb"/>
+                <outlet property="micbutton" destination="1N2-F5-w8v" id="mzQ-4H-Nlh"/>
+            </connections>
+            <point key="canvasLocation" x="206.87022900763358" y="166.90140845070422"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="microphone.fill" catalog="system" width="110" height="128"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGrayColor">
+            <color red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

@@ -9,7 +9,8 @@ class BlankJournalViewController: UIViewController {
 
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var textView: UITextView!
-
+     
+    var prefilledTitle: String?
     var existingEntry: JournalEntry?
     private let placeholderText = "Start writing what’s on your mind today..."
 
@@ -24,6 +25,12 @@ class BlankJournalViewController: UIViewController {
             titleField.text = entry.title
             textView.text = entry.body
             textView.textColor = .label
+        }
+        
+        if existingEntry == nil,
+           let prefilledTitle,
+           !prefilledTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            titleField.text = prefilledTitle
         }
 
         titleField.delegate = self
