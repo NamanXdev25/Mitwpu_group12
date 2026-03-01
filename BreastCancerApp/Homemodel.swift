@@ -1,55 +1,4 @@
-import UIKit
-
-// MARK: - Home Section Types
-enum HomeSectionType: Int, CaseIterable {
-    case title = 0
-    case quote
-    case mood
-    case suggestion
-    case articles
-}
-
-// MARK: - Item Model for Diffable Data Source
-struct HomeItem: Hashable {
-    let id = UUID()
-    let type: ItemType
-
-    enum ItemType: Hashable {
-        case title
-        case quote(String)
-        case mood
-        case suggestion(Suggestion)
-        case article(Article)
-    }
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
-
-    static func == (lhs: HomeItem, rhs: HomeItem) -> Bool {
-        lhs.id == rhs.id
-    }
-}
-
-// MARK: - Mood Model
-struct Mood: Hashable {
-    let imageName: String
-    let title: String
-}
-
-// MARK: - Suggestion Model
-struct Suggestion: Hashable {
-    let imageName: String
-    let title: String
-    let subtitle: String
-}
-
-// MARK: - Article Model
-struct Article: Hashable {
-    let imageName: String
-    let title: String
-    let subtitle: String
-}
+import Foundation
 
 // MARK: - Home Data Model
 class HomeModel {
@@ -74,18 +23,12 @@ class HomeModel {
     // Different breathing title per mood
     private static func preferredBreathingTitle(for moodKey: String) -> String {
         switch moodKey.lowercased() {
-        case "happy":
-            return "Inner Calm"
-        case "sad":
-            return "Healing Reflections"
-        case "anxious":
-            return "Calmer Mind"
-        case "tired":
-            return "Gentle Recharge"
-        case "excited":
-            return "Morning Appreciation"
-        default:
-            return "Gentle Focus"
+        case "happy": return "Inner Calm"
+        case "sad": return "Healing Reflections"
+        case "anxious": return "Calmer Mind"
+        case "tired": return "Gentle Recharge"
+        case "excited": return "Morning Appreciation"
+        default: return "Gentle Focus"
         }
     }
 
@@ -168,7 +111,7 @@ class HomeModel {
         ),
         Suggestion(
             imageName: "Journal",
-            title: "Today’s small win",
+            title: "Today's small win",
             subtitle: "Describe a tiny success and how it improved your mood."
         ),
         Suggestion(

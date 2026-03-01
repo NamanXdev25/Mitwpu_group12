@@ -173,13 +173,6 @@
 
 import Foundation
 
-struct MedicationHistoryEntry {
-    let date: Date
-    var medications: [Medication]
-    var taken: Int
-    var goal: Int
-}
-
 class MedicationHistory {
     static let shared = MedicationHistory()
     

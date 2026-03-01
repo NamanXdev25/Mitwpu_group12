@@ -94,39 +94,3 @@ class AppointmentManager {
         return Array(appointments.keys)
     }
 }
-
-// MARK: - Codable Version
-struct AppointmentItemCodable: Codable {
-    let id: String
-    let title: String
-    let category: String
-    let date: String
-    let time: String
-    let reminderEnabled: Bool
-    let note: String
-    let colorIndex: Int
-    
-    init(from appointment: AppointmentItem) {
-        self.id = appointment.id
-        self.title = appointment.title
-        self.category = appointment.category
-        self.date = appointment.date
-        self.time = appointment.time
-        self.reminderEnabled = appointment.reminderEnabled
-        self.note = appointment.note
-        self.colorIndex = appointment.colorIndex
-    }
-    
-    func toAppointmentItem() -> AppointmentItem {
-        return AppointmentItem(
-            id: id,
-            title: title,
-            category: category,
-            date: date,
-            time: time,
-            reminderEnabled: reminderEnabled,
-            note: note,
-            colorIndex: colorIndex
-        )
-    }
-}

@@ -1,21 +1,5 @@
 import Foundation
 
-struct HomeMoodSuggestionRoot: Decodable {
-    let moods: [String: HomeMoodSuggestionContent]
-}
-
-struct HomeMoodSuggestionContent: Decodable {
-    let breathing: [HomeMoodSuggestionItem]
-    let journaling: [HomeMoodSuggestionItem]
-    let hobby: [HomeMoodSuggestionItem]
-}
-
-struct HomeMoodSuggestionItem: Decodable {
-    let title: String
-    let description: String
-    let image: String?
-}
-
 final class HomeMoodSuggestionLoader {
     static let shared = HomeMoodSuggestionLoader()
     private(set) var root: HomeMoodSuggestionRoot?
@@ -30,7 +14,6 @@ final class HomeMoodSuggestionLoader {
             return
         }
 
-        // File contains many // commented lines. Remove them before decoding.
         let cleaned = rawText.replacingOccurrences(
             of: #"(?m)^\s*//.*\n?"#,
             with: "",
