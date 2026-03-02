@@ -18,7 +18,7 @@ class OnboardingHealthViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if let progressBarView = progressBar as? ProgressBarView {
-            progressBarView.setProgress(currentStep: 2, totalSteps: 5, animated: true)
+            progressBarView.setProgress(currentStep: 2, totalSteps: 9, animated: true)
         }
     }
 

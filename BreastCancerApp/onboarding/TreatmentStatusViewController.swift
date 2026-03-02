@@ -19,7 +19,7 @@ class TreatmentStatusViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        progressBar.setProgress(currentStep: 2, totalSteps: 5, animated: true)
+        progressBar.setProgress(currentStep: 5, totalSteps: 9, animated: true)
     }
 
     private func setupUI() {

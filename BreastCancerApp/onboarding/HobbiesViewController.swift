@@ -27,7 +27,7 @@ class HobbiesViewController: UIViewController {
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        progressBar.setProgress(currentStep: 4, totalSteps: 5, animated: true)
+        progressBar.setProgress(currentStep: 8, totalSteps: 9, animated: true)
     }
     
     // function def

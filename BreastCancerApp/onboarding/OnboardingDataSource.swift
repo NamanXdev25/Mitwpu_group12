@@ -94,7 +94,7 @@ struct OnboardingDataSource {
 
     static let currentFocusOptions = [
         FocusOption(title: "Exercise",          icon: "figure.walk"),
-        FocusOption(title: "Breathing",         icon: "wind"),
+        FocusOption(title: "Mindfulness",         icon: "figure.mind.and.body"),
         FocusOption(title: "Journaling",        icon: "book.closed"),
         FocusOption(title: "Routine Tracking",  icon: "checklist")
     ]
