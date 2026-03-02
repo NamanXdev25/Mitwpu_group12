@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		64C623872F548C6F0092494A /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 64C623862F548C6F0092494A /* FirebaseCore */; };
-		64C623892F548C860092494A /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 64C623882F548C860092494A /* FirebaseFirestore */; };
+		98354D362F558D0200B1ED4E /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 98354D352F558D0200B1ED4E /* FirebaseFirestore */; };
+		98354D382F558D1600B1ED4E /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 98354D372F558D1600B1ED4E /* FirebaseCore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,8 +42,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				64C623872F548C6F0092494A /* FirebaseCore in Frameworks */,
-				64C623892F548C860092494A /* FirebaseFirestore in Frameworks */,
+				98354D382F558D1600B1ED4E /* FirebaseCore in Frameworks */,
+				98354D362F558D0200B1ED4E /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,8 +95,8 @@
 			);
 			name = BreastCancerApp;
 			packageProductDependencies = (
-				64C623862F548C6F0092494A /* FirebaseCore */,
-				64C623882F548C860092494A /* FirebaseFirestore */,
+				98354D352F558D0200B1ED4E /* FirebaseFirestore */,
+				98354D372F558D1600B1ED4E /* FirebaseCore */,
 			);
 			productName = BreastCancerApp;
 			productReference = 64E778AE2ECE2D6600B7826F /* BreastCancerApp.app */;
@@ -127,7 +127,7 @@
 			mainGroup = 64E778A52ECE2D6600B7826F;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				64C623842F548B9F0092494A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				98354D342F558CE900B1ED4E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 64E778AF2ECE2D6600B7826F /* Products */;
@@ -363,7 +363,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		64C623842F548B9F0092494A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+		98354D342F558CE900B1ED4E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
 			requirement = {
@@ -374,15 +374,15 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		64C623862F548C6F0092494A /* FirebaseCore */ = {
+		98354D352F558D0200B1ED4E /* FirebaseFirestore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 64C623842F548B9F0092494A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseCore;
-		};
-		64C623882F548C860092494A /* FirebaseFirestore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 64C623842F548B9F0092494A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = 98354D342F558CE900B1ED4E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestore;
+		};
+		98354D372F558D1600B1ED4E /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 98354D342F558CE900B1ED4E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
