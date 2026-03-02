@@ -8,166 +8,111 @@
 import UIKit
 
 class JourneyDetailsViewController: UIViewController {
-    
-    // IBOutlets
+
     @IBOutlet weak var progressBar: ProgressBarView!
     @IBOutlet weak var nextButton: UIButton!
-    @IBOutlet weak var datePicker: UIDatePicker!
-    @IBOutlet weak var ageButton: UIButton!
-    @IBOutlet weak var agePickerView: UIView!
-    @IBOutlet weak var agePicker: UIPickerView!
-    @IBOutlet weak var stageButton: UIButton!
-    @IBOutlet weak var stagePickerView: UIView!
-    @IBOutlet weak var stagePicker: UIPickerView!
-    @IBOutlet weak var overlayView: UIView!
-    
-    private var selectedAge: String?
-    private var selectedStage: String?
-    
-    private let ageOptions = OnboardingDataSource.ageGroups
-    private let stageOptions = OnboardingDataSource.cancerStages
-    
-    // override funcs
+    @IBOutlet weak var collectionView: UICollectionView!
+
+    private var diagnosisDate: Date = Date()
+    private var selectedTreatmentPhase: String?
+
+    private let treatmentPhaseOptions = OnboardingDataSource.treatmentPhases
+    private let dateCellID      = "OnboardingDatePickerCell"
+    private let selectionCellID = "OnboardingSelectionPickerCell"
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        setupPickers()
-        setupGestures()
+        setupCollectionView()
     }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         progressBar.setProgress(currentStep: 3, totalSteps: 5, animated: true)
     }
-    
-    
+
     private func setupUI() {
         progressBar.setProgress(0, animated: false)
         navigationItem.backButtonTitle = ""
-        updateNextButtonState()
-        
-        datePicker.maximumDate = Date() // set max date to today
-        datePicker.addTarget(self, action: #selector(datePickerChanged), for: .valueChanged)
-        
-        overlayView.isHidden = true
-        overlayView.alpha = 0.5
-        agePickerView.isHidden = true
-        stagePickerView.isHidden = true
+        updateNextButton()
     }
-    
-    private func setupPickers() {
-        agePicker.delegate = self
-        agePicker.dataSource = self
-        agePicker.tag = 1 // age picker
-        
-        stagePicker.delegate = self
-        stagePicker.dataSource = self
-        stagePicker.tag = 2 // stage picker
+
+    private func setupCollectionView() {
+        collectionView.register(UINib(nibName: dateCellID,      bundle: nil),
+                                forCellWithReuseIdentifier: dateCellID)
+        collectionView.register(UINib(nibName: selectionCellID, bundle: nil),
+                                forCellWithReuseIdentifier: selectionCellID)
+        collectionView.delegate   = self
+        collectionView.dataSource = self
+        collectionView.collectionViewLayout = makeLayout()
+        collectionView.isScrollEnabled      = false
+        collectionView.alwaysBounceVertical = false
     }
-    
-    private func setupGestures() {
-        // tap gesture for overlay
-        let overlayTap = UITapGestureRecognizer(target: self, action: #selector(overlayTapped))
-        overlayView.addGestureRecognizer(overlayTap)
+
+    private func makeLayout() -> UICollectionViewCompositionalLayout {
+        UICollectionViewCompositionalLayout { _, _ in
+            let itemSize  = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                   heightDimension: .absolute(56))
+            let item      = NSCollectionLayoutItem(layoutSize: itemSize)
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                   heightDimension: .absolute(56))
+            let group     = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+            let section   = NSCollectionLayoutSection(group: group)
+            section.interGroupSpacing = 16
+            section.contentInsets     = NSDirectionalEdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0)
+            return section
+        }
     }
-    
-    @IBAction func ageFieldTapped(_ sender: UIButton) {
-        stagePickerView.isHidden = true
-        overlayView.isHidden = false
-        agePickerView.isHidden = false
-        
-        // bring to front
-        view.bringSubviewToFront(overlayView)
-        view.bringSubviewToFront(agePickerView)
-    }
-    
-    @IBAction func stageFieldTapped(_ sender: UIButton) {
-        agePickerView.isHidden = true
-        overlayView.isHidden = false
-        stagePickerView.isHidden = false
-        
-        // bring to front
-        view.bringSubviewToFront(overlayView)
-        view.bringSubviewToFront(stagePickerView)
-    }
-    
-    @objc private func overlayTapped() {
-        overlayView.isHidden = true
-        agePickerView.isHidden = true
-        stagePickerView.isHidden = true
-    }
-    
-    @objc private func datePickerChanged() {
-        updateNextButtonState()
-    }
-    
-    private func updateNextButtonState() {
-        let hasAge = selectedAge != nil
-        let hasStage = selectedStage != nil
-        let isValid = hasAge && hasStage
+
+    private func updateNextButton() {
+        let isValid      = selectedTreatmentPhase != nil
         nextButton.isEnabled = isValid
-        nextButton.alpha = isValid ? 1.0 : 0.5
+        nextButton.alpha     = isValid ? 1.0 : 0.5
     }
-    
-    private func saveData() {
-        OnboardingData.shared.diagnosisDate = datePicker.date
-        OnboardingData.shared.currentAge = selectedAge
-        OnboardingData.shared.currentStage = selectedStage
-    }
-    
-    @IBAction func skipButtonTapped(_ sender: UIButton) {
-        // navigate to hobbies
-        performSegue(withIdentifier: "showHobbies", sender: nil)
-    }
-    
+
     @IBAction func nextButtonTapped(_ sender: UIButton) {
-        saveData()
-        print("Journey details saved:")
-        print("- Date: \(datePicker.date)")
-        print("- Age: \(selectedAge ?? "none")")
-        print("- Stage: \(selectedStage ?? "none")")
-        performSegue(withIdentifier: "showHobbies", sender: nil)
+        OnboardingData.shared.diagnosisDate         = diagnosisDate
+        OnboardingData.shared.currentTreatmentPhase = selectedTreatmentPhase
+        performSegue(withIdentifier: "showFocus", sender: nil)
+    }
+
+    @IBAction func skipButtonTapped(_ sender: UIButton) {
+        performSegue(withIdentifier: "showFocus", sender: nil)
     }
 }
 
-// delegate & datasource
-extension JourneyDetailsViewController: UIPickerViewDelegate, UIPickerViewDataSource {
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        if pickerView.tag == 1 {
-            return ageOptions.count
-        } else {
-            return stageOptions.count
-        }
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        if pickerView.tag == 1 {
-            return ageOptions[row]
-        } else {
-            return stageOptions[row]
-        }
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        if pickerView.tag == 1 {
-            selectedAge = ageOptions[row]
-            // update button title to show selected age
-            var config = ageButton.configuration ?? UIButton.Configuration.plain()
-            config.title = selectedAge
-            ageButton.configuration = config
+extension JourneyDetailsViewController: UICollectionViewDataSource {
 
+    func numberOfSections(in collectionView: UICollectionView) -> Int { 1 }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int { 2 }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if indexPath.item == 0 {
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: dateCellID, for: indexPath
+            ) as! OnboardingDatePickerCell
+            cell.configure(title: "When were you diagnosed?", fieldName: "Diagnosis Date", maximumDate: Date())
+            cell.onDateChanged = { [weak self] date in self?.diagnosisDate = date }
+            return cell
         } else {
-            selectedStage = stageOptions[row]
-            // update button title to show selected stage
-            var config = stageButton.configuration ?? UIButton.Configuration.plain()
-            config.title = selectedStage
-            stageButton.configuration = config
-            
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: selectionCellID, for: indexPath
+            ) as! OnboardingSelectionPickerCell
+            cell.configure(title: "What treatment are you currently undergoing?", fieldName: "Treatment Phase",
+                           options: treatmentPhaseOptions,
+                           selectedValue: selectedTreatmentPhase)
+            cell.onOptionSelected = { [weak self] phase in
+                guard let self else { return }
+                self.selectedTreatmentPhase = phase
+                self.collectionView.reloadItems(at: [IndexPath(item: 1, section: 0)])
+                self.updateNextButton()
+            }
+            return cell
         }
-        
-        updateNextButtonState()
     }
 }
+
+extension JourneyDetailsViewController: UICollectionViewDelegate {}

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="OnboardingDatePickerCell" customModule="BreastCancerApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="448" height="88"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="448" height="88"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iZU-59-5Qe">
+                        <rect key="frame" x="24" y="32" width="400" height="56"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Diagnosis Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TBt-OR-W7T">
+                                <rect key="frame" x="16" y="18" width="115" height="20.333333333333329"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <color key="textColor" systemColor="systemGrayColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" datePickerMode="date" style="compact" translatesAutoresizingMaskIntoConstraints="NO" id="Uc3-RG-W0D">
+                                <rect key="frame" x="131" y="11" width="257" height="34.333333333333336"/>
+                                <color key="tintColor" name="primary_color"/>
+                            </datePicker>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Uc3-RG-W0D" firstAttribute="leading" secondItem="TBt-OR-W7T" secondAttribute="trailing" id="5bA-Lb-r3T"/>
+                            <constraint firstItem="TBt-OR-W7T" firstAttribute="leading" secondItem="iZU-59-5Qe" secondAttribute="leading" constant="16" id="G2S-Hw-JrA"/>
+                            <constraint firstAttribute="height" constant="56" id="eW4-dg-FXd"/>
+                            <constraint firstItem="Uc3-RG-W0D" firstAttribute="centerY" secondItem="iZU-59-5Qe" secondAttribute="centerY" id="iL7-lv-Vre"/>
+                            <constraint firstAttribute="trailing" secondItem="Uc3-RG-W0D" secondAttribute="trailing" constant="12" id="mdH-DP-ynF"/>
+                            <constraint firstItem="TBt-OR-W7T" firstAttribute="centerY" secondItem="iZU-59-5Qe" secondAttribute="centerY" id="nbP-Wl-PAe"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                <real key="value" value="1"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                <real key="value" value="13"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                <color key="value" systemColor="systemGrayColor"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="When were you diagnosed?" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bVj-5t-DNG">
+                        <rect key="frame" x="24" y="0.0" width="400" height="24"/>
+                        <constraints>
+                            <constraint firstAttribute="height" relation="lessThanOrEqual" constant="56" id="yjE-Oh-RBw"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="bVj-5t-DNG" secondAttribute="trailing" constant="24" id="2Bq-yd-b3P"/>
+                <constraint firstItem="iZU-59-5Qe" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="24" id="4ti-lU-g22"/>
+                <constraint firstAttribute="trailing" secondItem="iZU-59-5Qe" secondAttribute="trailing" constant="24" id="IdG-Ag-Jw8"/>
+                <constraint firstItem="iZU-59-5Qe" firstAttribute="top" secondItem="bVj-5t-DNG" secondAttribute="bottom" constant="8" id="YtK-ew-cn1"/>
+                <constraint firstAttribute="bottom" secondItem="iZU-59-5Qe" secondAttribute="bottom" id="fPQ-gC-g1L"/>
+                <constraint firstItem="bVj-5t-DNG" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="rcb-lf-x8d"/>
+                <constraint firstItem="bVj-5t-DNG" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="24" id="vhN-oI-dQI"/>
+            </constraints>
+            <size key="customSize" width="448" height="98"/>
+            <connections>
+                <outlet property="datePicker" destination="Uc3-RG-W0D" id="K2R-gB-3F5"/>
+                <outlet property="placeholderLabel" destination="TBt-OR-W7T" id="bGb-je-tjG"/>
+                <outlet property="titleLabel" destination="bVj-5t-DNG" id="EMO-Ph-2aD"/>
+            </connections>
+            <point key="canvasLocation" x="407.63358778625951" y="102.8169014084507"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <namedColor name="primary_color">
+            <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGrayColor">
+            <color red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

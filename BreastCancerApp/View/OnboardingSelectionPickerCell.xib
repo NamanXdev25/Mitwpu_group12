@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="UIMenu" message="Requires Xcode 11 or later." minToolsVersion="11.0" requiredIntegratedClassName="UICommandDiff"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="OnboardingSelectionPickerCell" customModule="BreastCancerApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="417" height="113"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="417" height="113"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h43-Oe-BzH">
+                        <rect key="frame" x="24" y="57" width="369" height="56"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Treatment Phase" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nP8-yl-hfm">
+                                <rect key="frame" x="16" y="17.666666666666671" width="129" height="21"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <color key="textColor" systemColor="systemGrayColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" showsMenuAsPrimaryAction="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" changesSelectionAsPrimaryAction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ecw-cy-ba2">
+                                <rect key="frame" x="312" y="13" width="41" height="30"/>
+                                <color key="tintColor" name="primary_color"/>
+                                <menu key="menu" id="Ioe-qf-Wma">
+                                    <children>
+                                        <command title="Item 1" id="An0-dz-UtP"/>
+                                        <command title="Item 2" id="plr-Qu-5vQ"/>
+                                    </children>
+                                </menu>
+                                <state key="normal" title="Button"/>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="nP8-yl-hfm" firstAttribute="leading" secondItem="h43-Oe-BzH" secondAttribute="leading" constant="16" id="M1p-Hi-AUI"/>
+                            <constraint firstItem="nP8-yl-hfm" firstAttribute="centerY" secondItem="h43-Oe-BzH" secondAttribute="centerY" id="WVz-N4-5SL"/>
+                            <constraint firstItem="Ecw-cy-ba2" firstAttribute="centerY" secondItem="h43-Oe-BzH" secondAttribute="centerY" id="noE-XR-Bpo"/>
+                            <constraint firstAttribute="height" constant="56" id="sZX-p1-deV"/>
+                            <constraint firstAttribute="trailing" secondItem="Ecw-cy-ba2" secondAttribute="trailing" constant="16" id="vgT-yk-e1b"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                <real key="value" value="1"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                <real key="value" value="13"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                <color key="value" systemColor="systemGrayColor"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What treatment are you currently undergoing?" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gYI-fi-p4U">
+                        <rect key="frame" x="24" y="0.0" width="369" height="49"/>
+                        <constraints>
+                            <constraint firstAttribute="height" relation="lessThanOrEqual" constant="56" id="nCO-7B-k3i"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="gYI-fi-p4U" secondAttribute="trailing" constant="24" id="9Pn-sN-3tc"/>
+                <constraint firstItem="h43-Oe-BzH" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="24" id="FhO-GE-jAb"/>
+                <constraint firstAttribute="trailing" secondItem="h43-Oe-BzH" secondAttribute="trailing" constant="24" id="Xqm-QI-JSA"/>
+                <constraint firstItem="gYI-fi-p4U" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="h0J-jl-AUs"/>
+                <constraint firstItem="gYI-fi-p4U" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="24" id="h53-BY-wpW"/>
+                <constraint firstItem="h43-Oe-BzH" firstAttribute="top" secondItem="gYI-fi-p4U" secondAttribute="bottom" constant="8" id="q3A-bs-N9v"/>
+                <constraint firstAttribute="bottom" secondItem="h43-Oe-BzH" secondAttribute="bottom" id="uCT-7E-Pif"/>
+            </constraints>
+            <size key="customSize" width="417" height="144"/>
+            <connections>
+                <outlet property="placeholderLabel" destination="nP8-yl-hfm" id="1Ee-k8-BYF"/>
+                <outlet property="titleLabel" destination="gYI-fi-p4U" id="RVg-Zd-Cjd"/>
+            </connections>
+            <point key="canvasLocation" x="-12.977099236641221" y="99.647887323943664"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <namedColor name="primary_color">
+            <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGrayColor">
+            <color red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>
