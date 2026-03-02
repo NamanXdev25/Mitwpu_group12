@@ -1,0 +1,36 @@
+//
+//  HomeJourneyCell.swift
+//  BreastCancerApp
+//
+//  Created by Shivani Dinesh on 03/03/26.
+//
+
+import UIKit
+
+class HomeJourneyCell: UICollectionViewCell {
+
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var subtitleLabel: UILabel!
+    @IBOutlet weak var treatmentLabel: UILabel!
+    @IBOutlet weak var phaseLabel: UILabel!
+    @IBOutlet weak var cardView: UIView!
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        setupCard()
+    }
+
+    private func setupCard() {
+        cardView.layer.cornerRadius = 16
+        cardView.layer.masksToBounds = false
+        cardView.layer.shadowColor = UIColor.black.cgColor
+        cardView.layer.shadowOpacity = 0.06
+        cardView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        cardView.layer.shadowRadius = 8
+    }
+
+    func configure(treatment: String, phase: String) {
+        treatmentLabel.text = treatment
+        phaseLabel.text = "• \(phase)"
+    }
+}
