@@ -23,25 +23,32 @@ class WaitCell: UICollectionViewCell {
     @IBOutlet weak var calmButton: UIButton!
     
     @IBOutlet weak var saveButton: UIButton!
-    @IBOutlet weak var successMessageView: UIView!
-    @IBOutlet weak var successMessageLabel: UILabel!
     
-    @IBOutlet weak var supportTitleLabel: UILabel!
-    @IBOutlet weak var suggestionsContainerView: UIView!
-    @IBOutlet weak var suggestionTitleLabel: UILabel!
-    @IBOutlet weak var suggestionDescriptionLabel: UILabel!
-    @IBOutlet weak var suggestion2TitleLabel: UILabel!
-    @IBOutlet weak var suggestion2DescriptionLabel: UILabel!
-    @IBOutlet weak var suggestion3TitleLabel: UILabel!
-    @IBOutlet weak var suggestion3DescriptionLabel: UILabel!
+    // MARK: - Colors
+    // Matched exactly to XIB named colors (displayP3)
+    // "light pink": r=0.988 g=0.910 b=0.937  → visible soft pink background
+    // "pink":       r=0.910 g=0.416 b=0.573  → strong pink for selected + save button
+    private let lightPinkColor = UIColor(
+        displayP3Red: 0.9882352941,
+        green:        0.9098039216,
+        blue:         0.9372549020,
+        alpha:        1.0
+    )
+    private let darkPinkColor = UIColor(
+        displayP3Red: 0.9098039216,
+        green:        0.4156862745,
+        blue:         0.5725490196,
+        alpha:        1.0
+    )
+    private let savedGreenColor = UIColor(red: 0.2,  green: 0.6,  blue: 0.2,  alpha: 1.0)
+    private let savedGreenBg    = UIColor(red: 0.85, green: 0.95, blue: 0.85, alpha: 1.0)
     
     // MARK: - Properties
     private var selectedFeelings: Set<String> = []
     private var currentDays: Int = 0
     private var feelingButtons: [UIButton] = []
-    
-    private let lightPinkColor = UIColor(red: 0.99, green: 0.96, blue: 0.97, alpha: 1.0)
-    private let darkPinkColor = UIColor(red: 0.93, green: 0.45, blue: 0.64, alpha: 1.0)
+    private var isSaved: Bool = false
+    private var didSetupButtons = false
     
     var onSaveButtonTapped: (() -> Void)?
     var onCellHeightChanged: (() -> Void)?
@@ -49,13 +56,30 @@ class WaitCell: UICollectionViewCell {
     // MARK: - Lifecycle
     override func awakeFromNib() {
         super.awakeFromNib()
-        setupUI()
-        setupFeelingButtons()
         setupActions()
+        setupStaticUI()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if !didSetupButtons {
+            didSetupButtons = true
+            setupFeelingButtons()
+        }
+        forceShowStaticContent()
+    }
+    
+    // MARK: - Color Image Helper
+    // setBackgroundImage always wins over XIB backgroundColor — required for UIButton
+    private func colorImage(_ color: UIColor) -> UIImage {
+        return UIGraphicsImageRenderer(size: CGSize(width: 1, height: 1)).image { ctx in
+            color.setFill()
+            ctx.fill(CGRect(x: 0, y: 0, width: 1, height: 1))
+        }
     }
     
     // MARK: - Setup
-    private func setupUI() {
+    private func setupStaticUI() {
         containerView.layer.cornerRadius = 16
         containerView.layer.shadowColor = UIColor.black.cgColor
         containerView.layer.shadowOpacity = 0.05
@@ -69,36 +93,74 @@ class WaitCell: UICollectionViewCell {
         daysTextField.isUserInteractionEnabled = false
         daysTextField.text = ""
         
-        feelingsQuestionLabel.isHidden = false
-        feelingsSubtitleLabel.isHidden = false
-        
-        saveButton.isHidden = true
-        saveButton.backgroundColor = darkPinkColor
+        saveButton.setTitle("Save", for: .normal)
         saveButton.setTitleColor(.white, for: .normal)
+        saveButton.backgroundColor = darkPinkColor
         saveButton.layer.cornerRadius = 12
         saveButton.clipsToBounds = true
+        saveButton.isHidden = false
+        saveButton.alpha = 0.4
+        saveButton.isUserInteractionEnabled = false
+    }
+    
+    private func forceShowStaticContent() {
+        daysWaitedLabel.isHidden = false
+        daysWaitedLabel.alpha = 1
         
-        successMessageView.isHidden = true
-        successMessageView.backgroundColor = .clear
-        successMessageLabel.isHidden = false
+        feelingsQuestionLabel.isHidden = false
+        feelingsQuestionLabel.alpha = 1
         
-        supportTitleLabel.isHidden = true
-        suggestionsContainerView.isHidden = true
+        feelingsSubtitleLabel.isHidden = false
+        feelingsSubtitleLabel.alpha = 1
+        
+        stepperUpButton.isHidden = false
+        stepperDownButton.isHidden = false
+        daysTextField.isHidden = false
+        
+        for button in feelingButtons {
+            button.isHidden = false
+            button.alpha = 1
+        }
     }
     
     private func setupFeelingButtons() {
         feelingButtons = [
             sadButton, anxiousButton, overwhelmedButton, scaredButton,
             angryButton, numbButton, hopefulButton, calmButton
-        ]
+        ].compactMap { $0 }
         
         for button in feelingButtons {
-            button.backgroundColor = lightPinkColor
-            button.setTitleColor(darkPinkColor, for: .normal)
             button.layer.cornerRadius = 20
             button.clipsToBounds = true
             button.contentEdgeInsets = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 16)
+            button.isHidden = false
+            button.alpha = 1
+            button.adjustsImageWhenHighlighted = false
+            applyDeselectedStyle(to: button)
         }
+    }
+    
+    // MARK: - Feeling Button Styling
+    private func applySelectedStyle(to button: UIButton) {
+        button.layer.backgroundColor = darkPinkColor.cgColor
+        button.setBackgroundImage(colorImage(darkPinkColor), for: .normal)
+        button.setBackgroundImage(colorImage(darkPinkColor), for: .highlighted)
+        button.setBackgroundImage(colorImage(darkPinkColor), for: .selected)
+        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(.white, for: .highlighted)
+        button.setTitleColor(.white, for: .selected)
+        button.titleLabel?.textColor = .white
+    }
+    
+    private func applyDeselectedStyle(to button: UIButton) {
+        button.layer.backgroundColor = lightPinkColor.cgColor
+        button.setBackgroundImage(colorImage(lightPinkColor), for: .normal)
+        button.setBackgroundImage(colorImage(lightPinkColor), for: .highlighted)
+        button.setBackgroundImage(colorImage(lightPinkColor), for: .selected)
+        button.setTitleColor(darkPinkColor, for: .normal)
+        button.setTitleColor(darkPinkColor, for: .highlighted)
+        button.setTitleColor(darkPinkColor, for: .selected)
+        button.titleLabel?.textColor = darkPinkColor
     }
     
     private func setupActions() {
@@ -119,152 +181,118 @@ class WaitCell: UICollectionViewCell {
     @objc private func stepperUpTapped() {
         currentDays += 1
         daysTextField.text = "\(currentDays)"
-        checkIfShouldShowSaveButton()
+        updateSaveButtonState()
     }
     
     @objc private func stepperDownTapped() {
         if currentDays > 0 {
             currentDays -= 1
             daysTextField.text = currentDays == 0 ? "" : "\(currentDays)"
-            checkIfShouldShowSaveButton()
+            updateSaveButtonState()
         }
     }
     
     @objc private func feelingButtonTapped(_ sender: UIButton) {
+        guard !isSaved else { return }
         guard let title = sender.titleLabel?.text else { return }
         let components = title.components(separatedBy: " ")
         let feeling = components.count > 1 ? components[1] : title
         
         if selectedFeelings.contains(feeling) {
             selectedFeelings.remove(feeling)
-            sender.backgroundColor = lightPinkColor
-            sender.setTitleColor(darkPinkColor, for: .normal)
+            applyDeselectedStyle(to: sender)
         } else {
             selectedFeelings.insert(feeling)
-            sender.backgroundColor = darkPinkColor
-            sender.setTitleColor(.white, for: .normal)
+            applySelectedStyle(to: sender)
         }
         
-        checkIfShouldShowSaveButton()
+        updateSaveButtonState()
     }
     
     @objc private func saveButtonTapped() {
-        saveButton.isHidden = true
-        successMessageView.isHidden = false
-        successMessageLabel.isHidden = false
+        guard !isSaved else { return }
+        isSaved = true
+        
+        saveButton.setTitle("Saved", for: .normal)
+        saveButton.backgroundColor = darkPinkColor
+        saveButton.setTitleColor(.white, for: .normal)
+        saveButton.alpha = 1.0
+        saveButton.isUserInteractionEnabled = false
         
         statusLabel.text = "Completed"
-        statusLabel.backgroundColor = UIColor(red: 0.85, green: 0.95, blue: 0.85, alpha: 1.0)
-        statusLabel.textColor = UIColor(red: 0.2, green: 0.6, blue: 0.2, alpha: 1.0)
+        statusLabel.backgroundColor = savedGreenBg
+        statusLabel.textColor = savedGreenColor
         
-        supportTitleLabel.isHidden = true
-        suggestionsContainerView.isHidden = false
+        stepperUpButton.isUserInteractionEnabled = false
+        stepperDownButton.isUserInteractionEnabled = false
         
-        updateSuggestions()
         onSaveButtonTapped?()
-        onCellHeightChanged?()
     }
     
-    private func checkIfShouldShowSaveButton() {
-        let shouldShow = currentDays > 0 && !selectedFeelings.isEmpty
-        if shouldShow != !saveButton.isHidden {
-            saveButton.isHidden = !shouldShow
-            onCellHeightChanged?()
-        }
-    }
-    
-    private func updateSuggestions() {
-        let allSuggestions = [
-            Suggestion(title: "Managing Anxiety",
-                      description: "Breathing exercises and grounding techniques",
-                      relatedFeelings: ["Anxious", "Overwhelmed", "Scared"]),
-            Suggestion(title: "Emotional Support",
-                      description: "Gentle ways to process difficult emotions",
-                      relatedFeelings: ["Sad", "Numb"]),
-            Suggestion(title: "Managing Anger",
-                      description: "Physical activity and mindfulness practices",
-                      relatedFeelings: ["Angry"]),
-            Suggestion(title: "Self-Care Practices",
-                      description: "Nurturing activities for emotional wellbeing",
-                      relatedFeelings: ["Hopeful", "Calm"]),
-            Suggestion(title: "Building Resilience",
-                      description: "Strategies to strengthen emotional capacity",
-                      relatedFeelings: ["Sad", "Scared", "Overwhelmed"])
-        ]
-        
-        var relevantSuggestions: [Suggestion] = []
-        for suggestion in allSuggestions {
-            for feeling in selectedFeelings {
-                if suggestion.relatedFeelings.contains(feeling) {
-                    if !relevantSuggestions.contains(where: { $0.title == suggestion.title }) {
-                        relevantSuggestions.append(suggestion)
-                    }
-                    break
-                }
-            }
-        }
-        
-        if relevantSuggestions.count < 3 {
-            for suggestion in allSuggestions {
-                if !relevantSuggestions.contains(where: { $0.title == suggestion.title }) {
-                    relevantSuggestions.append(suggestion)
-                }
-                if relevantSuggestions.count >= 3 { break }
-            }
-        }
-        
-        if relevantSuggestions.count > 0 {
-            suggestionTitleLabel.text = relevantSuggestions[0].title
-            suggestionDescriptionLabel.text = relevantSuggestions[0].description
-        }
-        if relevantSuggestions.count > 1 {
-            suggestion2TitleLabel.text = relevantSuggestions[1].title
-            suggestion2DescriptionLabel.text = relevantSuggestions[1].description
-        }
-        if relevantSuggestions.count > 2 {
-            suggestion3TitleLabel.text = relevantSuggestions[2].title
-            suggestion3DescriptionLabel.text = relevantSuggestions[2].description
+    // MARK: - Save Button State
+    private func updateSaveButtonState() {
+        guard !isSaved else { return }
+        let shouldEnable = currentDays > 0 && !selectedFeelings.isEmpty
+        saveButton.isUserInteractionEnabled = shouldEnable
+        UIView.animate(withDuration: 0.2) {
+            self.saveButton.alpha = shouldEnable ? 1.0 : 0.4
         }
     }
     
     // MARK: - Height Helper
     func getCellHeight() -> CGFloat {
-        var height: CGFloat = 540
-
-        if !saveButton.isHidden {
-            height += 70
-        }
-        if !successMessageView.isHidden {
-            height += 60
-        }
-        if !suggestionsContainerView.isHidden {
-            height += 330
-        }
-
-        return height
+        return 480
     }
     
     // MARK: - Configuration
     func configure(with model: WaitModel) {
-        statusLabel.text = model.status
+        daysWaitedLabel.isHidden = false
+        daysWaitedLabel.alpha = 1
         feelingsQuestionLabel.isHidden = false
+        feelingsQuestionLabel.alpha = 1
         feelingsSubtitleLabel.isHidden = false
+        feelingsSubtitleLabel.alpha = 1
+        stepperUpButton.isHidden = false
+        stepperDownButton.isHidden = false
+        daysTextField.isHidden = false
+        feelingButtons.forEach {
+            $0.isHidden = false
+            $0.alpha = 1
+        }
         
         if model.status == "Completed" {
-            statusLabel.backgroundColor = UIColor(red: 0.85, green: 0.95, blue: 0.85, alpha: 1.0)
-            statusLabel.textColor = UIColor(red: 0.2, green: 0.6, blue: 0.2, alpha: 1.0)
-            successMessageView.isHidden = false
-            successMessageLabel.isHidden = false
-            supportTitleLabel.isHidden = true
-            suggestionsContainerView.isHidden = false
-            saveButton.isHidden = true
+            isSaved = true
+            
+            statusLabel.text = "Completed"
+            statusLabel.backgroundColor = savedGreenBg
+            statusLabel.textColor = savedGreenColor
+            
+            saveButton.isHidden = false
+            saveButton.setTitle("Saved", for: .normal)
+            saveButton.backgroundColor = darkPinkColor
+            saveButton.setTitleColor(.white, for: .normal)
+            saveButton.alpha = 1.0
+            saveButton.isUserInteractionEnabled = false
+            
+            stepperUpButton.isUserInteractionEnabled = false
+            stepperDownButton.isUserInteractionEnabled = false
+            
         } else {
+            isSaved = false
+            
+            statusLabel.text = "Not Started"
             statusLabel.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1.0)
             statusLabel.textColor = .gray
-            successMessageView.isHidden = true
-            supportTitleLabel.isHidden = true
-            suggestionsContainerView.isHidden = true
-            saveButton.isHidden = true
+            
+            saveButton.isHidden = false
+            saveButton.setTitle("Save", for: .normal)
+            saveButton.backgroundColor = darkPinkColor
+            saveButton.setTitleColor(.white, for: .normal)
+            saveButton.isUserInteractionEnabled = false
+            saveButton.alpha = 0.4
+            
+            stepperUpButton.isUserInteractionEnabled = true
+            stepperDownButton.isUserInteractionEnabled = true
         }
         
         if let days = model.daysWaited {
@@ -274,6 +302,10 @@ class WaitCell: UICollectionViewCell {
         
         selectedFeelings = model.selectedFeelings
         updateFeelingButtonStates()
+        updateSaveButtonState()
+        
+        setNeedsLayout()
+        layoutIfNeeded()
     }
     
     private func updateFeelingButtonStates() {
@@ -283,11 +315,9 @@ class WaitCell: UICollectionViewCell {
             let feeling = components.count > 1 ? components[1] : title
             
             if selectedFeelings.contains(feeling) {
-                button.backgroundColor = darkPinkColor
-                button.setTitleColor(.white, for: .normal)
+                applySelectedStyle(to: button)
             } else {
-                button.backgroundColor = lightPinkColor
-                button.setTitleColor(darkPinkColor, for: .normal)
+                applyDeselectedStyle(to: button)
             }
         }
     }

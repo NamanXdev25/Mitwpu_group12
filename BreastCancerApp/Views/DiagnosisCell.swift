@@ -12,12 +12,12 @@ class DiagnosisCell: UICollectionViewCell {
     @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var datePickerHeightConstraint: NSLayoutConstraint!
     
-    // New outlets for button and message
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var successMessageView: UIView!
     @IBOutlet weak var successMessageLabel: UILabel!
     
     // MARK: - Properties
+    private let pink = UIColor(named: "pink") ?? UIColor(red: 0.93, green: 0.45, blue: 0.64, alpha: 1.0)
     private var overlayView: UIView?
     private var datePickerContainerView: UIView?
     var onDateSelected: ((Date) -> Void)?
@@ -33,30 +33,22 @@ class DiagnosisCell: UICollectionViewCell {
     
     // MARK: - Setup
     private func setupUI() {
-        // Hide the XIB date picker
         datePicker.isHidden = true
         datePickerHeightConstraint.constant = 0
-        
-        // Disable text field direct editing
         dateTextField.isUserInteractionEnabled = false
-        
-        // Initially hide button and message
         saveButton.isHidden = true
         successMessageView.isHidden = true
         
-        // Setup container view appearance
         containerView.layer.cornerRadius = 16
         containerView.layer.shadowColor = UIColor.black.cgColor
         containerView.layer.shadowOpacity = 0.05
         containerView.layer.shadowOffset = CGSize(width: 0, height: 2)
         containerView.layer.shadowRadius = 4
         
-        // Add rounded corners to status label
         statusLabel.layer.cornerRadius = 12
         statusLabel.clipsToBounds = true
         
-        // Setup save button appearance
-        saveButton.backgroundColor = UIColor(red: 0.93, green: 0.45, blue: 0.64, alpha: 1.0) // Pink color
+        saveButton.backgroundColor = pink
         saveButton.setTitleColor(.white, for: .normal)
         saveButton.layer.cornerRadius = 12
         saveButton.clipsToBounds = true
@@ -75,44 +67,38 @@ class DiagnosisCell: UICollectionViewCell {
     private func showDatePickerOverlay() {
         guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else { return }
         
-        // Create overlay background (dimmed)
         overlayView = UIView(frame: window.bounds)
         overlayView?.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         overlayView?.alpha = 0
         
-        // Tap to dismiss
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissDatePicker))
         overlayView?.addGestureRecognizer(tapGesture)
         
-        // Create date picker container
         datePickerContainerView = UIView()
         datePickerContainerView?.backgroundColor = .white
         datePickerContainerView?.layer.cornerRadius = 16
         datePickerContainerView?.translatesAutoresizingMaskIntoConstraints = false
         
-        // Create new date picker for overlay
         let picker = UIDatePicker()
         picker.preferredDatePickerStyle = .inline
         picker.datePickerMode = .date
         picker.translatesAutoresizingMaskIntoConstraints = false
+        picker.tintColor = pink   // ← pink tint for selected date circle, arrows, Done
         picker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
         
-        // Create Done button
         let doneButton = UIButton(type: .system)
         doneButton.setTitle("Done", for: .normal)
+        doneButton.setTitleColor(pink, for: .normal)   // ← pink Done button
         doneButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
         doneButton.translatesAutoresizingMaskIntoConstraints = false
         doneButton.addTarget(self, action: #selector(dismissDatePicker), for: .touchUpInside)
         
-        // Add to container
         datePickerContainerView?.addSubview(picker)
         datePickerContainerView?.addSubview(doneButton)
         
-        // Add to window
         window.addSubview(overlayView!)
         window.addSubview(datePickerContainerView!)
         
-        // Constraints for date picker container
         NSLayoutConstraint.activate([
             datePickerContainerView!.centerXAnchor.constraint(equalTo: window.centerXAnchor),
             datePickerContainerView!.centerYAnchor.constraint(equalTo: window.centerYAnchor),
@@ -129,7 +115,6 @@ class DiagnosisCell: UICollectionViewCell {
             doneButton.heightAnchor.constraint(equalToConstant: 44)
         ])
         
-        // Animate in
         datePickerContainerView?.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
         datePickerContainerView?.alpha = 0
         
@@ -158,46 +143,39 @@ class DiagnosisCell: UICollectionViewCell {
         formatter.dateFormat = "dd/MM/yyyy"
         dateTextField.text = formatter.string(from: sender.date)
         
-        // Show save button, hide success message
         saveButton.isHidden = false
         successMessageView.isHidden = true
         
-        // Notify the view controller
         onDateSelected?(sender.date)
         onCellHeightChanged?()
     }
     
     @objc private func saveButtonTapped() {
-        // Hide save button
         saveButton.isHidden = true
-        
-        // Show success message
         successMessageView.isHidden = false
         
-        // Update status to "Completed"
         statusLabel.text = "Completed"
-        statusLabel.backgroundColor = UIColor(red: 0.85, green: 0.95, blue: 0.85, alpha: 1.0) // Light green
-        statusLabel.textColor = UIColor(red: 0.2, green: 0.6, blue: 0.2, alpha: 1.0) // Dark green
+        statusLabel.backgroundColor = UIColor(red: 0.85, green: 0.95, blue: 0.85, alpha: 1.0)
+        statusLabel.textColor = UIColor(red: 0.2, green: 0.6, blue: 0.2, alpha: 1.0)
         
-        // Notify VC
         onSaveButtonTapped?()
         onCellHeightChanged?()
     }
     
     func getCellHeight() -> CGFloat {
         if !successMessageView.isHidden {
-            return 300 // Increased for success message
+            return 300
         } else if !saveButton.isHidden {
-            return 310 // Increased for save button
+            return 310
         } else {
-            return 240 // Increased base height
+            return 240
         }
     }
+    
     // MARK: - Configuration
     func configure(with model: DiagnosisModel) {
         statusLabel.text = model.status
         
-        // Update status appearance
         if model.status == "Completed" {
             statusLabel.backgroundColor = UIColor(red: 0.85, green: 0.95, blue: 0.85, alpha: 1.0)
             statusLabel.textColor = UIColor(red: 0.2, green: 0.6, blue: 0.2, alpha: 1.0)

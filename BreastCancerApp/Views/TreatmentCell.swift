@@ -16,14 +16,19 @@ class TreatmentCell: UICollectionViewCell {
     private var phases: [TreatmentPhaseModel] = []
     private var phaseViews: [TreatmentPhaseView] = []
     private let pink = UIColor(red: 0.91, green: 0.39, blue: 0.54, alpha: 1.0)
-    
-    // Container to hold phase views
+    private let completedGreenColor = UIColor(red: 0.2,  green: 0.6,  blue: 0.2,  alpha: 1.0)
+    private let completedGreenBg    = UIColor(red: 0.85, green: 0.95, blue: 0.85, alpha: 1.0)
+
+    // MARK: - Constants
+    private let phaseHeight: CGFloat = 390
+    private let phaseSpacing: CGFloat = 12
+
     private let phasesContainerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
+
     private var containerHeightConstraint: NSLayoutConstraint?
 
     // MARK: - Lifecycle
@@ -50,8 +55,7 @@ class TreatmentCell: UICollectionViewCell {
         addPhaseButton.setBackgroundImage(imageWithColor(.white), for: .normal)
         addPhaseButton.setBackgroundImage(imageWithColor(.white), for: .highlighted)
         addPhaseButton.setBackgroundImage(imageWithColor(.white), for: .selected)
-        
-        // Add phases container between separator and button
+
         contentView.addSubview(phasesContainerView)
         NSLayoutConstraint.activate([
             phasesContainerView.topAnchor.constraint(equalTo: separatorView.bottomAnchor, constant: 12),
@@ -59,7 +63,7 @@ class TreatmentCell: UICollectionViewCell {
             phasesContainerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             phasesContainerView.bottomAnchor.constraint(equalTo: addPhaseButton.topAnchor, constant: -12)
         ])
-        
+
         containerHeightConstraint = phasesContainerView.heightAnchor.constraint(equalToConstant: 0)
         containerHeightConstraint?.isActive = true
     }
@@ -77,59 +81,71 @@ class TreatmentCell: UICollectionViewCell {
 
     // MARK: - IBActions
     @IBAction func addPhaseTapped(_ sender: UIButton) {
-        print("➕ Add phase tapped")
         addNewPhase()
     }
-    
+
     // MARK: - Add Phase
     private func addNewPhase() {
-        // Load phase view from XIB
         guard let phaseView = Bundle.main.loadNibNamed("TreatmentPhaseView", owner: nil, options: nil)?.first as? TreatmentPhaseView else {
-            print("❌ Failed to load TreatmentPhaseView from XIB")
             return
         }
-        
+
         phaseView.translatesAutoresizingMaskIntoConstraints = false
         phaseView.configure(index: phaseViews.count)
-        
-        // Add to container
+
+        phaseView.onSaved = { [weak self] in
+            self?.markCompleted()
+        }
+
         phasesContainerView.addSubview(phaseView)
-        
-        // Position it below previous phase or at top
+
         if let lastPhase = phaseViews.last {
             NSLayoutConstraint.activate([
-                phaseView.topAnchor.constraint(equalTo: lastPhase.bottomAnchor, constant: 12),
+                phaseView.topAnchor.constraint(equalTo: lastPhase.bottomAnchor, constant: phaseSpacing),
                 phaseView.leadingAnchor.constraint(equalTo: phasesContainerView.leadingAnchor),
                 phaseView.trailingAnchor.constraint(equalTo: phasesContainerView.trailingAnchor),
-                phaseView.heightAnchor.constraint(equalToConstant: 450)
+                phaseView.heightAnchor.constraint(equalToConstant: phaseHeight)
             ])
         } else {
             NSLayoutConstraint.activate([
                 phaseView.topAnchor.constraint(equalTo: phasesContainerView.topAnchor),
                 phaseView.leadingAnchor.constraint(equalTo: phasesContainerView.leadingAnchor),
                 phaseView.trailingAnchor.constraint(equalTo: phasesContainerView.trailingAnchor),
-                phaseView.heightAnchor.constraint(equalToConstant: 450)
+                phaseView.heightAnchor.constraint(equalToConstant: phaseHeight)
             ])
         }
-        
+
         phaseViews.append(phaseView)
-        
-        // Update container height
-        let totalHeight = CGFloat(phaseViews.count) * 450 + CGFloat(phaseViews.count - 1) * 12
+
+        // Fix: correct total height — n phases + (n-1) gaps
+        let count = CGFloat(phaseViews.count)
+        let totalHeight = (count * phaseHeight) + ((count - 1) * phaseSpacing)
         containerHeightConstraint?.constant = totalHeight
-        
-        // Notify VC to update cell height
+
         onCellHeightChanged?()
+    }
+
+    // MARK: - Status Badge
+    private func markCompleted() {
+        statusLabel.text = "Completed"
+        statusLabel.backgroundColor = completedGreenBg
+        statusLabel.textColor = completedGreenColor
     }
 
     // MARK: - Public Configure
     func configure(with model: TreatmentModel) {
-        statusLabel.text = model.status
+        if model.status == "Completed" {
+            markCompleted()
+        } else {
+            statusLabel.text = "Not Started"
+            statusLabel.backgroundColor = UIColor(red: 0.94, green: 0.94, blue: 0.94, alpha: 1.0)
+            statusLabel.textColor = UIColor(red: 0.4, green: 0.4, blue: 0.4, alpha: 1.0)
+        }
     }
 
     // MARK: - Height Helper
     func getCellHeight() -> CGFloat {
-        let baseHeight: CGFloat = 130
+        let baseHeight: CGFloat = 150
         let phasesHeight = containerHeightConstraint?.constant ?? 0
         return baseHeight + phasesHeight
     }

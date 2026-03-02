@@ -12,9 +12,12 @@ class JourneyViewController: UIViewController {
 
     private var cellHeights: [Int: CGFloat] = [
         0: 200,
-        1: 540,
-        2: 140
+        1: 510,
+        2: 150,
+        3: 480
     ]
+    
+    private var selectedPostTreatmentDate: Date?
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -34,14 +37,10 @@ class JourneyViewController: UIViewController {
     }
 
     private func setupCollectionView() {
-        let diagnosisNib = UINib(nibName: "DiagnosisCell", bundle: nil)
-        collectionView.register(diagnosisNib, forCellWithReuseIdentifier: "DiagnosisCell")
-
-        let waitNib = UINib(nibName: "WaitCell", bundle: nil)
-        collectionView.register(waitNib, forCellWithReuseIdentifier: "WaitCell")
-
-        let treatmentNib = UINib(nibName: "TreatmentCell", bundle: nil)
-        collectionView.register(treatmentNib, forCellWithReuseIdentifier: "TreatmentCell")
+        collectionView.register(UINib(nibName: "DiagnosisCell", bundle: nil), forCellWithReuseIdentifier: "DiagnosisCell")
+        collectionView.register(UINib(nibName: "WaitCell", bundle: nil), forCellWithReuseIdentifier: "WaitCell")
+        collectionView.register(UINib(nibName: "TreatmentCell", bundle: nil), forCellWithReuseIdentifier: "TreatmentCell")
+        collectionView.register(UINib(nibName: "PostTreatmentCell", bundle: nil), forCellWithReuseIdentifier: "PostTreatmentCell")
 
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -55,90 +54,217 @@ class JourneyViewController: UIViewController {
         }
     }
 
-    // MARK: - Height Update Helper
+    // MARK: - Height Update
     private func updateHeight(for index: Int, height: CGFloat) {
         guard cellHeights[index] != height else { return }
         cellHeights[index] = height
         UIView.performWithoutAnimation {
-            self.collectionView.performBatchUpdates(nil)
+            collectionView.performBatchUpdates(nil)
         }
     }
 }
 
+////////////////////////////////////////////////////////////
 // MARK: - UICollectionViewDataSource
+////////////////////////////////////////////////////////////
+
 extension JourneyViewController: UICollectionViewDataSource {
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
 
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
+        return 4
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-        if indexPath.item == 0 {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DiagnosisCell", for: indexPath) as? DiagnosisCell else {
-                return UICollectionViewCell()
-            }
+        switch indexPath.item {
+
+        case 0:
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "DiagnosisCell",
+                for: indexPath) as? DiagnosisCell else { return UICollectionViewCell() }
+
             cell.configure(with: diagnosisModel)
+
             cell.onDateSelected = { [weak self] date in
                 self?.diagnosisModel.diagnosisDate = date
             }
+
             cell.onSaveButtonTapped = { [weak self] in
                 self?.diagnosisModel.status = "Completed"
             }
+
             cell.onCellHeightChanged = { [weak self] in
                 guard let self = self else { return }
-                let height = cell.getCellHeight()
-                self.updateHeight(for: 0, height: height)
+                self.updateHeight(for: 0, height: cell.getCellHeight())
             }
+
             return cell
 
-        } else if indexPath.item == 1 {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WaitCell", for: indexPath) as? WaitCell else {
-                return UICollectionViewCell()
-            }
+        case 1:
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "WaitCell",
+                for: indexPath) as? WaitCell else { return UICollectionViewCell() }
+
             cell.configure(with: waitModel)
+
             cell.onSaveButtonTapped = { [weak self] in
                 self?.waitModel.status = "Completed"
             }
+
             cell.onCellHeightChanged = { [weak self] in
                 guard let self = self else { return }
-                let height = cell.getCellHeight()
-                self.updateHeight(for: 1, height: height)
+                self.updateHeight(for: 1, height: cell.getCellHeight())
             }
+
             return cell
 
-        } else {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TreatmentCell", for: indexPath) as? TreatmentCell else {
-                return UICollectionViewCell()
-            }
+        case 2:
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "TreatmentCell",
+                for: indexPath) as? TreatmentCell else { return UICollectionViewCell() }
+
             cell.configure(with: treatmentModel)
+
             cell.onSaveButtonTapped = { [weak self] phase, index in
-                guard let self = self else { return }
-                self.treatmentModel.phases.append(phase)
-                print("💾 Treatment phase \(index + 1) saved")
+                self?.treatmentModel.phases.append(phase)
             }
+
             cell.onCellHeightChanged = { [weak self] in
                 guard let self = self else { return }
-                let height = cell.getCellHeight()
-                self.updateHeight(for: 2, height: height)
+                self.updateHeight(for: 2, height: cell.getCellHeight())
             }
+
+            return cell
+
+        default:
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "PostTreatmentCell",
+                for: indexPath) as? PostTreatmentCell else { return UICollectionViewCell() }
+
+            cell.configure()
+
+            cell.onDateTapped = { [weak self] in
+                self?.presentPostTreatmentCalendar()
+            }
+
+            cell.onCellHeightChanged = { [weak self] in
+                guard let self = self else { return }
+                self.updateHeight(for: 3, height: cell.getCellHeight())
+            }
+
             return cell
         }
     }
 }
 
+////////////////////////////////////////////////////////////
+// MARK: - Calendar Presentation
+////////////////////////////////////////////////////////////
+
+extension JourneyViewController {
+    
+    private func presentPostTreatmentCalendar() {
+        
+        let dimView = UIView(frame: view.bounds)
+        dimView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+        dimView.tag = 999
+        dimView.alpha = 0
+        view.addSubview(dimView)
+        
+        let container = UIView()
+        container.backgroundColor = .systemBackground
+        container.layer.cornerRadius = 16
+        container.translatesAutoresizingMaskIntoConstraints = false
+        dimView.addSubview(container)
+        
+        NSLayoutConstraint.activate([
+            container.centerXAnchor.constraint(equalTo: dimView.centerXAnchor),
+            container.centerYAnchor.constraint(equalTo: dimView.centerYAnchor),
+            container.widthAnchor.constraint(equalToConstant: 340),
+            container.heightAnchor.constraint(equalToConstant: 420)
+        ])
+        
+        let datePicker = UIDatePicker()
+        datePicker.datePickerMode = .date
+        datePicker.preferredDatePickerStyle = .inline
+        datePicker.translatesAutoresizingMaskIntoConstraints = false
+        container.addSubview(datePicker)
+        
+        let doneButton = UIButton(type: .system)
+        doneButton.setTitle("Done", for: .normal)
+        doneButton.titleLabel?.font = .boldSystemFont(ofSize: 16)
+        doneButton.translatesAutoresizingMaskIntoConstraints = false
+        container.addSubview(doneButton)
+        
+        NSLayoutConstraint.activate([
+            datePicker.topAnchor.constraint(equalTo: container.topAnchor, constant: 16),
+            datePicker.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 16),
+            datePicker.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -16),
+            
+            doneButton.topAnchor.constraint(equalTo: datePicker.bottomAnchor, constant: 8),
+            doneButton.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -16),
+            doneButton.centerXAnchor.constraint(equalTo: container.centerXAnchor)
+        ])
+        
+        UIView.animate(withDuration: 0.25) {
+            dimView.alpha = 1
+        }
+        
+        datePicker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
+        
+        doneButton.addAction(UIAction { [weak self] _ in
+            self?.dismissCalendarPopup()
+        }, for: .touchUpInside)
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissCalendarPopup))
+        tap.cancelsTouchesInView = false
+        dimView.addGestureRecognizer(tap)
+    }
+
+    @objc private func dateChanged(_ picker: UIDatePicker) {
+        selectedPostTreatmentDate = picker.date
+    }
+
+    @objc private func dismissCalendarPopup() {
+        
+        guard let dimView = view.viewWithTag(999) else { return }
+        
+        UIView.animate(withDuration: 0.25, animations: {
+            dimView.alpha = 0
+        }) { _ in
+            dimView.removeFromSuperview()
+        }
+        
+        if let date = selectedPostTreatmentDate {
+            let indexPath = IndexPath(item: 3, section: 0)
+            if let cell = collectionView.cellForItem(at: indexPath) as? PostTreatmentCell {
+                cell.updateSelectedDate(date)
+            }
+        }
+    }
+}
+
+////////////////////////////////////////////////////////////
 // MARK: - UICollectionViewDelegateFlowLayout
+////////////////////////////////////////////////////////////
+
 extension JourneyViewController: UICollectionViewDelegateFlowLayout {
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+
         let totalWidth = view.bounds.width
         let padding: CGFloat = 32
         let cellWidth = totalWidth - padding
         let height = cellHeights[indexPath.item] ?? 200
+        
         return CGSize(width: cellWidth, height: height)
     }
 }
