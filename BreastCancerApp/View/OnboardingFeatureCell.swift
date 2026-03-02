@@ -64,7 +64,7 @@ struct OnboardingFeature {
     
     static let healthFeatures: [OnboardingFeature] = [
         OnboardingFeature(
-            title: "Track appointments",
+            title: "Manage appointments and medicines",
             iconName: "calendar",
 //            iconTintColor: .systemTeal,
 //            backgroundColor: UIColor(named: "pastel_blue")!
@@ -78,12 +78,6 @@ struct OnboardingFeature {
         OnboardingFeature(
             title: "Monitor hydration",
             iconName: "drop",
-//            iconTintColor: .systemTeal,
-//            backgroundColor: UIColor(named: "pastel_blue")!
-        ),
-        OnboardingFeature(
-            title: "Manage medications",
-            iconName: "pills",
 //            iconTintColor: .systemTeal,
 //            backgroundColor: UIColor(named: "pastel_blue")!
         )

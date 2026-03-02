@@ -1,10 +1,3 @@
-//
-//  PostTreatmentViewController.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 13/01/26.
-//
-
 import UIKit
 
 class PostTreatmentViewController: UIViewController {
@@ -38,41 +31,51 @@ class PostTreatmentViewController: UIViewController {
     }
 
     private func setupCollectionView() {
-        collectionView.register(UINib(nibName: dateCellID,      bundle: nil),
+        collectionView.register(UINib(nibName: dateCellID, bundle: nil),
                                 forCellWithReuseIdentifier: dateCellID)
         collectionView.register(UINib(nibName: selectionCellID, bundle: nil),
                                 forCellWithReuseIdentifier: selectionCellID)
-        collectionView.delegate   = self
+        collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.collectionViewLayout = makeLayout()
-        collectionView.isScrollEnabled      = false
+        collectionView.isScrollEnabled = false
         collectionView.alwaysBounceVertical = false
     }
 
     private func makeLayout() -> UICollectionViewCompositionalLayout {
-        UICollectionViewCompositionalLayout { _, _ in
-            let itemSize  = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                   heightDimension: .absolute(56))
-            let item      = NSCollectionLayoutItem(layoutSize: itemSize)
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                   heightDimension: .absolute(56))
-            let group     = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
-            let section   = NSCollectionLayoutSection(group: group)
-            section.interGroupSpacing = 16
-            section.contentInsets     = NSDirectionalEdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0)
-            return section
+        UICollectionViewCompositionalLayout { [weak self] _, _ in
+            guard let self else { return Self.makeSection(topInset: 0) }
+            let collectionHeight = self.collectionView.bounds.height
+            let itemHeight: CGFloat = 90
+            let spacing: CGFloat = 16
+            let totalContentHeight = (itemHeight * 2) + spacing
+            let topInset = max(0, (collectionHeight - totalContentHeight) / 2)
+            return Self.makeSection(topInset: topInset)
         }
     }
 
+    private static func makeSection(topInset: CGFloat) -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                              heightDimension: .estimated(90))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                               heightDimension: .estimated(90))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+        section.interGroupSpacing = 16
+        section.contentInsets = NSDirectionalEdgeInsets(top: topInset, leading: 0, bottom: 8, trailing: 0)
+        return section
+    }
+
     private func updateNextButton() {
-        let isValid      = selectedMaintenanceTherapy != nil
+        let isValid = selectedMaintenanceTherapy != nil
         nextButton.isEnabled = isValid
-        nextButton.alpha     = isValid ? 1.0 : 0.5
+        nextButton.alpha = isValid ? 1.0 : 0.5
     }
 
     @IBAction func nextButtonTapped(_ sender: UIButton) {
         OnboardingData.shared.treatmentCompletionDate = completionDate
-        OnboardingData.shared.maintenanceTherapy      = selectedMaintenanceTherapy
+        OnboardingData.shared.maintenanceTherapy = selectedMaintenanceTherapy
         performSegue(withIdentifier: "showFocus", sender: nil)
     }
 
@@ -101,7 +104,8 @@ extension PostTreatmentViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: selectionCellID, for: indexPath
             ) as! OnboardingSelectionPickerCell
-            cell.configure(title: "Are you on maintenance therapy?", fieldName: "Maintenance Therapy",
+            cell.configure(title: "Are you on maintenance therapy?",
+                           fieldName: "Maintenance Therapy",
                            options: maintenanceOptions,
                            selectedValue: selectedMaintenanceTherapy)
             cell.onOptionSelected = { [weak self] option in

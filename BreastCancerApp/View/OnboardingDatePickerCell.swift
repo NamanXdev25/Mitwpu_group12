@@ -1,10 +1,3 @@
-//
-//  OnboardingDatePickerCell.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 01/03/26.
-//
-
 import UIKit
 
 class OnboardingDatePickerCell: UICollectionViewCell {
@@ -22,7 +15,6 @@ class OnboardingDatePickerCell: UICollectionViewCell {
 
     func configure(title: String, fieldName: String, maximumDate: Date? = Date()) {
         titleLabel.text        = title
-        placeholderLabel.text  = fieldName
         datePicker.maximumDate = maximumDate
     }
 

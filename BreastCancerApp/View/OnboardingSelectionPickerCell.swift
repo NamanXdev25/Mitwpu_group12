@@ -20,12 +20,10 @@ class OnboardingSelectionPickerCell: UICollectionViewCell {
 
     func configure(title: String, fieldName: String, options: [String], selectedValue: String?) {
         titleLabel.text       = title
-        placeholderLabel.text = selectedValue ?? fieldName
 
         let actions = options.map { option in
             UIAction(title: option,
                      state: option == selectedValue ? .on : .off) { [weak self] _ in
-                self?.placeholderLabel.text = option
                 self?.onOptionSelected?(option)
             }
         }

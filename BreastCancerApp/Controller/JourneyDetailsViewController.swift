@@ -1,10 +1,3 @@
-//
-//  JourneyDetailsViewController.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 13/01/26.
-//
-
 import UIKit
 
 class JourneyDetailsViewController: UIViewController {
@@ -38,40 +31,40 @@ class JourneyDetailsViewController: UIViewController {
     }
 
     private func setupCollectionView() {
-        collectionView.register(UINib(nibName: dateCellID,      bundle: nil),
+        collectionView.register(UINib(nibName: dateCellID, bundle: nil),
                                 forCellWithReuseIdentifier: dateCellID)
         collectionView.register(UINib(nibName: selectionCellID, bundle: nil),
                                 forCellWithReuseIdentifier: selectionCellID)
-        collectionView.delegate   = self
+        collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.collectionViewLayout = makeLayout()
-        collectionView.isScrollEnabled      = false
+        collectionView.isScrollEnabled = false
         collectionView.alwaysBounceVertical = false
     }
 
     private func makeLayout() -> UICollectionViewCompositionalLayout {
         UICollectionViewCompositionalLayout { _, _ in
-            let itemSize  = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                   heightDimension: .absolute(56))
-            let item      = NSCollectionLayoutItem(layoutSize: itemSize)
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                  heightDimension: .estimated(90))
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                   heightDimension: .absolute(56))
-            let group     = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
-            let section   = NSCollectionLayoutSection(group: group)
-            section.interGroupSpacing = 16
-            section.contentInsets     = NSDirectionalEdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0)
+                                                   heightDimension: .estimated(90))
+            let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+            let section = NSCollectionLayoutSection(group: group)
+            section.interGroupSpacing = 24
+            section.contentInsets = NSDirectionalEdgeInsets(top: 32, leading: 0, bottom: 0, trailing: 0)
             return section
         }
     }
 
     private func updateNextButton() {
-        let isValid      = selectedTreatmentPhase != nil
+        let isValid = selectedTreatmentPhase != nil
         nextButton.isEnabled = isValid
-        nextButton.alpha     = isValid ? 1.0 : 0.5
+        nextButton.alpha = isValid ? 1.0 : 0.5
     }
 
     @IBAction func nextButtonTapped(_ sender: UIButton) {
-        OnboardingData.shared.diagnosisDate         = diagnosisDate
+        OnboardingData.shared.diagnosisDate = diagnosisDate
         OnboardingData.shared.currentTreatmentPhase = selectedTreatmentPhase
         performSegue(withIdentifier: "showFocus", sender: nil)
     }
@@ -101,7 +94,8 @@ extension JourneyDetailsViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: selectionCellID, for: indexPath
             ) as! OnboardingSelectionPickerCell
-            cell.configure(title: "What treatment are you currently undergoing?", fieldName: "Treatment Phase",
+            cell.configure(title: "What treatment are you currently undergoing?",
+                           fieldName: "Treatment Phase",
                            options: treatmentPhaseOptions,
                            selectedValue: selectedTreatmentPhase)
             cell.onOptionSelected = { [weak self] phase in
