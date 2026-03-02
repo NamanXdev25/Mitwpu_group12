@@ -60,7 +60,7 @@
                             <constraint firstItem="lta-R8-Dn8" firstAttribute="leading" secondItem="G9m-m8-5rA" secondAttribute="leading" id="t6U-7m-aZI"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Journal" id="LEm-Tn-keQ">
+                    <navigationItem key="navigationItem" title="Journal" largeTitleDisplayMode="never" id="LEm-Tn-keQ">
                         <barButtonItem key="rightBarButtonItem" title="Item" image="calendar" catalog="system" id="45r-v9-QRZ">
                             <connections>
                                 <action selector="calendarTapped:" destination="Jiz-9b-xJk" id="TjE-QP-SwY"/>
@@ -123,13 +123,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Title" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hKu-eh-qsP">
-                                <rect key="frame" x="24" y="124" width="345" height="34"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" text="Title" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="3co-d6-qc6">
+                                <rect key="frame" x="24" y="172" width="345" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="44" id="oY3-Cn-XT2"/>
+                                </constraints>
+                                <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Start writing what's on your mind today..." textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="dZi-gp-IAI">
-                                <rect key="frame" x="24" y="158" width="345" height="582"/>
+                                <rect key="frame" x="24" y="230" width="345" height="510"/>
                                 <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -138,17 +142,17 @@
                         <viewLayoutGuide key="safeArea" id="I0I-rs-Hsu"/>
                         <color key="backgroundColor" name="BackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="I0I-rs-Hsu" firstAttribute="trailing" secondItem="3co-d6-qc6" secondAttribute="trailing" constant="24" id="0Ev-Ja-9YH"/>
                             <constraint firstItem="I0I-rs-Hsu" firstAttribute="trailing" secondItem="dZi-gp-IAI" secondAttribute="trailing" constant="24" id="25w-3T-P7w"/>
-                            <constraint firstItem="hKu-eh-qsP" firstAttribute="leading" secondItem="I0I-rs-Hsu" secondAttribute="leading" constant="24" id="9eW-Tw-ifo"/>
+                            <constraint firstItem="3co-d6-qc6" firstAttribute="leading" secondItem="I0I-rs-Hsu" secondAttribute="leading" constant="24" id="7eE-vy-Kox"/>
                             <constraint firstItem="dZi-gp-IAI" firstAttribute="leading" secondItem="I0I-rs-Hsu" secondAttribute="leading" constant="24" id="SUF-Th-IzN"/>
-                            <constraint firstItem="I0I-rs-Hsu" firstAttribute="trailing" secondItem="hKu-eh-qsP" secondAttribute="trailing" constant="24" id="dZu-pA-0hs"/>
-                            <constraint firstItem="dZi-gp-IAI" firstAttribute="top" secondItem="hKu-eh-qsP" secondAttribute="bottom" id="gyU-vN-fF2"/>
-                            <constraint firstItem="hKu-eh-qsP" firstAttribute="top" secondItem="Lyy-ac-oS6" secondAttribute="top" constant="124" id="jdm-9I-ctg"/>
+                            <constraint firstItem="3co-d6-qc6" firstAttribute="top" secondItem="I0I-rs-Hsu" secondAttribute="top" id="gEy-ey-9mR"/>
                             <constraint firstItem="I0I-rs-Hsu" firstAttribute="bottom" secondItem="dZi-gp-IAI" secondAttribute="bottom" constant="44" id="nYS-40-dED"/>
+                            <constraint firstItem="dZi-gp-IAI" firstAttribute="top" secondItem="3co-d6-qc6" secondAttribute="bottom" constant="8" id="vib-oG-ha6"/>
                         </constraints>
                     </view>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="Title" id="2D8-Ov-qnF">
+                    <navigationItem key="navigationItem" title="Title" largeTitleDisplayMode="never" id="2D8-Ov-qnF">
                         <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="DG5-uZ-Jfp">
                             <color key="tintColor" name="PrimaryColor"/>
                             <connections>
@@ -160,12 +164,12 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="textView" destination="dZi-gp-IAI" id="Wyh-G4-wFG"/>
-                        <outlet property="titleField" destination="hKu-eh-qsP" id="Tuh-7x-Rwd"/>
+                        <outlet property="titleTextView" destination="3co-d6-qc6" id="xei-4n-E6y"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SMv-nK-kgj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="260" y="1637"/>
+            <point key="canvasLocation" x="258.77862595419845" y="1636.6197183098593"/>
         </scene>
         <!--Guided Reflection-->
         <scene sceneID="lNd-1x-eUP">
@@ -212,7 +216,7 @@
                         </constraints>
                     </view>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="Guided Reflection" id="eO9-CN-CgX">
+                    <navigationItem key="navigationItem" title="Guided Reflection" largeTitleDisplayMode="never" id="eO9-CN-CgX">
                         <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="Htc-wZ-LhM">
                             <color key="tintColor" name="PrimaryColor"/>
                             <connections>
