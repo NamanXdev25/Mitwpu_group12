@@ -68,20 +68,17 @@ class PostTreatmentCell: UICollectionViewCell {
         ]
         
         for (btn, title) in symptomTitles {
-            btn.setTitle(title, for: .normal)
-            btn.setTitle(title, for: .selected)
-            btn.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .medium)
             btn.layer.cornerRadius = 20
             btn.clipsToBounds = true
             btn.isUserInteractionEnabled = true
             btn.isSelected = false
-            
-            // ✅ Use backgroundColor directly — no background images
-            btn.backgroundColor = lightPink
-            btn.setTitleColor(pink, for: .normal)
-            btn.setTitleColor(.white, for: .selected)
-            btn.setTitleColor(.white, for: .highlighted)
-            
+
+            var config = btn.configuration ?? UIButton.Configuration.filled()
+            config.baseBackgroundColor = lightPink
+            config.baseForegroundColor = pink
+            config.cornerStyle = .capsule
+            btn.configuration = config
+
             btn.removeTarget(nil, action: nil, for: .allEvents)
             btn.addTarget(self, action: #selector(symptomTapped(_:)), for: .touchUpInside)
         }
@@ -118,15 +115,17 @@ class PostTreatmentCell: UICollectionViewCell {
         if selectedSymptoms.contains(title) {
             selectedSymptoms.remove(title)
             sender.isSelected = false
-            // ✅ Deselected: back to light pink background, pink text
-            sender.backgroundColor = lightPink
-            sender.setTitleColor(pink, for: .normal)
+            var config = sender.configuration ?? UIButton.Configuration.filled()
+            config.baseBackgroundColor = lightPink
+            config.baseForegroundColor = pink
+            sender.configuration = config
         } else {
             selectedSymptoms.insert(title)
             sender.isSelected = true
-            // ✅ Selected: dark pink background, white text
-            sender.backgroundColor = darkPink
-            sender.setTitleColor(.white, for: .normal)
+            var config = sender.configuration ?? UIButton.Configuration.filled()
+            config.baseBackgroundColor = pink
+            config.baseForegroundColor = .white
+            sender.configuration = config
         }
         
         updateState()
@@ -296,13 +295,13 @@ class PostTreatmentCell: UICollectionViewCell {
         
         dateButton.isUserInteractionEnabled = true
         
-        // ✅ Reset all symptom buttons to deselected state using backgroundColor
         for (btn, title) in symptomTitles {
             btn.setTitle(title, for: .normal)
-            btn.setTitle(title, for: .selected)
             btn.isSelected = false
-            btn.backgroundColor = lightPink
-            btn.setTitleColor(pink, for: .normal)
+            var config = btn.configuration ?? UIButton.Configuration.filled()
+            config.baseBackgroundColor = lightPink
+            config.baseForegroundColor = pink
+            btn.configuration = config
             btn.isUserInteractionEnabled = true
         }
     }

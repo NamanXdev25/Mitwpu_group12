@@ -142,25 +142,17 @@ class WaitCell: UICollectionViewCell {
     
     // MARK: - Feeling Button Styling
     private func applySelectedStyle(to button: UIButton) {
-        button.layer.backgroundColor = darkPinkColor.cgColor
-        button.setBackgroundImage(colorImage(darkPinkColor), for: .normal)
-        button.setBackgroundImage(colorImage(darkPinkColor), for: .highlighted)
-        button.setBackgroundImage(colorImage(darkPinkColor), for: .selected)
-        button.setTitleColor(.white, for: .normal)
-        button.setTitleColor(.white, for: .highlighted)
-        button.setTitleColor(.white, for: .selected)
-        button.titleLabel?.textColor = .white
+        var config = button.configuration ?? UIButton.Configuration.filled()
+        config.baseBackgroundColor = darkPinkColor
+        config.baseForegroundColor = .white
+        button.configuration = config
     }
-    
+
     private func applyDeselectedStyle(to button: UIButton) {
-        button.layer.backgroundColor = lightPinkColor.cgColor
-        button.setBackgroundImage(colorImage(lightPinkColor), for: .normal)
-        button.setBackgroundImage(colorImage(lightPinkColor), for: .highlighted)
-        button.setBackgroundImage(colorImage(lightPinkColor), for: .selected)
-        button.setTitleColor(darkPinkColor, for: .normal)
-        button.setTitleColor(darkPinkColor, for: .highlighted)
-        button.setTitleColor(darkPinkColor, for: .selected)
-        button.titleLabel?.textColor = darkPinkColor
+        var config = button.configuration ?? UIButton.Configuration.filled()
+        config.baseBackgroundColor = lightPinkColor
+        config.baseForegroundColor = darkPinkColor
+        button.configuration = config
     }
     
     private func setupActions() {
