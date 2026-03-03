@@ -180,7 +180,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="KyO-4I-u3q">
-                                <rect key="frame" x="0.0" y="172" width="393" height="563"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                 <color key="backgroundColor" name="BgColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="k3b-qL-6Xw">
                                     <size key="itemSize" width="128" height="128"/>
@@ -203,10 +203,10 @@
                         <viewLayoutGuide key="safeArea" id="BQX-d9-cJo"/>
                         <color key="backgroundColor" name="BgColor"/>
                         <constraints>
-                            <constraint firstItem="KyO-4I-u3q" firstAttribute="top" secondItem="BQX-d9-cJo" secondAttribute="top" id="1jS-Dv-xoT"/>
+                            <constraint firstAttribute="bottom" secondItem="KyO-4I-u3q" secondAttribute="bottom" id="6nm-bL-OLl"/>
                             <constraint firstItem="KyO-4I-u3q" firstAttribute="leading" secondItem="BQX-d9-cJo" secondAttribute="leading" id="D2W-nh-Rry"/>
+                            <constraint firstItem="KyO-4I-u3q" firstAttribute="top" secondItem="HgD-Wh-xaG" secondAttribute="top" id="bdJ-6Q-UK1"/>
                             <constraint firstItem="BQX-d9-cJo" firstAttribute="trailing" secondItem="KyO-4I-u3q" secondAttribute="trailing" id="hIc-Mq-geh"/>
-                            <constraint firstItem="BQX-d9-cJo" firstAttribute="bottom" secondItem="KyO-4I-u3q" secondAttribute="bottom" id="lLJ-t7-eVb"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Mindfulness" largeTitleDisplayMode="always" id="t7f-Sb-Yiz"/>
@@ -216,7 +216,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qdm-t3-7E3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6300" y="92"/>
+            <point key="canvasLocation" x="6300" y="91.549295774647888"/>
         </scene>
         <!--Mindfullness-->
         <scene sceneID="xhZ-CS-sXV">
@@ -249,35 +249,35 @@
                                 <rect key="frame" x="16" y="172" width="361" height="105"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Level 1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sSK-nH-5sX">
-                                        <rect key="frame" x="16.000000000000004" y="16" width="51.333333333333343" height="21"/>
+                                        <rect key="frame" x="16.000000000000004" y="15.999999999999998" width="51.333333333333343" height="20.333333333333329"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="500 Points to next garden" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Go-8p-XFk">
-                                        <rect key="frame" x="16" y="37" width="157" height="16"/>
+                                        <rect key="frame" x="16" y="36.333333333333343" width="156.66666666666666" height="15.666666666666664"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="ueM-L6-IS9">
-                                        <rect key="frame" x="16" y="74" width="329" height="4"/>
+                                        <rect key="frame" x="16" y="73" width="329" height="4"/>
                                         <color key="tintColor" name="plusbuttoncolor"/>
                                     </progressView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="/" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rg7-cu-pm3">
-                                        <rect key="frame" x="314" y="58" width="4" height="12"/>
+                                        <rect key="frame" x="315" y="57" width="3.3333333333333144" height="12"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                         <color key="textColor" name="Memorycolor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="5000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uIQ-ta-1T5">
-                                        <rect key="frame" x="319" y="58" width="26" height="12"/>
+                                        <rect key="frame" x="319.33333333333331" y="57" width="25.666666666666686" height="12"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                         <color key="textColor" name="Memorycolor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="4200" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C8y-XU-eFR">
-                                        <rect key="frame" x="286" y="58" width="27" height="12"/>
+                                        <rect key="frame" x="287" y="57" width="27" height="12"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="12" id="iS9-JT-kOG"/>
                                         </constraints>
@@ -439,7 +439,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="r42-aK-xN2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="8025" y="92"/>
+            <point key="canvasLocation" x="8023.6641221374039" y="91.549295774647888"/>
         </scene>
         <!--Garden-->
         <scene sceneID="Sor-1o-zN2">

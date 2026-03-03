@@ -13,7 +13,7 @@
         <!--Your Garden-->
         <scene sceneID="s0d-6b-0kx">
             <objects>
-                <viewController title="Your Garden" id="Y6W-OH-hqX" customClass="GardenViewController" customModule="healinggarden2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Your Garden" id="Y6W-OH-hqX" customClass="GardenViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -101,7 +101,7 @@
                                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         </collectionViewFlowLayout>
                                         <cells>
-                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ItemCell" id="wsT-vs-8HM" customClass="GardenItemCell" customModule="healinggarden2" customModuleProvider="target">
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ItemCell" id="wsT-vs-8HM" customClass="GardenItemCell" customModule="BreastCancerApp" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="7.666666666666667" width="109" height="93"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="3oF-FT-1FA">
@@ -217,7 +217,7 @@
         <!--Healing Garden Store-->
         <scene sceneID="i5c-LC-fgy">
             <objects>
-                <viewController storyboardIdentifier="StoreViewController" title="Healing Garden Store" id="Pq3-ir-U0d" customClass="StoreViewController" customModule="healinggarden2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="StoreViewController" title="Healing Garden Store" id="Pq3-ir-U0d" customClass="StoreViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="qsF-SP-tg0">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -230,7 +230,7 @@
                                     <segment title="Wellness"/>
                                 </segments>
                                 <connections>
-                                    <action selector="segmentChanged:" destination="Pq3-ir-U0d" eventType="touchUpInside" id="T9z-Qz-Hs8"/>
+                                    <action selector="segmentChanged:" destination="Pq3-ir-U0d" eventType="valueChanged" id="7C2-B7-eSX"/>
                                 </connections>
                             </segmentedControl>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="LO6-6p-khH">
@@ -243,7 +243,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="StoreCell" id="oHm-lZ-gQv" customClass="StoreItemCell" customModule="healinggarden2" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="StoreCell" id="oHm-lZ-gQv" customClass="StoreItemCell" customModule="BreastCancerApp" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="185" height="215"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="rQh-v6-Hz6">
@@ -304,11 +304,32 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="aT9-aO-PZr">
+                                <rect key="frame" x="310.66666666666669" y="70" width="66.333333333333314" height="30"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" verticalHuggingPriority="251" image="bitcoinsign.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="M1z-Me-lPW">
+                                        <rect key="frame" x="0.0" y="0.66666666666666607" width="30" height="28.666666666666671"/>
+                                        <color key="tintColor" systemColor="systemYellowColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="30" id="U70-5V-EbT"/>
+                                            <constraint firstAttribute="height" constant="30" id="jWt-R7-UT4"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iDZ-hi-Yau">
+                                        <rect key="frame" x="31.000000000000004" y="0.0" width="35.333333333333343" height="30"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="kJf-s5-SU6"/>
                         <color key="backgroundColor" name="BgColor"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="aT9-aO-PZr" secondAttribute="trailing" constant="16" id="0jR-m6-ADV"/>
                             <constraint firstItem="LO6-6p-khH" firstAttribute="leading" secondItem="kJf-s5-SU6" secondAttribute="leading" id="1eT-yj-zQO"/>
+                            <constraint firstItem="aT9-aO-PZr" firstAttribute="top" secondItem="qsF-SP-tg0" secondAttribute="top" constant="70" id="5Qa-BI-bBu"/>
                             <constraint firstItem="LO6-6p-khH" firstAttribute="trailing" secondItem="kJf-s5-SU6" secondAttribute="trailing" id="9yo-Av-lga"/>
                             <constraint firstItem="ldA-cQ-vIN" firstAttribute="top" secondItem="kJf-s5-SU6" secondAttribute="top" id="NfL-cp-bH5"/>
                             <constraint firstItem="LO6-6p-khH" firstAttribute="top" secondItem="ldA-cQ-vIN" secondAttribute="bottom" constant="8" id="Pry-Ee-v5j"/>
@@ -321,6 +342,8 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="categorySegmentedControl" destination="ldA-cQ-vIN" id="uZM-CX-8Yt"/>
+                        <outlet property="coinimage" destination="M1z-Me-lPW" id="E1z-iP-xGk"/>
+                        <outlet property="currentcoinvalue" destination="iDZ-hi-Yau" id="spf-Ah-Xb8"/>
                         <outlet property="storeCollectionView" destination="LO6-6p-khH" id="ma4-ef-LbS"/>
                     </connections>
                 </viewController>
@@ -382,7 +405,7 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGray2Color">
-            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemYellowColor">
             <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
