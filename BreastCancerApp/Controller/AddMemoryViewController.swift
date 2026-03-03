@@ -46,19 +46,18 @@ final class AddMemoryViewController: UIViewController {
     @objc private func doneTapped() {
         let note = noteTextView.textColor == .systemGray ? nil : noteTextView.text
 
-        guard let imageData = image.jpegData(compressionQuality: 0.9) else {
-            return
-        }
-
         let memory = Memory(
             image: image,
             date: Date(),
             note: note
         )
 
-        delegate?.didAddMemory(memory)
-        dismiss(animated: true)
+        // Dismiss first, then notify delegate so reward animation is visible
+        dismiss(animated: true) { [weak self] in
+            self?.delegate?.didAddMemory(memory)
+        }
     }
+
 }
 
 extension AddMemoryViewController: UITextViewDelegate {

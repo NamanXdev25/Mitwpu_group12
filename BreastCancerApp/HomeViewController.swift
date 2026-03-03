@@ -758,9 +758,16 @@ class HomeViewController: UIViewController,
     }
 
     func didAddMemory(_ memory: Memory) {
+        // 1. Persist the new memory
         var memories = MemoryStore.load()
         memories.append(memory)
         MemoryStore.save(memories)
+
+        // 2. Award coins once per day — shared key with MemoriesViewController.
+        //    Whichever screen the user adds a memory on first (Home hobby card OR
+        //    the Memories/mindfulness section) claims the daily reward.
+        //    Any further memory creation the same day is silently skipped.
+        CoinRewardService.shared.awardMemoryCoinsIfEligible(on: self)
     }
 
     @objc

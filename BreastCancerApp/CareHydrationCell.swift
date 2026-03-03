@@ -107,8 +107,26 @@ class CareHydrationCell: UICollectionViewCell {
         configureStepperRange()
         render()
         delegate?.careHydrationCell(self, didChangeCurrentAmountML: currentAmountML)
+
+        // Award coins only when daily hydration goal is completed (once per day)
+        if let vc = findViewController() {
+            CoinRewardService.shared.awardHydrationGoalIfEligible(
+                currentML: currentAmountML,
+                goalML: goalML,
+                on: vc
+            )
+        }
     }
 
+    /// Walks responder chain to find the parent ViewController
+    private func findViewController() -> UIViewController? {
+        var responder: UIResponder? = self
+        while let r = responder {
+            if let vc = r as? UIViewController { return vc }
+            responder = r.next
+        }
+        return nil
+    }
 
 
 

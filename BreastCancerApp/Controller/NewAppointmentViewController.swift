@@ -299,9 +299,16 @@ class NewAppointmentViewController: UIViewController {
         
         let appointment = createAppointment()
         delegate?.didAddAppointment(appointment)
+
+        // Award coins for new appointment (not edits, once per day)
+        if initialAppointment == nil {
+            CoinRewardService.shared.awardAppointmentCoinsIfEligible(on: self)
+        }
         
         // Pop back to AppointmentsViewController
         navigationController?.popViewController(animated: true)
+
+
     }
     
     // MARK: - Validation
