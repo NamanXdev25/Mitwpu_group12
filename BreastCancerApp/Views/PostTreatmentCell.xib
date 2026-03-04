@@ -121,7 +121,7 @@
                                         <color key="tintColor" name="light pink"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="filled" title="Pain" cornerStyle="capsule">
-                                            <fontDescription key="titleFontDescription" style="UICTFontTextStyleHeadline"/>
+                                            <fontDescription key="titleFontDescription" style="UICTFontTextStyleBody"/>
                                             <color key="baseForegroundColor" name="pink"/>
                                         </buttonConfiguration>
                                         <connections>
@@ -137,7 +137,7 @@
                                         <color key="tintColor" name="light pink"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="filled" title="Numbness">
-                                            <fontDescription key="titleFontDescription" style="UICTFontTextStyleHeadline"/>
+                                            <fontDescription key="titleFontDescription" style="UICTFontTextStyleBody"/>
                                             <color key="baseForegroundColor" name="pink"/>
                                         </buttonConfiguration>
                                         <connections>
@@ -153,7 +153,7 @@
                                         <color key="tintColor" name="light pink"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="filled" title="Swelling">
-                                            <fontDescription key="titleFontDescription" style="UICTFontTextStyleHeadline"/>
+                                            <fontDescription key="titleFontDescription" style="UICTFontTextStyleBody"/>
                                             <color key="baseForegroundColor" name="pink"/>
                                         </buttonConfiguration>
                                         <connections>
@@ -169,7 +169,7 @@
                                         <color key="tintColor" name="light pink"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="filled" title="Stiffness">
-                                            <fontDescription key="titleFontDescription" style="UICTFontTextStyleHeadline"/>
+                                            <fontDescription key="titleFontDescription" style="UICTFontTextStyleBody"/>
                                             <color key="baseForegroundColor" name="pink"/>
                                         </buttonConfiguration>
                                         <connections>
@@ -185,7 +185,7 @@
                                         <color key="tintColor" name="light pink"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="filled" title="Fatigue">
-                                            <fontDescription key="titleFontDescription" style="UICTFontTextStyleHeadline"/>
+                                            <fontDescription key="titleFontDescription" style="UICTFontTextStyleBody"/>
                                             <color key="baseForegroundColor" name="pink"/>
                                         </buttonConfiguration>
                                         <connections>

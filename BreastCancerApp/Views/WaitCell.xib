@@ -120,6 +120,7 @@
                                 <color key="tintColor" name="light pink"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Sad">
+                                    <fontDescription key="titleFontDescription" style="UICTFontTextStyleBody"/>
                                     <color key="baseForegroundColor" name="pink"/>
                                 </buttonConfiguration>
                             </button>
@@ -131,6 +132,7 @@
                                 <color key="tintColor" name="light pink"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Anxious">
+                                    <fontDescription key="titleFontDescription" style="UICTFontTextStyleBody"/>
                                     <color key="baseForegroundColor" name="pink"/>
                                 </buttonConfiguration>
                             </button>
@@ -142,6 +144,7 @@
                                 <color key="tintColor" name="light pink"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Overwhelmed">
+                                    <fontDescription key="titleFontDescription" style="UICTFontTextStyleBody"/>
                                     <color key="baseForegroundColor" name="pink"/>
                                 </buttonConfiguration>
                             </button>
@@ -153,6 +156,7 @@
                                 <color key="tintColor" name="light pink"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Scared">
+                                    <fontDescription key="titleFontDescription" style="UICTFontTextStyleBody"/>
                                     <color key="baseForegroundColor" name="pink"/>
                                 </buttonConfiguration>
                             </button>
@@ -164,6 +168,7 @@
                                 <color key="tintColor" name="light pink"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Angry">
+                                    <fontDescription key="titleFontDescription" style="UICTFontTextStyleBody"/>
                                     <color key="baseForegroundColor" name="pink"/>
                                 </buttonConfiguration>
                             </button>
@@ -175,6 +180,7 @@
                                 <color key="tintColor" name="light pink"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Numb">
+                                    <fontDescription key="titleFontDescription" style="UICTFontTextStyleBody"/>
                                     <color key="baseForegroundColor" name="pink"/>
                                 </buttonConfiguration>
                             </button>
@@ -183,6 +189,7 @@
                                 <color key="tintColor" name="light pink"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Hopeful">
+                                    <fontDescription key="titleFontDescription" style="UICTFontTextStyleBody"/>
                                     <color key="baseForegroundColor" name="pink"/>
                                 </buttonConfiguration>
                             </button>
@@ -194,6 +201,7 @@
                                 <color key="tintColor" name="light pink"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Calm">
+                                    <fontDescription key="titleFontDescription" style="UICTFontTextStyleBody"/>
                                     <color key="baseForegroundColor" name="pink"/>
                                 </buttonConfiguration>
                             </button>
