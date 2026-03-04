@@ -205,9 +205,14 @@
                     <navigationItem key="navigationItem" title="Healing Garden" id="C8u-10-Si4"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
+                        <outlet property="currentPointsLabel" destination="gM5-Bm-33M" id="7SK-70-DbM"/>
                         <outlet property="gardenSKView" destination="YIO-B7-tHQ" id="USk-WZ-u1Z"/>
                         <outlet property="itemCollectionView" destination="kOi-TW-rfU" id="b0d-tL-9TP"/>
+                        <outlet property="levelProgressView" destination="wIg-de-jGE" id="GcR-OY-TeM"/>
+                        <outlet property="levelTitleLabel" destination="mIe-gA-6v7" id="UCH-yq-G6q"/>
+                        <outlet property="pointsToNextLabel" destination="45g-ZJ-nJA" id="XGA-Ia-62Q"/>
                         <outlet property="storeButton" destination="Fjf-pz-zhi" id="q6l-cG-NsQ"/>
+                        <outlet property="totalPointsLabel" destination="8it-rQ-iYd" id="moN-7K-adl"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -405,7 +410,7 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGray2Color">
-            <color red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemYellowColor">
             <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

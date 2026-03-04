@@ -1,24 +1,36 @@
 {
   "your_items": [],
   "nature": [
-    { "id": "nature_coloured_flowers", "name": "Coloured Flowers", "image": "ColouredFlowers", "price": 1800 },
-    { "id": "nature_flower_line", "name": "Flower Line", "image": "Flower Line", "price": 500 },
-    { "id": "nature_hydrogena_basket", "name": "Hydrogena Basket", "image": "Hydrogena Basket", "price": 2600 },
-    { "id": "nature_hydrogena", "name": "Hydrogena", "image": "Hydrogena", "price": 2400 },
-    { "id": "nature_purple_flowers", "name": "Purple Flowers", "image": "PurpleFlowers", "price": 2000 },
-    { "id": "nature_tulips", "name": "Tulips", "image": "Tulips", "price": 2300 },
-    { "id": "nature_white_flowers", "name": "White Flowers", "image": "WhiteFlowers", "price": 1900 },
-    { "id": "nature_yellow_flowers", "name": "Yellow Flowers", "image": "Yellow Flowers", "price": 1900 }
+    { "id": "nature_coloured_flowers", "name": "Coloured Flowers", "image": "ColouredFlowers",  "price": 18, "base_id": "classic" },
+    { "id": "nature_flower_line",      "name": "Flower Line",      "image": "Flower Line",       "price": 500,  "base_id": "classic" },
+    { "id": "nature_hydrogena_basket", "name": "Hydrogena Basket", "image": "Hydrogena Basket",  "price": 2600, "base_id": "classic" },
+    { "id": "nature_hydrogena",        "name": "Hydrogena",        "image": "Hydrogena",         "price": 2400, "base_id": "classic" },
+    { "id": "nature_purple_flowers",   "name": "Purple Flowers",   "image": "PurpleFlowers",     "price": 2000, "base_id": "classic" },
+    { "id": "nature_tulips",           "name": "Tulips",           "image": "Tulips",            "price": 2300, "base_id": "classic" },
+    { "id": "nature_white_flowers",    "name": "White Flowers",    "image": "WhiteFlowers",      "price": 1900, "base_id": "classic" },
+    { "id": "nature_yellow_flowers",   "name": "Yellow Flowers",   "image": "Yellow Flowers",    "price": 1900, "base_id": "classic" },
+
+    { "id": "zen_bamboo",              "name": "Bamboo",           "image": "zen_bamboo",        "price": 2200, "base_id": "zen" },
+    { "id": "zen_bonsai",              "name": "Bonsai Tree",      "image": "zen_bonsai",        "price": 2800, "base_id": "zen" },
+    { "id": "zen_cherry_blossom",      "name": "Cherry Blossom",   "image": "zen_cherry_blossom","price": 3000, "base_id": "zen" },
+
+    { "id": "tropical_palm",           "name": "Palm Tree",        "image": "tropical_palm",     "price": 2500, "base_id": "tropical" },
+    { "id": "tropical_hibiscus",       "name": "Hibiscus",         "image": "tropical_hibiscus", "price": 2000, "base_id": "tropical" }
   ],
   "wellness": [
-    { "id": "wellness_lamp", "name": "Lamp", "image": "Lamp", "price": 2200 },
-    { "id": "wellness_old_bath", "name": "Old Bath", "image": "Old Bath", "price": 2100 },
-    { "id": "wellness_old_lamp", "name": "Old Lamp", "image": "Old Lamp", "price": 2000 },
-    { "id": "wellness_old_fountain", "name": "Old Fountain", "image": "OldFountain", "price": 3200 },
-    { "id": "wellness_pink_bath", "name": "Pink Bath", "image": "Pink_Bath", "price": 2500 },
-    { "id": "wellness_bird_bath", "name": "Bird Bath", "image": "bird_bath", "price": 1500 },
-    { "id": "wellness_final_flower", "name": "Drum", "image": "Drum", "price": 2800 },
-    { "id": "wellness_fountain", "name": "Fountain", "image": "fountain", "price": 3000 }
+    { "id": "wellness_lamp",           "name": "Lamp",             "image": "Lamp",              "price": 2200, "base_id": "classic" },
+    { "id": "wellness_old_bath",       "name": "Old Bath",         "image": "Old Bath",          "price": 2100, "base_id": "classic" },
+    { "id": "wellness_old_lamp",       "name": "Old Lamp",         "image": "Old Lamp",          "price": 2000, "base_id": "classic" },
+    { "id": "wellness_old_fountain",   "name": "Old Fountain",     "image": "OldFountain",       "price": 3200, "base_id": "classic" },
+    { "id": "wellness_pink_bath",      "name": "Pink Bath",        "image": "Pink_Bath",         "price": 2500, "base_id": "classic" },
+    { "id": "wellness_bird_bath",      "name": "Bird Bath",        "image": "bird_bath",         "price": 1500, "base_id": "classic" },
+    { "id": "wellness_final_flower",   "name": "Drum",             "image": "Drum",              "price": 2800, "base_id": "classic" },
+    { "id": "wellness_fountain",       "name": "Fountain",         "image": "fountain",          "price": 3000, "base_id": "classic" },
+
+    { "id": "zen_stone_lantern",       "name": "Stone Lantern",    "image": "zen_stone_lantern", "price": 2600, "base_id": "zen" },
+    { "id": "zen_koi_pond",            "name": "Koi Pond",         "image": "zen_koi_pond",      "price": 3500, "base_id": "zen" },
+
+    { "id": "tropical_tiki_torch",     "name": "Tiki Torch",       "image": "tropical_tiki_torch","price": 2300, "base_id": "tropical" },
+    { "id": "tropical_hammock",        "name": "Hammock",          "image": "tropical_hammock",  "price": 3100, "base_id": "tropical" }
   ]
 }
-

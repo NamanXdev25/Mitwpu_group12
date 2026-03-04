@@ -734,6 +734,8 @@ struct StoreItem: Codable {
     let imageName: String
     let price: Int
     let category: String
+    /// The base this item belongs to. nil = classic base (backwards compatible).
+    var baseId: String?
 }
 
 struct PlacedItem: Codable {
@@ -742,4 +744,47 @@ struct PlacedItem: Codable {
     let positionX: CGFloat
     let positionY: CGFloat
     let zPosition: CGFloat
+}
+
+// MARK: - Garden Base
+
+/// Represents a garden base (background theme).
+/// The first base ("classic") is always unlocked.
+struct GardenBase: Codable, Equatable {
+    let id: String           // e.g. "classic", "zen", "tropical"
+    let name: String         // Display name: "Classic", "Zen Garden"
+    let imageName: String    // Asset name for the background SKSpriteNode
+    let unlockLevel: Int     // Which level unlocks this base (1 = always available)
+    var isUnlocked: Bool
+}
+
+// MARK: - Garden Level / Points
+
+/// Tracks the player's daily-coin-based point progress.
+/// Points = 5% of coins earned in the current day.
+/// The progress bar fills from 0 → pointsNeededForNextLevel.
+struct GardenLevelProgress: Codable {
+    var currentLevel: Int         // starts at 1
+    var currentPoints: Int        // points accumulated toward next level
+    var pointsNeededForNextLevel: Int  // threshold to reach next level
+    var dailyCoinsEarned: Int     // coins earned today (reset daily)
+    var lastResetDateString: String    // "yyyy-MM-dd" of last reset
+
+    static let pointsPerLevel = 5000  // points needed per level-up (5000 gap per level)
+
+    static var initial: GardenLevelProgress {
+        GardenLevelProgress(
+            currentLevel: 1,
+            currentPoints: 0,
+            pointsNeededForNextLevel: pointsPerLevel,
+            dailyCoinsEarned: 0,
+            lastResetDateString: GardenLevelProgress.todayString()
+        )
+    }
+
+    static func todayString() -> String {
+        let fmt = DateFormatter()
+        fmt.dateFormat = "yyyy-MM-dd"
+        return fmt.string(from: Date())
+    }
 }

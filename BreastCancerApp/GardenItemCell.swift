@@ -19,7 +19,7 @@ class GardenItemCell: UICollectionViewCell {
         
         // Styling the cell
         itemImageView.contentMode = .scaleAspectFit
-        titleLabel.font = .systemFont(ofSize: 12, weight: .medium)
+        titleLabel.font = .systemFont(ofSize: 9, weight: .medium)
         titleLabel.textColor = .darkGray
         titleLabel.textAlignment = .center
         

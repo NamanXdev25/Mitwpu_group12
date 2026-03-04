@@ -1,354 +1,20 @@
-//////////
-//////////  GardenManager.swift
-//////////  healinggarden2
-//////////
-//////////  Created by Naman Bhansali on 27/01/26.
-//////////
-////////
-////////import Foundation
-////////
-////////class GardenManager {
-////////    static let shared = GardenManager()
-////////    
-////////    private init() {
-////////        // Mocking some initially unlocked items for testing
-////////        unlockedItemIds.insert("1")
-////////        unlockedItemIds.insert("2")
-////////    }
-////////    
-////////    // User State
-////////    var coins: Int = 32000
-////////    var unlockedItemIds: Set<String> = []
-////////    
-////////    // FIXED: Added a computed property 'unlockedItems' so the ViewController can access it
-////////    var unlockedItems: [StoreItem] {
-////////        return storeCatalog.filter { unlockedItemIds.contains($0.id) }
-////////    }
-////////    
-////////    // Store Data
-////////    let storeCatalog: [StoreItem] = [
-////////        StoreItem(id: "1", name: "Fountain", imageName: "fountain", price: 3000, category: "Wellness"),
-////////        StoreItem(id: "2", name: "Bench", imageName: "bench", price: 2300, category: "Nature"),
-////////        StoreItem(id: "3", name: "Hydrangea", imageName: "hydrangea", price: 3000, category: "Nature"),
-////////        StoreItem(id: "4", name: "Tulips", imageName: "tulips", price: 2300, category: "Nature"),
-////////        StoreItem(id: "5", name: "Bird Bath", imageName: "bird_bath", price: 1500, category: "Wellness")
-////////    ]
-////////    
-////////    func getItems(for category: String) -> [StoreItem] {
-////////        if category == "Your Items" {
-////////            return unlockedItems
-////////        }
-////////        return storeCatalog.filter { $0.category == category }
-////////    }
-////////    
-////////    func purchaseItem(_ item: StoreItem) -> Bool {
-////////        if coins >= item.price && !unlockedItemIds.contains(item.id) {
-////////            coins -= item.price
-////////            unlockedItemIds.insert(item.id)
-////////            return true
-////////        }
-////////        return false
-////////    }
-////////}
-//////
-////////
-////////  GardenManager.swift
-////////  BreastCancerApp
-////////
-//////
-//////import Foundation
-//////
-//////final class GardenManager {
-//////    static let shared = GardenManager()
-//////
-//////    enum Category: String, CaseIterable {
-//////        case yourItems = "Your Items"
-//////        case nature = "Nature"
-//////        case wellness = "Wellness"
-//////    }
-//////
-//////    static let segmentCategories: [String] = Category.allCases.map(\.rawValue)
-//////
-//////    private(set) var coins: Int = 32000
-//////    private(set) var unlockedItemIds: Set<String> = []
-//////
-//////    private var yourItemsCatalog: [StoreItem] = []
-//////    private var shopCatalog: [StoreItem] = []
-//////    private var allItemsOrdered: [StoreItem] = []
-//////
-//////    var unlockedItems: [StoreItem] {
-//////        allItemsOrdered.filter { unlockedItemIds.contains($0.id) }
-//////    }
-//////
-//////    private init() {
-//////        loadCatalog()
-//////        seedDefaultUnlockedItems()
-//////    }
-//////
-//////    func getItems(for category: String) -> [StoreItem] {
-//////        guard let parsedCategory = Category(rawValue: category) else { return [] }
-//////
-//////        switch parsedCategory {
-//////        case .yourItems:
-//////            return unlockedItems
-//////        case .nature, .wellness:
-//////            return shopCatalog.filter { $0.category == parsedCategory.rawValue }
-//////        }
-//////    }
-//////
-//////    @discardableResult
-//////    func purchaseItem(_ item: StoreItem) -> Bool {
-//////        guard item.category != Category.yourItems.rawValue else { return false }
-//////        guard !unlockedItemIds.contains(item.id) else { return false }
-//////        guard coins >= item.price else { return false }
-//////
-//////        coins -= item.price
-//////        unlockedItemIds.insert(item.id)
-//////        return true
-//////    }
-//////
-//////    private func loadCatalog() {
-//////        let payload = loadPayloadFromJSON() ?? Self.fallbackPayload
-//////
-//////        yourItemsCatalog = payload.yourItems.enumerated().map { index, dto in
-//////            makeYourItem(from: dto, index: index)
-//////        }
-//////
-//////        let natureItems = payload.nature.enumerated().map { index, dto in
-//////            makeShopItem(from: dto, category: .nature, index: index)
-//////        }
-//////
-//////        let wellnessItems = payload.wellness.enumerated().map { index, dto in
-//////            makeShopItem(from: dto, category: .wellness, index: index)
-//////        }
-//////
-//////        shopCatalog = natureItems + wellnessItems
-//////        allItemsOrdered = yourItemsCatalog + shopCatalog
-//////    }
-//////
-//////    private func seedDefaultUnlockedItems() {
-//////        let defaultUnlockedIds = Set(yourItemsCatalog.map(\.id))
-//////        unlockedItemIds.formUnion(defaultUnlockedIds)
-//////    }
-//////
-//////    private func loadPayloadFromJSON() -> GardenCatalogPayload? {
-//////        guard let url = Bundle.main.url(forResource: "garden_items", withExtension: "json") else {
-//////            print("garden_items.json not found in bundle. Using fallback catalog.")
-//////            return nil
-//////        }
-//////
-//////        do {
-//////            let data = try Data(contentsOf: url)
-//////            return try JSONDecoder().decode(GardenCatalogPayload.self, from: data)
-//////        } catch {
-//////            print("Failed to decode garden_items.json: \(error). Using fallback catalog.")
-//////            return nil
-//////        }
-//////    }
-//////
-//////    private func makeYourItem(from dto: UnlockedItemDTO, index: Int) -> StoreItem {
-//////        let imageName = dto.imageName
-//////        let id = resolvedId(explicitId: dto.id, category: .yourItems, imageName: imageName, index: index)
-//////        let name = dto.name?.trimmedNonEmpty ?? Self.displayName(fromImageName: imageName)
-//////
-//////        return StoreItem(
-//////            id: id,
-//////            name: name,
-//////            imageName: imageName,
-//////            price: 0,
-//////            category: Category.yourItems.rawValue
-//////        )
-//////    }
-//////
-//////    private func makeShopItem(from dto: ShopItemDTO, category: Category, index: Int) -> StoreItem {
-//////        let imageName = dto.imageName
-//////        let id = resolvedId(explicitId: dto.id, category: category, imageName: imageName, index: index)
-//////        let name = dto.name?.trimmedNonEmpty ?? Self.displayName(fromImageName: imageName)
-//////
-//////        return StoreItem(
-//////            id: id,
-//////            name: name,
-//////            imageName: imageName,
-//////            price: max(dto.price, 0),
-//////            category: category.rawValue
-//////        )
-//////    }
-//////
-//////    private func resolvedId(explicitId: String?, category: Category, imageName: String, index: Int) -> String {
-//////        if let explicitId, let clean = explicitId.trimmedNonEmpty {
-//////            return clean
-//////        }
-//////
-//////        let safeCategory = category.rawValue.lowercased().replacingOccurrences(of: " ", with: "_")
-//////        let safeImage = imageName.lowercased().replacingOccurrences(of: " ", with: "_")
-//////        return "\(safeCategory)_\(safeImage)_\(index)"
-//////    }
-//////
-//////    private static func displayName(fromImageName imageName: String) -> String {
-//////        let cleaned = imageName
-//////            .replacingOccurrences(of: "_", with: " ")
-//////            .replacingOccurrences(of: "-", with: " ")
-//////            .trimmingCharacters(in: .whitespacesAndNewlines)
-//////
-//////        guard !cleaned.isEmpty else { return "Item" }
-//////
-//////        return cleaned
-//////            .split(separator: " ")
-//////            .map { $0.capitalized }
-//////            .joined(separator: " ")
-//////    }
-//////
-//////    private static let fallbackPayload = GardenCatalogPayload(
-//////        yourItems: [
-//////            UnlockedItemDTO(id: "your_garden_base", name: "Garden Base", imageName: "garden_base")
-//////        ],
-//////        nature: [
-//////            ShopItemDTO(id: "nature_bench", name: "Bench", imageName: "bench", price: 2300),
-//////            ShopItemDTO(id: "nature_hydrangea", name: "Hydrangea", imageName: "hydrangea", price: 3000),
-//////            ShopItemDTO(id: "nature_tulips", name: "Tulips", imageName: "tulips", price: 2300)
-//////        ],
-//////        wellness: [
-//////            ShopItemDTO(id: "wellness_fountain", name: "Fountain", imageName: "fountain", price: 3000),
-//////            ShopItemDTO(id: "wellness_bird_bath", name: "Bird Bath", imageName: "bird_bath", price: 1500)
-//////        ]
-//////    )
-//////}
-//////
-//////private struct GardenCatalogPayload: Decodable {
-//////    let yourItems: [UnlockedItemDTO]
-//////    let nature: [ShopItemDTO]
-//////    let wellness: [ShopItemDTO]
-//////
-//////    enum CodingKeys: String, CodingKey {
-//////        case yourItemsSnake = "your_items"
-//////        case yourItemsTitle = "Your Items"
-//////        case natureLower = "nature"
-//////        case natureTitle = "Nature"
-//////        case wellnessLower = "wellness"
-//////        case wellnessTitle = "Wellness"
-//////    }
-//////
-//////    init(yourItems: [UnlockedItemDTO], nature: [ShopItemDTO], wellness: [ShopItemDTO]) {
-//////        self.yourItems = yourItems
-//////        self.nature = nature
-//////        self.wellness = wellness
-//////    }
-//////
-//////    init(from decoder: Decoder) throws {
-//////        let container = try decoder.container(keyedBy: CodingKeys.self)
-//////
-//////        yourItems =
-//////            (try? container.decode([UnlockedItemDTO].self, forKey: .yourItemsSnake)) ??
-//////            (try? container.decode([UnlockedItemDTO].self, forKey: .yourItemsTitle)) ??
-//////            []
-//////
-//////        nature =
-//////            (try? container.decode([ShopItemDTO].self, forKey: .natureLower)) ??
-//////            (try? container.decode([ShopItemDTO].self, forKey: .natureTitle)) ??
-//////            []
-//////
-//////        wellness =
-//////            (try? container.decode([ShopItemDTO].self, forKey: .wellnessLower)) ??
-//////            (try? container.decode([ShopItemDTO].self, forKey: .wellnessTitle)) ??
-//////            []
-//////    }
-//////}
-//////
-//////private struct UnlockedItemDTO: Decodable {
-//////    let id: String?
-//////    let name: String?
-//////    let imageName: String
-//////
-//////    enum CodingKeys: String, CodingKey {
-//////        case id
-//////        case name
-//////        case image
-//////        case imageName
-//////    }
-//////
-//////    init(id: String? = nil, name: String? = nil, imageName: String) {
-//////        self.id = id
-//////        self.name = name
-//////        self.imageName = imageName
-//////    }
-//////
-//////    init(from decoder: Decoder) throws {
-//////        let container = try decoder.container(keyedBy: CodingKeys.self)
-//////        id = try container.decodeIfPresent(String.self, forKey: .id)
-//////        name = try container.decodeIfPresent(String.self, forKey: .name)
-//////
-//////        if let imageNameValue = try container.decodeIfPresent(String.self, forKey: .imageName) {
-//////            imageName = imageNameValue
-//////        } else {
-//////            imageName = try container.decode(String.self, forKey: .image)
-//////        }
-//////    }
-//////}
-//////
-//////private struct ShopItemDTO: Decodable {
-//////    let id: String?
-//////    let name: String?
-//////    let imageName: String
-//////    let price: Int
-//////
-//////    enum CodingKeys: String, CodingKey {
-//////        case id
-//////        case name
-//////        case image
-//////        case imageName
-//////        case price
-//////    }
-//////
-//////    init(id: String? = nil, name: String? = nil, imageName: String, price: Int) {
-//////        self.id = id
-//////        self.name = name
-//////        self.imageName = imageName
-//////        self.price = price
-//////    }
-//////
-//////    init(from decoder: Decoder) throws {
-//////        let container = try decoder.container(keyedBy: CodingKeys.self)
-//////
-//////        id = try container.decodeIfPresent(String.self, forKey: .id)
-//////        name = try container.decodeIfPresent(String.self, forKey: .name)
-//////
-//////        if let imageNameValue = try container.decodeIfPresent(String.self, forKey: .imageName) {
-//////            imageName = imageNameValue
-//////        } else {
-//////            imageName = try container.decode(String.self, forKey: .image)
-//////        }
-//////
-//////        if let directPrice = try container.decodeIfPresent(Int.self, forKey: .price) {
-//////            price = directPrice
-//////        } else if let stringPrice = try container.decodeIfPresent(String.self, forKey: .price),
-//////                  let parsed = Int(stringPrice.replacingOccurrences(of: ",", with: "")) {
-//////            price = parsed
-//////        } else {
-//////            price = 0
-//////        }
-//////    }
-//////}
-//////private extension String {
-//////    var trimmedNonEmpty: String? {
-//////        let value = trimmingCharacters(in: .whitespacesAndNewlines)
-//////        return value.isEmpty ? nil : value
-//////    }
-//////}
-////
-//////
-//////  GardenManager.swift
-//////  BreastCancerApp
-//////
-////
 ////import Foundation
+////
+////// MARK: - Notification names
+////extension Notification.Name {
+////    static let gardenBaseDidChange  = Notification.Name("gardenBaseDidChange")
+////    static let gardenLevelDidChange = Notification.Name("gardenLevelDidChange")
+////    static let gardenBasesUnlocked  = Notification.Name("gardenBasesUnlocked")
+////}
 ////
 ////final class GardenManager {
 ////    static let shared = GardenManager()
 ////
+////    // MARK: - Category
 ////    enum Category: String, CaseIterable {
 ////        case yourItems = "Your Items"
-////        case nature = "Nature"
-////        case wellness = "Wellness"
+////        case nature    = "Nature"
+////        case wellness  = "Wellness"
 ////    }
 ////
 ////    enum PurchaseResult {
@@ -360,59 +26,109 @@
 ////
 ////    static let segmentCategories: [String] = Category.allCases.map(\.rawValue)
 ////
+////    // MARK: - Storage keys (v3)
 ////    private enum StorageKeys {
-////        static let coins = "garden_coins_v1"
-////        static let unlockedIds = "garden_unlocked_item_ids_v1"
+////        static let coins          = "garden_coins_v3"
+////        static let unlockedIds    = "garden_unlocked_item_ids_v3"
+////        static let unlockedBases  = "garden_unlocked_base_ids_v3"
+////        static let selectedBaseId = "garden_selected_base_id_v3"
+////        static let levelProgress  = "garden_level_progress_v3"
+////        static func placedItems(for baseId: String) -> String {
+////            "garden_placed_items_\(baseId)_v3"
+////        }
 ////    }
 ////
-////    private(set) var coins: Int = 32000
+////    // MARK: - Public state
+////    private(set) var coins: Int = 0
 ////    private(set) var unlockedItemIds: Set<String> = []
-////
 ////    var currentCoins: Int { coins }
 ////
-////    private var yourItemsCatalog: [StoreItem] = []
-////    private var shopCatalog: [StoreItem] = []
-////    private var allItemsOrdered: [StoreItem] = []
+////    private(set) var allBases: [GardenBase] = []
 ////
-////    var unlockedItems: [StoreItem] {
-////        allItemsOrdered.filter { unlockedItemIds.contains($0.id) }
+////    private(set) var selectedBase: GardenBase {
+////        didSet {
+////            UserDefaults.standard.set(selectedBase.id, forKey: StorageKeys.selectedBaseId)
+////            NotificationCenter.default.post(name: .gardenBaseDidChange, object: selectedBase)
+////        }
 ////    }
 ////
+////    private(set) var levelProgress: GardenLevelProgress = .initial
+////
+////    // MARK: - Private catalog
+////    private var yourItemsCatalog: [StoreItem] = []
+////    private var shopCatalog: [StoreItem]      = []
+////    private var allItemsOrdered: [StoreItem]  = []
+////
+////    // MARK: - Derived helpers
+////
+////    var unlockedBases: [GardenBase] { allBases.filter(\.isUnlocked) }
+////
+////    /// Items for the bottom tray on GardenViewController:
+////    /// • All unlocked bases (tap to switch base)
+////    /// • All unlocked shop items across ALL bases
+////    var trayItems: [StoreItem] {
+////        var result: [StoreItem] = []
+////        for base in unlockedBases {
+////            result.append(makeBaseStoreItem(from: base))
+////        }
+////        // FIX: only show items that belong to the currently selected base
+////        let shopUnlocked = allItemsOrdered.filter {
+////            $0.category != Category.yourItems.rawValue &&
+////            unlockedItemIds.contains($0.id) &&
+////            effectiveBaseId(of: $0) == selectedBase.id
+////        }
+////        result.append(contentsOf: shopUnlocked)
+////        return result
+////    }
+////
+////    // MARK: - Init
 ////    private init() {
+////        selectedBase = GardenBase(id: "classic", name: "Classic", imageName: "garden_base",
+////                                  unlockLevel: 1, isUnlocked: true)
+////        loadBases()
 ////        loadCatalog()
 ////        restorePersistedState()
 ////        seedDefaultUnlockedItems()
+////        checkDailyReset()
 ////        persistState()
 ////    }
 ////
-////    func getItems(for category: String) -> [StoreItem] {
-////        guard let parsedCategory = Category(rawValue: category) else { return [] }
+////    // MARK: - Public API
 ////
-////        switch parsedCategory {
+////    func getItems(for category: String) -> [StoreItem] {
+////        guard let parsed = Category(rawValue: category) else { return [] }
+////        let baseId = selectedBase.id
+////
+////        switch parsed {
 ////        case .yourItems:
-////            return unlockedItems
+////            var result: [StoreItem] = []
+////            for base in unlockedBases {
+////                result.append(makeBaseStoreItem(from: base))
+////            }
+////            let shopUnlocked = allItemsOrdered.filter {
+////                $0.category != Category.yourItems.rawValue &&
+////                unlockedItemIds.contains($0.id) &&
+////                effectiveBaseId(of: $0) == baseId
+////            }
+////            result.append(contentsOf: shopUnlocked)
+////            return result
+////
 ////        case .nature, .wellness:
-////            return shopCatalog.filter { $0.category == parsedCategory.rawValue }
+////            return shopCatalog.filter {
+////                $0.category == parsed.rawValue &&
+////                effectiveBaseId(of: $0) == baseId &&
+////                !unlockedItemIds.contains($0.id)
+////            }
 ////        }
 ////    }
 ////
 ////    func purchaseResult(for item: StoreItem) -> PurchaseResult {
-////        guard item.category != Category.yourItems.rawValue else {
-////            return .notPurchasable
-////        }
-////
-////        guard !unlockedItemIds.contains(item.id) else {
-////            return .alreadyUnlocked
-////        }
-////
+////        guard item.category != Category.yourItems.rawValue else { return .notPurchasable }
+////        guard !unlockedItemIds.contains(item.id)           else { return .alreadyUnlocked }
 ////        guard coins >= item.price else {
-////            return .insufficientCoins(
-////                missingCoins: item.price - coins,
-////                currentCoins: coins,
-////                itemPrice: item.price
-////            )
+////            return .insufficientCoins(missingCoins: item.price - coins,
+////                                      currentCoins: coins, itemPrice: item.price)
 ////        }
-////
 ////        coins -= item.price
 ////        unlockedItemIds.insert(item.id)
 ////        persistState()
@@ -421,181 +137,264 @@
 ////
 ////    @discardableResult
 ////    func purchaseItem(_ item: StoreItem) -> Bool {
-////        if case .purchased = purchaseResult(for: item) {
-////            return true
-////        }
+////        if case .purchased = purchaseResult(for: item) { return true }
 ////        return false
 ////    }
 ////
 ////    func addCoins(_ amount: Int) {
 ////        guard amount > 0 else { return }
 ////        coins += amount
+////        creditDailyCoins(amount*5100)
 ////        persistState()
 ////    }
 ////
-////    private func loadCatalog() {
-////        let payload = loadPayloadFromJSON() ?? Self.fallbackPayload
+////    // MARK: - Base Selection
 ////
-////        yourItemsCatalog = payload.yourItems.enumerated().map { index, dto in
-////            makeYourItem(from: dto, index: index)
-////        }
-////
-////        let natureItems = payload.nature.enumerated().map { index, dto in
-////            makeShopItem(from: dto, category: .nature, index: index)
-////        }
-////
-////        let wellnessItems = payload.wellness.enumerated().map { index, dto in
-////            makeShopItem(from: dto, category: .wellness, index: index)
-////        }
-////
-////        shopCatalog = natureItems + wellnessItems
-////        allItemsOrdered = yourItemsCatalog + shopCatalog
+////    func selectBase(_ base: GardenBase) {
+////        guard base.isUnlocked,
+////              let found = allBases.first(where: { $0.id == base.id }) else { return }
+////        selectedBase = found
+////        UserDefaults.standard.set(found.id, forKey: StorageKeys.selectedBaseId)
 ////    }
 ////
-////    private func restorePersistedState() {
-////        let defaults = UserDefaults.standard
+////    // MARK: - Per-Base Placed Items
 ////
-////        if defaults.object(forKey: StorageKeys.coins) != nil {
-////            coins = defaults.integer(forKey: StorageKeys.coins)
-////        } else {
-////            coins = 32000
+////    func savePlacedItems(_ items: [PlacedItem], for baseId: String) {
+////        if let data = try? JSONEncoder().encode(items) {
+////            UserDefaults.standard.set(data, forKey: StorageKeys.placedItems(for: baseId))
+////        }
+////    }
+////
+////    func loadPlacedItems(for baseId: String) -> [PlacedItem] {
+////        guard let data  = UserDefaults.standard.data(forKey: StorageKeys.placedItems(for: baseId)),
+////              let items = try? JSONDecoder().decode([PlacedItem].self, from: data) else { return [] }
+////        return items
+////    }
+////
+////    // MARK: - Daily Reset
+////
+////    func checkDailyReset() {
+////        let today = GardenLevelProgress.todayString()
+////        if levelProgress.lastResetDateString != today {
+////            levelProgress.dailyCoinsEarned    = 0
+////            levelProgress.lastResetDateString = today
+////            persistLevelProgress()
+////        }
+////    }
+////
+////    // MARK: - Private: Level Crediting
+////
+////    private func creditDailyCoins(_ amount: Int) {
+////        checkDailyReset()
+////        levelProgress.dailyCoinsEarned += amount
+////
+////        let freshPoints = Int(Double(levelProgress.dailyCoinsEarned) * 0.05)
+////        if freshPoints > levelProgress.currentPoints {
+////            levelProgress.currentPoints = freshPoints
 ////        }
 ////
-////        let ids = defaults.stringArray(forKey: StorageKeys.unlockedIds) ?? []
-////        unlockedItemIds = Set(ids)
+////        while levelProgress.currentPoints >= levelProgress.pointsNeededForNextLevel {
+////            levelProgress.currentPoints -= levelProgress.pointsNeededForNextLevel
+////            levelProgress.currentLevel  += 1
+////            levelProgress.pointsNeededForNextLevel = GardenLevelProgress.pointsPerLevel
+////        }
+////
+////        checkAndUnlockBasesForLevel()
+////        persistLevelProgress()
+////        NotificationCenter.default.post(name: .gardenLevelDidChange, object: levelProgress)
+////    }
+////
+////    private func checkAndUnlockBasesForLevel() {
+////        var changed = false
+////        for i in allBases.indices {
+////            if !allBases[i].isUnlocked && allBases[i].unlockLevel <= levelProgress.currentLevel {
+////                allBases[i].isUnlocked = true
+////                changed = true
+////            }
+////        }
+////        if changed { persistBases() }
+////    }
+////
+////    private func effectiveBaseId(of item: StoreItem) -> String {
+////        item.baseId ?? "classic"
+////    }
+////
+////    private func makeBaseStoreItem(from base: GardenBase) -> StoreItem {
+////        StoreItem(id: "base_\(base.id)", name: base.name, imageName: base.imageName,
+////                  price: 0, category: Category.yourItems.rawValue, baseId: base.id)
+////    }
+////
+////    // MARK: - Load Bases
+////
+////    private func loadBases() {
+////        allBases = [
+////            GardenBase(id: "classic",  name: "Classic Garden",  imageName: "garden_base",
+////                       unlockLevel: 1, isUnlocked: true),
+////            GardenBase(id: "zen",      name: "Zen Garden",      imageName: "garden_base_zen",
+////                       unlockLevel: 3, isUnlocked: false),
+////            GardenBase(id: "tropical", name: "Tropical Garden", imageName: "garden_base_tropical",
+////                       unlockLevel: 5, isUnlocked: false),
+////        ]
+////
+////        let savedIds = Set(UserDefaults.standard.stringArray(forKey: StorageKeys.unlockedBases) ?? [])
+////        for i in allBases.indices where savedIds.contains(allBases[i].id) {
+////            allBases[i].isUnlocked = true
+////        }
+////        if let idx = allBases.firstIndex(where: { $0.id == "classic" }) {
+////            allBases[idx].isUnlocked = true
+////        }
+////
+////        let savedBaseId = UserDefaults.standard.string(forKey: StorageKeys.selectedBaseId) ?? "classic"
+////        selectedBase = allBases.first(where: { $0.id == savedBaseId && $0.isUnlocked })
+////                    ?? allBases.first(where: { $0.id == "classic" })
+////                    ?? allBases[0]
+////    }
+////
+////    private func persistBases() {
+////        UserDefaults.standard.set(allBases.filter(\.isUnlocked).map(\.id),
+////                                  forKey: StorageKeys.unlockedBases)
+////    }
+////
+////    // MARK: - Load Catalog
+////
+////    private func loadCatalog() {
+////        let payload      = loadPayloadFromJSON() ?? Self.fallbackPayload
+////        yourItemsCatalog = payload.yourItems.enumerated().map { makeYourItem(from: $1, index: $0) }
+////        let nature       = payload.nature.enumerated().map   { makeShopItem(from: $1, category: .nature,   index: $0) }
+////        let wellness     = payload.wellness.enumerated().map { makeShopItem(from: $1, category: .wellness, index: $0) }
+////        shopCatalog      = nature + wellness
+////        allItemsOrdered  = yourItemsCatalog + shopCatalog
+////    }
+////
+////    // MARK: - State Persistence
+////
+////    private func restorePersistedState() {
+////        let d = UserDefaults.standard
+////        coins = d.object(forKey: StorageKeys.coins) != nil ? d.integer(forKey: StorageKeys.coins) : 0
+////        unlockedItemIds = Set(d.stringArray(forKey: StorageKeys.unlockedIds) ?? [])
+////
+////        if let data     = d.data(forKey: StorageKeys.levelProgress),
+////           let progress = try? JSONDecoder().decode(GardenLevelProgress.self, from: data) {
+////            levelProgress = progress
+////        } else {
+////            levelProgress = .initial
+////        }
 ////    }
 ////
 ////    private func persistState() {
-////        let defaults = UserDefaults.standard
-////        defaults.set(coins, forKey: StorageKeys.coins)
-////        defaults.set(Array(unlockedItemIds), forKey: StorageKeys.unlockedIds)
+////        let d = UserDefaults.standard
+////        d.set(coins,                    forKey: StorageKeys.coins)
+////        d.set(Array(unlockedItemIds),   forKey: StorageKeys.unlockedIds)
+////        persistBases()
+////        persistLevelProgress()
+////    }
+////
+////    private func persistLevelProgress() {
+////        if let data = try? JSONEncoder().encode(levelProgress) {
+////            UserDefaults.standard.set(data, forKey: StorageKeys.levelProgress)
+////        }
 ////    }
 ////
 ////    private func seedDefaultUnlockedItems() {
-////        let defaultUnlockedIds = Set(yourItemsCatalog.map(\.id))
-////        unlockedItemIds.formUnion(defaultUnlockedIds)
+////        unlockedItemIds.formUnion(yourItemsCatalog.map(\.id))
+////        checkAndUnlockBasesForLevel()
 ////    }
 ////
-////    private func loadPayloadFromJSON() -> GardenCatalogPayload? {
-////        guard let url = Bundle.main.url(forResource: "garden_items", withExtension: "json") else {
-////            print("garden_items.json not found in bundle. Using fallback catalog.")
-////            return nil
-////        }
-////
-////        do {
-////            let data = try Data(contentsOf: url)
-////            return try JSONDecoder().decode(GardenCatalogPayload.self, from: data)
-////        } catch {
-////            print("Failed to decode garden_items.json: \(error). Using fallback catalog.")
-////            return nil
-////        }
-////    }
+////    // MARK: - Item Factory
 ////
 ////    private func makeYourItem(from dto: UnlockedItemDTO, index: Int) -> StoreItem {
-////        let imageName = dto.imageName
-////        let id = resolvedId(explicitId: dto.id, category: .yourItems, imageName: imageName, index: index)
-////        let name = dto.name?.trimmedNonEmpty ?? Self.displayName(fromImageName: imageName)
-////
-////        return StoreItem(
-////            id: id,
-////            name: name,
-////            imageName: imageName,
-////            price: 0,
-////            category: Category.yourItems.rawValue
-////        )
+////        let id   = resolvedId(explicitId: dto.id, category: .yourItems,
+////                              imageName: dto.imageName, index: index)
+////        let name = dto.name?.trimmedNonEmpty ?? Self.displayName(fromImageName: dto.imageName)
+////        return StoreItem(id: id, name: name, imageName: dto.imageName, price: 0,
+////                         category: Category.yourItems.rawValue, baseId: dto.baseId ?? "classic")
 ////    }
 ////
 ////    private func makeShopItem(from dto: ShopItemDTO, category: Category, index: Int) -> StoreItem {
-////        let imageName = dto.imageName
-////        let id = resolvedId(explicitId: dto.id, category: category, imageName: imageName, index: index)
-////        let name = dto.name?.trimmedNonEmpty ?? Self.displayName(fromImageName: imageName)
-////
-////        return StoreItem(
-////            id: id,
-////            name: name,
-////            imageName: imageName,
-////            price: max(dto.price, 0),
-////            category: category.rawValue
-////        )
+////        let id   = resolvedId(explicitId: dto.id, category: category,
+////                              imageName: dto.imageName, index: index)
+////        let name = dto.name?.trimmedNonEmpty ?? Self.displayName(fromImageName: dto.imageName)
+////        return StoreItem(id: id, name: name, imageName: dto.imageName, price: max(dto.price, 0),
+////                         category: category.rawValue, baseId: dto.baseId ?? "classic")
 ////    }
 ////
-////    private func resolvedId(explicitId: String?, category: Category, imageName: String, index: Int) -> String {
-////        if let explicitId, let clean = explicitId.trimmedNonEmpty {
-////            return clean
-////        }
-////
-////        let safeCategory = category.rawValue.lowercased().replacingOccurrences(of: " ", with: "_")
-////        let safeImage = imageName.lowercased().replacingOccurrences(of: " ", with: "_")
-////        return "\(safeCategory)_\(safeImage)_\(index)"
+////    private func resolvedId(explicitId: String?, category: Category,
+////                            imageName: String, index: Int) -> String {
+////        if let e = explicitId, let clean = e.trimmedNonEmpty { return clean }
+////        let cat   = category.rawValue.lowercased().replacingOccurrences(of: " ", with: "_")
+////        let image = imageName.lowercased().replacingOccurrences(of: " ", with: "_")
+////        return "\(cat)_\(image)_\(index)"
 ////    }
 ////
 ////    private static func displayName(fromImageName imageName: String) -> String {
-////        let cleaned = imageName
+////        let s = imageName
 ////            .replacingOccurrences(of: "_", with: " ")
 ////            .replacingOccurrences(of: "-", with: " ")
 ////            .trimmingCharacters(in: .whitespacesAndNewlines)
+////        guard !s.isEmpty else { return "Item" }
+////        return s.split(separator: " ").map { $0.capitalized }.joined(separator: " ")
+////    }
 ////
-////        guard !cleaned.isEmpty else { return "Item" }
+////    // MARK: - JSON Loading
 ////
-////        return cleaned
-////            .split(separator: " ")
-////            .map { $0.capitalized }
-////            .joined(separator: " ")
+////    private func loadPayloadFromJSON() -> GardenCatalogPayload? {
+////        guard let url = Bundle.main.url(forResource: "garden_items", withExtension: "json") else { return nil }
+////        do {
+////            return try JSONDecoder().decode(GardenCatalogPayload.self, from: Data(contentsOf: url))
+////        } catch {
+////            print("Failed to decode garden_items.json: \(error)")
+////            return nil
+////        }
 ////    }
 ////
 ////    private static let fallbackPayload = GardenCatalogPayload(
-////        yourItems: [
-////            UnlockedItemDTO(id: "your_garden_base", name: "Garden Base", imageName: "garden_base")
-////        ],
+////        yourItems: [],
 ////        nature: [
-////            ShopItemDTO(id: "nature_bench", name: "Bench", imageName: "bench", price: 2300),
-////            ShopItemDTO(id: "nature_hydrangea", name: "Hydrangea", imageName: "hydrangea", price: 3000),
-////            ShopItemDTO(id: "nature_tulips", name: "Tulips", imageName: "tulips", price: 2300)
+////            ShopItemDTO(id: "nature_hydrangea", name: "Hydrangea", imageName: "hydrangea",
+////                        price: 3000, baseId: "classic"),
+////            ShopItemDTO(id: "nature_tulips",    name: "Tulips",    imageName: "tulips",
+////                        price: 2300, baseId: "classic")
 ////        ],
 ////        wellness: [
-////            ShopItemDTO(id: "wellness_fountain", name: "Fountain", imageName: "fountain", price: 3000),
-////            ShopItemDTO(id: "wellness_bird_bath", name: "Bird Bath", imageName: "bird_bath", price: 1500)
+////            ShopItemDTO(id: "wellness_bird_bath", name: "Bird Bath", imageName: "bird_bath",
+////                        price: 1500, baseId: "classic"),
+////            ShopItemDTO(id: "wellness_fountain",  name: "Fountain",  imageName: "fountain",
+////                        price: 3000, baseId: "classic")
 ////        ]
 ////    )
 ////}
 ////
+////// MARK: - Private DTO types
+////
 ////private struct GardenCatalogPayload: Decodable {
 ////    let yourItems: [UnlockedItemDTO]
-////    let nature: [ShopItemDTO]
-////    let wellness: [ShopItemDTO]
+////    let nature:    [ShopItemDTO]
+////    let wellness:  [ShopItemDTO]
 ////
 ////    enum CodingKeys: String, CodingKey {
 ////        case yourItemsSnake = "your_items"
 ////        case yourItemsTitle = "Your Items"
-////        case natureLower = "nature"
-////        case natureTitle = "Nature"
-////        case wellnessLower = "wellness"
-////        case wellnessTitle = "Wellness"
+////        case natureLower    = "nature"
+////        case natureTitle    = "Nature"
+////        case wellnessLower  = "wellness"
+////        case wellnessTitle  = "Wellness"
 ////    }
 ////
 ////    init(yourItems: [UnlockedItemDTO], nature: [ShopItemDTO], wellness: [ShopItemDTO]) {
-////        self.yourItems = yourItems
-////        self.nature = nature
-////        self.wellness = wellness
+////        self.yourItems = yourItems; self.nature = nature; self.wellness = wellness
 ////    }
 ////
 ////    init(from decoder: Decoder) throws {
-////        let container = try decoder.container(keyedBy: CodingKeys.self)
-////
-////        yourItems =
-////            (try? container.decode([UnlockedItemDTO].self, forKey: .yourItemsSnake)) ??
-////            (try? container.decode([UnlockedItemDTO].self, forKey: .yourItemsTitle)) ??
-////            []
-////
-////        nature =
-////            (try? container.decode([ShopItemDTO].self, forKey: .natureLower)) ??
-////            (try? container.decode([ShopItemDTO].self, forKey: .natureTitle)) ??
-////            []
-////
-////        wellness =
-////            (try? container.decode([ShopItemDTO].self, forKey: .wellnessLower)) ??
-////            (try? container.decode([ShopItemDTO].self, forKey: .wellnessTitle)) ??
-////            []
+////        let c = try decoder.container(keyedBy: CodingKeys.self)
+////        yourItems = (try? c.decode([UnlockedItemDTO].self, forKey: .yourItemsSnake))
+////                 ?? (try? c.decode([UnlockedItemDTO].self, forKey: .yourItemsTitle))
+////                 ?? []
+////        nature    = (try? c.decode([ShopItemDTO].self, forKey: .natureLower))
+////                 ?? (try? c.decode([ShopItemDTO].self, forKey: .natureTitle))
+////                 ?? []
+////        wellness  = (try? c.decode([ShopItemDTO].self, forKey: .wellnessLower))
+////                 ?? (try? c.decode([ShopItemDTO].self, forKey: .wellnessTitle))
+////                 ?? []
 ////    }
 ////}
 ////
@@ -603,29 +402,26 @@
 ////    let id: String?
 ////    let name: String?
 ////    let imageName: String
+////    let baseId: String?
 ////
 ////    enum CodingKeys: String, CodingKey {
-////        case id
-////        case name
-////        case image
-////        case imageName
+////        case id, name, image, imageName, baseId = "base_id"
 ////    }
 ////
-////    init(id: String? = nil, name: String? = nil, imageName: String) {
-////        self.id = id
-////        self.name = name
-////        self.imageName = imageName
+////    init(id: String? = nil, name: String? = nil, imageName: String, baseId: String? = nil) {
+////        self.id = id; self.name = name; self.imageName = imageName; self.baseId = baseId
 ////    }
 ////
 ////    init(from decoder: Decoder) throws {
-////        let container = try decoder.container(keyedBy: CodingKeys.self)
-////        id = try container.decodeIfPresent(String.self, forKey: .id)
-////        name = try container.decodeIfPresent(String.self, forKey: .name)
-////
-////        if let imageNameValue = try container.decodeIfPresent(String.self, forKey: .imageName) {
-////            imageName = imageNameValue
+////        let c  = try decoder.container(keyedBy: CodingKeys.self)
+////        id     = try? c.decode(String.self, forKey: .id)
+////        name   = try? c.decode(String.self, forKey: .name)
+////        baseId = try? c.decode(String.self, forKey: .baseId)
+////        // Try imageName first, fall back to image — both wrapped in do/catch to avoid ambiguous try
+////        if let v = try? c.decode(String.self, forKey: .imageName) {
+////            imageName = v
 ////        } else {
-////            imageName = try container.decode(String.self, forKey: .image)
+////            imageName = try c.decode(String.self, forKey: .image)
 ////        }
 ////    }
 ////}
@@ -635,39 +431,35 @@
 ////    let name: String?
 ////    let imageName: String
 ////    let price: Int
+////    let baseId: String?
 ////
 ////    enum CodingKeys: String, CodingKey {
-////        case id
-////        case name
-////        case image
-////        case imageName
-////        case price
+////        case id, name, image, imageName, price, baseId = "base_id"
 ////    }
 ////
-////    init(id: String? = nil, name: String? = nil, imageName: String, price: Int) {
-////        self.id = id
-////        self.name = name
-////        self.imageName = imageName
-////        self.price = price
+////    init(id: String? = nil, name: String? = nil, imageName: String,
+////         price: Int, baseId: String? = nil) {
+////        self.id = id; self.name = name; self.imageName = imageName
+////        self.price = price; self.baseId = baseId
 ////    }
 ////
 ////    init(from decoder: Decoder) throws {
-////        let container = try decoder.container(keyedBy: CodingKeys.self)
-////
-////        id = try container.decodeIfPresent(String.self, forKey: .id)
-////        name = try container.decodeIfPresent(String.self, forKey: .name)
-////
-////        if let imageNameValue = try container.decodeIfPresent(String.self, forKey: .imageName) {
-////            imageName = imageNameValue
+////        let c  = try decoder.container(keyedBy: CodingKeys.self)
+////        id     = try? c.decode(String.self, forKey: .id)
+////        name   = try? c.decode(String.self, forKey: .name)
+////        baseId = try? c.decode(String.self, forKey: .baseId)
+////        // imageName: try imageName key first, then image key
+////        if let v = try? c.decode(String.self, forKey: .imageName) {
+////            imageName = v
 ////        } else {
-////            imageName = try container.decode(String.self, forKey: .image)
+////            imageName = try c.decode(String.self, forKey: .image)
 ////        }
-////
-////        if let directPrice = try container.decodeIfPresent(Int.self, forKey: .price) {
-////            price = directPrice
-////        } else if let stringPrice = try container.decodeIfPresent(String.self, forKey: .price),
-////                  let parsed = Int(stringPrice.replacingOccurrences(of: ",", with: "")) {
-////            price = parsed
+////        // price: try Int first, then String
+////        if let p = try? c.decode(Int.self, forKey: .price) {
+////            price = p
+////        } else if let s = try? c.decode(String.self, forKey: .price),
+////                  let p = Int(s.replacingOccurrences(of: ",", with: "")) {
+////            price = p
 ////        } else {
 ////            price = 0
 ////        }
@@ -676,25 +468,27 @@
 ////
 ////private extension String {
 ////    var trimmedNonEmpty: String? {
-////        let value = trimmingCharacters(in: .whitespacesAndNewlines)
-////        return value.isEmpty ? nil : value
+////        let v = trimmingCharacters(in: .whitespacesAndNewlines)
+////        return v.isEmpty ? nil : v
 ////    }
 ////}
 //
-////
-////  GardenManager.swift
-////  BreastCancerApp
-////
-//
 //import Foundation
+//
+//// MARK: - Notification names
+//extension Notification.Name {
+//    static let gardenBaseDidChange  = Notification.Name("gardenBaseDidChange")
+//    static let gardenLevelDidChange = Notification.Name("gardenLevelDidChange")
+//}
 //
 //final class GardenManager {
 //    static let shared = GardenManager()
 //
+//    // MARK: - Category
 //    enum Category: String, CaseIterable {
 //        case yourItems = "Your Items"
-//        case nature = "Nature"
-//        case wellness = "Wellness"
+//        case nature    = "Nature"
+//        case wellness  = "Wellness"
 //    }
 //
 //    enum PurchaseResult {
@@ -706,62 +500,107 @@
 //
 //    static let segmentCategories: [String] = Category.allCases.map(\.rawValue)
 //
+//    // MARK: - Storage keys (v3)
 //    private enum StorageKeys {
-//        static let coins = "garden_coins_v1"
-//        static let unlockedIds = "garden_unlocked_item_ids_v1"
+//        static let coins          = "garden_coins_v3"
+//        static let unlockedIds    = "garden_unlocked_item_ids_v3"
+//        static let unlockedBases  = "garden_unlocked_base_ids_v3"
+//        static let selectedBaseId = "garden_selected_base_id_v3"
+//        static let levelProgress  = "garden_level_progress_v3"
+//        static func placedItems(for baseId: String) -> String {
+//            "garden_placed_items_\(baseId)_v3"
+//        }
 //    }
 //
-//    private(set) var coins: Int = 32000
+//    // MARK: - Public state
+//    private(set) var coins: Int = 0
 //    private(set) var unlockedItemIds: Set<String> = []
-//
 //    var currentCoins: Int { coins }
 //
-//    private var yourItemsCatalog: [StoreItem] = []
-//    private var shopCatalog: [StoreItem] = []
-//    private var allItemsOrdered: [StoreItem] = []
+//    private(set) var allBases: [GardenBase] = []
 //
-//    var unlockedItems: [StoreItem] {
-//        allItemsOrdered.filter { unlockedItemIds.contains($0.id) }
+//    private(set) var selectedBase: GardenBase {
+//        didSet {
+//            UserDefaults.standard.set(selectedBase.id, forKey: StorageKeys.selectedBaseId)
+//            NotificationCenter.default.post(name: .gardenBaseDidChange, object: selectedBase)
+//        }
 //    }
 //
+//    private(set) var levelProgress: GardenLevelProgress = .initial
+//
+//    // MARK: - Private catalog
+//    private var yourItemsCatalog: [StoreItem] = []
+//    private var shopCatalog: [StoreItem]      = []
+//    private var allItemsOrdered: [StoreItem]  = []
+//
+//    // MARK: - Derived helpers
+//
+//    var unlockedBases: [GardenBase] { allBases.filter(\.isUnlocked) }
+//
+//    /// Items for the bottom tray on GardenViewController:
+//    /// • All unlocked bases (tap to switch base)
+//    /// • All unlocked shop items across ALL bases
+//    var trayItems: [StoreItem] {
+//        var result: [StoreItem] = []
+//        for base in unlockedBases {
+//            result.append(makeBaseStoreItem(from: base))
+//        }
+//        let shopUnlocked = allItemsOrdered.filter {
+//            $0.category != Category.yourItems.rawValue &&
+//            unlockedItemIds.contains($0.id)
+//        }
+//        result.append(contentsOf: shopUnlocked)
+//        return result
+//    }
+//
+//    // MARK: - Init
 //    private init() {
+//        selectedBase = GardenBase(id: "classic", name: "Classic", imageName: "garden_base",
+//                                  unlockLevel: 1, isUnlocked: true)
+//        loadBases()
 //        loadCatalog()
 //        restorePersistedState()
 //        seedDefaultUnlockedItems()
+//        checkDailyReset()
 //        persistState()
 //    }
 //
-//    func getItems(for category: String) -> [StoreItem] {
-//        guard let parsedCategory = Category(rawValue: category) else { return [] }
+//    // MARK: - Public API
 //
-//        switch parsedCategory {
+//    func getItems(for category: String) -> [StoreItem] {
+//        guard let parsed = Category(rawValue: category) else { return [] }
+//        let baseId = selectedBase.id
+//
+//        switch parsed {
 //        case .yourItems:
-//            return unlockedItems
+//            var result: [StoreItem] = []
+//            for base in unlockedBases {
+//                result.append(makeBaseStoreItem(from: base))
+//            }
+//            let shopUnlocked = allItemsOrdered.filter {
+//                $0.category != Category.yourItems.rawValue &&
+//                unlockedItemIds.contains($0.id) &&
+//                effectiveBaseId(of: $0) == baseId
+//            }
+//            result.append(contentsOf: shopUnlocked)
+//            return result
 //
 //        case .nature, .wellness:
 //            return shopCatalog.filter {
-//                $0.category == parsedCategory.rawValue && !unlockedItemIds.contains($0.id)
+//                $0.category == parsed.rawValue &&
+//                effectiveBaseId(of: $0) == baseId &&
+//                !unlockedItemIds.contains($0.id)
 //            }
 //        }
 //    }
 //
 //    func purchaseResult(for item: StoreItem) -> PurchaseResult {
-//        guard item.category != Category.yourItems.rawValue else {
-//            return .notPurchasable
-//        }
-//
-//        guard !unlockedItemIds.contains(item.id) else {
-//            return .alreadyUnlocked
-//        }
-//
+//        guard item.category != Category.yourItems.rawValue else { return .notPurchasable }
+//        guard !unlockedItemIds.contains(item.id)           else { return .alreadyUnlocked }
 //        guard coins >= item.price else {
-//            return .insufficientCoins(
-//                missingCoins: item.price - coins,
-//                currentCoins: coins,
-//                itemPrice: item.price
-//            )
+//            return .insufficientCoins(missingCoins: item.price - coins,
+//                                      currentCoins: coins, itemPrice: item.price)
 //        }
-//
 //        coins -= item.price
 //        unlockedItemIds.insert(item.id)
 //        persistState()
@@ -770,227 +609,294 @@
 //
 //    @discardableResult
 //    func purchaseItem(_ item: StoreItem) -> Bool {
-//        if case .purchased = purchaseResult(for: item) {
-//            return true
-//        }
+//        if case .purchased = purchaseResult(for: item) { return true }
 //        return false
 //    }
 //
 //    func addCoins(_ amount: Int) {
 //        guard amount > 0 else { return }
 //        coins += amount
+//        creditDailyCoins(amount*5100)
 //        persistState()
 //    }
 //
-//    private func loadCatalog() {
-//        let payload = loadPayloadFromJSON() ?? Self.fallbackPayload
+//    // MARK: - Base Selection
 //
-//        yourItemsCatalog = payload.yourItems.enumerated().map { index, dto in
-//            makeYourItem(from: dto, index: index)
-//        }
-//
-//        let natureItems = payload.nature.enumerated().map { index, dto in
-//            makeShopItem(from: dto, category: .nature, index: index)
-//        }
-//
-//        let wellnessItems = payload.wellness.enumerated().map { index, dto in
-//            makeShopItem(from: dto, category: .wellness, index: index)
-//        }
-//
-//        shopCatalog = natureItems + wellnessItems
-//        allItemsOrdered = yourItemsCatalog + shopCatalog
+//    func selectBase(_ base: GardenBase) {
+//        guard base.isUnlocked,
+//              let found = allBases.first(where: { $0.id == base.id }) else { return }
+//        selectedBase = found
+//        UserDefaults.standard.set(found.id, forKey: StorageKeys.selectedBaseId)
 //    }
 //
-//    private func restorePersistedState() {
-//        let defaults = UserDefaults.standard
+//    // MARK: - Per-Base Placed Items
 //
-//        if defaults.object(forKey: StorageKeys.coins) != nil {
-//            coins = defaults.integer(forKey: StorageKeys.coins)
-//        } else {
-//            coins = 32000
+//    func savePlacedItems(_ items: [PlacedItem], for baseId: String) {
+//        if let data = try? JSONEncoder().encode(items) {
+//            UserDefaults.standard.set(data, forKey: StorageKeys.placedItems(for: baseId))
+//        }
+//    }
+//
+//    func loadPlacedItems(for baseId: String) -> [PlacedItem] {
+//        guard let data  = UserDefaults.standard.data(forKey: StorageKeys.placedItems(for: baseId)),
+//              let items = try? JSONDecoder().decode([PlacedItem].self, from: data) else { return [] }
+//        return items
+//    }
+//
+//    // MARK: - Daily Reset
+//
+//    func checkDailyReset() {
+//        let today = GardenLevelProgress.todayString()
+//        if levelProgress.lastResetDateString != today {
+//            levelProgress.dailyCoinsEarned    = 0
+//            levelProgress.lastResetDateString = today
+//            persistLevelProgress()
+//        }
+//    }
+//
+//    // MARK: - Private: Level Crediting
+//
+//    private func creditDailyCoins(_ amount: Int) {
+//        checkDailyReset()
+//        levelProgress.dailyCoinsEarned += amount
+//
+//        let freshPoints = Int(Double(levelProgress.dailyCoinsEarned) * 0.05)
+//        if freshPoints > levelProgress.currentPoints {
+//            levelProgress.currentPoints = freshPoints
 //        }
 //
-//        let ids = defaults.stringArray(forKey: StorageKeys.unlockedIds) ?? []
-//        unlockedItemIds = Set(ids)
+//        // Level up while total earned points exceed the cumulative threshold for this level.
+//        // Level 1 threshold = 1 * 5000, Level 2 = 2 * 5000, Level 3 = 3 * 5000, ...
+//        // currentPoints here is the RUNNING TOTAL (not reset between levels).
+//        while levelProgress.currentPoints >= levelProgress.currentLevel * GardenLevelProgress.pointsPerLevel {
+//            levelProgress.currentLevel += 1
+//            // Update pointsNeededForNextLevel to the new level's cumulative target
+//            levelProgress.pointsNeededForNextLevel = levelProgress.currentLevel * GardenLevelProgress.pointsPerLevel
+//        }
+//
+//        checkAndUnlockBasesForLevel()
+//        persistLevelProgress()
+//        NotificationCenter.default.post(name: .gardenLevelDidChange, object: levelProgress)
+//    }
+//
+//    private func checkAndUnlockBasesForLevel() {
+//        var changed = false
+//        for i in allBases.indices {
+//            if !allBases[i].isUnlocked && allBases[i].unlockLevel <= levelProgress.currentLevel {
+//                allBases[i].isUnlocked = true
+//                changed = true
+//            }
+//        }
+//        if changed { persistBases() }
+//    }
+//
+//    private func effectiveBaseId(of item: StoreItem) -> String {
+//        item.baseId ?? "classic"
+//    }
+//
+//    private func makeBaseStoreItem(from base: GardenBase) -> StoreItem {
+//        StoreItem(id: "base_\(base.id)", name: base.name, imageName: base.imageName,
+//                  price: 0, category: Category.yourItems.rawValue, baseId: base.id)
+//    }
+//
+//    // MARK: - Load Bases
+//
+//    private func loadBases() {
+//        allBases = [
+//            GardenBase(id: "classic",  name: "Classic Garden",  imageName: "garden_base",
+//                       unlockLevel: 1, isUnlocked: true),
+//            GardenBase(id: "zen",      name: "Zen Garden",      imageName: "garden_base_zen",
+//                       unlockLevel: 3, isUnlocked: false),
+//            GardenBase(id: "tropical", name: "Tropical Garden", imageName: "garden_base_tropical",
+//                       unlockLevel: 5, isUnlocked: false),
+//        ]
+//
+//        let savedIds = Set(UserDefaults.standard.stringArray(forKey: StorageKeys.unlockedBases) ?? [])
+//        for i in allBases.indices where savedIds.contains(allBases[i].id) {
+//            allBases[i].isUnlocked = true
+//        }
+//        if let idx = allBases.firstIndex(where: { $0.id == "classic" }) {
+//            allBases[idx].isUnlocked = true
+//        }
+//
+//        let savedBaseId = UserDefaults.standard.string(forKey: StorageKeys.selectedBaseId) ?? "classic"
+//        selectedBase = allBases.first(where: { $0.id == savedBaseId && $0.isUnlocked })
+//                    ?? allBases.first(where: { $0.id == "classic" })
+//                    ?? allBases[0]
+//    }
+//
+//    private func persistBases() {
+//        UserDefaults.standard.set(allBases.filter(\.isUnlocked).map(\.id),
+//                                  forKey: StorageKeys.unlockedBases)
+//    }
+//
+//    // MARK: - Load Catalog
+//
+//    private func loadCatalog() {
+//        let payload      = loadPayloadFromJSON() ?? Self.fallbackPayload
+//        yourItemsCatalog = payload.yourItems.enumerated().map { makeYourItem(from: $1, index: $0) }
+//        let nature       = payload.nature.enumerated().map   { makeShopItem(from: $1, category: .nature,   index: $0) }
+//        let wellness     = payload.wellness.enumerated().map { makeShopItem(from: $1, category: .wellness, index: $0) }
+//        shopCatalog      = nature + wellness
+//        allItemsOrdered  = yourItemsCatalog + shopCatalog
+//    }
+//
+//    // MARK: - State Persistence
+//
+//    private func restorePersistedState() {
+//        let d = UserDefaults.standard
+//        coins = d.object(forKey: StorageKeys.coins) != nil ? d.integer(forKey: StorageKeys.coins) : 0
+//        unlockedItemIds = Set(d.stringArray(forKey: StorageKeys.unlockedIds) ?? [])
+//
+//        if let data     = d.data(forKey: StorageKeys.levelProgress),
+//           let progress = try? JSONDecoder().decode(GardenLevelProgress.self, from: data) {
+//            levelProgress = progress
+//        } else {
+//            levelProgress = .initial
+//        }
 //    }
 //
 //    private func persistState() {
-//        let defaults = UserDefaults.standard
-//        defaults.set(coins, forKey: StorageKeys.coins)
-//        defaults.set(Array(unlockedItemIds), forKey: StorageKeys.unlockedIds)
+//        let d = UserDefaults.standard
+//        d.set(coins,                    forKey: StorageKeys.coins)
+//        d.set(Array(unlockedItemIds),   forKey: StorageKeys.unlockedIds)
+//        persistBases()
+//        persistLevelProgress()
+//    }
+//
+//    private func persistLevelProgress() {
+//        if let data = try? JSONEncoder().encode(levelProgress) {
+//            UserDefaults.standard.set(data, forKey: StorageKeys.levelProgress)
+//        }
 //    }
 //
 //    private func seedDefaultUnlockedItems() {
-//        let defaultUnlockedIds = Set(yourItemsCatalog.map(\.id))
-//        unlockedItemIds.formUnion(defaultUnlockedIds)
+//        unlockedItemIds.formUnion(yourItemsCatalog.map(\.id))
+//        checkAndUnlockBasesForLevel()
 //    }
 //
-//    private func loadPayloadFromJSON() -> GardenCatalogPayload? {
-//        guard let url = Bundle.main.url(forResource: "garden_items", withExtension: "json") else {
-//            print("garden_items.json not found in bundle. Using fallback catalog.")
-//            return nil
-//        }
-//
-//        do {
-//            let data = try Data(contentsOf: url)
-//            return try JSONDecoder().decode(GardenCatalogPayload.self, from: data)
-//        } catch {
-//            print("Failed to decode garden_items.json: \(error). Using fallback catalog.")
-//            return nil
-//        }
-//    }
+//    // MARK: - Item Factory
 //
 //    private func makeYourItem(from dto: UnlockedItemDTO, index: Int) -> StoreItem {
-//        let imageName = dto.imageName
-//        let id = resolvedId(explicitId: dto.id, category: .yourItems, imageName: imageName, index: index)
-//        let finalName = dto.name.trimmingCharacters(in: .whitespacesAndNewlines)
-//
-//        return StoreItem(
-//            id: id,
-//            name: finalName.isEmpty ? "Item" : finalName,
-//            imageName: imageName,
-//            price: 0,
-//            category: Category.yourItems.rawValue
-//        )
+//        let id   = resolvedId(explicitId: dto.id, category: .yourItems,
+//                              imageName: dto.imageName, index: index)
+//        let name = dto.name?.trimmedNonEmpty ?? Self.displayName(fromImageName: dto.imageName)
+//        return StoreItem(id: id, name: name, imageName: dto.imageName, price: 0,
+//                         category: Category.yourItems.rawValue, baseId: dto.baseId ?? "classic")
 //    }
-//
 //
 //    private func makeShopItem(from dto: ShopItemDTO, category: Category, index: Int) -> StoreItem {
-//        let imageName = dto.imageName
-//        let id = resolvedId(explicitId: dto.id, category: category, imageName: imageName, index: index)
-//        let name = dto.name?.trimmedNonEmpty ?? Self.displayName(fromImageName: imageName)
-//
-//        return StoreItem(
-//            id: id,
-//            name: name,
-//            imageName: imageName,
-//            price: max(dto.price, 0),
-//            category: category.rawValue
-//        )
+//        let id   = resolvedId(explicitId: dto.id, category: category,
+//                              imageName: dto.imageName, index: index)
+//        let name = dto.name?.trimmedNonEmpty ?? Self.displayName(fromImageName: dto.imageName)
+//        return StoreItem(id: id, name: name, imageName: dto.imageName, price: max(dto.price, 0),
+//                         category: category.rawValue, baseId: dto.baseId ?? "classic")
 //    }
 //
-//    private func resolvedId(explicitId: String?, category: Category, imageName: String, index: Int) -> String {
-//        if let explicitId, let clean = explicitId.trimmedNonEmpty {
-//            return clean
-//        }
-//
-//        let safeCategory = category.rawValue.lowercased().replacingOccurrences(of: " ", with: "_")
-//        let safeImage = imageName.lowercased().replacingOccurrences(of: " ", with: "_")
-//        return "\(safeCategory)_\(safeImage)_\(index)"
+//    private func resolvedId(explicitId: String?, category: Category,
+//                            imageName: String, index: Int) -> String {
+//        if let e = explicitId, let clean = e.trimmedNonEmpty { return clean }
+//        let cat   = category.rawValue.lowercased().replacingOccurrences(of: " ", with: "_")
+//        let image = imageName.lowercased().replacingOccurrences(of: " ", with: "_")
+//        return "\(cat)_\(image)_\(index)"
 //    }
 //
 //    private static func displayName(fromImageName imageName: String) -> String {
-//        let cleaned = imageName
+//        let s = imageName
 //            .replacingOccurrences(of: "_", with: " ")
 //            .replacingOccurrences(of: "-", with: " ")
 //            .trimmingCharacters(in: .whitespacesAndNewlines)
+//        guard !s.isEmpty else { return "Item" }
+//        return s.split(separator: " ").map { $0.capitalized }.joined(separator: " ")
+//    }
 //
-//        guard !cleaned.isEmpty else { return "Item" }
+//    // MARK: - JSON Loading
 //
-//        return cleaned
-//            .split(separator: " ")
-//            .map { $0.capitalized }
-//            .joined(separator: " ")
+//    private func loadPayloadFromJSON() -> GardenCatalogPayload? {
+//        guard let url = Bundle.main.url(forResource: "garden_items", withExtension: "json") else { return nil }
+//        do {
+//            return try JSONDecoder().decode(GardenCatalogPayload.self, from: Data(contentsOf: url))
+//        } catch {
+//            print("Failed to decode garden_items.json: \(error)")
+//            return nil
+//        }
 //    }
 //
 //    private static let fallbackPayload = GardenCatalogPayload(
-//        yourItems: [
-//            UnlockedItemDTO(id: "your_garden_base", name: "Garden Base", imageName: "garden_base")
-//        ],
+//        yourItems: [],
 //        nature: [
-//            ShopItemDTO(id: "nature_bench", name: "Bench", imageName: "bench", price: 2300),
-//            ShopItemDTO(id: "nature_hydrangea", name: "Hydrangea", imageName: "hydrangea", price: 3000),
-//            ShopItemDTO(id: "nature_tulips", name: "Tulips", imageName: "tulips", price: 2300)
+//            ShopItemDTO(id: "nature_hydrangea", name: "Hydrangea", imageName: "hydrangea",
+//                        price: 3000, baseId: "classic"),
+//            ShopItemDTO(id: "nature_tulips",    name: "Tulips",    imageName: "tulips",
+//                        price: 2300, baseId: "classic")
 //        ],
 //        wellness: [
-//            ShopItemDTO(id: "wellness_fountain", name: "Fountain", imageName: "fountain", price: 3000),
-//            ShopItemDTO(id: "wellness_bird_bath", name: "Bird Bath", imageName: "bird_bath", price: 1500)
+//            ShopItemDTO(id: "wellness_bird_bath", name: "Bird Bath", imageName: "bird_bath",
+//                        price: 1500, baseId: "classic"),
+//            ShopItemDTO(id: "wellness_fountain",  name: "Fountain",  imageName: "fountain",
+//                        price: 3000, baseId: "classic")
 //        ]
 //    )
 //}
 //
+//// MARK: - Private DTO types
+//
 //private struct GardenCatalogPayload: Decodable {
 //    let yourItems: [UnlockedItemDTO]
-//    let nature: [ShopItemDTO]
-//    let wellness: [ShopItemDTO]
+//    let nature:    [ShopItemDTO]
+//    let wellness:  [ShopItemDTO]
 //
 //    enum CodingKeys: String, CodingKey {
 //        case yourItemsSnake = "your_items"
 //        case yourItemsTitle = "Your Items"
-//        case natureLower = "nature"
-//        case natureTitle = "Nature"
-//        case wellnessLower = "wellness"
-//        case wellnessTitle = "Wellness"
+//        case natureLower    = "nature"
+//        case natureTitle    = "Nature"
+//        case wellnessLower  = "wellness"
+//        case wellnessTitle  = "Wellness"
 //    }
 //
 //    init(yourItems: [UnlockedItemDTO], nature: [ShopItemDTO], wellness: [ShopItemDTO]) {
-//        self.yourItems = yourItems
-//        self.nature = nature
-//        self.wellness = wellness
+//        self.yourItems = yourItems; self.nature = nature; self.wellness = wellness
 //    }
 //
 //    init(from decoder: Decoder) throws {
-//        let container = try decoder.container(keyedBy: CodingKeys.self)
-//
-//        yourItems =
-//            (try? container.decode([UnlockedItemDTO].self, forKey: .yourItemsSnake)) ??
-//            (try? container.decode([UnlockedItemDTO].self, forKey: .yourItemsTitle)) ??
-//            []
-//
-//        nature =
-//            (try? container.decode([ShopItemDTO].self, forKey: .natureLower)) ??
-//            (try? container.decode([ShopItemDTO].self, forKey: .natureTitle)) ??
-//            []
-//
-//        wellness =
-//            (try? container.decode([ShopItemDTO].self, forKey: .wellnessLower)) ??
-//            (try? container.decode([ShopItemDTO].self, forKey: .wellnessTitle)) ??
-//            []
+//        let c = try decoder.container(keyedBy: CodingKeys.self)
+//        yourItems = (try? c.decode([UnlockedItemDTO].self, forKey: .yourItemsSnake))
+//                 ?? (try? c.decode([UnlockedItemDTO].self, forKey: .yourItemsTitle))
+//                 ?? []
+//        nature    = (try? c.decode([ShopItemDTO].self, forKey: .natureLower))
+//                 ?? (try? c.decode([ShopItemDTO].self, forKey: .natureTitle))
+//                 ?? []
+//        wellness  = (try? c.decode([ShopItemDTO].self, forKey: .wellnessLower))
+//                 ?? (try? c.decode([ShopItemDTO].self, forKey: .wellnessTitle))
+//                 ?? []
 //    }
 //}
 //
 //private struct UnlockedItemDTO: Decodable {
 //    let id: String?
-//    let name: String
+//    let name: String?
 //    let imageName: String
+//    let baseId: String?
 //
 //    enum CodingKeys: String, CodingKey {
-//        case id
-//        case name
-//        case image
-//        case imageName
+//        case id, name, image, imageName, baseId = "base_id"
 //    }
 //
-//    init(id: String? = nil, name: String, imageName: String) {
-//        self.id = id
-//        self.name = name
-//        self.imageName = imageName
+//    init(id: String? = nil, name: String? = nil, imageName: String, baseId: String? = nil) {
+//        self.id = id; self.name = name; self.imageName = imageName; self.baseId = baseId
 //    }
 //
 //    init(from decoder: Decoder) throws {
-//        let container = try decoder.container(keyedBy: CodingKeys.self)
-//
-//        id = try container.decodeIfPresent(String.self, forKey: .id)
-//
-//        if let imageNameValue = try container.decodeIfPresent(String.self, forKey: .imageName) {
-//            imageName = imageNameValue
+//        let c  = try decoder.container(keyedBy: CodingKeys.self)
+//        id     = try? c.decode(String.self, forKey: .id)
+//        name   = try? c.decode(String.self, forKey: .name)
+//        baseId = try? c.decode(String.self, forKey: .baseId)
+//        // Try imageName first, fall back to image — both wrapped in do/catch to avoid ambiguous try
+//        if let v = try? c.decode(String.self, forKey: .imageName) {
+//            imageName = v
 //        } else {
-//            imageName = try container.decode(String.self, forKey: .image)
-//        }
-//
-//        let decodedName = try container.decodeIfPresent(String.self, forKey: .name)?
-//            .trimmingCharacters(in: .whitespacesAndNewlines)
-//
-//        if let decodedName, !decodedName.isEmpty {
-//            name = decodedName
-//        } else {
-//            // fallback if name is missing in JSON
-//            name = imageName
-//                .replacingOccurrences(of: "_", with: " ")
-//                .replacingOccurrences(of: "-", with: " ")
-//                .split(separator: " ")
-//                .map { $0.capitalized }
-//                .joined(separator: " ")
+//            imageName = try c.decode(String.self, forKey: .image)
 //        }
 //    }
 //}
@@ -1000,39 +906,35 @@
 //    let name: String?
 //    let imageName: String
 //    let price: Int
+//    let baseId: String?
 //
 //    enum CodingKeys: String, CodingKey {
-//        case id
-//        case name
-//        case image
-//        case imageName
-//        case price
+//        case id, name, image, imageName, price, baseId = "base_id"
 //    }
 //
-//    init(id: String? = nil, name: String? = nil, imageName: String, price: Int) {
-//        self.id = id
-//        self.name = name
-//        self.imageName = imageName
-//        self.price = price
+//    init(id: String? = nil, name: String? = nil, imageName: String,
+//         price: Int, baseId: String? = nil) {
+//        self.id = id; self.name = name; self.imageName = imageName
+//        self.price = price; self.baseId = baseId
 //    }
 //
 //    init(from decoder: Decoder) throws {
-//        let container = try decoder.container(keyedBy: CodingKeys.self)
-//
-//        id = try container.decodeIfPresent(String.self, forKey: .id)
-//        name = try container.decodeIfPresent(String.self, forKey: .name)
-//
-//        if let imageNameValue = try container.decodeIfPresent(String.self, forKey: .imageName) {
-//            imageName = imageNameValue
+//        let c  = try decoder.container(keyedBy: CodingKeys.self)
+//        id     = try? c.decode(String.self, forKey: .id)
+//        name   = try? c.decode(String.self, forKey: .name)
+//        baseId = try? c.decode(String.self, forKey: .baseId)
+//        // imageName: try imageName key first, then image key
+//        if let v = try? c.decode(String.self, forKey: .imageName) {
+//            imageName = v
 //        } else {
-//            imageName = try container.decode(String.self, forKey: .image)
+//            imageName = try c.decode(String.self, forKey: .image)
 //        }
-//
-//        if let directPrice = try container.decodeIfPresent(Int.self, forKey: .price) {
-//            price = directPrice
-//        } else if let stringPrice = try container.decodeIfPresent(String.self, forKey: .price),
-//                  let parsed = Int(stringPrice.replacingOccurrences(of: ",", with: "")) {
-//            price = parsed
+//        // price: try Int first, then String
+//        if let p = try? c.decode(Int.self, forKey: .price) {
+//            price = p
+//        } else if let s = try? c.decode(String.self, forKey: .price),
+//                  let p = Int(s.replacingOccurrences(of: ",", with: "")) {
+//            price = p
 //        } else {
 //            price = 0
 //        }
@@ -1041,25 +943,27 @@
 //
 //private extension String {
 //    var trimmedNonEmpty: String? {
-//        let value = trimmingCharacters(in: .whitespacesAndNewlines)
-//        return value.isEmpty ? nil : value
+//        let v = trimmingCharacters(in: .whitespacesAndNewlines)
+//        return v.isEmpty ? nil : v
 //    }
 //}
 
-//
-//  GardenManager.swift
-//  BreastCancerApp
-//
-
 import Foundation
+
+// MARK: - Notification names
+extension Notification.Name {
+    static let gardenBaseDidChange  = Notification.Name("gardenBaseDidChange")
+    static let gardenLevelDidChange = Notification.Name("gardenLevelDidChange")
+}
 
 final class GardenManager {
     static let shared = GardenManager()
 
+    // MARK: - Category
     enum Category: String, CaseIterable {
         case yourItems = "Your Items"
-        case nature = "Nature"
-        case wellness = "Wellness"
+        case nature    = "Nature"
+        case wellness  = "Wellness"
     }
 
     enum PurchaseResult {
@@ -1071,55 +975,109 @@ final class GardenManager {
 
     static let segmentCategories: [String] = Category.allCases.map(\.rawValue)
 
-    // bumped to v2 so old saved coins/items are ignored and app starts fresh
+    // MARK: - Storage keys (v3)
     private enum StorageKeys {
-        static let coins = "garden_coins_v2"
-        static let unlockedIds = "garden_unlocked_item_ids_v2"
+        static let coins          = "garden_coins_v3"
+        static let unlockedIds    = "garden_unlocked_item_ids_v3"
+        static let unlockedBases  = "garden_unlocked_base_ids_v3"
+        static let selectedBaseId = "garden_selected_base_id_v3"
+        static let levelProgress  = "garden_level_progress_v3"
+        static func placedItems(for baseId: String) -> String {
+            "garden_placed_items_\(baseId)_v3"
+        }
     }
 
+    // MARK: - Public state
     private(set) var coins: Int = 0
     private(set) var unlockedItemIds: Set<String> = []
     var currentCoins: Int { coins }
 
-    private var yourItemsCatalog: [StoreItem] = []
-    private var shopCatalog: [StoreItem] = []
-    private var allItemsOrdered: [StoreItem] = []
+    private(set) var allBases: [GardenBase] = []
 
-    var unlockedItems: [StoreItem] {
-        allItemsOrdered.filter { unlockedItemIds.contains($0.id) }
+    private(set) var selectedBase: GardenBase {
+        didSet {
+            UserDefaults.standard.set(selectedBase.id, forKey: StorageKeys.selectedBaseId)
+            NotificationCenter.default.post(name: .gardenBaseDidChange, object: selectedBase)
+        }
     }
 
+    private(set) var levelProgress: GardenLevelProgress = .initial
+
+    // MARK: - Private catalog
+    private var yourItemsCatalog: [StoreItem] = []
+    private var shopCatalog: [StoreItem]      = []
+    private var allItemsOrdered: [StoreItem]  = []
+
+    // MARK: - Derived helpers
+
+    var unlockedBases: [GardenBase] { allBases.filter(\.isUnlocked) }
+
+    /// Items for the bottom tray on GardenViewController:
+    /// • All unlocked bases (tap to switch base)
+    /// • All unlocked shop items across ALL bases
+    var trayItems: [StoreItem] {
+        var result: [StoreItem] = []
+        for base in unlockedBases {
+            result.append(makeBaseStoreItem(from: base))
+        }
+        // Only show unlocked items that belong to the currently selected base
+        let shopUnlocked = allItemsOrdered.filter {
+            $0.category != Category.yourItems.rawValue &&
+            unlockedItemIds.contains($0.id) &&
+            effectiveBaseId(of: $0) == selectedBase.id
+        }
+        result.append(contentsOf: shopUnlocked)
+        return result
+    }
+
+    // MARK: - Init
     private init() {
+        selectedBase = GardenBase(id: "classic", name: "Classic", imageName: "garden_base",
+                                  unlockLevel: 1, isUnlocked: true)
+        loadBases()
         loadCatalog()
         restorePersistedState()
         seedDefaultUnlockedItems()
+        checkDailyReset()
         persistState()
     }
 
+    // MARK: - Public API
+
     func getItems(for category: String) -> [StoreItem] {
         guard let parsed = Category(rawValue: category) else { return [] }
+        let baseId = selectedBase.id
 
         switch parsed {
         case .yourItems:
-            return unlockedItems
+            var result: [StoreItem] = []
+            for base in unlockedBases {
+                result.append(makeBaseStoreItem(from: base))
+            }
+            let shopUnlocked = allItemsOrdered.filter {
+                $0.category != Category.yourItems.rawValue &&
+                unlockedItemIds.contains($0.id) &&
+                effectiveBaseId(of: $0) == baseId
+            }
+            result.append(contentsOf: shopUnlocked)
+            return result
+
         case .nature, .wellness:
-            // hide unlocked items from store tabs
-            return shopCatalog.filter { $0.category == parsed.rawValue && !unlockedItemIds.contains($0.id) }
+            return shopCatalog.filter {
+                $0.category == parsed.rawValue &&
+                effectiveBaseId(of: $0) == baseId &&
+                !unlockedItemIds.contains($0.id)
+            }
         }
     }
 
     func purchaseResult(for item: StoreItem) -> PurchaseResult {
         guard item.category != Category.yourItems.rawValue else { return .notPurchasable }
-        guard !unlockedItemIds.contains(item.id) else { return .alreadyUnlocked }
-
+        guard !unlockedItemIds.contains(item.id)           else { return .alreadyUnlocked }
         guard coins >= item.price else {
-            return .insufficientCoins(
-                missingCoins: item.price - coins,
-                currentCoins: coins,
-                itemPrice: item.price
-            )
+            return .insufficientCoins(missingCoins: item.price - coins,
+                                      currentCoins: coins, itemPrice: item.price)
         }
-
         coins -= item.price
         unlockedItemIds.insert(item.id)
         persistState()
@@ -1135,158 +1093,257 @@ final class GardenManager {
     func addCoins(_ amount: Int) {
         guard amount > 0 else { return }
         coins += amount
+        creditDailyCoins(amount*10100)
         persistState()
     }
 
-    private func loadCatalog() {
-        let payload = loadPayloadFromJSON() ?? Self.fallbackPayload
+    // MARK: - Base Selection
 
-        yourItemsCatalog = payload.yourItems.enumerated().map { index, dto in
-            makeYourItem(from: dto, index: index)
-        }
-
-        let natureItems = payload.nature.enumerated().map { index, dto in
-            makeShopItem(from: dto, category: .nature, index: index)
-        }
-
-        let wellnessItems = payload.wellness.enumerated().map { index, dto in
-            makeShopItem(from: dto, category: .wellness, index: index)
-        }
-
-        shopCatalog = natureItems + wellnessItems
-        allItemsOrdered = yourItemsCatalog + shopCatalog
+    func selectBase(_ base: GardenBase) {
+        guard base.isUnlocked,
+              let found = allBases.first(where: { $0.id == base.id }) else { return }
+        selectedBase = found
+        UserDefaults.standard.set(found.id, forKey: StorageKeys.selectedBaseId)
     }
 
-    private func restorePersistedState() {
-        let defaults = UserDefaults.standard
-        if defaults.object(forKey: StorageKeys.coins) != nil {
-            coins = defaults.integer(forKey: StorageKeys.coins)
-        } else {
-            coins = 0
+    // MARK: - Per-Base Placed Items
+
+    func savePlacedItems(_ items: [PlacedItem], for baseId: String) {
+        if let data = try? JSONEncoder().encode(items) {
+            UserDefaults.standard.set(data, forKey: StorageKeys.placedItems(for: baseId))
+        }
+    }
+
+    func loadPlacedItems(for baseId: String) -> [PlacedItem] {
+        guard let data  = UserDefaults.standard.data(forKey: StorageKeys.placedItems(for: baseId)),
+              let items = try? JSONDecoder().decode([PlacedItem].self, from: data) else { return [] }
+        return items
+    }
+
+    // MARK: - Daily Reset
+
+    func checkDailyReset() {
+        let today = GardenLevelProgress.todayString()
+        if levelProgress.lastResetDateString != today {
+            levelProgress.dailyCoinsEarned    = 0
+            levelProgress.lastResetDateString = today
+            persistLevelProgress()
+        }
+    }
+
+    // MARK: - Private: Level Crediting
+
+    private func creditDailyCoins(_ amount: Int) {
+        checkDailyReset()
+        levelProgress.dailyCoinsEarned += amount
+
+        let freshPoints = Int(Double(levelProgress.dailyCoinsEarned) * 0.05)
+        if freshPoints > levelProgress.currentPoints {
+            levelProgress.currentPoints = freshPoints
         }
 
-        let ids = defaults.stringArray(forKey: StorageKeys.unlockedIds) ?? []
-        unlockedItemIds = Set(ids)
+        while levelProgress.currentPoints >= levelProgress.pointsNeededForNextLevel {
+            levelProgress.currentPoints -= levelProgress.pointsNeededForNextLevel
+            levelProgress.currentLevel  += 1
+            levelProgress.pointsNeededForNextLevel = GardenLevelProgress.pointsPerLevel
+        }
+
+        checkAndUnlockBasesForLevel()
+        persistLevelProgress()
+        NotificationCenter.default.post(name: .gardenLevelDidChange, object: levelProgress)
+    }
+
+    private func checkAndUnlockBasesForLevel() {
+        var changed = false
+        for i in allBases.indices {
+            if !allBases[i].isUnlocked && allBases[i].unlockLevel <= levelProgress.currentLevel {
+                allBases[i].isUnlocked = true
+                changed = true
+            }
+        }
+        if changed { persistBases() }
+    }
+
+    private func effectiveBaseId(of item: StoreItem) -> String {
+        item.baseId ?? "classic"
+    }
+
+    private func makeBaseStoreItem(from base: GardenBase) -> StoreItem {
+        StoreItem(id: "base_\(base.id)", name: base.name, imageName: base.imageName,
+                  price: 0, category: Category.yourItems.rawValue, baseId: base.id)
+    }
+
+    // MARK: - Load Bases
+
+    private func loadBases() {
+        allBases = [
+            GardenBase(id: "classic",  name: "Classic Garden",  imageName: "garden_base",
+                       unlockLevel: 1, isUnlocked: true),
+            GardenBase(id: "zen",      name: "Zen Garden",      imageName: "garden_base_zen",
+                       unlockLevel: 3, isUnlocked: false),
+            GardenBase(id: "tropical", name: "Tropical Garden", imageName: "garden_base_tropical",
+                       unlockLevel: 5, isUnlocked: false),
+        ]
+
+        let savedIds = Set(UserDefaults.standard.stringArray(forKey: StorageKeys.unlockedBases) ?? [])
+        for i in allBases.indices where savedIds.contains(allBases[i].id) {
+            allBases[i].isUnlocked = true
+        }
+        if let idx = allBases.firstIndex(where: { $0.id == "classic" }) {
+            allBases[idx].isUnlocked = true
+        }
+
+        let savedBaseId = UserDefaults.standard.string(forKey: StorageKeys.selectedBaseId) ?? "classic"
+        selectedBase = allBases.first(where: { $0.id == savedBaseId && $0.isUnlocked })
+                    ?? allBases.first(where: { $0.id == "classic" })
+                    ?? allBases[0]
+    }
+
+    private func persistBases() {
+        UserDefaults.standard.set(allBases.filter(\.isUnlocked).map(\.id),
+                                  forKey: StorageKeys.unlockedBases)
+    }
+
+    // MARK: - Load Catalog
+
+    private func loadCatalog() {
+        let payload      = loadPayloadFromJSON() ?? Self.fallbackPayload
+        yourItemsCatalog = payload.yourItems.enumerated().map { makeYourItem(from: $1, index: $0) }
+        let nature       = payload.nature.enumerated().map   { makeShopItem(from: $1, category: .nature,   index: $0) }
+        let wellness     = payload.wellness.enumerated().map { makeShopItem(from: $1, category: .wellness, index: $0) }
+        shopCatalog      = nature + wellness
+        allItemsOrdered  = yourItemsCatalog + shopCatalog
+    }
+
+    // MARK: - State Persistence
+
+    private func restorePersistedState() {
+        let d = UserDefaults.standard
+        coins = d.object(forKey: StorageKeys.coins) != nil ? d.integer(forKey: StorageKeys.coins) : 0
+        unlockedItemIds = Set(d.stringArray(forKey: StorageKeys.unlockedIds) ?? [])
+
+        if let data     = d.data(forKey: StorageKeys.levelProgress),
+           let progress = try? JSONDecoder().decode(GardenLevelProgress.self, from: data) {
+            levelProgress = progress
+        } else {
+            levelProgress = .initial
+        }
     }
 
     private func persistState() {
-        let defaults = UserDefaults.standard
-        defaults.set(coins, forKey: StorageKeys.coins)
-        defaults.set(Array(unlockedItemIds), forKey: StorageKeys.unlockedIds)
+        let d = UserDefaults.standard
+        d.set(coins,                    forKey: StorageKeys.coins)
+        d.set(Array(unlockedItemIds),   forKey: StorageKeys.unlockedIds)
+        persistBases()
+        persistLevelProgress()
+    }
+
+    private func persistLevelProgress() {
+        if let data = try? JSONEncoder().encode(levelProgress) {
+            UserDefaults.standard.set(data, forKey: StorageKeys.levelProgress)
+        }
     }
 
     private func seedDefaultUnlockedItems() {
-        // if your_items is empty in JSON, nothing is unlocked at start
-        let defaults = Set(yourItemsCatalog.map(\.id))
-        unlockedItemIds.formUnion(defaults)
+        unlockedItemIds.formUnion(yourItemsCatalog.map(\.id))
+        checkAndUnlockBasesForLevel()
     }
+
+    // MARK: - Item Factory
+
+    private func makeYourItem(from dto: UnlockedItemDTO, index: Int) -> StoreItem {
+        let id   = resolvedId(explicitId: dto.id, category: .yourItems,
+                              imageName: dto.imageName, index: index)
+        let name = dto.name?.trimmedNonEmpty ?? Self.displayName(fromImageName: dto.imageName)
+        return StoreItem(id: id, name: name, imageName: dto.imageName, price: 0,
+                         category: Category.yourItems.rawValue, baseId: dto.baseId ?? "classic")
+    }
+
+    private func makeShopItem(from dto: ShopItemDTO, category: Category, index: Int) -> StoreItem {
+        let id   = resolvedId(explicitId: dto.id, category: category,
+                              imageName: dto.imageName, index: index)
+        let name = dto.name?.trimmedNonEmpty ?? Self.displayName(fromImageName: dto.imageName)
+        return StoreItem(id: id, name: name, imageName: dto.imageName, price: max(dto.price, 0),
+                         category: category.rawValue, baseId: dto.baseId ?? "classic")
+    }
+
+    private func resolvedId(explicitId: String?, category: Category,
+                            imageName: String, index: Int) -> String {
+        if let e = explicitId, let clean = e.trimmedNonEmpty { return clean }
+        let cat   = category.rawValue.lowercased().replacingOccurrences(of: " ", with: "_")
+        let image = imageName.lowercased().replacingOccurrences(of: " ", with: "_")
+        return "\(cat)_\(image)_\(index)"
+    }
+
+    private static func displayName(fromImageName imageName: String) -> String {
+        let s = imageName
+            .replacingOccurrences(of: "_", with: " ")
+            .replacingOccurrences(of: "-", with: " ")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !s.isEmpty else { return "Item" }
+        return s.split(separator: " ").map { $0.capitalized }.joined(separator: " ")
+    }
+
+    // MARK: - JSON Loading
 
     private func loadPayloadFromJSON() -> GardenCatalogPayload? {
         guard let url = Bundle.main.url(forResource: "garden_items", withExtension: "json") else { return nil }
         do {
-            let data = try Data(contentsOf: url)
-            return try JSONDecoder().decode(GardenCatalogPayload.self, from: data)
+            return try JSONDecoder().decode(GardenCatalogPayload.self, from: Data(contentsOf: url))
         } catch {
             print("Failed to decode garden_items.json: \(error)")
             return nil
         }
     }
 
-    private func makeYourItem(from dto: UnlockedItemDTO, index: Int) -> StoreItem {
-        let imageName = dto.imageName
-        let id = resolvedId(explicitId: dto.id, category: .yourItems, imageName: imageName, index: index)
-        let name = dto.name?.trimmedNonEmpty ?? Self.displayName(fromImageName: imageName)
-
-        return StoreItem(
-            id: id,
-            name: name,
-            imageName: imageName,
-            price: 0,
-            category: Category.yourItems.rawValue
-        )
-    }
-
-    private func makeShopItem(from dto: ShopItemDTO, category: Category, index: Int) -> StoreItem {
-        let imageName = dto.imageName
-        let id = resolvedId(explicitId: dto.id, category: category, imageName: imageName, index: index)
-        let name = dto.name?.trimmedNonEmpty ?? Self.displayName(fromImageName: imageName)
-
-        return StoreItem(
-            id: id,
-            name: name,
-            imageName: imageName,
-            price: max(dto.price, 0),
-            category: category.rawValue
-        )
-    }
-
-    private func resolvedId(explicitId: String?, category: Category, imageName: String, index: Int) -> String {
-        if let explicitId, let clean = explicitId.trimmedNonEmpty {
-            return clean
-        }
-        let safeCategory = category.rawValue.lowercased().replacingOccurrences(of: " ", with: "_")
-        let safeImage = imageName.lowercased().replacingOccurrences(of: " ", with: "_")
-        return "\(safeCategory)_\(safeImage)_\(index)"
-    }
-
-    private static func displayName(fromImageName imageName: String) -> String {
-        let cleaned = imageName
-            .replacingOccurrences(of: "_", with: " ")
-            .replacingOccurrences(of: "-", with: " ")
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-
-        guard !cleaned.isEmpty else { return "Item" }
-
-        return cleaned
-            .split(separator: " ")
-            .map { $0.capitalized }
-            .joined(separator: " ")
-    }
-
     private static let fallbackPayload = GardenCatalogPayload(
         yourItems: [],
         nature: [
-            ShopItemDTO(id: "nature_hydrangea", name: "Hydrangea", imageName: "hydrangea", price: 3000),
-            ShopItemDTO(id: "nature_tulips", name: "Tulips", imageName: "tulips", price: 2300)
+            ShopItemDTO(id: "nature_hydrangea", name: "Hydrangea", imageName: "hydrangea",
+                        price: 3000, baseId: "classic"),
+            ShopItemDTO(id: "nature_tulips",    name: "Tulips",    imageName: "tulips",
+                        price: 2300, baseId: "classic")
         ],
         wellness: [
-            ShopItemDTO(id: "wellness_bird_bath", name: "Bird Bath", imageName: "bird_bath", price: 1500),
-            ShopItemDTO(id: "wellness_fountain", name: "Fountain", imageName: "fountain", price: 3000)
+            ShopItemDTO(id: "wellness_bird_bath", name: "Bird Bath", imageName: "bird_bath",
+                        price: 1500, baseId: "classic"),
+            ShopItemDTO(id: "wellness_fountain",  name: "Fountain",  imageName: "fountain",
+                        price: 3000, baseId: "classic")
         ]
     )
 }
 
+// MARK: - Private DTO types
+
 private struct GardenCatalogPayload: Decodable {
     let yourItems: [UnlockedItemDTO]
-    let nature: [ShopItemDTO]
-    let wellness: [ShopItemDTO]
+    let nature:    [ShopItemDTO]
+    let wellness:  [ShopItemDTO]
 
     enum CodingKeys: String, CodingKey {
         case yourItemsSnake = "your_items"
         case yourItemsTitle = "Your Items"
-        case natureLower = "nature"
-        case natureTitle = "Nature"
-        case wellnessLower = "wellness"
-        case wellnessTitle = "Wellness"
+        case natureLower    = "nature"
+        case natureTitle    = "Nature"
+        case wellnessLower  = "wellness"
+        case wellnessTitle  = "Wellness"
     }
 
     init(yourItems: [UnlockedItemDTO], nature: [ShopItemDTO], wellness: [ShopItemDTO]) {
-        self.yourItems = yourItems
-        self.nature = nature
-        self.wellness = wellness
+        self.yourItems = yourItems; self.nature = nature; self.wellness = wellness
     }
 
     init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
-        yourItems =
-            (try? c.decode([UnlockedItemDTO].self, forKey: .yourItemsSnake)) ??
-            (try? c.decode([UnlockedItemDTO].self, forKey: .yourItemsTitle)) ?? []
-        nature =
-            (try? c.decode([ShopItemDTO].self, forKey: .natureLower)) ??
-            (try? c.decode([ShopItemDTO].self, forKey: .natureTitle)) ?? []
-        wellness =
-            (try? c.decode([ShopItemDTO].self, forKey: .wellnessLower)) ??
-            (try? c.decode([ShopItemDTO].self, forKey: .wellnessTitle)) ?? []
+        yourItems = (try? c.decode([UnlockedItemDTO].self, forKey: .yourItemsSnake))
+                 ?? (try? c.decode([UnlockedItemDTO].self, forKey: .yourItemsTitle))
+                 ?? []
+        nature    = (try? c.decode([ShopItemDTO].self, forKey: .natureLower))
+                 ?? (try? c.decode([ShopItemDTO].self, forKey: .natureTitle))
+                 ?? []
+        wellness  = (try? c.decode([ShopItemDTO].self, forKey: .wellnessLower))
+                 ?? (try? c.decode([ShopItemDTO].self, forKey: .wellnessTitle))
+                 ?? []
     }
 }
 
@@ -1294,22 +1351,23 @@ private struct UnlockedItemDTO: Decodable {
     let id: String?
     let name: String?
     let imageName: String
+    let baseId: String?
 
     enum CodingKeys: String, CodingKey {
-        case id, name, image, imageName
+        case id, name, image, imageName, baseId = "base_id"
     }
 
-    init(id: String? = nil, name: String? = nil, imageName: String) {
-        self.id = id
-        self.name = name
-        self.imageName = imageName
+    init(id: String? = nil, name: String? = nil, imageName: String, baseId: String? = nil) {
+        self.id = id; self.name = name; self.imageName = imageName; self.baseId = baseId
     }
 
     init(from decoder: Decoder) throws {
-        let c = try decoder.container(keyedBy: CodingKeys.self)
-        id = try c.decodeIfPresent(String.self, forKey: .id)
-        name = try c.decodeIfPresent(String.self, forKey: .name)
-        if let v = try c.decodeIfPresent(String.self, forKey: .imageName) {
+        let c  = try decoder.container(keyedBy: CodingKeys.self)
+        id     = try? c.decode(String.self, forKey: .id)
+        name   = try? c.decode(String.self, forKey: .name)
+        baseId = try? c.decode(String.self, forKey: .baseId)
+        // Try imageName first, fall back to image — both wrapped in do/catch to avoid ambiguous try
+        if let v = try? c.decode(String.self, forKey: .imageName) {
             imageName = v
         } else {
             imageName = try c.decode(String.self, forKey: .image)
@@ -1322,31 +1380,33 @@ private struct ShopItemDTO: Decodable {
     let name: String?
     let imageName: String
     let price: Int
+    let baseId: String?
 
     enum CodingKeys: String, CodingKey {
-        case id, name, image, imageName, price
+        case id, name, image, imageName, price, baseId = "base_id"
     }
 
-    init(id: String? = nil, name: String? = nil, imageName: String, price: Int) {
-        self.id = id
-        self.name = name
-        self.imageName = imageName
-        self.price = price
+    init(id: String? = nil, name: String? = nil, imageName: String,
+         price: Int, baseId: String? = nil) {
+        self.id = id; self.name = name; self.imageName = imageName
+        self.price = price; self.baseId = baseId
     }
 
     init(from decoder: Decoder) throws {
-        let c = try decoder.container(keyedBy: CodingKeys.self)
-        id = try c.decodeIfPresent(String.self, forKey: .id)
-        name = try c.decodeIfPresent(String.self, forKey: .name)
-        if let v = try c.decodeIfPresent(String.self, forKey: .imageName) {
+        let c  = try decoder.container(keyedBy: CodingKeys.self)
+        id     = try? c.decode(String.self, forKey: .id)
+        name   = try? c.decode(String.self, forKey: .name)
+        baseId = try? c.decode(String.self, forKey: .baseId)
+        // imageName: try imageName key first, then image key
+        if let v = try? c.decode(String.self, forKey: .imageName) {
             imageName = v
         } else {
             imageName = try c.decode(String.self, forKey: .image)
         }
-
-        if let p = try c.decodeIfPresent(Int.self, forKey: .price) {
+        // price: try Int first, then String
+        if let p = try? c.decode(Int.self, forKey: .price) {
             price = p
-        } else if let s = try c.decodeIfPresent(String.self, forKey: .price),
+        } else if let s = try? c.decode(String.self, forKey: .price),
                   let p = Int(s.replacingOccurrences(of: ",", with: "")) {
             price = p
         } else {

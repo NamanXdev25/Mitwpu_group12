@@ -1,144 +1,3 @@
-////////
-////////  StoreItemCell.swift
-////////  healinggarden2
-////////
-////////  Created by Naman Bhansali on 27/01/26.
-////////
-//////
-//////import UIKit
-//////
-//////class StoreItemCell: UICollectionViewCell {
-//////    
-//////    @IBOutlet weak var cardContainerView: UIView!
-//////    @IBOutlet weak var itemImageView: UIImageView!
-//////    @IBOutlet weak var priceLabel: UILabel!
-//////    @IBOutlet weak var coinImageView: UIImageView!
-//////    
-//////    override func awakeFromNib() {
-//////        super.awakeFromNib()
-//////        setupUI()
-//////    }
-//////    
-//////    private func setupUI() {
-//////        // 1. Shadow on the Cell itself
-//////        self.backgroundColor = .clear
-//////        self.layer.shadowColor = UIColor.black.cgColor
-//////        self.layer.shadowOffset = CGSize(width: 0, height: 4)
-//////        self.layer.shadowRadius = 6
-//////        self.layer.shadowOpacity = 0.1
-//////        self.layer.masksToBounds = false
-//////        
-//////        // 2. Rounded Corners on the Container
-//////        cardContainerView.backgroundColor = .white
-//////        cardContainerView.layer.cornerRadius = 13
-//////        cardContainerView.layer.masksToBounds = true // Clips the image inside
-//////        
-//////        itemImageView.contentMode = .scaleAspectFit
-//////        priceLabel.font = .systemFont(ofSize: 14, weight: .bold)
-//////    }
-//////    
-//////    func configure(with item: StoreItem) {
-//////        itemImageView.image = UIImage(named: item.imageName)
-//////        priceLabel.text = "\(item.price)"
-////////        coinImageView.image = UIImage(named: "coin_icon") // Asset needed
-//////    }
-//////}
-////
-//////
-//////  StoreItemCell.swift
-//////  BreastCancerApp
-//////
-////
-////import UIKit
-////
-////class StoreItemCell: UICollectionViewCell {
-////
-////    @IBOutlet weak var cardContainerView: UIView!
-////    @IBOutlet weak var itemImageView: UIImageView!
-////    @IBOutlet weak var priceLabel: UILabel!
-////    @IBOutlet weak var coinImageView: UIImageView!
-////
-////    override func awakeFromNib() {
-////        super.awakeFromNib()
-////        setupUI()
-////    }
-////
-////    private func setupUI() {
-////        backgroundColor = .clear
-////        layer.shadowColor = UIColor.black.cgColor
-////        layer.shadowOffset = CGSize(width: 0, height: 4)
-////        layer.shadowRadius = 6
-////        layer.shadowOpacity = 0.1
-////        layer.masksToBounds = false
-////
-////        cardContainerView.backgroundColor = .white
-////        cardContainerView.layer.cornerRadius = 13
-////        cardContainerView.layer.masksToBounds = true
-////
-////        itemImageView.contentMode = .scaleAspectFit
-////        priceLabel.font = .systemFont(ofSize: 14, weight: .bold)
-////    }
-////
-////    func configure(with item: StoreItem) {
-////        itemImageView.image = UIImage(named: item.imageName)
-////
-////        let showPrice = item.category != GardenManager.Category.yourItems.rawValue && item.price > 0
-////        priceLabel.isHidden = !showPrice
-////        coinImageView.isHidden = !showPrice
-////        priceLabel.text = showPrice ? "\(item.price)" : ""
-////    }
-////}
-//
-////
-////  StoreItemCell.swift
-////  BreastCancerApp
-////
-//
-//import UIKit
-//
-//class StoreItemCell: UICollectionViewCell {
-//
-//    @IBOutlet weak var cardContainerView: UIView!
-//    @IBOutlet weak var itemImageView: UIImageView!
-//    @IBOutlet weak var priceLabel: UILabel!
-//    @IBOutlet weak var coinImageView: UIImageView!
-//
-//    override func awakeFromNib() {
-//        super.awakeFromNib()
-//        setupUI()
-//    }
-//
-//    private func setupUI() {
-//        backgroundColor = .clear
-//        layer.shadowColor = UIColor.black.cgColor
-//        layer.shadowOffset = CGSize(width: 0, height: 4)
-//        layer.shadowRadius = 6
-//        layer.shadowOpacity = 0.1
-//        layer.masksToBounds = false
-//
-//        cardContainerView.backgroundColor = .white
-//        cardContainerView.layer.cornerRadius = 13
-//        cardContainerView.layer.masksToBounds = true
-//
-//        itemImageView.contentMode = .scaleAspectFit
-//        priceLabel.font = .systemFont(ofSize: 14, weight: .bold)
-//    }
-//
-//    func configure(with item: StoreItem, showPrice: Bool) {
-//        itemImageView.image = UIImage(named: item.imageName)
-//
-//        let shouldShowPrice = showPrice && item.price > 0
-//        priceLabel.isHidden = !shouldShowPrice
-//        coinImageView.isHidden = !shouldShowPrice
-//        priceLabel.text = shouldShowPrice ? "\(item.price)" : ""
-//    }
-//}
-
-//
-//  StoreItemCell.swift
-//  BreastCancerApp
-//
-
 import UIKit
 
 class StoreItemCell: UICollectionViewCell {
@@ -175,19 +34,86 @@ class StoreItemCell: UICollectionViewCell {
         priceLabel.minimumScaleFactor = 0.7
     }
 
+    // MARK: - Standard configure (shop tabs: Nature / Wellness)
+
     func configure(with item: StoreItem, showPrice: Bool) {
         itemImageView.image = UIImage(named: item.imageName)
 
         if showPrice {
-            // Nature / Wellness: show coin + price
+            // Nature / Wellness tab: show coin icon + price number
             coinImageView.isHidden = false
-            priceLabel.isHidden = false
-            priceLabel.text = "\(item.price)"
+            priceLabel.isHidden    = false
+            priceLabel.text        = "\(item.price)"
         } else {
-            // Your Items: show name from JSON, hide coin
+            // Your Items tab (regular unlocked item): show name, hide coin
             coinImageView.isHidden = true
-            priceLabel.isHidden = false
-            priceLabel.text = item.name
+            priceLabel.isHidden    = false
+            priceLabel.text        = item.name
         }
+
+        // Clear any leftover base styling from cell reuse
+        resetBaseStyle()
+    }
+
+    // MARK: - Your Items configure (bases + unlocked items)
+
+    /// Call this instead of configure() when populating the "Your Items" tab.
+    /// - isBase: pass true when the item represents a garden base tile.
+    /// - isSelectedBase: pass true when this base is currently active.
+    func configureAsYourItem(_ item: StoreItem, isBase: Bool, isSelectedBase: Bool) {
+        // Reuse existing logic — no price shown in Your Items
+        configure(with: item, showPrice: false)
+
+        if isBase {
+            // Highlight border: green = active, gray = unlocked but not active
+            cardContainerView.layer.borderWidth = isSelectedBase ? 3.0 : 1.5
+            cardContainerView.layer.borderColor = isSelectedBase
+                ? UIColor.systemGreen.cgColor
+                : UIColor.systemGray3.cgColor
+
+            if isSelectedBase {
+                addActiveBadge()
+            } else {
+                removeActiveBadge()
+            }
+        } else {
+            resetBaseStyle()
+        }
+    }
+
+    // MARK: - Active badge ("✓ Active" shown on the selected base tile)
+
+    private func addActiveBadge() {
+        let tag = 9_001
+        guard contentView.viewWithTag(tag) == nil else { return }
+
+        let badge = UILabel()
+        badge.tag             = tag
+        badge.text            = "✓ Active"
+        badge.font            = .systemFont(ofSize: 9, weight: .bold)
+        badge.textColor       = .white
+        badge.backgroundColor = UIColor.systemGreen
+        badge.textAlignment   = .center
+        badge.layer.cornerRadius = 6
+        badge.clipsToBounds   = true
+        badge.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(badge)
+
+        NSLayoutConstraint.activate([
+            badge.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
+            badge.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
+            badge.heightAnchor.constraint(equalToConstant: 16),
+            badge.widthAnchor.constraint(equalToConstant: 48)
+        ])
+    }
+
+    private func removeActiveBadge() {
+        contentView.viewWithTag(9_001)?.removeFromSuperview()
+    }
+
+    private func resetBaseStyle() {
+        cardContainerView.layer.borderWidth = 0
+        cardContainerView.layer.borderColor = nil
+        removeActiveBadge()
     }
 }
