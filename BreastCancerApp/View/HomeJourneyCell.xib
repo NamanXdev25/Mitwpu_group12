@@ -47,14 +47,14 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Chemotherapy" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f2D-cK-Yy5">
-                                <rect key="frame" x="12" y="90" width="130" height="20"/>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
+                                <rect key="frame" x="12" y="90" width="118" height="20"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                 <color key="textColor" name="primary_color"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="• Phase 1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mKY-ec-CdL">
-                                <rect key="frame" x="148" y="88" width="82" height="24"/>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
+                                <rect key="frame" x="136" y="90" width="70.666666666666686" height="20.333333333333329"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                 <color key="textColor" systemColor="systemGrayColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -97,6 +97,13 @@
                 <constraint firstAttribute="trailing" secondItem="b1o-8D-c4X" secondAttribute="trailing" id="uJL-IN-RKQ"/>
             </constraints>
             <size key="customSize" width="360" height="114"/>
+            <connections>
+                <outlet property="cardView" destination="b1o-8D-c4X" id="H61-vK-Zbq"/>
+                <outlet property="phaseLabel" destination="mKY-ec-CdL" id="H5A-0G-TfQ"/>
+                <outlet property="subtitleLabel" destination="1u0-bt-QxQ" id="Uzf-iO-BLa"/>
+                <outlet property="titleLabel" destination="aHs-16-sK0" id="8xY-p8-gAk"/>
+                <outlet property="treatmentLabel" destination="f2D-cK-Yy5" id="yjP-X0-kgk"/>
+            </connections>
             <point key="canvasLocation" x="175.57251908396947" y="99.295774647887328"/>
         </collectionViewCell>
     </objects>

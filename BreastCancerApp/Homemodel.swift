@@ -491,4 +491,12 @@ class HomeModel {
             subtitle: "You should know about the truth behind myths associated with Breast Cancer"
         )
     ]
+
+    static var currentTreatment: String {
+        UserDefaults.standard.string(forKey: "journey_treatment") ?? "Chemotherapy"
+    }
+
+    static var currentPhase: String {
+        UserDefaults.standard.string(forKey: "journey_phase") ?? "Phase 1"
+    }
 }
