@@ -1093,7 +1093,7 @@ final class GardenManager {
     func addCoins(_ amount: Int) {
         guard amount > 0 else { return }
         coins += amount
-        creditDailyCoins(amount*10100)
+        creditDailyCoins(amount)
         persistState()
     }
 
