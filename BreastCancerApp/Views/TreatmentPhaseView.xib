@@ -3,6 +3,7 @@
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -43,14 +44,16 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eQA-3A-bMl">
-                                        <rect key="frame" x="467" y="14" width="20" height="20"/>
+                                        <rect key="frame" x="459" y="14" width="20" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="oWP-Eg-yfK"/>
                                             <constraint firstAttribute="width" constant="20" id="sWu-EQ-9xr"/>
                                         </constraints>
                                         <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" image="chevron.down" catalog="system"/>
+                                        <buttonConfiguration key="configuration" style="plain">
+                                            <imageReference key="image" image="chevron.down" catalog="system" symbolScale="small"/>
+                                        </buttonConfiguration>
                                         <connections>
                                             <action selector="dropdownTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="cLf-tI-DzG"/>
                                         </connections>
@@ -60,7 +63,7 @@
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="17U-rk-GjO" secondAttribute="bottom" id="Vuq-Aa-fi5"/>
                                     <constraint firstItem="eQA-3A-bMl" firstAttribute="centerY" secondItem="17U-rk-GjO" secondAttribute="centerY" id="fHe-E5-qD9"/>
-                                    <constraint firstAttribute="trailing" secondItem="eQA-3A-bMl" secondAttribute="trailing" constant="8" id="iDl-G3-RO5"/>
+                                    <constraint firstAttribute="trailing" secondItem="eQA-3A-bMl" secondAttribute="trailing" constant="16" id="iDl-G3-RO5"/>
                                     <constraint firstItem="17U-rk-GjO" firstAttribute="top" secondItem="iZf-7Z-x7I" secondAttribute="top" id="oNN-ot-Kfh"/>
                                     <constraint firstAttribute="height" constant="48" id="omC-Jx-KcX"/>
                                     <constraint firstItem="17U-rk-GjO" firstAttribute="leading" secondItem="iZf-7Z-x7I" secondAttribute="leading" constant="14" id="whq-J0-dMz"/>
@@ -120,7 +123,7 @@
                                     <constraint firstItem="8jV-SG-4i1" firstAttribute="centerY" secondItem="arR-2M-M0k" secondAttribute="centerY" id="yJK-EA-2X1"/>
                                 </constraints>
                             </view>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="e.g., 6 weeks" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zPu-57-QEo">
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="e.g., 6 Days" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zPu-57-QEo">
                                 <rect key="frame" x="171" y="158.66666666666666" width="324" height="48"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="wyF-tS-F4d"/>
@@ -128,30 +131,43 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current Day in Cycle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GT7-4D-sfW">
-                                <rect key="frame" x="0.0" y="222.33333333333334" width="140.66666666666666" height="18"/>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                                <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder=" e.g., 3" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Dye-tJ-nSr">
-                                <rect key="frame" x="0.0" y="246.33333333333337" width="495" height="48"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="48" id="vXQ-ct-R0S"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
                             <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C9L-Mj-dif">
-                                <rect key="frame" x="0.0" y="310.33333333333331" width="495" height="50"/>
+                                <rect key="frame" x="0.0" y="224.33333333333334" width="495" height="50.000000000000028"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="ezW-KR-Ust"/>
                                 </constraints>
                                 <color key="tintColor" name="pink"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="filled" title="Save Phase Details"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Save Phase Details">
+                                    <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </buttonConfiguration>
                                 <connections>
                                     <action selector="saveTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="kQo-bJ-WG3"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8dM-mU-wi6">
+                                <rect key="frame" x="0.0" y="222.66666666666666" width="495" height="49.999999999999972"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="vmI-o9-hez"/>
+                                </constraints>
+                                <color key="tintColor" name="light pink"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" image="pencil" catalog="system" title="  Edit">
+                                    <color key="baseForegroundColor" name="pink"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="editTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="BXk-5F-d8R"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ut5-xo-2zd">
+                                <rect key="frame" x="448" y="6.6666666666666679" width="39" height="35"/>
+                                <color key="tintColor" red="0.91976243257522583" green="0.27363217767170778" blue="0.35983380262164366" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain">
+                                    <imageReference key="image" image="trash.fill" catalog="system" symbolScale="small"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="deleteTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="ekb-MQ-q7b"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -159,27 +175,27 @@
                         <constraints>
                             <constraint firstItem="zPu-57-QEo" firstAttribute="top" secondItem="Ckd-RD-V3D" secondAttribute="bottom" constant="6" id="0aS-hG-L3B"/>
                             <constraint firstItem="CX2-ME-6JE" firstAttribute="top" secondItem="32m-rp-Oqx" secondAttribute="top" constant="13.666666666666664" id="3P5-CE-6rt"/>
+                            <constraint firstAttribute="trailing" secondItem="8dM-mU-wi6" secondAttribute="trailing" id="4rQ-7t-gah"/>
+                            <constraint firstAttribute="trailing" secondItem="Ut5-xo-2zd" secondAttribute="trailing" constant="8" id="6fS-EY-3eZ"/>
                             <constraint firstItem="zPu-57-QEo" firstAttribute="leading" secondItem="JoW-Uu-fRi" secondAttribute="trailing" constant="16" id="Dpr-by-a8u"/>
                             <constraint firstItem="iZf-7Z-x7I" firstAttribute="top" secondItem="xEe-Uj-ZIj" secondAttribute="bottom" constant="6" id="JbI-62-qeO"/>
-                            <constraint firstAttribute="trailing" secondItem="Dye-tJ-nSr" secondAttribute="trailing" id="NKs-9Q-Unk"/>
                             <constraint firstItem="NGt-hA-dSB" firstAttribute="top" secondItem="iZf-7Z-x7I" secondAttribute="bottom" constant="14" id="QRb-lh-KIi"/>
                             <constraint firstAttribute="trailing" secondItem="C9L-Mj-dif" secondAttribute="trailing" id="QcW-Bm-yaJ"/>
                             <constraint firstAttribute="trailing" secondItem="Ckd-RD-V3D" secondAttribute="trailing" constant="8" id="SDS-eD-0wd"/>
-                            <constraint firstItem="GT7-4D-sfW" firstAttribute="leading" secondItem="32m-rp-Oqx" secondAttribute="leading" id="VmO-9E-q0x"/>
+                            <constraint firstItem="Ut5-xo-2zd" firstAttribute="centerY" secondItem="CX2-ME-6JE" secondAttribute="centerY" id="W7Y-Dp-qoy"/>
+                            <constraint firstItem="C9L-Mj-dif" firstAttribute="top" secondItem="JoW-Uu-fRi" secondAttribute="bottom" constant="16" id="YHi-IP-LB0"/>
                             <constraint firstItem="xEe-Uj-ZIj" firstAttribute="top" secondItem="CX2-ME-6JE" secondAttribute="bottom" constant="14" id="YO3-fx-xi4"/>
-                            <constraint firstItem="C9L-Mj-dif" firstAttribute="top" secondItem="Dye-tJ-nSr" secondAttribute="bottom" constant="16" id="YkB-eX-6W9"/>
-                            <constraint firstItem="Dye-tJ-nSr" firstAttribute="top" secondItem="GT7-4D-sfW" secondAttribute="bottom" constant="6" id="cAN-yr-la1"/>
                             <constraint firstAttribute="trailing" secondItem="zPu-57-QEo" secondAttribute="trailing" id="fo0-JU-IT0"/>
                             <constraint firstItem="iZf-7Z-x7I" firstAttribute="leading" secondItem="xEe-Uj-ZIj" secondAttribute="leading" id="foe-Ub-YHE"/>
                             <constraint firstItem="iZf-7Z-x7I" firstAttribute="leading" secondItem="NGt-hA-dSB" secondAttribute="leading" id="gEn-9U-78i"/>
-                            <constraint firstItem="GT7-4D-sfW" firstAttribute="top" secondItem="JoW-Uu-fRi" secondAttribute="bottom" constant="14" id="h0R-14-Oye"/>
                             <constraint firstItem="JoW-Uu-fRi" firstAttribute="leading" secondItem="32m-rp-Oqx" secondAttribute="leading" id="kgy-ir-cc3"/>
                             <constraint firstItem="iZf-7Z-x7I" firstAttribute="top" secondItem="xEe-Uj-ZIj" secondAttribute="bottom" constant="6" id="ojs-Zl-lfI"/>
                             <constraint firstItem="NGt-hA-dSB" firstAttribute="leading" secondItem="32m-rp-Oqx" secondAttribute="leading" id="opJ-RO-sZt"/>
-                            <constraint firstItem="Dye-tJ-nSr" firstAttribute="leading" secondItem="32m-rp-Oqx" secondAttribute="leading" id="pwZ-FI-Gqq"/>
+                            <constraint firstItem="8dM-mU-wi6" firstAttribute="top" secondItem="zPu-57-QEo" secondAttribute="bottom" constant="16" id="roh-l6-vcz"/>
                             <constraint firstItem="Ckd-RD-V3D" firstAttribute="top" secondItem="iZf-7Z-x7I" secondAttribute="bottom" constant="14" id="s94-hk-Pn6"/>
                             <constraint firstItem="C9L-Mj-dif" firstAttribute="leading" secondItem="32m-rp-Oqx" secondAttribute="leading" id="tqt-Pu-aUZ"/>
                             <constraint firstItem="iZf-7Z-x7I" firstAttribute="leading" secondItem="CX2-ME-6JE" secondAttribute="leading" id="uh3-J7-oWm"/>
+                            <constraint firstItem="8dM-mU-wi6" firstAttribute="leading" secondItem="32m-rp-Oqx" secondAttribute="leading" id="wtj-9P-Q1C"/>
                             <constraint firstItem="JoW-Uu-fRi" firstAttribute="top" secondItem="NGt-hA-dSB" secondAttribute="bottom" constant="7.6666666666666856" id="yUp-ny-gdq"/>
                             <constraint firstItem="iZf-7Z-x7I" firstAttribute="trailing" secondItem="zPu-57-QEo" secondAttribute="trailing" id="zcO-kv-J5e"/>
                         </constraints>
@@ -195,11 +211,12 @@
             </constraints>
             <size key="customSize" width="495" height="631"/>
             <connections>
-                <outlet property="cycleTextField" destination="Dye-tJ-nSr" id="4lK-hb-OTt"/>
+                <outlet property="deleteButton" destination="Ut5-xo-2zd" id="bZw-SN-tU7"/>
                 <outlet property="dropdownButton" destination="eQA-3A-bMl" id="4bw-CZ-Jbo"/>
                 <outlet property="dropdownContainerView" destination="iZf-7Z-x7I" id="3hO-a9-7SP"/>
                 <outlet property="dropdownLabel" destination="17U-rk-GjO" id="RJm-Wr-DBl"/>
                 <outlet property="durationTextField" destination="zPu-57-QEo" id="Xpt-Rn-fcS"/>
+                <outlet property="editButton" destination="8dM-mU-wi6" id="iqA-65-6WH"/>
                 <outlet property="phaseTitleLabel" destination="CX2-ME-6JE" id="ipt-U8-EFF"/>
                 <outlet property="saveButton" destination="C9L-Mj-dif" id="xvn-gy-qM7"/>
                 <outlet property="startDateButton" destination="2Fr-eg-B4U" id="dNO-tV-LLm"/>
@@ -212,6 +229,11 @@
     <resources>
         <image name="calendar" catalog="system" width="128" height="107"/>
         <image name="chevron.down" catalog="system" width="128" height="70"/>
+        <image name="pencil" catalog="system" width="128" height="113"/>
+        <image name="trash.fill" catalog="system" width="117" height="128"/>
+        <namedColor name="light pink">
+            <color red="0.9882352941176471" green="0.90980392156862744" blue="0.93725490196078431" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
         <namedColor name="pink">
             <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>

@@ -11,10 +11,10 @@ class JourneyViewController: UIViewController {
     private var treatmentModel = TreatmentModel()
 
     private var cellHeights: [Int: CGFloat] = [
-        0: 200,
-        1: 510,
-        2: 150,
-        3: 480
+        0: 280,  // DiagnosisCell — title + separator + date label + textfield + save button
+        1: 510,  // WaitCell
+        2: 150,  // TreatmentCell
+        3: 445   // PostTreatmentCell
     ]
     
     private var selectedPostTreatmentDate: Date?
@@ -50,7 +50,7 @@ class JourneyViewController: UIViewController {
             layout.estimatedItemSize = .zero
             layout.minimumLineSpacing = 16
             layout.minimumInteritemSpacing = 0
-            layout.sectionInset = UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
+            layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
         }
     }
 
