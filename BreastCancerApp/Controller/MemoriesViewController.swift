@@ -178,7 +178,12 @@ final class MemoriesViewController: UIViewController,
         MemoryStore.save(memories)
         sortAndGroupMemories()
         collectionView.reloadData()
+
+        // Award coins for new memory (once per day)
+        CoinRewardService.shared.awardMemoryCoinsIfEligible(on: self)
     }
+
+
 
     func didDeleteMemory(at index: Int) {
         memories.remove(at: index)

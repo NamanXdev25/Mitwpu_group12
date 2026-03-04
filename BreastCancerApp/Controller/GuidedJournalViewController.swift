@@ -87,8 +87,16 @@ class GuidedJournalViewController: UIViewController {
                 category: categoryLabel.text
             )
             JournalStore.shared.add(newEntry)
+
+            // Award coins for new guided journal entry (once per day)
+            CoinRewardService.shared.awardJournalCoinsIfEligible(
+                reason: "Guided Journal 📝",
+                on: self
+            )
         }
         navigationController?.popViewController(animated: true)
+
+
     }
 }
 

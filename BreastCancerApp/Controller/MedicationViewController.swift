@@ -216,7 +216,17 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
                 // Reload both the item and the stats header
                 self.collectionView.reloadItems(at: [dynamicIndexPath, IndexPath(item: 0, section: 0)])
                 self.saveMedications()
+
+                // Check if ALL today's medications are now taken → award coins (once per day)
+                let allTaken = !self.todaysMedications.isEmpty &&
+                               self.todaysMedications.allSatisfy({ $0.isTaken })
+                CoinRewardService.shared.awardMedicationGoalIfEligible(
+                    allTaken: allTaken,
+                    on: self
+                )
             }
+
+
         }
 
         return cell

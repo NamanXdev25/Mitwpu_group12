@@ -516,9 +516,17 @@ class BlankJournalViewController: UIViewController {
                 category: nil
             )
             JournalStore.shared.add(newEntry)
+
+            // Award coins for new journal entry (once per day)
+            CoinRewardService.shared.awardJournalCoinsIfEligible(
+                reason: "Journal Entry 📝",
+                on: self
+            )
         }
 
         closeAfterSave()
+
+
     }
 
     private func closeAfterSave() {

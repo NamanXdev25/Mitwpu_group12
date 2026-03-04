@@ -191,6 +191,10 @@ class BreathingPlayerViewController: UIViewController {
             timerView.setFullProgress()
             
             timerView.showMessage("A quiet bloom marks your moment of peace")
+
+            // Award coins (once per day)
+            CoinRewardService.shared.awardBreathingCoinsIfEligible(on: self)
+
             
             playButton.isHidden = true
             UIView.animate(withDuration: 0.3) { self.backgroundImageView.alpha = 1 }

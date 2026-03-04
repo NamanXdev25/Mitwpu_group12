@@ -1,0 +1,24 @@
+{
+  "your_items": [],
+  "nature": [
+    { "id": "nature_coloured_flowers", "name": "Coloured Flowers", "image": "ColouredFlowers", "price": 1800 },
+    { "id": "nature_flower_line", "name": "Flower Line", "image": "Flower Line", "price": 500 },
+    { "id": "nature_hydrogena_basket", "name": "Hydrogena Basket", "image": "Hydrogena Basket", "price": 2600 },
+    { "id": "nature_hydrogena", "name": "Hydrogena", "image": "Hydrogena", "price": 2400 },
+    { "id": "nature_purple_flowers", "name": "Purple Flowers", "image": "PurpleFlowers", "price": 2000 },
+    { "id": "nature_tulips", "name": "Tulips", "image": "Tulips", "price": 2300 },
+    { "id": "nature_white_flowers", "name": "White Flowers", "image": "WhiteFlowers", "price": 1900 },
+    { "id": "nature_yellow_flowers", "name": "Yellow Flowers", "image": "Yellow Flowers", "price": 1900 }
+  ],
+  "wellness": [
+    { "id": "wellness_lamp", "name": "Lamp", "image": "Lamp", "price": 2200 },
+    { "id": "wellness_old_bath", "name": "Old Bath", "image": "Old Bath", "price": 2100 },
+    { "id": "wellness_old_lamp", "name": "Old Lamp", "image": "Old Lamp", "price": 2000 },
+    { "id": "wellness_old_fountain", "name": "Old Fountain", "image": "OldFountain", "price": 3200 },
+    { "id": "wellness_pink_bath", "name": "Pink Bath", "image": "Pink_Bath", "price": 2500 },
+    { "id": "wellness_bird_bath", "name": "Bird Bath", "image": "bird_bath", "price": 1500 },
+    { "id": "wellness_final_flower", "name": "Drum", "image": "Drum", "price": 2800 },
+    { "id": "wellness_fountain", "name": "Fountain", "image": "fountain", "price": 3000 }
+  ]
+}
+

@@ -334,9 +334,13 @@ extension ExercisePlayerViewController: ExercisePlayerDataSourceDelegate {
         if let cell = collectionView.cellForItem(at: IndexPath(item: 0, section: 3)) as? ActionButtonsCell {
             if cell.isDone {
                 showToast(message: "Exercise marked as done ✓")
+
+                // Award coins (once per day)
+                CoinRewardService.shared.awardExerciseCoinsIfEligible(on: self)
             }
         }
     }
+
 
     func didTapNext() {
         pushNextExercise()
