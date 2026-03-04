@@ -142,7 +142,6 @@ class StoreViewController: UIViewController {
 
         gardenManager.selectBase(base)
 
-        // Show a brief confirmation
         let alert = UIAlertController(
             title: "Base Changed",
             message: "Now viewing \(base.name).",
@@ -151,6 +150,52 @@ class StoreViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "OK", style: .default) { [weak self] _ in
             self?.updateData()
         })
+        present(alert, animated: true)
+    }
+
+    // MARK: - Purchase Confirmation
+
+    private func showPurchaseConfirmation(for item: StoreItem) {
+        // Dry-run checks WITHOUT purchasing — just inspect state directly
+        guard item.category != GardenManager.Category.yourItems.rawValue else { return }
+
+        if gardenManager.unlockedItemIds.contains(item.id) {
+            showAlreadyUnlockedAlert(for: item)
+            return
+        }
+
+        if gardenManager.currentCoins < item.price {
+            let missing = item.price - gardenManager.currentCoins
+            showInsufficientCoinsAlert(for: item, missing: missing)
+            return
+        }
+
+        // User can afford it — show confirmation first, purchase only after "Yes"
+        let alert = UIAlertController(
+            title: "Purchase Item?",
+            message: "Are you sure you want to purchase \"\(item.name)\" for \(item.price) coins?",
+            preferredStyle: .alert
+        )
+
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+
+        alert.addAction(UIAlertAction(title: "Yes, Buy!", style: .default) { [weak self] _ in
+            guard let self = self else { return }
+            switch self.gardenManager.purchaseResult(for: item) {
+            case .purchased:
+                self.updateData()
+                self.showUnlockCelebration(for: item) { [weak self] in
+                    self?.navigationController?.popViewController(animated: true)
+                }
+            case .insufficientCoins(let missingCoins, _, _):
+                self.showInsufficientCoinsAlert(for: item, missing: missingCoins)
+            case .alreadyUnlocked:
+                self.showAlreadyUnlockedAlert(for: item)
+            case .notPurchasable:
+                break
+            }
+        })
+
         present(alert, animated: true)
     }
 
@@ -381,7 +426,6 @@ extension StoreViewController: UICollectionViewDataSource, UICollectionViewDeleg
         let item = currentData[indexPath.item]
 
         if isShowingYourItems {
-            // In "Your Items": bases show as selectable tiles; items show without price
             let isBase = item.id.hasPrefix("base_")
             let isSelected = isBase && (item.baseId == gardenManager.selectedBase.id)
             cell.configureAsYourItem(item, isBase: isBase, isSelectedBase: isSelected)
@@ -395,27 +439,13 @@ extension StoreViewController: UICollectionViewDataSource, UICollectionViewDeleg
         let item = currentData[indexPath.item]
 
         if isShowingYourItems {
-            // Tapping a base tile switches the active base
             if item.id.hasPrefix("base_") {
                 handleBaseItemTapped(item)
             }
-            // Tapping a regular item in "Your Items" does nothing (it's already unlocked)
             return
         }
 
-        // Shop tab purchase flow
-        switch gardenManager.purchaseResult(for: item) {
-        case .purchased:
-            updateData()
-            showUnlockCelebration(for: item) { [weak self] in
-                self?.switchToYourItemsAndReload()
-            }
-        case .insufficientCoins(let missingCoins, _, _):
-            showInsufficientCoinsAlert(for: item, missing: missingCoins)
-        case .alreadyUnlocked:
-            showAlreadyUnlockedAlert(for: item)
-        case .notPurchasable:
-            break
-        }
+        // Show confirmation before purchasing
+        showPurchaseConfirmation(for: item)
     }
 }

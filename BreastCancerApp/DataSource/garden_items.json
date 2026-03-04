@@ -1,10 +1,10 @@
 {
   "your_items": [],
   "nature": [
-    { "id": "nature_coloured_flowers", "name": "Coloured Flowers", "image": "ColouredFlowers",  "price": 18, "base_id": "classic" },
-    { "id": "nature_flower_line",      "name": "Flower Line",      "image": "Flower Line",       "price": 500,  "base_id": "classic" },
-    { "id": "nature_hydrogena_basket", "name": "Hydrogena Basket", "image": "Hydrogena Basket",  "price": 2600, "base_id": "classic" },
-    { "id": "nature_hydrogena",        "name": "Hydrogena",        "image": "Hydrogena",         "price": 2400, "base_id": "classic" },
+    { "id": "nature_coloured_flowers", "name": "Coloured Flowers", "image": "ColouredFlowers",  "price": 1800, "base_id": "classic" },
+    { "id": "nature_flower_line",      "name": "Flower Line",      "image": "Flower Line",       "price": 1500,  "base_id": "classic" },
+    { "id": "nature_hydrogena_basket", "name": "Hydrogena Basket", "image": "Hydrogena Basket",  "price": 1700, "base_id": "classic" },
+    { "id": "nature_hydrogena",        "name": "Hydrogena",        "image": "Hydrogena",         "price": 1900, "base_id": "classic" },
     { "id": "nature_purple_flowers",   "name": "Purple Flowers",   "image": "PurpleFlowers",     "price": 2000, "base_id": "classic" },
     { "id": "nature_tulips",           "name": "Tulips",           "image": "Tulips",            "price": 2300, "base_id": "classic" },
     { "id": "nature_white_flowers",    "name": "White Flowers",    "image": "WhiteFlowers",      "price": 1900, "base_id": "classic" },
