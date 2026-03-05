@@ -171,19 +171,19 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="rEQ-jX-KtJ" firstAttribute="centerY" secondItem="NFp-2L-6GC" secondAttribute="centerY" id="7sX-IU-5KI"/>
-                                    <constraint firstItem="rEQ-jX-KtJ" firstAttribute="leading" secondItem="NFp-2L-6GC" secondAttribute="trailing" constant="230.33000000000001" id="FGg-ts-MIo"/>
-                                    <constraint firstItem="S7u-tA-bnO" firstAttribute="leading" secondItem="BOV-uQ-evh" secondAttribute="trailing" constant="5" id="JSh-Ry-RJT"/>
                                     <constraint firstItem="ca6-hf-F1c" firstAttribute="top" secondItem="NFp-2L-6GC" secondAttribute="bottom" constant="13.67" id="JoU-1q-xFQ"/>
                                     <constraint firstItem="BOV-uQ-evh" firstAttribute="centerY" secondItem="hDn-81-IFR" secondAttribute="centerY" id="KAE-Qt-fQK"/>
+                                    <constraint firstAttribute="trailing" secondItem="neG-dC-nmY" secondAttribute="trailing" constant="19" id="KUR-ZC-gyL"/>
+                                    <constraint firstItem="S7u-tA-bnO" firstAttribute="leading" secondItem="BOV-uQ-evh" secondAttribute="trailing" constant="5" id="Oxj-Et-SrF"/>
                                     <constraint firstAttribute="trailing" secondItem="9Yc-Sz-jDT" secondAttribute="trailing" constant="16" id="RNH-at-gKT"/>
-                                    <constraint firstItem="neG-dC-nmY" firstAttribute="leading" secondItem="rEQ-jX-KtJ" secondAttribute="trailing" constant="5" id="U2T-qu-RHy"/>
                                     <constraint firstItem="S7u-tA-bnO" firstAttribute="centerY" secondItem="BOV-uQ-evh" secondAttribute="centerY" id="VHR-9P-jVx"/>
                                     <constraint firstItem="hDn-81-IFR" firstAttribute="top" secondItem="ca6-hf-F1c" secondAttribute="bottom" constant="13" id="WEz-mt-ysi"/>
                                     <constraint firstItem="NFp-2L-6GC" firstAttribute="leading" secondItem="6L6-Jf-MRj" secondAttribute="leading" constant="16" id="X6l-uo-boi"/>
                                     <constraint firstItem="9Yc-Sz-jDT" firstAttribute="leading" secondItem="6L6-Jf-MRj" secondAttribute="leading" constant="16" id="Zmg-GM-6m3"/>
+                                    <constraint firstItem="neG-dC-nmY" firstAttribute="leading" secondItem="rEQ-jX-KtJ" secondAttribute="trailing" constant="5" id="cgB-ha-VbV"/>
                                     <constraint firstItem="neG-dC-nmY" firstAttribute="centerY" secondItem="rEQ-jX-KtJ" secondAttribute="centerY" id="ckM-Xp-Asb"/>
-                                    <constraint firstItem="BOV-uQ-evh" firstAttribute="leading" secondItem="hDn-81-IFR" secondAttribute="trailing" constant="176.33000000000001" id="gON-I7-Xw5"/>
                                     <constraint firstAttribute="trailing" secondItem="ca6-hf-F1c" secondAttribute="trailing" constant="16" id="gge-bG-oXw"/>
+                                    <constraint firstAttribute="trailing" secondItem="S7u-tA-bnO" secondAttribute="trailing" constant="19.670000000000002" id="ixg-Dg-xYR"/>
                                     <constraint firstItem="hDn-81-IFR" firstAttribute="leading" secondItem="6L6-Jf-MRj" secondAttribute="leading" constant="16" id="qe1-io-R10"/>
                                     <constraint firstItem="ca6-hf-F1c" firstAttribute="leading" secondItem="6L6-Jf-MRj" secondAttribute="leading" constant="16" id="xGV-Bx-5OY"/>
                                     <constraint firstItem="9Yc-Sz-jDT" firstAttribute="top" secondItem="6L6-Jf-MRj" secondAttribute="top" id="xJa-Uc-Kem"/>
@@ -229,7 +229,7 @@
     <resources>
         <image name="chevron.up.chevron.down" catalog="system" width="109" height="128"/>
         <namedColor name="HydrationColor">
-            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.23499999940395355" green="0.23499999940395355" blue="0.2630000114440918" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="SeperatorColor">
             <color red="0.90200001001358032" green="0.90200001001358032" blue="0.90200001001358032" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
