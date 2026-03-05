@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="UmD-gh-64p">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Journey-->
+        <scene sceneID="UqD-4S-hPI">
+            <objects>
+                <viewController storyboardIdentifier="JourneyViewController" id="wmB-AP-212" customClass="JourneyViewController" customModule="BreastCancerApp" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="m1n-u7-LR6">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="EYg-wU-Gej">
+                                <rect key="frame" x="0.0" y="172" width="393" height="612"/>
+                                <color key="backgroundColor" name="baground"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Ot3-Ld-Yd9">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="lTk-wA-HtE">
+                                        <rect key="frame" x="0.0" y="0.0" width="127.99999999999997" height="128"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="xGS-OV-eDV">
+                                            <rect key="frame" x="0.0" y="0.0" width="127.99999999999997" height="128"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </collectionViewCellContentView>
+                                    </collectionViewCell>
+                                </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="wmB-AP-212" id="J2c-8G-5w2"/>
+                                    <outlet property="delegate" destination="wmB-AP-212" id="xSb-A2-w5u"/>
+                                </connections>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="cUd-Is-VxD"/>
+                        <color key="backgroundColor" name="baground"/>
+                        <constraints>
+                            <constraint firstItem="EYg-wU-Gej" firstAttribute="leading" secondItem="cUd-Is-VxD" secondAttribute="leading" id="43r-hx-8PH"/>
+                            <constraint firstItem="cUd-Is-VxD" firstAttribute="trailing" secondItem="EYg-wU-Gej" secondAttribute="trailing" id="Wg3-Lg-86X"/>
+                            <constraint firstItem="cUd-Is-VxD" firstAttribute="bottom" secondItem="EYg-wU-Gej" secondAttribute="bottom" id="ZHk-Iv-AXu"/>
+                            <constraint firstItem="EYg-wU-Gej" firstAttribute="top" secondItem="cUd-Is-VxD" secondAttribute="top" id="pTd-ZW-dot"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Journey" largeTitleDisplayMode="never" id="SIN-9Z-Ggl"/>
+                    <connections>
+                        <outlet property="collectionView" destination="EYg-wU-Gej" id="MDm-CI-gcc"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wJJ-En-vEW" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2799.2366412213742" y="1517.605633802817"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Wvv-yn-DHM">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="UmD-gh-64p" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="dj7-am-hPF">
+                        <rect key="frame" x="0.0" y="118" width="393" height="54"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="wmB-AP-212" kind="relationship" relationship="rootViewController" id="WVo-dB-QYr"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0Vc-fS-kEj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1872.5190839694656" y="1517.605633802817"/>
+        </scene>
+    </scenes>
+    <resources>
+        <namedColor name="baground">
+            <color red="0.97254901960784312" green="0.94901960784313721" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+    </resources>
+</document>

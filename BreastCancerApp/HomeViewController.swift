@@ -31,7 +31,9 @@
 //    private func registerCells() {
 //        let cellIdentifiers = [
 //            "HomeQuoteCell",
+//            "HomeJourneyCell",   // ← Journey cell registered here
 //            "HomeMoodCell",
+//            "HomeJournalCell",
 //            "HomeSuggestionCell",
 //            "HomeArticleCell"
 //        ]
@@ -66,11 +68,13 @@
 //            else { return nil }
 //
 //            switch sectionType {
-//            case .title: return self.createEmptySection()
-//            case .quote: return self.createQuoteSection()
-//            case .mood: return self.createMoodSection()
+//            case .title:      return self.createEmptySection()
+//            case .quote:      return self.createQuoteSection()
+//            case .journey:    return self.createJourneySection()   // ← Between quote and mood
+//            case .mood:       return self.createMoodSection()
+//            case .journal:    return self.createJournalSection()
 //            case .suggestion: return self.createSuggestionSection()
-//            case .articles: return self.createArticlesSection()
+//            case .articles:   return self.createArticlesSection()
 //            }
 //        }
 //    }
@@ -95,6 +99,17 @@
 //        return section
 //    }
 //
+//    // Journey card sits between quote and mood
+//    private func createJourneySection() -> NSCollectionLayoutSection {
+//        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(130))
+//        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+//        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(130))
+//        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+//        let section = NSCollectionLayoutSection(group: group)
+//        section.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 16, bottom: 8, trailing: 16)
+//        return section
+//    }
+//
 //    private func createMoodSection() -> NSCollectionLayoutSection {
 //        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(155))
 //        let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -102,6 +117,16 @@
 //        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 //        let section = NSCollectionLayoutSection(group: group)
 //        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16)
+//        return section
+//    }
+//
+//    private func createJournalSection() -> NSCollectionLayoutSection {
+//        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(120))
+//        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+//        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(120))
+//        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+//        let section = NSCollectionLayoutSection(group: group)
+//        section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 4, trailing: 16)
 //        return section
 //    }
 //
@@ -161,6 +186,12 @@
 //                cell.configure(quote: quote)
 //                return cell
 //
+//            // ← Journey cell dequeued and configured
+//            case .journey(let treatment, let phase):
+//                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeJourneyCell", for: indexPath) as! HomeJourneyCell
+//                cell.configure(treatment: treatment, phase: phase)
+//                return cell
+//
 //            case .mood:
 //                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeMoodCell", for: indexPath) as! HomeMoodCell
 //                cell.configure(
@@ -169,10 +200,14 @@
 //                    selectedMoodKey: selectedMoodKey,
 //                    hasUserSelectedMood: hasUserSelectedMood
 //                )
-//
 //                cell.onMoodTapped = { [weak self] mood in
 //                    self?.updateSuggestions(for: mood)
 //                }
+//                return cell
+//
+//            case .journal(let journalSuggestion):
+//                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeJournalCell", for: indexPath) as! HomeJournalCell
+//                cell.configure(with: journalSuggestion)
 //                return cell
 //
 //            case .suggestion(let suggestion):
@@ -218,12 +253,24 @@
 //        snapshot.appendSections(HomeSectionType.allCases)
 //
 //        snapshot.appendItems([HomeItem(type: .quote(HomeModel.quote))], toSection: .quote)
+//
+//        // Journey card — populate from your data model (replace with real user journey data)
+//        let journeyItem = HomeItem(type: .journey(
+//            treatment: HomeModel.currentTreatment,
+//            phase: HomeModel.currentPhase
+//        ))
+//        snapshot.appendItems([journeyItem], toSection: .journey)
+//
 //        snapshot.appendItems([HomeItem(type: .mood)], toSection: .mood)
+//
+//        let journalSuggestion: Suggestion = hasUserSelectedMood
+//            ? HomeModel.journalSuggestion(for: selectedMoodKey)
+//            : HomeModel.initialJournalSuggestion(for: selectedMoodKey)
+//        snapshot.appendItems([HomeItem(type: .journal(journalSuggestion))], toSection: .journal)
 //
 //        let suggestions: [Suggestion] = hasUserSelectedMood
 //            ? HomeModel.suggestions(for: selectedMoodKey)
 //            : HomeModel.initialSuggestion(for: selectedMoodKey)
-//
 //        snapshot.appendItems(suggestions.map { HomeItem(type: .suggestion($0)) }, toSection: .suggestion)
 //        snapshot.appendItems(HomeModel.articles.map { HomeItem(type: .article($0)) }, toSection: .articles)
 //
@@ -236,7 +283,7 @@
 //        applySnapshot()
 //    }
 //
-//    // MARK: - Suggestion Actions
+//    // MARK: - Actions
 //    private func openBreathingSessionAsSheet(withTitle title: String) {
 //        let sessions = BreathingDataManager().getAllSessions()
 //        guard let session = sessions.first(where: { $0.title.caseInsensitiveCompare(title) == .orderedSame }) else { return }
@@ -260,10 +307,11 @@
 //        present(navController, animated: true)
 //    }
 //
-//    private func openBlankJournalAsSheet() {
+//    private func openBlankJournalAsSheet(prefilledTitle: String? = nil) {
 //        let storyboard = UIStoryboard(name: "JournalMain", bundle: nil)
 //        guard let journalVC = storyboard.instantiateViewController(withIdentifier: "BlankJournalViewController") as? BlankJournalViewController else { return }
 //
+//        journalVC.prefilledTitle = prefilledTitle
 //        journalVC.navigationItem.leftBarButtonItem = UIBarButtonItem(
 //            barButtonSystemItem: .close,
 //            target: self,
@@ -286,13 +334,8 @@
 //        popup.modalPresentationStyle = .popover
 //        popup.preferredContentSize = CGSize(width: 260, height: 150)
 //
-//        popup.onCamera = { [weak self] in
-//            self?.presentImagePicker(sourceType: .camera)
-//        }
-//
-//        popup.onPhotos = { [weak self] in
-//            self?.presentImagePicker(sourceType: .photoLibrary)
-//        }
+//        popup.onCamera = { [weak self] in self?.presentImagePicker(sourceType: .camera) }
+//        popup.onPhotos  = { [weak self] in self?.presentImagePicker(sourceType: .photoLibrary) }
 //
 //        guard let popover = popup.popoverPresentationController else {
 //            present(popup, animated: true)
@@ -311,17 +354,16 @@
 //        guard UIImagePickerController.isSourceTypeAvailable(sourceType) else { return }
 //        let picker = UIImagePickerController()
 //        picker.sourceType = sourceType
-//        picker.delegate = self
+//        picker.delegate  = self
 //        present(picker, animated: true)
 //    }
 //
 //    func imagePickerController(_ picker: UIImagePickerController,
-//                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+//                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
 //        guard let image = info[.originalImage] as? UIImage else {
 //            picker.dismiss(animated: true)
 //            return
 //        }
-//
 //        picker.dismiss(animated: true) { [weak self] in
 //            self?.openAddMemoryScreen(with: image)
 //        }
@@ -334,15 +376,22 @@
 //    private func openAddMemoryScreen(with image: UIImage) {
 //        let storyboard = UIStoryboard(name: "memory", bundle: nil)
 //        let addVC = storyboard.instantiateViewController(withIdentifier: "AddMemoryViewController") as! AddMemoryViewController
-//        addVC.image = image
+//        addVC.image    = image
 //        addVC.delegate = self
 //        present(UINavigationController(rootViewController: addVC), animated: true)
 //    }
 //
 //    func didAddMemory(_ memory: Memory) {
+//        // 1. Persist the new memory
 //        var memories = MemoryStore.load()
 //        memories.append(memory)
 //        MemoryStore.save(memories)
+//
+//        // 2. Award coins once per day — shared key with MemoriesViewController.
+//        //    Whichever screen the user adds a memory on first (Home hobby card OR
+//        //    the Memories/mindfulness section) claims the daily reward.
+//        //    Any further memory creation the same day is silently skipped.
+//        CoinRewardService.shared.awardMemoryCoinsIfEligible(on: self)
 //    }
 //
 //    @objc
@@ -358,16 +407,26 @@
 //        }
 //    }
 //
-//    // MARK: - Delegate
+//    // MARK: - UICollectionViewDelegate
 //    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 //        guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
 //
 //        switch item.type {
+//        case .journey:
+//            // Navigate to the user's Journey / profile detail screen
+//            // e.g. navigationController?.pushViewController(JourneyViewController(), animated: true)
+//            break
+//
+//        case .journal(let journalSuggestion):
+//            openBlankJournalAsSheet(prefilledTitle: journalSuggestion.title)
+//
 //        case .suggestion(let suggestion):
-//            if suggestion.imageName == "BreathingSessionsImage" {
+//            let sessions = BreathingDataManager().getAllSessions()
+//            let isBreathingSuggestion = sessions.contains {
+//                $0.title.caseInsensitiveCompare(suggestion.title) == .orderedSame
+//            }
+//            if isBreathingSuggestion {
 //                openBreathingSessionAsSheet(withTitle: suggestion.title)
-//            } else if suggestion.imageName == "Journal" {
-//                openBlankJournalAsSheet()
 //            } else if suggestion.imageName == "Cooking" {
 //                let sourceView = collectionView.cellForItem(at: indexPath) ?? collectionView
 //                openHobbyMemoryOptions(from: sourceView)
@@ -397,6 +456,7 @@
 //        }
 //    }
 //}
+
 
 import UIKit
 
@@ -431,7 +491,7 @@ class HomeViewController: UIViewController,
     private func registerCells() {
         let cellIdentifiers = [
             "HomeQuoteCell",
-            "HomeJourneyCell",   // ← Journey cell registered here
+            "HomeJourneyCell",
             "HomeMoodCell",
             "HomeJournalCell",
             "HomeSuggestionCell",
@@ -470,7 +530,7 @@ class HomeViewController: UIViewController,
             switch sectionType {
             case .title:      return self.createEmptySection()
             case .quote:      return self.createQuoteSection()
-            case .journey:    return self.createJourneySection()   // ← Between quote and mood
+            case .journey:    return self.createJourneySection()
             case .mood:       return self.createMoodSection()
             case .journal:    return self.createJournalSection()
             case .suggestion: return self.createSuggestionSection()
@@ -499,7 +559,6 @@ class HomeViewController: UIViewController,
         return section
     }
 
-    // Journey card sits between quote and mood
     private func createJourneySection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(130))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -586,7 +645,6 @@ class HomeViewController: UIViewController,
                 cell.configure(quote: quote)
                 return cell
 
-            // ← Journey cell dequeued and configured
             case .journey(let treatment, let phase):
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeJourneyCell", for: indexPath) as! HomeJourneyCell
                 cell.configure(treatment: treatment, phase: phase)
@@ -654,7 +712,6 @@ class HomeViewController: UIViewController,
 
         snapshot.appendItems([HomeItem(type: .quote(HomeModel.quote))], toSection: .quote)
 
-        // Journey card — populate from your data model (replace with real user journey data)
         let journeyItem = HomeItem(type: .journey(
             treatment: HomeModel.currentTreatment,
             phase: HomeModel.currentPhase
@@ -754,7 +811,7 @@ class HomeViewController: UIViewController,
         guard UIImagePickerController.isSourceTypeAvailable(sourceType) else { return }
         let picker = UIImagePickerController()
         picker.sourceType = sourceType
-        picker.delegate  = self
+        picker.delegate = self
         present(picker, animated: true)
     }
 
@@ -776,21 +833,15 @@ class HomeViewController: UIViewController,
     private func openAddMemoryScreen(with image: UIImage) {
         let storyboard = UIStoryboard(name: "memory", bundle: nil)
         let addVC = storyboard.instantiateViewController(withIdentifier: "AddMemoryViewController") as! AddMemoryViewController
-        addVC.image    = image
+        addVC.image = image
         addVC.delegate = self
         present(UINavigationController(rootViewController: addVC), animated: true)
     }
 
     func didAddMemory(_ memory: Memory) {
-        // 1. Persist the new memory
         var memories = MemoryStore.load()
         memories.append(memory)
         MemoryStore.save(memories)
-
-        // 2. Award coins once per day — shared key with MemoriesViewController.
-        //    Whichever screen the user adds a memory on first (Home hobby card OR
-        //    the Memories/mindfulness section) claims the daily reward.
-        //    Any further memory creation the same day is silently skipped.
         CoinRewardService.shared.awardMemoryCoinsIfEligible(on: self)
     }
 
@@ -807,15 +858,32 @@ class HomeViewController: UIViewController,
         }
     }
 
+    private func navigateToJourney() {
+    
+
+            let sb = UIStoryboard(name: "JourneyMain", bundle: nil)
+
+            if let journeyVC = sb.instantiateViewController(withIdentifier: "JourneyViewController") as? JourneyViewController {
+                navigationController?.pushViewController(journeyVC, animated: true)
+                return
+            }
+
+            if let journeyDetailsVC = sb.instantiateViewController(withIdentifier: "JourneyDetailsViewController") as? JourneyDetailsViewController {
+                navigationController?.pushViewController(journeyDetailsVC, animated: true)
+                return
+            }
+       
+
+        print("Journey screen not found. Check storyboard name and ViewController identifier.")
+    }
+
     // MARK: - UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
 
         switch item.type {
-        case .journey:
-            // Navigate to the user's Journey / profile detail screen
-            // e.g. navigationController?.pushViewController(JourneyViewController(), animated: true)
-            break
+        case .journey(_, _):
+            navigateToJourney()
 
         case .journal(let journalSuggestion):
             openBlankJournalAsSheet(prefilledTitle: journalSuggestion.title)
@@ -825,6 +893,7 @@ class HomeViewController: UIViewController,
             let isBreathingSuggestion = sessions.contains {
                 $0.title.caseInsensitiveCompare(suggestion.title) == .orderedSame
             }
+
             if isBreathingSuggestion {
                 openBreathingSessionAsSheet(withTitle: suggestion.title)
             } else if suggestion.imageName == "Cooking" {
