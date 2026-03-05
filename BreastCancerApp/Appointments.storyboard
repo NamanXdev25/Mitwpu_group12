@@ -405,7 +405,7 @@
         <!--Navigation Controller-->
         <scene sceneID="9n6-z5-pfP">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="rMN-64-666" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="NewAppointmentNavController" automaticallyAdjustsScrollViewInsets="NO" id="rMN-64-666" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="tOB-I3-c0E">
                         <rect key="frame" x="0.0" y="118" width="393" height="54"/>
