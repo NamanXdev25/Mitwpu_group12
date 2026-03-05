@@ -7,435 +7,298 @@
 
 import UIKit
 
-// MARK: - Protocol
+// MARK: - Delegate
 protocol AddAppointmentDelegate: AnyObject {
     func didAddAppointment(_ appointment: AppointmentItem)
 }
 
-// MARK: - View Controller
+// MARK: - Section / Row
+private enum Section: Int, CaseIterable {
+    case details  = 0   // Title, Doctor, Location
+    case dateTime = 1   // Date, Time
+    case reminder = 2   // Switch, ReminderTimes
+    case note     = 3
+}
+
+private enum DetailsRow: Int, CaseIterable  { case title, doctor, location }
+private enum DateTimeRow: Int, CaseIterable { case date, time }
+private enum ReminderRow: Int, CaseIterable { case toggle, times }
+
+// MARK: - ViewController
 class NewAppointmentViewController: UIViewController {
 
-    // MARK: - IBOutlets
-    @IBOutlet weak var closeBarButton: UIBarButtonItem!
-    @IBOutlet weak var saveBarButton: UIBarButtonItem!
-    @IBOutlet weak var userTitleTextField: UITextField! 
-    @IBOutlet weak var categoryTextField: UITextField!
-    @IBOutlet weak var chemotherapyIndicatorView: UIView!
-    @IBOutlet weak var doctorVisitIndicatorView: UIView!
-    @IBOutlet weak var dateTextField: UITextField!
-    @IBOutlet weak var timeTextField: UITextField!
-    @IBOutlet weak var setReminderSwitch: UISwitch!
-    @IBOutlet weak var noteTextView: UITextView!
-    
-    @IBOutlet weak var categoryChevronImageView: UIImageView!
-    @IBOutlet weak var dateChevronImageView: UIImageView!
-    @IBOutlet weak var timeChevronImageView: UIImageView!
-    
-    @IBOutlet weak var pickerOverlay: UIView!
-    @IBOutlet weak var pickerCard: UIView!
-    @IBOutlet weak var categoryPicker: UIPickerView!
-    @IBOutlet weak var datePicker: UIDatePicker!
-    @IBOutlet weak var timePicker: UIDatePicker!
-    
-    // MARK: - Properties
+    // MARK: IBOutlets
+    @IBOutlet weak var collectionView: UICollectionView!
+
+    // MARK: Public
     weak var delegate: AddAppointmentDelegate?
-    
     var initialAppointment: AppointmentItem?
     var originalDate: Date?
-    
-    private var selectedAppointmentType: AppointmentType = .chemotherapy
-    private let notePlaceholder = "Add a note"
-    
-    // MARK: - Lifecycle
+
+    // MARK: State
+    private var titleText    = ""
+    private var doctorText   = ""
+    private var locationText = ""
+    private var selectedDate: Date?
+    private var selectedTime: Date?
+    private var reminderOn   = true
+    private var reminderOffsets: [ReminderOffset] = [.day1]
+    private var userNoteText = ""
+
+    // MARK: Cell IDs  — must match XIB file names exactly
+    private let tfCellID  = "NewAppointmentTextFieldCell"
+    private let dtCellID  = "NewAppointmentDateTimeCell"
+    private let swCellID  = "NewAppointmentSwitchCell"
+    private let remCellID = "NewAppointmentReminderTimeCell"
+    private let noteCellID = "NewAppointmentNoteCell"
+
+    // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
-        setupDelegates()
-        setupGestures()
+        registerCells()
+        collectionView.collectionViewLayout = makeLayout()
+        collectionView.dataSource = self
+        collectionView.delegate   = self
+        collectionView.keyboardDismissMode = .onDrag
         loadInitialData()
     }
-    
-    // MARK: - Setup Methods
-    private func setupUI() {
-        setupPickerCard()
-        setupNoteTextView()
-        setupTitleIndicator()
-        setupPickers()
-        setupCategoryTextField()
-        pickerOverlay.isHidden = true
+
+    // MARK: Setup
+    private func registerCells() {
+        [tfCellID, dtCellID, swCellID, remCellID, noteCellID].forEach {
+            collectionView.register(UINib(nibName: $0, bundle: nil),
+                                    forCellWithReuseIdentifier: $0)
+        }
     }
-    
-    private func setupPickerCard() {
-        pickerCard.layer.shadowColor = UIColor.black.cgColor
-        pickerCard.layer.shadowOpacity = 0.2
-        pickerCard.layer.shadowRadius = 10
+
+    private func makeLayout() -> UICollectionViewLayout {
+        var config = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
+        config.showsSeparators = true
+        return UICollectionViewCompositionalLayout.list(using: config)
     }
-    
-    private func setupNoteTextView() {
-        noteTextView.text = notePlaceholder
-        noteTextView.textColor = .lightGray
-        noteTextView.delegate = self
-        noteTextView.textContainerInset = UIEdgeInsets(top: 15, left: 10, bottom: 10, right: 10)
-    }
-    
-    private func setupTitleIndicator() {
-        chemotherapyIndicatorView.layer.cornerRadius = chemotherapyIndicatorView.frame.width / 2
-        chemotherapyIndicatorView.clipsToBounds = true
-        chemotherapyIndicatorView.backgroundColor = AppointmentType.chemotherapy.color
-        
-        doctorVisitIndicatorView.layer.cornerRadius = doctorVisitIndicatorView.frame.width / 2
-        doctorVisitIndicatorView.clipsToBounds = true
-        doctorVisitIndicatorView.backgroundColor = AppointmentType.doctorVisit.color
-        
-        updateIndicatorVisibility()
-    }
-    
-    private func setupCategoryTextField() {
-        categoryTextField.textColor = .lightGray
-        categoryTextField.isUserInteractionEnabled = true
-    }
-    
-    private func setupPickers() {
-        datePicker.datePickerMode = .date
-        datePicker.preferredDatePickerStyle = .wheels
-        datePicker.minimumDate = Date()
-        datePicker.locale = Locale(identifier: "en_US")
-        
-        timePicker.datePickerMode = .time
-        timePicker.preferredDatePickerStyle = .wheels
-        timePicker.locale = Locale(identifier: "en_US")
-    }
-    
-    private func setupDelegates() {
-        userTitleTextField.delegate = self
-        categoryTextField.delegate = self
-        dateTextField.delegate = self
-        timeTextField.delegate = self
-        categoryPicker.delegate = self
-        categoryPicker.dataSource = self
-    }
-    
-    private func setupGestures() {
-        setupChevronTapGestures()
-        setupOverlayTapGesture()
-    }
-    
-    private func setupChevronTapGestures() {
-        categoryChevronImageView.isUserInteractionEnabled = true
-        dateChevronImageView.isUserInteractionEnabled = true
-        timeChevronImageView.isUserInteractionEnabled = true
-        
-        let categoryTap = UITapGestureRecognizer(target: self, action: #selector(categoryChevronTapped))
-        categoryChevronImageView.addGestureRecognizer(categoryTap)
-        
-        let dateTap = UITapGestureRecognizer(target: self, action: #selector(dateChevronTapped))
-        dateChevronImageView.addGestureRecognizer(dateTap)
-        
-        let timeTap = UITapGestureRecognizer(target: self, action: #selector(timeChevronTapped))
-        timeChevronImageView.addGestureRecognizer(timeTap)
-    }
-    
-    private func setupOverlayTapGesture() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissPopup))
-        pickerOverlay.addGestureRecognizer(tapGesture)
-    }
-    
+
+    // MARK: Load existing data
     private func loadInitialData() {
-        guard let appointment = initialAppointment else {
-            setDefaultValues()
-            return
+        guard let a = initialAppointment else { return }
+
+        titleText       = a.title
+        reminderOn      = a.reminderEnabled
+        reminderOffsets = a.reminderOffsets.isEmpty ? [.day1] : a.reminderOffsets
+
+        // Parse doctor / location back out of note
+        // Stored format: "doctor | location\nnote"
+        let note = a.note
+        if let newlineRange = note.range(of: "\n") {
+            let header = String(note[note.startIndex..<newlineRange.lowerBound])
+            userNoteText   = String(note[newlineRange.upperBound...])
+            let parts      = header.components(separatedBy: " | ")
+            doctorText     = parts.indices.contains(0) ? parts[0] : ""
+            locationText   = parts.indices.contains(1) ? parts[1] : ""
+        } else {
+            userNoteText = note
         }
-        
-        loadAppointmentData(appointment)
+
+        let df = DateFormatter(); df.dateFormat = "dd MMM yyyy"
+        if let d = df.date(from: a.date) { selectedDate = d; originalDate = d }
+
+        let tf = DateFormatter(); tf.dateFormat = "h:mm a"
+        if let t = tf.date(from: a.time) { selectedTime = t }
     }
-    
-    private func setDefaultValues() {
-        categoryTextField.text = AppointmentType.chemotherapy.title
-        categoryTextField.textColor = .lightGray
-        updateIndicatorVisibility()
-    }
-    
-    private func loadAppointmentData(_ appointment: AppointmentItem) {
-        // Load custom title
-        userTitleTextField.text = appointment.title
-        userTitleTextField.textColor = .black
-        
-        // Load category
-        if let type = AppointmentType(rawValue: appointment.colorIndex) {
-            selectedAppointmentType = type
-            categoryTextField.text = type.title
-            categoryTextField.textColor = .black
-            updateIndicatorVisibility()
-        }
-        
-        // Load date
-        if !appointment.date.isEmpty {
-            dateTextField.text = appointment.date
-            let formatter = DateFormatter()
-            formatter.dateFormat = "dd MMM yyyy"
-            if let parsedDate = formatter.date(from: appointment.date) {
-                datePicker.date = parsedDate
-                originalDate = parsedDate
-            }
-        }
-        
-        dateTextField.isUserInteractionEnabled = true
-        dateTextField.textColor = .black
-        dateTextField.backgroundColor = .clear
-        dateChevronImageView.isHidden = false
-        
-        // Load time
-        if !appointment.time.isEmpty {
-            timeTextField.text = appointment.time
-            let formatter = DateFormatter()
-            formatter.dateFormat = "h:mm a"
-            if let parsedTime = formatter.date(from: appointment.time) {
-                timePicker.date = parsedTime
-            }
-        }
-        
-        // Load note
-        if !appointment.note.isEmpty {
-            noteTextView.text = appointment.note
-            noteTextView.textColor = .black
-        }
-        
-        setReminderSwitch.isOn = appointment.reminderEnabled
-    }
-    
-    // MARK: - UI Update Methods
-    private func updateIndicatorVisibility() {
-        switch selectedAppointmentType {
-        case .chemotherapy:
-            chemotherapyIndicatorView.isHidden = false
-            doctorVisitIndicatorView.isHidden = true
-        case .doctorVisit:
-            chemotherapyIndicatorView.isHidden = true
-            doctorVisitIndicatorView.isHidden = false
-        }
-    }
-    
-    private func showPicker(category: Bool = false, date: Bool = false, time: Bool = false) {
-        view.endEditing(true)
-        pickerOverlay.isHidden = false
-        
-        categoryPicker.isHidden = !category
-        datePicker.isHidden = !date
-        timePicker.isHidden = !time
-        
-        if category {
-            categoryPicker.selectRow(selectedAppointmentType.rawValue, inComponent: 0, animated: false)
-        }
-    }
-    
-    // MARK: - Gesture Actions
-    @objc private func categoryChevronTapped() {
-        showPicker(category: true)
-    }
-    
-    @objc private func dateChevronTapped() {
-        showPicker(date: true)
-    }
-    
-    @objc private func timeChevronTapped() {
-        showPicker(time: true)
-    }
-    
-    @objc private func dismissPopup() {
-        if !categoryPicker.isHidden {
-            handleCategoryPickerDismiss()
-        } else if !datePicker.isHidden {
-            handleDatePickerDismiss()
-        } else if !timePicker.isHidden {
-            handleTimePickerDismiss()
-        }
-        
-        pickerOverlay.isHidden = true
-    }
-    
-    private func handleCategoryPickerDismiss() {
-        let selectedRow = categoryPicker.selectedRow(inComponent: 0)
-        if let type = AppointmentType(rawValue: selectedRow) {
-            selectedAppointmentType = type
-            categoryTextField.text = type.title
-            categoryTextField.textColor = .black
-            updateIndicatorVisibility()
-        }
-    }
-    
-    private func handleDatePickerDismiss() {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd MMM yyyy"
-        dateTextField.text = formatter.string(from: datePicker.date)
-    }
-    
-    private func handleTimePickerDismiss() {
-        let formatter = DateFormatter()
-        formatter.timeStyle = .short
-        timeTextField.text = formatter.string(from: timePicker.date)
-    }
-    
-    // MARK: - IBActions
-    @IBAction func closeTapped(_ sender: UIBarButtonItem) {
-        dismiss(animated: true)
-    }
-    
+
+    // MARK: Nav bar IBActions
+//    @IBAction func cancelTapped(_ sender: UIBarButtonItem) {
+//        dismiss(animated: true)
+//    }
+
     @IBAction func saveTapped(_ sender: UIBarButtonItem) {
-        guard validateInputs() else { return }
-        
-        if let appointment = initialAppointment, let oldDate = originalDate {
-            let newDateString = dateTextField.text ?? ""
-            let formatter = DateFormatter()
-            formatter.dateFormat = "dd MMM yyyy"
-            
-            if let newDate = formatter.date(from: newDateString) {
-                let calendar = Calendar.current
-                if !calendar.isDate(oldDate, inSameDayAs: newDate) {
-                    AppointmentManager.shared.deleteAppointment(appointment.id, for: oldDate)
-                }
-            }
+        view.endEditing(true)
+        guard validate() else { return }
+
+        if let old = initialAppointment,
+           let oldDate = originalDate,
+           let newDate = selectedDate,
+           !Calendar.current.isDate(oldDate, inSameDayAs: newDate) {
+            AppointmentManager.shared.deleteAppointment(old.id, for: oldDate)
         }
-        
-        let appointment = createAppointment()
-        delegate?.didAddAppointment(appointment)
+
+        delegate?.didAddAppointment(buildItem())
         dismiss(animated: true)
     }
-    
-    // MARK: - Validation
-    private func validateInputs() -> Bool {
-        // Validate Title
-        guard let title = userTitleTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
-              !title.isEmpty else {
-            showAlert(message: "Please enter a title for the appointment.")
-            return false
+
+    // MARK: Validation
+    private func validate() -> Bool {
+        if titleText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            alert("Please enter a title."); return false
         }
-        
-        // Validate Category
-        guard let category = categoryTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
-              !category.isEmpty,
-              categoryTextField.textColor != .lightGray else {
-            showAlert(message: "Please select a category.")
-            return false
+        if selectedDate == nil {
+            alert("Please select a date."); return false
         }
-        
-        // Validate Date
-        guard let date = dateTextField.text, !date.isEmpty else {
-            showAlert(message: "Please select a date for the appointment.")
-            return false
+        if selectedTime == nil {
+            alert("Please select a time."); return false
         }
-        
-        // Validate Time
-        guard let time = timeTextField.text, !time.isEmpty else {
-            showAlert(message: "Please select a time for the appointment.")
-            return false
-        }
-        
         return true
     }
-    
-    // MARK: - Model Creation
-    private func createAppointment() -> AppointmentItem {
-        let appointmentId = initialAppointment?.id ?? UUID().uuidString
-        let userTitle = userTitleTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        let category = categoryTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        let date = dateTextField.text ?? ""
-        let time = timeTextField.text ?? ""
-        let note = getNoteText()
-        
+
+    private func alert(_ msg: String) {
+        let ac = UIAlertController(title: "Required Field", message: msg, preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        present(ac, animated: true)
+    }
+
+    // MARK: Build model
+    private func buildItem() -> AppointmentItem {
+        let doctor   = doctorText.trimmingCharacters(in: .whitespacesAndNewlines)
+        let location = locationText.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        var combinedNote = userNoteText
+        if !doctor.isEmpty || !location.isEmpty {
+            let header = [doctor, location].filter { !$0.isEmpty }.joined(separator: " | ")
+            combinedNote = userNoteText.isEmpty ? header : "\(header)\n\(userNoteText)"
+        }
+
         return AppointmentItem(
-            id: appointmentId,
-            title: userTitle,
-            category: category,
-            date: date,
-            time: time,
-            reminderEnabled: setReminderSwitch.isOn,
-            note: note,
-            colorIndex: selectedAppointmentType.rawValue
+            id: initialAppointment?.id ?? UUID().uuidString,
+            title: titleText,
+            category: "",
+            date: selectedDate.map { fmtDate($0) } ?? "",
+            time: selectedTime.map { fmtTime($0) } ?? "",
+            reminderEnabled: reminderOn,
+            reminderOffsets: reminderOffsets,
+            note: combinedNote,
+            colorIndex: 0
         )
     }
-    
-    private func getNoteText() -> String {
-        let text = noteTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
-        return text == notePlaceholder ? "" : text
+
+    // MARK: Formatters
+    private func fmtDate(_ d: Date) -> String {
+        let f = DateFormatter(); f.dateFormat = "dd MMM yyyy"; return f.string(from: d)
     }
-    
-    // MARK: - Alert
-    private func showAlert(message: String) {
-        let alert = UIAlertController(
-            title: "Required Field",
-            message: message,
-            preferredStyle: .alert
-        )
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
+    private func fmtTime(_ d: Date) -> String {
+        let f = DateFormatter(); f.timeStyle = .short; return f.string(from: d)
     }
-    
-    // MARK: - Touch Handling
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        view.endEditing(true)
+
+    // MARK: Reminder popup
+    private func presentReminderPopup() {
+        let ac = UIAlertController(title: "Add Reminder", message: nil, preferredStyle: .actionSheet)
+        for offset in ReminderOffset.allCases {
+            let added  = reminderOffsets.contains(offset)
+            let action = UIAlertAction(title: offset.rawValue, style: .default) { [weak self] _ in
+                guard let self, !added else { return }
+                self.reminderOffsets.append(offset)
+                self.reloadReminderTimesCell()
+            }
+            action.isEnabled = !added
+            ac.addAction(action)
+        }
+        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(ac, animated: true)
+    }
+
+    private func reloadReminderTimesCell() {
+        let ip = IndexPath(item: ReminderRow.times.rawValue,
+                           section: Section.reminder.rawValue)
+        collectionView.reloadItems(at: [ip])
     }
 }
 
-// MARK: - UITextFieldDelegate
-extension NewAppointmentViewController: UITextFieldDelegate {
-    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        if textField == categoryTextField {
-            showPicker(category: true)
-            return false
-        } else if textField == dateTextField {
-            showPicker(date: true)
-            return false
-        } else if textField == timeTextField {
-            showPicker(time: true)
-            return false
-        }
-        
-        return true
+// MARK: - DataSource
+extension NewAppointmentViewController: UICollectionViewDataSource {
+
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        Section.allCases.count
     }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
+
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
+        switch Section(rawValue: section)! {
+        case .details:  return DetailsRow.allCases.count
+        case .dateTime: return DateTimeRow.allCases.count
+        case .reminder: return ReminderRow.allCases.count
+        case .note:     return 1
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+
+        switch Section(rawValue: indexPath.section)! {
+
+        case .details:
+            let cell = dequeue(tfCellID, collectionView, indexPath) as! NewAppointmentTextFieldCell
+            switch DetailsRow(rawValue: indexPath.item)! {
+            case .title:
+                cell.configure(placeholder: "Title *", text: titleText)
+                cell.onTextChange = { [weak self] in self?.titleText = $0 }
+            case .doctor:
+                cell.configure(placeholder: "Doctor / Department", text: doctorText)
+                cell.onTextChange = { [weak self] in self?.doctorText = $0 }
+            case .location:
+                cell.configure(placeholder: "Location", text: locationText)
+                cell.onTextChange = { [weak self] in self?.locationText = $0 }
+            }
+            return cell
+
+        case .dateTime:
+            let cell = dequeue(dtCellID, collectionView, indexPath) as! NewAppointmentDateTimeCell
+            switch DateTimeRow(rawValue: indexPath.item)! {
+            case .date:
+                cell.configureAsDate(current: selectedDate)
+                cell.datePicker.addTarget(self,
+                    action: #selector(datePickerChanged(_:)), for: .valueChanged)
+            case .time:
+                cell.configureAsTime(current: selectedTime)
+                cell.datePicker.addTarget(self,
+                    action: #selector(timePickerChanged(_:)), for: .valueChanged)
+            }
+            return cell
+
+        case .reminder:
+            switch ReminderRow(rawValue: indexPath.item)! {
+            case .toggle:
+                let cell = dequeue(swCellID, collectionView, indexPath) as! NewAppointmentSwitchCell
+                cell.configure(isOn: reminderOn)
+                cell.onToggle = { [weak self] on in self?.reminderOn = on }
+                return cell
+            case .times:
+                let cell = dequeue(remCellID, collectionView, indexPath) as! NewAppointmentReminderTimeCell
+                cell.reminderOffsets = reminderOffsets
+                cell.onAdd    = { [weak self] in self?.presentReminderPopup() }
+                cell.onDelete = { [weak self] idx in
+                    guard let self else { return }
+                    self.reminderOffsets.remove(at: idx)
+                    self.reloadReminderTimesCell()
+                }
+                return cell
+            }
+
+        case .note:
+            let cell = dequeue(noteCellID, collectionView, indexPath) as! NewAppointmentNoteCell
+            cell.configure(text: userNoteText)
+            cell.onTextChange = { [weak self] in self?.userNoteText = $0 }
+            return cell
+        }
+    }
+
+    // Convenience
+    private func dequeue(_ id: String,
+                         _ cv: UICollectionView,
+                         _ ip: IndexPath) -> UICollectionViewCell {
+        cv.dequeueReusableCell(withReuseIdentifier: id, for: ip)
+    }
+
+    // MARK: Picker targets
+    @objc private func datePickerChanged(_ picker: UIDatePicker) {
+        selectedDate = picker.date
+    }
+    @objc private func timePickerChanged(_ picker: UIDatePicker) {
+        selectedTime = picker.date
     }
 }
 
-// MARK: - UIPickerViewDataSource & UIPickerViewDelegate
-extension NewAppointmentViewController: UIPickerViewDataSource, UIPickerViewDelegate {
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return AppointmentType.allCases.count
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return AppointmentType(rawValue: row)?.pickerTitle
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        if let type = AppointmentType(rawValue: row) {
-            selectedAppointmentType = type
-            categoryTextField.text = type.title
-            categoryTextField.textColor = .black
-            updateIndicatorVisibility()
-        }
-    }
-}
-
-// MARK: - UITextViewDelegate
-extension NewAppointmentViewController: UITextViewDelegate {
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == .lightGray {
-            textView.text = nil
-            textView.textColor = .black
-        }
-    }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        if textView.text.isEmpty {
-            textView.text = notePlaceholder
-            textView.textColor = .lightGray
-        }
-    }
+// MARK: - Delegate
+extension NewAppointmentViewController: UICollectionViewDelegate {
+    // Compact UIDatePicker handles its own taps — no didSelectItemAt needed.
+    // Disable row highlight so rows don't flash when tapped.
+    func collectionView(_ collectionView: UICollectionView,
+                        shouldHighlightItemAt indexPath: IndexPath) -> Bool { false }
 }
