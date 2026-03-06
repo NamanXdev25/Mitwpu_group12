@@ -6,56 +6,57 @@
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="NewAppointmentReminderTimeCell" customModule="BreastCancerApp" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="394" height="100"/>
+            <rect key="frame" x="0.0" y="0.0" width="394" height="44"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="394" height="100"/>
+                <rect key="frame" x="0.0" y="0.0" width="394" height="44"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" style="plain" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="svp-aG-miK">
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sv4-KP-2nF">
                         <rect key="frame" x="0.0" y="0.0" width="394" height="44"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PF2-Tx-Slz">
+                                <rect key="frame" x="8" y="0.0" width="153.66666666666666" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="DTb-bP-y0y"/>
+                                </constraints>
+                                <color key="tintColor" name="primary_color"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Add Reminder" imagePadding="4">
+                                    <imageReference key="image" image="plus" catalog="system" symbolScale="medium"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="addReminderTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="0sh-VI-uWq"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="44" id="ouG-uc-bnn"/>
+                            <constraint firstItem="PF2-Tx-Slz" firstAttribute="leading" secondItem="sv4-KP-2nF" secondAttribute="leading" constant="8" id="aoe-Mf-gLH"/>
+                            <constraint firstItem="PF2-Tx-Slz" firstAttribute="centerY" secondItem="sv4-KP-2nF" secondAttribute="centerY" id="kT6-q4-a9L"/>
                         </constraints>
-                        <color key="sectionIndexBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    </tableView>
-                    <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PF2-Tx-Slz">
-                        <rect key="frame" x="16" y="44" width="153.66666666666666" height="44"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="44" id="DTb-bP-y0y"/>
-                        </constraints>
-                        <color key="tintColor" name="primary_color"/>
-                        <state key="normal" title="Button"/>
-                        <buttonConfiguration key="configuration" style="plain" title="Add Reminder" imagePadding="4">
-                            <imageReference key="image" image="plus" catalog="system" symbolScale="medium"/>
-                        </buttonConfiguration>
-                    </button>
+                    </view>
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <constraints>
-                <constraint firstItem="svp-aG-miK" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="Jho-ak-xan"/>
-                <constraint firstItem="svp-aG-miK" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="KWN-1L-cTK"/>
-                <constraint firstItem="PF2-Tx-Slz" firstAttribute="top" secondItem="svp-aG-miK" secondAttribute="bottom" id="Zu9-KQ-IOw"/>
-                <constraint firstAttribute="bottom" secondItem="PF2-Tx-Slz" secondAttribute="bottom" constant="12" id="fAV-fI-HLA"/>
-                <constraint firstAttribute="trailing" secondItem="svp-aG-miK" secondAttribute="trailing" id="ff2-GJ-9Od"/>
-                <constraint firstItem="PF2-Tx-Slz" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="k1S-iu-923"/>
-                <constraint firstItem="PF2-Tx-Slz" firstAttribute="top" secondItem="svp-aG-miK" secondAttribute="bottom" id="rmf-Py-HZP"/>
+                <constraint firstItem="sv4-KP-2nF" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="0cM-Jo-VDW"/>
+                <constraint firstAttribute="bottom" secondItem="sv4-KP-2nF" secondAttribute="bottom" id="JNc-fy-XEb"/>
+                <constraint firstAttribute="trailing" secondItem="sv4-KP-2nF" secondAttribute="trailing" id="ZZd-OC-g32"/>
+                <constraint firstItem="sv4-KP-2nF" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="ogg-7u-h4q"/>
             </constraints>
-            <size key="customSize" width="238" height="242"/>
+            <size key="customSize" width="238" height="186"/>
             <connections>
                 <outlet property="addReminderButton" destination="PF2-Tx-Slz" id="wgm-cg-S3n"/>
-                <outlet property="tableHeightConstraint" destination="ouG-uc-bnn" id="8Ce-9F-zzA"/>
-                <outlet property="tableView" destination="svp-aG-miK" id="gk5-FW-CzQ"/>
             </connections>
-            <point key="canvasLocation" x="-80.916030534351137" y="135.21126760563382"/>
+            <point key="canvasLocation" x="-80.916030534351137" y="145.77464788732394"/>
         </collectionViewCell>
     </objects>
     <resources>
@@ -63,5 +64,8 @@
         <namedColor name="primary_color">
             <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

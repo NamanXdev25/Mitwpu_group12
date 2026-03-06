@@ -7,35 +7,31 @@
 
 import UIKit
 
-// MARK: - Delegate
 protocol AddAppointmentDelegate: AnyObject {
     func didAddAppointment(_ appointment: AppointmentItem)
 }
 
-// MARK: - Section / Row
 private enum Section: Int, CaseIterable {
-    case details  = 0   // Title, Doctor, Location
-    case dateTime = 1   // Date, Time
-    case reminder = 2   // Switch, ReminderTimes
+    case details  = 0
+    case dateTime = 1
+    case reminder = 2
     case note     = 3
 }
 
 private enum DetailsRow: Int, CaseIterable  { case title, doctor, location }
 private enum DateTimeRow: Int, CaseIterable { case date, time }
-private enum ReminderRow: Int, CaseIterable { case toggle, times }
 
-// MARK: - ViewController
+private let reminderToggleRow = 0
+private func reminderOffsetRow(_ idx: Int) -> Int { idx + 1 }
+
 class NewAppointmentViewController: UIViewController {
 
-    // MARK: IBOutlets
     @IBOutlet weak var collectionView: UICollectionView!
 
-    // MARK: Public
     weak var delegate: AddAppointmentDelegate?
     var initialAppointment: AppointmentItem?
     var originalDate: Date?
 
-    // MARK: State
     private var titleText    = ""
     private var doctorText   = ""
     private var locationText = ""
@@ -45,27 +41,31 @@ class NewAppointmentViewController: UIViewController {
     private var reminderOffsets: [ReminderOffset] = [.day1]
     private var userNoteText = ""
 
-    // MARK: Cell IDs  — must match XIB file names exactly
-    private let tfCellID  = "NewAppointmentTextFieldCell"
-    private let dtCellID  = "NewAppointmentDateTimeCell"
-    private let swCellID  = "NewAppointmentSwitchCell"
-    private let remCellID = "NewAppointmentReminderTimeCell"
-    private let noteCellID = "NewAppointmentNoteCell"
+    private let tfCellID              = "NewAppointmentTextFieldCell"
+    private let dtCellID              = "NewAppointmentDateTimeCell"
+    private let swCellID              = "NewAppointmentSwitchCell"
+    private let remCellID             = "NewAppointmentReminderTimeCell"
+    private let addedReminderCellID   = "NewAppintmentAddedReminderCell"
+    private let noteCellID            = "NewAppointmentNoteCell"
+
+    private var reminderSectionCount: Int { 1 + reminderOffsets.count + 1 }
+    private var addButtonRow: Int         { reminderOffsets.count + 1 }
 
     // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         registerCells()
         collectionView.collectionViewLayout = makeLayout()
+        collectionView.backgroundColor = UIColor(named: "BackgroundColor")
+        view.backgroundColor = UIColor(named: "BackgroundColor")
         collectionView.dataSource = self
         collectionView.delegate   = self
         collectionView.keyboardDismissMode = .onDrag
         loadInitialData()
     }
 
-    // MARK: Setup
     private func registerCells() {
-        [tfCellID, dtCellID, swCellID, remCellID, noteCellID].forEach {
+        [tfCellID, dtCellID, swCellID, remCellID, addedReminderCellID, noteCellID].forEach {
             collectionView.register(UINib(nibName: $0, bundle: nil),
                                     forCellWithReuseIdentifier: $0)
         }
@@ -74,26 +74,24 @@ class NewAppointmentViewController: UIViewController {
     private func makeLayout() -> UICollectionViewLayout {
         var config = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
         config.showsSeparators = true
+        config.backgroundColor = UIColor(named: "BackgroundColor")
         return UICollectionViewCompositionalLayout.list(using: config)
     }
 
     // MARK: Load existing data
     private func loadInitialData() {
         guard let a = initialAppointment else { return }
-
         titleText       = a.title
         reminderOn      = a.reminderEnabled
         reminderOffsets = a.reminderOffsets.isEmpty ? [.day1] : a.reminderOffsets
 
-        // Parse doctor / location back out of note
-        // Stored format: "doctor | location\nnote"
         let note = a.note
         if let newlineRange = note.range(of: "\n") {
-            let header = String(note[note.startIndex..<newlineRange.lowerBound])
-            userNoteText   = String(note[newlineRange.upperBound...])
-            let parts      = header.components(separatedBy: " | ")
-            doctorText     = parts.indices.contains(0) ? parts[0] : ""
-            locationText   = parts.indices.contains(1) ? parts[1] : ""
+            let header   = String(note[note.startIndex..<newlineRange.lowerBound])
+            userNoteText = String(note[newlineRange.upperBound...])
+            let parts    = header.components(separatedBy: " | ")
+            doctorText   = parts.indices.contains(0) ? parts[0] : ""
+            locationText = parts.indices.contains(1) ? parts[1] : ""
         } else {
             userNoteText = note
         }
@@ -105,11 +103,7 @@ class NewAppointmentViewController: UIViewController {
         if let t = tf.date(from: a.time) { selectedTime = t }
     }
 
-    // MARK: Nav bar IBActions
-//    @IBAction func cancelTapped(_ sender: UIBarButtonItem) {
-//        dismiss(animated: true)
-//    }
-
+    // MARK: Save
     @IBAction func saveTapped(_ sender: UIBarButtonItem) {
         view.endEditing(true)
         guard validate() else { return }
@@ -130,12 +124,8 @@ class NewAppointmentViewController: UIViewController {
         if titleText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             alert("Please enter a title."); return false
         }
-        if selectedDate == nil {
-            alert("Please select a date."); return false
-        }
-        if selectedTime == nil {
-            alert("Please select a time."); return false
-        }
+        if selectedDate == nil { alert("Please select a date."); return false }
+        if selectedTime == nil { alert("Please select a time."); return false }
         return true
     }
 
@@ -149,13 +139,11 @@ class NewAppointmentViewController: UIViewController {
     private func buildItem() -> AppointmentItem {
         let doctor   = doctorText.trimmingCharacters(in: .whitespacesAndNewlines)
         let location = locationText.trimmingCharacters(in: .whitespacesAndNewlines)
-
         var combinedNote = userNoteText
         if !doctor.isEmpty || !location.isEmpty {
             let header = [doctor, location].filter { !$0.isEmpty }.joined(separator: " | ")
             combinedNote = userNoteText.isEmpty ? header : "\(header)\n\(userNoteText)"
         }
-
         return AppointmentItem(
             id: initialAppointment?.id ?? UUID().uuidString,
             title: titleText,
@@ -169,7 +157,6 @@ class NewAppointmentViewController: UIViewController {
         )
     }
 
-    // MARK: Formatters
     private func fmtDate(_ d: Date) -> String {
         let f = DateFormatter(); f.dateFormat = "dd MMM yyyy"; return f.string(from: d)
     }
@@ -184,20 +171,46 @@ class NewAppointmentViewController: UIViewController {
             let added  = reminderOffsets.contains(offset)
             let action = UIAlertAction(title: offset.rawValue, style: .default) { [weak self] _ in
                 guard let self, !added else { return }
-                self.reminderOffsets.append(offset)
-                self.reloadReminderTimesCell()
+                self.insertReminderOffset(offset)
             }
             action.isEnabled = !added
             ac.addAction(action)
         }
         ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+
+        if let popover = ac.popoverPresentationController {
+            let ip = IndexPath(item: addButtonRow, section: Section.reminder.rawValue)
+            if let cell = collectionView.cellForItem(at: ip) {
+                popover.sourceView = cell
+                popover.sourceRect = CGRect(x: cell.bounds.midX, y: cell.bounds.midY,
+                                            width: 0, height: 0)
+            } else {
+                popover.sourceView = view
+                popover.sourceRect = CGRect(x: view.bounds.midX, y: view.bounds.midY,
+                                            width: 0, height: 0)
+            }
+        }
         present(ac, animated: true)
     }
 
-    private func reloadReminderTimesCell() {
-        let ip = IndexPath(item: ReminderRow.times.rawValue,
-                           section: Section.reminder.rawValue)
-        collectionView.reloadItems(at: [ip])
+    private func insertReminderOffset(_ offset: ReminderOffset) {
+        let newIndex    = reminderOffsets.count
+        reminderOffsets.append(offset)
+        let newRowIndex = reminderOffsetRow(newIndex)
+        let insertIP    = IndexPath(item: newRowIndex,     section: Section.reminder.rawValue)
+        let addBtnIP    = IndexPath(item: newRowIndex + 1, section: Section.reminder.rawValue)
+        collectionView.performBatchUpdates {
+            collectionView.insertItems(at: [insertIP])
+            collectionView.reloadItems(at: [addBtnIP])
+        }
+    }
+
+    private func deleteReminderOffset(at index: Int) {
+        reminderOffsets.remove(at: index)
+        let removeIP = IndexPath(item: reminderOffsetRow(index), section: Section.reminder.rawValue)
+        collectionView.performBatchUpdates {
+            collectionView.deleteItems(at: [removeIP])
+        }
     }
 }
 
@@ -213,7 +226,7 @@ extension NewAppointmentViewController: UICollectionViewDataSource {
         switch Section(rawValue: section)! {
         case .details:  return DetailsRow.allCases.count
         case .dateTime: return DateTimeRow.allCases.count
-        case .reminder: return ReminderRow.allCases.count
+        case .reminder: return reminderSectionCount
         case .note:     return 1
         }
     }
@@ -243,30 +256,35 @@ extension NewAppointmentViewController: UICollectionViewDataSource {
             switch DateTimeRow(rawValue: indexPath.item)! {
             case .date:
                 cell.configureAsDate(current: selectedDate)
-                cell.datePicker.addTarget(self,
-                    action: #selector(datePickerChanged(_:)), for: .valueChanged)
+                cell.datePicker.addTarget(self, action: #selector(datePickerChanged(_:)),
+                                          for: .valueChanged)
             case .time:
                 cell.configureAsTime(current: selectedTime)
-                cell.datePicker.addTarget(self,
-                    action: #selector(timePickerChanged(_:)), for: .valueChanged)
+                cell.datePicker.addTarget(self, action: #selector(timePickerChanged(_:)),
+                                          for: .valueChanged)
             }
             return cell
 
         case .reminder:
-            switch ReminderRow(rawValue: indexPath.item)! {
-            case .toggle:
+            let row = indexPath.item
+
+            if row == reminderToggleRow {
                 let cell = dequeue(swCellID, collectionView, indexPath) as! NewAppointmentSwitchCell
                 cell.configure(isOn: reminderOn)
                 cell.onToggle = { [weak self] on in self?.reminderOn = on }
                 return cell
-            case .times:
+
+            } else if row == addButtonRow {
                 let cell = dequeue(remCellID, collectionView, indexPath) as! NewAppointmentReminderTimeCell
-                cell.reminderOffsets = reminderOffsets
-                cell.onAdd    = { [weak self] in self?.presentReminderPopup() }
-                cell.onDelete = { [weak self] idx in
-                    guard let self else { return }
-                    self.reminderOffsets.remove(at: idx)
-                    self.reloadReminderTimesCell()
+                cell.onAdd = { [weak self] in self?.presentReminderPopup() }
+                return cell
+
+            } else {
+                let offsetIndex = row - 1
+                let cell = dequeue(addedReminderCellID, collectionView, indexPath) as! NewAppintmentAddedReminderCell
+                cell.configure(offset: reminderOffsets[offsetIndex])
+                cell.onDelete = { [weak self] in
+                    self?.deleteReminderOffset(at: offsetIndex)
                 }
                 return cell
             }
@@ -279,26 +297,17 @@ extension NewAppointmentViewController: UICollectionViewDataSource {
         }
     }
 
-    // Convenience
-    private func dequeue(_ id: String,
-                         _ cv: UICollectionView,
+    private func dequeue(_ id: String, _ cv: UICollectionView,
                          _ ip: IndexPath) -> UICollectionViewCell {
         cv.dequeueReusableCell(withReuseIdentifier: id, for: ip)
     }
 
-    // MARK: Picker targets
-    @objc private func datePickerChanged(_ picker: UIDatePicker) {
-        selectedDate = picker.date
-    }
-    @objc private func timePickerChanged(_ picker: UIDatePicker) {
-        selectedTime = picker.date
-    }
+    @objc private func datePickerChanged(_ picker: UIDatePicker) { selectedDate = picker.date }
+    @objc private func timePickerChanged(_ picker: UIDatePicker) { selectedTime = picker.date }
 }
 
 // MARK: - Delegate
 extension NewAppointmentViewController: UICollectionViewDelegate {
-    // Compact UIDatePicker handles its own taps — no didSelectItemAt needed.
-    // Disable row highlight so rows don't flash when tapped.
     func collectionView(_ collectionView: UICollectionView,
                         shouldHighlightItemAt indexPath: IndexPath) -> Bool { false }
 }
