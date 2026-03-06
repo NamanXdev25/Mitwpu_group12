@@ -86,7 +86,7 @@
                                     <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" configurationType="pointSize" pointSize="80" scale="large"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="playButtonTapped:" destination="f1b-uT-ZIG" eventType="touchUpInside" id="lsY-kB-TQY"/>
+                                    <action selector="playButtonTapped:" destination="f1b-uT-ZIG" eventType="touchUpInside" id="Tkv-wo-9cY"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -119,9 +119,9 @@
                     </view>
                     <navigationItem key="navigationItem" title="Gentle Focus" id="VXJ-aY-Ney"/>
                     <connections>
-                        <outlet property="backgroundImageView" destination="Y4l-mU-GY8" id="KCb-Xm-WXV"/>
-                        <outlet property="playButton" destination="n20-O2-vXr" id="56c-0y-peo"/>
-                        <outlet property="timerView" destination="Kdr-96-W4q" id="ggb-aH-sgV"/>
+                        <outlet property="backgroundImageView" destination="Y4l-mU-GY8" id="cC6-ke-ayS"/>
+                        <outlet property="playButton" destination="n20-O2-vXr" id="k6S-Ge-MXE"/>
+                        <outlet property="timerView" destination="Kdr-96-W4q" id="9v1-38-puM"/>
                         <outlet property="videoContainerView" destination="CSi-py-koH" id="r0R-qh-aVc"/>
                     </connections>
                 </viewController>

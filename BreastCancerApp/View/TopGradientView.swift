@@ -25,11 +25,11 @@ final class TopGradientView: UIView {
 
     private func setupGradient() {
         isUserInteractionEnabled = false
-        gradientLayer.colors = [
-            UIColor(named: "primary_color")?.cgColor,
-            UIColor.clear.cgColor
-        ]
-        layer.addSublayer(gradientLayer)
+        // gradientLayer.colors = [
+        //     UIColor(named: "primary_color")?.cgColor,
+        //     UIColor.clear.cgColor
+        // ]
+        // layer.addSublayer(gradientLayer)
     }
 
     override func layoutSubviews() {
