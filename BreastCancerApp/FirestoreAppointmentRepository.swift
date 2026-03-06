@@ -30,13 +30,30 @@ final class FirestoreAppointmentRepository: AppointmentRepository {
         local.saveAppointments(appointments)
 
         let collection = FirestorePath.appointments(userId)
-        for (dateKey, items) in appointments {
-            let dtoItems = items.compactMap { FirestoreCodableBridge.toDictionary($0.toDTO()) }
-            collection.document(dateKey).setData([
-                "dateKey": dateKey,
-                "items": dtoItems,
-                "updatedAt": Timestamp(date: Date())
-            ], merge: true)
+        collection.getDocuments { snapshot, _ in
+            guard let snapshot else {
+                self.writeAppointmentsToCloud(appointments, in: collection)
+                return
+            }
+
+            let batch = collection.firestore.batch()
+            let existingKeys = Set(snapshot.documents.map(\.documentID))
+            let currentKeys = Set(appointments.keys)
+
+            for removedKey in existingKeys.subtracting(currentKeys) {
+                batch.deleteDocument(collection.document(removedKey))
+            }
+
+            for (dateKey, items) in appointments {
+                let dtoItems = items.compactMap { FirestoreCodableBridge.toDictionary($0.toDTO()) }
+                batch.setData([
+                    "dateKey": dateKey,
+                    "items": dtoItems,
+                    "updatedAt": Timestamp(date: Date())
+                ], forDocument: collection.document(dateKey))
+            }
+
+            batch.commit()
         }
     }
 
@@ -56,9 +73,21 @@ final class FirestoreAppointmentRepository: AppointmentRepository {
                 map[dateKey] = models
             }
 
-            if !map.isEmpty {
-                self.local.saveAppointments(map)
-            }
+            self.local.saveAppointments(map)
+        }
+    }
+
+    private func writeAppointmentsToCloud(
+        _ appointments: [String: [AppointmentItem]],
+        in collection: CollectionReference
+    ) {
+        for (dateKey, items) in appointments {
+            let dtoItems = items.compactMap { FirestoreCodableBridge.toDictionary($0.toDTO()) }
+            collection.document(dateKey).setData([
+                "dateKey": dateKey,
+                "items": dtoItems,
+                "updatedAt": Timestamp(date: Date())
+            ])
         }
     }
 }

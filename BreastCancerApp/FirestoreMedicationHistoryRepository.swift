@@ -30,9 +30,26 @@ final class FirestoreMedicationHistoryRepository: MedicationHistoryRepository {
         local.saveHistory(history)
 
         let collection = FirestorePath.medicationHistory(userId)
-        for (dateKey, entry) in history {
-            guard let dto = FirestoreCodableBridge.toDictionary(entry.toDTO()) else { continue }
-            collection.document(dateKey).setData(dto, merge: true)
+        collection.getDocuments { snapshot, _ in
+            guard let snapshot else {
+                self.writeHistoryToCloud(history, in: collection)
+                return
+            }
+
+            let batch = collection.firestore.batch()
+            let existingKeys = Set(snapshot.documents.map(\.documentID))
+            let currentKeys = Set(history.keys)
+
+            for removedKey in existingKeys.subtracting(currentKeys) {
+                batch.deleteDocument(collection.document(removedKey))
+            }
+
+            for (dateKey, entry) in history {
+                guard let dto = FirestoreCodableBridge.toDictionary(entry.toDTO()) else { continue }
+                batch.setData(dto, forDocument: collection.document(dateKey))
+            }
+
+            batch.commit()
         }
     }
 
@@ -47,9 +64,17 @@ final class FirestoreMedicationHistoryRepository: MedicationHistoryRepository {
                 map[doc.documentID] = MedicationHistoryEntry(dto: dto)
             }
 
-            if !map.isEmpty {
-                self.local.saveHistory(map)
-            }
+            self.local.saveHistory(map)
+        }
+    }
+
+    private func writeHistoryToCloud(
+        _ history: [String: MedicationHistoryEntry],
+        in collection: CollectionReference
+    ) {
+        for (dateKey, entry) in history {
+            guard let dto = FirestoreCodableBridge.toDictionary(entry.toDTO()) else { continue }
+            collection.document(dateKey).setData(dto)
         }
     }
 }

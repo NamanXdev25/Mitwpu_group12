@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         FirebaseBootstrap.configureIfNeeded()
         FirestoreMigrationService.shared.runIfNeeded()
         UNUserNotificationCenter.current().delegate = self
+        ReminderResyncService.syncAll()
 
         return true
     }
@@ -34,6 +35,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // Called when the user discards a scene session.
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
+    }
+
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        ReminderResyncService.syncAll()
     }
 
     func userNotificationCenter(

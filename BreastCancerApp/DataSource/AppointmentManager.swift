@@ -43,6 +43,7 @@ class AppointmentManager {
         }
 
         persist()
+        AppointmentReminderScheduler.shared.syncReminders(for: appointment)
     }
 
     func getAppointments(for date: Date) -> [AppointmentItem] {
@@ -62,6 +63,7 @@ class AppointmentManager {
         }
 
         persist()
+        AppointmentReminderScheduler.shared.removeReminders(for: appointmentId)
     }
 
     func hasAppointments(for date: Date) -> Bool {

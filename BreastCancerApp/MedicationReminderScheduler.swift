@@ -9,14 +9,14 @@ final class MedicationReminderScheduler {
 
     private init() {}
 
-    func syncReminder(for medication: Medication) {
+    func syncReminder(for medication: Medication, showPermissionAlert: Bool = true) {
         let identifier = notificationIdentifier(for: medication.id)
 
         center.removePendingNotificationRequests(withIdentifiers: [identifier])
 
         guard medication.reminderEnabled else { return }
 
-        requestAuthorizationIfNeeded { [weak self] granted in
+        requestAuthorizationIfNeeded(showPermissionAlert: showPermissionAlert) { [weak self] granted in
             guard granted else { return }
             self?.scheduleReminder(for: medication, identifier: identifier)
         }
@@ -28,16 +28,31 @@ final class MedicationReminderScheduler {
         )
     }
 
-    private func requestAuthorizationIfNeeded(completion: @escaping (Bool) -> Void) {
+    private func requestAuthorizationIfNeeded(
+        showPermissionAlert: Bool,
+        completion: @escaping (Bool) -> Void
+    ) {
         center.getNotificationSettings { [weak self] settings in
             switch settings.authorizationStatus {
             case .authorized, .provisional, .ephemeral:
                 completion(true)
             case .notDetermined:
                 self?.center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, _ in
+                    if !granted, showPermissionAlert {
+                        NotificationPermissionAlertPresenter.show(
+                            title: "Notifications Disabled",
+                            message: "Enable notifications in Settings to receive medication reminders."
+                        )
+                    }
                     completion(granted)
                 }
             case .denied:
+                if showPermissionAlert {
+                    NotificationPermissionAlertPresenter.show(
+                        title: "Notifications Disabled",
+                        message: "Enable notifications in Settings to receive medication reminders."
+                    )
+                }
                 completion(false)
             @unknown default:
                 completion(false)
