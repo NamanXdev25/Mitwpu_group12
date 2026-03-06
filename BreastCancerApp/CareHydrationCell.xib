@@ -150,13 +150,13 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="200 mL" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BOV-uQ-evh">
-                                        <rect key="frame" x="260" y="62.000000000000007" width="58.333333333333314" height="20.333333333333336"/>
+                                        <rect key="frame" x="260.66666666666669" y="62.000000000000007" width="58.333333333333314" height="20.333333333333336"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" name="HydrationColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S7u-tA-bnO">
-                                        <rect key="frame" x="323.33333333333331" y="61.666666666666657" width="18" height="21"/>
+                                        <rect key="frame" x="324" y="61.666666666666657" width="18" height="21"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="18" id="0cW-gY-gp5"/>
                                             <constraint firstAttribute="height" constant="21" id="ZFt-Fd-rkg"/>
@@ -183,7 +183,7 @@
                                     <constraint firstItem="neG-dC-nmY" firstAttribute="leading" secondItem="rEQ-jX-KtJ" secondAttribute="trailing" constant="5" id="cgB-ha-VbV"/>
                                     <constraint firstItem="neG-dC-nmY" firstAttribute="centerY" secondItem="rEQ-jX-KtJ" secondAttribute="centerY" id="ckM-Xp-Asb"/>
                                     <constraint firstAttribute="trailing" secondItem="ca6-hf-F1c" secondAttribute="trailing" constant="16" id="gge-bG-oXw"/>
-                                    <constraint firstAttribute="trailing" secondItem="S7u-tA-bnO" secondAttribute="trailing" constant="19.670000000000002" id="ixg-Dg-xYR"/>
+                                    <constraint firstAttribute="trailing" secondItem="S7u-tA-bnO" secondAttribute="trailing" constant="19" id="ixg-Dg-xYR"/>
                                     <constraint firstItem="hDn-81-IFR" firstAttribute="leading" secondItem="6L6-Jf-MRj" secondAttribute="leading" constant="16" id="qe1-io-R10"/>
                                     <constraint firstItem="ca6-hf-F1c" firstAttribute="leading" secondItem="6L6-Jf-MRj" secondAttribute="leading" constant="16" id="xGV-Bx-5OY"/>
                                     <constraint firstItem="9Yc-Sz-jDT" firstAttribute="top" secondItem="6L6-Jf-MRj" secondAttribute="top" id="xJa-Uc-Kem"/>
