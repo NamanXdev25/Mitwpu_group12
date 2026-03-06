@@ -5,8 +5,8 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
     // MARK: - Outlets
     @IBOutlet weak var monthLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
-    
     // Navigation arrows
+    @IBOutlet weak var cancelbutton: UIBarButtonItem!
     @IBOutlet weak var previousMonth: UIButton!
     @IBOutlet weak var nextMonth: UIButton!
     
@@ -45,6 +45,7 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        configureNavigationBar()
         setupYears()
         setupCollectionView()
         setupTableView()
@@ -97,6 +98,27 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
         monthYearPicker.dataSource = self
         monthYearPicker.delegate = self
         pickerContainerView.isHidden = true
+    }
+
+    private func configureNavigationBar() {
+        cancelbutton.target = self
+        cancelbutton.action = #selector(cancelTapped(_:))
+    }
+
+    private func makeNewAppointmentViewController() -> NewAppointmentViewController? {
+        let storyboard = UIStoryboard(name: "Appointments", bundle: nil)
+        return storyboard.instantiateViewController(withIdentifier: "NewAppointmentViewController") as? NewAppointmentViewController
+    }
+
+    private func showAppointmentEditor(
+        initialAppointment: AppointmentItem? = nil,
+        isViewMode: Bool = false
+    ) {
+        guard let appointmentVC = makeNewAppointmentViewController() else { return }
+        appointmentVC.delegate = self
+        appointmentVC.initialAppointment = initialAppointment
+        appointmentVC.isViewMode = isViewMode
+        navigationController?.pushViewController(appointmentVC, animated: true)
     }
     
     // MARK: - Calendar Methods
@@ -222,18 +244,11 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
     }
     
     @IBAction func addAppointmentTapped(_ sender: UIBarButtonItem) {
-        let storyboard = UIStoryboard(name: "Appointments", bundle: nil)
-        if let navController = storyboard.instantiateViewController(withIdentifier: "NewAppointmentNavController") as? UINavigationController {
-            if let addVC = navController.topViewController as? NewAppointmentViewController {
-                addVC.delegate = self
-            }
-            navController.modalPresentationStyle = .pageSheet
-            if let sheet = navController.sheetPresentationController {
-                sheet.detents = [.large()]
-                sheet.prefersGrabberVisible = true
-            }
-            present(navController, animated: true)
-        }
+        showAppointmentEditor()
+    }
+
+    @objc private func cancelTapped(_ sender: UIBarButtonItem) {
+        dismiss(animated: true)
     }
     
     // MARK: - UICollectionView DataSource & Delegate
@@ -317,23 +332,7 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let appointment = appointmentsForSelectedDate[indexPath.row]
-
-        let storyboard = UIStoryboard(name: "Appointments", bundle: nil)
-        guard let navController = storyboard.instantiateViewController(
-            withIdentifier: "NewAppointmentNavController") as? UINavigationController,
-              let viewVC = navController.topViewController as? NewAppointmentViewController
-        else { return }
-
-        viewVC.initialAppointment = appointment
-        viewVC.isViewMode         = true
-        viewVC.delegate           = self
-
-        navController.modalPresentationStyle = .pageSheet
-        if let sheet = navController.sheetPresentationController {
-            sheet.detents = [.large()]
-            sheet.prefersGrabberVisible = true
-        }
-        present(navController, animated: true)
+        showAppointmentEditor(initialAppointment: appointment, isViewMode: true)
     }
     
     // MARK: - Swipe Actions (Edit & Delete)
@@ -354,19 +353,7 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
         let editAction = UIContextualAction(style: .normal, title: "Edit") { [weak self] (_, _, completionHandler) in
             guard let self else { return }
             let appointment = self.appointmentsForSelectedDate[indexPath.row]
-            let storyboard = UIStoryboard(name: "Appointments", bundle: nil)
-            if let navController = storyboard.instantiateViewController(withIdentifier: "NewAppointmentNavController") as? UINavigationController {
-                if let editVC = navController.topViewController as? NewAppointmentViewController {
-                    editVC.delegate = self
-                    editVC.initialAppointment = appointment
-                }
-                navController.modalPresentationStyle = .pageSheet
-                if let sheet = navController.sheetPresentationController {
-                    sheet.detents = [.large()]
-                    sheet.prefersGrabberVisible = true
-                }
-                self.present(navController, animated: true)
-            }
+            self.showAppointmentEditor(initialAppointment: appointment)
             completionHandler(true)
         }
         editAction.image = UIImage(systemName: "pencil")

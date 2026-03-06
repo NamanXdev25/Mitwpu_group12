@@ -26,6 +26,7 @@ private func reminderOffsetRow(_ idx: Int) -> Int { idx + 1 }
 
 class NewAppointmentViewController: UIViewController {
 
+    @IBOutlet weak var backbutton: UIBarButtonItem!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var rightBarButton: UIBarButtonItem!
 
@@ -63,6 +64,7 @@ class NewAppointmentViewController: UIViewController {
     // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureNavigationBar()
         registerCells()
         collectionView.collectionViewLayout = makeLayout()
         collectionView.dataSource = self
@@ -78,6 +80,11 @@ class NewAppointmentViewController: UIViewController {
             collectionView.register(UINib(nibName: $0, bundle: nil),
                                     forCellWithReuseIdentifier: $0)
         }
+    }
+
+    private func configureNavigationBar() {
+        backbutton.target = self
+        backbutton.action = #selector(backTapped(_:))
     }
 
     private func makeLayout() -> UICollectionViewLayout {
@@ -160,7 +167,23 @@ class NewAppointmentViewController: UIViewController {
             CoinRewardService.shared.awardAppointmentCoinsIfEligible(on: self)
         }
 
-        dismiss(animated: true)
+        closeScreenAfterSave()
+    }
+
+    @objc private func backTapped(_ sender: UIBarButtonItem) {
+        if let navigationController, navigationController.viewControllers.first != self {
+            navigationController.popViewController(animated: true)
+        } else {
+            dismiss(animated: true)
+        }
+    }
+
+    private func closeScreenAfterSave() {
+        if let navigationController, navigationController.viewControllers.first != self {
+            navigationController.popViewController(animated: true)
+        } else {
+            dismiss(animated: true)
+        }
     }
 
     // MARK: Validation

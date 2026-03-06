@@ -338,8 +338,6 @@ class HomeModel {
 
     private static let fallbackBreathingImageName = "BreathingSessionsImage"
     private static let journalingImageName = "Journal"
-    private static let hobbyImageName = "Cooking"
-
     private static func preferredBreathingTitle(for moodKey: String) -> String {
         switch moodKey.lowercased() {
         case "happy": return "Inner Calm"
@@ -370,6 +368,25 @@ class HomeModel {
         return value.isEmpty ? fallback : value
     }
 
+    private static func normalizedTitle(_ title: String) -> String {
+        title.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+    }
+
+    private static func hobbyImageName(for hobby: HomeMoodSuggestionItem) -> String {
+        let value = hobby.image?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        return value.isEmpty ? "Cooking" : value
+    }
+
+    private static func randomItem(
+        from items: [HomeMoodSuggestionItem],
+        avoidingTitles: Set<String>
+    ) -> HomeMoodSuggestionItem? {
+        guard !items.isEmpty else { return nil }
+
+        let filtered = items.filter { !avoidingTitles.contains(normalizedTitle($0.title)) }
+        return (filtered.isEmpty ? items : filtered).randomElement()
+    }
+
     // MARK: - Journal (separate cell)
 
     static func initialJournalSuggestion(for moodKey: String) -> Suggestion {
@@ -388,6 +405,22 @@ class HomeModel {
     static func journalSuggestion(for moodKey: String) -> Suggestion {
         guard let content = HomeMoodSuggestionLoader.shared.moodContent(for: moodKey),
               let journaling = content.journaling.first else {
+            return fallbackJournalSuggestion
+        }
+
+        return Suggestion(
+            imageName: journalingImageName,
+            title: journaling.title,
+            subtitle: subtitle(for: journaling, fallback: "Start Writing...")
+        )
+    }
+
+    static func randomJournalSuggestion(
+        for moodKey: String,
+        avoidingTitles: Set<String> = []
+    ) -> Suggestion {
+        guard let content = HomeMoodSuggestionLoader.shared.moodContent(for: moodKey),
+              let journaling = randomItem(from: content.journaling, avoidingTitles: avoidingTitles) else {
             return fallbackJournalSuggestion
         }
 
@@ -420,7 +453,7 @@ class HomeModel {
         if let hobby = content.hobby.first {
             output.append(
                 Suggestion(
-                    imageName: hobbyImageName,
+                    imageName: hobbyImageName(for: hobby),
                     title: hobby.title,
                     subtitle: subtitle(for: hobby, fallback: "Enjoy this hobby at your own pace.")
                 )
@@ -450,7 +483,41 @@ class HomeModel {
         if let hobby = content.hobby.first {
             output.append(
                 Suggestion(
-                    imageName: hobbyImageName,
+                    imageName: hobbyImageName(for: hobby),
+                    title: hobby.title,
+                    subtitle: subtitle(for: hobby, fallback: "Enjoy this hobby at your own pace.")
+                )
+            )
+        }
+
+        return output.isEmpty ? fallbackSuggestedForYou : output
+    }
+
+    static func randomSuggestions(
+        for moodKey: String,
+        avoidingBreathingTitles: Set<String> = [],
+        avoidingHobbyTitles: Set<String> = []
+    ) -> [Suggestion] {
+        guard let content = HomeMoodSuggestionLoader.shared.moodContent(for: moodKey) else {
+            return fallbackSuggestedForYou
+        }
+
+        var output: [Suggestion] = []
+
+        if let breathing = randomItem(from: content.breathing, avoidingTitles: avoidingBreathingTitles) {
+            output.append(
+                Suggestion(
+                    imageName: breathingImageName(for: breathing.title),
+                    title: breathing.title,
+                    subtitle: subtitle(for: breathing, fallback: "A soft breathing session to keep your energy steady.")
+                )
+            )
+        }
+
+        if let hobby = randomItem(from: content.hobby, avoidingTitles: avoidingHobbyTitles) {
+            output.append(
+                Suggestion(
+                    imageName: hobbyImageName(for: hobby),
                     title: hobby.title,
                     subtitle: subtitle(for: hobby, fallback: "Enjoy this hobby at your own pace.")
                 )
@@ -498,5 +565,16 @@ class HomeModel {
 
     static var currentPhase: String {
         UserDefaults.standard.string(forKey: "journey_phase") ?? "Phase 1"
+    }
+
+    static func isHobbySuggestion(title: String) -> Bool {
+        let normalizedTitle = title.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !normalizedTitle.isEmpty else { return false }
+
+        return HomeMoodSuggestionLoader.shared.root?.moods.values.contains { content in
+            content.hobby.contains {
+                $0.title.caseInsensitiveCompare(normalizedTitle) == .orderedSame
+            }
+        } ?? false
     }
 }

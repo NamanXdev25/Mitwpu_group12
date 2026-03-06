@@ -13,6 +13,11 @@ class HomeViewController: UIViewController,
     private var dataSource: UICollectionViewDiffableDataSource<HomeSectionType, HomeItem>!
     private var selectedMoodKey: String = "happy"
     private var hasUserSelectedMood: Bool = false
+    private var currentJournalSuggestion: Suggestion?
+    private var currentSuggestions: [Suggestion] = []
+    private var recentlyShownJournalTitles = Set<String>()
+    private var recentlyShownBreathingTitles = Set<String>()
+    private var recentlyShownHobbyTitles = Set<String>()
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -20,6 +25,7 @@ class HomeViewController: UIViewController,
         registerCells()
         setupCollectionView()
         configureDataSource()
+        refreshDisplayedSuggestions(for: selectedMoodKey)
         applySnapshot()
     }
 
@@ -265,14 +271,13 @@ class HomeViewController: UIViewController,
 
         snapshot.appendItems([HomeItem(type: .mood)], toSection: .mood)
 
-        let journalSuggestion: Suggestion = hasUserSelectedMood
-            ? HomeModel.journalSuggestion(for: selectedMoodKey)
-            : HomeModel.initialJournalSuggestion(for: selectedMoodKey)
+        let journalSuggestion = currentJournalSuggestion
+            ?? HomeModel.randomJournalSuggestion(for: selectedMoodKey)
         snapshot.appendItems([HomeItem(type: .journal(journalSuggestion))], toSection: .journal)
 
-        let suggestions: [Suggestion] = hasUserSelectedMood
-            ? HomeModel.suggestions(for: selectedMoodKey)
-            : HomeModel.initialSuggestion(for: selectedMoodKey)
+        let suggestions = currentSuggestions.isEmpty
+            ? HomeModel.randomSuggestions(for: selectedMoodKey)
+            : currentSuggestions
         snapshot.appendItems(suggestions.map { HomeItem(type: .suggestion($0)) }, toSection: .suggestion)
         snapshot.appendItems(HomeModel.articles.map { HomeItem(type: .article($0)) }, toSection: .articles)
 
@@ -282,7 +287,60 @@ class HomeViewController: UIViewController,
     private func updateSuggestions(for mood: Mood) {
         selectedMoodKey = mood.title.lowercased()
         hasUserSelectedMood = true
+        refreshDisplayedSuggestions(for: selectedMoodKey)
         applySnapshot()
+    }
+
+    private func refreshDisplayedSuggestions(for moodKey: String) {
+        currentJournalSuggestion = HomeModel.randomJournalSuggestion(
+            for: moodKey,
+            avoidingTitles: recentlyShownJournalTitles
+        )
+
+        currentSuggestions = HomeModel.randomSuggestions(
+            for: moodKey,
+            avoidingBreathingTitles: recentlyShownBreathingTitles,
+            avoidingHobbyTitles: recentlyShownHobbyTitles
+        )
+
+        if let journalTitle = currentJournalSuggestion?.title.normalizedSuggestionTitle {
+            recentlyShownJournalTitles.insert(journalTitle)
+        }
+
+        if let breathingTitle = currentSuggestions.first?.title.normalizedSuggestionTitle {
+            recentlyShownBreathingTitles.insert(breathingTitle)
+        }
+
+        if currentSuggestions.count > 1 {
+            let hobbyTitle = currentSuggestions[1].title.normalizedSuggestionTitle
+            recentlyShownHobbyTitles.insert(hobbyTitle)
+        }
+
+        trimHistoryIfNeeded()
+    }
+
+    private func trimHistoryIfNeeded() {
+        if recentlyShownJournalTitles.count > 12 {
+            recentlyShownJournalTitles.removeAll()
+            if let title = currentJournalSuggestion?.title.normalizedSuggestionTitle {
+                recentlyShownJournalTitles.insert(title)
+            }
+        }
+
+        if recentlyShownBreathingTitles.count > 8 {
+            recentlyShownBreathingTitles.removeAll()
+            if let title = currentSuggestions.first?.title.normalizedSuggestionTitle {
+                recentlyShownBreathingTitles.insert(title)
+            }
+        }
+
+        if recentlyShownHobbyTitles.count > 8 {
+            recentlyShownHobbyTitles.removeAll()
+            if currentSuggestions.count > 1 {
+                let title = currentSuggestions[1].title.normalizedSuggestionTitle
+                recentlyShownHobbyTitles.insert(title)
+            }
+        }
     }
 
     // MARK: - Actions
@@ -438,7 +496,7 @@ class HomeViewController: UIViewController,
 
             if isBreathingSuggestion {
                 openBreathingSessionAsSheet(withTitle: suggestion.title)
-            } else if suggestion.imageName == "Cooking" {
+            } else if HomeModel.isHobbySuggestion(title: suggestion.title) {
                 let sourceView = collectionView.cellForItem(at: indexPath) ?? collectionView
                 openHobbyMemoryOptions(from: sourceView)
             }
@@ -468,6 +526,12 @@ class HomeViewController: UIViewController,
     }
 }
 
+private extension String {
+    var normalizedSuggestionTitle: String {
+        trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+    }
+}
+
 extension HomeModel {
     static func moodHeaderText(for moodKey: String, hasUserSelectedMood: Bool) -> String {
         guard hasUserSelectedMood else {
@@ -490,4 +554,3 @@ extension HomeModel {
         }
     }
 }
-

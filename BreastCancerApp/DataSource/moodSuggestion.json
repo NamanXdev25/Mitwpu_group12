@@ -8,9 +8,7 @@
         { "title": "Inner Calm", "description": "A grounding breath to help you enjoy this peaceful mood.", "image": "BreathingSessionsImage" },
         { "title": "Gentle Recharge", "description": "Light breathing to refresh your mind without slowing down your day.", "image": "BreathingSessionsImage" },
         { "title": "Morning Appreciation", "description": "A warm breathing ritual to lift your spirits even more.", "image": "BreathingSessionsImage" },
-        { "title": "Release Tension", "description": "Small stretches paired with breath to keep your body relaxed.", "image": "BreathingSessionsImage" },
-        { "title": "Calm Drift", "description": "Slow, soothing breathwork to stay centered and light.", "image": "BreathingSessionsImage" },
-        { "title": "Peaceful Night", "description": "Soft breathing for unwinding and settling into rest.", "image": "BreathingSessionsImage" },
+        { "title": "Deep Rest", "description": "Soft breathing for unwinding and settling into rest.", "image": "BreathingSessionsImage" },
         { "title": "Nausea Relief", "description": "Gentle paced breathing to relax the body and maintain ease.", "image": "BreathingSessionsImage" }
       ],
       "journaling": [
@@ -34,16 +32,16 @@
         { "title": "What are you silently thankful for right now?" }
       ],
       "hobby": [
-        { "title": "Drawing", "description": "Sketch anything that reflects your happy moment today.", "image": "Cooking" },
-        { "title": "Music", "description": "Play a song you love and enjoy the rhythm.", "image": "Cooking" },
-        { "title": "Painting", "description": "Create something colorful that matches your mood.", "image": "Cooking" },
-        { "title": "Crafting", "description": "Make something small — even a paper fold counts.", "image": "Cooking" },
-        { "title": "Reading", "description": "Read a page of something light and enjoyable.", "image": "Cooking" },
+        { "title": "Drawing", "description": "Sketch anything that reflects your happy moment today.", "image": "Drawing" },
+        { "title": "Music", "description": "Play a song you love and enjoy the rhythm.", "image": "Music" },
+        { "title": "Painting", "description": "Create something colorful that matches your mood.", "image": "Drawing" },
+        { "title": "Crafting", "description": "Make something small — even a paper fold counts.", "image": "crafting" },
+        { "title": "Reading", "description": "Read a page of something light and enjoyable.", "image": "Reading" },
         { "title": "Cooking", "description": "Make a snack you love and enjoy the process.", "image": "Cooking" },
-        { "title": "Watching movies", "description": "Watch a short feel-good clip or scene.", "image": "Cooking" },
-        { "title": "Meditation", "description": "Sit quietly and enjoy 2 minutes of calm awareness.", "image": "Cooking" },
-        { "title": "Listening to calming music", "description": "Play a soothing track and breathe slowly.", "image": "Cooking" },
-        { "title": "Walking", "description": "Take a short walk and notice things that make you smile.", "image": "Cooking" }
+        { "title": "Watching movies", "description": "Watch a short feel-good clip or scene.", "image": "Movies" },
+        { "title": "Meditation", "description": "Sit quietly and enjoy 2 minutes of calm awareness.", "image": "yoga" },
+        { "title": "Listening to calming music", "description": "Play a soothing track and breathe slowly.", "image": "Music" },
+        { "title": "Walking", "description": "Take a short walk and notice things that make you smile.", "image": "walking" }
       ]
     },
     "sad": {
@@ -53,9 +51,7 @@
         { "title": "Calmer Mind", "description": "Settle emotional waves with steady breathing.", "image": "BreathingSessionsImage" },
         { "title": "Inner Calm", "description": "A grounding breath to help you find emotional balance.", "image": "BreathingSessionsImage" },
         { "title": "Gentle Recharge", "description": "Soft breathwork to lighten emotional heaviness.", "image": "BreathingSessionsImage" },
-        { "title": "Release Tension", "description": "Slow breaths paired with letting go of tightness.", "image": "BreathingSessionsImage" },
-        { "title": "Calm Drift", "description": "A warm breath flow to relax sadness-tensed muscles.", "image": "BreathingSessionsImage" },
-        { "title": "Peaceful Night", "description": "Soothing breaths to help you settle and rest.", "image": "BreathingSessionsImage" },
+        { "title": "Deep Rest", "description": "Soothing breaths to help you settle and rest.", "image": "BreathingSessionsImage" },
         { "title": "Morning Appreciation", "description": "Gentle breaths focusing on small things that still feel okay.", "image": "BreathingSessionsImage" },
         { "title": "Nausea Relief", "description": "A calm breathing rhythm to soothe emotional tension.", "image": "BreathingSessionsImage" }
       ],
@@ -82,16 +78,16 @@
         { "title": "What do you need to hear in this moment?" }
       ],
       "hobby": [
-        { "title": "Watching movies", "description": "Watch a comforting scene.", "image": "Cooking" },
-        { "title": "Listening to calming music", "description": "Play a soft track that soothes you.", "image": "Cooking" },
-        { "title": "Talking to family", "description": "Reach out to someone who feels safe.", "image": "Cooking" },
-        { "title": "Gardening", "description": "Spend a moment with plants.", "image": "Cooking" },
-        { "title": "Drawing", "description": "Draw gentle shapes or doodles.", "image": "Cooking" },
-        { "title": "Reading", "description": "Read a calming page.", "image": "Cooking" },
-        { "title": "Meditation", "description": "Do a short grounding meditation.", "image": "Cooking" },
-        { "title": "Crafting", "description": "Do a simple craft.", "image": "Cooking" },
+        { "title": "Watching movies", "description": "Watch a comforting scene.", "image": "Movies" },
+        { "title": "Listening to calming music", "description": "Play a soft track that soothes you.", "image": "Music" },
+        { "title": "Talking to family", "description": "Reach out to someone who feels safe.", "image": "talkingtofamily" },
+        { "title": "Gardening", "description": "Spend a moment with plants.", "image": "Gardening" },
+        { "title": "Drawing", "description": "Draw gentle shapes or doodles.", "image": "Drawing" },
+        { "title": "Reading", "description": "Read a calming page.", "image": "Reading" },
+        { "title": "Meditation", "description": "Do a short grounding meditation.", "image": "yoga" },
+        { "title": "Crafting", "description": "Do a simple craft.", "image": "crafting" },
         { "title": "Cooking", "description": "Make a warm drink.", "image": "Cooking" },
-        { "title": "Walking", "description": "A slow walk to ease heaviness.", "image": "Cooking" }
+        { "title": "Walking", "description": "A slow walk to ease heaviness.", "image": "walking" }
       ]
     },
     "anxious": {
@@ -99,9 +95,7 @@
         { "title": "Gentle Focus", "description": "A stabilizing breath session to calm racing thoughts.", "image": "BreathingSessionsImage" },
         { "title": "Calmer Mind", "description": "Steady breaths to quiet the anxious loop.", "image": "BreathingSessionsImage" },
         { "title": "Inner Calm", "description": "A grounding breath to bring you back to the present.", "image": "BreathingSessionsImage" },
-        { "title": "Release Tension", "description": "Breaths paired with shoulder relaxation.", "image": "BreathingSessionsImage" },
-        { "title": "Calm Drift", "description": "A slow, continuous breath to ease agitation.", "image": "BreathingSessionsImage" },
-        { "title": "Peaceful Night", "description": "A settling practice for anxious evenings.", "image": "BreathingSessionsImage" },
+        { "title": "Deep Rest", "description": "A settling practice for anxious evenings.", "image": "BreathingSessionsImage" },
         { "title": "Gentle Recharge", "description": "Soft breathing to reduce tension.", "image": "BreathingSessionsImage" },
         { "title": "Nausea Relief", "description": "A paced breath for anxiety-linked stomach tension.", "image": "BreathingSessionsImage" },
         { "title": "Healing Reflections", "description": "A soothing rhythm to settle your nervous system.", "image": "BreathingSessionsImage" },
@@ -126,16 +120,16 @@
         { "title": "What tells you that this is anxiety, not immediate danger?" }
       ],
       "hobby": [
-        { "title": "Walking", "description": "Walk slowly and name three things you see.", "image": "Cooking" },
-        { "title": "Listening to calming music", "description": "Choose a steady soothing sound.", "image": "Cooking" },
-        { "title": "Meditation", "description": "A short focus meditation.", "image": "Cooking" },
-        { "title": "Drawing", "description": "Doodle repeating patterns.", "image": "Cooking" },
-        { "title": "Reading", "description": "Read a short calming passage.", "image": "Cooking" },
-        { "title": "Gardening", "description": "Touch soil or leaves.", "image": "Cooking" },
+        { "title": "Walking", "description": "Walk slowly and name three things you see.", "image": "walking" },
+        { "title": "Listening to calming music", "description": "Choose a steady soothing sound.", "image": "Music" },
+        { "title": "Meditation", "description": "A short focus meditation.", "image": "yoga" },
+        { "title": "Drawing", "description": "Doodle repeating patterns.", "image": "Drawing" },
+        { "title": "Reading", "description": "Read a short calming passage.", "image": "Reading" },
+        { "title": "Gardening", "description": "Touch soil or leaves.", "image": "Gardening" },
         { "title": "Cooking", "description": "Follow a simple recipe.", "image": "Cooking" },
-        { "title": "Crafting", "description": "Do a repetitive craft.", "image": "Cooking" },
-        { "title": "Watching movies", "description": "Watch a calming scene.", "image": "Cooking" },
-        { "title": "Talking to family", "description": "Say a quick hello.", "image": "Cooking" }
+        { "title": "Crafting", "description": "Do a repetitive craft.", "image": "crafting" },
+        { "title": "Watching movies", "description": "Watch a calming scene.", "image": "Movies" },
+        { "title": "Talking to family", "description": "Say a quick hello.", "image": "talkingtofamily" }
       ]
     },
     "tired": {
@@ -145,9 +139,7 @@
         { "title": "Calmer Mind", "description": "Slow breaths to reduce mental fatigue.", "image": "BreathingSessionsImage" },
         { "title": "Inner Calm", "description": "A grounding breath to bring ease.", "image": "BreathingSessionsImage" },
         { "title": "Gentle Recharge", "description": "A mild breathing reset.", "image": "BreathingSessionsImage" },
-        { "title": "Release Tension", "description": "Slow breaths with soft relaxation.", "image": "BreathingSessionsImage" },
-        { "title": "Calm Drift", "description": "A sleepy slow rhythm.", "image": "BreathingSessionsImage" },
-        { "title": "Peaceful Night", "description": "A settling breath session.", "image": "BreathingSessionsImage" },
+        { "title": "Deep Rest", "description": "A settling breath session.", "image": "BreathingSessionsImage" },
         { "title": "Morning Appreciation", "description": "Gentle boost breathing.", "image": "BreathingSessionsImage" },
         { "title": "Nausea Relief", "description": "Calm pacing to ease tired discomfort.", "image": "BreathingSessionsImage" }
       ],
@@ -173,15 +165,15 @@
         { "title": "What would happen if you allowed yourself to slow down right now?" }
       ],
       "hobby": [
-        { "title": "Listening to calming music", "description": "Choose a soft track.", "image": "Cooking" },
-        { "title": "Reading", "description": "Read 1–2 pages.", "image": "Cooking" },
-        { "title": "Watching movies", "description": "Watch a relaxing scene.", "image": "Cooking" },
-        { "title": "Drawing", "description": "Doodle something simple.", "image": "Cooking" },
-        { "title": "Meditation", "description": "Try a 2-minute rest meditation.", "image": "Cooking" },
-        { "title": "Journaling", "description": "Write freely for a minute.", "image": "Cooking" },
-        { "title": "Gardening", "description": "Observe a plant closely.", "image": "Cooking" },
-        { "title": "Walking", "description": "Take a very slow short walk.", "image": "Cooking" },
-        { "title": "Crafting", "description": "Do a tiny creative task.", "image": "Cooking" },
+        { "title": "Listening to calming music", "description": "Choose a soft track.", "image": "Music" },
+        { "title": "Reading", "description": "Read 1–2 pages.", "image": "Reading" },
+        { "title": "Watching movies", "description": "Watch a relaxing scene.", "image": "Movies" },
+        { "title": "Drawing", "description": "Doodle something simple.", "image": "Drawing" },
+        { "title": "Meditation", "description": "Try a 2-minute rest meditation.", "image": "yoga" },
+        { "title": "Journaling", "description": "Write freely for a minute.", "image": "Journaling" },
+        { "title": "Gardening", "description": "Observe a plant closely.", "image": "Gardening" },
+        { "title": "Walking", "description": "Take a very slow short walk.", "image": "walking" },
+        { "title": "Crafting", "description": "Do a tiny creative task.", "image": "crafting" },
         { "title": "Cooking", "description": "Make a warm drink.", "image": "Cooking" }
       ]
     },
@@ -193,9 +185,7 @@
         { "title": "Calmer Mind", "description": "Clear breathing to stay focused.", "image": "BreathingSessionsImage" },
         { "title": "Inner Calm", "description": "Ground your excitement gently.", "image": "BreathingSessionsImage" },
         { "title": "Healing Reflections", "description": "Pause and fully feel this joyful energy.", "image": "BreathingSessionsImage" },
-        { "title": "Release Tension", "description": "Stretch and breathe to balance your energy.", "image": "BreathingSessionsImage" },
-        { "title": "Calm Drift", "description": "Slow breaths to stay centered.", "image": "BreathingSessionsImage" },
-        { "title": "Peaceful Night", "description": "Settle excitement before rest.", "image": "BreathingSessionsImage" },
+        { "title": "Deep Rest", "description": "Settle excitement before rest.", "image": "BreathingSessionsImage" },
         { "title": "Nausea Relief", "description": "Paced breathing if excitement feels overwhelming.", "image": "BreathingSessionsImage" }
       ],
       "journaling": [
@@ -217,16 +207,16 @@
         { "title": "If time paused for a minute, what would you notice most?" }
       ],
       "hobby": [
-        { "title": "Drawing", "description": "Sketch your excitement with bold lines.", "image": "Cooking" },
-        { "title": "Music", "description": "Play an upbeat song and move with it.", "image": "Cooking" },
-        { "title": "Painting", "description": "Use bright colors to express your mood.", "image": "Cooking" },
-        { "title": "Crafting", "description": "Create something vibrant and fun.", "image": "Cooking" },
+        { "title": "Drawing", "description": "Sketch your excitement with bold lines.", "image": "Drawing" },
+        { "title": "Music", "description": "Play an upbeat song and move with it.", "image": "Music" },
+        { "title": "Painting", "description": "Use bright colors to express your mood.", "image": "Drawing" },
+        { "title": "Crafting", "description": "Create something vibrant and fun.", "image": "crafting" },
         { "title": "Cooking", "description": "Try making something new and exciting.", "image": "Cooking" },
-        { "title": "Walking", "description": "Take a lively walk and notice your energy.", "image": "Cooking" },
-        { "title": "Talking to family", "description": "Share your excitement with someone close.", "image": "Cooking" },
-        { "title": "Watching movies", "description": "Watch something uplifting.", "image": "Cooking" },
-        { "title": "Meditation", "description": "Channel your excitement into focused breathing.", "image": "Cooking" },
-        { "title": "Listening to calming music", "description": "Balance your energy with rhythmic music.", "image": "Cooking" }
+        { "title": "Walking", "description": "Take a lively walk and notice your energy.", "image": "walking" },
+        { "title": "Talking to family", "description": "Share your excitement with someone close.", "image": "talkingtofamily" },
+        { "title": "Watching movies", "description": "Watch something uplifting.", "image": "Movies" },
+        { "title": "Meditation", "description": "Channel your excitement into focused breathing.", "image": "yoga" },
+        { "title": "Listening to calming music", "description": "Balance your energy with rhythmic music.", "image": "Music" }
       ]
     }
   }
