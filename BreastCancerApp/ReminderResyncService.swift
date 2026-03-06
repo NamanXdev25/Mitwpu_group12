@@ -8,10 +8,10 @@ enum ReminderResyncService {
 
     private static func syncMedicationRemindersForToday() {
         guard let entry = MedicationHistory.shared.getHistory(for: Date()) else { return }
-
-        for medication in entry.medications where medication.reminderEnabled {
-            MedicationReminderScheduler.shared.syncReminder(for: medication, showPermissionAlert: false)
-        }
+        MedicationReminderScheduler.shared.syncReminders(
+            for: entry.medications,
+            showPermissionAlert: false
+        )
     }
 
     private static func syncFutureAppointmentReminders() {
@@ -30,9 +30,12 @@ enum ReminderResyncService {
                 guard let appointmentDate = appointmentFormatter.date(from: "\(appointment.date) \(appointment.time)"),
                       appointmentDate > now
                 else { continue }
-
-                AppointmentReminderScheduler.shared.syncReminders(for: appointment, showPermissionAlert: false)
             }
         }
+
+        AppointmentReminderScheduler.shared.syncReminders(
+            for: AppointmentManager.shared.getAllAppointments(),
+            showPermissionAlert: false
+        )
     }
 }

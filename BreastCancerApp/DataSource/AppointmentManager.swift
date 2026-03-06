@@ -43,7 +43,7 @@ class AppointmentManager {
         }
 
         persist()
-        AppointmentReminderScheduler.shared.syncReminders(for: appointment)
+        AppointmentReminderScheduler.shared.syncReminders(for: getAllAppointments())
     }
 
     func getAppointments(for date: Date) -> [AppointmentItem] {
@@ -63,7 +63,7 @@ class AppointmentManager {
         }
 
         persist()
-        AppointmentReminderScheduler.shared.removeReminders(for: appointmentId)
+        AppointmentReminderScheduler.shared.syncReminders(for: getAllAppointments(), showPermissionAlert: false)
     }
 
     func hasAppointments(for date: Date) -> Bool {
@@ -72,5 +72,9 @@ class AppointmentManager {
 
     func getAllDatesWithAppointments() -> [String] {
         Array(appointments.keys)
+    }
+
+    func getAllAppointments() -> [AppointmentItem] {
+        appointments.values.flatMap { $0 }
     }
 }

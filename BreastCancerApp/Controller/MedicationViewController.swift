@@ -359,9 +359,8 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
         
         let deleteBtn = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
             guard let self = self else { return }
-            let medicationID = self.allMedications[actualIndex].id
             self.allMedications.remove(at: actualIndex)
-            MedicationReminderScheduler.shared.removeReminder(for: medicationID)
+            MedicationReminderScheduler.shared.syncReminders(for: self.allMedications, showPermissionAlert: false)
             self.saveMedications()
             
             self.collectionView.reloadData()
@@ -416,7 +415,7 @@ extension MedicationViewController: AddMedicationDelegate {
     func didAddMedication(name: String, time: String, repeatOption: String, note: String, reminderEnabled: Bool) {
         let newPill = Medication(name: name, note: note, time: time, repeatOption: repeatOption, isTaken: false, reminderEnabled: reminderEnabled)
         allMedications.append(newPill)
-        MedicationReminderScheduler.shared.syncReminder(for: newPill)
+        MedicationReminderScheduler.shared.syncReminders(for: allMedications)
         collectionView.reloadData()
         saveMedications()
     }
@@ -433,7 +432,7 @@ extension MedicationViewController: AddMedicationDelegate {
         )
         
         allMedications[index] = updatedPill
-        MedicationReminderScheduler.shared.syncReminder(for: updatedPill)
+        MedicationReminderScheduler.shared.syncReminders(for: allMedications)
         collectionView.reloadData()
         saveMedications()
     }

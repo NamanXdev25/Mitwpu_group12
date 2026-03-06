@@ -9,23 +9,18 @@ final class MedicationReminderScheduler {
 
     private init() {}
 
-    func syncReminder(for medication: Medication, showPermissionAlert: Bool = true) {
-        let identifier = notificationIdentifier(for: medication.id)
+    func syncReminders(for medications: [Medication], showPermissionAlert: Bool = true) {
+        removeAllPendingReminders { [weak self] in
+            guard let self else { return }
 
-        center.removePendingNotificationRequests(withIdentifiers: [identifier])
+            let enabledMedications = medications.filter(\.reminderEnabled)
+            guard !enabledMedications.isEmpty else { return }
 
-        guard medication.reminderEnabled else { return }
-
-        requestAuthorizationIfNeeded(showPermissionAlert: showPermissionAlert) { [weak self] granted in
-            guard granted else { return }
-            self?.scheduleReminder(for: medication, identifier: identifier)
+            self.requestAuthorizationIfNeeded(showPermissionAlert: showPermissionAlert) { granted in
+                guard granted else { return }
+                self.scheduleGroupedReminders(for: enabledMedications)
+            }
         }
-    }
-
-    func removeReminder(for medicationID: String) {
-        center.removePendingNotificationRequests(
-            withIdentifiers: [notificationIdentifier(for: medicationID)]
-        )
     }
 
     private func requestAuthorizationIfNeeded(
@@ -60,20 +55,30 @@ final class MedicationReminderScheduler {
         }
     }
 
-    private func scheduleReminder(for medication: Medication, identifier: String) {
-        guard let dateComponents = triggerDateComponents(
-            forTimeString: medication.time,
-            repeatOption: medication.repeatOption
-        ) else { return }
+    private func scheduleGroupedReminders(for medications: [Medication]) {
+        let grouped = Dictionary(grouping: medications, by: triggerKey(for:))
 
-        let content = UNMutableNotificationContent()
-        content.title = "Medication Reminder"
-        content.body = "Time to take \(medication.name)."
-        content.sound = .default
+        for (key, group) in grouped {
+            guard let first = group.first,
+                  let dateComponents = triggerDateComponents(
+                    forTimeString: first.time,
+                    repeatOption: first.repeatOption
+                  )
+            else { continue }
 
-        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
-        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
-        center.add(request)
+            let content = UNMutableNotificationContent()
+            content.title = "Medication Reminder"
+            content.body = reminderBody(for: group)
+            content.sound = .default
+
+            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+            let request = UNNotificationRequest(
+                identifier: notificationIdentifier(for: key),
+                content: content,
+                trigger: trigger
+            )
+            center.add(request)
+        }
     }
 
     private func triggerDateComponents(forTimeString timeString: String, repeatOption: String) -> DateComponents? {
@@ -110,7 +115,44 @@ final class MedicationReminderScheduler {
         return mapping[repeatOption]
     }
 
-    private func notificationIdentifier(for medicationID: String) -> String {
-        identifierPrefix + medicationID
+    private func triggerKey(for medication: Medication) -> String {
+        let weekdayKey = weekday(for: medication.repeatOption).map(String.init) ?? "daily"
+        return "\(weekdayKey)-\(medication.time.lowercased())"
+    }
+
+    private func notificationIdentifier(for key: String) -> String {
+        identifierPrefix + key.replacingOccurrences(of: " ", with: "-")
+    }
+
+    private func reminderBody(for medications: [Medication]) -> String {
+        let names = medications.map(\.name)
+
+        if names.count == 1, let name = names.first {
+            return "Time to take \(name)."
+        }
+
+        if names.count == 2 {
+            return "Time to take \(names[0]) and \(names[1])."
+        }
+
+        let preview = names.prefix(3).joined(separator: ", ")
+        let remaining = names.count - min(names.count, 3)
+        return "Time to take \(preview), and \(remaining) more medications."
+    }
+
+    private func removeAllPendingReminders(completion: @escaping () -> Void) {
+        center.getPendingNotificationRequests { [weak self] requests in
+            guard let self else {
+                completion()
+                return
+            }
+
+            let identifiers = requests
+                .map(\.identifier)
+                .filter { $0.hasPrefix(self.identifierPrefix) }
+
+            self.center.removePendingNotificationRequests(withIdentifiers: identifiers)
+            completion()
+        }
     }
 }

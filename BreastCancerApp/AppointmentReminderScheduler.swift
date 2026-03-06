@@ -9,22 +9,18 @@ final class AppointmentReminderScheduler {
 
     private init() {}
 
-    func syncReminders(for appointment: AppointmentItem, showPermissionAlert: Bool = true) {
-        let identifiers = notificationIdentifiers(for: appointment.id)
-        center.removePendingNotificationRequests(withIdentifiers: identifiers)
+    func syncReminders(for appointments: [AppointmentItem], showPermissionAlert: Bool = true) {
+        removeAllPendingReminders { [weak self] in
+            guard let self else { return }
 
-        guard appointment.reminderEnabled else { return }
+            let enabledAppointments = appointments.filter(\.reminderEnabled)
+            guard !enabledAppointments.isEmpty else { return }
 
-        requestAuthorizationIfNeeded(showPermissionAlert: showPermissionAlert) { [weak self] granted in
-            guard granted else { return }
-            self?.scheduleReminders(for: appointment)
+            self.requestAuthorizationIfNeeded(showPermissionAlert: showPermissionAlert) { granted in
+                guard granted else { return }
+                self.scheduleGroupedReminders(for: enabledAppointments)
+            }
         }
-    }
-
-    func removeReminders(for appointmentID: String) {
-        center.removePendingNotificationRequests(
-            withIdentifiers: notificationIdentifiers(for: appointmentID)
-        )
     }
 
     private func requestAuthorizationIfNeeded(
@@ -59,24 +55,37 @@ final class AppointmentReminderScheduler {
         }
     }
 
-    private func scheduleReminders(for appointment: AppointmentItem) {
-        for offset in appointment.reminderOffsets {
-            guard let reminderDate = reminderDate(for: appointment, offset: offset),
-                  reminderDate > Date()
-            else { continue }
+    private func scheduleGroupedReminders(for appointments: [AppointmentItem]) {
+        var grouped: [String: (date: Date, appointments: [AppointmentItem])] = [:]
 
+        for appointment in appointments {
+            for offset in appointment.reminderOffsets {
+                guard let reminderDate = reminderDate(for: appointment, offset: offset),
+                      reminderDate > Date()
+                else { continue }
+
+                let key = reminderTriggerKey(for: reminderDate)
+                if grouped[key] == nil {
+                    grouped[key] = (date: reminderDate, appointments: [appointment])
+                } else {
+                    grouped[key]?.appointments.append(appointment)
+                }
+            }
+        }
+
+        for (key, value) in grouped {
             let content = UNMutableNotificationContent()
             content.title = "Appointment Reminder"
-            content.body = reminderBody(for: appointment, offset: offset)
+            content.body = reminderBody(for: value.appointments)
             content.sound = .default
 
             let triggerDate = Calendar.current.dateComponents(
                 [.year, .month, .day, .hour, .minute],
-                from: reminderDate
+                from: value.date
             )
             let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
             let request = UNNotificationRequest(
-                identifier: notificationIdentifier(for: appointment.id, offset: offset),
+                identifier: notificationIdentifier(for: key),
                 content: content,
                 trigger: trigger
             )
@@ -115,13 +124,19 @@ final class AppointmentReminderScheduler {
         return Calendar.current.date(byAdding: .minute, value: -minutesOffset, to: appointmentDate)
     }
 
-    private func reminderBody(for appointment: AppointmentItem, offset: ReminderOffset) -> String {
-        let appointmentDateText = formattedAppointmentDateTime(for: appointment)
-
-        if offset == .atTime {
-            return "\(appointment.title) is scheduled for \(appointmentDateText)."
+    private func reminderBody(for appointments: [AppointmentItem]) -> String {
+        if appointments.count == 1, let appointment = appointments.first {
+            return "\(appointment.title) is on \(formattedAppointmentDateTime(for: appointment))."
         }
-        return "\(appointment.title) is on \(appointmentDateText)."
+
+        let names = appointments.map(\.title)
+        if names.count == 2 {
+            return "You have 2 appointments coming up: \(names[0]) and \(names[1])."
+        }
+
+        let preview = names.prefix(3).joined(separator: ", ")
+        let remaining = names.count - min(names.count, 3)
+        return "You have \(names.count) appointments coming up: \(preview), and \(remaining) more."
     }
 
     private func formattedAppointmentDateTime(for appointment: AppointmentItem) -> String {
@@ -139,12 +154,30 @@ final class AppointmentReminderScheduler {
         return formatter.string(from: appointmentDate)
     }
 
-    private func notificationIdentifiers(for appointmentID: String) -> [String] {
-        ReminderOffset.allCases.map { notificationIdentifier(for: appointmentID, offset: $0) }
+    private func reminderTriggerKey(for date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd-HH-mm"
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        return formatter.string(from: date)
     }
 
-    private func notificationIdentifier(for appointmentID: String, offset: ReminderOffset) -> String {
-        let safeOffset = offset.rawValue.replacingOccurrences(of: " ", with: "-").lowercased()
-        return "\(identifierPrefix)\(appointmentID)-\(safeOffset)"
+    private func notificationIdentifier(for key: String) -> String {
+        identifierPrefix + key
+    }
+
+    private func removeAllPendingReminders(completion: @escaping () -> Void) {
+        center.getPendingNotificationRequests { [weak self] requests in
+            guard let self else {
+                completion()
+                return
+            }
+
+            let identifiers = requests
+                .map(\.identifier)
+                .filter { $0.hasPrefix(self.identifierPrefix) }
+
+            self.center.removePendingNotificationRequests(withIdentifiers: identifiers)
+            completion()
+        }
     }
 }
