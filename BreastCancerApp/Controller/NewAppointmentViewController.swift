@@ -27,11 +27,16 @@ private func reminderOffsetRow(_ idx: Int) -> Int { idx + 1 }
 class NewAppointmentViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var rightBarButton: UIBarButtonItem!
 
     weak var delegate: AddAppointmentDelegate?
     var initialAppointment: AppointmentItem?
     var originalDate: Date?
 
+    var isViewMode: Bool = false
+
+    // MARK: Private state
+    private var isEditing_: Bool = false
     private var titleText    = ""
     private var doctorText   = ""
     private var locationText = ""
@@ -41,29 +46,33 @@ class NewAppointmentViewController: UIViewController {
     private var reminderOffsets: [ReminderOffset] = [.day1]
     private var userNoteText = ""
 
-    private let tfCellID              = "NewAppointmentTextFieldCell"
-    private let dtCellID              = "NewAppointmentDateTimeCell"
-    private let swCellID              = "NewAppointmentSwitchCell"
-    private let remCellID             = "NewAppointmentReminderTimeCell"
-    private let addedReminderCellID   = "NewAppintmentAddedReminderCell"
-    private let noteCellID            = "NewAppointmentNoteCell"
+    private let tfCellID            = "NewAppointmentTextFieldCell"
+    private let dtCellID            = "NewAppointmentDateTimeCell"
+    private let swCellID            = "NewAppointmentSwitchCell"
+    private let remCellID           = "NewAppointmentReminderTimeCell"
+    private let addedReminderCellID = "NewAppintmentAddedReminderCell"
+    private let noteCellID          = "NewAppointmentNoteCell"
 
     private var reminderSectionCount: Int { 1 + reminderOffsets.count + 1 }
     private var addButtonRow: Int         { reminderOffsets.count + 1 }
+
+    private var fieldsEnabled: Bool {
+        return !isViewMode || isEditing_
+    }
 
     // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         registerCells()
         collectionView.collectionViewLayout = makeLayout()
-        collectionView.backgroundColor = UIColor(named: "BackgroundColor")
-        view.backgroundColor = UIColor(named: "BackgroundColor")
         collectionView.dataSource = self
         collectionView.delegate   = self
         collectionView.keyboardDismissMode = .onDrag
         loadInitialData()
+        configureBarButton()
     }
 
+    // MARK: Setup
     private func registerCells() {
         [tfCellID, dtCellID, swCellID, remCellID, addedReminderCellID, noteCellID].forEach {
             collectionView.register(UINib(nibName: $0, bundle: nil),
@@ -76,6 +85,18 @@ class NewAppointmentViewController: UIViewController {
         config.showsSeparators = true
         config.backgroundColor = UIColor(named: "BackgroundColor")
         return UICollectionViewCompositionalLayout.list(using: config)
+    }
+
+    private func configureBarButton() {
+        if isViewMode {
+            rightBarButton.image = UIImage(systemName: "pencil")
+            rightBarButton.tintColor = .white
+            rightBarButton.title = nil
+        } else {
+            rightBarButton.image = UIImage(systemName: "checkmark")
+            rightBarButton.tintColor = UIColor(named: "primary_color")
+            rightBarButton.title = nil
+        }
     }
 
     // MARK: Load existing data
@@ -103,8 +124,19 @@ class NewAppointmentViewController: UIViewController {
         if let t = tf.date(from: a.time) { selectedTime = t }
     }
 
-    // MARK: Save
+    // MARK: Bar button action — handles both Edit and Save
     @IBAction func saveTapped(_ sender: UIBarButtonItem) {
+        if isViewMode && !isEditing_ {
+            // Switch to edit mode
+            isEditing_ = true
+            rightBarButton.image = UIImage(systemName: "checkmark")
+            rightBarButton.tintColor = UIColor(named: "primary_color")
+            rightBarButton.title = nil
+            collectionView.reloadData()
+            return
+        }
+
+        // Save path
         view.endEditing(true)
         guard validate() else { return }
 
@@ -237,6 +269,7 @@ extension NewAppointmentViewController: UICollectionViewDataSource {
         switch Section(rawValue: indexPath.section)! {
 
         case .details:
+            // disable text in view-only mode
             let cell = dequeue(tfCellID, collectionView, indexPath) as! NewAppointmentTextFieldCell
             switch DetailsRow(rawValue: indexPath.item)! {
             case .title:
@@ -249,9 +282,12 @@ extension NewAppointmentViewController: UICollectionViewDataSource {
                 cell.configure(placeholder: "Location", text: locationText)
                 cell.onTextChange = { [weak self] in self?.locationText = $0 }
             }
+            cell.textField.isUserInteractionEnabled = fieldsEnabled
+            cell.textField.alpha = fieldsEnabled ? 1.0 : 0.4
             return cell
 
         case .dateTime:
+            // disable date/time text view in view-only mode
             let cell = dequeue(dtCellID, collectionView, indexPath) as! NewAppointmentDateTimeCell
             switch DateTimeRow(rawValue: indexPath.item)! {
             case .date:
@@ -263,6 +299,9 @@ extension NewAppointmentViewController: UICollectionViewDataSource {
                 cell.datePicker.addTarget(self, action: #selector(timePickerChanged(_:)),
                                           for: .valueChanged)
             }
+            cell.datePicker.isUserInteractionEnabled = fieldsEnabled
+            cell.datePicker.alpha = fieldsEnabled ? 1.0 : 0.4
+            cell.titleLabel.alpha = fieldsEnabled ? 1.0 : 0.4
             return cell
 
         case .reminder:
@@ -272,12 +311,12 @@ extension NewAppointmentViewController: UICollectionViewDataSource {
                 let cell = dequeue(swCellID, collectionView, indexPath) as! NewAppointmentSwitchCell
                 cell.configure(isOn: reminderOn)
                 cell.onToggle = { [weak self] on in self?.reminderOn = on }
-                return cell
+                return cell  // reminder toggle always interactive
 
             } else if row == addButtonRow {
                 let cell = dequeue(remCellID, collectionView, indexPath) as! NewAppointmentReminderTimeCell
                 cell.onAdd = { [weak self] in self?.presentReminderPopup() }
-                return cell
+                return cell  // add reminder always interactive
 
             } else {
                 let offsetIndex = row - 1
@@ -286,13 +325,15 @@ extension NewAppointmentViewController: UICollectionViewDataSource {
                 cell.onDelete = { [weak self] in
                     self?.deleteReminderOffset(at: offsetIndex)
                 }
-                return cell
+                return cell  // delete reminder always interactive
             }
 
         case .note:
             let cell = dequeue(noteCellID, collectionView, indexPath) as! NewAppointmentNoteCell
             cell.configure(text: userNoteText)
             cell.onTextChange = { [weak self] in self?.userNoteText = $0 }
+            // disable note text view in view-only mode
+            cell.noteTextView.isUserInteractionEnabled = fieldsEnabled
             return cell
         }
     }

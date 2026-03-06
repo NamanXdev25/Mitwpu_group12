@@ -396,6 +396,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="collectionView" destination="ziD-JZ-iHb" id="r7e-LE-cG6"/>
+                        <outlet property="rightBarButton" destination="JgV-q9-MIG" id="Abc-IY-0Sd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jbd-L2-ygw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
