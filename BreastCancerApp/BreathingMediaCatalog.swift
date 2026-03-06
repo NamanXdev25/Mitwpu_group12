@@ -64,6 +64,8 @@ enum BreathingMediaCatalog {
         "Nausea Relief": BreathingMediaPair(videoName: "nausearelief_video", audioName: "nausearelief_audio", loopStartTrim: 0.18, loopEndTrim: 0.06),
         "Deep Rest": BreathingMediaPair(videoName: "deeprest_video", audioName: "deeprest_audio", loopStartTrim: 0.18, loopEndTrim: 0.06),
         "Morning Appreciation": BreathingMediaPair(videoName: "morningappreciation_video", audioName: "morningappreciation_audio", loopStartTrim: 0.18, loopEndTrim: 0.06),
+        "Healing Reflections": BreathingMediaPair(videoName: "healingreflection_video", audioName: "healingreflection_audio", loopStartTrim: 0.18, loopEndTrim: 0.06),
+        
     ]
 
     static func media(for sessionTitle: String) -> BreathingMediaPair? {
