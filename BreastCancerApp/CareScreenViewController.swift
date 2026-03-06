@@ -582,8 +582,8 @@ class CareScreenViewController: UIViewController {
                 CareItem(id: UUID(), type: .appointment(
                     month: month,
                     day: day,
-                    title: closest.title.isEmpty ? closest.category : closest.title,
-                    doctor: closest.note.isEmpty ? "No notes" : closest.note,
+                    title: closest.title,
+                    doctor: closest.doctor.isEmpty ? closest.location : closest.doctor,
                     time: closest.time
                 ))
             ], toSection: .appointments)
@@ -620,8 +620,21 @@ extension CareScreenViewController: UICollectionViewDelegate {
             print("👆 Selected exercise: \(title)")
         case .symptoms:
             print("👆 View all symptoms tapped")
-        case .appointment(_, _, let title, _, _):
-            print("👆 Selected appointment: \(title)")
+        case .appointment(_, _, _, _, _):
+            guard let appointment = closestUpcomingAppointment() else { return }
+            let storyboard = UIStoryboard(name: "Appointments", bundle: nil)
+            guard let navController = storyboard.instantiateViewController(withIdentifier: "NewAppointmentNavController") as? UINavigationController,
+                  let viewVC = navController.topViewController as? NewAppointmentViewController
+            else { return }
+            viewVC.initialAppointment = appointment
+            viewVC.isViewMode = true
+            viewVC.delegate = self
+            navController.modalPresentationStyle = .pageSheet
+            if let sheet = navController.sheetPresentationController {
+                sheet.detents = [.large()]
+                sheet.prefersGrabberVisible = true
+            }
+            present(navController, animated: true)
         case .healthInsights:
             print("👆 View health insights tapped")
         default:
@@ -765,3 +778,13 @@ extension CareScreenViewController: CareDailyExerciseCellDelegate {
     }
 }
 
+// MARK: - AddAppointmentDelegate
+extension CareScreenViewController: AddAppointmentDelegate {
+    func didAddAppointment(_ appointment: AppointmentItem) {
+        let df = DateFormatter(); df.dateFormat = "dd MMM yyyy"
+        if let date = df.date(from: appointment.date) {
+            AppointmentManager.shared.saveAppointment(appointment, for: date)
+        }
+        NotificationCenter.default.post(name: NSNotification.Name("AppointmentDataUpdated"), object: nil)
+    }
+}

@@ -206,65 +206,73 @@ struct HomeMoodSuggestionItem: Decodable {
 struct AppointmentItem {
     let id: String
     let title: String
-    let category: String
     let date: String
     let time: String
     let reminderEnabled: Bool
+    let reminderOffsets: [ReminderOffset]
     let note: String
-    let colorIndex: Int
-}
 
-enum AppointmentType: Int, CaseIterable {
-    case chemotherapy = 0
-    case doctorVisit = 1
-
-    var title: String {
-        switch self {
-        case .chemotherapy: return "Chemotherapy"
-        case .doctorVisit: return "     Doctor Visit"
-        }
+    var doctor: String {
+        let header = note.components(separatedBy: "\n").first ?? note
+        let parts = header.components(separatedBy: " | ")
+        return parts.count > 1 ? parts[0] : ""
     }
 
-    var pickerTitle: String {
-        switch self {
-        case .chemotherapy: return "Chemotherapy"
-        case .doctorVisit: return "Doctor Visit"
+    var location: String {
+        let header = note.components(separatedBy: "\n").first ?? note
+        let parts = header.components(separatedBy: " | ")
+        return parts.count > 1 ? parts[1] : ""
+    }
+
+    var noteBody: String {
+        if let newlineRange = note.range(of: "\n") {
+            return String(note[newlineRange.upperBound...])
         }
+        let parts = note.components(separatedBy: " | ")
+        return parts.count > 1 ? "" : note
     }
 }
 
+// MARK: - ReminderOffset
+
+enum ReminderOffset: String, Codable, CaseIterable {
+    case atTime = "At time of appointment"
+    case min15  = "15 minutes before"
+    case min30  = "30 minutes before"
+    case hour1  = "1 hour before"
+    case hour2  = "2 hours before"
+    case day1   = "1 day before"
+    case day2   = "2 days before"
+}
 
 struct AppointmentItemCodable: Codable {
     let id: String
     let title: String
-    let category: String
     let date: String
     let time: String
     let reminderEnabled: Bool
+    let reminderOffsets: [String]
     let note: String
-    let colorIndex: Int
 
     init(from appointment: AppointmentItem) {
         self.id = appointment.id
         self.title = appointment.title
-        self.category = appointment.category
         self.date = appointment.date
         self.time = appointment.time
         self.reminderEnabled = appointment.reminderEnabled
+        self.reminderOffsets = appointment.reminderOffsets.map { $0.rawValue }
         self.note = appointment.note
-        self.colorIndex = appointment.colorIndex
     }
 
     func toAppointmentItem() -> AppointmentItem {
         AppointmentItem(
             id: id,
             title: title,
-            category: category,
             date: date,
             time: time,
             reminderEnabled: reminderEnabled,
-            note: note,
-            colorIndex: colorIndex
+            reminderOffsets: reminderOffsets.compactMap { ReminderOffset(rawValue: $0) },
+            note: note
         )
     }
 }
@@ -746,31 +754,22 @@ struct PlacedItem: Codable {
     let zPosition: CGFloat
 }
 
-// MARK: - Garden Base
-
-/// Represents a garden base (background theme).
-/// The first base ("classic") is always unlocked.
 struct GardenBase: Codable, Equatable {
-    let id: String           // e.g. "classic", "zen", "tropical"
-    let name: String         // Display name: "Classic", "Zen Garden"
-    let imageName: String    // Asset name for the background SKSpriteNode
-    let unlockLevel: Int     // Which level unlocks this base (1 = always available)
+    let id: String
+    let name: String
+    let imageName: String
+    let unlockLevel: Int
     var isUnlocked: Bool
 }
 
-// MARK: - Garden Level / Points
-
-/// Tracks the player's daily-coin-based point progress.
-/// Points = 5% of coins earned in the current day.
-/// The progress bar fills from 0 → pointsNeededForNextLevel.
 struct GardenLevelProgress: Codable {
-    var currentLevel: Int         // starts at 1
-    var currentPoints: Int        // points accumulated toward next level
-    var pointsNeededForNextLevel: Int  // threshold to reach next level
-    var dailyCoinsEarned: Int     // coins earned today (reset daily)
-    var lastResetDateString: String    // "yyyy-MM-dd" of last reset
+    var currentLevel: Int
+    var currentPoints: Int
+    var pointsNeededForNextLevel: Int
+    var dailyCoinsEarned: Int
+    var lastResetDateString: String
 
-    static let pointsPerLevel = 5000  // points needed per level-up (5000 gap per level)
+    static let pointsPerLevel = 5000
 
     static var initial: GardenLevelProgress {
         GardenLevelProgress(

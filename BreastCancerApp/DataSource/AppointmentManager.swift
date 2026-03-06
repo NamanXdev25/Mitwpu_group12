@@ -46,29 +46,26 @@ class AppointmentManager {
     }
 
     func getAppointments(for date: Date) -> [AppointmentItem] {
-        let key = getDateKey(for: date)
-        return appointments[key] ?? []
+        appointments[getDateKey(for: date)] ?? []
     }
 
     func deleteAppointment(_ appointmentId: String, for date: Date) {
         let key = getDateKey(for: date)
 
-        if var existing = appointments[key] {
-            existing.removeAll { $0.id == appointmentId }
+        guard var existing = appointments[key] else { return }
+        existing.removeAll { $0.id == appointmentId }
 
-            if existing.isEmpty {
-                appointments.removeValue(forKey: key)
-            } else {
-                appointments[key] = existing
-            }
-
-            persist()
+        if existing.isEmpty {
+            appointments.removeValue(forKey: key)
+        } else {
+            appointments[key] = existing
         }
+
+        persist()
     }
 
     func hasAppointments(for date: Date) -> Bool {
-        let key = getDateKey(for: date)
-        return appointments[key]?.isEmpty == false
+        !(appointments[getDateKey(for: date)]?.isEmpty ?? true)
     }
 
     func getAllDatesWithAppointments() -> [String] {

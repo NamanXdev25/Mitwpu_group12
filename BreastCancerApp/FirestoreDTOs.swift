@@ -12,12 +12,11 @@ import Foundation
 struct AppointmentFirestoreDTO: Codable {
     let id: String
     let title: String
-    let category: String
     let date: String
     let time: String
     let reminderEnabled: Bool
+    let reminderOffsets: [String]
     let note: String
-    let colorIndex: Int
 }
 
 extension AppointmentItem {
@@ -25,12 +24,11 @@ extension AppointmentItem {
         self.init(
             id: dto.id,
             title: dto.title,
-            category: dto.category,
             date: dto.date,
             time: dto.time,
             reminderEnabled: dto.reminderEnabled,
-            note: dto.note,
-            colorIndex: dto.colorIndex
+            reminderOffsets: dto.reminderOffsets.compactMap { ReminderOffset(rawValue: $0) },
+            note: dto.note
         )
     }
 
@@ -38,12 +36,11 @@ extension AppointmentItem {
         AppointmentFirestoreDTO(
             id: id,
             title: title,
-            category: category,
             date: date,
             time: time,
             reminderEnabled: reminderEnabled,
-            note: note,
-            colorIndex: colorIndex
+            reminderOffsets: reminderOffsets.map { $0.rawValue },
+            note: note
         )
     }
 }

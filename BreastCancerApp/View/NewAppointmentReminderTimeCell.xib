@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="NewAppointmentReminderTimeCell" customModule="BreastCancerApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="394" height="44"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="394" height="44"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sv4-KP-2nF">
+                        <rect key="frame" x="0.0" y="0.0" width="394" height="44"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PF2-Tx-Slz">
+                                <rect key="frame" x="8" y="0.0" width="153.66666666666666" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="DTb-bP-y0y"/>
+                                </constraints>
+                                <color key="tintColor" name="primary_color"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Add Reminder" imagePadding="4">
+                                    <imageReference key="image" image="plus" catalog="system" symbolScale="medium"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="addReminderTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="0sh-VI-uWq"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="PF2-Tx-Slz" firstAttribute="leading" secondItem="sv4-KP-2nF" secondAttribute="leading" constant="8" id="aoe-Mf-gLH"/>
+                            <constraint firstItem="PF2-Tx-Slz" firstAttribute="centerY" secondItem="sv4-KP-2nF" secondAttribute="centerY" id="kT6-q4-a9L"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstItem="sv4-KP-2nF" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="0cM-Jo-VDW"/>
+                <constraint firstAttribute="bottom" secondItem="sv4-KP-2nF" secondAttribute="bottom" id="JNc-fy-XEb"/>
+                <constraint firstAttribute="trailing" secondItem="sv4-KP-2nF" secondAttribute="trailing" id="ZZd-OC-g32"/>
+                <constraint firstItem="sv4-KP-2nF" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="ogg-7u-h4q"/>
+            </constraints>
+            <size key="customSize" width="238" height="186"/>
+            <connections>
+                <outlet property="addReminderButton" destination="PF2-Tx-Slz" id="wgm-cg-S3n"/>
+            </connections>
+            <point key="canvasLocation" x="-80.916030534351137" y="145.77464788732394"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="plus" catalog="system" width="128" height="113"/>
+        <namedColor name="primary_color">
+            <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

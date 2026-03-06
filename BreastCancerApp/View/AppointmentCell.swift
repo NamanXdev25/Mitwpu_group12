@@ -29,21 +29,16 @@ class AppointmentCell: UITableViewCell {
     }
     
     func configure(with appointment: AppointmentItem) {
-        // Show custom title if available, otherwise show category
-        if !appointment.title.isEmpty {
-            titleLabel.text = appointment.title
-        } else {
-            titleLabel.text = appointment.category
-        }
-        
+        titleLabel.text = appointment.title
         titleLabel.textColor = .black
         timeLabel.text = appointment.time
-        
-        if appointment.note.isEmpty {
+
+        let displayNote = appointment.noteBody
+        if displayNote.isEmpty {
             noteLabel.text = "No Description"
             noteLabel.textColor = .lightGray
         } else {
-            noteLabel.text = appointment.note
+            noteLabel.text = displayNote
             noteLabel.textColor = .darkGray
         }
     }
