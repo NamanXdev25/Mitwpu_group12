@@ -21,17 +21,17 @@ final class FirestoreBreathingRepository: BreathingRepository {
         self.userId = userId
     }
 
-    func loadFavoriteTitles() -> Set<String> {
+    func loadFavoriteTitles() -> [String] {
         let cached = local.loadFavoriteTitles()
         syncFromCloudIntoLocal()
         return cached
     }
 
-    func saveFavoriteTitles(_ titles: Set<String>) {
+    func saveFavoriteTitles(_ titles: [String]) {
         local.saveFavoriteTitles(titles)
 
         FirestorePath.breathing(userId).document(stateDocId).setData([
-            "favoriteTitles": Array(titles),
+            "favoriteTitles": titles,
             "updatedAt": Timestamp(date: Date())
         ], merge: true)
     }
@@ -39,7 +39,7 @@ final class FirestoreBreathingRepository: BreathingRepository {
     private func syncFromCloudIntoLocal() {
         FirestorePath.breathing(userId).document(stateDocId).getDocument { [weak self] snapshot, _ in
             guard let self, let data = snapshot?.data() else { return }
-            let titles = Set(data["favoriteTitles"] as? [String] ?? [])
+            let titles = data["favoriteTitles"] as? [String] ?? []
             self.local.saveFavoriteTitles(titles)
         }
     }

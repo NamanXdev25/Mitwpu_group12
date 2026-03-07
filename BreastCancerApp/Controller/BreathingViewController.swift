@@ -27,9 +27,9 @@ class BreathingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Load all sessions first, then derive favorites from it
+        // Load all sessions first, then load favorites using the persisted order.
         allSessions = dataManager.getAllSessions()
-        favoriteSessions = allSessions.filter { $0.isFavorite }
+        favoriteSessions = dataManager.getFavoriteSessions()
         filterTags = dataManager.getFilterTags()
         
         filteredSessions = allSessions
@@ -261,7 +261,7 @@ extension BreathingViewController: SessionCellDelegate {
             let isEmptyNow = favoriteSessions.isEmpty
             
             // Persist favorites
-            dataManager.saveFavoriteTitles(from: allSessions)
+            dataManager.saveFavoriteTitles(favoriteSessions.map(\.title))
             
             //  Update UI
             collectionView.performBatchUpdates {
@@ -293,7 +293,7 @@ extension BreathingViewController: SessionCellDelegate {
             )
             
             // Persist favorites
-            dataManager.saveFavoriteTitles(from: allSessions)
+            dataManager.saveFavoriteTitles(favoriteSessions.map(\.title))
             
             collectionView.performBatchUpdates {
                 collectionView.reloadSections(IndexSet(integer: 0))

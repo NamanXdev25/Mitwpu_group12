@@ -21,7 +21,7 @@ class CareScreenViewController: UIViewController {
 
     private var hydrationCurrentAmountML: Int =
         UserDefaults.standard.integer(forKey: "care_hydration_current_ml") == 0
-        ? 2000
+        ? HydrationDataManager.shared.getTotalForDate(Date())
         : UserDefaults.standard.integer(forKey: "care_hydration_current_ml")
 
     private let hydrationGoalOptionsML = [1500, 2000, 2500, 3000, 3500]
@@ -71,6 +71,8 @@ class CareScreenViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        hydrationCurrentAmountML = HydrationDataManager.shared.getTotalForDate(Date())
+        saveHydrationState()
         applySnapshot(animatingDifferences: false)
     }
 
@@ -676,7 +678,11 @@ extension CareScreenViewController: CareHydrationCellDelegate {
     }
 
     func careHydrationCell(_ cell: CareHydrationCell, didChangeCurrentAmountML amountML: Int) {
+        let previousAmount = hydrationCurrentAmountML
         hydrationCurrentAmountML = min(max(amountML, 0), hydrationGoalML)
+        let delta = hydrationCurrentAmountML - previousAmount
+        HydrationDataManager.shared.adjustToday(by: delta)
+        hydrationCurrentAmountML = HydrationDataManager.shared.getTotalForDate(Date())
         saveHydrationState()
     }
 }

@@ -15,8 +15,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        FirebaseBootstrap.configureIfNeeded()
-        FirestoreMigrationService.shared.runIfNeeded()
+        AppBackend.setCurrent(.supabase)
+        print("App backend:", AppBackend.current.rawValue)
+        print("Supabase configured:", SupabaseConfiguration.current != nil)
+        print("Supabase user id:", SupabaseUserContext.userId.uuidString)
+        print("Supabase URL:", SupabaseConfiguration.current?.url.absoluteString ?? "nil")
+
+        switch AppBackend.current {
+        case .firestore:
+            FirebaseBootstrap.configureIfNeeded()
+            FirestoreMigrationService.shared.runIfNeeded()
+        case .supabase:
+            SupabaseMigrationService.shared.runIfNeeded()
+        }
         UNUserNotificationCenter.current().delegate = self
         ReminderResyncService.syncAll()
 

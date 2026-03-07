@@ -5,16 +5,35 @@ class MedicationHistory {
 
     private let repository: MedicationHistoryRepository
     private var history: [String: MedicationHistoryEntry]
+    private let demoCleanupFlagKey = "medication_demo_history_cleanup_v1"
+    private let demoMedicationNames: Set<String> = [
+        "Aspirin",
+        "Vitamin D",
+        "Blood Pressure Med",
+        "Thyroid Medicine",
+        "Allergy Medicine",
+        "Omega-3",
+        "Calcium Supplement",
+        "Vitamin B12"
+    ]
 
-    init(repository: MedicationHistoryRepository = FirestoreMedicationHistoryRepository()) {
+    init(repository: MedicationHistoryRepository = RepositoryFactory.makeMedicationHistoryRepository()) {
         self.repository = repository
         self.history = repository.loadHistory()
+        var didMutate = false
 
-        if history.isEmpty {
-            loadDummyHistoryData()
+        if normalizeStoredDailyCountsIfNeeded() {
+            didMutate = true
         }
-        initializeTodayIfNeeded()
-        persist()
+        if purgeLegacyDemoHistoryIfNeeded() {
+            didMutate = true
+        }
+        if initializeTodayIfNeeded() {
+            didMutate = true
+        }
+        if didMutate {
+            persist()
+        }
     }
 
     private func dateKey(from date: Date) -> String {
@@ -49,16 +68,15 @@ class MedicationHistory {
 
     func saveMedications(_ medications: [Medication], for date: Date) {
         let key = dateKey(from: date)
-        let taken = medications.filter { $0.isTaken }.count
-        let goal = medications.count
+        let dailyCounts = scheduledCounts(for: medications, on: date)
 
         let stableId = history[key]?.id ?? key
         history[key] = MedicationHistoryEntry(
             id: stableId,
             date: date,
             medications: medications,
-            taken: taken,
-            goal: goal
+            taken: dailyCounts.taken,
+            goal: dailyCounts.goal
         )
 
         persist()
@@ -73,32 +91,60 @@ class MedicationHistory {
         Array(history.values).sorted { $0.date > $1.date }
     }
 
-    func initializeTodayIfNeeded() {
+    @discardableResult
+    func initializeTodayIfNeeded() -> Bool {
         let today = Date()
         let key = dateKey(from: today)
-        guard history[key] == nil else { return }
+        guard history[key] == nil else { return false }
 
-        let calendar = Calendar.current
-        let weekday = calendar.component(.weekday, from: today)
-        var todayMedications: [Medication] = []
+        history[key] = MedicationHistoryEntry(
+            id: key,
+            date: today,
+            medications: [],
+            taken: 0,
+            goal: 0
+        )
+        return true
+    }
 
-        todayMedications.append(Medication(name: "Aspirin", note: "Take with food", time: "8:00 AM", repeatOption: "Every Day", isTaken: false, reminderEnabled: true))
-        todayMedications.append(Medication(name: "Vitamin D", note: "Morning supplement", time: "9:00 AM", repeatOption: "Every Day", isTaken: false, reminderEnabled: true))
-        todayMedications.append(Medication(name: "Blood Pressure Med", note: "", time: "12:00 PM", repeatOption: "Every Day", isTaken: false, reminderEnabled: true))
-        todayMedications.append(Medication(name: "Thyroid Medicine", note: "Take on empty stomach", time: "7:00 AM", repeatOption: "Every Day", isTaken: false, reminderEnabled: true))
-        todayMedications.append(Medication(name: "Allergy Medicine", note: "Only if needed", time: "10:00 PM", repeatOption: "Every Day", isTaken: false, reminderEnabled: true))
+    private func purgeLegacyDemoHistoryIfNeeded() -> Bool {
+        guard AppBackend.current == .supabase else { return false }
 
-        if weekday == 2 {
-            todayMedications.append(Medication(name: "Omega-3", note: "", time: "6:00 PM", repeatOption: "Every Mon", isTaken: false, reminderEnabled: false))
+        let defaults = UserDefaults.standard
+        guard !defaults.bool(forKey: demoCleanupFlagKey) else { return false }
+        defer { defaults.set(true, forKey: demoCleanupFlagKey) }
+
+        let allMedications = history.values.flatMap(\.medications)
+        guard allMedications.count >= 120 else { return false }
+
+        let names = Set(allMedications.map(\.name))
+        guard !names.isEmpty, names.isSubset(of: demoMedicationNames) else { return false }
+
+        history.removeAll()
+        return true
+    }
+
+    private func scheduledCounts(for medications: [Medication], on date: Date) -> (taken: Int, goal: Int) {
+        let scheduled = medications.filter { $0.isScheduledFor(date: date) }
+        let taken = scheduled.filter { $0.isTaken }.count
+        return (taken: taken, goal: scheduled.count)
+    }
+
+    private func normalizeStoredDailyCountsIfNeeded() -> Bool {
+        var didMutate = false
+
+        for key in Array(history.keys) {
+            guard var entry = history[key] else { continue }
+            let normalized = scheduledCounts(for: entry.medications, on: entry.date)
+            guard entry.taken != normalized.taken || entry.goal != normalized.goal else { continue }
+
+            entry.taken = normalized.taken
+            entry.goal = normalized.goal
+            history[key] = entry
+            didMutate = true
         }
-        if weekday == 4 {
-            todayMedications.append(Medication(name: "Calcium Supplement", note: "Take with meal", time: "1:00 PM", repeatOption: "Every Wed", isTaken: false, reminderEnabled: true))
-        }
-        if weekday == 6 {
-            todayMedications.append(Medication(name: "Vitamin B12", note: "", time: "8:30 AM", repeatOption: "Every Fri", isTaken: false, reminderEnabled: true))
-        }
 
-        saveMedications(todayMedications, for: today)
+        return didMutate
     }
 
     private func loadDummyHistoryData() {

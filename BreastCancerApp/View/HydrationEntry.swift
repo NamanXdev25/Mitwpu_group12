@@ -6,7 +6,7 @@ class HydrationDataManager {
     private let repository: HydrationRepository
     private(set) var entries: [HydrationEntry] = []
 
-    init(repository: HydrationRepository = FirestoreHydrationRepository()) {
+    init(repository: HydrationRepository = RepositoryFactory.makeHydrationRepository()) {
         self.repository = repository
         self.entries = repository.loadEntries()
 
@@ -29,6 +29,37 @@ class HydrationDataManager {
     func addEntry(_ entry: HydrationEntry) {
         entries.append(entry)
         entries.sort { $0.timestamp > $1.timestamp }
+        persist()
+    }
+
+    func adjustToday(by deltaML: Int) {
+        guard deltaML != 0 else { return }
+
+        if deltaML > 0 {
+            addEntry(HydrationEntry(amountML: deltaML))
+            return
+        }
+
+        var remaining = -deltaML
+        let calendar = Calendar.current
+        let today = Date()
+
+        var updatedEntries = entries
+        let todayIndices = updatedEntries.indices.filter { calendar.isDate(updatedEntries[$0].timestamp, inSameDayAs: today) }
+            .sorted { updatedEntries[$0].timestamp > updatedEntries[$1].timestamp }
+
+        for index in todayIndices where remaining > 0 {
+            let current = updatedEntries[index].amountML
+            if current <= remaining {
+                remaining -= current
+                updatedEntries.remove(at: index)
+            } else {
+                updatedEntries[index].amountML = current - remaining
+                remaining = 0
+            }
+        }
+
+        entries = updatedEntries.sorted { $0.timestamp > $1.timestamp }
         persist()
     }
 

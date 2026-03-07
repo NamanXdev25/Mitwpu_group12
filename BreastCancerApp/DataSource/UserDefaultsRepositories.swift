@@ -171,7 +171,7 @@ final class UserDefaultsJournalRepository: JournalRepository {
         else {
             return []
         }
-        return decoded.map(JournalEntry.init(dto:)).sorted { $0.date > $1.date }
+        return decoded.map(JournalEntry.init(dto:))
     }
 
     func saveEntries(_ entries: [JournalEntry]) {
@@ -190,11 +190,11 @@ final class UserDefaultsBreathingRepository: BreathingRepository {
         self.key = key
     }
 
-    func loadFavoriteTitles() -> Set<String> {
-        Set(userDefaults.stringArray(forKey: key) ?? [])
+    func loadFavoriteTitles() -> [String] {
+        userDefaults.stringArray(forKey: key) ?? []
     }
 
-    func saveFavoriteTitles(_ titles: Set<String>) {
-        userDefaults.set(Array(titles), forKey: key)
+    func saveFavoriteTitles(_ titles: [String]) {
+        userDefaults.set(titles, forKey: key)
     }
 }

@@ -1,12 +1,16 @@
 class BreathingDataManager {
     private let repository: BreathingRepository
 
-    init(repository: BreathingRepository = FirestoreBreathingRepository()) {
+    init(repository: BreathingRepository = RepositoryFactory.makeBreathingRepository()) {
         self.repository = repository
     }
 
     func getFavoriteSessions() -> [BreathingSession] {
-        getAllSessions().filter { $0.isFavorite }
+        let favoritesOrder = repository.loadFavoriteTitles()
+        let favoriteOrderIndex = Dictionary(uniqueKeysWithValues: favoritesOrder.enumerated().map { ($0.element, $0.offset) })
+        return getAllSessions()
+            .filter { $0.isFavorite }
+            .sorted { favoriteOrderIndex[$0.title, default: .max] < favoriteOrderIndex[$1.title, default: .max] }
     }
 
     func getFilterTags() -> [String] {
@@ -14,7 +18,8 @@ class BreathingDataManager {
     }
 
     func getAllSessions() -> [BreathingSession] {
-        let favorites = repository.loadFavoriteTitles()
+        let favoriteTitles = repository.loadFavoriteTitles()
+        let favorites = Set(favoriteTitles)
 
         var sessions = [
             BreathingSession(title: "Gentle Focus", category: "Meditation", duration: "15 min", imageName: "gentle_focus", isFavorite: false, videoFileName: "Gentle"),
@@ -34,8 +39,7 @@ class BreathingDataManager {
         return sessions
     }
 
-    func saveFavoriteTitles(from sessions: [BreathingSession]) {
-        let titles = Set(sessions.filter { $0.isFavorite }.map { $0.title })
+    func saveFavoriteTitles(_ titles: [String]) {
         repository.saveFavoriteTitles(titles)
     }
 }

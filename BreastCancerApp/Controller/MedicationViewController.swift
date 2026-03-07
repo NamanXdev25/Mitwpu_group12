@@ -104,8 +104,7 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
         if let history = MedicationHistory.shared.getHistory(for: Date()) {
             allMedications = history.medications
         } else {
-            // If no history exists, initialize with dummy data
-            loadDummyData()
+            allMedications = []
         }
     }
     

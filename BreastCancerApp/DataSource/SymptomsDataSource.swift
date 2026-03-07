@@ -13,7 +13,7 @@ class SymptomDataSource {
     private let repository: SymptomRepository
     private let defaultSymptomIDs: Set<String> = ["fatigue", "nausea", "pain"]
 
-    private init(repository: SymptomRepository = FirestoreSymptomRepository()) {
+    private init(repository: SymptomRepository = RepositoryFactory.makeSymptomRepository()) {
         self.repository = repository
         loadSymptomsFromJSON()
         loadPersistedState()

@@ -17,7 +17,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		799720952EEBD93600475E06 /* Exceptions for "BreastCancerApp" folder in "BreastCancerApp" target */ = {
+		641008B32F5C453800BB13F0 /* Exceptions for "BreastCancerApp" folder in "BreastCancerApp" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -30,7 +30,7 @@
 		64E778B02ECE2D6600B7826F /* BreastCancerApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				799720952EEBD93600475E06 /* Exceptions for "BreastCancerApp" folder in "BreastCancerApp" target */,
+				641008B32F5C453800BB13F0 /* Exceptions for "BreastCancerApp" folder in "BreastCancerApp" target */,
 			);
 			path = BreastCancerApp;
 			sourceTree = "<group>";

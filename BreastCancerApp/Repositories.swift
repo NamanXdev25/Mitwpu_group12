@@ -33,6 +33,6 @@ protocol JournalRepository {
 }
 
 protocol BreathingRepository {
-    func loadFavoriteTitles() -> Set<String>
-    func saveFavoriteTitles(_ titles: Set<String>)
+    func loadFavoriteTitles() -> [String]
+    func saveFavoriteTitles(_ titles: [String])
 }

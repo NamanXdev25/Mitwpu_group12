@@ -48,7 +48,7 @@ final class FirestoreJournalRepository: JournalRepository {
             }
 
             if !entries.isEmpty {
-                self.local.saveEntries(entries.sorted { $0.date > $1.date })
+                self.local.saveEntries(entries)
             }
         }
     }

@@ -13,7 +13,7 @@ class AppointmentManager {
     private let repository: AppointmentRepository
     private var appointments: [String: [AppointmentItem]]
 
-    init(repository: AppointmentRepository = FirestoreAppointmentRepository()) {
+    init(repository: AppointmentRepository = RepositoryFactory.makeAppointmentRepository()) {
         self.repository = repository
         self.appointments = repository.loadAppointments()
     }

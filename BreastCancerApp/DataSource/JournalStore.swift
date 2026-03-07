@@ -6,7 +6,7 @@ class JournalStore {
     private let repository: JournalRepository
     private(set) var entries: [JournalEntry] = []
 
-    init(repository: JournalRepository = FirestoreJournalRepository()) {
+    init(repository: JournalRepository = RepositoryFactory.makeJournalRepository()) {
         self.repository = repository
         load()
     }
@@ -17,7 +17,7 @@ class JournalStore {
             entries = SampleJournalData.all
             persist()
         } else {
-            entries = saved.sorted { $0.date > $1.date }
+            entries = saved
         }
     }
 
@@ -33,7 +33,6 @@ class JournalStore {
     func update(_ entry: JournalEntry) {
         if let index = entries.firstIndex(where: { $0.id == entry.id }) {
             entries[index] = entry
-            entries.sort { $0.date > $1.date }
             persist()
         }
     }

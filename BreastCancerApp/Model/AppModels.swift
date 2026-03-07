@@ -235,6 +235,22 @@ struct AppointmentItem {
         let parts = note.components(separatedBy: " | ")
         return parts.count > 1 ? "" : note
     }
+
+    var appointmentAt: Date? {
+        Self.supabaseDateTimeFormatter.date(from: "\(date) \(time)")
+    }
+
+    var supabaseNote: String? {
+        let trimmed = noteBody.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed.isEmpty ? nil : trimmed
+    }
+
+    static var supabaseDateTimeFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "dd MMM yyyy h:mm a"
+        return formatter
+    }
 }
 
 // MARK: - ReminderOffset
@@ -247,6 +263,31 @@ enum ReminderOffset: String, Codable, CaseIterable {
     case hour2  = "2 hours before"
     case day1   = "1 day before"
     case day2   = "2 days before"
+
+    var minutesBefore: Int {
+        switch self {
+        case .atTime: return 0
+        case .min15: return 15
+        case .min30: return 30
+        case .hour1: return 60
+        case .hour2: return 120
+        case .day1: return 1_440
+        case .day2: return 2_880
+        }
+    }
+
+    init?(minutesBefore: Int) {
+        switch minutesBefore {
+        case 0: self = .atTime
+        case 15: self = .min15
+        case 30: self = .min30
+        case 60: self = .hour1
+        case 120: self = .hour2
+        case 1_440: self = .day1
+        case 2_880: self = .day2
+        default: return nil
+        }
+    }
 }
 
 struct AppointmentItemCodable: Codable {
@@ -444,6 +485,10 @@ struct Medication: Codable, Identifiable {
         ]
 
         return repeatOption == weekdayMap[weekday]
+    }
+
+    var repeatRule: MedicationRepeatRule {
+        MedicationRepeatRule(repeatOption: repeatOption)
     }
 }
 
@@ -1012,4 +1057,101 @@ struct NewExercisePlan {
     let exerciseCount: Int
     let note: String?
     let exercises: [NewExerciseModel]
+}
+
+// MARK: - Supabase Target Models
+
+struct SupabaseProfileRecord: Codable, Identifiable, Hashable {
+    let id: UUID
+    var firstName: String
+    var lastName: String
+    var gender: String?
+    var age: Int?
+    var diagnosisDate: Date?
+    var cancerStage: String?
+    var treatmentState: String?
+    var treatmentCompletionDate: Date?
+    var exerciseNotificationsEnabled: Bool
+    var hydrationNotificationsEnabled: Bool
+    var appointmentsNotificationsEnabled: Bool
+    var medicationsNotificationsEnabled: Bool
+    var profileImageURL: String?
+}
+
+struct SupabaseAppointmentRecord: Codable, Identifiable, Hashable {
+    let id: UUID
+    let userID: UUID
+    var title: String
+    var doctor: String?
+    var location: String?
+    var note: String?
+    var appointmentAt: Date
+    var reminderEnabled: Bool
+    var reminderOffsets: [ReminderOffset]
+    var createdAt: Date?
+    var updatedAt: Date?
+}
+
+enum MedicationRepeatRule: Codable, Hashable {
+    case everyDay
+    case weekly(weekday: Int)
+
+    init(repeatOption: String) {
+        let mapping: [String: Int] = [
+            "Every Sun": 1,
+            "Every Mon": 2,
+            "Every Tue": 3,
+            "Every Wed": 4,
+            "Every Thu": 5,
+            "Every Fri": 6,
+            "Every Sat": 7
+        ]
+
+        if let weekday = mapping[repeatOption] {
+            self = .weekly(weekday: weekday)
+        } else {
+            self = .everyDay
+        }
+    }
+
+    var repeatOption: String {
+        switch self {
+        case .everyDay:
+            return "Every Day"
+        case .weekly(let weekday):
+            let mapping: [Int: String] = [
+                1: "Every Sun",
+                2: "Every Mon",
+                3: "Every Tue",
+                4: "Every Wed",
+                5: "Every Thu",
+                6: "Every Fri",
+                7: "Every Sat"
+            ]
+            return mapping[weekday] ?? "Every Day"
+        }
+    }
+}
+
+struct SupabaseMedicationRecord: Codable, Identifiable, Hashable {
+    let id: UUID
+    let userID: UUID
+    var name: String
+    var note: String?
+    var scheduledTime: String
+    var repeatRule: MedicationRepeatRule
+    var reminderEnabled: Bool
+    var isActive: Bool
+    var createdAt: Date?
+    var updatedAt: Date?
+}
+
+struct SupabaseMedicationLogRecord: Codable, Identifiable, Hashable {
+    let id: UUID
+    let medicationID: UUID
+    let userID: UUID
+    var scheduledDate: Date
+    var taken: Bool
+    var takenAt: Date?
+    var createdAt: Date?
 }
