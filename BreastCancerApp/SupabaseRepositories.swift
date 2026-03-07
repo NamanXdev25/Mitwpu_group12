@@ -133,11 +133,26 @@ final class SupabaseMedicationHistoryRepository: MedicationHistoryRepository {
         let itemRows = history.flatMap { dateKey, entry in
             entry.medications.map { $0.toSupabaseItemRow(userId: userId, dateKey: dateKey) }
         }
+        let latestPlanSource = history.values
+            .sorted(by: { $0.date > $1.date })
+            .first(where: { !$0.medications.isEmpty })
+        let planRows = latestPlanSource?.medications.map { $0.toSupabasePlanRow(userId: userId) } ?? []
+        let dailyStatusRows = history.flatMap { dateKey, entry in
+            entry.toSupabaseDailyStatusRows(userId: userId, dateKey: dateKey)
+        }
 
         client.deleteAllRows(forUser: userId, from: "medication_history_snapshots") { _ in
             self.client.upsertRows(rows, into: "medication_history_snapshots", onConflict: "id") { _ in
                 self.client.deleteAllRows(forUser: self.userId, from: "medication_items") { _ in
-                    self.client.upsertRows(itemRows, into: "medication_items", onConflict: "id")
+                    self.client.upsertRows(itemRows, into: "medication_items", onConflict: "id") { _ in
+                        self.client.deleteAllRows(forUser: self.userId, from: "medication_plans") { _ in
+                            self.client.upsertRows(planRows, into: "medication_plans", onConflict: "id") { _ in
+                                self.client.deleteAllRows(forUser: self.userId, from: "medication_daily_status") { _ in
+                                    self.client.upsertRows(dailyStatusRows, into: "medication_daily_status", onConflict: "id")
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

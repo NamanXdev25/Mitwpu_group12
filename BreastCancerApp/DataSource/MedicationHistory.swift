@@ -28,10 +28,8 @@ class MedicationHistory {
         if purgeLegacyDemoHistoryIfNeeded() {
             didMutate = true
         }
-        if initializeTodayIfNeeded() {
-            didMutate = true
-        }
-        if didMutate {
+        let didInitializeToday = initializeTodayIfNeeded()
+        if didMutate && !didInitializeToday {
             persist()
         }
     }
@@ -84,6 +82,9 @@ class MedicationHistory {
 
     func getHistory(for date: Date) -> MedicationHistoryEntry? {
         let key = dateKey(from: date)
+        if history[key] == nil, createEntryIfNeeded(for: date) {
+            persist()
+        }
         return history[key]
     }
 
@@ -93,18 +94,11 @@ class MedicationHistory {
 
     @discardableResult
     func initializeTodayIfNeeded() -> Bool {
-        let today = Date()
-        let key = dateKey(from: today)
-        guard history[key] == nil else { return false }
-
-        history[key] = MedicationHistoryEntry(
-            id: key,
-            date: today,
-            medications: [],
-            taken: 0,
-            goal: 0
-        )
-        return true
+        let didCreate = createEntryIfNeeded(for: Date())
+        if didCreate {
+            persist()
+        }
+        return didCreate
     }
 
     private func purgeLegacyDemoHistoryIfNeeded() -> Bool {
@@ -128,6 +122,45 @@ class MedicationHistory {
         let scheduled = medications.filter { $0.isScheduledFor(date: date) }
         let taken = scheduled.filter { $0.isTaken }.count
         return (taken: taken, goal: scheduled.count)
+    }
+
+    private func normalizedPlanMedications() -> [Medication] {
+        guard let source = history.values
+            .sorted(by: { $0.date > $1.date })
+            .first(where: { !$0.medications.isEmpty })
+        else {
+            return []
+        }
+
+        return source.medications.map {
+            Medication(
+                id: $0.id,
+                name: $0.name,
+                note: $0.note,
+                time: $0.time,
+                repeatOption: $0.repeatOption,
+                isTaken: false,
+                reminderEnabled: $0.reminderEnabled
+            )
+        }
+    }
+
+    @discardableResult
+    private func createEntryIfNeeded(for date: Date) -> Bool {
+        let key = dateKey(from: date)
+        guard history[key] == nil else { return false }
+
+        let planMedications = normalizedPlanMedications()
+        let dailyCounts = scheduledCounts(for: planMedications, on: date)
+
+        history[key] = MedicationHistoryEntry(
+            id: key,
+            date: date,
+            medications: planMedications,
+            taken: dailyCounts.taken,
+            goal: dailyCounts.goal
+        )
+        return true
     }
 
     private func normalizeStoredDailyCountsIfNeeded() -> Bool {

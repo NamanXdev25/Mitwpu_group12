@@ -46,6 +46,31 @@ struct MedicationItemSupabaseRow: Codable {
     let updated_at: Date?
 }
 
+struct MedicationPlanSupabaseRow: Codable {
+    let id: String
+    let user_id: UUID
+    let name: String
+    let note: String
+    let time: String
+    let repeat_option: String
+    let reminder_enabled: Bool
+    let is_active: Bool
+    let created_at: Date?
+    let updated_at: Date?
+}
+
+struct MedicationDailyStatusSupabaseRow: Codable {
+    let id: String
+    let user_id: UUID
+    let date_key: String
+    let date_epoch: TimeInterval
+    let medication_id: String
+    let is_scheduled: Bool
+    let is_taken: Bool
+    let taken_at: Date?
+    let updated_at: Date?
+}
+
 struct JournalSupabaseRow: Codable {
     let id: UUID
     let user_id: UUID
@@ -275,6 +300,41 @@ extension Medication {
             reminder_enabled: reminderEnabled,
             updated_at: Date()
         )
+    }
+
+    func toSupabasePlanRow(userId: UUID) -> MedicationPlanSupabaseRow {
+        MedicationPlanSupabaseRow(
+            id: id,
+            user_id: userId,
+            name: name,
+            note: note,
+            time: time,
+            repeat_option: repeatOption,
+            reminder_enabled: reminderEnabled,
+            is_active: true,
+            created_at: nil,
+            updated_at: Date()
+        )
+    }
+}
+
+extension MedicationHistoryEntry {
+    func toSupabaseDailyStatusRows(userId: UUID, dateKey: String) -> [MedicationDailyStatusSupabaseRow] {
+        medications
+            .filter { $0.isScheduledFor(date: date) }
+            .map { medication in
+                MedicationDailyStatusSupabaseRow(
+                    id: "\(dateKey)#\(medication.id)",
+                    user_id: userId,
+                    date_key: dateKey,
+                    date_epoch: date.timeIntervalSince1970,
+                    medication_id: medication.id,
+                    is_scheduled: true,
+                    is_taken: medication.isTaken,
+                    taken_at: nil,
+                    updated_at: Date()
+                )
+            }
     }
 }
 

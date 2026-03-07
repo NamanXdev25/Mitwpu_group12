@@ -82,6 +82,43 @@ create index if not exists medication_items_user_id_idx
 create index if not exists medication_items_user_date_key_idx
     on medication_items (user_id, date_key desc);
 
+create table if not exists medication_plans (
+    id text primary key,
+    user_id uuid not null,
+    name text not null,
+    note text not null default '',
+    time text not null,
+    repeat_option text not null,
+    reminder_enabled boolean not null default false,
+    is_active boolean not null default true,
+    created_at timestamptz,
+    updated_at timestamptz
+);
+
+create index if not exists medication_plans_user_id_idx
+    on medication_plans (user_id);
+
+create table if not exists medication_daily_status (
+    id text primary key,
+    user_id uuid not null,
+    date_key text not null,
+    date_epoch double precision not null,
+    medication_id text not null,
+    is_scheduled boolean not null default true,
+    is_taken boolean not null default false,
+    taken_at timestamptz,
+    updated_at timestamptz
+);
+
+create index if not exists medication_daily_status_user_id_idx
+    on medication_daily_status (user_id);
+
+create index if not exists medication_daily_status_user_date_key_idx
+    on medication_daily_status (user_id, date_key desc);
+
+create unique index if not exists medication_daily_status_user_date_medication_idx
+    on medication_daily_status (user_id, date_key, medication_id);
+
 create table if not exists memories (
     id text primary key,
     user_id uuid not null,
@@ -174,6 +211,8 @@ alter table appointments enable row level security;
 alter table appointment_reminders enable row level security;
 alter table medication_history_snapshots enable row level security;
 alter table medication_items enable row level security;
+alter table medication_plans enable row level security;
+alter table medication_daily_status enable row level security;
 alter table memories enable row level security;
 alter table hydration_entries enable row level security;
 alter table journals enable row level security;
@@ -201,6 +240,18 @@ with check (auth.uid()::uuid = user_id);
 
 create policy "medication_items_owner_all"
 on medication_items
+for all
+using (auth.uid()::uuid = user_id)
+with check (auth.uid()::uuid = user_id);
+
+create policy "medication_plans_owner_all"
+on medication_plans
+for all
+using (auth.uid()::uuid = user_id)
+with check (auth.uid()::uuid = user_id);
+
+create policy "medication_daily_status_owner_all"
+on medication_daily_status
 for all
 using (auth.uid()::uuid = user_id)
 with check (auth.uid()::uuid = user_id);
