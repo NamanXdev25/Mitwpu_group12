@@ -72,6 +72,7 @@ final class SupabaseMigrationService {
         cloudBreathing.saveFavoriteTitles(localBreathing.loadFavoriteTitles())
         cloudSymptoms.saveLogs(localSymptoms.loadLogs())
         cloudSymptoms.saveUserSymptomIDs(localSymptoms.loadUserSymptomIDs())
+        GardenManager.shared.syncWithCloudIfNeeded()
 
         defaults.set(true, forKey: migrationFlagKey)
     }

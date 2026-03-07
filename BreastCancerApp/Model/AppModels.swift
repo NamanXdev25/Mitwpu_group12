@@ -815,6 +815,7 @@ struct GardenLevelProgress: Codable {
     var currentLevel: Int
     var currentPoints: Int
     var pointsNeededForNextLevel: Int
+    var goalToNextLevel: Int
     var dailyCoinsEarned: Int
     var lastResetDateString: String
 
@@ -825,9 +826,67 @@ struct GardenLevelProgress: Codable {
             currentLevel: 1,
             currentPoints: 0,
             pointsNeededForNextLevel: pointsPerLevel,
+            goalToNextLevel: pointsPerLevel,
             dailyCoinsEarned: 0,
             lastResetDateString: GardenLevelProgress.todayString()
         )
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case currentLevel
+        case currentPoints
+        case pointsNeededForNextLevel
+        case goalToNextLevel
+        case dailyCoinsEarned
+        case lastResetDateString
+    }
+
+    init(
+        currentLevel: Int,
+        currentPoints: Int,
+        pointsNeededForNextLevel: Int,
+        goalToNextLevel: Int,
+        dailyCoinsEarned: Int,
+        lastResetDateString: String
+    ) {
+        self.currentLevel = max(currentLevel, 1)
+        self.currentPoints = max(currentPoints, 0)
+        self.goalToNextLevel = max(goalToNextLevel, Self.pointsPerLevel)
+        self.pointsNeededForNextLevel = max(pointsNeededForNextLevel, 0)
+        self.dailyCoinsEarned = max(dailyCoinsEarned, 0)
+        self.lastResetDateString = lastResetDateString
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        let decodedLevel = (try? container.decode(Int.self, forKey: .currentLevel)) ?? 1
+        let decodedPoints = (try? container.decode(Int.self, forKey: .currentPoints)) ?? 0
+        let safeLevel = max(decodedLevel, 1)
+        let safePoints = max(decodedPoints, 0)
+        let computedGoal = safeLevel * Self.pointsPerLevel
+
+        currentLevel = safeLevel
+        currentPoints = safePoints
+        goalToNextLevel = computedGoal
+        pointsNeededForNextLevel = max(computedGoal - safePoints, 0)
+        dailyCoinsEarned = max((try? container.decode(Int.self, forKey: .dailyCoinsEarned)) ?? 0, 0)
+        lastResetDateString = (try? container.decode(String.self, forKey: .lastResetDateString)) ?? GardenLevelProgress.todayString()
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        let safeLevel = max(currentLevel, 1)
+        let safePoints = max(currentPoints, 0)
+        let computedGoal = safeLevel * Self.pointsPerLevel
+        let computedNeed = max(computedGoal - safePoints, 0)
+
+        try container.encode(safeLevel, forKey: .currentLevel)
+        try container.encode(safePoints, forKey: .currentPoints)
+        try container.encode(computedNeed, forKey: .pointsNeededForNextLevel)
+        try container.encode(computedGoal, forKey: .goalToNextLevel)
+        try container.encode(max(dailyCoinsEarned, 0), forKey: .dailyCoinsEarned)
+        try container.encode(lastResetDateString, forKey: .lastResetDateString)
     }
 
     static func todayString() -> String {

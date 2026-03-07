@@ -228,6 +228,11 @@ class GardenScene: SKScene {
     private var initialCameraScale: CGFloat = 1.0
     private var isPlacementValid: Bool = true
     private var loadedBaseId: String = "classic"
+    private enum PlacedItemUserDataKey {
+        static let assetName = "assetName"
+        static let instanceId = "instanceId"
+        static let imageName = "imageName" // Legacy key used by older builds.
+    }
 
     // MARK: - Lifecycle
 
@@ -268,15 +273,39 @@ class GardenScene: SKScene {
     private func savePlacedItems(for baseId: String) {
         var items: [PlacedItem] = []
         for node in children where node.name == "placed_item" {
-            guard let sprite    = node as? SKSpriteNode,
-                  let assetName = sprite.userData?["assetName"] as? String else { continue }
+            guard let sprite = node as? SKSpriteNode else { continue }
+            guard let assetName = resolvedAssetName(for: sprite) else { continue }
+            guard sprite.position.x.isFinite,
+                  sprite.position.y.isFinite,
+                  sprite.zPosition.isFinite else { continue }
+
+            let instanceId = (sprite.userData?[PlacedItemUserDataKey.instanceId] as? String) ?? UUID().uuidString
+            if sprite.userData == nil {
+                sprite.userData = NSMutableDictionary()
+            }
+            sprite.userData?[PlacedItemUserDataKey.instanceId] = instanceId
+            sprite.userData?[PlacedItemUserDataKey.assetName] = assetName
+
             items.append(PlacedItem(
-                id: UUID().uuidString, imageName: assetName,
+                id: instanceId, imageName: assetName,
                 positionX: sprite.position.x, positionY: sprite.position.y,
                 zPosition: sprite.zPosition
             ))
         }
         gardenManager?.savePlacedItems(items, for: baseId)
+    }
+
+    private func resolvedAssetName(for sprite: SKSpriteNode) -> String? {
+        let raw = (sprite.userData?[PlacedItemUserDataKey.assetName] as? String)
+            ?? (sprite.userData?[PlacedItemUserDataKey.imageName] as? String)
+        guard let cleaned = raw?.trimmingCharacters(in: .whitespacesAndNewlines), !cleaned.isEmpty else {
+            return nil
+        }
+        if sprite.userData == nil {
+            sprite.userData = NSMutableDictionary()
+        }
+        sprite.userData?[PlacedItemUserDataKey.assetName] = cleaned
+        return cleaned
     }
 
     private func restorePlacedItems(for baseId: String) {
@@ -286,7 +315,10 @@ class GardenScene: SKScene {
             sprite.position    = CGPoint(x: item.positionX, y: item.positionY)
             sprite.zPosition   = item.zPosition
             sprite.name        = "placed_item"
-            sprite.userData    = ["assetName": item.imageName]
+            sprite.userData    = [
+                PlacedItemUserDataKey.assetName: item.imageName,
+                PlacedItemUserDataKey.instanceId: item.id
+            ]
             sprite.setScale(0.15)
             sprite.anchorPoint = CGPoint(x: 0.5, y: 0.2)
             addChild(sprite)
@@ -373,7 +405,7 @@ class GardenScene: SKScene {
         let item            = SKSpriteNode(imageNamed: imageName)
         item.name           = "moving_item"
         item.alpha          = 0.85
-        item.userData       = ["assetName": imageName]
+        item.userData       = [PlacedItemUserDataKey.assetName: imageName]
         item.setScale(0.15)
         item.anchorPoint    = CGPoint(x: 0.5, y: 0.2)
         container.addChild(item)
@@ -394,7 +426,7 @@ class GardenScene: SKScene {
         container.zPosition = 1000
         container.name      = "placement_container"
         container.addChild(makeDiamondHighlight(valid: true))
-        let item            = SKSpriteNode(imageNamed: node.userData?["assetName"] as? String ?? "")
+        let item            = SKSpriteNode(imageNamed: node.userData?[PlacedItemUserDataKey.assetName] as? String ?? "")
         item.name           = "moving_item"
         item.alpha          = 0.85
         item.userData       = node.userData
@@ -567,11 +599,20 @@ class GardenScene: SKScene {
         guard isPlacementValid,
               let c     = activePlacementNode,
               let ghost = c.childNode(withName: "moving_item") as? SKSpriteNode else { cancelPlacement(); return }
-        let assetName = ghost.userData?["assetName"] as? String ?? ""
+        let assetName = (ghost.userData?[PlacedItemUserDataKey.assetName] as? String)?
+            .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        guard !assetName.isEmpty else {
+            cancelPlacement()
+            return
+        }
+        let instanceId = (ghost.userData?[PlacedItemUserDataKey.instanceId] as? String) ?? UUID().uuidString
         let f         = SKSpriteNode(imageNamed: assetName)
         f.position    = c.position; f.anchorPoint = ghost.anchorPoint
         f.setScale(ghost.xScale); f.name = "placed_item"
-        f.userData    = ["assetName": assetName]
+        f.userData    = [
+            PlacedItemUserDataKey.assetName: assetName,
+            PlacedItemUserDataKey.instanceId: instanceId
+        ]
         f.zPosition   = 1000 - c.position.y; f.alpha = 1.0
         addChild(f); cancelPlacement()
         savePlacedItems(for: loadedBaseId)

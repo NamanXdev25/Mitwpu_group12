@@ -511,8 +511,9 @@ final class GardenManager {
         static let unlockedBases  = "garden_unlocked_base_ids_v3"
         static let selectedBaseId = "garden_selected_base_id_v3"
         static let levelProgress  = "garden_level_progress_v3"
+        static let placedItemsPrefix = "garden_placed_items_"
         static func placedItems(for baseId: String) -> String {
-            "garden_placed_items_\(baseId)_v3"
+            "\(placedItemsPrefix)\(baseId)_v3"
         }
     }
 
@@ -536,6 +537,10 @@ final class GardenManager {
     private var yourItemsCatalog: [StoreItem] = []
     private var shopCatalog: [StoreItem]      = []
     private var allItemsOrdered: [StoreItem]  = []
+    private let supabaseClient = SupabaseRESTClient.shared
+    private let supabaseUserId = SupabaseUserContext.userId
+    private var isApplyingCloudSnapshot = false
+    private var localMutationVersion: Int = 0
 
     // MARK: - Derived helpers
 
@@ -555,6 +560,7 @@ final class GardenManager {
 
     // MARK: - Init
     private init() {
+        isApplyingCloudSnapshot = true
         selectedBase = GardenBase(id: "classic", name: "Classic", imageName: "garden_base",
                                   unlockLevel: 1, isUnlocked: true)
         loadBases()
@@ -563,6 +569,8 @@ final class GardenManager {
         seedDefaultUnlockedItems()
         checkDailyReset()
         persistState()
+        isApplyingCloudSnapshot = false
+        syncFromCloudIntoLocalIfNeeded()
     }
 
     // MARK: - Public API
@@ -586,6 +594,10 @@ final class GardenManager {
         }
     }
 
+    func syncWithCloudIfNeeded() {
+        syncFromCloudIntoLocalIfNeeded()
+    }
+
     func purchaseResult(for item: StoreItem) -> PurchaseResult {
         guard item.category != Category.yourItems.rawValue else { return .notPurchasable }
         guard !unlockedItemIds.contains(item.id)           else { return .alreadyUnlocked }
@@ -595,6 +607,7 @@ final class GardenManager {
         }
         coins -= item.price
         unlockedItemIds.insert(item.id)
+        markLocalMutation()
         persistState()
         return .purchased(remainingCoins: coins)
     }
@@ -609,6 +622,7 @@ final class GardenManager {
         guard amount > 0 else { return }
         coins += amount
         creditDailyCoins(amount)
+        markLocalMutation()
         persistState()
     }
 
@@ -619,14 +633,21 @@ final class GardenManager {
               let found = allBases.first(where: { $0.id == base.id }) else { return }
         selectedBase = found
         UserDefaults.standard.set(found.id, forKey: StorageKeys.selectedBaseId)
+        markLocalMutation()
+        persistState()
     }
 
     // MARK: - Per-Base Placed Items
 
     func savePlacedItems(_ items: [PlacedItem], for baseId: String) {
-        if let data = try? JSONEncoder().encode(items) {
-            UserDefaults.standard.set(data, forKey: StorageKeys.placedItems(for: baseId))
+        guard let data = try? JSONEncoder().encode(items) else { return }
+        let key = StorageKeys.placedItems(for: baseId)
+        let defaults = UserDefaults.standard
+        if defaults.data(forKey: key) != data {
+            markLocalMutation()
+            defaults.set(data, forKey: key)
         }
+        syncSnapshotToCloudIfNeeded()
     }
 
     func loadPlacedItems(for baseId: String) -> [PlacedItem] {
@@ -642,6 +663,7 @@ final class GardenManager {
         if levelProgress.lastResetDateString != today {
             levelProgress.dailyCoinsEarned    = 0
             levelProgress.lastResetDateString = today
+            markLocalMutation()
             persistLevelProgress()
         }
     }
@@ -657,12 +679,13 @@ final class GardenManager {
             levelProgress.currentPoints = freshPoints
         }
 
-        while levelProgress.currentPoints >= levelProgress.pointsNeededForNextLevel {
-            levelProgress.currentPoints -= levelProgress.pointsNeededForNextLevel
+        let perLevelThreshold = GardenLevelProgress.pointsPerLevel
+        while levelProgress.currentPoints >= perLevelThreshold {
+            levelProgress.currentPoints -= perLevelThreshold
             levelProgress.currentLevel  += 1
-            levelProgress.pointsNeededForNextLevel = GardenLevelProgress.pointsPerLevel
         }
 
+        syncPointsNeededForCurrentLevel()
         checkAndUnlockBasesForLevel()
         persistLevelProgress()
         NotificationCenter.default.post(name: .gardenLevelDidChange, object: levelProgress)
@@ -749,6 +772,7 @@ final class GardenManager {
         } else {
             levelProgress = .initial
         }
+        syncPointsNeededForCurrentLevel()
     }
 
     private func persistState() {
@@ -757,17 +781,202 @@ final class GardenManager {
         d.set(Array(unlockedItemIds),   forKey: StorageKeys.unlockedIds)
         persistBases()
         persistLevelProgress()
+        syncSnapshotToCloudIfNeeded()
     }
 
     private func persistLevelProgress() {
+        syncPointsNeededForCurrentLevel()
         if let data = try? JSONEncoder().encode(levelProgress) {
             UserDefaults.standard.set(data, forKey: StorageKeys.levelProgress)
+        }
+    }
+
+    // Keeps DB/UI JSON aligned to: pointsNeededForNextLevel = (currentLevel * 5000) - currentPoints.
+    private func syncPointsNeededForCurrentLevel() {
+        let safeLevel = max(levelProgress.currentLevel, 1)
+        let totalGoalForLevel = safeLevel * GardenLevelProgress.pointsPerLevel
+        let safeCurrentPoints = max(levelProgress.currentPoints, 0)
+        levelProgress.goalToNextLevel = totalGoalForLevel
+        levelProgress.pointsNeededForNextLevel = max(0, totalGoalForLevel - safeCurrentPoints)
+    }
+
+    private func syncFromCloudIntoLocalIfNeeded() {
+        guard AppBackend.current == .supabase, supabaseClient.isConfigured else { return }
+        let fetchStartVersion = localMutationVersion
+
+        let filters = [SupabaseFilter(key: "user_id", op: "eq", value: supabaseUserId.uuidString)]
+        supabaseClient.fetchRows(from: "garden_states", filters: filters) { [weak self] (parentRows: [GardenStateSupabaseRow]) in
+            guard let self else { return }
+            self.supabaseClient.fetchRows(from: "garden_base_states", filters: filters) { [weak self] (baseRows: [GardenBaseStateSupabaseRow]) in
+                guard let self else { return }
+
+                let latestParentRow = parentRows.max(by: { ($0.updated_at ?? .distantPast) < ($1.updated_at ?? .distantPast) })
+                if latestParentRow != nil || !baseRows.isEmpty {
+                    DispatchQueue.main.async {
+                        guard self.localMutationVersion == fetchStartVersion else {
+                            self.syncSnapshotToCloudIfNeeded()
+                            return
+                        }
+                        self.applyCloudState(parentRow: latestParentRow, baseRows: baseRows)
+                    }
+                    return
+                }
+                self.syncSnapshotToCloudIfNeeded()
+            }
+        }
+    }
+
+    private func syncSnapshotToCloudIfNeeded() {
+        guard !isApplyingCloudSnapshot else { return }
+        guard AppBackend.current == .supabase, supabaseClient.isConfigured else { return }
+
+        let parentRow = GardenStateSupabaseRow(
+            id: supabaseUserId,
+            user_id: supabaseUserId,
+            coins: coins,
+            unlocked_base_ids: allBases.filter(\.isUnlocked).map(\.id).sorted(),
+            selected_base_id: selectedBase.id,
+            level_progress: levelProgress,
+            updated_at: Date()
+        )
+        let baseRows = buildGardenBaseStateRows()
+        let currentBaseRowIDs = Set(baseRows.map(\.id))
+        let filters = [SupabaseFilter(key: "user_id", op: "eq", value: supabaseUserId.uuidString)]
+
+        supabaseClient.upsertRows([parentRow], into: "garden_states", onConflict: "id") { [weak self] parentSuccess in
+            guard let self, parentSuccess else { return }
+
+            self.supabaseClient.upsertRows(baseRows, into: "garden_base_states", onConflict: "id") { [weak self] baseSuccess in
+                guard let self, baseSuccess else { return }
+
+                self.supabaseClient.fetchRows(from: "garden_base_states", filters: filters) { [weak self] (existingRows: [GardenBaseStateSupabaseRow]) in
+                    guard let self else { return }
+
+                    let staleIDs = existingRows
+                        .map(\.id)
+                        .filter { !currentBaseRowIDs.contains($0) }
+
+                    for staleID in staleIDs {
+                        self.supabaseClient.deleteRows(
+                            from: "garden_base_states",
+                            filters: [
+                                SupabaseFilter(key: "user_id", op: "eq", value: self.supabaseUserId.uuidString),
+                                SupabaseFilter(key: "id", op: "eq", value: staleID)
+                            ]
+                        )
+                    }
+                }
+
+            }
+        }
+    }
+
+    private func applyCloudState(parentRow: GardenStateSupabaseRow?, baseRows: [GardenBaseStateSupabaseRow]) {
+        isApplyingCloudSnapshot = true
+
+        if let parentRow {
+            coins = max(0, parentRow.coins)
+            levelProgress = parentRow.level_progress
+        }
+
+        let latestRowsByBase = Dictionary(grouping: baseRows, by: \.base_id).compactMapValues { rows in
+            rows.max(by: { ($0.updated_at ?? .distantPast) < ($1.updated_at ?? .distantPast) })
+        }
+        let unlockedBaseIDs = Set(latestRowsByBase.values.filter(\.is_base_unlocked).map(\.base_id))
+            .union(parentRow.map { Set($0.unlocked_base_ids) } ?? [])
+
+        for index in allBases.indices {
+            allBases[index].isUnlocked = unlockedBaseIDs.contains(allBases[index].id)
+        }
+        if let classicIndex = allBases.firstIndex(where: { $0.id == "classic" }) {
+            allBases[classicIndex].isUnlocked = true
+        }
+
+        checkAndUnlockBasesForLevel()
+
+        let activeBaseIdFromRows = latestRowsByBase.values
+            .first(where: { $0.is_base_unlocked && $0.is_active })?
+            .base_id
+        let preferredSelectedBaseId = parentRow?.selected_base_id ?? activeBaseIdFromRows
+        selectedBase = allBases.first(where: { $0.id == preferredSelectedBaseId && $0.isUnlocked })
+            ?? allBases.first(where: { $0.id == "classic" })
+            ?? allBases[0]
+
+        let unlockedItemIDsFromBaseRows = Set(latestRowsByBase.values.flatMap(\.unlocked_item_ids))
+        if !unlockedItemIDsFromBaseRows.isEmpty {
+            unlockedItemIds = unlockedItemIDsFromBaseRows
+        }
+
+        if !latestRowsByBase.isEmpty {
+            replacePlacedItemsByBase(with: latestRowsByBase.mapValues(\.placed_items))
+        }
+
+        seedDefaultUnlockedItems()
+        persistState()
+
+        isApplyingCloudSnapshot = false
+        NotificationCenter.default.post(name: .gardenLevelDidChange, object: levelProgress)
+    }
+
+    private func buildGardenBaseStateRows() -> [GardenBaseStateSupabaseRow] {
+        let now = Date()
+        let unlockedBases = allBases.filter(\.isUnlocked).sorted { $0.id < $1.id }
+
+        return unlockedBases.map { base in
+            GardenBaseStateSupabaseRow(
+                id: baseStateRowID(for: base.id),
+                user_id: supabaseUserId,
+                base_id: base.id,
+                is_base_unlocked: base.isUnlocked,
+                is_active: selectedBase.id == base.id,
+                unlocked_item_ids: unlockedItemIDs(forBaseID: base.id),
+                placed_items: loadPlacedItems(for: base.id),
+                updated_at: now
+            )
+        }
+    }
+
+    private func unlockedItemIDs(forBaseID baseId: String) -> [String] {
+        allItemsOrdered
+            .filter {
+                $0.category != Category.yourItems.rawValue &&
+                unlockedItemIds.contains($0.id) &&
+                effectiveBaseId(of: $0) == baseId
+            }
+            .map(\.id)
+            .sorted()
+    }
+
+    private func baseStateRowID(for baseId: String) -> String {
+        "\(supabaseUserId.uuidString)__\(baseId)"
+    }
+
+    private func replacePlacedItemsByBase(with map: [String: [PlacedItem]]) {
+        clearStoredPlacedItems()
+        for (baseId, items) in map {
+            if let data = try? JSONEncoder().encode(items) {
+                UserDefaults.standard.set(data, forKey: StorageKeys.placedItems(for: baseId))
+            }
+        }
+    }
+
+    private func clearStoredPlacedItems() {
+        let defaults = UserDefaults.standard
+        let keys = defaults.dictionaryRepresentation().keys.filter {
+            $0.hasPrefix(StorageKeys.placedItemsPrefix)
+        }
+        for key in keys {
+            defaults.removeObject(forKey: key)
         }
     }
 
     private func seedDefaultUnlockedItems() {
         unlockedItemIds.formUnion(yourItemsCatalog.map(\.id))
         checkAndUnlockBasesForLevel()
+    }
+
+    private func markLocalMutation() {
+        localMutationVersion = localMutationVersion &+ 1
     }
 
     // MARK: - Item Factory

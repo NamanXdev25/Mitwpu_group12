@@ -206,6 +206,172 @@ create index if not exists breathing_favorites_user_id_idx
 create unique index if not exists breathing_favorites_user_title_idx
     on breathing_favorites (user_id, title);
 
+create table if not exists garden_states (
+    id uuid primary key,
+    user_id uuid not null unique,
+    coins integer not null default 0,
+    unlocked_base_ids jsonb not null default '[]'::jsonb,
+    selected_base_id text not null default 'classic',
+    level_progress jsonb not null default '{}'::jsonb,
+    updated_at timestamptz
+);
+
+create index if not exists garden_states_user_id_idx
+    on garden_states (user_id);
+
+create table if not exists garden_base_states (
+    id text primary key,
+    user_id uuid not null,
+    base_id text not null,
+    is_base_unlocked bool not null default true,
+    is_active bool not null default false,
+    unlocked_item_ids jsonb not null default '[]'::jsonb,
+    placed_items jsonb not null default '[]'::jsonb,
+    updated_at timestamptz,
+    constraint garden_base_states_user_fk
+        foreign key (user_id)
+        references garden_states (user_id)
+        on delete cascade
+);
+
+create index if not exists garden_base_states_user_id_idx
+    on garden_base_states (user_id);
+
+create unique index if not exists garden_base_states_user_base_idx
+    on garden_base_states (user_id, base_id);
+
+do $$
+declare
+    r record;
+begin
+    -- Hard reset: keep no legacy FKs on garden_base_states, then re-add only the intended parent FK.
+    for r in
+        select c.conname
+        from pg_constraint c
+        join pg_class t on t.oid = c.conrelid
+        join pg_namespace n on n.oid = t.relnamespace
+        where n.nspname = 'public'
+          and t.relname = 'garden_base_states'
+          and c.contype = 'f'
+    loop
+        execute format(
+            'alter table public.garden_base_states drop constraint if exists %I',
+            r.conname
+        );
+    end loop;
+
+    if exists (
+        select 1
+        from information_schema.columns
+        where table_schema = 'public'
+          and table_name = 'garden_base_states'
+          and column_name = 'appointment_id'
+    ) then
+        alter table public.garden_base_states drop column appointment_id;
+    end if;
+
+    if exists (
+        select 1
+        from information_schema.columns
+        where table_schema = 'public'
+          and table_name = 'garden_base_states'
+          and column_name = 'offset_minutes'
+    ) then
+        alter table public.garden_base_states drop column offset_minutes;
+    end if;
+
+    if exists (
+        select 1
+        from information_schema.columns
+        where table_schema = 'public'
+          and table_name = 'garden_base_states'
+          and column_name = 'created_at'
+    ) then
+        alter table public.garden_base_states drop column created_at;
+    end if;
+
+    if exists (
+        select 1
+        from information_schema.columns
+        where table_schema = 'public'
+          and table_name = 'garden_states'
+          and column_name = 'unlocked_item_ids'
+    ) then
+        alter table garden_states drop column unlocked_item_ids;
+    end if;
+
+    if exists (
+        select 1
+        from information_schema.columns
+        where table_schema = 'public'
+          and table_name = 'garden_states'
+          and column_name = 'placed_items_by_base'
+    ) then
+        alter table garden_states drop column placed_items_by_base;
+    end if;
+
+    if not exists (
+        select 1
+        from pg_constraint
+        where conname = 'garden_base_states_user_fk'
+    ) then
+        delete from public.garden_base_states gbs
+        where not exists (
+            select 1
+            from public.garden_states gs
+            where gs.user_id = gbs.user_id
+        );
+
+        alter table garden_base_states
+        add constraint garden_base_states_user_fk
+            foreign key (user_id)
+            references garden_states (user_id)
+            on delete cascade;
+    end if;
+
+    -- Normalize appointment_reminders FK as well.
+    for r in
+        select c.conname
+        from pg_constraint c
+        join pg_class t on t.oid = c.conrelid
+        join pg_namespace n on n.oid = t.relnamespace
+        where n.nspname = 'public'
+          and t.relname = 'appointment_reminders'
+          and c.contype = 'f'
+    loop
+        execute format(
+            'alter table public.appointment_reminders drop constraint if exists %I',
+            r.conname
+        );
+    end loop;
+
+    if exists (
+        select 1
+        from information_schema.columns
+        where table_schema = 'public'
+          and table_name = 'appointment_reminders'
+          and column_name = 'appointment_id'
+    ) and not exists (
+        select 1
+        from pg_constraint c
+        join pg_class t on t.oid = c.conrelid
+        join pg_namespace n on n.oid = t.relnamespace
+        join pg_class rt on rt.oid = c.confrelid
+        join pg_namespace rn on rn.oid = rt.relnamespace
+        where n.nspname = 'public'
+          and t.relname = 'appointment_reminders'
+          and c.contype = 'f'
+          and rn.nspname = 'public'
+          and rt.relname = 'appointments'
+    ) then
+        alter table public.appointment_reminders
+        add constraint appointment_reminders_appointment_fk
+            foreign key (appointment_id)
+            references public.appointments (id)
+            on delete cascade;
+    end if;
+end $$;
+
 -- RLS setup.
 -- Do not enable these for runtime until the app uses real Supabase auth instead of a generated local UUID.
 
@@ -221,6 +387,8 @@ alter table journals enable row level security;
 alter table symptom_logs enable row level security;
 alter table symptom_user_preferences enable row level security;
 alter table breathing_favorites enable row level security;
+alter table garden_states enable row level security;
+alter table garden_base_states enable row level security;
 
 create policy "appointments_owner_all"
 on appointments
@@ -290,6 +458,18 @@ with check (auth.uid()::uuid = user_id);
 
 create policy "breathing_favorites_owner_all"
 on breathing_favorites
+for all
+using (auth.uid()::uuid = user_id)
+with check (auth.uid()::uuid = user_id);
+
+create policy "garden_states_owner_all"
+on garden_states
+for all
+using (auth.uid()::uuid = user_id)
+with check (auth.uid()::uuid = user_id);
+
+create policy "garden_base_states_owner_all"
+on garden_base_states
 for all
 using (auth.uid()::uuid = user_id)
 with check (auth.uid()::uuid = user_id);

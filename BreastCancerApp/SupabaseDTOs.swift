@@ -209,6 +209,109 @@ struct BreathingFavoriteSupabaseRow: Codable {
     let created_at: Date?
 }
 
+struct GardenStateSupabaseRow: Codable {
+    let id: UUID
+    let user_id: UUID
+    let coins: Int
+    let unlocked_base_ids: [String]
+    let selected_base_id: String
+    let level_progress: GardenLevelProgress
+    let updated_at: Date?
+
+    private enum CodingKeys: String, CodingKey {
+        case id
+        case user_id
+        case coins
+        case unlocked_base_ids
+        case selected_base_id
+        case level_progress
+        case updated_at
+    }
+
+    init(
+        id: UUID,
+        user_id: UUID,
+        coins: Int,
+        unlocked_base_ids: [String],
+        selected_base_id: String,
+        level_progress: GardenLevelProgress,
+        updated_at: Date?
+    ) {
+        self.id = id
+        self.user_id = user_id
+        self.coins = coins
+        self.unlocked_base_ids = unlocked_base_ids
+        self.selected_base_id = selected_base_id
+        self.level_progress = level_progress
+        self.updated_at = updated_at
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(UUID.self, forKey: .id)
+        user_id = try container.decode(UUID.self, forKey: .user_id)
+        coins = (try? container.decode(Int.self, forKey: .coins)) ?? 0
+        unlocked_base_ids = (try? container.decode([String].self, forKey: .unlocked_base_ids)) ?? []
+        selected_base_id = (try? container.decode(String.self, forKey: .selected_base_id)) ?? "classic"
+        level_progress = (try? container.decode(GardenLevelProgress.self, forKey: .level_progress)) ?? .initial
+        updated_at = (try? container.decodeIfPresent(Date.self, forKey: .updated_at)) ?? nil
+    }
+}
+
+struct GardenBaseStateSupabaseRow: Codable {
+    let id: String
+    let user_id: UUID
+    let base_id: String
+    let is_base_unlocked: Bool
+    let is_active: Bool
+    let unlocked_item_ids: [String]
+    let placed_items: [PlacedItem]
+    let updated_at: Date?
+
+    private enum CodingKeys: String, CodingKey {
+        case id
+        case user_id
+        case base_id
+        case is_base_unlocked
+        case is_active
+        case unlocked_item_ids
+        case placed_items
+        case updated_at
+    }
+
+    init(
+        id: String,
+        user_id: UUID,
+        base_id: String,
+        is_base_unlocked: Bool,
+        is_active: Bool,
+        unlocked_item_ids: [String],
+        placed_items: [PlacedItem],
+        updated_at: Date?
+    ) {
+        self.id = id
+        self.user_id = user_id
+        self.base_id = base_id
+        self.is_base_unlocked = is_base_unlocked
+        self.is_active = is_active
+        self.unlocked_item_ids = unlocked_item_ids
+        self.placed_items = placed_items
+        self.updated_at = updated_at
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        user_id = try container.decode(UUID.self, forKey: .user_id)
+        base_id = (try? container.decode(String.self, forKey: .base_id)) ?? "classic"
+        is_base_unlocked = (try? container.decode(Bool.self, forKey: .is_base_unlocked)) ?? false
+        is_active = (try? container.decode(Bool.self, forKey: .is_active)) ?? false
+        unlocked_item_ids = (try? container.decode([String].self, forKey: .unlocked_item_ids)) ?? []
+        placed_items = (try? container.decode([PlacedItem].self, forKey: .placed_items)) ?? []
+        updated_at = (try? container.decodeIfPresent(Date.self, forKey: .updated_at)) ?? nil
+    }
+}
+
 extension AppointmentItem {
     init?(supabaseRow: AppointmentSupabaseRow, reminderOffsets: [ReminderOffset]) {
         let formatter = DateFormatter()
