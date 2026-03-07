@@ -134,19 +134,21 @@ create index if not exists memories_user_id_idx
 create index if not exists memories_user_date_idx
     on memories (user_id, memory_date desc);
 
-create table if not exists hydration_entries (
-    id uuid primary key,
+create table if not exists hydration_daily_status (
+    id text primary key,
     user_id uuid not null,
-    amount_ml integer not null check (amount_ml > 0),
-    logged_at timestamptz not null,
-    created_at timestamptz
+    date_key text not null,
+    date_epoch double precision not null,
+    consumed_ml integer not null default 0 check (consumed_ml >= 0),
+    goal_ml integer not null default 3000 check (goal_ml > 0),
+    updated_at timestamptz
 );
 
-create index if not exists hydration_entries_user_id_idx
-    on hydration_entries (user_id);
+create index if not exists hydration_daily_status_user_id_idx
+    on hydration_daily_status (user_id);
 
-create index if not exists hydration_entries_user_logged_idx
-    on hydration_entries (user_id, logged_at desc);
+create unique index if not exists hydration_daily_status_user_date_key_idx
+    on hydration_daily_status (user_id, date_key);
 
 create table if not exists journals (
     id uuid primary key,
@@ -214,7 +216,7 @@ alter table medication_items enable row level security;
 alter table medication_plans enable row level security;
 alter table medication_daily_status enable row level security;
 alter table memories enable row level security;
-alter table hydration_entries enable row level security;
+alter table hydration_daily_status enable row level security;
 alter table journals enable row level security;
 alter table symptom_logs enable row level security;
 alter table symptom_user_preferences enable row level security;
@@ -262,8 +264,8 @@ for all
 using (auth.uid()::uuid = user_id)
 with check (auth.uid()::uuid = user_id);
 
-create policy "hydration_entries_owner_all"
-on hydration_entries
+create policy "hydration_daily_status_owner_all"
+on hydration_daily_status
 for all
 using (auth.uid()::uuid = user_id)
 with check (auth.uid()::uuid = user_id);

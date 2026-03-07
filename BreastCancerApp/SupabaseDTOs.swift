@@ -165,12 +165,14 @@ struct JournalSupabaseRow: Codable {
     }
 }
 
-struct HydrationSupabaseRow: Codable {
-    let id: UUID
+struct HydrationDailySupabaseRow: Codable {
+    let id: String
     let user_id: UUID
-    let amount_ml: Int
-    let logged_at: Date
-    let created_at: Date?
+    let date_key: String
+    let date_epoch: TimeInterval
+    let consumed_ml: Int
+    let goal_ml: Int
+    let updated_at: Date?
 }
 
 struct MemorySupabaseRow: Codable {
@@ -368,17 +370,11 @@ extension JournalEntry {
 }
 
 extension HydrationEntry {
-    init(supabaseRow: HydrationSupabaseRow) {
-        self.init(id: supabaseRow.id, amountML: supabaseRow.amount_ml, timestamp: supabaseRow.logged_at)
-    }
-
-    func toSupabaseRow(userId: UUID) -> HydrationSupabaseRow {
-        HydrationSupabaseRow(
-            id: id,
-            user_id: userId,
-            amount_ml: amountML,
-            logged_at: timestamp,
-            created_at: nil
+    init(supabaseDailyRow: HydrationDailySupabaseRow) {
+        self.init(
+            id: UUID(uuidString: supabaseDailyRow.id) ?? UUID(),
+            amountML: supabaseDailyRow.consumed_ml,
+            timestamp: supabaseDailyRow.updated_at ?? Date(timeIntervalSince1970: supabaseDailyRow.date_epoch)
         )
     }
 }

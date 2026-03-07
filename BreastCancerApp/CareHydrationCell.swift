@@ -36,10 +36,6 @@ class CareHydrationCell: UICollectionViewCell {
     private var goalML: Int = 3000
     private var cupSizeML: Int = 200
     private var lastStepperValue: Double = 0
-    private let stepperTickML = 100
-
-
-
     override func awakeFromNib() {
         super.awakeFromNib()
 
@@ -152,13 +148,23 @@ class CareHydrationCell: UICollectionViewCell {
     }
 
     private func configureStepperRange() {
-        let minTick = 0.0
-        let maxTick = Double(goalML) / Double(stepperTickML)
-        let currentTick = Double(currentAmountML) / Double(stepperTickML)
+        let minTick = 0
+        let maxTick = max(1, Int(ceil(Double(goalML) / Double(cupSizeML))))
+        var currentTick = Int(floor(Double(currentAmountML) / Double(cupSizeML)))
 
-        Hydrationstepper.minimumValue = minTick
-        Hydrationstepper.maximumValue = max(1, maxTick)
-        Hydrationstepper.value = min(Hydrationstepper.maximumValue, max(Hydrationstepper.minimumValue, currentTick))
+        if currentAmountML > 0 {
+            currentTick = max(currentTick, 1)
+        }
+
+        if currentAmountML >= goalML {
+            currentTick = maxTick
+        } else {
+            currentTick = min(currentTick, maxTick - 1)
+        }
+
+        Hydrationstepper.minimumValue = Double(minTick)
+        Hydrationstepper.maximumValue = Double(maxTick)
+        Hydrationstepper.value = Double(min(max(currentTick, minTick), maxTick))
         lastStepperValue = Hydrationstepper.value
     }
 
@@ -174,13 +180,14 @@ class CareHydrationCell: UICollectionViewCell {
     }
 
     private func formatGoal(_ ml: Int) -> String {
-        String(format: "%.1f L", Double(ml) / 1000.0)
+        "\(formatLiters(ml)) L"
     }
 
     private func formatLiters(_ ml: Int) -> String {
         let liters = Double(ml) / 1000.0
-        return liters.truncatingRemainder(dividingBy: 1) == 0
-            ? String(Int(liters))
-            : String(format: "%.1f", liters)
+        let formatter = NumberFormatter()
+        formatter.minimumFractionDigits = 0
+        formatter.maximumFractionDigits = 2
+        return formatter.string(from: NSNumber(value: liters)) ?? "\(liters)"
     }
 }

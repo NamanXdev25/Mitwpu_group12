@@ -158,7 +158,11 @@ class HydrationDetailViewController: UIViewController {
             return "\(ml) ml"
         } else {
             let liters = Double(ml) / 1000.0
-            return String(format: "%.1f L", liters)
+            let formatter = NumberFormatter()
+            formatter.minimumFractionDigits = 0
+            formatter.maximumFractionDigits = 2
+            let litersString = formatter.string(from: NSNumber(value: liters)) ?? "\(liters)"
+            return "\(litersString) L"
         }
     }
 }
@@ -222,4 +226,3 @@ extension HydrationDetailViewController: UITableViewDelegate {
         return configuration
     }
 }
-

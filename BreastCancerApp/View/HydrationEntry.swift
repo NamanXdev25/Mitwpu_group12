@@ -9,15 +9,9 @@ class HydrationDataManager {
     init(repository: HydrationRepository = RepositoryFactory.makeHydrationRepository()) {
         self.repository = repository
         self.entries = repository.loadEntries()
-
-        if entries.isEmpty {
-            entries = [
-                HydrationEntry(amountML: 250, timestamp: Date().addingTimeInterval(-25200)),
-                HydrationEntry(amountML: 250, timestamp: Date().addingTimeInterval(-19500)),
-                HydrationEntry(amountML: 250, timestamp: Date().addingTimeInterval(-14400)),
-                HydrationEntry(amountML: 500, timestamp: Date().addingTimeInterval(-3600)),
-                HydrationEntry(amountML: 250, timestamp: Date().addingTimeInterval(-1800))
-            ]
+        let normalized = normalizedDailyEntries(from: entries)
+        if !hasSameContent(lhs: normalized, rhs: entries) {
+            entries = normalized
             persist()
         }
     }
@@ -27,45 +21,29 @@ class HydrationDataManager {
     }
 
     func addEntry(_ entry: HydrationEntry) {
-        entries.append(entry)
+        applyDelta(entry.amountML, for: entry.timestamp)
         entries.sort { $0.timestamp > $1.timestamp }
         persist()
     }
 
     func adjustToday(by deltaML: Int) {
         guard deltaML != 0 else { return }
-
-        if deltaML > 0 {
-            addEntry(HydrationEntry(amountML: deltaML))
-            return
-        }
-
-        var remaining = -deltaML
-        let calendar = Calendar.current
-        let today = Date()
-
-        var updatedEntries = entries
-        let todayIndices = updatedEntries.indices.filter { calendar.isDate(updatedEntries[$0].timestamp, inSameDayAs: today) }
-            .sorted { updatedEntries[$0].timestamp > updatedEntries[$1].timestamp }
-
-        for index in todayIndices where remaining > 0 {
-            let current = updatedEntries[index].amountML
-            if current <= remaining {
-                remaining -= current
-                updatedEntries.remove(at: index)
-            } else {
-                updatedEntries[index].amountML = current - remaining
-                remaining = 0
-            }
-        }
-
-        entries = updatedEntries.sorted { $0.timestamp > $1.timestamp }
+        applyDelta(deltaML, for: Date())
+        entries = entries.sorted { $0.timestamp > $1.timestamp }
         persist()
+    }
+
+    func setTotalForToday(_ totalML: Int) {
+        setTotal(totalML, for: Date())
     }
 
     func updateEntry(withId id: UUID, newAmount: Int) {
         if let index = entries.firstIndex(where: { $0.id == id }) {
-            entries[index] = HydrationEntry(id: id, amountML: newAmount, timestamp: entries[index].timestamp)
+            if newAmount <= 0 {
+                entries.remove(at: index)
+            } else {
+                entries[index] = HydrationEntry(id: id, amountML: newAmount, timestamp: entries[index].timestamp)
+            }
             persist()
         }
     }
@@ -80,5 +58,71 @@ class HydrationDataManager {
         return entries
             .filter { calendar.isDate($0.timestamp, inSameDayAs: date) }
             .reduce(0) { $0 + $1.amountML }
+    }
+
+    private func applyDelta(_ deltaML: Int, for date: Date) {
+        guard deltaML != 0 else { return }
+
+        let calendar = Calendar.current
+        if let index = entries.firstIndex(where: { calendar.isDate($0.timestamp, inSameDayAs: date) }) {
+            let updatedAmount = max(0, entries[index].amountML + deltaML)
+            if updatedAmount == 0 {
+                entries.remove(at: index)
+            } else {
+                entries[index] = HydrationEntry(
+                    id: entries[index].id,
+                    amountML: updatedAmount,
+                    timestamp: entries[index].timestamp
+                )
+            }
+            return
+        }
+
+        guard deltaML > 0 else { return }
+        entries.append(HydrationEntry(amountML: deltaML, timestamp: date))
+    }
+
+    private func setTotal(_ totalML: Int, for date: Date) {
+        let targetAmount = max(0, totalML)
+        let calendar = Calendar.current
+
+        if let index = entries.firstIndex(where: { calendar.isDate($0.timestamp, inSameDayAs: date) }) {
+            if targetAmount == 0 {
+                entries.remove(at: index)
+            } else {
+                entries[index] = HydrationEntry(
+                    id: entries[index].id,
+                    amountML: targetAmount,
+                    timestamp: date
+                )
+            }
+        } else if targetAmount > 0 {
+            entries.append(HydrationEntry(amountML: targetAmount, timestamp: date))
+        }
+
+        entries = entries.sorted { $0.timestamp > $1.timestamp }
+        persist()
+    }
+
+    private func normalizedDailyEntries(from source: [HydrationEntry]) -> [HydrationEntry] {
+        let calendar = Calendar.current
+        let grouped = Dictionary(grouping: source) { calendar.startOfDay(for: $0.timestamp) }
+
+        return grouped.map { _, dayEntries in
+            let totalAmount = dayEntries.reduce(0) { $0 + $1.amountML }
+            let latestTimestamp = dayEntries.map(\.timestamp).max() ?? Date()
+            let stableId = dayEntries.sorted(by: { $0.timestamp > $1.timestamp }).first?.id ?? UUID()
+            return HydrationEntry(id: stableId, amountML: totalAmount, timestamp: latestTimestamp)
+        }
+        .sorted { $0.timestamp > $1.timestamp }
+    }
+
+    private func hasSameContent(lhs: [HydrationEntry], rhs: [HydrationEntry]) -> Bool {
+        guard lhs.count == rhs.count else { return false }
+        return zip(lhs, rhs).allSatisfy {
+            $0.id == $1.id &&
+            $0.amountML == $1.amountML &&
+            $0.timestamp == $1.timestamp
+        }
     }
 }

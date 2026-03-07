@@ -658,6 +658,8 @@ extension CareScreenViewController: CareHydrationCellDelegate {
             guard let self = self else { return }
             self.hydrationGoalML = selectedGoal
             self.hydrationCurrentAmountML = min(self.hydrationCurrentAmountML, selectedGoal)
+            HydrationDataManager.shared.setTotalForToday(self.hydrationCurrentAmountML)
+            self.hydrationCurrentAmountML = HydrationDataManager.shared.getTotalForDate(Date())
             self.saveHydrationState()
             self.applySnapshot(animatingDifferences: false)
         }

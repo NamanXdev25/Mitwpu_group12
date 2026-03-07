@@ -42,8 +42,11 @@ AppBackend.setCurrent(.supabase)
 - `appointments`
 - `appointment_reminders`
 - `medication_history_snapshots`
+- `medication_items`
+- `medication_plans`
+- `medication_daily_status`
 - `memories`
-- `hydration_entries`
+- `hydration_daily_status`
 - `journals`
 - `symptom_logs`
 - `symptom_user_preferences`

@@ -205,6 +205,8 @@ final class SupabaseHydrationRepository: HydrationRepository {
     private let local: HydrationRepository
     private let userId: UUID
     private let client: SupabaseRESTClient
+    private let defaultGoalML = 3000
+    private let hydrationGoalKey = "care_hydration_goal_ml"
 
     init(
         local: HydrationRepository = UserDefaultsHydrationRepository(),
@@ -228,17 +230,51 @@ final class SupabaseHydrationRepository: HydrationRepository {
     }
 
     private func syncFromCloudIntoLocal() {
-        client.fetchRows(from: "hydration_entries", filters: [SupabaseFilter(key: "user_id", op: "eq", value: userId.uuidString)]) { (rows: [HydrationSupabaseRow]) in
-            self.local.saveEntries(rows.map(HydrationEntry.init(supabaseRow:)).sorted { $0.timestamp > $1.timestamp })
+        client.fetchRows(from: "hydration_daily_status", filters: [SupabaseFilter(key: "user_id", op: "eq", value: userId.uuidString)]) { (rows: [HydrationDailySupabaseRow]) in
+            guard !rows.isEmpty else { return }
+            let dailyEntries = rows
+                .map(HydrationEntry.init(supabaseDailyRow:))
+                .sorted { $0.timestamp > $1.timestamp }
+            self.local.saveEntries(dailyEntries)
         }
     }
 
     private func syncSnapshotToCloud(_ entries: [HydrationEntry]) {
         guard client.isConfigured else { return }
 
-        let rows = entries.map { $0.toSupabaseRow(userId: userId) }
-        client.deleteAllRows(forUser: userId, from: "hydration_entries") { _ in
-            self.client.upsertRows(rows, into: "hydration_entries")
+        let calendar = Calendar.current
+        let groupedByDate = Dictionary(grouping: entries) { entry in
+            calendar.startOfDay(for: entry.timestamp)
+        }
+
+        client.fetchRows(from: "hydration_daily_status", filters: [SupabaseFilter(key: "user_id", op: "eq", value: userId.uuidString)]) { (existingRows: [HydrationDailySupabaseRow]) in
+            let currentGoalML = max(UserDefaults.standard.integer(forKey: self.hydrationGoalKey), self.defaultGoalML)
+            let existingGoalByDateKey = Dictionary(uniqueKeysWithValues: existingRows.map { ($0.date_key, $0.goal_ml) })
+            let todayKey = DateFormatter.supabaseDateKey.string(from: calendar.startOfDay(for: Date()))
+
+            let rows = groupedByDate.map { dayStart, dayEntries in
+                let dateKey = DateFormatter.supabaseDateKey.string(from: dayStart)
+                let consumedML = dayEntries.reduce(0) { $0 + $1.amountML }
+                let goalML: Int
+                if dateKey == todayKey {
+                    goalML = currentGoalML
+                } else {
+                    goalML = existingGoalByDateKey[dateKey] ?? currentGoalML
+                }
+                return HydrationDailySupabaseRow(
+                    id: dateKey,
+                    user_id: self.userId,
+                    date_key: dateKey,
+                    date_epoch: dayStart.timeIntervalSince1970,
+                    consumed_ml: consumedML,
+                    goal_ml: goalML,
+                    updated_at: Date()
+                )
+            }
+
+            self.client.deleteAllRows(forUser: self.userId, from: "hydration_daily_status") { _ in
+                self.client.upsertRows(rows, into: "hydration_daily_status", onConflict: "id")
+            }
         }
     }
 }
