@@ -16,6 +16,7 @@ class SymptomsViewController: UIViewController {
     private var userSymptoms: [Symptom] = []
     private var selectedSymptoms: [String: (severity: Int, note: String)] = [:]
     private var todayLogs: [SymptomLog] = []
+    private var lastLoadedDay = Calendar.current.startOfDay(for: Date())
     
     private enum Section: Int, CaseIterable {
         case log = 0
@@ -28,6 +29,12 @@ class SymptomsViewController: UIViewController {
         super.viewDidLoad()
         setupCollectionView()
         loadData()
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleCalendarDayChanged),
+            name: Notification.Name.NSCalendarDayChanged,
+            object: nil
+        )
         
         // Add tap gesture to dismiss keyboard
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
@@ -39,9 +46,18 @@ class SymptomsViewController: UIViewController {
         super.viewWillAppear(animated)
         loadData()
     }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: Notification.Name.NSCalendarDayChanged, object: nil)
+    }
     
     @objc private func dismissKeyboard() {
         view.endEditing(true)
+    }
+
+    @objc private func handleCalendarDayChanged() {
+        loadData()
+        NotificationCenter.default.post(name: NSNotification.Name("SymptomDataUpdated"), object: nil)
     }
     
     private func setupCollectionView() {
@@ -183,9 +199,17 @@ class SymptomsViewController: UIViewController {
     }
     
     private func loadData() {
+        resetSelectionIfNeededForNewDay()
         userSymptoms = dataSource.getUserSymptoms()
         todayLogs = dataSource.getTodayLogs()
         collectionView.reloadData()
+    }
+
+    private func resetSelectionIfNeededForNewDay() {
+        let today = Calendar.current.startOfDay(for: Date())
+        guard today != lastLoadedDay else { return }
+        lastLoadedDay = today
+        selectedSymptoms.removeAll()
     }
     
     @objc private func logSymptomButtonTapped() {
@@ -372,7 +396,7 @@ extension SymptomsViewController: UICollectionViewDataSource {
                 
                 // Create and configure label
                 let label = UILabel()
-                label.text = "No symptoms logged yet"
+                label.text = "No symptoms logged"
                 label.textAlignment = .center
                 label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
                 label.textColor = .systemGray

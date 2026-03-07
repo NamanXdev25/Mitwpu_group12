@@ -49,12 +49,82 @@ class SymptomDataSource {
         applyUserSymptomIDsToMasterList(currentUserSymptomsOrder)
 
         let persistedLogs = repository.loadLogs()
-        if persistedLogs.isEmpty {
-            todayLogs = SampleSymptomData.allLogs
+        let cleanedLogs = removeLegacySeedLogsIfNeeded(from: persistedLogs)
+        todayLogs = cleanedLogs
+        if cleanedLogs.count != persistedLogs.count {
             persistLogs()
-        } else {
-            todayLogs = persistedLogs
         }
+    }
+
+    // Removes the historical built-in seed dataset that was previously auto-written.
+    // This keeps real user logs but drops only the exact known legacy sample pattern.
+    private func removeLegacySeedLogsIfNeeded(from logs: [SymptomLog]) -> [SymptomLog] {
+        guard !logs.isEmpty else { return logs }
+
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+
+        struct SeedSignature: Hashable {
+            let symptomId: String
+            let severity: Int
+            let dayOffset: Int
+        }
+
+        let legacySeedSignatures: Set<SeedSignature> = [
+            SeedSignature(symptomId: "nausea", severity: 1, dayOffset: 1),
+            SeedSignature(symptomId: "pain", severity: 3, dayOffset: 1),
+            SeedSignature(symptomId: "fatigue", severity: 3, dayOffset: 3),
+            SeedSignature(symptomId: "headache", severity: 2, dayOffset: 3),
+            SeedSignature(symptomId: "nausea", severity: 4, dayOffset: 5),
+            SeedSignature(symptomId: "pain", severity: 2, dayOffset: 7),
+            SeedSignature(symptomId: "fatigue", severity: 4, dayOffset: 7),
+            SeedSignature(symptomId: "insomnia", severity: 3, dayOffset: 10),
+            SeedSignature(symptomId: "nausea", severity: 2, dayOffset: 12),
+            SeedSignature(symptomId: "appetite_loss", severity: 3, dayOffset: 12),
+            SeedSignature(symptomId: "fatigue", severity: 3, dayOffset: 14),
+            SeedSignature(symptomId: "pain", severity: 4, dayOffset: 14),
+            SeedSignature(symptomId: "headache", severity: 1, dayOffset: 17),
+            SeedSignature(symptomId: "nausea", severity: 3, dayOffset: 19),
+            SeedSignature(symptomId: "fatigue", severity: 4, dayOffset: 21),
+            SeedSignature(symptomId: "insomnia", severity: 2, dayOffset: 21),
+            SeedSignature(symptomId: "pain", severity: 3, dayOffset: 24),
+            SeedSignature(symptomId: "nausea", severity: 2, dayOffset: 26),
+            SeedSignature(symptomId: "appetite_loss", severity: 4, dayOffset: 26),
+            SeedSignature(symptomId: "fatigue", severity: 2, dayOffset: 28),
+            SeedSignature(symptomId: "headache", severity: 3, dayOffset: 30),
+            SeedSignature(symptomId: "pain", severity: 2, dayOffset: 30)
+        ]
+
+        var candidateIndexBySignature: [SeedSignature: Int] = [:]
+
+        for (index, log) in logs.enumerated() {
+            let trimmedNote = log.note.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard trimmedNote.isEmpty else { continue }
+
+            let logDay = calendar.startOfDay(for: log.timestamp)
+            let dayOffset = calendar.dateComponents([.day], from: logDay, to: today).day ?? 0
+            guard dayOffset >= 1 else { continue }
+
+            let signature = SeedSignature(
+                symptomId: log.symptomId.lowercased(),
+                severity: log.severity,
+                dayOffset: dayOffset
+            )
+            if legacySeedSignatures.contains(signature), candidateIndexBySignature[signature] == nil {
+                candidateIndexBySignature[signature] = index
+            }
+        }
+
+        guard candidateIndexBySignature.count == legacySeedSignatures.count else {
+            return logs
+        }
+
+        let indicesToRemove = Set(candidateIndexBySignature.values)
+        var cleaned = logs
+        for index in indicesToRemove.sorted(by: >) {
+            cleaned.remove(at: index)
+        }
+        return cleaned
     }
 
     private func applyUserSymptomIDsToMasterList(_ ids: [String]) {
