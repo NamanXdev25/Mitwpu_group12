@@ -1,13 +1,1 @@
-import Foundation
-
-struct WaitModel {
-    var status: String = "Not Started"
-    var daysWaited: Int?
-    var selectedFeelings: Set<String> = []
-}
-
-struct JourneySuggestion {
-    let title: String
-    let description: String
-    let relatedFeelings: [String]
-}
+// Moved to AppModels.swift

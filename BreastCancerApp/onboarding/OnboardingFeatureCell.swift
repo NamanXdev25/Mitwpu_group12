@@ -34,13 +34,8 @@ class OnboardingFeatureCell: UICollectionViewCell {
     }
 }
 
-// MARK: - OnboardingFeature Model
-struct OnboardingFeature {
-    let title: String
-    let iconName: String
-//    let iconTintColor: UIColor
-//    let backgroundColor: UIColor
-    
+// MARK: - OnboardingFeature Content
+extension OnboardingFeature {
     static let mindfulnessFeatures: [OnboardingFeature] = [
         OnboardingFeature(
             title: "Get mood-based suggestions",

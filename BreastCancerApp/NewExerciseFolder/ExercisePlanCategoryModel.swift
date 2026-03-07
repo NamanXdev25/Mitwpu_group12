@@ -7,26 +7,6 @@
 
 import Foundation
 
-struct ExercisePlanCategory {
-    let id: Int
-    let title: String
-    let subtitle: String
-    let importantNote: String
-    let exercises: [CategoryExercise]
-    let imageName: String?
-
-    var headerImageName: String? {
-        if let imageName = imageName { return imageName }
-        return exercises.first?.imageName
-    }
-}
-
-struct CategoryExercise {
-    let name: String
-    let details: String
-    let imageName: String
-}
-
 // MARK: - Exercise Image Mapping
 private func imageForExercise(_ name: String) -> String {
     let lower = name.lowercased()

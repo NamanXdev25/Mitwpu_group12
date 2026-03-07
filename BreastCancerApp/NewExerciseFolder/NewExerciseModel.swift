@@ -7,22 +7,6 @@
 
 import Foundation
 
-struct NewExerciseModel {
-    let imageName: String
-    let title: String
-    let category: String
-    let difficulty: String
-    let duration: String
-}
-
-struct NewExercisePlan {
-    let level: String
-    let duration: String
-    let exerciseCount: Int
-    let note: String?
-    let exercises: [NewExerciseModel]
-}
-
 // MARK: - Sample Data
 extension NewExercisePlan {
     static let level1Exercises = NewExercisePlan(

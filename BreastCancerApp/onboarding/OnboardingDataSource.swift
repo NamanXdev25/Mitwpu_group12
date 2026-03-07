@@ -99,15 +99,3 @@ struct OnboardingDataSource {
         FocusOption(title: "Routine Tracking",  icon: "checklist")
     ]
 }
-
-// Interest Option Model
-struct InterestOption {
-    let title: String
-    let icon: String
-}
-
-// current focus option model
-struct FocusOption {
-    let title: String
-    let icon: String
-}

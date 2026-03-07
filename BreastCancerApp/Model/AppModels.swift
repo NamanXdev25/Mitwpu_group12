@@ -7,6 +7,10 @@
 
 import Foundation
 import CoreGraphics
+import UIKit
+
+// Shared app-domain and reusable feature models live in this file.
+// Firestore transport DTOs, repositories, and UI-local enums stay in their feature files.
 
 // MARK: - Care
 
@@ -786,4 +790,226 @@ struct GardenLevelProgress: Codable {
         fmt.dateFormat = "yyyy-MM-dd"
         return fmt.string(from: Date())
     }
+}
+
+// MARK: - Profile / Onboarding
+
+struct UserProfile {
+    let id: String
+    let name: String
+    let email: String
+    let password: String
+    let treatmentStatus: String
+    let hobbies: [String]
+    let profileImageName: String?
+    let diagnosisDate: Date?
+    let currentAge: String?
+    let currentStage: String?
+    let lastCheckupDate: Date?
+    let followUpFrequency: String?
+    let treatmentCompletionDate: Date?
+    let interests: [String]?
+}
+
+struct HealingGardenStats {
+    var currentPoints: Int
+    var totalPointsNeeded: Int
+    var currentLevel: Int
+    var nextLevel: Int
+
+    var pointsToNextLevel: Int {
+        totalPointsNeeded - currentPoints
+    }
+
+    var progress: Float {
+        Float(currentPoints) / Float(totalPointsNeeded)
+    }
+}
+
+struct ProfileUserProfile: Codable {
+    var firstName: String
+    var lastName: String
+    var profileImageBase64: String?
+    var diagnosisDate: String
+    var gender: String
+    var age: Int
+    var cancerStage: String
+    var treatmentState: String
+    var treatmentCompletionDate: String
+    var exerciseNotificationsEnabled: Bool
+    var hydrationNotificationsEnabled: Bool
+    var appointmentsNotificationsEnabled: Bool
+    var medicationsNotificationsEnabled: Bool
+
+    var fullName: String {
+        if lastName.isEmpty { return firstName }
+        return "\(firstName) \(lastName)"
+    }
+
+    var profileImage: UIImage? {
+        get {
+            guard let base64 = profileImageBase64,
+                  let data = Data(base64Encoded: base64) else {
+                return nil
+            }
+            return UIImage(data: data)
+        }
+        set {
+            if let image = newValue,
+               let data = image.jpegData(compressionQuality: 0.8) {
+                profileImageBase64 = data.base64EncodedString()
+            } else {
+                profileImageBase64 = nil
+            }
+        }
+    }
+
+    var diagnosisDateObject: Date? {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd MMM yyyy"
+        return formatter.date(from: diagnosisDate)
+    }
+
+    var ageString: String {
+        "\(age)"
+    }
+
+    var treatmentCompletionDateObject: Date? {
+        guard !treatmentCompletionDate.isEmpty else { return nil }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd MMM yyyy"
+        return formatter.date(from: treatmentCompletionDate)
+    }
+
+    init(
+        firstName: String = "Sophie",
+        lastName: String = "Chen",
+        profileImage: UIImage? = nil,
+        diagnosisDate: String = "12 Aug 2024",
+        gender: String = "Female",
+        age: Int = 32,
+        cancerStage: String = "Stage II",
+        treatmentState: String = "Ongoing",
+        treatmentCompletionDate: String = "",
+        exerciseNotificationsEnabled: Bool = false,
+        hydrationNotificationsEnabled: Bool = false,
+        appointmentsNotificationsEnabled: Bool = false,
+        medicationsNotificationsEnabled: Bool = false
+    ) {
+        self.firstName = firstName
+        self.lastName = lastName
+        self.diagnosisDate = diagnosisDate
+        self.gender = gender
+        self.age = age
+        self.cancerStage = cancerStage
+        self.treatmentState = treatmentState
+        self.treatmentCompletionDate = treatmentCompletionDate
+        self.exerciseNotificationsEnabled = exerciseNotificationsEnabled
+        self.hydrationNotificationsEnabled = hydrationNotificationsEnabled
+        self.appointmentsNotificationsEnabled = appointmentsNotificationsEnabled
+        self.medicationsNotificationsEnabled = medicationsNotificationsEnabled
+        self.profileImage = profileImage
+    }
+}
+
+// MARK: - Journey / Treatment
+
+struct DiagnosisModel {
+    var diagnosisDate: Date?
+    var status: String = "Not Started"
+}
+
+enum TreatmentType: String, CaseIterable {
+    case none = "Select treatment"
+    case chemotherapy = "Chemotherapy"
+    case radiationTherapy = "Radiation Therapy"
+    case immunotherapy = "Immunotherapy"
+    case hormoneTherapy = "Hormone Therapy"
+    case targetedTherapy = "Targeted Therapy"
+    case surgery = "Surgery"
+    case stemCellTransplant = "Stem Cell Transplant"
+}
+
+enum PhaseState {
+    case editing
+    case saved
+}
+
+struct TreatmentPhaseModel {
+    var treatmentType: TreatmentType = .none
+    var startDate: Date? = nil
+    var duration: String = ""
+    var state: PhaseState = .editing
+}
+
+struct TreatmentModel {
+    var phases: [TreatmentPhaseModel] = []
+    var status: String = "Not Started"
+}
+
+struct WaitModel {
+    var status: String = "Not Started"
+    var daysWaited: Int?
+    var selectedFeelings: Set<String> = []
+}
+
+struct JourneySuggestion {
+    let title: String
+    let description: String
+    let relatedFeelings: [String]
+}
+
+// MARK: - Onboarding
+
+struct InterestOption {
+    let title: String
+    let icon: String
+}
+
+struct FocusOption {
+    let title: String
+    let icon: String
+}
+
+struct OnboardingFeature {
+    let title: String
+    let iconName: String
+}
+
+// MARK: - Exercise
+
+struct ExercisePlanCategory {
+    let id: Int
+    let title: String
+    let subtitle: String
+    let importantNote: String
+    let exercises: [CategoryExercise]
+    let imageName: String?
+
+    var headerImageName: String? {
+        if let imageName = imageName { return imageName }
+        return exercises.first?.imageName
+    }
+}
+
+struct CategoryExercise {
+    let name: String
+    let details: String
+    let imageName: String
+}
+
+struct NewExerciseModel {
+    let imageName: String
+    let title: String
+    let category: String
+    let difficulty: String
+    let duration: String
+}
+
+struct NewExercisePlan {
+    let level: String
+    let duration: String
+    let exerciseCount: Int
+    let note: String?
+    let exercises: [NewExerciseModel]
 }
