@@ -27,10 +27,26 @@ class HomeViewController: UIViewController,
         configureDataSource()
         refreshDisplayedSuggestions(for: selectedMoodKey)
         applySnapshot()
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(journeyStateChanged),
+            name: JourneyState.didChangeNotification,
+            object: nil
+        )
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
     @IBAction func ProfileButtonTapped(_ sender: Any) {
         print("👆 Profile button tapped")
+    }
+
+    // MARK: - Journey State Observer
+    @objc private func journeyStateChanged() {
+        applySnapshot()
     }
 
     // MARK: - Dynamic Mood Header
@@ -263,9 +279,10 @@ class HomeViewController: UIViewController,
 
         snapshot.appendItems([HomeItem(type: .quote(HomeModel.quote))], toSection: .quote)
 
+        // ── Journey cell reads live data from JourneyState ──
         let journeyItem = HomeItem(type: .journey(
-            treatment: HomeModel.currentTreatment,
-            phase: HomeModel.currentPhase
+            treatment: JourneyState.shared.currentTreatmentName,
+            phase: JourneyState.shared.currentStepTitle
         ))
         snapshot.appendItems([journeyItem], toSection: .journey)
 
@@ -540,11 +557,11 @@ extension HomeModel {
 
         switch moodKey.lowercased() {
         case "anxious":
-            return "Take a breath - you’re safe here"
+            return "Take a breath - you're safe here"
         case "sad":
-            return "Let’s take this gently today"
+            return "Let's take this gently today"
         case "tired":
-            return "Energy feels low - We’ve got you"
+            return "Energy feels low - We've got you"
         case "happy":
             return "Keep the good energy going"
         case "excited":
