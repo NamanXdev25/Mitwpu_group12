@@ -248,7 +248,8 @@ final class SupabaseHydrationRepository: HydrationRepository {
         }
 
         client.fetchRows(from: "hydration_daily_status", filters: [SupabaseFilter(key: "user_id", op: "eq", value: userId.uuidString)]) { (existingRows: [HydrationDailySupabaseRow]) in
-            let currentGoalML = max(UserDefaults.standard.integer(forKey: self.hydrationGoalKey), self.defaultGoalML)
+            let storedGoalML = UserDefaults.standard.integer(forKey: self.hydrationGoalKey)
+            let currentGoalML = storedGoalML > 0 ? storedGoalML : self.defaultGoalML
             let existingGoalByDateKey = Dictionary(uniqueKeysWithValues: existingRows.map { ($0.date_key, $0.goal_ml) })
             let todayKey = DateFormatter.supabaseDateKey.string(from: calendar.startOfDay(for: Date()))
 
