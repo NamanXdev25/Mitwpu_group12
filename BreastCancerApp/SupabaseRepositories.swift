@@ -123,6 +123,11 @@ final class SupabaseMedicationHistoryRepository: MedicationHistoryRepository {
 
     private func syncFromCloudIntoLocal() {
         client.fetchRows(from: "medication_history_snapshots", filters: [SupabaseFilter(key: "user_id", op: "eq", value: userId.uuidString)]) { (rows: [MedicationHistorySnapshotSupabaseRow]) in
+            // Guard: never overwrite local data when cloud returns nothing.
+            // This prevents wiping medication history when the token is expired,
+            // RLS blocks the read, or the cloud table is empty after a migration.
+            guard !rows.isEmpty else { return }
+
             let groupedByDate = Dictionary(grouping: rows, by: \.date_key)
 
             var canonicalRows: [MedicationHistorySnapshotSupabaseRow] = []
