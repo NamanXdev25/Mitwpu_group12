@@ -20,7 +20,7 @@ class DataPrivacyViewController: UIViewController {
     }
 
     @IBAction func skipButtonTapped(_ sender: UIButton) {
-        let storyboard = UIStoryboard(name: "TabBarMain", bundle: nil)
+        let storyboard = UIStoryboard(name: "TabbarMain", bundle: nil)
         guard let tabBarController = storyboard.instantiateInitialViewController() as? UITabBarController else {
             fatalError("TabBarMain must have UITabBarController as initial VC")
         }

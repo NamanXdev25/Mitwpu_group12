@@ -9,7 +9,7 @@ import Foundation
 import CoreGraphics
 
 // Shared app-domain and reusable feature models live in this file.
-// Firestore transport DTOs, repositories, and UI-local enums stay in their feature files.
+// Persistence transport DTOs, repositories, and UI-local enums stay in their feature files.
 
 // MARK: - Care
 

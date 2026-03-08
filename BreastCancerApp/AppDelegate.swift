@@ -18,16 +18,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         AppBackend.setCurrent(.supabase)
         print("App backend:", AppBackend.current.rawValue)
         print("Supabase configured:", SupabaseConfiguration.current != nil)
-        print("Supabase user id:", SupabaseUserContext.userId.uuidString)
+        print("Supabase user id:", SupabaseUserContext.currentUserId?.uuidString ?? "none")
         print("Supabase URL:", SupabaseConfiguration.current?.url.absoluteString ?? "nil")
 
-        switch AppBackend.current {
-        case .firestore:
-            FirebaseBootstrap.configureIfNeeded()
-            FirestoreMigrationService.shared.runIfNeeded()
-        case .supabase:
-            SupabaseMigrationService.shared.runIfNeeded()
-        }
+        SupabaseMigrationService.shared.runIfNeeded()
         UNUserNotificationCenter.current().delegate = self
         ReminderResyncService.syncAll()
 

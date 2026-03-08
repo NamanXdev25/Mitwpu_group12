@@ -3,6 +3,7 @@ import UIKit
 final class SignUpViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
+    private let authService = SupabaseAuthService.shared
 
     enum SignUpItem {
         case header
@@ -126,7 +127,10 @@ extension SignUpViewController: UICollectionViewDataSource {
             ) as! SocialSignupCollectionViewCell
             
             cell.onSignInTapped = { [weak self] in
-                self?.dismiss(animated: true)
+                self?.navigateToSignIn()
+            }
+            cell.onGoogleTapped = { [weak self] in
+                self?.signUpWithGoogle()
             }
             
             return cell
@@ -163,14 +167,131 @@ extension SignUpViewController: UICollectionViewDelegateFlowLayout {
 extension SignUpViewController: SignUpFormCellDelegate {
     
     func signUpFormCellDidTapSignUp(_ cell: SignUpFormCell, email: String, password: String, reenterPassword: String, agreedToTerms: Bool) {
-        
-        print("Sign Up Data:")
-        print("Email: \(email)")
-        print("Password: \(password)")
-        print("Agreed to Terms: \(agreedToTerms)")
-        
-        // Signup API after review
-        
+        guard agreedToTerms else {
+            showAuthAlert(message: "Please agree to terms and conditions.")
+            return
+        }
+
+        let normalizedEmail = email.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmedPassword = password.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !normalizedEmail.isEmpty, !trimmedPassword.isEmpty else {
+            showAuthAlert(message: "Please enter email and password.")
+            return
+        }
+
+        if AppBackend.current == .supabase {
+            signUpWithSupabase(email: normalizedEmail, password: trimmedPassword)
+            return
+        }
+
+        UserDefaults.standard.set(true, forKey: "isLoggedIn")
+        UserDefaults.standard.set(false, forKey: "hasCompletedOnboarding")
         navigateToProfileSetup()
+    }
+
+    private func signUpWithSupabase(email: String, password: String) {
+        authService.signUp(email: email, password: password) { [weak self] result in
+            DispatchQueue.main.async {
+                guard let self else { return }
+                switch result {
+                case .failure(let error):
+                    self.showAuthAlert(message: error.localizedDescription)
+                case .success(let user):
+                    let firstName = user.email.split(separator: "@").first.map(String.init)?.capitalized ?? "User"
+                    let newProfile = ProfileUserProfile(
+                        firstName: firstName,
+                        lastName: "",
+                        profileImageBase64: nil,
+                        diagnosisDate: "NA",
+                        gender: "Female",
+                        age: 32,
+                        cancerStage: "NA",
+                        treatmentState: "Unknown",
+                        treatmentCompletionDate: "",
+                        exerciseNotificationsEnabled: false,
+                        hydrationNotificationsEnabled: false,
+                        appointmentsNotificationsEnabled: false,
+                        medicationsNotificationsEnabled: false
+                    )
+                    UserProfileDataSource.shared.updateProfile(newProfile)
+                    UserDefaults.standard.set(true, forKey: "isLoggedIn")
+                    UserDefaults.standard.set(false, forKey: "hasCompletedOnboarding")
+                    self.navigateToProfileSetup()
+                }
+            }
+        }
+    }
+
+    private func signUpWithGoogle() {
+        guard AppBackend.current == .supabase else {
+            showAuthAlert(message: "Google auth is currently enabled only for Supabase mode.")
+            return
+        }
+
+        authService.signInWithGoogleNative(presentingViewController: self) { [weak self] result in
+            DispatchQueue.main.async {
+                guard let self else { return }
+                switch result {
+                case .failure(let error):
+                    if case .oauthCancelled = error { return }
+                    self.showAuthAlert(message: error.localizedDescription)
+                case .success(let user):
+                    let firstName = user.email.split(separator: "@").first.map(String.init)?.capitalized ?? "User"
+                    let profile = ProfileUserProfile(
+                        firstName: firstName,
+                        lastName: "",
+                        profileImageBase64: nil,
+                        diagnosisDate: "NA",
+                        gender: "Female",
+                        age: 32,
+                        cancerStage: "NA",
+                        treatmentState: "Unknown",
+                        treatmentCompletionDate: "",
+                        exerciseNotificationsEnabled: false,
+                        hydrationNotificationsEnabled: false,
+                        appointmentsNotificationsEnabled: false,
+                        medicationsNotificationsEnabled: false
+                    )
+                    UserProfileDataSource.shared.updateProfile(profile)
+                    UserDefaults.standard.set(true, forKey: "isLoggedIn")
+                    UserDefaults.standard.set(user.has_completed_onboarding, forKey: "hasCompletedOnboarding")
+                    if user.has_completed_onboarding {
+                        self.navigateToHome()
+                    } else {
+                        self.navigateToProfileSetup()
+                    }
+                }
+            }
+        }
+    }
+
+    private func navigateToHome() {
+        let storyboard = UIStoryboard(name: "TabBarMain", bundle: nil)
+        guard let tabBarController = storyboard.instantiateInitialViewController() as? UITabBarController else {
+            showAuthAlert(message: "Could not open home.")
+            return
+        }
+
+        if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+            sceneDelegate.window?.rootViewController = tabBarController
+            sceneDelegate.window?.makeKeyAndVisible()
+        }
+    }
+
+    private func navigateToSignIn() {
+        let storyboard = UIStoryboard(name: "Login", bundle: nil)
+        guard let loginRoot = storyboard.instantiateInitialViewController() else {
+            showAuthAlert(message: "Could not open sign in screen.")
+            return
+        }
+        loginRoot.modalPresentationStyle = .fullScreen
+        loginRoot.modalTransitionStyle = .crossDissolve
+        present(loginRoot, animated: true)
+    }
+
+    private func showAuthAlert(message: String) {
+        let alert = UIAlertController(title: "Sign Up", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
     }
 }

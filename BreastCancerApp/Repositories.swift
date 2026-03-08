@@ -36,3 +36,8 @@ protocol BreathingRepository {
     func loadFavoriteTitles() -> [String]
     func saveFavoriteTitles(_ titles: [String])
 }
+
+protocol ProfileRepository {
+    func loadProfile() -> ProfileUserProfile?
+    func saveProfile(_ profile: ProfileUserProfile)
+}

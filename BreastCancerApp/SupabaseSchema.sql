@@ -9,6 +9,37 @@
 
 create extension if not exists pgcrypto;
 
+create table if not exists auth_users (
+    user_id uuid primary key,
+    email text not null unique,
+    password text not null,
+    is_logged_in boolean not null default false,
+    has_completed_onboarding boolean not null default false,
+    created_at timestamptz,
+    updated_at timestamptz
+);
+
+create index if not exists auth_users_email_idx
+    on auth_users (email);
+
+create table if not exists user_profiles (
+    user_id uuid primary key,
+    first_name text not null,
+    last_name text not null default '',
+    profile_image_base64 text,
+    diagnosis_date text not null default 'NA',
+    gender text not null default 'Female',
+    age integer not null default 32,
+    cancer_stage text not null default 'NA',
+    treatment_state text not null default 'Unknown',
+    treatment_completion_date text not null default '',
+    exercise_notifications_enabled boolean not null default false,
+    hydration_notifications_enabled boolean not null default false,
+    appointments_notifications_enabled boolean not null default false,
+    medications_notifications_enabled boolean not null default false,
+    updated_at timestamptz
+);
+
 create table if not exists appointments (
     id uuid primary key,
     user_id uuid not null,

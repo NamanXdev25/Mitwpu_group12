@@ -3,6 +3,7 @@ import UIKit
 class LoginViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
+    private let authService = SupabaseAuthService.shared
 
     private enum LoginSectionItem {
         case welcome
@@ -37,25 +38,116 @@ class LoginViewController: UIViewController {
     }
     
     func login(email: String, password: String) {
+        let normalizedEmail = email.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmedPassword = password.trimmingCharacters(in: .whitespacesAndNewlines)
 
-        guard let profile = SampleProfilesManager.shared.sampleProfiles.first(
-            where: { $0.email == email && $0.password == password }
-        ) else {
-            print("Invalid credentials")
+        guard !normalizedEmail.isEmpty, !trimmedPassword.isEmpty else {
+            showAuthAlert(message: "Please enter both email and password.")
             return
         }
 
-        // FIXED: Convert UserProfile to ProfileUserProfile and save to UserProfileDataSource
+        if AppBackend.current == .supabase {
+            loginWithSupabase(email: normalizedEmail, password: trimmedPassword)
+            return
+        }
+
+        guard let profile = SampleProfilesManager.shared.sampleProfiles.first(
+            where: { $0.email == normalizedEmail && $0.password == trimmedPassword }
+        ) else {
+            print("Invalid credentials")
+            showAuthAlert(message: "Invalid email or password.")
+            return
+        }
+
         convertAndSaveProfile(profile)
-        
-        // Update garden stats
-//        HomeDataStore.shared.gardenStats =
-//            SampleProfilesManager.shared.getStatsForProfile(id: profile.id)
-        
-        // Set login flag
         UserDefaults.standard.set(true, forKey: "isLoggedIn")
+        UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
 
         navigateToHome()
+    }
+
+    private func loginWithSupabase(email: String, password: String) {
+        authService.login(email: email, password: password) { [weak self] result in
+            DispatchQueue.main.async {
+                guard let self else { return }
+                switch result {
+                case .failure(let error):
+                    self.showAuthAlert(message: error.localizedDescription)
+                case .success(let user):
+                    UserDefaults.standard.set(true, forKey: "isLoggedIn")
+                    UserDefaults.standard.set(user.has_completed_onboarding, forKey: "hasCompletedOnboarding")
+                    self.syncProfileAfterSupabaseLogin(user: user) {
+                        if user.has_completed_onboarding {
+                            self.navigateToHome()
+                        } else {
+                            self.navigateToProfileSetup()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private func loginWithGoogle() {
+        guard AppBackend.current == .supabase else {
+            showAuthAlert(message: "Google auth is currently enabled only for Supabase mode.")
+            return
+        }
+
+        authService.signInWithGoogleNative(presentingViewController: self) { [weak self] result in
+            DispatchQueue.main.async {
+                guard let self else { return }
+                switch result {
+                case .failure(let error):
+                    if case .oauthCancelled = error { return }
+                    self.showAuthAlert(message: error.localizedDescription)
+                case .success(let user):
+                    UserDefaults.standard.set(true, forKey: "isLoggedIn")
+                    UserDefaults.standard.set(user.has_completed_onboarding, forKey: "hasCompletedOnboarding")
+                    self.syncProfileAfterSupabaseLogin(user: user) {
+                        if user.has_completed_onboarding {
+                            self.navigateToHome()
+                        } else {
+                            self.navigateToProfileSetup()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private func syncProfileAfterSupabaseLogin(user: AuthUserSupabaseRow, completion: @escaping () -> Void) {
+        SupabaseRESTClient.shared.fetchRows(
+            from: "user_profiles",
+            filters: [SupabaseFilter(key: "user_id", op: "eq", value: user.user_id.uuidString)]
+        ) { (rows: [UserProfileSupabaseRow]) in
+            DispatchQueue.main.async {
+                if let row = rows.first {
+                    UserProfileDataSource.shared.updateProfile(ProfileUserProfile(supabaseRow: row))
+                    completion()
+                    return
+                }
+
+                let firstName = user.email.split(separator: "@").first.map(String.init)?.capitalized ?? "User"
+                let fallback = ProfileUserProfile(
+                    firstName: firstName,
+                    lastName: "",
+                    profileImageBase64: nil,
+                    diagnosisDate: "NA",
+                    gender: "Female",
+                    age: 32,
+                    cancerStage: "NA",
+                    treatmentState: "Unknown",
+                    treatmentCompletionDate: "",
+                    exerciseNotificationsEnabled: false,
+                    hydrationNotificationsEnabled: false,
+                    appointmentsNotificationsEnabled: false,
+                    medicationsNotificationsEnabled: false
+                )
+                UserProfileDataSource.shared.updateProfile(fallback)
+                completion()
+            }
+        }
     }
     
     // MARK: - Profile Conversion Helper
@@ -140,7 +232,7 @@ class LoginViewController: UIViewController {
     }
     
     func navigateToHome() {
-        let storyboard = UIStoryboard(name: "TabBarMain", bundle: nil)
+        let storyboard = UIStoryboard(name: "TabbarMain", bundle: nil)
 
         guard let tabBarController =
                 storyboard.instantiateInitialViewController()
@@ -154,6 +246,27 @@ class LoginViewController: UIViewController {
             sceneDelegate.window?.rootViewController = tabBarController
             sceneDelegate.window?.makeKeyAndVisible()
         }
+    }
+
+    private func navigateToProfileSetup() {
+        let storyboard = UIStoryboard(name: "Login", bundle: nil)
+
+        guard let profileSetupVC = storyboard.instantiateViewController(
+            withIdentifier: "ProfileSetupViewController"
+        ) as? ProfileSetupViewController else {
+            showAuthAlert(message: "Could not open profile setup.")
+            return
+        }
+
+        profileSetupVC.modalPresentationStyle = .fullScreen
+        profileSetupVC.modalTransitionStyle = .crossDissolve
+        present(profileSetupVC, animated: true)
+    }
+
+    private func showAuthAlert(message: String) {
+        let alert = UIAlertController(title: "Login", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
     }
 
     private func setupCollectionView() {
@@ -246,6 +359,9 @@ extension LoginViewController: UICollectionViewDataSource {
             
             cell.onSignUpTapped = { [weak self] in
                 self?.goToSignUp()
+            }
+            cell.onGoogleTapped = { [weak self] in
+                self?.loginWithGoogle()
             }
             
             return cell

@@ -14,6 +14,8 @@ class SocialLoginCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var signUpButton: UIButton!
     
     var onSignUpTapped: (() -> Void)?
+    var onGoogleTapped: (() -> Void)?
+    var onAppleTapped: (() -> Void)?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -53,14 +55,15 @@ class SocialLoginCollectionViewCell: UICollectionViewCell {
 
     @objc private func didTapGoogle() {
         print("Google login tapped")
+        onGoogleTapped?()
     }
 
     @objc private func didTapApple() {
         print("Apple login tapped")
+        onAppleTapped?()
     }
 
     @IBAction func didTapSignUp(_ sender: UIButton) {
         onSignUpTapped?()
     }
 }
-

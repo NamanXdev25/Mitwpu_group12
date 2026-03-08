@@ -5,19 +5,22 @@ class UserProfileDataSource {
 
     static let shared = UserProfileDataSource()
     private(set) var userProfile: ProfileUserProfile
-    private let userProfileKey = "savedUserProfile"
+    private let repository: ProfileRepository
     static let profileDidUpdateNotification = Notification.Name("UserProfileDidUpdate")
 
-    private init() {
-        // First check if there's a saved profile from a previous session
-        if let savedProfile = UserProfileDataSource.loadFromUserDefaults() {
+    private init(repository: ProfileRepository = RepositoryFactory.makeProfileRepository()) {
+        self.repository = repository
+
+        if let savedProfile = repository.loadProfile() {
             self.userProfile = savedProfile
-            print("Loaded profile from UserDefaults")
+            print("Loaded profile from repository")
         } else if let defaultProfile = UserProfileDataSource.loadFromJSON() {
             self.userProfile = defaultProfile
+            repository.saveProfile(defaultProfile)
             print("Loaded profile from JSON")
         } else {
             self.userProfile = ProfileUserProfile(profileImageBase64: nil)
+            repository.saveProfile(self.userProfile)
             print("Using hardcoded default profile")
         }
     }
@@ -26,7 +29,7 @@ class UserProfileDataSource {
 
     func updateProfile(_ profile: ProfileUserProfile) {
         self.userProfile = profile
-        saveToUserDefaults()
+        persistProfile()
         notifyProfileUpdate()
     }
 
@@ -38,7 +41,7 @@ class UserProfileDataSource {
         userProfile.firstName = firstName
         userProfile.lastName = lastName
         userProfile.profileImage = profileImage
-        saveToUserDefaults()
+        persistProfile()
         notifyProfileUpdate()
     }
 
@@ -69,7 +72,7 @@ class UserProfileDataSource {
             userProfile.treatmentCompletionDate = treatmentCompletionDate
         }
 
-        saveToUserDefaults()
+        persistProfile()
         notifyProfileUpdate()
     }
 
@@ -93,7 +96,7 @@ class UserProfileDataSource {
         if let medications = medications {
             userProfile.medicationsNotificationsEnabled = medications
         }
-        saveToUserDefaults()
+        persistProfile()
         notifyProfileUpdate()
     }
     
@@ -165,7 +168,7 @@ class UserProfileDataSource {
         }
         
         // Save and notify
-        saveToUserDefaults()
+        persistProfile()
         notifyProfileUpdate()
         
         print("✅ Profile updated from onboarding:")
@@ -180,30 +183,9 @@ class UserProfileDataSource {
 
     // MARK: - Persistence
 
-    private func saveToUserDefaults() {
-        do {
-            let encoder = JSONEncoder()
-            encoder.outputFormatting = .prettyPrinted
-            let data = try encoder.encode(userProfile)
-            UserDefaults.standard.set(data, forKey: userProfileKey)
-            print("Profile saved to UserDefaults")
-        } catch {
-            print("Failed to save profile: \(error)")
-        }
-    }
-
-    private static func loadFromUserDefaults() -> ProfileUserProfile? {
-        guard let data = UserDefaults.standard.data(forKey: "savedUserProfile") else {
-            return nil
-        }
-
-        do {
-            let decoder = JSONDecoder()
-            return try decoder.decode(ProfileUserProfile.self, from: data)
-        } catch {
-            print("Failed to load profile from UserDefaults: \(error)")
-            return nil
-        }
+    private func persistProfile() {
+        repository.saveProfile(userProfile)
+        print("Profile saved to repository")
     }
 
     private static func loadFromJSON() -> ProfileUserProfile? {
@@ -251,8 +233,8 @@ extension ProfileUserProfile {
     }
 
     init(
-        firstName: String = "Sophie",
-        lastName: String = "Chen",
+        firstName: String,
+        lastName: String,
         profileImage: UIImage? = nil,
         diagnosisDate: String = "12 Aug 2024",
         gender: String = "Female",

@@ -42,6 +42,9 @@ class CompletionViewController: UIViewController {
         UserProfileDataSource.shared.transferFromOnboarding()
         print("Onboarding data successfully transferred to profile")
         UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
+        if AppBackend.current == .supabase {
+            SupabaseAuthService.shared.markCurrentUserOnboardingCompleted()
+        }
     }
     
     @IBAction func homeButtonTapped(_ sender: UIButton) {

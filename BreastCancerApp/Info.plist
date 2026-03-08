@@ -8,6 +8,31 @@
 	<string>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR5anl0aHNwaXh3aXNwbWtscGNtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4NjYxODMsImV4cCI6MjA4ODQ0MjE4M30.wLh5Wmpx1dUQvOiTDjlVaB63UqWsilresMb0Izelic8</string>
 	<key>SUPABASE_SCHEMA</key>
 	<string>public</string>
+	<key>SUPABASE_OAUTH_REDIRECT_SCHEME</key>
+	<string>mindooauth</string>
+	<key>GOOGLE_IOS_CLIENT_ID</key>
+	<string>137933029604-oe16qdpdt44acps418pdfhv0gsomnri0.apps.googleusercontent.com</string>
+	<key>GOOGLE_REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.137933029604-oe16qdpdt44acps418pdfhv0gsomnri0</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.group12ios.breastcancerapp.supabase.auth</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>mindooauth</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.group12ios.breastcancerapp.google.signin</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.137933029604-oe16qdpdt44acps418pdfhv0gsomnri0</string>
+			</array>
+		</dict>
+	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

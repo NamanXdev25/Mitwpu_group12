@@ -1,5 +1,149 @@
 import Foundation
 
+struct AuthUserSupabaseRow: Codable {
+    let user_id: UUID
+    let email: String
+    let password: String
+    let is_logged_in: Bool
+    let has_completed_onboarding: Bool
+    let created_at: Date?
+    let updated_at: Date?
+
+    private enum CodingKeys: String, CodingKey {
+        case user_id
+        case email
+        case password
+        case is_logged_in
+        case has_completed_onboarding
+        case created_at
+        case updated_at
+    }
+
+    init(
+        user_id: UUID,
+        email: String,
+        password: String,
+        is_logged_in: Bool,
+        has_completed_onboarding: Bool,
+        created_at: Date?,
+        updated_at: Date?
+    ) {
+        self.user_id = user_id
+        self.email = email
+        self.password = password
+        self.is_logged_in = is_logged_in
+        self.has_completed_onboarding = has_completed_onboarding
+        self.created_at = created_at
+        self.updated_at = updated_at
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        user_id = try container.decode(UUID.self, forKey: .user_id)
+        email = try container.decode(String.self, forKey: .email)
+        password = try container.decode(String.self, forKey: .password)
+        is_logged_in = try container.decodeIfPresent(Bool.self, forKey: .is_logged_in) ?? false
+        has_completed_onboarding =
+            try container.decodeIfPresent(Bool.self, forKey: .has_completed_onboarding) ?? false
+        created_at = try container.decodeIfPresent(Date.self, forKey: .created_at)
+        updated_at = try container.decodeIfPresent(Date.self, forKey: .updated_at)
+    }
+}
+
+struct UserProfileSupabaseRow: Codable {
+    let user_id: UUID
+    let first_name: String
+    let last_name: String
+    let profile_image_base64: String?
+    let diagnosis_date: String
+    let gender: String
+    let age: Int
+    let cancer_stage: String
+    let treatment_state: String
+    let treatment_completion_date: String
+    let exercise_notifications_enabled: Bool
+    let hydration_notifications_enabled: Bool
+    let appointments_notifications_enabled: Bool
+    let medications_notifications_enabled: Bool
+    let updated_at: Date?
+
+    private enum CodingKeys: String, CodingKey {
+        case user_id
+        case first_name
+        case last_name
+        case profile_image_base64
+        case diagnosis_date
+        case gender
+        case age
+        case cancer_stage
+        case treatment_state
+        case treatment_completion_date
+        case exercise_notifications_enabled
+        case hydration_notifications_enabled
+        case appointments_notifications_enabled
+        case medications_notifications_enabled
+        case updated_at
+    }
+
+    init(
+        user_id: UUID,
+        first_name: String,
+        last_name: String,
+        profile_image_base64: String?,
+        diagnosis_date: String,
+        gender: String,
+        age: Int,
+        cancer_stage: String,
+        treatment_state: String,
+        treatment_completion_date: String,
+        exercise_notifications_enabled: Bool,
+        hydration_notifications_enabled: Bool,
+        appointments_notifications_enabled: Bool,
+        medications_notifications_enabled: Bool,
+        updated_at: Date?
+    ) {
+        self.user_id = user_id
+        self.first_name = first_name
+        self.last_name = last_name
+        self.profile_image_base64 = profile_image_base64
+        self.diagnosis_date = diagnosis_date
+        self.gender = gender
+        self.age = age
+        self.cancer_stage = cancer_stage
+        self.treatment_state = treatment_state
+        self.treatment_completion_date = treatment_completion_date
+        self.exercise_notifications_enabled = exercise_notifications_enabled
+        self.hydration_notifications_enabled = hydration_notifications_enabled
+        self.appointments_notifications_enabled = appointments_notifications_enabled
+        self.medications_notifications_enabled = medications_notifications_enabled
+        self.updated_at = updated_at
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        user_id = try container.decode(UUID.self, forKey: .user_id)
+        first_name = try container.decodeIfPresent(String.self, forKey: .first_name) ?? "User"
+        last_name = try container.decodeIfPresent(String.self, forKey: .last_name) ?? ""
+        profile_image_base64 = try container.decodeIfPresent(String.self, forKey: .profile_image_base64)
+        diagnosis_date = try container.decodeIfPresent(String.self, forKey: .diagnosis_date) ?? "NA"
+        gender = try container.decodeIfPresent(String.self, forKey: .gender) ?? "Female"
+        age = try container.decodeIfPresent(Int.self, forKey: .age) ?? 32
+        cancer_stage = try container.decodeIfPresent(String.self, forKey: .cancer_stage) ?? "NA"
+        treatment_state = try container.decodeIfPresent(String.self, forKey: .treatment_state) ?? "Unknown"
+        treatment_completion_date =
+            try container.decodeIfPresent(String.self, forKey: .treatment_completion_date) ?? ""
+        exercise_notifications_enabled =
+            try container.decodeIfPresent(Bool.self, forKey: .exercise_notifications_enabled) ?? false
+        hydration_notifications_enabled =
+            try container.decodeIfPresent(Bool.self, forKey: .hydration_notifications_enabled) ?? false
+        appointments_notifications_enabled =
+            try container.decodeIfPresent(Bool.self, forKey: .appointments_notifications_enabled) ?? false
+        medications_notifications_enabled =
+            try container.decodeIfPresent(Bool.self, forKey: .medications_notifications_enabled) ?? false
+        updated_at = try container.decodeIfPresent(Date.self, forKey: .updated_at)
+    }
+}
+
 struct AppointmentSupabaseRow: Codable {
     let id: UUID
     let user_id: UUID
@@ -26,7 +170,7 @@ struct MedicationHistorySnapshotSupabaseRow: Codable {
     let user_id: UUID
     let date_key: String
     let date_epoch: TimeInterval
-    let medications: [MedicationFirestoreDTO]
+    let medications: [MedicationDTO]
     let taken: Int
     let goal: Int
     let updated_at: Date?
@@ -378,7 +522,7 @@ extension MedicationHistoryEntry {
         let takenToday = scheduledToday.filter { $0.isTaken }.count
 
         return MedicationHistorySnapshotSupabaseRow(
-            id: id,
+            id: "\(userId.uuidString)#\(dateKey)",
             user_id: userId,
             date_key: dateKey,
             date_epoch: date.timeIntervalSince1970,
@@ -393,7 +537,7 @@ extension MedicationHistoryEntry {
 extension Medication {
     func toSupabaseItemRow(userId: UUID, dateKey: String) -> MedicationItemSupabaseRow {
         MedicationItemSupabaseRow(
-            id: "\(dateKey)#\(id)",
+            id: "\(userId.uuidString)#\(dateKey)#\(id)",
             user_id: userId,
             date_key: dateKey,
             medication_id: id,
@@ -409,7 +553,7 @@ extension Medication {
 
     func toSupabasePlanRow(userId: UUID) -> MedicationPlanSupabaseRow {
         MedicationPlanSupabaseRow(
-            id: id,
+            id: "\(userId.uuidString)#\(id)",
             user_id: userId,
             name: name,
             note: note,
@@ -429,7 +573,7 @@ extension MedicationHistoryEntry {
             .filter { $0.isScheduledFor(date: date) }
             .map { medication in
                 MedicationDailyStatusSupabaseRow(
-                    id: "\(dateKey)#\(medication.id)",
+                    id: "\(userId.uuidString)#\(dateKey)#\(medication.id)",
                     user_id: userId,
                     date_key: dateKey,
                     date_epoch: date.timeIntervalSince1970,
@@ -527,6 +671,46 @@ extension SymptomLog {
             note: note,
             logged_at: timestamp,
             created_at: nil
+        )
+    }
+}
+
+extension ProfileUserProfile {
+    init(supabaseRow: UserProfileSupabaseRow) {
+        self.init(
+            firstName: supabaseRow.first_name,
+            lastName: supabaseRow.last_name,
+            profileImageBase64: supabaseRow.profile_image_base64,
+            diagnosisDate: supabaseRow.diagnosis_date,
+            gender: supabaseRow.gender,
+            age: supabaseRow.age,
+            cancerStage: supabaseRow.cancer_stage,
+            treatmentState: supabaseRow.treatment_state,
+            treatmentCompletionDate: supabaseRow.treatment_completion_date,
+            exerciseNotificationsEnabled: supabaseRow.exercise_notifications_enabled,
+            hydrationNotificationsEnabled: supabaseRow.hydration_notifications_enabled,
+            appointmentsNotificationsEnabled: supabaseRow.appointments_notifications_enabled,
+            medicationsNotificationsEnabled: supabaseRow.medications_notifications_enabled
+        )
+    }
+
+    func toSupabaseRow(userId: UUID) -> UserProfileSupabaseRow {
+        UserProfileSupabaseRow(
+            user_id: userId,
+            first_name: firstName,
+            last_name: lastName,
+            profile_image_base64: profileImageBase64,
+            diagnosis_date: diagnosisDate,
+            gender: gender,
+            age: age,
+            cancer_stage: cancerStage,
+            treatment_state: treatmentState,
+            treatment_completion_date: treatmentCompletionDate,
+            exercise_notifications_enabled: exerciseNotificationsEnabled,
+            hydration_notifications_enabled: hydrationNotificationsEnabled,
+            appointments_notifications_enabled: appointmentsNotificationsEnabled,
+            medications_notifications_enabled: medicationsNotificationsEnabled,
+            updated_at: Date()
         )
     }
 }

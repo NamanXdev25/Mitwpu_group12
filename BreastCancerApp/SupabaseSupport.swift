@@ -29,16 +29,111 @@ struct SupabaseConfiguration {
 
 enum SupabaseUserContext {
     private static let key = "supabase_user_id"
+    private static let emailKey = "supabase_user_email"
+
+    static var currentUserId: UUID? {
+        guard let rawValue = UserDefaults.standard.string(forKey: key),
+              let uuid = UUID(uuidString: rawValue) else {
+            return nil
+        }
+        return uuid
+    }
 
     static var userId: UUID {
-        if let rawValue = UserDefaults.standard.string(forKey: key),
-           let uuid = UUID(uuidString: rawValue) {
+        if let uuid = currentUserId {
             return uuid
         }
 
         let generated = UUID()
         UserDefaults.standard.set(generated.uuidString, forKey: key)
         return generated
+    }
+
+    static var email: String? {
+        UserDefaults.standard.string(forKey: emailKey)
+    }
+
+    static func setUser(id: UUID, email: String?) {
+        UserDefaults.standard.set(id.uuidString, forKey: key)
+        if let email, !email.isEmpty {
+            UserDefaults.standard.set(email, forKey: emailKey)
+        } else {
+            UserDefaults.standard.removeObject(forKey: emailKey)
+        }
+    }
+
+    static func clearUser() {
+        UserDefaults.standard.removeObject(forKey: key)
+        UserDefaults.standard.removeObject(forKey: emailKey)
+        SupabaseAuthSessionStore.clear()
+    }
+}
+
+enum SupabaseAuthSessionStore {
+    private static let accessTokenKey = "supabase_access_token"
+    private static let refreshTokenKey = "supabase_refresh_token"
+    private static let tokenTypeKey = "supabase_token_type"
+    private static let expiresAtKey = "supabase_expires_at"
+
+    static var accessToken: String? {
+        guard let value = UserDefaults.standard.string(forKey: accessTokenKey),
+              !value.isEmpty else {
+            return nil
+        }
+        return value
+    }
+
+    static var refreshToken: String? {
+        guard let value = UserDefaults.standard.string(forKey: refreshTokenKey),
+              !value.isEmpty else {
+            return nil
+        }
+        return value
+    }
+
+    static var tokenType: String? {
+        guard let value = UserDefaults.standard.string(forKey: tokenTypeKey),
+              !value.isEmpty else {
+            return nil
+        }
+        return value
+    }
+
+    static var expiresAt: Date? {
+        let timestamp = UserDefaults.standard.double(forKey: expiresAtKey)
+        guard timestamp > 0 else { return nil }
+        return Date(timeIntervalSince1970: timestamp)
+    }
+
+    static func set(
+        accessToken: String,
+        refreshToken: String?,
+        tokenType: String?,
+        expiresIn: Int?
+    ) {
+        UserDefaults.standard.set(accessToken, forKey: accessTokenKey)
+        if let refreshToken, !refreshToken.isEmpty {
+            UserDefaults.standard.set(refreshToken, forKey: refreshTokenKey)
+        } else {
+            UserDefaults.standard.removeObject(forKey: refreshTokenKey)
+        }
+        if let tokenType, !tokenType.isEmpty {
+            UserDefaults.standard.set(tokenType, forKey: tokenTypeKey)
+        } else {
+            UserDefaults.standard.removeObject(forKey: tokenTypeKey)
+        }
+        if let expiresIn, expiresIn > 0 {
+            UserDefaults.standard.set(Date().addingTimeInterval(TimeInterval(expiresIn)).timeIntervalSince1970, forKey: expiresAtKey)
+        } else {
+            UserDefaults.standard.removeObject(forKey: expiresAtKey)
+        }
+    }
+
+    static func clear() {
+        UserDefaults.standard.removeObject(forKey: accessTokenKey)
+        UserDefaults.standard.removeObject(forKey: refreshTokenKey)
+        UserDefaults.standard.removeObject(forKey: tokenTypeKey)
+        UserDefaults.standard.removeObject(forKey: expiresAtKey)
     }
 }
 
@@ -185,7 +280,8 @@ final class SupabaseRESTClient {
         var request = URLRequest(url: url)
         request.httpMethod = method
         request.setValue(config.anonKey, forHTTPHeaderField: "apikey")
-        request.setValue("Bearer \(config.anonKey)", forHTTPHeaderField: "Authorization")
+        let bearerToken = SupabaseAuthSessionStore.accessToken ?? config.anonKey
+        request.setValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue(config.schema, forHTTPHeaderField: "Accept-Profile")
         request.setValue(config.schema, forHTTPHeaderField: "Content-Profile")

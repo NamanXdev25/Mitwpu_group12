@@ -19,7 +19,7 @@ final class UserDefaultsAppointmentRepository: AppointmentRepository {
     func loadAppointments() -> [String: [AppointmentItem]] {
         guard
             let data = userDefaults.data(forKey: key),
-            let decoded = try? JSONDecoder().decode([String: [AppointmentFirestoreDTO]].self, from: data)
+            let decoded = try? JSONDecoder().decode([String: [AppointmentDTO]].self, from: data)
         else {
             return [:]
         }
@@ -37,21 +37,41 @@ final class UserDefaultsAppointmentRepository: AppointmentRepository {
 final class UserDefaultsMedicationHistoryRepository: MedicationHistoryRepository {
     private let userDefaults: UserDefaults
     private let key: String
+    private let legacyKey: String?
 
-    init(userDefaults: UserDefaults = .standard, key: String = "MedicationHistoryStore") {
+    init(
+        userDefaults: UserDefaults = .standard,
+        key: String = "MedicationHistoryStore",
+        legacyKey: String? = nil
+    ) {
         self.userDefaults = userDefaults
         self.key = key
+        if let legacyKey {
+            self.legacyKey = legacyKey
+        } else if key != "MedicationHistoryStore" {
+            self.legacyKey = "MedicationHistoryStore"
+        } else {
+            self.legacyKey = nil
+        }
     }
 
     func loadHistory() -> [String: MedicationHistoryEntry] {
-        guard
-            let data = userDefaults.data(forKey: key),
-            let decoded = try? JSONDecoder().decode([String: MedicationHistoryEntryFirestoreDTO].self, from: data)
-        else {
+        if let data = userDefaults.data(forKey: key),
+           let decoded = try? JSONDecoder().decode([String: MedicationHistoryEntryDTO].self, from: data) {
+            return decoded.mapValues { MedicationHistoryEntry(dto: $0) }
+        }
+
+        guard let legacyKey,
+              let data = userDefaults.data(forKey: legacyKey),
+              let decoded = try? JSONDecoder().decode([String: MedicationHistoryEntryDTO].self, from: data) else {
             return [:]
         }
 
-        return decoded.mapValues { MedicationHistoryEntry(dto: $0) }
+        let migrated = decoded.mapValues { MedicationHistoryEntry(dto: $0) }
+        if !migrated.isEmpty {
+            saveHistory(migrated)
+        }
+        return migrated
     }
 
     func saveHistory(_ history: [String: MedicationHistoryEntry]) {
@@ -73,7 +93,7 @@ final class UserDefaultsMemoryRepository: MemoryRepository {
     func loadMemories() -> [Memory] {
         guard
             let data = userDefaults.data(forKey: key),
-            let decoded = try? JSONDecoder().decode([MemoryFirestoreDTO].self, from: data)
+            let decoded = try? JSONDecoder().decode([MemoryDTO].self, from: data)
         else {
             return []
         }
@@ -100,7 +120,7 @@ final class UserDefaultsHydrationRepository: HydrationRepository {
     func loadEntries() -> [HydrationEntry] {
         guard
             let data = userDefaults.data(forKey: key),
-            let decoded = try? JSONDecoder().decode([HydrationEntryFirestoreDTO].self, from: data)
+            let decoded = try? JSONDecoder().decode([HydrationEntryDTO].self, from: data)
         else {
             return []
         }
@@ -133,7 +153,7 @@ final class UserDefaultsSymptomRepository: SymptomRepository {
     func loadLogs() -> [SymptomLog] {
         guard
             let data = userDefaults.data(forKey: logsKey),
-            let decoded = try? JSONDecoder().decode([SymptomLogFirestoreDTO].self, from: data)
+            let decoded = try? JSONDecoder().decode([SymptomLogDTO].self, from: data)
         else {
             return []
         }
@@ -167,7 +187,7 @@ final class UserDefaultsJournalRepository: JournalRepository {
     func loadEntries() -> [JournalEntry] {
         guard
             let data = userDefaults.data(forKey: key),
-            let decoded = try? JSONDecoder().decode([JournalEntryFirestoreDTO].self, from: data)
+            let decoded = try? JSONDecoder().decode([JournalEntryDTO].self, from: data)
         else {
             return []
         }
@@ -196,5 +216,45 @@ final class UserDefaultsBreathingRepository: BreathingRepository {
 
     func saveFavoriteTitles(_ titles: [String]) {
         userDefaults.set(titles, forKey: key)
+    }
+}
+
+final class UserDefaultsProfileRepository: ProfileRepository {
+    private let userDefaults: UserDefaults
+    private let key: String
+    private let legacyKey: String?
+
+    init(
+        userDefaults: UserDefaults = .standard,
+        key: String = "savedUserProfile",
+        legacyKey: String? = nil
+    ) {
+        self.userDefaults = userDefaults
+        self.key = key
+        if let legacyKey {
+            self.legacyKey = legacyKey
+        } else if key != "savedUserProfile" {
+            self.legacyKey = "savedUserProfile"
+        } else {
+            self.legacyKey = nil
+        }
+    }
+
+    func loadProfile() -> ProfileUserProfile? {
+        if let data = userDefaults.data(forKey: key),
+           let profile = try? JSONDecoder().decode(ProfileUserProfile.self, from: data) {
+            return profile
+        }
+
+        guard let legacyKey,
+              let data = userDefaults.data(forKey: legacyKey) else {
+            return nil
+        }
+        return try? JSONDecoder().decode(ProfileUserProfile.self, from: data)
+    }
+
+    func saveProfile(_ profile: ProfileUserProfile) {
+        guard let encoded = try? JSONEncoder().encode(profile) else { return }
+        userDefaults.set(encoded, forKey: key)
     }
 }

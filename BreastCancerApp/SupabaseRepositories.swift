@@ -95,11 +95,17 @@ final class SupabaseMedicationHistoryRepository: MedicationHistoryRepository {
     private let client: SupabaseRESTClient
 
     init(
-        local: MedicationHistoryRepository = UserDefaultsMedicationHistoryRepository(),
+        local: MedicationHistoryRepository? = nil,
         userId: UUID = SupabaseUserContext.userId,
         client: SupabaseRESTClient = .shared
     ) {
-        self.local = local
+        let resolvedLocal = local
+            ?? UserDefaultsMedicationHistoryRepository(
+                key: "MedicationHistoryStore_\(userId.uuidString)",
+                legacyKey: "MedicationHistoryStore"
+            )
+            as MedicationHistoryRepository
+        self.local = resolvedLocal
         self.userId = userId
         self.client = client
     }
@@ -117,10 +123,37 @@ final class SupabaseMedicationHistoryRepository: MedicationHistoryRepository {
 
     private func syncFromCloudIntoLocal() {
         client.fetchRows(from: "medication_history_snapshots", filters: [SupabaseFilter(key: "user_id", op: "eq", value: userId.uuidString)]) { (rows: [MedicationHistorySnapshotSupabaseRow]) in
-            let map = rows.reduce(into: [String: MedicationHistoryEntry]()) { partialResult, row in
+            let groupedByDate = Dictionary(grouping: rows, by: \.date_key)
+
+            var canonicalRows: [MedicationHistorySnapshotSupabaseRow] = []
+            var staleRowIDs: [String] = []
+
+            for (_, groupedRows) in groupedByDate {
+                let sortedRows = groupedRows.sorted { lhs, rhs in
+                    let lhsTimestamp = lhs.updated_at ?? Date(timeIntervalSince1970: lhs.date_epoch)
+                    let rhsTimestamp = rhs.updated_at ?? Date(timeIntervalSince1970: rhs.date_epoch)
+                    return lhsTimestamp > rhsTimestamp
+                }
+
+                guard let canonical = sortedRows.first else { continue }
+                canonicalRows.append(canonical)
+                staleRowIDs.append(contentsOf: sortedRows.dropFirst().map(\.id))
+            }
+
+            let map = canonicalRows.reduce(into: [String: MedicationHistoryEntry]()) { partialResult, row in
                 partialResult[row.date_key] = MedicationHistoryEntry(supabaseRow: row)
             }
             self.local.saveHistory(map)
+
+            for staleRowID in staleRowIDs {
+                self.client.deleteRows(
+                    from: "medication_history_snapshots",
+                    filters: [
+                        SupabaseFilter(key: "user_id", op: "eq", value: self.userId.uuidString),
+                        SupabaseFilter(key: "id", op: "eq", value: staleRowID)
+                    ]
+                )
+            }
         }
     }
 
@@ -141,21 +174,13 @@ final class SupabaseMedicationHistoryRepository: MedicationHistoryRepository {
             entry.toSupabaseDailyStatusRows(userId: userId, dateKey: dateKey)
         }
 
-        client.deleteAllRows(forUser: userId, from: "medication_history_snapshots") { _ in
-            self.client.upsertRows(rows, into: "medication_history_snapshots", onConflict: "id") { _ in
-                self.client.deleteAllRows(forUser: self.userId, from: "medication_items") { _ in
-                    self.client.upsertRows(itemRows, into: "medication_items", onConflict: "id") { _ in
-                        self.client.deleteAllRows(forUser: self.userId, from: "medication_plans") { _ in
-                            self.client.upsertRows(planRows, into: "medication_plans", onConflict: "id") { _ in
-                                self.client.deleteAllRows(forUser: self.userId, from: "medication_daily_status") { _ in
-                                    self.client.upsertRows(dailyStatusRows, into: "medication_daily_status", onConflict: "id")
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        // Do not hard-delete all medication rows before upsert.
+        // Hard deletes can drop historical data from other devices that have not
+        // yet pulled the latest local snapshot.
+        client.upsertRows(rows, into: "medication_history_snapshots", onConflict: "user_id,date_key")
+        client.upsertRows(itemRows, into: "medication_items", onConflict: "id")
+        client.upsertRows(planRows, into: "medication_plans", onConflict: "id")
+        client.upsertRows(dailyStatusRows, into: "medication_daily_status", onConflict: "id")
     }
 }
 
@@ -263,7 +288,7 @@ final class SupabaseHydrationRepository: HydrationRepository {
                     goalML = existingGoalByDateKey[dateKey] ?? currentGoalML
                 }
                 return HydrationDailySupabaseRow(
-                    id: dateKey,
+                    id: "\(self.userId.uuidString)#\(dateKey)",
                     user_id: self.userId,
                     date_key: dateKey,
                     date_epoch: dayStart.timeIntervalSince1970,
@@ -273,9 +298,15 @@ final class SupabaseHydrationRepository: HydrationRepository {
                 )
             }
 
-            self.client.deleteAllRows(forUser: self.userId, from: "hydration_daily_status") { _ in
-                self.client.upsertRows(rows, into: "hydration_daily_status", onConflict: "id")
-            }
+            // Do not delete all user rows here.
+            // Multiple devices can have partially synced local snapshots; a full delete from one
+            // device would wipe hydration history uploaded by another device.
+            // Merge by per-day key instead.
+            self.client.upsertRows(
+                rows,
+                into: "hydration_daily_status",
+                onConflict: "user_id,date_key"
+            )
         }
     }
 }
@@ -286,23 +317,37 @@ final class SupabaseSymptomRepository: SymptomRepository {
     private let client: SupabaseRESTClient
 
     init(
-        local: SymptomRepository = UserDefaultsSymptomRepository(),
+        local: SymptomRepository? = nil,
         userId: UUID = SupabaseUserContext.userId,
         client: SupabaseRESTClient = .shared
     ) {
-        self.local = local
+        let resolvedLocal = local
+            ?? UserDefaultsSymptomRepository(
+                logsKey: "symptom_logs_v1_\(userId.uuidString)",
+                idsKey: "symptom_user_ids_v1_\(userId.uuidString)"
+            )
+            as SymptomRepository
+        self.local = resolvedLocal
         self.userId = userId
         self.client = client
     }
 
     func loadLogs() -> [SymptomLog] {
         let cached = local.loadLogs()
+        let cleaned = removeLegacySeedLogsIfNeeded(from: cached)
+        if cleaned.count != cached.count {
+            local.saveLogs(cleaned)
+            if client.isConfigured {
+                uploadCurrentState()
+            }
+        }
         syncFromCloudIntoLocal()
-        return cached
+        return cleaned
     }
 
     func saveLogs(_ logs: [SymptomLog]) {
-        local.saveLogs(logs)
+        let cleaned = removeLegacySeedLogsIfNeeded(from: logs)
+        local.saveLogs(cleaned)
         uploadCurrentState()
     }
 
@@ -319,7 +364,13 @@ final class SupabaseSymptomRepository: SymptomRepository {
 
     private func syncFromCloudIntoLocal() {
         client.fetchRows(from: "symptom_logs", filters: [SupabaseFilter(key: "user_id", op: "eq", value: userId.uuidString)]) { (rows: [SymptomLogSupabaseRow]) in
-            self.local.saveLogs(rows.map(SymptomLog.init(supabaseRow:)).sorted { $0.timestamp > $1.timestamp })
+            let orderedLogs = rows.map(SymptomLog.init(supabaseRow:)).sorted { $0.timestamp > $1.timestamp }
+            let cleanedLogs = self.removeLegacySeedLogsIfNeeded(from: orderedLogs)
+            self.local.saveLogs(cleanedLogs)
+
+            if cleanedLogs.count != orderedLogs.count {
+                self.uploadCurrentState()
+            }
         }
 
         client.fetchRows(from: "symptom_user_preferences", filters: [SupabaseFilter(key: "user_id", op: "eq", value: userId.uuidString)]) { (rows: [SymptomPreferenceSupabaseRow]) in
@@ -346,6 +397,70 @@ final class SupabaseSymptomRepository: SymptomRepository {
         // with the latest selected symptom IDs.
         client.deleteAllRows(forUser: userId, from: "symptom_user_preferences") { _ in
             self.client.upsertRows([preferenceRow], into: "symptom_user_preferences")
+        }
+    }
+
+    private func removeLegacySeedLogsIfNeeded(from logs: [SymptomLog]) -> [SymptomLog] {
+        guard !logs.isEmpty else { return logs }
+
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+
+        struct SeedSignature: Hashable {
+            let symptomId: String
+            let severity: Int
+            let dayOffset: Int
+        }
+
+        let legacySeedSignatures: Set<SeedSignature> = [
+            SeedSignature(symptomId: "nausea", severity: 1, dayOffset: 1),
+            SeedSignature(symptomId: "pain", severity: 3, dayOffset: 1),
+            SeedSignature(symptomId: "fatigue", severity: 3, dayOffset: 3),
+            SeedSignature(symptomId: "headache", severity: 2, dayOffset: 3),
+            SeedSignature(symptomId: "nausea", severity: 4, dayOffset: 5),
+            SeedSignature(symptomId: "pain", severity: 2, dayOffset: 7),
+            SeedSignature(symptomId: "fatigue", severity: 4, dayOffset: 7),
+            SeedSignature(symptomId: "insomnia", severity: 3, dayOffset: 10),
+            SeedSignature(symptomId: "nausea", severity: 2, dayOffset: 12),
+            SeedSignature(symptomId: "appetite_loss", severity: 3, dayOffset: 12),
+            SeedSignature(symptomId: "fatigue", severity: 3, dayOffset: 14),
+            SeedSignature(symptomId: "pain", severity: 4, dayOffset: 14),
+            SeedSignature(symptomId: "headache", severity: 1, dayOffset: 17),
+            SeedSignature(symptomId: "nausea", severity: 3, dayOffset: 19),
+            SeedSignature(symptomId: "fatigue", severity: 4, dayOffset: 21),
+            SeedSignature(symptomId: "insomnia", severity: 2, dayOffset: 21),
+            SeedSignature(symptomId: "pain", severity: 3, dayOffset: 24),
+            SeedSignature(symptomId: "nausea", severity: 2, dayOffset: 26),
+            SeedSignature(symptomId: "appetite_loss", severity: 4, dayOffset: 26),
+            SeedSignature(symptomId: "fatigue", severity: 2, dayOffset: 28),
+            SeedSignature(symptomId: "headache", severity: 3, dayOffset: 30),
+            SeedSignature(symptomId: "pain", severity: 2, dayOffset: 30)
+        ]
+
+        var removalIndices = Set<Int>()
+
+        for (index, log) in logs.enumerated() {
+            let trimmedNote = log.note.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard trimmedNote.isEmpty else { continue }
+
+            let logDay = calendar.startOfDay(for: log.timestamp)
+            let dayOffset = calendar.dateComponents([.day], from: logDay, to: today).day ?? 0
+            guard dayOffset >= 1 else { continue }
+
+            let signature = SeedSignature(
+                symptomId: log.symptomId.lowercased(),
+                severity: log.severity,
+                dayOffset: dayOffset
+            )
+            if legacySeedSignatures.contains(signature) {
+                removalIndices.insert(index)
+            }
+        }
+
+        guard removalIndices.count >= 8 else { return logs }
+
+        return logs.enumerated().compactMap { index, log in
+            removalIndices.contains(index) ? nil : log
         }
     }
 }
@@ -533,6 +648,54 @@ final class SupabaseBreathingRepository: BreathingRepository {
         client.deleteAllRows(forUser: userId, from: "breathing_favorites") { _ in
             self.client.upsertRows(rows, into: "breathing_favorites")
         }
+    }
+}
+
+final class SupabaseProfileRepository: ProfileRepository {
+    private let local: ProfileRepository
+    private let userId: UUID
+    private let client: SupabaseRESTClient
+
+    init(
+        local: ProfileRepository? = nil,
+        userId: UUID = SupabaseUserContext.userId,
+        client: SupabaseRESTClient = .shared
+    ) {
+        self.userId = userId
+        self.client = client
+        self.local = local ?? UserDefaultsProfileRepository(key: "savedUserProfile_\(userId.uuidString)")
+    }
+
+    func loadProfile() -> ProfileUserProfile? {
+        let cached = local.loadProfile()
+        syncFromCloudIntoLocal()
+        return cached
+    }
+
+    func saveProfile(_ profile: ProfileUserProfile) {
+        local.saveProfile(profile)
+        syncSnapshotToCloud(profile)
+    }
+
+    private func syncFromCloudIntoLocal() {
+        client.fetchRows(
+            from: "user_profiles",
+            filters: [SupabaseFilter(key: "user_id", op: "eq", value: userId.uuidString)]
+        ) { (rows: [UserProfileSupabaseRow]) in
+            if let row = rows.first {
+                self.local.saveProfile(ProfileUserProfile(supabaseRow: row))
+                return
+            }
+
+            if let localProfile = self.local.loadProfile() {
+                self.syncSnapshotToCloud(localProfile)
+            }
+        }
+    }
+
+    private func syncSnapshotToCloud(_ profile: ProfileUserProfile) {
+        guard client.isConfigured else { return }
+        client.upsertRows([profile.toSupabaseRow(userId: userId)], into: "user_profiles", onConflict: "user_id")
     }
 }
 

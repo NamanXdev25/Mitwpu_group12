@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		98354D362F558D0200B1ED4E /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 98354D352F558D0200B1ED4E /* FirebaseFirestore */; };
-		98354D382F558D1600B1ED4E /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 98354D372F558D1600B1ED4E /* FirebaseCore */; };
+		98A1F0032F70A10000B1ED4E /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 98A1F0022F70A10000B1ED4E /* GoogleSignIn */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,8 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				98354D382F558D1600B1ED4E /* FirebaseCore in Frameworks */,
-				98354D362F558D0200B1ED4E /* FirebaseFirestore in Frameworks */,
+				98A1F0032F70A10000B1ED4E /* GoogleSignIn in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,8 +93,7 @@
 			);
 			name = BreastCancerApp;
 			packageProductDependencies = (
-				98354D352F558D0200B1ED4E /* FirebaseFirestore */,
-				98354D372F558D1600B1ED4E /* FirebaseCore */,
+				98A1F0022F70A10000B1ED4E /* GoogleSignIn */,
 			);
 			productName = BreastCancerApp;
 			productReference = 64E778AE2ECE2D6600B7826F /* BreastCancerApp.app */;
@@ -127,7 +124,7 @@
 			mainGroup = 64E778A52ECE2D6600B7826F;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				98354D342F558CE900B1ED4E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				98A1F0012F70A10000B1ED4E /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 64E778AF2ECE2D6600B7826F /* Products */;
@@ -363,26 +360,21 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		98354D342F558CE900B1ED4E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+		98A1F0012F70A10000B1ED4E /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 12.10.0;
+				minimumVersion = 8.0.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		98354D352F558D0200B1ED4E /* FirebaseFirestore */ = {
+		98A1F0022F70A10000B1ED4E /* GoogleSignIn */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 98354D342F558CE900B1ED4E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseFirestore;
-		};
-		98354D372F558D1600B1ED4E /* FirebaseCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 98354D342F558CE900B1ED4E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseCore;
+			package = 98A1F0012F70A10000B1ED4E /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

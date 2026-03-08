@@ -10,11 +10,14 @@ final class SocialSignupCollectionViewCell: UICollectionViewCell {
     
     // Add closure for Sign In action
     var onSignInTapped: (() -> Void)?
+    var onGoogleTapped: (() -> Void)?
+    var onAppleTapped: (() -> Void)?
 
     override func awakeFromNib() {
         super.awakeFromNib()
         configureInteraction()
         setupUI()
+        setupTapGestures()
     }
 
     private func configureInteraction() {
@@ -35,14 +38,42 @@ final class SocialSignupCollectionViewCell: UICollectionViewCell {
         view.clipsToBounds = true
     }
 
+    private func setupTapGestures() {
+        let googleTap = UITapGestureRecognizer(
+            target: self,
+            action: #selector(didTapGoogleContainer)
+        )
+        googleContainerView.addGestureRecognizer(googleTap)
+
+        let appleTap = UITapGestureRecognizer(
+            target: self,
+            action: #selector(didTapAppleContainer)
+        )
+        appleContainerView.addGestureRecognizer(appleTap)
+    }
+
+    @objc
+    private func didTapGoogleContainer() {
+        print("Google signup tapped")
+        onGoogleTapped?()
+    }
+
+    @objc
+    private func didTapAppleContainer() {
+        print("Apple signup tapped")
+        onAppleTapped?()
+    }
+
     // Actions
 
     @IBAction func didTapGoogle(_ sender: UIButton) {
-        print("Google login tapped")
+        print("Google signup tapped")
+        onGoogleTapped?()
     }
 
     @IBAction func didTapApple(_ sender: UIButton) {
         print("Apple login tapped")
+        onAppleTapped?()
     }
 
     @IBAction func didTapSignUp(_ sender: UIButton) {

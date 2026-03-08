@@ -2,65 +2,34 @@ import Foundation
 
 enum RepositoryFactory {
     static func makeAppointmentRepository() -> AppointmentRepository {
-        switch AppBackend.current {
-        case .firestore:
-            return FirestoreAppointmentRepository()
-        case .supabase:
-            return SupabaseAppointmentRepository()
-        }
+        SupabaseAppointmentRepository()
     }
 
     static func makeMedicationHistoryRepository() -> MedicationHistoryRepository {
-        switch AppBackend.current {
-        case .firestore:
-            return FirestoreMedicationHistoryRepository()
-        case .supabase:
-            return SupabaseMedicationHistoryRepository()
-        }
+        SupabaseMedicationHistoryRepository()
     }
 
     static func makeMemoryRepository() -> MemoryRepository {
-        switch AppBackend.current {
-        case .firestore:
-            return FirestoreMemoryRepository()
-        case .supabase:
-            return SupabaseMemoryRepository()
-        }
+        SupabaseMemoryRepository()
     }
 
     static func makeHydrationRepository() -> HydrationRepository {
-        switch AppBackend.current {
-        case .firestore:
-            return FirestoreHydrationRepository()
-        case .supabase:
-            return SupabaseHydrationRepository()
-        }
+        SupabaseHydrationRepository()
     }
 
     static func makeSymptomRepository() -> SymptomRepository {
-        switch AppBackend.current {
-        case .firestore:
-            return FirestoreSymptomRepository()
-        case .supabase:
-            return SupabaseSymptomRepository()
-        }
+        SupabaseSymptomRepository()
     }
 
     static func makeJournalRepository() -> JournalRepository {
-        switch AppBackend.current {
-        case .firestore:
-            return FirestoreJournalRepository()
-        case .supabase:
-            return SupabaseJournalRepository()
-        }
+        SupabaseJournalRepository()
     }
 
     static func makeBreathingRepository() -> BreathingRepository {
-        switch AppBackend.current {
-        case .firestore:
-            return FirestoreBreathingRepository()
-        case .supabase:
-            return SupabaseBreathingRepository()
-        }
+        SupabaseBreathingRepository()
+    }
+
+    static func makeProfileRepository() -> ProfileRepository {
+        SupabaseProfileRepository()
     }
 }

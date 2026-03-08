@@ -1,15 +1,15 @@
 //
-//  FirestoreDTOs.swift
+//  PersistenceDTOs.swift
 //  BreastCancerApp
 //
-//  Created by Naman Bhansali on 01/03/26.
+//  Created by Codex on 08/03/26.
 //
 
 import Foundation
 
 // MARK: - Appointment
 
-struct AppointmentFirestoreDTO: Codable {
+struct AppointmentDTO: Codable {
     let id: String
     let title: String
     let date: String
@@ -20,7 +20,7 @@ struct AppointmentFirestoreDTO: Codable {
 }
 
 extension AppointmentItem {
-    init(dto: AppointmentFirestoreDTO) {
+    init(dto: AppointmentDTO) {
         self.init(
             id: dto.id,
             title: dto.title,
@@ -32,8 +32,8 @@ extension AppointmentItem {
         )
     }
 
-    func toDTO() -> AppointmentFirestoreDTO {
-        AppointmentFirestoreDTO(
+    func toDTO() -> AppointmentDTO {
+        AppointmentDTO(
             id: id,
             title: title,
             date: date,
@@ -47,7 +47,7 @@ extension AppointmentItem {
 
 // MARK: - Medication
 
-struct MedicationFirestoreDTO: Codable {
+struct MedicationDTO: Codable {
     let id: String
     let name: String
     let note: String
@@ -58,7 +58,7 @@ struct MedicationFirestoreDTO: Codable {
 }
 
 extension Medication {
-    init(dto: MedicationFirestoreDTO) {
+    init(dto: MedicationDTO) {
         self.init(
             id: dto.id,
             name: dto.name,
@@ -70,8 +70,8 @@ extension Medication {
         )
     }
 
-    func toDTO() -> MedicationFirestoreDTO {
-        MedicationFirestoreDTO(
+    func toDTO() -> MedicationDTO {
+        MedicationDTO(
             id: id,
             name: name,
             note: note,
@@ -85,16 +85,16 @@ extension Medication {
 
 // MARK: - Medication History
 
-struct MedicationHistoryEntryFirestoreDTO: Codable {
+struct MedicationHistoryEntryDTO: Codable {
     let id: String
     let dateEpoch: TimeInterval
-    let medications: [MedicationFirestoreDTO]
+    let medications: [MedicationDTO]
     let taken: Int
     let goal: Int
 }
 
 extension MedicationHistoryEntry {
-    init(dto: MedicationHistoryEntryFirestoreDTO) {
+    init(dto: MedicationHistoryEntryDTO) {
         self.init(
             id: dto.id,
             date: Date(timeIntervalSince1970: dto.dateEpoch),
@@ -104,8 +104,8 @@ extension MedicationHistoryEntry {
         )
     }
 
-    func toDTO() -> MedicationHistoryEntryFirestoreDTO {
-        MedicationHistoryEntryFirestoreDTO(
+    func toDTO() -> MedicationHistoryEntryDTO {
+        MedicationHistoryEntryDTO(
             id: id,
             dateEpoch: date.timeIntervalSince1970,
             medications: medications.map { $0.toDTO() },
@@ -117,7 +117,7 @@ extension MedicationHistoryEntry {
 
 // MARK: - Memory
 
-struct MemoryFirestoreDTO: Codable {
+struct MemoryDTO: Codable {
     let id: String
     let imageDataBase64: String?
     let dateEpoch: TimeInterval
@@ -125,7 +125,7 @@ struct MemoryFirestoreDTO: Codable {
 }
 
 extension Memory {
-    init(dto: MemoryFirestoreDTO) {
+    init(dto: MemoryDTO) {
         let data = dto.imageDataBase64.flatMap { Data(base64Encoded: $0) }
         self.init(
             id: dto.id,
@@ -135,8 +135,8 @@ extension Memory {
         )
     }
 
-    func toDTO() -> MemoryFirestoreDTO {
-        MemoryFirestoreDTO(
+    func toDTO() -> MemoryDTO {
+        MemoryDTO(
             id: id,
             imageDataBase64: imageData?.base64EncodedString(),
             dateEpoch: date.timeIntervalSince1970,
@@ -147,7 +147,7 @@ extension Memory {
 
 // MARK: - Symptom Log
 
-struct SymptomLogFirestoreDTO: Codable {
+struct SymptomLogDTO: Codable {
     let id: String
     let symptomId: String
     let symptomName: String
@@ -157,7 +157,7 @@ struct SymptomLogFirestoreDTO: Codable {
 }
 
 extension SymptomLog {
-    init(dto: SymptomLogFirestoreDTO) {
+    init(dto: SymptomLogDTO) {
         self.init(
             id: dto.id,
             symptomId: dto.symptomId,
@@ -168,8 +168,8 @@ extension SymptomLog {
         )
     }
 
-    func toDTO() -> SymptomLogFirestoreDTO {
-        SymptomLogFirestoreDTO(
+    func toDTO() -> SymptomLogDTO {
+        SymptomLogDTO(
             id: id,
             symptomId: symptomId,
             symptomName: symptomName,
@@ -182,14 +182,14 @@ extension SymptomLog {
 
 // MARK: - Hydration Entry
 
-struct HydrationEntryFirestoreDTO: Codable {
+struct HydrationEntryDTO: Codable {
     let id: String
     let amountML: Int
     let timestampEpoch: TimeInterval
 }
 
 extension HydrationEntry {
-    init(dto: HydrationEntryFirestoreDTO) {
+    init(dto: HydrationEntryDTO) {
         self.init(
             id: UUID(uuidString: dto.id) ?? UUID(),
             amountML: dto.amountML,
@@ -197,8 +197,8 @@ extension HydrationEntry {
         )
     }
 
-    func toDTO() -> HydrationEntryFirestoreDTO {
-        HydrationEntryFirestoreDTO(
+    func toDTO() -> HydrationEntryDTO {
+        HydrationEntryDTO(
             id: id.uuidString,
             amountML: amountML,
             timestampEpoch: timestamp.timeIntervalSince1970
@@ -208,7 +208,7 @@ extension HydrationEntry {
 
 // MARK: - Journal
 
-struct JournalEntryFirestoreDTO: Codable {
+struct JournalEntryDTO: Codable {
     let id: String
     let title: String
     let body: String
@@ -219,7 +219,7 @@ struct JournalEntryFirestoreDTO: Codable {
 }
 
 extension JournalEntry {
-    init(dto: JournalEntryFirestoreDTO) {
+    init(dto: JournalEntryDTO) {
         self.init(
             id: UUID(uuidString: dto.id) ?? UUID(),
             title: dto.title,
@@ -231,8 +231,8 @@ extension JournalEntry {
         )
     }
 
-    func toDTO() -> JournalEntryFirestoreDTO {
-        JournalEntryFirestoreDTO(
+    func toDTO() -> JournalEntryDTO {
+        JournalEntryDTO(
             id: id.uuidString,
             title: title,
             body: body,

@@ -95,7 +95,7 @@ class SymptomDataSource {
             SeedSignature(symptomId: "pain", severity: 2, dayOffset: 30)
         ]
 
-        var candidateIndexBySignature: [SeedSignature: Int] = [:]
+        var removalIndices = Set<Int>()
 
         for (index, log) in logs.enumerated() {
             let trimmedNote = log.note.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -110,21 +110,17 @@ class SymptomDataSource {
                 severity: log.severity,
                 dayOffset: dayOffset
             )
-            if legacySeedSignatures.contains(signature), candidateIndexBySignature[signature] == nil {
-                candidateIndexBySignature[signature] = index
+            if legacySeedSignatures.contains(signature) {
+                removalIndices.insert(index)
             }
         }
 
-        guard candidateIndexBySignature.count == legacySeedSignatures.count else {
-            return logs
-        }
+        // Avoid deleting real user logs when only 1-2 signatures happen to overlap.
+        guard removalIndices.count >= 8 else { return logs }
 
-        let indicesToRemove = Set(candidateIndexBySignature.values)
-        var cleaned = logs
-        for index in indicesToRemove.sorted(by: >) {
-            cleaned.remove(at: index)
+        return logs.enumerated().compactMap { index, log in
+            removalIndices.contains(index) ? nil : log
         }
-        return cleaned
     }
 
     private func applyUserSymptomIDsToMasterList(_ ids: [String]) {

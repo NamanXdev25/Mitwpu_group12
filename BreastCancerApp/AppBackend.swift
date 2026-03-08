@@ -1,7 +1,6 @@
 import Foundation
 
 enum AppBackendProvider: String {
-    case firestore
     case supabase
 }
 
@@ -14,11 +13,7 @@ enum AppBackend {
             return provider
         }
 
-        if SupabaseConfiguration.current != nil {
-            return .supabase
-        }
-
-        return .firestore
+        return .supabase
     }
 
     static func setCurrent(_ provider: AppBackendProvider) {
