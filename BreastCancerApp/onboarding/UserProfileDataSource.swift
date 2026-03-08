@@ -17,7 +17,7 @@ class UserProfileDataSource {
             self.userProfile = defaultProfile
             print("Loaded profile from JSON")
         } else {
-            self.userProfile = ProfileUserProfile()
+            self.userProfile = ProfileUserProfile(profileImageBase64: nil)
             print("Using hardcoded default profile")
         }
     }
@@ -228,5 +228,58 @@ class UserProfileDataSource {
             object: self,
             userInfo: ["profile": userProfile]
         )
+    }
+}
+
+extension ProfileUserProfile {
+    var profileImage: UIImage? {
+        get {
+            guard let base64 = profileImageBase64,
+                  let data = Data(base64Encoded: base64) else {
+                return nil
+            }
+            return UIImage(data: data)
+        }
+        set {
+            if let image = newValue,
+               let data = image.jpegData(compressionQuality: 0.8) {
+                profileImageBase64 = data.base64EncodedString()
+            } else {
+                profileImageBase64 = nil
+            }
+        }
+    }
+
+    init(
+        firstName: String = "Sophie",
+        lastName: String = "Chen",
+        profileImage: UIImage? = nil,
+        diagnosisDate: String = "12 Aug 2024",
+        gender: String = "Female",
+        age: Int = 32,
+        cancerStage: String = "Stage II",
+        treatmentState: String = "Ongoing",
+        treatmentCompletionDate: String = "",
+        exerciseNotificationsEnabled: Bool = false,
+        hydrationNotificationsEnabled: Bool = false,
+        appointmentsNotificationsEnabled: Bool = false,
+        medicationsNotificationsEnabled: Bool = false
+    ) {
+        self.init(
+            firstName: firstName,
+            lastName: lastName,
+            profileImageBase64: nil,
+            diagnosisDate: diagnosisDate,
+            gender: gender,
+            age: age,
+            cancerStage: cancerStage,
+            treatmentState: treatmentState,
+            treatmentCompletionDate: treatmentCompletionDate,
+            exerciseNotificationsEnabled: exerciseNotificationsEnabled,
+            hydrationNotificationsEnabled: hydrationNotificationsEnabled,
+            appointmentsNotificationsEnabled: appointmentsNotificationsEnabled,
+            medicationsNotificationsEnabled: medicationsNotificationsEnabled
+        )
+        self.profileImage = profileImage
     }
 }

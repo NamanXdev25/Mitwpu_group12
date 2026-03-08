@@ -7,7 +7,6 @@
 
 import Foundation
 import CoreGraphics
-import UIKit
 
 // Shared app-domain and reusable feature models live in this file.
 // Firestore transport DTOs, repositories, and UI-local enums stay in their feature files.
@@ -950,24 +949,6 @@ struct ProfileUserProfile: Codable {
         return "\(firstName) \(lastName)"
     }
 
-    var profileImage: UIImage? {
-        get {
-            guard let base64 = profileImageBase64,
-                  let data = Data(base64Encoded: base64) else {
-                return nil
-            }
-            return UIImage(data: data)
-        }
-        set {
-            if let image = newValue,
-               let data = image.jpegData(compressionQuality: 0.8) {
-                profileImageBase64 = data.base64EncodedString()
-            } else {
-                profileImageBase64 = nil
-            }
-        }
-    }
-
     var diagnosisDateObject: Date? {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd MMM yyyy"
@@ -988,7 +969,7 @@ struct ProfileUserProfile: Codable {
     init(
         firstName: String = "Sophie",
         lastName: String = "Chen",
-        profileImage: UIImage? = nil,
+        profileImageBase64: String? = nil,
         diagnosisDate: String = "12 Aug 2024",
         gender: String = "Female",
         age: Int = 32,
@@ -1012,7 +993,7 @@ struct ProfileUserProfile: Codable {
         self.hydrationNotificationsEnabled = hydrationNotificationsEnabled
         self.appointmentsNotificationsEnabled = appointmentsNotificationsEnabled
         self.medicationsNotificationsEnabled = medicationsNotificationsEnabled
-        self.profileImage = profileImage
+        self.profileImageBase64 = profileImageBase64
     }
 }
 
