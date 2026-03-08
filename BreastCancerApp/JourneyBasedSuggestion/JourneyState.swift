@@ -94,6 +94,18 @@ final class JourneyState {
            let decoded = try? JSONDecoder().decode(PersistedPostTreatmentState.self, from: data) {
             persistedPostTreatment = decoded
         }
+
+        // If treatment name is stale but we have saved phases,
+        // derive the name from the latest saved phase
+        if (currentTreatmentName == "Not started yet" || currentTreatmentName.isEmpty)
+            && !persistedPhaseStates.isEmpty {
+            let latestSaved = persistedPhaseStates
+                .filter { $0.isSaved && $0.treatmentTypeRaw != "none" && !$0.treatmentTypeRaw.isEmpty }
+                .last
+            if let name = latestSaved?.treatmentTypeRaw {
+                currentTreatmentName = name
+            }
+        }
     }
 
     // MARK: - Phase state persistence (called by JourneyViewController)
@@ -146,6 +158,7 @@ final class JourneyState {
         // Clear all phase + post-treatment state when diagnosis resets
         persistedPhaseStates    = []
         persistedTreatmentBadge = "notStarted"
+        currentTreatmentName    = "Not started yet"
         persistedPostTreatment  = PersistedPostTreatmentState(selectedDate: nil, selectedSymptoms: [], isSaved: false)
         save(); post()
     }
@@ -157,6 +170,7 @@ final class JourneyState {
         // Clear phase + post-treatment state when wait resets
         persistedPhaseStates    = []
         persistedTreatmentBadge = "notStarted"
+        currentTreatmentName    = "Not started yet"
         persistedPostTreatment  = PersistedPostTreatmentState(selectedDate: nil, selectedSymptoms: [], isSaved: false)
         save(); post()
     }
@@ -164,6 +178,7 @@ final class JourneyState {
     func resetTreatment() {
         isTreatmentCompleted    = false
         persistedTreatmentBadge = "notStarted"
+        currentTreatmentName    = "Not started yet"
         currentStepTitle        = isWaitCompleted ? "Treatment" : "Waiting for Result"
         save(); post()
     }

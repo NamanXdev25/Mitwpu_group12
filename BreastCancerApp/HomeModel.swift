@@ -419,15 +419,14 @@ class HomeModel {
         for moodKey: String,
         avoidingTitles: Set<String> = []
     ) -> Suggestion {
-        guard let content = HomeMoodSuggestionLoader.shared.moodContent(for: moodKey),
-              let journaling = randomItem(from: content.journaling, avoidingTitles: avoidingTitles) else {
-            return fallbackJournalSuggestion
-        }
-
+        let promptTitle = HomeContextEngine.selectJournalPrompt(
+            for: moodKey,
+            avoiding: avoidingTitles
+        )
         return Suggestion(
             imageName: journalingImageName,
-            title: journaling.title,
-            subtitle: subtitle(for: journaling, fallback: "Start Writing...")
+            title: promptTitle,
+            subtitle: "Start Writing..."
         )
     }
 

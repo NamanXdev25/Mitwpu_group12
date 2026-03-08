@@ -188,6 +188,7 @@ class WaitCell: UICollectionViewCell {
             button.isHidden = false
             button.alpha = 1
             applyDeselectedStyle(to: button)
+            button.addTarget(self, action: #selector(feelingButtonTapped(_:)), for: .touchUpInside)
         }
     }
 

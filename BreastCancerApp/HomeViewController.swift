@@ -18,6 +18,7 @@ class HomeViewController: UIViewController,
     private var recentlyShownJournalTitles = Set<String>()
     private var recentlyShownBreathingTitles = Set<String>()
     private var recentlyShownHobbyTitles = Set<String>()
+    private var dailySuggestionCache: [String: DailySuggestionCache] = [:]
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -25,7 +26,7 @@ class HomeViewController: UIViewController,
         registerCells()
         setupCollectionView()
         configureDataSource()
-        refreshDisplayedSuggestions(for: selectedMoodKey)
+        refreshDefaultSuggestions()
         applySnapshot()
 
         NotificationCenter.default.addObserver(
@@ -45,6 +46,10 @@ class HomeViewController: UIViewController,
     }
 
     // MARK: - Journey State Observer
+    // Called whenever JourneyState changes (phase added, deleted, type changed, etc.).
+    // Only redraws the snapshot so the journey card label updates immediately.
+    // Suggestions are intentionally NOT rebuilt here — they are stable for the day
+    // and the new treatment context flows into the weighted algorithm on the next session.
     @objc private func journeyStateChanged() {
         applySnapshot()
     }
@@ -279,18 +284,17 @@ class HomeViewController: UIViewController,
 
         snapshot.appendItems([HomeItem(type: .quote(HomeModel.quote))], toSection: .quote)
 
-        // ── Journey cell reads live data from JourneyState ──
         let journeyItem = HomeItem(type: .journey(
-            treatment: JourneyState.shared.currentTreatmentName,
-            phase: JourneyState.shared.currentStepTitle
+            treatment: journeyCellTreatmentText(),
+                phase: journeyCellPhaseText()
         ))
         snapshot.appendItems([journeyItem], toSection: .journey)
 
         snapshot.appendItems([HomeItem(type: .mood)], toSection: .mood)
 
-        let journalSuggestion = currentJournalSuggestion
-            ?? HomeModel.randomJournalSuggestion(for: selectedMoodKey)
-        snapshot.appendItems([HomeItem(type: .journal(journalSuggestion))], toSection: .journal)
+        if hasUserSelectedMood, let journalSuggestion = currentJournalSuggestion {
+            snapshot.appendItems([HomeItem(type: .journal(journalSuggestion))], toSection: .journal)
+        }
 
         let suggestions = currentSuggestions.isEmpty
             ? HomeModel.randomSuggestions(for: selectedMoodKey)
@@ -304,36 +308,75 @@ class HomeViewController: UIViewController,
     private func updateSuggestions(for mood: Mood) {
         selectedMoodKey = mood.title.lowercased()
         hasUserSelectedMood = true
-        refreshDisplayedSuggestions(for: selectedMoodKey)
+        refreshMoodSuggestions(for: selectedMoodKey)
         applySnapshot()
     }
 
-    private func refreshDisplayedSuggestions(for moodKey: String) {
+    private func refreshDefaultSuggestions() {
+        currentJournalSuggestion = nil
+        currentSuggestions = HomeSuggestionEngine.defaultSuggestions(
+            avoiding: recentlyShownBreathingTitles,
+            avoiding: recentlyShownHobbyTitles
+        )
+        trackShownSuggestions()
+        trimHistoryIfNeeded()
+    }
+
+    private func refreshMoodSuggestions(for moodKey: String) {
+        let cacheKey = dailyCacheKey(for: moodKey)
+
+        if let cached = dailySuggestionCache[cacheKey] {
+            currentJournalSuggestion = Suggestion(
+                imageName: "Journal",
+                title: cached.journalPrompt,
+                subtitle: "Start Writing..."
+            )
+            currentSuggestions = [
+                Suggestion(imageName: cached.breathingImage, title: cached.breathingTitle, subtitle: cached.breathingSubtitle),
+                Suggestion(imageName: cached.hobbyImage, title: cached.hobbyTitle, subtitle: cached.hobbySubtitle)
+            ]
+            return
+        }
+
         currentJournalSuggestion = HomeModel.randomJournalSuggestion(
             for: moodKey,
             avoidingTitles: recentlyShownJournalTitles
         )
-
-        currentSuggestions = HomeModel.randomSuggestions(
+        currentSuggestions = HomeSuggestionEngine.moodSuggestions(
             for: moodKey,
-            avoidingBreathingTitles: recentlyShownBreathingTitles,
-            avoidingHobbyTitles: recentlyShownHobbyTitles
+            avoiding: recentlyShownBreathingTitles,
+            avoiding: recentlyShownHobbyTitles
         )
 
-        if let journalTitle = currentJournalSuggestion?.title.normalizedSuggestionTitle {
-            recentlyShownJournalTitles.insert(journalTitle)
+        if let journal = currentJournalSuggestion,
+           currentSuggestions.count >= 2 {
+            let b = currentSuggestions[0]
+            let h = currentSuggestions[1]
+            dailySuggestionCache[cacheKey] = DailySuggestionCache(
+                breathingTitle: b.title,
+                breathingSubtitle: b.subtitle,
+                breathingImage: b.imageName,
+                hobbyTitle: h.title,
+                hobbySubtitle: h.subtitle,
+                hobbyImage: h.imageName,
+                journalPrompt: journal.title
+            )
         }
 
-        if let breathingTitle = currentSuggestions.first?.title.normalizedSuggestionTitle {
-            recentlyShownBreathingTitles.insert(breathingTitle)
+        if let t = currentJournalSuggestion?.title.normalizedSuggestionTitle {
+            recentlyShownJournalTitles.insert(t)
         }
-
-        if currentSuggestions.count > 1 {
-            let hobbyTitle = currentSuggestions[1].title.normalizedSuggestionTitle
-            recentlyShownHobbyTitles.insert(hobbyTitle)
-        }
-
+        trackShownSuggestions()
         trimHistoryIfNeeded()
+    }
+
+    private func trackShownSuggestions() {
+        if let t = currentSuggestions.first?.title.normalizedSuggestionTitle {
+            recentlyShownBreathingTitles.insert(t)
+        }
+        if currentSuggestions.count > 1 {
+            recentlyShownHobbyTitles.insert(currentSuggestions[1].title.normalizedSuggestionTitle)
+        }
     }
 
     private func trimHistoryIfNeeded() {
@@ -512,8 +555,10 @@ class HomeViewController: UIViewController,
             }
 
             if isBreathingSuggestion {
+                UserActivityStore.shared.recordBreathingTap(title: suggestion.title)
                 openBreathingSessionAsSheet(withTitle: suggestion.title)
             } else if HomeModel.isHobbySuggestion(title: suggestion.title) {
+                UserActivityStore.shared.recordHobbyTap(title: suggestion.title)
                 let sourceView = collectionView.cellForItem(at: indexPath) ?? collectionView
                 openHobbyMemoryOptions(from: sourceView)
             }
@@ -541,6 +586,65 @@ class HomeViewController: UIViewController,
             break
         }
     }
+
+    private func dailyCacheKey(for moodKey: String) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        return "\(moodKey)_\(formatter.string(from: Date()))"
+    }
+
+    private func journeyCellTreatmentText() -> String {
+        let js = JourneyState.shared
+
+        guard js.isDiagnosisCompleted else { return "Diagnosis" }
+
+        if js.currentStepTitle == "Treatment" || js.isTreatmentCompleted {
+            let name = js.currentTreatmentName
+            if name == "Not started yet" || name.isEmpty { return "Treatment" }
+            return name
+        }
+
+        if js.currentStepTitle == "Post-Treatment" {
+            return "Post-Treatment"
+        }
+
+        return "Diagnosed"
+    }
+
+    private func journeyCellPhaseText() -> String {
+        let js = JourneyState.shared
+
+        guard js.isDiagnosisCompleted else { return "Not Updated" }
+
+        if js.currentStepTitle == "Post-Treatment" && js.isTreatmentCompleted {
+            return "Recovery"
+        }
+
+        if js.currentStepTitle == "Treatment" || js.isTreatmentCompleted {
+            let phases = js.persistedPhaseStates
+            let savedPhases = phases.filter { $0.isSaved }
+
+            if js.isTreatmentCompleted {
+                return "Completed"
+            }
+
+            let inProgress = phases.firstIndex { $0.statusRaw == "inProgress" }
+            let phaseNumber = (inProgress ?? savedPhases.count) + 1
+            return "Phase \(phaseNumber)"
+        }
+
+        return "Waiting"
+    }
+}
+
+private struct DailySuggestionCache {
+    let breathingTitle: String
+    let breathingSubtitle: String
+    let breathingImage: String
+    let hobbyTitle: String
+    let hobbySubtitle: String
+    let hobbyImage: String
+    let journalPrompt: String
 }
 
 private extension String {

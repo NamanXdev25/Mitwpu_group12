@@ -50,13 +50,19 @@ class ExercisePlanCategoryViewController: UIViewController {
     }
 
     private func makeCompositionalLayout() -> UICollectionViewCompositionalLayout {
-        let screenWidth = UIScreen.main.bounds.width
         let cardWidth: CGFloat = 240
         let cardHeight: CGFloat = 232
 
-        return UICollectionViewCompositionalLayout { sectionIndex, _ in
-            let section = ExercisePlanSection(rawValue: sectionIndex)
-            let itemCount = section?.categories.count ?? 1
+        return UICollectionViewCompositionalLayout { [weak self] sectionIndex, _ in
+            guard let self else { return nil }
+
+            // Ask the data source directly — avoids raw value mismatch
+            // when the recommended section is hidden
+            let isRecommended = sectionIndex == 0
+                && !ExerciseRecommendationEngine.recommendedCategories().isEmpty
+            let itemCount = max(
+                self.collectionView.numberOfItems(inSection: sectionIndex), 1
+            )
             let isMulti = itemCount > 1
 
             let itemSize = NSCollectionLayoutSize(
@@ -78,7 +84,12 @@ class ExercisePlanCategoryViewController: UIViewController {
 
             let layoutSection = NSCollectionLayoutSection(group: group)
             layoutSection.interGroupSpacing = 0
-            layoutSection.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 24, trailing: 16)
+
+            // Recommended section gets extra bottom spacing to separate it from the rest
+            let bottomInset: CGFloat = isRecommended ? 36 : 24
+            layoutSection.contentInsets = NSDirectionalEdgeInsets(
+                top: 0, leading: 16, bottom: bottomInset, trailing: 16
+            )
 
             if isMulti {
                 layoutSection.orthogonalScrollingBehavior = .groupPaging

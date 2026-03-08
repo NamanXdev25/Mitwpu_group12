@@ -113,18 +113,12 @@ class JourneyViewController: UIViewController {
         setupCollectionView()
         setupNavigationBar()
 
-        // Restore simple completion flags
         if JourneyState.shared.isDiagnosisCompleted { diagnosisModel.status = "Completed" }
         if JourneyState.shared.isWaitCompleted      { waitModel.status      = "Completed" }
-        if JourneyState.shared.isTreatmentCompleted {
-            treatmentModel.status = "Completed"
-        }
+        if JourneyState.shared.isTreatmentCompleted { treatmentModel.status = "Completed" }
 
-        // Restore phase states from JourneyState (persisted across screen changes)
         savedPhaseStates     = JourneyState.shared.persistedPhaseStates.map { SavedPhaseState.from($0) }
         treatmentBadgeStatus = PhaseStatus.from(rawStringValue: JourneyState.shared.persistedTreatmentBadge)
-
-        // Restore post-treatment state
         savedPostTreatmentState = SavedPostTreatmentState.from(JourneyState.shared.persistedPostTreatment)
     }
 
@@ -143,6 +137,19 @@ class JourneyViewController: UIViewController {
 
     private func persistPostTreatmentState() {
         JourneyState.shared.savePostTreatmentState(savedPostTreatmentState.toPersistedState())
+    }
+
+    // MARK: - Treatment name sync
+    // Scans all phases for the last non-none treatment type.
+    // On delete: reverts to previous phase's type. On all deleted: clears to "Not started yet".
+    // Called after EVERY mutation (add, delete, field change, save) so Home + Exercise
+    // screens update immediately via JourneyState.didChangeNotification.
+    private func syncTreatmentName() {
+        let best = savedPhaseStates
+            .filter { $0.treatmentType != .none }
+            .last
+        let name = best.map { $0.treatmentType.rawValue } ?? "Not started yet"
+        JourneyState.shared.updateTreatmentPhaseName(name)
     }
 
     // MARK: - Setup
@@ -195,8 +202,6 @@ class JourneyViewController: UIViewController {
     // MARK: - TreatmentCell wiring
     private func configureTreatmentCell(_ cell: TreatmentCell, for indexPath: IndexPath) {
         cell.restoreState(phases: savedPhaseStates, badgeStatus: treatmentBadgeStatus)
-        // Sync height immediately after restoreState so sizeForItemAt is correct
-        // on the very first layout pass (before any onCellHeightChanged fires).
         cellHeights[2] = cell.getCellHeight()
         cell.setLocked(!isUnlocked(2))
 
@@ -210,8 +215,7 @@ class JourneyViewController: UIViewController {
                 self.savedPhaseStates[index].startDate     = phase.startDate
                 self.savedPhaseStates[index].duration      = phase.duration
             }
-            let name = phase.treatmentType != .none ? phase.treatmentType.rawValue : "Treatment"
-            JourneyState.shared.updateTreatmentPhaseName(name)
+            self.syncTreatmentName()
             self.persistPhaseStates()
         }
 
@@ -227,17 +231,27 @@ class JourneyViewController: UIViewController {
             self.savedPhaseStates[index].startDate     = startDate
             self.savedPhaseStates[index].duration      = duration
             self.savedPhaseStates[index].isSaved       = false
+            // Sync immediately on dropdown change — drives Home label + exercise recs
+            // before Save is even tapped.
+            self.syncTreatmentName()
             self.persistPhaseStates()
         }
 
         cell.onPhaseAdded = { [weak self] in
-            self?.savedPhaseStates.append(SavedPhaseState(status: .notStarted, model: nil))
-            self?.persistPhaseStates()
+            guard let self else { return }
+            self.savedPhaseStates.append(SavedPhaseState(status: .notStarted, model: nil))
+            // New blank phase doesn't change effective name, but persist the new count.
+            self.persistPhaseStates()
         }
 
         cell.onPhaseDeleted = { [weak self] index in
             guard let self, index < self.savedPhaseStates.count else { return }
             self.savedPhaseStates.remove(at: index)
+            // Re-derive from remaining phases. If the last phase is deleted, reverts to
+            // "Not started yet". If Phase 2 is deleted and Phase 1 still has a type,
+            // correctly reverts to Phase 1's treatment. Fires didChangeNotification so
+            // Home screen and exercise recommendations update immediately.
+            self.syncTreatmentName()
             self.persistPhaseStates()
         }
 
@@ -270,7 +284,6 @@ class JourneyViewController: UIViewController {
     // MARK: - PostTreatmentCell wiring
     private func configurePostTreatmentCell(_ cell: PostTreatmentCell) {
         cell.restoreState(savedPostTreatmentState)
-        // Sync height immediately after restoreState — same fix as TreatmentCell.
         cellHeights[3] = cell.getCellHeight()
         cell.setLocked(!isUnlocked(3))
 
@@ -351,10 +364,8 @@ extension JourneyViewController: UICollectionViewDataSource {
                 guard let self else { return }
                 self.diagnosisModel.status = "Not Started"
                 JourneyState.shared.resetDiagnosis()
-                // resetDiagnosis also clears phase + postTreatment state in JourneyState,
-                // so reset local copies too
-                self.savedPhaseStates       = []
-                self.treatmentBadgeStatus   = .notStarted
+                self.savedPhaseStates        = []
+                self.treatmentBadgeStatus    = .notStarted
                 self.savedPostTreatmentState = SavedPostTreatmentState()
                 UIView.performWithoutAnimation {
                     self.collectionView.reloadItems(at: [
@@ -395,7 +406,6 @@ extension JourneyViewController: UICollectionViewDataSource {
                 guard let self else { return }
                 self.waitModel.status = "Not Started"
                 JourneyState.shared.resetWait()
-                // resetWait also clears phase + postTreatment state in JourneyState
                 self.savedPhaseStates        = []
                 self.treatmentBadgeStatus    = .notStarted
                 self.savedPostTreatmentState = SavedPostTreatmentState()
