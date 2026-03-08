@@ -34,6 +34,7 @@ final class SupabaseAppointmentRepository: AppointmentRepository {
 
     private func syncFromCloudIntoLocal() {
         client.fetchRows(from: "appointments", filters: [SupabaseFilter(key: "user_id", op: "eq", value: userId.uuidString)]) { (rows: [AppointmentSupabaseRow]) in
+            guard !rows.isEmpty else { return }
             self.client.fetchRows(from: "appointment_reminders", filters: [SupabaseFilter(key: "user_id", op: "eq", value: self.userId.uuidString)]) { (reminderRows: [AppointmentReminderSupabaseRow]) in
                 let reminderMap = Dictionary(grouping: reminderRows, by: \.appointment_id)
                 let calendar = Calendar.current
@@ -217,6 +218,7 @@ final class SupabaseMemoryRepository: MemoryRepository {
 
     private func syncFromCloudIntoLocal() {
         client.fetchRows(from: "memories", filters: [SupabaseFilter(key: "user_id", op: "eq", value: userId.uuidString)]) { (rows: [MemorySupabaseRow]) in
+            guard !rows.isEmpty else { return }
             self.local.saveMemories(rows.map(Memory.init(supabaseRow:)).sorted { $0.date > $1.date })
         }
     }
@@ -369,6 +371,7 @@ final class SupabaseSymptomRepository: SymptomRepository {
 
     private func syncFromCloudIntoLocal() {
         client.fetchRows(from: "symptom_logs", filters: [SupabaseFilter(key: "user_id", op: "eq", value: userId.uuidString)]) { (rows: [SymptomLogSupabaseRow]) in
+            guard !rows.isEmpty else { return }
             let orderedLogs = rows.map(SymptomLog.init(supabaseRow:)).sorted { $0.timestamp > $1.timestamp }
             let cleanedLogs = self.removeLegacySeedLogsIfNeeded(from: orderedLogs)
             self.local.saveLogs(cleanedLogs)
@@ -379,6 +382,7 @@ final class SupabaseSymptomRepository: SymptomRepository {
         }
 
         client.fetchRows(from: "symptom_user_preferences", filters: [SupabaseFilter(key: "user_id", op: "eq", value: userId.uuidString)]) { (rows: [SymptomPreferenceSupabaseRow]) in
+            guard !rows.isEmpty else { return }
             self.local.saveUserSymptomIDs(rows.first?.user_symptom_ids ?? [])
         }
     }
@@ -629,6 +633,7 @@ final class SupabaseBreathingRepository: BreathingRepository {
 
     private func syncFromCloudIntoLocal() {
         client.fetchRows(from: "breathing_favorites", filters: [SupabaseFilter(key: "user_id", op: "eq", value: userId.uuidString)]) { (rows: [BreathingFavoriteSupabaseRow]) in
+            guard !rows.isEmpty else { return }
             let orderedTitles = rows
                 .sorted { ($0.created_at ?? .distantPast) > ($1.created_at ?? .distantPast) }
                 .map(\.title)
