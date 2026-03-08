@@ -328,42 +328,53 @@ class HomeModel {
 
     static let moods: [Mood] = [
         Mood(imageName: "ExcitedImage", title: "Excited"),
-        Mood(imageName: "HappyImage", title: "Happy"),
-        Mood(imageName: "SadImage", title: "Sad"),
-        Mood(imageName: "TiredImage", title: "Tired"),
+        Mood(imageName: "HappyImage",   title: "Happy"),
+        Mood(imageName: "SadImage",     title: "Sad"),
+        Mood(imageName: "TiredImage",   title: "Tired"),
         Mood(imageName: "AnxiousImage", title: "Anxious")
     ]
 
     static let quote = "My body and I are working together beautifully"
 
     private static let fallbackBreathingImageName = "BreathingSessionsImage"
-    private static let journalingImageName = "Journal"
+    private static let journalingImageName        = "Journal"
+
+    // MARK: - Breathing helpers
+
     private static func preferredBreathingTitle(for moodKey: String) -> String {
         switch moodKey.lowercased() {
-        case "happy": return "Inner Calm"
-        case "sad": return "Healing Reflections"
+        case "happy":   return "Inner Calm"
+        case "sad":     return "Healing Reflections"
         case "anxious": return "Calmer Mind"
-        case "tired": return "Gentle Recharge"
+        case "tired":   return "Gentle Recharge"
         case "excited": return "Morning Appreciation"
-        default: return "Gentle Focus"
+        default:        return "Gentle Focus"
         }
     }
 
-    private static func breathingItem(for moodKey: String, from content: HomeMoodSuggestionContent) -> HomeMoodSuggestionItem? {
+    private static func breathingItem(
+        for moodKey: String,
+        from content: HomeMoodSuggestionContent
+    ) -> HomeMoodSuggestionItem? {
         let preferred = preferredBreathingTitle(for: moodKey)
-        return content.breathing.first(where: { $0.title.caseInsensitiveCompare(preferred) == .orderedSame })
-            ?? content.breathing.first
+        return content.breathing.first(where: {
+            $0.title.caseInsensitiveCompare(preferred) == .orderedSame
+        }) ?? content.breathing.first
     }
 
     private static func breathingImageName(for breathingTitle: String) -> String {
         let sessions = BreathingDataManager().getAllSessions()
-        if let match = sessions.first(where: { $0.title.caseInsensitiveCompare(breathingTitle) == .orderedSame }) {
-            return match.imageName
-        }
-        return fallbackBreathingImageName
+        return sessions.first(where: {
+            $0.title.caseInsensitiveCompare(breathingTitle) == .orderedSame
+        })?.imageName ?? fallbackBreathingImageName
     }
 
-    private static func subtitle(for item: HomeMoodSuggestionItem, fallback: String) -> String {
+    // MARK: - Generic helpers
+
+    private static func subtitle(
+        for item: HomeMoodSuggestionItem,
+        fallback: String
+    ) -> String {
         let value = item.description?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         return value.isEmpty ? fallback : value
     }
@@ -382,7 +393,6 @@ class HomeModel {
         avoidingTitles: Set<String>
     ) -> HomeMoodSuggestionItem? {
         guard !items.isEmpty else { return nil }
-
         let filtered = items.filter { !avoidingTitles.contains(normalizedTitle($0.title)) }
         return (filtered.isEmpty ? items : filtered).randomElement()
     }
@@ -390,31 +400,30 @@ class HomeModel {
     // MARK: - Journal (separate cell)
 
     static func initialJournalSuggestion(for moodKey: String) -> Suggestion {
-        guard let content = HomeMoodSuggestionLoader.shared.moodContent(for: moodKey),
+        guard let content   = HomeMoodSuggestionLoader.shared.moodContent(for: moodKey),
               let journaling = content.journaling.first else {
             return fallbackJournalSuggestion
         }
-
         return Suggestion(
             imageName: journalingImageName,
-            title: journaling.title,
-            subtitle: subtitle(for: journaling, fallback: "Start Writing...")
+            title:     journaling.title,
+            subtitle:  subtitle(for: journaling, fallback: "Start Writing...")
         )
     }
 
     static func journalSuggestion(for moodKey: String) -> Suggestion {
-        guard let content = HomeMoodSuggestionLoader.shared.moodContent(for: moodKey),
+        guard let content   = HomeMoodSuggestionLoader.shared.moodContent(for: moodKey),
               let journaling = content.journaling.first else {
             return fallbackJournalSuggestion
         }
-
         return Suggestion(
             imageName: journalingImageName,
-            title: journaling.title,
-            subtitle: subtitle(for: journaling, fallback: "Start Writing...")
+            title:     journaling.title,
+            subtitle:  subtitle(for: journaling, fallback: "Start Writing...")
         )
     }
 
+    // Uses HomeContextEngine — the weighted, context-aware journal prompt picker.
     static func randomJournalSuggestion(
         for moodKey: String,
         avoidingTitles: Set<String> = []
@@ -425,8 +434,8 @@ class HomeModel {
         )
         return Suggestion(
             imageName: journalingImageName,
-            title: promptTitle,
-            subtitle: "Start Writing..."
+            title:     promptTitle,
+            subtitle:  "Start Writing..."
         )
     }
 
@@ -436,29 +445,21 @@ class HomeModel {
         guard let content = HomeMoodSuggestionLoader.shared.moodContent(for: moodKey) else {
             return fallbackSuggestedForYou
         }
-
         var output: [Suggestion] = []
-
         if let breathing = breathingItem(for: moodKey, from: content) {
-            output.append(
-                Suggestion(
-                    imageName: breathingImageName(for: breathing.title),
-                    title: breathing.title,
-                    subtitle: subtitle(for: breathing, fallback: "A soft breathing session to keep your energy steady.")
-                )
-            )
+            output.append(Suggestion(
+                imageName: breathingImageName(for: breathing.title),
+                title:     breathing.title,
+                subtitle:  subtitle(for: breathing, fallback: "A soft breathing session.")
+            ))
         }
-
         if let hobby = content.hobby.first {
-            output.append(
-                Suggestion(
-                    imageName: hobbyImageName(for: hobby),
-                    title: hobby.title,
-                    subtitle: subtitle(for: hobby, fallback: "Enjoy this hobby at your own pace.")
-                )
-            )
+            output.append(Suggestion(
+                imageName: hobbyImageName(for: hobby),
+                title:     hobby.title,
+                subtitle:  subtitle(for: hobby, fallback: "Enjoy this hobby at your own pace.")
+            ))
         }
-
         return output.isEmpty ? fallbackSuggestedForYou : output
     }
 
@@ -466,114 +467,110 @@ class HomeModel {
         guard let content = HomeMoodSuggestionLoader.shared.moodContent(for: moodKey) else {
             return fallbackSuggestedForYou
         }
-
         var output: [Suggestion] = []
-
         if let breathing = breathingItem(for: moodKey, from: content) {
-            output.append(
-                Suggestion(
-                    imageName: breathingImageName(for: breathing.title),
-                    title: breathing.title,
-                    subtitle: subtitle(for: breathing, fallback: "A soft breathing session to keep your energy steady.")
-                )
-            )
+            output.append(Suggestion(
+                imageName: breathingImageName(for: breathing.title),
+                title:     breathing.title,
+                subtitle:  subtitle(for: breathing, fallback: "A soft breathing session.")
+            ))
         }
-
         if let hobby = content.hobby.first {
-            output.append(
-                Suggestion(
-                    imageName: hobbyImageName(for: hobby),
-                    title: hobby.title,
-                    subtitle: subtitle(for: hobby, fallback: "Enjoy this hobby at your own pace.")
-                )
-            )
+            output.append(Suggestion(
+                imageName: hobbyImageName(for: hobby),
+                title:     hobby.title,
+                subtitle:  subtitle(for: hobby, fallback: "Enjoy this hobby at your own pace.")
+            ))
         }
-
         return output.isEmpty ? fallbackSuggestedForYou : output
     }
 
     static func randomSuggestions(
         for moodKey: String,
         avoidingBreathingTitles: Set<String> = [],
-        avoidingHobbyTitles: Set<String> = []
+        avoidingHobbyTitles: Set<String>     = []
     ) -> [Suggestion] {
         guard let content = HomeMoodSuggestionLoader.shared.moodContent(for: moodKey) else {
             return fallbackSuggestedForYou
         }
-
         var output: [Suggestion] = []
-
         if let breathing = randomItem(from: content.breathing, avoidingTitles: avoidingBreathingTitles) {
-            output.append(
-                Suggestion(
-                    imageName: breathingImageName(for: breathing.title),
-                    title: breathing.title,
-                    subtitle: subtitle(for: breathing, fallback: "A soft breathing session to keep your energy steady.")
-                )
-            )
+            output.append(Suggestion(
+                imageName: breathingImageName(for: breathing.title),
+                title:     breathing.title,
+                subtitle:  subtitle(for: breathing, fallback: "A soft breathing session.")
+            ))
         }
-
         if let hobby = randomItem(from: content.hobby, avoidingTitles: avoidingHobbyTitles) {
-            output.append(
-                Suggestion(
-                    imageName: hobbyImageName(for: hobby),
-                    title: hobby.title,
-                    subtitle: subtitle(for: hobby, fallback: "Enjoy this hobby at your own pace.")
-                )
-            )
+            output.append(Suggestion(
+                imageName: hobbyImageName(for: hobby),
+                title:     hobby.title,
+                subtitle:  subtitle(for: hobby, fallback: "Enjoy this hobby at your own pace.")
+            ))
         }
-
         return output.isEmpty ? fallbackSuggestedForYou : output
     }
 
+    // MARK: - Fallbacks
+
     private static let fallbackJournalSuggestion = Suggestion(
         imageName: "Journal",
-        title: "Write about someone who brings joy and why they matter.",
-        subtitle: "Start Writing..."
+        title:     "Write about someone who brings joy and why they matter.",
+        subtitle:  "Start Writing..."
     )
 
     private static let fallbackSuggestedForYou: [Suggestion] = [
         Suggestion(
             imageName: "BreathingSessionsImage",
-            title: "Gentle Focus",
-            subtitle: "A soft breathing session to keep your energy steady."
+            title:     "Gentle Focus",
+            subtitle:  "A soft breathing session to keep your energy steady."
         ),
         Suggestion(
             imageName: "Cooking",
-            title: "Cooking",
-            subtitle: "Make a snack you love and enjoy the process."
+            title:     "Cooking",
+            subtitle:  "Make a snack you love and enjoy the process."
         )
     ]
+
+    // MARK: - Articles
 
     static let articles: [Article] = [
         Article(
             imageName: "article_image_1",
-            title: "Debunking Common Breast Cancer Myths",
-            subtitle: "You should know about the truth behind myths associated with Breast Cancer"
+            title:     "Debunking Common Breast Cancer Myths",
+            subtitle:  "You should know about the truth behind myths associated with Breast Cancer"
         ),
         Article(
             imageName: "article_image_2",
-            title: "Implications of Dense Breast Tissue",
-            subtitle: "You should know about the truth behind myths associated with Breast Cancer"
+            title:     "Implications of Dense Breast Tissue",
+            subtitle:  "You should know about the truth behind myths associated with Breast Cancer"
         )
     ]
 
-    static var currentTreatment: String {
-        UserDefaults.standard.string(forKey: "journey_treatment") ?? "Chemotherapy"
-    }
-
-    static var currentPhase: String {
-        UserDefaults.standard.string(forKey: "journey_phase") ?? "Phase 1"
-    }
+    // MARK: - Hobby check
 
     static func isHobbySuggestion(title: String) -> Bool {
         let normalizedTitle = title.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !normalizedTitle.isEmpty else { return false }
-
         return HomeMoodSuggestionLoader.shared.root?.moods.values.contains { content in
             content.hobby.contains {
                 $0.title.caseInsensitiveCompare(normalizedTitle) == .orderedSame
             }
         } ?? false
+    }
+}
+
+// MARK: - Mood header text (used by HomeViewController)
+extension HomeModel {
+    static func moodHeaderText(for moodKey: String, hasUserSelectedMood: Bool) -> String {
+        guard hasUserSelectedMood else { return "How are you feeling right now?" }
+        switch moodKey.lowercased() {
+        case "anxious": return "Take a breath - you're safe here"
+        case "sad":     return "Let's take this gently today"
+        case "tired":   return "Energy feels low - We've got you"
+        case "happy":   return "Keep the good energy going"
+        case "excited": return "Great to see you feeling excited!"
+        default:        return "How are you feeling right now?"
+        }
     }
 }
