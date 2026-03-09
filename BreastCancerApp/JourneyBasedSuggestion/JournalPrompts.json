@@ -78,7 +78,7 @@
     { "id": "jp_hor_014", "title": "What keeps you going on the days the hormone therapy fatigue is hardest?", "moodTags": ["tired", "sad"], "phaseTags": ["hormone"], "symptomTags": ["fatigue"], "ageRange": [18, 99] },
     { "id": "jp_hor_015", "title": "Write three things you appreciate about your body today — despite everything it is managing.", "moodTags": ["happy", "sad"], "phaseTags": ["hormone"], "symptomTags": [], "ageRange": [18, 99] },
 
-    // ─── IMMUNOTHERAPY × MOOD ────────────────────────────────────────────────
+    // ─── IMMUNOTHERAPY × MOOD ──────────────────────────────────────────────────
 
     { "id": "jp_imm_001", "title": "What is bringing you a sense of hope or relief during immunotherapy today?", "moodTags": ["happy"], "phaseTags": ["immunotherapy"], "symptomTags": [], "ageRange": [18, 99] },
     { "id": "jp_imm_002", "title": "What is making today feel heavy during immunotherapy?", "moodTags": ["sad", "tired"], "phaseTags": ["immunotherapy"], "symptomTags": ["fatigue"], "ageRange": [18, 99] },
@@ -122,7 +122,7 @@
     { "id": "jp_ed_014", "title": "Write about a moment this week where you felt like yourself — not a patient, just you.", "moodTags": ["happy", "sad"], "phaseTags": ["earlyDiagnosis"], "symptomTags": [], "ageRange": [18, 99] },
     { "id": "jp_ed_015", "title": "What would you want your medical team to know about how you are really doing emotionally?", "moodTags": ["sad", "anxious"], "phaseTags": ["earlyDiagnosis"], "symptomTags": [], "ageRange": [18, 99] },
 
-    // ─── POST-TREATMENT × MOOD ───────────────────────────────────────────────
+    // ─── POST-TREATMENT × MOOD ─────────────────────────────────────────────────
 
     { "id": "jp_pt_001", "title": "Post-treatment anxiety is extremely common — what is your worry most focused on today?", "moodTags": ["anxious"], "phaseTags": ["postTreatment"], "symptomTags": ["anxiety"], "ageRange": [18, 99] },
     { "id": "jp_pt_002", "title": "You finished treatment — what does happiness feel like now compared to before?", "moodTags": ["happy"], "phaseTags": ["postTreatment"], "symptomTags": [], "ageRange": [18, 99] },
@@ -147,14 +147,12 @@
 
     // ─── SYMPTOM-SPECIFIC (any phase) ─────────────────────────────────────────
 
-    { "id": "jp_sym_001", "title": "Hair loss can feel like a very visible loss of identity — how are you relating to your body and appearance right now?", "moodTags": ["sad", "anxious"], "phaseTags": [], "symptomTags": ["hair loss"], "ageRange": [18, 99] },
-    { "id": "jp_sym_002", "title": "What has surprised you about how you feel about your hair loss — expected or different from what you imagined?", "moodTags": ["sad", "anxious"], "phaseTags": [], "symptomTags": ["hair loss"], "ageRange": [18, 99] },
-    { "id": "jp_sym_003", "title": "Pain is exhausting beyond the physical — how does living with pain affect your emotional state today?", "moodTags": ["sad", "tired", "anxious"], "phaseTags": [], "symptomTags": ["pain"], "ageRange": [18, 99] },
-    { "id": "jp_sym_004", "title": "The insomnia — describe what your nights are like right now and what the tiredness on top of treatment feels like.", "moodTags": ["tired", "anxious"], "phaseTags": [], "symptomTags": ["insomnia"], "ageRange": [18, 99] },
-    { "id": "jp_sym_005", "title": "Brain fog makes it hard to think clearly — how does that affect your sense of yourself and your confidence?", "moodTags": ["tired", "sad"], "phaseTags": [], "symptomTags": ["brain fog"], "ageRange": [18, 99] },
-    { "id": "jp_sym_006", "title": "Lymphedema changes how your body feels and moves — how are you relating to it emotionally today?", "moodTags": ["sad", "anxious", "tired"], "phaseTags": [], "symptomTags": ["lymphedema"], "ageRange": [18, 99] },
-    { "id": "jp_sym_007", "title": "Nausea that doesn't stop changes everything — what has today been like, and what has helped even slightly?", "moodTags": ["tired", "sad"], "phaseTags": [], "symptomTags": ["nausea"], "ageRange": [18, 99] },
-    { "id": "jp_sym_008", "title": "Hot flashes and hormonal changes — how are they affecting your sleep, your mood, and your sense of self?", "moodTags": ["tired", "sad", "anxious"], "phaseTags": [], "symptomTags": ["hot flashes"], "ageRange": [18, 99] },
+    { "id": "jp_sym_001", "title": "Hair loss can feel like a very visible loss of identity — how are you relating to your body and appearance right now?", "moodTags": ["sad", "anxious"], "phaseTags": ["chemotherapy", "postTreatment"], "symptomTags": ["hair loss"], "ageRange": [18, 99] },
+    { "id": "jp_sym_002", "title": "What has surprised you about how you feel about your hair loss — expected or different from what you imagined?", "moodTags": ["sad", "anxious"], "phaseTags": ["chemotherapy", "postTreatment"], "symptomTags": ["hair loss"], "ageRange": [18, 99] },
+    { "id": "jp_sym_003", "title": "Is physical discomfort shaping how you feel emotionally today — and how are you sitting with that?", "moodTags": ["sad", "tired", "anxious"], "phaseTags": [], "symptomTags": ["pain"], "ageRange": [18, 99] },
+    { "id": "jp_sym_005", "title": "Brain fog makes it hard to think clearly — how does that affect your sense of yourself and your confidence?", "moodTags": ["tired", "sad"], "phaseTags": ["chemotherapy", "stemcell"], "symptomTags": ["brain fog"], "ageRange": [18, 99] },
+    { "id": "jp_sym_007", "title": "Nausea that doesn't stop changes everything — what has today been like, and what has helped even slightly?", "moodTags": ["tired", "sad"], "phaseTags": ["chemotherapy", "stemcell"], "symptomTags": ["nausea"], "ageRange": [18, 99] },
+    { "id": "jp_sym_008", "title": "Hot flashes and hormonal changes — how are they affecting your sleep, your mood, and your sense of self?", "moodTags": ["tired", "sad", "anxious"], "phaseTags": ["hormone"], "symptomTags": ["hot flashes"], "ageRange": [18, 99] },
 
     // ─── GENERIC (any mood, any phase) ────────────────────────────────────────
 
@@ -165,7 +163,7 @@
     { "id": "jp_gen_005", "title": "What is one small, specific thing you are grateful for today?", "moodTags": [], "phaseTags": [], "symptomTags": [], "ageRange": [18, 99] },
     { "id": "jp_gen_006", "title": "What would you want to remember about today a year from now?", "moodTags": [], "phaseTags": [], "symptomTags": [], "ageRange": [18, 99] },
     { "id": "jp_gen_007", "title": "Write freely for 5 minutes — no topic, no editing, just write and keep going.", "moodTags": [], "phaseTags": [], "symptomTags": [], "ageRange": [18, 99] },
-    { "id": "jp_gen_008", "title": "What fear can you name today that you haven't said out loud yet?", "moodTags": [], "phaseTags": [], "symptomTags": [], "ageRange": [18, 99] },
+    { "id": "jp_gen_008", "title": "What fear can you name today that you haven't said out loud yet?", "moodTags": ["anxious"], "phaseTags": [], "symptomTags": [], "ageRange": [18, 99] },
     { "id": "jp_gen_009", "title": "What is one thing within your control today — and what is one thing you can let go of?", "moodTags": [], "phaseTags": [], "symptomTags": [], "ageRange": [18, 99] },
     { "id": "jp_gen_010", "title": "Write about a small moment of beauty or kindness you witnessed or felt today.", "moodTags": [], "phaseTags": [], "symptomTags": [], "ageRange": [18, 99] },
     { "id": "jp_gen_011", "title": "If you could say one thing to someone who is just beginning this journey, what would it be?", "moodTags": [], "phaseTags": [], "symptomTags": [], "ageRange": [18, 99] },

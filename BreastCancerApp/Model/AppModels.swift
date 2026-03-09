@@ -133,7 +133,7 @@ struct HomeItem: Hashable {
     enum ItemType: Hashable {
         case title
         case quote(String)
-        case journey(treatment: String, phase: String)
+        case journey(stage: String)
         case mood
         case journal(Suggestion)
         case suggestion(Suggestion)

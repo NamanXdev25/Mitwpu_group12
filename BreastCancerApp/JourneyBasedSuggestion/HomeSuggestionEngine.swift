@@ -13,15 +13,14 @@
 //   Base                 : 10
 //
 // WEIGHT BANDS — hobby (tag-driven via HobbyActivityLoader):
+//   HARD GATE: Phase — phaseTags non-empty must match user's phase (else excluded)
+//   HARD GATE: Mood  — moodTags non-empty must match user's mood (else excluded)
 //   Phase tag match      : +30     (activity.phaseTags contains current phase)
 //   Mood tag match       : +20     (activity.moodTags contains current mood)
 //   Symptom tag match    : +25 ×n  (phase-typical symptoms baked into activity tags)
 //   Age range match      : +15
 //   Onboarding category  : +20
 //   Tap history          : ×4
-//   Wrong phase penalty  : –10
-//   Wrong mood penalty   : –5
-//   Outside age range    : –10
 //   Base                 : 10
 //
 // NOTE: We do NOT ask users for symptoms during treatment.
@@ -82,7 +81,7 @@ struct HomeSuggestionEngine {
         // ── Hobby ──────────────────────────────────────────────────────────
         // Tag-driven via HobbyActivityLoader. Activities have phaseTags,
         // moodTags, symptomTags (typical for that phase), ageRange.
-        // The loader reads all tags and scores against current AppContext.
+        // The loader now enforces HARD GATES on mood and phase matching.
         if let activity = HobbyActivityLoader.shared.selectActivity(
             ctx:         ctx,
             avoidingIDs: recentHobbyIDs
@@ -128,6 +127,9 @@ struct HomeSuggestionEngine {
 
     // Phase → preferred breathing (weight 15–32)
     private static func breathingPhaseScore(title: String, ctx: AppContext) -> Int {
+        // When phase is unknown ("Not Started Yet"), don't boost any phase-specific breathing
+        if ctx.isPhaseUnknown { return 0 }
+
         let t = normalize(title)
         switch ctx.effectiveTreatmentType {
 
@@ -265,6 +267,9 @@ struct HomeSuggestionEngine {
 
     // Mood × Phase combos for breathing (weight 36–50, highest band)
     private static func breathingMoodPhaseComboScore(title: String, moodKey: String, ctx: AppContext) -> Int {
+        // No combos when phase is unknown
+        if ctx.isPhaseUnknown { return 0 }
+
         let t = normalize(title)
         let m = moodKey.lowercased()
 
@@ -344,31 +349,51 @@ struct HomeSuggestionEngine {
             return "Steady breaths to help you take things one day at a time."
         }
 
-        // Phase-only overrides
-        switch phase {
-        case "chemotherapy":
-            if t == "gentle recharge"      { return "A mild reset when chemo leaves your body drained." }
-            if t == "deep rest"            { return "Let your body rest deeply between treatment sessions." }
-            if t == "inner calm"           { return "A soft session to quieten everything chemo stirs up." }
-        case "surgery":
-            if t == "healing reflections"  { return "A soft session to support your body as it heals from surgery." }
-            if t == "gentle recharge"      { return "Light breathing to replenish energy during post-surgery rest." }
-        case "radiation":
-            if t == "inner calm"           { return "Calming breath to ease the tension that radiation can build up." }
-            if t == "calmer mind"          { return "Steady breaths to keep your mind quiet between sessions." }
-        case "hormone":
-            if t == "calmer mind"          { return "Steady breaths to balance the emotional shifts from hormone therapy." }
-        case "immunotherapy", "targeted":
-            if t == "gentle recharge"      { return "A mild reset for the fatigue that comes with this treatment." }
-        case "stemcell":
-            if t == "deep rest"            { return "A deep rest session to support your recovery." }
-        case "earlyDiagnosis":
-            if t == "gentle focus"         { return "A grounding session to help you stay present amid uncertainty." }
-            if t == "calmer mind"          { return "Slow breaths to quiet the worry of waiting." }
-        default:
-            if ctx.isPostTreatment && t == "healing reflections" {
-                return "A soft session to breathe through what you have been through."
+        // Phase-only overrides (skip when phase unknown)
+        if !ctx.isPhaseUnknown {
+            switch phase {
+            case "chemotherapy":
+                if t == "gentle recharge"      { return "A mild reset when chemo leaves your body drained." }
+                if t == "deep rest"            { return "Let your body rest deeply between treatment sessions." }
+                if t == "inner calm"           { return "A soft session to quieten everything chemo stirs up." }
+            case "surgery":
+                if t == "healing reflections"  { return "A soft session to support your body as it heals from surgery." }
+                if t == "gentle recharge"      { return "Light breathing to replenish energy during post-surgery rest." }
+            case "radiation":
+                if t == "inner calm"           { return "Calming breath to ease the tension that radiation can build up." }
+                if t == "calmer mind"          { return "Steady breaths to keep your mind quiet between sessions." }
+            case "hormone":
+                if t == "calmer mind"          { return "Steady breaths to balance the emotional shifts from hormone therapy." }
+            case "immunotherapy", "targeted":
+                if t == "gentle recharge"      { return "A mild reset for the fatigue that comes with this treatment." }
+            case "stemcell":
+                if t == "deep rest"            { return "A deep rest session to support your recovery." }
+            case "earlyDiagnosis":
+                if t == "gentle focus"         { return "A grounding session to help you stay present amid uncertainty." }
+                if t == "calmer mind"          { return "Slow breaths to quiet the worry of waiting." }
+            default:
+                if ctx.isPostTreatment && t == "healing reflections" {
+                    return "A soft session to breathe through what you have been through."
+                }
             }
+        }
+
+        // Mood-only overrides (used when phase is unknown / "Not Started Yet")
+        switch m {
+        case "anxious":
+            if t == "calmer mind"  { return "Slow, steady breaths to help quiet the worry." }
+            if t == "gentle focus" { return "A grounding session to bring you back to the present." }
+        case "tired":
+            if t == "gentle recharge" { return "A soft reset to replenish your energy." }
+            if t == "deep rest"       { return "Settle excitement before rest." }
+        case "sad":
+            if t == "healing reflections" { return "A soft rhythm to hold you gently today." }
+        case "happy":
+            if t == "morning appreciation" { return "A warm breathing ritual to lift your spirits." }
+        case "excited":
+            if t == "gentle focus"         { return "A grounding session to channel your energy." }
+            if t == "morning appreciation" { return "Breathe in the good energy you are feeling today." }
+        default: break
         }
 
         return nil
@@ -378,17 +403,23 @@ struct HomeSuggestionEngine {
 
     private static func pickDefaultBreathing(ctx: AppContext, avoiding: Set<String>) -> Suggestion? {
         let preferred: String
-        switch ctx.effectiveTreatmentType {
-        case "chemotherapy":          preferred = "Gentle Recharge"
-        case "surgery":               preferred = "Healing Reflections"
-        case "radiation":             preferred = "Inner Calm"
-        case "hormone":               preferred = "Calmer Mind"
-        case "immunotherapy",
-             "targeted":              preferred = "Gentle Recharge"
-        case "stemcell":              preferred = "Deep Rest"
-        case "earlyDiagnosis":        preferred = "Gentle Focus"
-        default:
-            preferred = ctx.isPostTreatment ? "Healing Reflections" : "Morning Appreciation"
+
+        // When phase is unknown, use a universally good default
+        if ctx.isPhaseUnknown {
+            preferred = "Morning Appreciation"
+        } else {
+            switch ctx.effectiveTreatmentType {
+            case "chemotherapy":          preferred = "Gentle Recharge"
+            case "surgery":               preferred = "Healing Reflections"
+            case "radiation":             preferred = "Inner Calm"
+            case "hormone":               preferred = "Calmer Mind"
+            case "immunotherapy",
+                 "targeted":              preferred = "Gentle Recharge"
+            case "stemcell":              preferred = "Deep Rest"
+            case "earlyDiagnosis":        preferred = "Gentle Focus"
+            default:
+                preferred = ctx.isPostTreatment ? "Healing Reflections" : "Morning Appreciation"
+            }
         }
 
         let title = avoiding.contains(preferred.lowercased())
@@ -408,6 +439,17 @@ struct HomeSuggestionEngine {
     }
 
     private static func defaultBreathingSubtitle(title: String, ctx: AppContext) -> String {
+        // When phase is unknown, use mood-agnostic general subtitles
+        if ctx.isPhaseUnknown {
+            switch normalize(title) {
+            case "morning appreciation": return "A warm breathing ritual to lift your spirits."
+            case "gentle focus":         return "A grounding session to start your day."
+            case "inner calm":           return "A calming session to bring ease."
+            case "deep rest":            return "A gentle session for deep rest."
+            default:                     return "A gentle breathing session for your day."
+            }
+        }
+
         switch ctx.effectiveTreatmentType {
         case "chemotherapy":
             return "A gentle breathing session to help your body rest and recover."

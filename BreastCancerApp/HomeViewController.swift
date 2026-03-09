@@ -293,11 +293,11 @@ class HomeViewController: UIViewController,
                 cell.configure(quote: quote)
                 return cell
 
-            case .journey(let treatment, let phase):
+            case .journey(let stage):
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: "HomeJourneyCell", for: indexPath
                 ) as! HomeJourneyCell
-                cell.configure(treatment: treatment, phase: phase)
+                cell.configure(journeyStage: stage)
                 return cell
 
             case .mood:
@@ -368,8 +368,7 @@ class HomeViewController: UIViewController,
         snapshot.appendItems([HomeItem(type: .quote(HomeModel.quote))], toSection: .quote)
 
         snapshot.appendItems([HomeItem(type: .journey(
-            treatment: journeyCellTreatmentText(),
-            phase:     journeyCellPhaseText()
+            stage: journeyStageText()
         ))], toSection: .journey)
 
         snapshot.appendItems([HomeItem(type: .mood)], toSection: .mood)
@@ -504,33 +503,43 @@ class HomeViewController: UIViewController,
         }
     }
 
-    // MARK: - Journey cell text helpers
+    // MARK: - Journey cell text helper
 
-    private func journeyCellTreatmentText() -> String {
+    /// Returns the single stage label shown on the Home journey card.
+    /// Progression: Not Started Yet → Diagnosed → Waiting for Result
+    ///              → <Treatment type e.g. Surgery / Radiation Therapy> → Recovery
+    private func journeyStageText() -> String {
         let js = JourneyState.shared
-        guard js.isDiagnosisCompleted else { return "Diagnosis" }
-        if js.currentStepTitle == "Treatment" || js.isTreatmentCompleted {
-            let name = js.currentTreatmentName
-            if name == "Not started yet" || name.isEmpty { return "Treatment" }
-            return name
-        }
-        if js.currentStepTitle == "Post-Treatment" { return "Post-Treatment" }
-        return "Diagnosed"
-    }
 
-    private func journeyCellPhaseText() -> String {
-        let js = JourneyState.shared
-        guard js.isDiagnosisCompleted else { return "Not Updated" }
-        if js.currentStepTitle == "Post-Treatment" && js.isTreatmentCompleted { return "Recovery" }
+        // Nothing saved in journey yet
+        guard js.isDiagnosisCompleted else { return "Not Started Yet" }
+
+        // Post-treatment always shows Recovery
+        if js.currentStepTitle == "Post-Treatment" { return "Recovery" }
+
+        // Active treatment — prefer the in-progress phase name, then last saved phase
         if js.currentStepTitle == "Treatment" || js.isTreatmentCompleted {
             let phases = js.persistedPhaseStates
-            if js.isTreatmentCompleted { return "Completed" }
-            let inProgress  = phases.firstIndex { $0.statusRaw == "inProgress" }
-            let savedCount  = phases.filter { $0.isSaved }.count
-            let phaseNumber = (inProgress ?? savedCount) + 1
-            return "Phase \(phaseNumber)"
+            // 1. In-progress phase takes highest priority
+            if let inProgress = phases.first(where: { $0.statusRaw == "inProgress" }),
+               !inProgress.treatmentTypeRaw.isEmpty,
+               inProgress.treatmentTypeRaw != "none" {
+                return inProgress.treatmentTypeRaw
+            }
+            // 2. Last saved phase as fallback
+            if let lastSaved = phases
+                .filter({ $0.isSaved && !$0.treatmentTypeRaw.isEmpty && $0.treatmentTypeRaw != "none" })
+                .last {
+                return lastSaved.treatmentTypeRaw
+            }
+            // 3. Stored treatment name (legacy / edge-case)
+            let name = js.currentTreatmentName
+            if name != "Not started yet" && !name.isEmpty { return name }
+            return "Treatment"
         }
-        return "Waiting"
+
+        if js.currentStepTitle == "Waiting for Result" { return "Waiting for Result" }
+        return "Diagnosed"
     }
 
     // MARK: - Actions

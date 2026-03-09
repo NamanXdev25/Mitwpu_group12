@@ -13,11 +13,11 @@
 //
 //  Every activity in HobbyActivities.json has:
 //    phaseTags   e.g. ["chemotherapy", "stemcell"]
-//                → +30 if current phase matches, –10 if set but doesn't match
+//                → HARD GATE: if non-empty, must match user's phase or score = 0
 //                → empty array means generic (valid for all phases, no boost)
 //
 //    moodTags    e.g. ["tired", "sad"]
-//                → +20 if current mood matches, –5 if set but doesn't match
+//                → HARD GATE: if non-empty, must contain user's mood or score = 0
 //                → empty array means mood-agnostic
 //
 //    symptomTags e.g. ["nausea", "fatigue"]
@@ -33,6 +33,12 @@
 //    "Read just 1–2 pages — something light" (reading_003)
 //    or "Listen and do nothing else — just listen" (music_listen_001)
 //  rather than "Try a splatter painting" (painting_013, tagged [18,45], postTreatment)
+//
+//  HARD GATE SUMMARY (items MUST pass all gates or they are excluded):
+//    Gate 1 — Phase: if phaseTags non-empty, user's phase must match
+//    Gate 2 — Mood:  if moodTags non-empty, user's mood must match
+//                     (mood "general" = no mood selected → mood-tagged items still allowed)
+//    Gate 3 — Symptom (journals only): condition-specific symptoms require confirmed phase
 
 import Foundation
 
@@ -137,6 +143,17 @@ final class HobbyActivityLoader {
         guard !pool.isEmpty else { return nil }
 
         let scored = pool.map { ($0, scoreActivity($0, ctx: ctx)) }
+            .filter { $0.1 > 0 }  // Drop items that failed hard gates (score = 0)
+
+        // If all items were gated out, fall back to generic items only
+        if scored.isEmpty {
+            let genericPool = pool.filter { $0.phaseTags.isEmpty && $0.moodTags.isEmpty }
+            let genericScored = genericPool.map { ($0, scoreActivity($0, ctx: ctx)) }
+            return weightedRandomActivity(from: genericScored.isEmpty
+                ? pool.map { ($0, 10) }  // absolute fallback
+                : genericScored)
+        }
+
         return weightedRandomActivity(from: scored)
     }
 
@@ -154,6 +171,17 @@ final class HobbyActivityLoader {
         guard !pool.isEmpty else { return nil }
 
         let scored = pool.map { ($0, scoreJournal($0, ctx: ctx)) }
+            .filter { $0.1 > 0 }  // Drop items that failed hard gates (score = 0)
+
+        // If all items were gated out, fall back to generic prompts
+        if scored.isEmpty {
+            let genericPool = pool.filter { $0.phaseTags.isEmpty && $0.moodTags.isEmpty && $0.symptomTags.isEmpty }
+            let genericScored = genericPool.map { ($0, 10) }
+            return weightedRandomJournal(from: genericScored.isEmpty
+                ? pool.filter { $0.phaseTags.isEmpty && $0.symptomTags.isEmpty }.map { ($0, 10) }
+                : genericScored)
+        }
+
         return weightedRandomJournal(from: scored)
     }
 
@@ -162,38 +190,60 @@ final class HobbyActivityLoader {
     // This is where every tag on every activity gets evaluated against
     // the live AppContext. The result is a score that reflects how well
     // this specific activity matches THIS user's phase, mood, symptoms, age.
+    //
+    // HARD GATES (return 0 = excluded):
+    //   Gate 1: Phase — if phaseTags non-empty, user's phase must match
+    //   Gate 2: Mood  — if moodTags non-empty, user's mood must match
+    //                    (skipped when mood is "general" i.e. no mood selected)
 
     private func scoreActivity(_ a: HobbyActivity, ctx: AppContext) -> Int {
-        var w = 10 * max(1, a.weight)
-
         let phase = normalize(ctx.effectiveTreatmentType)
         let mood  = normalize(ctx.moodKey)
         let age   = ctx.age
 
-        // ── Phase tags ──────────────────────────────────────────────────────
+        // ── Resolve the user's confirmed phase key ───────────────────────────
+        let phaseIsKnown = phase != "general"
+            || ctx.isPostTreatment
+            || ctx.isEarlyDiagnosis
+            || ctx.isInActiveTreatment
+
         let effectivePhaseKey: String
         if ctx.isPostTreatment       { effectivePhaseKey = "posttreatment" }
         else if ctx.isEarlyDiagnosis { effectivePhaseKey = "earlydiagnosis" }
         else                         { effectivePhaseKey = phase }
 
+        // ── HARD GATE 1: Phase ──────────────────────────────────────────────
+        // Activities with phaseTags set are designed for a specific clinical
+        // context. If we don't know the user's phase, or the phase doesn't
+        // match, exclude the activity entirely.
         if !a.phaseTags.isEmpty {
+            guard phaseIsKnown else { return 0 }  // phase unknown → exclude
             let normalisedPhaseTags = a.phaseTags.map { normalize($0) }
-            if normalisedPhaseTags.contains(effectivePhaseKey) {
-                w += 30   // ✅ written for the user's current phase
-            } else {
-                w -= 10   // ❌ phase-specific but wrong phase — deprioritise
-            }
+            guard normalisedPhaseTags.contains(effectivePhaseKey) else { return 0 }  // wrong phase → exclude
         }
-        // Generic activities (empty phaseTags) get neither boost nor penalty.
 
-        // ── Mood tags ───────────────────────────────────────────────────────
-        if !a.moodTags.isEmpty {
+        // ── HARD GATE 2: Mood ───────────────────────────────────────────────
+        // Activities with moodTags set are designed for specific emotional
+        // states. If the user selected a mood that doesn't match, exclude.
+        // When mood is "general" (no mood selected yet), skip this gate —
+        // mood-tagged items are still allowed in the default/pre-mood pool.
+        let moodIsSelected = mood != "general"
+        if moodIsSelected && !a.moodTags.isEmpty {
             let normalisedMoodTags = a.moodTags.map { normalize($0) }
-            if normalisedMoodTags.contains(mood) {
-                w += 20   // ✅ matches current mood
-            } else {
-                w -= 5    // ❌ mood-specific but wrong mood
-            }
+            guard normalisedMoodTags.contains(mood) else { return 0 }  // wrong mood → exclude
+        }
+
+        // ── Scoring (only reached if hard gates passed) ──────────────────────
+        var w = 10 * max(1, a.weight)
+
+        // Phase match boost (already confirmed matching at this point)
+        if !a.phaseTags.isEmpty {
+            w += 30   // ✅ written for the user's current phase
+        }
+
+        // Mood match boost (already confirmed matching at this point)
+        if moodIsSelected && !a.moodTags.isEmpty {
+            w += 20   // ✅ matches current mood
         }
 
         // ── Symptom tags — phase-inferred, NOT user-entered ─────────────────
@@ -259,33 +309,85 @@ final class HobbyActivityLoader {
         }
     }
 
-    // MARK: - Journal scoring (same tag logic)
+    // MARK: - Journal scoring
+    //
+    // SAFETY RULE: Journal prompts that reference a specific treatment phase
+    // (e.g. "during chemo", "since surgery", "survivorship") or a specific
+    // symptom (e.g. lymphedema, hot flashes, nausea, hair loss) or a specific
+    // mood (e.g. "sad", "anxious") must ONLY be shown when the user's context
+    // actually confirms that phase, symptom, or mood.
+    //
+    // HARD GATES (return 0 = excluded):
+    //   Gate 1 — Phase:   if phaseTags non-empty, user's phase must match
+    //   Gate 2 — Symptom: condition-specific symptoms require confirmed phase context
+    //   Gate 3 — Mood:    if moodTags non-empty, user's mood must match
+    //                      (skipped when mood is "general" i.e. no mood selected)
 
     private func scoreJournal(_ p: JournalPromptItem, ctx: AppContext) -> Int {
-        var w = 10
-
         let phase = normalize(ctx.effectiveTreatmentType)
         let mood  = normalize(ctx.moodKey)
         let age   = ctx.age
+
+        // ── Resolve the user's confirmed phase key ───────────────────────────
+        // "general" means no journey data — we treat it as unknown.
+        let phaseIsKnown = phase != "general"
+            || ctx.isPostTreatment
+            || ctx.isEarlyDiagnosis
+            || ctx.isInActiveTreatment
 
         let effectivePhaseKey: String
         if ctx.isPostTreatment       { effectivePhaseKey = "posttreatment" }
         else if ctx.isEarlyDiagnosis { effectivePhaseKey = "earlydiagnosis" }
         else                         { effectivePhaseKey = phase }
 
-        // Phase
+        // ── HARD GATE 1: Phase-specific prompts require a known, matching phase ──
+        // Prompts with phaseTags set (e.g. ["chemotherapy"]) are written for
+        // a specific clinical context. If we don't know the user's phase, or
+        // the phase doesn't match, we must not show them.
         if !p.phaseTags.isEmpty {
+            guard phaseIsKnown else { return 0 }      // phase unknown → exclude
             let normTags = p.phaseTags.map { normalize($0) }
-            if normTags.contains(effectivePhaseKey) { w += 30 } else { w -= 8 }
+            guard normTags.contains(effectivePhaseKey) else { return 0 } // wrong phase → exclude
         }
 
-        // Mood
-        if !p.moodTags.isEmpty {
-            let normTags = p.moodTags.map { normalize($0) }
-            if normTags.contains(mood) { w += 20 } else { w -= 5 }
+        // ── HARD GATE 2: Symptom-specific prompts require confirmed symptom context ──
+        // Some prompts are written for specific symptoms (lymphedema, hot flashes,
+        // hair loss, nausea, brain fog, insomnia) that are NOT universal.
+        // We only show these if the user's known phase typically produces that symptom.
+        // If phase is unknown, none of these can be confirmed → exclude.
+        let conditionSpecificSymptoms: Set<String> = [
+            "lymphedema", "hot flashes", "hot flush",
+            "hair loss", "hair", "nausea", "brain fog", "fog", "insomnia", "sleep"
+        ]
+        for tag in p.symptomTags {
+            let t = normalize(tag)
+            if conditionSpecificSymptoms.contains(t) {
+                // This prompt is written for a specific symptom.
+                // Only show it if the user's phase plausibly produces this symptom.
+                guard phaseIsKnown && phaseTypicallyProducesSymptom(t, for: ctx) else { return 0 }
+            }
         }
 
-        // Symptom tags — phase-inferred (same logic as activity scoring)
+        // ── HARD GATE 3: Mood-specific prompts require matching mood ─────────
+        // Prompts with moodTags set are designed for specific emotional states.
+        // If the user selected a mood that doesn't match, exclude the prompt.
+        // When mood is "general" (no mood selected), skip this gate.
+        let moodIsSelected = mood != "general"
+        if moodIsSelected && !p.moodTags.isEmpty {
+            let normMoodTags = p.moodTags.map { normalize($0) }
+            guard normMoodTags.contains(mood) else { return 0 }  // wrong mood → exclude
+        }
+
+        // ── Scoring (only reached if ALL hard gates passed) ──────────────────
+        var w = 10
+
+        // Phase match boost (prompt already confirmed to match phase at this point)
+        if !p.phaseTags.isEmpty { w += 30 }
+
+        // Mood match boost (prompt already confirmed to match mood at this point)
+        if moodIsSelected && !p.moodTags.isEmpty { w += 20 }
+
+        // Symptom tags — boost if phase-typical (already confirmed safe above)
         for tag in p.symptomTags {
             if phaseTypicallyProducesSymptom(normalize(tag), for: ctx) {
                 w += 25

@@ -428,10 +428,22 @@ class HomeModel {
         for moodKey: String,
         avoidingTitles: Set<String> = []
     ) -> Suggestion {
-        let promptTitle = HomeContextEngine.selectJournalPrompt(
-            for: moodKey,
-            avoiding: avoidingTitles
-        )
+        // Use HobbyActivityLoader (JSON-driven) first — richer, phase/mood-aware prompts.
+        // Fall back to HomeContextEngine (hardcoded) if JSON pool is empty.
+        let ctx = AppContext.current(moodKey: moodKey)
+        let avoidingIDs = Set(avoidingTitles) // titles used as IDs for JSON prompts
+        let promptTitle: String
+        if let jsonPrompt = HobbyActivityLoader.shared.selectJournalPrompt(
+            ctx: ctx,
+            avoidingIDs: avoidingIDs
+        ) {
+            promptTitle = jsonPrompt.title
+        } else {
+            promptTitle = HomeContextEngine.selectJournalPrompt(
+                for: moodKey,
+                avoiding: avoidingTitles
+            )
+        }
         return Suggestion(
             imageName: journalingImageName,
             title:     promptTitle,

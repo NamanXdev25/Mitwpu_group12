@@ -21,6 +21,14 @@ struct AppContext {
     let hobbies: [String]
     let onboardingTreatmentPhase: String?  // from OnboardingData e.g. "Chemotherapy", "Surgery"
 
+    // Journey completion flags — needed to distinguish
+    // "Not Started Yet" (default) from "Diagnosed" (user-confirmed).
+    // JourneyState.currentStepTitle defaults to "Diagnosed" even when
+    // the user has never opened the Journey screen, so we need these
+    // flags to know whether the journey data is real or just defaults.
+    let isDiagnosisCompleted: Bool
+    let isWaitCompleted: Bool
+
     static func current(moodKey: String) -> AppContext {
         let profile  = UserProfileDataSource.shared.userProfile
         let onboard  = OnboardingData.shared
@@ -34,19 +42,40 @@ struct AppContext {
             age:                     profile.age,
             gender:                  profile.gender,
             hobbies:                 onboard.selectedHobbies,
-            onboardingTreatmentPhase: onboard.currentTreatmentPhase
+            onboardingTreatmentPhase: onboard.currentTreatmentPhase,
+            isDiagnosisCompleted:    journey.isDiagnosisCompleted,
+            isWaitCompleted:         journey.isWaitCompleted
         )
     }
 
     // MARK: - Convenience flags
+
     var isInActiveTreatment: Bool {
         treatmentState == "Ongoing" || journeyPhase == "Treatment"
     }
+
     var isPostTreatment: Bool {
         treatmentState == "Completed" || journeyPhase == "Post-Treatment"
     }
+
+    /// True ONLY when the user has actually confirmed their diagnosis
+    /// in the Journey screen. "Diagnosed" is the default value of
+    /// journeyPhase even when the user has never opened Journey,
+    /// so we require isDiagnosisCompleted to be true.
     var isEarlyDiagnosis: Bool {
-        journeyPhase == "Diagnosed" || journeyPhase == "Waiting for Result"
+        // If diagnosis hasn't been confirmed by the user, this is NOT
+        // an early diagnosis state — it's "Not Started Yet".
+        guard isDiagnosisCompleted else { return false }
+        return journeyPhase == "Diagnosed" || journeyPhase == "Waiting for Result"
+    }
+
+    /// True when the user has NOT yet started their Journey
+    /// (no diagnosis confirmed, no treatment, no completion).
+    var isPhaseUnknown: Bool {
+        effectiveTreatmentType == "general"
+            && !isPostTreatment
+            && !isEarlyDiagnosis
+            && !isInActiveTreatment
     }
 
     // MARK: - Effective treatment type
@@ -124,83 +153,158 @@ struct HomeContextEngine {
             }
         }
 
-        // Layer 2 — Phase-specific prompts (weight 20–30, HIGHER PRIORITY)
-        all.append(contentsOf: phasePrompts(for: ctx))
+        // Layer 2 — Phase-specific prompts (weight 20–30)
+        // NOW FILTERED BY MOOD: only prompts relevant to the current mood are included
+        // Skipped when phase is unknown (user hasn't started Journey)
+        if !ctx.isPhaseUnknown {
+            all.append(contentsOf: phasePrompts(for: ctx))
+        }
 
         // Layer 3 — Mood × phase combos (weight 35–40, HIGHEST PRIORITY)
-        all.append(contentsOf: moodPhaseComboPrompts(for: ctx))
+        // These already check mood by definition
+        // Skipped when phase is unknown
+        if !ctx.isPhaseUnknown {
+            all.append(contentsOf: moodPhaseComboPrompts(for: ctx))
+        }
+
+        // Layer 4 — General prompts (always available, for any mood/phase)
+        // These serve as fallback when phase is unknown or no specific match
+        all.append(contentsOf: generalPrompts(for: ctx))
 
         return all
     }
 
+    // MARK: - General prompts (no phase/mood restriction, weight 8–15)
+    private static func generalPrompts(for ctx: AppContext) -> [WeightedItem] {
+        // Lower weight than phase/mood-specific prompts so they yield
+        // when better matches exist, but still available as fallback.
+        let baseWeight = ctx.isPhaseUnknown ? 15 : 8  // Boost when phase unknown
+        return [
+            WeightedItem(title: "How are you really doing today — not the answer you give people, but the honest one?", weight: baseWeight, tags: ["general"]),
+            WeightedItem(title: "What is one thing you are proud of yourself for today?", weight: baseWeight, tags: ["general"]),
+            WeightedItem(title: "What does your body need most right now?", weight: baseWeight, tags: ["general"]),
+            WeightedItem(title: "Who is on your team right now — the people who are truly with you through this?", weight: baseWeight, tags: ["general"]),
+            WeightedItem(title: "What is one small, specific thing you are grateful for today?", weight: baseWeight, tags: ["general"]),
+            WeightedItem(title: "What would you want to remember about today a year from now?", weight: baseWeight, tags: ["general"]),
+            WeightedItem(title: "What fear can you name today that you haven't said out loud yet?", weight: baseWeight, tags: ["general"]),
+            WeightedItem(title: "Write about a small moment of beauty or kindness you witnessed or felt today.", weight: baseWeight, tags: ["general"]),
+        ]
+    }
+
     // MARK: - Phase-specific prompt bank (weight 20–28)
+    // NOW MOOD-AWARE: Each prompt is tagged with compatible moods.
+    // Prompts incompatible with the current mood are excluded.
     private static func phasePrompts(for ctx: AppContext) -> [WeightedItem] {
         var p: [WeightedItem] = []
+        let mood = ctx.moodKey.lowercased()
 
         switch ctx.effectiveTreatmentType {
 
         case "chemotherapy":
-            p += [
-                WeightedItem(title: "What helped you get through today, even in a small way?", weight: 26, tags: ["phase"]),
-                WeightedItem(title: "How is your body feeling right now after treatment?", weight: 25, tags: ["phase"]),
-                WeightedItem(title: "What is one thing you are proud of yourself for today?", weight: 24, tags: ["phase"]),
-                WeightedItem(title: "What does rest look like for you right now?", weight: 23, tags: ["phase"]),
-                WeightedItem(title: "What would you tell a friend going through chemotherapy today?", weight: 22, tags: ["phase"]),
-                WeightedItem(title: "What part of your day took the most courage?", weight: 21, tags: ["phase"]),
-            ]
+            appendIfMoodMatches(&p, mood: mood, compatibleMoods: ["sad", "tired", "anxious", "happy"],
+                title: "What helped you get through today, even in a small way?", weight: 26)
+            appendIfMoodMatches(&p, mood: mood, compatibleMoods: ["tired", "sad"],
+                title: "How is your body feeling right now after treatment?", weight: 25)
+            appendIfMoodMatches(&p, mood: mood, compatibleMoods: ["happy", "excited"],
+                title: "What is one thing you are proud of yourself for today?", weight: 24)
+            appendIfMoodMatches(&p, mood: mood, compatibleMoods: ["tired", "sad"],
+                title: "What does rest look like for you right now?", weight: 23)
+            appendIfMoodMatches(&p, mood: mood, compatibleMoods: ["sad", "anxious"],
+                title: "What would you tell a friend going through chemotherapy today?", weight: 22)
+            appendIfMoodMatches(&p, mood: mood, compatibleMoods: ["anxious", "sad", "tired"],
+                title: "What part of your day took the most courage?", weight: 21)
 
         case "surgery":
-            p += [
-                WeightedItem(title: "How does your body feel as it heals today?", weight: 26, tags: ["phase"]),
-                WeightedItem(title: "What small sign of recovery did you notice today?", weight: 25, tags: ["phase"]),
-                WeightedItem(title: "What are you being patient with yourself about right now?", weight: 24, tags: ["phase"]),
-                WeightedItem(title: "What comfort or support helped you most today?", weight: 22, tags: ["phase"]),
-                WeightedItem(title: "What does healing feel like in your body today?", weight: 21, tags: ["phase"]),
-            ]
+            if ctx.isInActiveTreatment {
+                appendIfMoodMatches(&p, mood: mood, compatibleMoods: ["tired", "sad"],
+                    title: "How does your body feel as it heals today?", weight: 26)
+                appendIfMoodMatches(&p, mood: mood, compatibleMoods: ["anxious", "sad", "tired"],
+                    title: "What are you being patient with yourself about right now?", weight: 25)
+                appendIfMoodMatches(&p, mood: mood, compatibleMoods: ["happy", "sad"],
+                    title: "What comfort or support helped you most today?", weight: 24)
+                appendIfMoodMatches(&p, mood: mood, compatibleMoods: ["happy", "excited"],
+                    title: "What small sign of your body's strength did you notice today?", weight: 22)
+                appendIfMoodMatches(&p, mood: mood, compatibleMoods: ["tired", "sad"],
+                    title: "What does healing feel like in your body today?", weight: 21)
+            } else {
+                appendIfMoodMatches(&p, mood: mood, compatibleMoods: ["happy", "sad"],
+                    title: "What has this experience taught you about patience and your own strength?", weight: 26)
+                appendIfMoodMatches(&p, mood: mood, compatibleMoods: ["happy", "excited"],
+                    title: "What small sign of recovery did you notice today?", weight: 25)
+                appendIfMoodMatches(&p, mood: mood, compatibleMoods: ["happy", "excited", "sad"],
+                    title: "What are you slowly reclaiming for yourself?", weight: 23)
+            }
 
         case "radiation":
-            p += [
-                WeightedItem(title: "How did your body respond to treatment today?", weight: 26, tags: ["phase"]),
-                WeightedItem(title: "What gave you comfort during today's session?", weight: 25, tags: ["phase"]),
-                WeightedItem(title: "What does your body need from you most right now?", weight: 24, tags: ["phase"]),
-                WeightedItem(title: "What routine is helping you stay steady during radiation?", weight: 22, tags: ["phase"]),
-            ]
+            appendIfMoodMatches(&p, mood: mood, compatibleMoods: ["tired", "sad", "anxious"],
+                title: "How did your body respond to treatment today?", weight: 26)
+            appendIfMoodMatches(&p, mood: mood, compatibleMoods: ["sad", "anxious", "tired"],
+                title: "What gave you comfort during today's session?", weight: 25)
+            appendIfMoodMatches(&p, mood: mood, compatibleMoods: ["tired", "sad"],
+                title: "What does your body need from you most right now?", weight: 24)
+            appendIfMoodMatches(&p, mood: mood, compatibleMoods: ["happy", "tired"],
+                title: "What routine is helping you stay steady during radiation?", weight: 22)
 
         case "hormone":
-            p += [
-                WeightedItem(title: "What emotion surprised you today?", weight: 25, tags: ["phase"]),
-                WeightedItem(title: "How are you relating to your body's changes right now?", weight: 24, tags: ["phase"]),
-                WeightedItem(title: "What feels steady or reliable in your life right now?", weight: 23, tags: ["phase"]),
-            ]
+            appendIfMoodMatches(&p, mood: mood, compatibleMoods: ["sad", "anxious", "happy"],
+                title: "What emotion surprised you today?", weight: 25)
+            appendIfMoodMatches(&p, mood: mood, compatibleMoods: ["sad", "anxious", "tired"],
+                title: "How are you relating to your body's changes right now?", weight: 24)
+            appendIfMoodMatches(&p, mood: mood, compatibleMoods: ["happy", "tired"],
+                title: "What feels steady or reliable in your life right now?", weight: 23)
 
         case "earlyDiagnosis":
-            p += [
-                WeightedItem(title: "What feels most uncertain right now, and what feels solid?", weight: 27, tags: ["phase"]),
-                WeightedItem(title: "What question is taking up most of your mental energy today?", weight: 26, tags: ["phase"]),
-                WeightedItem(title: "Who or what is making this period feel more manageable?", weight: 25, tags: ["phase"]),
-            ]
+            appendIfMoodMatches(&p, mood: mood, compatibleMoods: ["anxious", "sad"],
+                title: "What feels most uncertain right now, and what feels solid?", weight: 27)
+            appendIfMoodMatches(&p, mood: mood, compatibleMoods: ["anxious", "tired"],
+                title: "What question is taking up most of your mental energy today?", weight: 26)
+            appendIfMoodMatches(&p, mood: mood, compatibleMoods: ["happy", "sad", "anxious"],
+                title: "Who or what is making this period feel more manageable?", weight: 25)
 
         default: break
         }
 
         // Journey-phase-based prompts (use journeyPhase directly)
-        switch ctx.journeyPhase {
-        case "Diagnosed", "Waiting for Result":
-            p += [
-                WeightedItem(title: "What would help you feel more prepared for what is ahead?", weight: 24, tags: ["phase"]),
-                WeightedItem(title: "What are you holding onto that gives you strength right now?", weight: 23, tags: ["phase"]),
-            ]
-        case "Post-Treatment":
-            p += [
-                WeightedItem(title: "What does life feel like now that treatment is behind you?", weight: 27, tags: ["phase"]),
-                WeightedItem(title: "What are you slowly reclaiming for yourself?", weight: 26, tags: ["phase"]),
-                WeightedItem(title: "What fear or worry has eased, even slightly?", weight: 24, tags: ["phase"]),
-                WeightedItem(title: "What part of yourself do you want to reconnect with?", weight: 23, tags: ["phase"]),
-            ]
-        default: break
+        // IMPORTANT: Only show "Diagnosed"/"Waiting" prompts if user actually
+        // confirmed diagnosis — otherwise these fire for "Not Started Yet" users
+        // because journeyPhase defaults to "Diagnosed".
+        if ctx.isDiagnosisCompleted {
+            switch ctx.journeyPhase {
+            case "Diagnosed", "Waiting for Result":
+                appendIfMoodMatches(&p, mood: mood, compatibleMoods: ["anxious", "sad", "tired"],
+                    title: "What would help you feel more prepared for what is ahead?", weight: 24)
+                appendIfMoodMatches(&p, mood: mood, compatibleMoods: ["happy", "sad", "anxious"],
+                    title: "What are you holding onto that gives you strength right now?", weight: 23)
+            case "Post-Treatment":
+                appendIfMoodMatches(&p, mood: mood, compatibleMoods: ["happy", "excited", "sad"],
+                    title: "What does life feel like now that treatment is behind you?", weight: 27)
+                appendIfMoodMatches(&p, mood: mood, compatibleMoods: ["happy", "excited"],
+                    title: "What are you slowly reclaiming for yourself?", weight: 26)
+                appendIfMoodMatches(&p, mood: mood, compatibleMoods: ["anxious", "sad"],
+                    title: "What fear or worry has eased, even slightly?", weight: 24)
+                appendIfMoodMatches(&p, mood: mood, compatibleMoods: ["happy", "excited", "sad"],
+                    title: "What part of yourself do you want to reconnect with?", weight: 23)
+            default: break
+            }
         }
 
         return p
+    }
+
+    // MARK: - Mood filtering helper
+    /// Only appends the prompt if the user's mood is in the compatible list,
+    /// or if no mood has been selected yet (mood == "general").
+    private static func appendIfMoodMatches(
+        _ array: inout [WeightedItem],
+        mood: String,
+        compatibleMoods: [String],
+        title: String,
+        weight: Int
+    ) {
+        // If no mood selected, allow all prompts
+        if mood == "general" || compatibleMoods.contains(mood) {
+            array.append(WeightedItem(title: title, weight: weight, tags: ["phase"]))
+        }
     }
 
     // MARK: - Mood × phase combo prompts (weight 35–40, highest)
@@ -253,6 +357,49 @@ struct HomeContextEngine {
             p += [
                 WeightedItem(title: "What is the one thing you most wish you knew right now?", weight: 40, tags: ["combo"]),
                 WeightedItem(title: "What is helping you take things one day at a time?", weight: 37, tags: ["combo"]),
+            ]
+        }
+        // ── Additional mood × phase combos for coverage ────────────────
+        if mood == "excited" && ctx.isInActiveTreatment {
+            p += [
+                WeightedItem(title: "What is making you feel excited or hopeful today despite treatment?", weight: 38, tags: ["combo"]),
+                WeightedItem(title: "Write about the good energy you are feeling today — hold onto it.", weight: 36, tags: ["combo"]),
+            ]
+        }
+        if mood == "happy" && ctx.isInActiveTreatment {
+            p += [
+                WeightedItem(title: "What brought a genuine smile to your face today during treatment?", weight: 38, tags: ["combo"]),
+                WeightedItem(title: "Write a note to yourself about today's good feeling — something to return to on harder days.", weight: 36, tags: ["combo"]),
+            ]
+        }
+        if mood == "excited" && ctx.isEarlyDiagnosis {
+            p += [
+                WeightedItem(title: "Something is giving you positive energy today despite everything — what is it?", weight: 38, tags: ["combo"]),
+            ]
+        }
+        if mood == "tired" && ctx.isPostTreatment {
+            p += [
+                WeightedItem(title: "Post-treatment fatigue is real — what does your energy feel like today?", weight: 38, tags: ["combo"]),
+            ]
+        }
+        if mood == "sad" && ctx.isPostTreatment {
+            p += [
+                WeightedItem(title: "Treatment is over but the sadness isn't — what is weighing on you today?", weight: 40, tags: ["combo"]),
+            ]
+        }
+        if mood == "anxious" && ctx.isPostTreatment {
+            p += [
+                WeightedItem(title: "What is your anxiety most focused on now that treatment is behind you?", weight: 40, tags: ["combo"]),
+            ]
+        }
+        if mood == "sad" && ctx.isEarlyDiagnosis {
+            p += [
+                WeightedItem(title: "What part of your diagnosis feels heaviest to carry right now?", weight: 40, tags: ["combo"]),
+            ]
+        }
+        if mood == "tired" && ctx.isEarlyDiagnosis {
+            p += [
+                WeightedItem(title: "The weight of a diagnosis can be exhausting — what kind of tired are you feeling today?", weight: 38, tags: ["combo"]),
             ]
         }
 
