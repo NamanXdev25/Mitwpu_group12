@@ -18,6 +18,7 @@ class HomeJourneyCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         setupCard()
+        phaseLabel.isHidden = true
     }
 
     private func setupCard() {
@@ -29,8 +30,8 @@ class HomeJourneyCell: UICollectionViewCell {
         cardView.layer.shadowRadius = 8
     }
 
-    func configure(treatment: String, phase: String) {
-        treatmentLabel.text = treatment
-        phaseLabel.text = "• \(phase)"
+    func configure(journeyStage: String) {
+        treatmentLabel.text = journeyStage
+        phaseLabel.isHidden = true
     }
 }

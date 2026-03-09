@@ -23,7 +23,7 @@ class WaitCell: UICollectionViewCell {
     @IBOutlet weak var calmButton: UIButton!
 
     @IBOutlet weak var saveButton: UIButton!
-    @IBOutlet weak var editButton: UIButton!   // connect in XIB
+    @IBOutlet weak var editButton: UIButton!
 
     // MARK: - Colors
     private let lightPinkColor  = UIColor(displayP3Red: 0.9882352941, green: 0.9098039216, blue: 0.9372549020, alpha: 1.0)
@@ -46,11 +46,14 @@ class WaitCell: UICollectionViewCell {
     private var buttonFeelingMap: [UIButton: String] = [:]
     private var isSaved: Bool = false
     private var didSetupButtons = false
+    private var lockOverlayView: UIView?
 
     var onSaveButtonTapped: (() -> Void)?
+    var onEditButtonTapped: (() -> Void)?
     var onCellHeightChanged: (() -> Void)?
+    /// Fired when the saved countdown reaches 0 days — this is when Treatment unlocks
+    var onWaitPeriodExpired: (() -> Void)?
 
-    // MARK: - Views that fade on save (everything except title, status badge, edit button)
     private var fadableViews: [UIView] {
         return [
             daysWaitedLabel, daysTextField,
@@ -74,6 +77,46 @@ class WaitCell: UICollectionViewCell {
         }
     }
 
+    // MARK: - Lock Overlay
+    func setLocked(_ locked: Bool) {
+        locked ? showLockOverlay() : removeLockOverlay()
+    }
+
+    private func showLockOverlay() {
+        guard lockOverlayView == nil else { return }
+        let overlay = UIView()
+        overlay.backgroundColor = UIColor.white.withAlphaComponent(0.65)
+        overlay.layer.cornerRadius = 16
+        overlay.translatesAutoresizingMaskIntoConstraints = false
+        overlay.isUserInteractionEnabled = true
+
+        let lockImage = UIImageView(image: UIImage(systemName: "lock.fill"))
+        lockImage.tintColor = UIColor(white: 0.5, alpha: 1)
+        lockImage.contentMode = .scaleAspectFit
+        lockImage.translatesAutoresizingMaskIntoConstraints = false
+        overlay.addSubview(lockImage)
+        NSLayoutConstraint.activate([
+            lockImage.centerXAnchor.constraint(equalTo: overlay.centerXAnchor),
+            lockImage.centerYAnchor.constraint(equalTo: overlay.centerYAnchor),
+            lockImage.widthAnchor.constraint(equalToConstant: 28),
+            lockImage.heightAnchor.constraint(equalToConstant: 28)
+        ])
+
+        containerView.addSubview(overlay)
+        NSLayoutConstraint.activate([
+            overlay.topAnchor.constraint(equalTo: containerView.topAnchor),
+            overlay.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            overlay.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            overlay.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        ])
+        lockOverlayView = overlay
+    }
+
+    private func removeLockOverlay() {
+        lockOverlayView?.removeFromSuperview()
+        lockOverlayView = nil
+    }
+
     // MARK: - Static UI
     private func setupStaticUI() {
         containerView.layer.cornerRadius = 16
@@ -87,13 +130,16 @@ class WaitCell: UICollectionViewCell {
         statusLabel.clipsToBounds = true
         applyBadge(.notStarted)
 
-        daysTextField.isUserInteractionEnabled = false
+        daysTextField.isUserInteractionEnabled = true
+        daysTextField.keyboardType = .numberPad
+        daysTextField.delegate = self
         daysTextField.borderStyle = .none
         daysTextField.layer.borderColor = UIColor.lightGray.cgColor
         daysTextField.layer.borderWidth = 1
         daysTextField.layer.cornerRadius = 10
         daysTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 14, height: 0))
         daysTextField.leftViewMode = .always
+        daysTextField.addTarget(self, action: #selector(daysTextFieldChanged), for: .editingChanged)
 
         applySaveStyle()
         saveButton.isHidden = false
@@ -104,7 +150,6 @@ class WaitCell: UICollectionViewCell {
         editButton.isHidden = true
     }
 
-    // MARK: - Button Styles (legacy API only — no UIButton.Configuration on save/edit)
     private func applySaveStyle() {
         saveButton.setTitle("Save", for: .normal)
         saveButton.setTitleColor(.white, for: .normal)
@@ -115,7 +160,6 @@ class WaitCell: UICollectionViewCell {
     }
 
     private func applyEditStyle() {
-        // Only bg + corners — XIB owns title, emoji, font, color
         editButton.backgroundColor = lightPinkColor
         editButton.layer.cornerRadius = 14
         editButton.clipsToBounds = true
@@ -144,6 +188,7 @@ class WaitCell: UICollectionViewCell {
             button.isHidden = false
             button.alpha = 1
             applyDeselectedStyle(to: button)
+            button.addTarget(self, action: #selector(feelingButtonTapped(_:)), for: .touchUpInside)
         }
     }
 
@@ -176,14 +221,10 @@ class WaitCell: UICollectionViewCell {
 
     // MARK: - Actions
     private func setupActions() {
-        stepperUpButton.addTarget(self, action: #selector(stepperUpTapped), for: .touchUpInside)
+        stepperUpButton.addTarget(self,   action: #selector(stepperUpTapped),   for: .touchUpInside)
         stepperDownButton.addTarget(self, action: #selector(stepperDownTapped), for: .touchUpInside)
-        [sadButton, anxiousButton, overwhelmedButton, scaredButton,
-         angryButton, numbButton, hopefulButton, calmButton].forEach {
-            $0?.addTarget(self, action: #selector(feelingButtonTapped(_:)), for: .touchUpInside)
-        }
-        saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
-        editButton.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
+        saveButton.addTarget(self,        action: #selector(saveButtonTapped),  for: .touchUpInside)
+        editButton.addTarget(self,        action: #selector(editButtonTapped),  for: .touchUpInside)
     }
 
     @objc private func stepperUpTapped() {
@@ -194,9 +235,21 @@ class WaitCell: UICollectionViewCell {
     }
 
     @objc private func stepperDownTapped() {
-        guard currentDays > 0 else { return }
-        currentDays -= 1
-        daysTextField.text = currentDays == 0 ? "" : "\(currentDays)"
+        if currentDays > 0 { currentDays -= 1 }
+        daysTextField.text = "\(currentDays)"
+        if isSaved { revertToEdit() }
+        updateSaveButtonState()
+    }
+
+    @objc private func daysTextFieldChanged() {
+        let text = daysTextField.text ?? ""
+        if text.isEmpty {
+            currentDays = 0
+        } else if let value = Int(text), value >= 0 {
+            currentDays = value
+        } else {
+            daysTextField.text = "\(currentDays)"
+        }
         if isSaved { revertToEdit() }
         updateSaveButtonState()
     }
@@ -216,7 +269,7 @@ class WaitCell: UICollectionViewCell {
 
     // MARK: - Save
     @objc private func saveButtonTapped() {
-        guard currentDays > 0, !selectedFeelings.isEmpty else { return }
+        guard !selectedFeelings.isEmpty else { return }
         isSaved = true
 
         let defaults = UserDefaults.standard
@@ -232,18 +285,18 @@ class WaitCell: UICollectionViewCell {
         refreshCountdownBadge()
         applyEditStyle()
 
-        // Lock interaction
-        stepperUpButton.isUserInteractionEnabled = false
+        stepperUpButton.isUserInteractionEnabled   = false
         stepperDownButton.isUserInteractionEnabled = false
+        daysTextField.isUserInteractionEnabled     = false
+        // FIX: Explicitly lock feeling buttons — this was missing, causing them
+        // to remain tappable after the cell is reconfigured from a saved state.
         feelingButtons.forEach { $0.isUserInteractionEnabled = false }
 
         let block = {
-            // Fade ONLY the form content — title, badge, edit button are NOT in fadableViews
             self.fadableViews.forEach { $0.alpha = 0.35 }
-            // Hide save, show edit at FULL alpha
             self.saveButton.isHidden = true
             self.editButton.isHidden = false
-            self.editButton.alpha = 1.0   // explicit — never faded
+            self.editButton.alpha = 1.0
         }
         if animated {
             UIView.animate(withDuration: 0.3, animations: block)
@@ -254,21 +307,25 @@ class WaitCell: UICollectionViewCell {
 
     // MARK: - Edit
     @objc private func editButtonTapped() {
+        let defaults = UserDefaults.standard
+        defaults.removeObject(forKey: kSaveDate)
+        defaults.removeObject(forKey: kDaysInput)
+        defaults.removeObject(forKey: kFeelings)
         revertToEdit()
+        onEditButtonTapped?()
     }
 
     private func revertToEdit() {
         isSaved = false
         applySaveStyle()
 
-        stepperUpButton.isUserInteractionEnabled = true
+        stepperUpButton.isUserInteractionEnabled   = true
         stepperDownButton.isUserInteractionEnabled = true
+        daysTextField.isUserInteractionEnabled     = true
         feelingButtons.forEach { $0.isUserInteractionEnabled = true }
 
         UIView.animate(withDuration: 0.3) {
-            // Restore all form content to full opacity
             self.fadableViews.forEach { $0.alpha = 1.0 }
-            // Swap buttons
             self.saveButton.isHidden = false
             self.editButton.isHidden = true
         }
@@ -281,7 +338,12 @@ class WaitCell: UICollectionViewCell {
         guard isSaved else { applyBadge(.notStarted); return }
         let remaining = remainingDays()
         daysTextField.text = remaining > 0 ? "\(remaining)" : "0"
-        applyBadge(remaining > 0 ? .inProgress : .completed)
+        if remaining > 0 {
+            applyBadge(.inProgress)
+        } else {
+            applyBadge(.completed)
+            onWaitPeriodExpired?()
+        }
     }
 
     private func remainingDays() -> Int {
@@ -314,7 +376,7 @@ class WaitCell: UICollectionViewCell {
 
     // MARK: - Save Button State
     private func updateSaveButtonState() {
-        let shouldEnable = currentDays > 0 && !selectedFeelings.isEmpty
+        let shouldEnable = !selectedFeelings.isEmpty
         saveButton.isUserInteractionEnabled = shouldEnable
         UIView.animate(withDuration: 0.2) {
             self.saveButton.alpha = shouldEnable ? 1.0 : 0.4
@@ -326,7 +388,7 @@ class WaitCell: UICollectionViewCell {
 
     // MARK: - Configure
     func configure(with model: WaitModel) {
-        stepperUpButton.isUserInteractionEnabled = true
+        stepperUpButton.isUserInteractionEnabled   = true
         stepperDownButton.isUserInteractionEnabled = true
 
         let wasSaved = UserDefaults.standard.object(forKey: kSaveDate) != nil
@@ -338,6 +400,9 @@ class WaitCell: UICollectionViewCell {
                 selectedFeelings = Set(feelings)
             }
             updateFeelingButtonStates()
+            // FIX: enterSavedState sets isUserInteractionEnabled = false on feeling buttons.
+            // Previously this was not called here, so buttons appeared saved (faded) but
+            // were still fully interactive on cell reuse.
             enterSavedState(animated: false)
         } else {
             isSaved = false
@@ -347,8 +412,9 @@ class WaitCell: UICollectionViewCell {
             saveButton.alpha = 0.4
             saveButton.isUserInteractionEnabled = false
             editButton.isHidden = true
-            // Restore full opacity in case of cell reuse
             fadableViews.forEach { $0.alpha = 1.0 }
+            // Ensure feeling buttons are interactive in edit mode
+            feelingButtons.forEach { $0.isUserInteractionEnabled = true }
 
             if let days = model.daysWaited {
                 currentDays = days
@@ -370,6 +436,26 @@ class WaitCell: UICollectionViewCell {
             } else {
                 applyDeselectedStyle(to: button)
             }
+            // Wire tap target — safe to add multiple times (UIKit deduplicates)
+            button.addTarget(self, action: #selector(feelingButtonTapped(_:)), for: .touchUpInside)
+        }
+    }
+}
+
+// MARK: - UITextFieldDelegate
+extension WaitCell: UITextFieldDelegate {
+    func textField(_ textField: UITextField,
+                   shouldChangeCharactersIn range: NSRange,
+                   replacementString string: String) -> Bool {
+        if string.isEmpty { return true }
+        return string.unicodeScalars.allSatisfy { CharacterSet.decimalDigits.contains($0) }
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField.text?.isEmpty ?? true {
+            currentDays = 0
+            textField.text = "0"
+            updateSaveButtonState()
         }
     }
 }

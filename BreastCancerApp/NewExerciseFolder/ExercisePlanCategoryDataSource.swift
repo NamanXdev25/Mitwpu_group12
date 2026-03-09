@@ -8,15 +8,18 @@
 import UIKit
 
 enum ExercisePlanSection: Int, CaseIterable {
-    case postSurgery = 0
-    case postRecovery = 1
-    case chemotherapy = 2
-    case radiation = 3
-    case reconstruction = 4
-    case recovery = 5
+    case recommended = 0
+    case postSurgery = 1
+    case postRecovery = 2
+    case chemotherapy = 3
+    case radiation = 4
+    case reconstruction = 5
+    case recovery = 6
     
     var title: String {
         switch self {
+        case .recommended:
+            return "Recommended for You"
         case .postSurgery:
             return "Post-Surgery Exercises"
         case .postRecovery:
@@ -34,6 +37,8 @@ enum ExercisePlanSection: Int, CaseIterable {
     
     var categories: [ExercisePlanCategory] {
         switch self {
+        case .recommended:
+            return ExerciseRecommendationEngine.recommendedCategories()
         case .postSurgery:
             return ExercisePlanCategory.postSurgeryCategories
         case .postRecovery:
@@ -58,7 +63,14 @@ class ExercisePlanCategoryDataSource: NSObject {
     
     weak var delegate: ExercisePlanCategorySelectionDelegate?
     
-    private let sections = ExercisePlanSection.allCases
+    private var sections: [ExercisePlanSection] {
+        ExercisePlanSection.allCases.filter { section in
+            if section == .recommended {
+                return !ExerciseRecommendationEngine.recommendedCategories().isEmpty
+            }
+            return true
+        }
+    }
 }
 
 // MARK: - UICollectionViewDataSource
@@ -120,11 +132,11 @@ extension ExercisePlanCategoryDataSource: UICollectionViewDelegate {
 
 //// MARK: - UICollectionViewDelegateFlowLayout
 //extension ExercisePlanCategoryDataSource: UICollectionViewDelegateFlowLayout {
-//    
+//
 //    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
 //        return CGSize(width: collectionView.bounds.width, height: 50)
 //    }
-//    
+//
 //    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 //        let width = collectionView.bounds.width
 //        let section = sections[indexPath.section]
@@ -146,15 +158,15 @@ extension ExercisePlanCategoryDataSource: UICollectionViewDelegate {
 //        let totalHeight = 100 + 12 + 20 + 4 + ceil(subtitleHeight) + 16
 //        return CGSize(width: itemWidth, height: max(totalHeight, 180))
 //    }
-//    
+//
 //    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
 //        return 16
 //    }
-//    
+//
 //    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
 //        return 16
 //    }
-//    
+//
 //    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
 //        return UIEdgeInsets(top: 0, left: 16, bottom: 24, right: 16)
 //    }

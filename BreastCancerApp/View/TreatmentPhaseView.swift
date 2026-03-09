@@ -26,6 +26,8 @@ class TreatmentPhaseView: UIView {
     var onSaved: (() -> Void)?
     var onStatusChanged: ((PhaseStatus) -> Void)?
     var onDeleteTapped: (() -> Void)?
+    /// Fired whenever any field value changes (before Save) so the VC can cache unsaved input.
+    var onFieldsChanged: ((TreatmentType, Date?, String) -> Void)?
 
     // MARK: - Properties
     private var phaseIndex: Int = 0
@@ -74,10 +76,6 @@ class TreatmentPhaseView: UIView {
         durationTextField.delegate = self
         durationTextField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
 
-        // Save button: rebuild config from scratch.
-        // XIB sets enabled=NO which greys out filled buttons; we fix that here.
-        // Also XIB has no baseBackgroundColor set, so pink would never appear without this.
-        // Gate interaction via isUserInteractionEnabled + alpha only, never isEnabled.
         saveButton.isEnabled = true
         var saveCfg = UIButton.Configuration.filled()
         saveCfg.baseBackgroundColor = pink
@@ -94,17 +92,15 @@ class TreatmentPhaseView: UIView {
         saveButton.alpha = 0.4
         saveButton.isHidden = false
 
-        // Edit button: XIB owns title/emoji/font/color, only bg + corners here
         applyEditButtonStyle()
         editButton.isHidden = true
         editButton.alpha = 1.0
         editButton.addTarget(self, action: #selector(editButtonTappedAction), for: .touchUpInside)
 
-        // Delete button — wired from XIB outlet
         deleteButton.addTarget(self, action: #selector(deleteButtonTappedAction), for: .touchUpInside)
     }
 
-    // MARK: - Edit Button Style (no Configuration — preserves XIB title/emoji/font)
+    // MARK: - Edit Button Style
     private func applyEditButtonStyle() {
         editButton.backgroundColor = lightPink
         editButton.setTitleColor(pink, for: .normal)
@@ -122,7 +118,13 @@ class TreatmentPhaseView: UIView {
 
     @objc private func textFieldChanged() {
         if isSaved { revertToEditMode() }
+        notifyFieldsChanged()
         updateSaveButtonState()
+    }
+
+    // MARK: - Notify VC of field changes
+    private func notifyFieldsChanged() {
+        onFieldsChanged?(phaseModel.treatmentType, selectedDate, durationTextField.text ?? "")
     }
 
     // MARK: - Save → Enter saved state
@@ -135,39 +137,36 @@ class TreatmentPhaseView: UIView {
         phaseModel.startDate     = selectedDate
         phaseModel.duration      = durationTextField.text ?? ""
 
-        // Lock interaction
         dropdownButton.isUserInteractionEnabled    = false
         startDateButton.isUserInteractionEnabled   = false
         durationTextField.isUserInteractionEnabled = false
 
-        // Swap buttons — outside animate block
         saveButton.isHidden = true
         editButton.isHidden = false
         editButton.alpha = 1.0
 
-        // Fade form views
         UIView.animate(withDuration: 0.3) {
             self.fadableViews.forEach { $0.alpha = 0.35 }
         }
 
         startStatusTimer()
-        evaluateAndBroadcastStatus()
+        DispatchQueue.main.async {
+            self.evaluateAndBroadcastStatus()
+        }
         onSaved?()
     }
 
-    // MARK: - Edit → Revert to initial state
+    // MARK: - Edit → Revert to edit state
     private func revertToEditMode() {
         isSaved = false
         phaseModel.state = .editing
 
-        // Unlock interaction
         dropdownButton.isUserInteractionEnabled    = true
         startDateButton.isUserInteractionEnabled   = true
         durationTextField.isUserInteractionEnabled = true
 
-        // Swap buttons -- outside animate block
         editButton.isHidden = true
-        saveButton.isEnabled = true   // re-assert; UIKit may reset when isHidden toggles
+        saveButton.isEnabled = true
         saveButton.isHidden = false
 
         UIView.animate(withDuration: 0.3) {
@@ -182,8 +181,6 @@ class TreatmentPhaseView: UIView {
     // MARK: - Save Button State
     private func updateSaveButtonState() {
         let allFilled = allFieldsFilled()
-        // Always keep isEnabled=true; use isUserInteractionEnabled + alpha to fake disabled.
-        // isEnabled=false on a filled-config button causes UIKit to apply a grey tint.
         saveButton.isEnabled = true
         saveButton.isUserInteractionEnabled = allFilled
         UIView.animate(withDuration: 0.2) {
@@ -210,8 +207,12 @@ class TreatmentPhaseView: UIView {
 
     private func startStatusTimer() {
         statusTimer?.invalidate()
-        statusTimer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { [weak self] _ in
-            self?.evaluateAndBroadcastStatus()
+        statusTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { [weak self] _ in
+            guard let self else { return }
+            self.evaluateAndBroadcastStatus()
+            self.statusTimer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { [weak self] _ in
+                self?.evaluateAndBroadcastStatus()
+            }
         }
     }
 
@@ -225,6 +226,80 @@ class TreatmentPhaseView: UIView {
         phaseTitleLabel.text = "Phase \(index + 1)"
     }
 
+    // MARK: - Restore (called by TreatmentCell after cell reuse)
+
+    /// Restores unsaved in-progress field values typed by the user before they hit Save.
+    func restoreFields(treatmentType: TreatmentType, startDate: Date?, duration: String) {
+        // Treatment type
+        phaseModel.treatmentType = treatmentType
+        if treatmentType != .none {
+            dropdownLabel.text      = treatmentType.rawValue
+            dropdownLabel.textColor = .black
+        } else {
+            dropdownLabel.text      = "Select treatment"
+            dropdownLabel.textColor = .placeholderText
+        }
+
+        // Start date
+        selectedDate = startDate
+        if let date = startDate {
+            startDateLabel.text      = formatDate(date)
+            startDateLabel.textColor = .black
+        } else {
+            startDateLabel.text      = nil
+            startDateLabel.textColor = .placeholderText
+        }
+
+        // Duration
+        durationTextField.text = duration.isEmpty ? nil : duration
+
+        // Ensure edit-mode UI state
+        isSaved = false
+        dropdownButton.isUserInteractionEnabled    = true
+        startDateButton.isUserInteractionEnabled   = true
+        durationTextField.isUserInteractionEnabled = true
+        saveButton.isHidden  = false
+        editButton.isHidden  = true
+        fadableViews.forEach { $0.alpha = 1.0 }
+        updateSaveButtonState()
+    }
+
+    /// Restores a fully saved phase (user already tapped "Save Phase Details").
+    func restoreSavedModel(_ model: TreatmentPhaseModel) {
+        phaseModel   = model
+        selectedDate = model.startDate
+        isSaved      = true
+
+        // Populate labels
+        if model.treatmentType != .none {
+            dropdownLabel.text      = model.treatmentType.rawValue
+            dropdownLabel.textColor = .black
+        }
+        if let date = model.startDate {
+            startDateLabel.text      = formatDate(date)
+            startDateLabel.textColor = .black
+        }
+        durationTextField.text = model.duration
+
+        // Lock interaction, show Edit button
+        dropdownButton.isUserInteractionEnabled    = false
+        startDateButton.isUserInteractionEnabled   = false
+        durationTextField.isUserInteractionEnabled = false
+        saveButton.isHidden = true
+        editButton.isHidden = false
+        editButton.alpha    = 1.0
+        fadableViews.forEach { $0.alpha = 0.35 }
+
+        // Restart the status timer so badge stays live
+        startStatusTimer()
+        DispatchQueue.main.async { self.evaluateAndBroadcastStatus() }
+    }
+
+    // MARK: - Public accessors (used by TreatmentCell.onSaved to build TreatmentPhaseModel)
+    func currentTreatmentType() -> TreatmentType { phaseModel.treatmentType }
+    func currentStartDate() -> Date?             { selectedDate }
+    func currentDuration() -> String             { durationTextField.text ?? "" }
+
     // MARK: - Helpers
     private func allFieldsFilled() -> Bool {
         let treatmentSelected = phaseModel.treatmentType != .none
@@ -236,6 +311,12 @@ class TreatmentPhaseView: UIView {
     private func selectedTreatmentType() -> TreatmentType {
         let text = dropdownLabel.text ?? ""
         return TreatmentType.allCases.first { $0.rawValue == text } ?? .none
+    }
+
+    private func formatDate(_ date: Date) -> String {
+        let f = DateFormatter()
+        f.dateFormat = "dd/MM/yyyy"
+        return f.string(from: date)
     }
 }
 
@@ -256,7 +337,6 @@ extension TreatmentPhaseView {
         guard let window = self.window else { return }
         let options = TreatmentType.allCases.filter { $0 != .none }
 
-        // Blur backdrop — native iOS feel
         let blurEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
         let dimView = UIVisualEffectView(effect: blurEffect)
         dimView.frame = window.bounds
@@ -264,7 +344,6 @@ extension TreatmentPhaseView {
         dimView.alpha = 0
         window.addSubview(dimView)
 
-        // Glass container using UIVisualEffectView + vibrancy
         let sheetBlur = UIBlurEffect(style: .systemMaterial)
         let container = UIVisualEffectView(effect: sheetBlur)
         container.layer.cornerRadius = 16
@@ -319,10 +398,7 @@ extension TreatmentPhaseView {
 
     private func makePickerRow(title: String, isSelected: Bool, isLast: Bool) -> UIView {
         let row = UIView()
-        // Glass rows: clear bg, selected gets a subtle pink tint
-        row.backgroundColor = isSelected
-            ? pink.withAlphaComponent(0.85)
-            : UIColor.clear
+        row.backgroundColor = isSelected ? pink.withAlphaComponent(0.85) : UIColor.clear
 
         if isSelected {
             let check = UIImageView(image: UIImage(systemName: "checkmark"))
@@ -376,6 +452,7 @@ extension TreatmentPhaseView {
         phaseModel.treatmentType = selected
         dismissPicker()
         if isSaved { revertToEditMode() }
+        notifyFieldsChanged()
         updateSaveButtonState()
     }
 
@@ -445,6 +522,7 @@ extension TreatmentPhaseView {
             self.startDateLabel.text = self.formatDate(datePicker.date)
             self.startDateLabel.textColor = .black
             if self.isSaved { self.revertToEditMode() }
+            self.notifyFieldsChanged()
             self.dismissDatePicker()
             self.updateSaveButtonState()
         }, for: .touchUpInside)
@@ -463,16 +541,11 @@ extension TreatmentPhaseView {
         selectedDate = picker.date
         startDateLabel.text = formatDate(picker.date)
         startDateLabel.textColor = .black
+        notifyFieldsChanged()
     }
 
     @objc private func dismissDatePicker() {
         guard let window = self.window, let dimView = window.viewWithTag(8002) else { return }
         UIView.animate(withDuration: 0.2, animations: { dimView.alpha = 0 }) { _ in dimView.removeFromSuperview() }
-    }
-
-    private func formatDate(_ date: Date) -> String {
-        let f = DateFormatter()
-        f.dateFormat = "dd/MM/yyyy"
-        return f.string(from: date)
     }
 }

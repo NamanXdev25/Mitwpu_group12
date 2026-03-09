@@ -21,8 +21,16 @@ class DiagnosisCell: UICollectionViewCell {
     private var datePickerContainerView: UIView?
     private var isSaved = false
 
+    /// Locked overlay view — shown when this card is not yet unlocked
+    private var lockOverlayView: UIView?
+
+    // MARK: - Persistence
+    private let kDiagnosisDate   = "diagnosisCell_date"
+    private let kDiagnosisStatus = "diagnosisCell_status"
+
     var onDateSelected: ((Date) -> Void)?
     var onSaveButtonTapped: (() -> Void)?
+    var onEditButtonTapped: (() -> Void)?
     var onCellHeightChanged: (() -> Void)?
 
     // MARK: - Lifecycle
@@ -54,21 +62,61 @@ class DiagnosisCell: UICollectionViewCell {
         statusLabel.layer.cornerRadius = 12
         statusLabel.clipsToBounds = true
 
-        // Save button — use Configuration for this one since it has no XIB image
         applySaveButtonStyle()
         saveButton.isHidden = false
         saveButton.alpha = 0.4
         saveButton.isUserInteractionEnabled = false
 
-        // Edit button — DO NOT touch configuration at all.
-        // The title, emoji/image, and font are already set in XIB.
-        // Only set backgroundColor + corner radius here.
         applyEditButtonStyle()
         editButton.isHidden = true
     }
 
-    // MARK: - Button Styles
+    // MARK: - Lock Overlay
+    func setLocked(_ locked: Bool) {
+        if locked {
+            showLockOverlay()
+        } else {
+            removeLockOverlay()
+        }
+    }
 
+    private func showLockOverlay() {
+        guard lockOverlayView == nil else { return }
+        let overlay = UIView()
+        overlay.backgroundColor = UIColor.white.withAlphaComponent(0.65)
+        overlay.layer.cornerRadius = 16
+        overlay.translatesAutoresizingMaskIntoConstraints = false
+        overlay.isUserInteractionEnabled = true // absorbs touches
+
+        // Lock icon
+        let lockImage = UIImageView(image: UIImage(systemName: "lock.fill"))
+        lockImage.tintColor = UIColor(white: 0.5, alpha: 1)
+        lockImage.contentMode = .scaleAspectFit
+        lockImage.translatesAutoresizingMaskIntoConstraints = false
+        overlay.addSubview(lockImage)
+        NSLayoutConstraint.activate([
+            lockImage.centerXAnchor.constraint(equalTo: overlay.centerXAnchor),
+            lockImage.centerYAnchor.constraint(equalTo: overlay.centerYAnchor),
+            lockImage.widthAnchor.constraint(equalToConstant: 28),
+            lockImage.heightAnchor.constraint(equalToConstant: 28)
+        ])
+
+        containerView.addSubview(overlay)
+        NSLayoutConstraint.activate([
+            overlay.topAnchor.constraint(equalTo: containerView.topAnchor),
+            overlay.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            overlay.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            overlay.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        ])
+        lockOverlayView = overlay
+    }
+
+    private func removeLockOverlay() {
+        lockOverlayView?.removeFromSuperview()
+        lockOverlayView = nil
+    }
+
+    // MARK: - Button Styles
     private func applySaveButtonStyle() {
         var config = UIButton.Configuration.plain()
         config.background.backgroundColor = pink
@@ -84,12 +132,9 @@ class DiagnosisCell: UICollectionViewCell {
     }
 
     private func applyEditButtonStyle() {
-        // KEY: Don't assign a UIButton.Configuration here — it would wipe the XIB title & image.
-        // Instead, style via the layer directly. This preserves everything set in XIB.
         editButton.backgroundColor = lightPink
         editButton.layer.cornerRadius = 14
         editButton.clipsToBounds = true
-        // Ensure title color is pink (in case XIB default differs)
         editButton.setTitleColor(pink, for: .normal)
     }
 
@@ -102,6 +147,12 @@ class DiagnosisCell: UICollectionViewCell {
     // MARK: - Save
     @objc private func saveButtonTapped() {
         isSaved = true
+        // Persist
+        if let text = dateTextField.text, !text.isEmpty {
+            UserDefaults.standard.set(text, forKey: kDiagnosisDate)
+        }
+        UserDefaults.standard.set("Completed", forKey: kDiagnosisStatus)
+
         statusLabel.text = "Completed"
         statusLabel.backgroundColor = UIColor(red: 0.85, green: 0.95, blue: 0.85, alpha: 1.0)
         statusLabel.textColor = UIColor(red: 0.2, green: 0.6, blue: 0.2, alpha: 1.0)
@@ -110,7 +161,6 @@ class DiagnosisCell: UICollectionViewCell {
     }
 
     private func enterSavedState(animated: Bool) {
-        // Re-apply each time to prevent any UIKit state reset
         applyEditButtonStyle()
         let block = {
             self.diagnosisDateLabel.alpha = 0.35
@@ -124,7 +174,10 @@ class DiagnosisCell: UICollectionViewCell {
 
     // MARK: - Edit
     @objc private func editButtonTapped() {
+        UserDefaults.standard.removeObject(forKey: kDiagnosisDate)
+        UserDefaults.standard.removeObject(forKey: kDiagnosisStatus)
         enterEditState(animated: true)
+        onEditButtonTapped?()
     }
 
     private func enterEditState(animated: Bool) {
@@ -173,15 +226,30 @@ class DiagnosisCell: UICollectionViewCell {
         picker.tintColor = pink
         picker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
 
+        // Button row: Reset | Done
+        let buttonStack = UIStackView()
+        buttonStack.axis = .horizontal
+        buttonStack.distribution = .fillEqually
+        buttonStack.spacing = 12
+        buttonStack.translatesAutoresizingMaskIntoConstraints = false
+
+        let resetButton = UIButton(type: .system)
+        resetButton.setTitle("Reset", for: .normal)
+        resetButton.setTitleColor(.systemRed, for: .normal)
+        resetButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        resetButton.addTarget(self, action: #selector(resetDateTapped), for: .touchUpInside)
+
         let doneButton = UIButton(type: .system)
         doneButton.setTitle("Done", for: .normal)
         doneButton.setTitleColor(pink, for: .normal)
         doneButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
-        doneButton.translatesAutoresizingMaskIntoConstraints = false
         doneButton.addTarget(self, action: #selector(dismissDatePicker), for: .touchUpInside)
 
+        buttonStack.addArrangedSubview(resetButton)
+        buttonStack.addArrangedSubview(doneButton)
+
         datePickerContainerView?.addSubview(picker)
-        datePickerContainerView?.addSubview(doneButton)
+        datePickerContainerView?.addSubview(buttonStack)
         window.addSubview(overlayView!)
         window.addSubview(datePickerContainerView!)
 
@@ -192,11 +260,11 @@ class DiagnosisCell: UICollectionViewCell {
             picker.topAnchor.constraint(equalTo: datePickerContainerView!.topAnchor, constant: 20),
             picker.leadingAnchor.constraint(equalTo: datePickerContainerView!.leadingAnchor, constant: 10),
             picker.trailingAnchor.constraint(equalTo: datePickerContainerView!.trailingAnchor, constant: -10),
-            doneButton.topAnchor.constraint(equalTo: picker.bottomAnchor, constant: 10),
-            doneButton.centerXAnchor.constraint(equalTo: datePickerContainerView!.centerXAnchor),
-            doneButton.bottomAnchor.constraint(equalTo: datePickerContainerView!.bottomAnchor, constant: -20),
-            doneButton.widthAnchor.constraint(equalToConstant: 100),
-            doneButton.heightAnchor.constraint(equalToConstant: 44)
+            buttonStack.topAnchor.constraint(equalTo: picker.bottomAnchor, constant: 10),
+            buttonStack.leadingAnchor.constraint(equalTo: datePickerContainerView!.leadingAnchor, constant: 24),
+            buttonStack.trailingAnchor.constraint(equalTo: datePickerContainerView!.trailingAnchor, constant: -24),
+            buttonStack.bottomAnchor.constraint(equalTo: datePickerContainerView!.bottomAnchor, constant: -20),
+            buttonStack.heightAnchor.constraint(equalToConstant: 44)
         ])
 
         datePickerContainerView?.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
@@ -206,6 +274,14 @@ class DiagnosisCell: UICollectionViewCell {
             self.datePickerContainerView?.alpha = 1
             self.datePickerContainerView?.transform = .identity
         }
+    }
+
+    @objc private func resetDateTapped() {
+        dateTextField.text = nil
+        onDateSelected?(Date.distantPast) // signal cleared
+        saveButton.isUserInteractionEnabled = false
+        UIView.animate(withDuration: 0.2) { self.saveButton.alpha = 0.4 }
+        dismissDatePicker()
     }
 
     @objc private func dismissDatePicker() {
@@ -235,13 +311,19 @@ class DiagnosisCell: UICollectionViewCell {
 
     // MARK: - Configure
     func configure(with model: DiagnosisModel) {
-        if let date = model.diagnosisDate {
+        // UserDefaults is source of truth — overrides model passed in
+        let savedStatus = UserDefaults.standard.string(forKey: kDiagnosisStatus)
+        let savedDateString = UserDefaults.standard.string(forKey: kDiagnosisDate)
+
+        if let dateString = savedDateString {
+            dateTextField.text = dateString
+        } else if let date = model.diagnosisDate {
             let formatter = DateFormatter()
             formatter.dateFormat = "dd/MM/yyyy"
             dateTextField.text = formatter.string(from: date)
         }
 
-        if model.status == "Completed" {
+        if savedStatus == "Completed" || model.status == "Completed" {
             isSaved = true
             statusLabel.text = "Completed"
             statusLabel.backgroundColor = UIColor(red: 0.85, green: 0.95, blue: 0.85, alpha: 1.0)

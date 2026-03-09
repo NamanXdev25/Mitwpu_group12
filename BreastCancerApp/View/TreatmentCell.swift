@@ -9,9 +9,24 @@ class TreatmentCell: UICollectionViewCell {
 
     var onCellHeightChanged: (() -> Void)?
     var onSaveButtonTapped: ((TreatmentPhaseModel, Int) -> Void)?
+    /// Called when all phases are completed and the overall badge goes Completed.
+    var onAllPhasesCompleted: ((String) -> Void)?
+    /// Called when a phase is deleted / edit reverted, dropping back below Completed.
+    var onTreatmentReset: (() -> Void)?
+
+    /// Called whenever a phase's STATUS changes — VC updates its savedPhaseStates.
+    var onPhaseStatusChanged: ((Int, PhaseStatus) -> Void)?
+    /// Called when + Add Phase is tapped — VC appends a new SavedPhaseState.
+    var onPhaseAdded: (() -> Void)?
+    /// Called when a phase is deleted — VC removes from savedPhaseStates at that index.
+    var onPhaseDeleted: ((Int) -> Void)?
+    /// Called whenever any field value inside a phase changes (before Save) — VC caches it.
+    var onPhaseFieldsChanged: ((Int, TreatmentType, Date?, String) -> Void)?
 
     private var phaseViews: [TreatmentPhaseView] = []
     private var phaseStatuses: [Int: PhaseStatus] = [:]
+    private var wasCompleted = false
+    private var lockOverlayView: UIView?
 
     private let lightPink           = UIColor(red: 1.0,  green: 0.92, blue: 0.95, alpha: 1.0)
     private let inProgressTextColor = UIColor(red: 0.91, green: 0.39, blue: 0.54, alpha: 1.0)
@@ -53,6 +68,65 @@ class TreatmentCell: UICollectionViewCell {
         containerHeightConstraint?.isActive = true
     }
 
+    // MARK: - Reuse restore
+    /// Called from cellForItemAt every time this cell is dequeued.
+    /// Tears down leftover phase views and rebuilds entirely from VC-owned state.
+    func restoreState(phases: [SavedPhaseState], badgeStatus: PhaseStatus) {
+        phaseViews.forEach { $0.removeFromSuperview() }
+        phaseViews    = []
+        phaseStatuses = [:]
+        wasCompleted  = (badgeStatus == .completed)
+
+        for (i, saved) in phases.enumerated() {
+            addPhaseViewInternal(index: i, initialStatus: saved.status, savedState: saved)
+        }
+
+        applyBadge(badgeStatus)
+        // Ensure containerHeightConstraint is accurate so getCellHeight() returns
+        // the correct value when the VC reads it synchronously right after restoreState.
+        rebuildContainerHeight()
+    }
+
+    // MARK: - Lock Overlay
+    func setLocked(_ locked: Bool) {
+        locked ? showLockOverlay() : removeLockOverlay()
+    }
+
+    private func showLockOverlay() {
+        guard lockOverlayView == nil else { return }
+        let overlay = UIView()
+        overlay.backgroundColor = UIColor.white.withAlphaComponent(0.65)
+        overlay.layer.cornerRadius = 16
+        overlay.translatesAutoresizingMaskIntoConstraints = false
+        overlay.isUserInteractionEnabled = true
+
+        let lockImage = UIImageView(image: UIImage(systemName: "lock.fill"))
+        lockImage.tintColor = UIColor(white: 0.5, alpha: 1)
+        lockImage.contentMode = .scaleAspectFit
+        lockImage.translatesAutoresizingMaskIntoConstraints = false
+        overlay.addSubview(lockImage)
+        NSLayoutConstraint.activate([
+            lockImage.centerXAnchor.constraint(equalTo: overlay.centerXAnchor),
+            lockImage.centerYAnchor.constraint(equalTo: overlay.centerYAnchor),
+            lockImage.widthAnchor.constraint(equalToConstant: 28),
+            lockImage.heightAnchor.constraint(equalToConstant: 28)
+        ])
+
+        contentView.addSubview(overlay)
+        NSLayoutConstraint.activate([
+            overlay.topAnchor.constraint(equalTo: contentView.topAnchor),
+            overlay.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            overlay.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            overlay.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        ])
+        lockOverlayView = overlay
+    }
+
+    private func removeLockOverlay() {
+        lockOverlayView?.removeFromSuperview()
+        lockOverlayView = nil
+    }
+
     private func imageWithColor(_ color: UIColor) -> UIImage {
         UIGraphicsImageRenderer(size: CGSize(width: 1, height: 1)).image { ctx in
             color.setFill()
@@ -60,17 +134,46 @@ class TreatmentCell: UICollectionViewCell {
         }
     }
 
+    // MARK: - Add Phase (user-initiated via + button)
     @IBAction func addPhaseTapped(_ sender: UIButton) {
+        let index = phaseViews.count
+        phaseStatuses[index] = .notStarted
+        addPhaseViewInternal(index: index, initialStatus: .notStarted, savedState: nil)
+        onPhaseAdded?()
+        rebuildContainerHeight()
+        onCellHeightChanged?()
+    }
+
+    // MARK: - Internal phase view builder
+    /// `savedState` is non-nil when restoring after cell reuse; nil when user taps + Add Phase.
+    private func addPhaseViewInternal(index: Int, initialStatus: PhaseStatus, savedState: SavedPhaseState?) {
         guard let phaseView = Bundle.main.loadNibNamed("TreatmentPhaseView", owner: nil, options: nil)?.first as? TreatmentPhaseView else { return }
 
-        let index = phaseViews.count
+        phaseStatuses[index] = initialStatus
         phaseView.translatesAutoresizingMaskIntoConstraints = false
         phaseView.configure(index: index)
-        phaseStatuses[index] = .notStarted
 
+        // ── Restore field values so unsaved input survives cell reuse ──
+        if let saved = savedState {
+            if saved.isSaved, let model = saved.model {
+                // Phase was fully saved — restore the complete saved model
+                phaseView.restoreSavedModel(model)
+            } else if saved.treatmentType != .none || saved.startDate != nil || !saved.duration.isEmpty {
+                // Phase had in-progress unsaved input — restore raw field values
+                phaseView.restoreFields(
+                    treatmentType: saved.treatmentType,
+                    startDate:     saved.startDate,
+                    duration:      saved.duration
+                )
+            }
+        }
+
+        // ── Wire callbacks ──
         phaseView.onStatusChanged = { [weak self] status in
             guard let self else { return }
+            guard index < self.phaseViews.count else { return }
             self.phaseStatuses[index] = status
+            self.onPhaseStatusChanged?(index, status)
             self.recomputeOverallBadge()
         }
 
@@ -79,8 +182,28 @@ class TreatmentCell: UICollectionViewCell {
             self.deletePhase(phaseView)
         }
 
-        phasesContainerView.addSubview(phaseView)
+        // Relay field changes up to VC so it can cache unsaved input in savedPhaseStates
+        phaseView.onFieldsChanged = { [weak self] type, startDate, duration in
+            guard let self else { return }
+            guard let idx = self.phaseViews.firstIndex(of: phaseView) else { return }
+            self.onPhaseFieldsChanged?(idx, type, startDate, duration)
+        }
 
+        // Relay save up to VC
+        phaseView.onSaved = { [weak self] in
+            guard let self else { return }
+            guard let idx = self.phaseViews.firstIndex(of: phaseView) else { return }
+            // Build and relay the saved model
+            var model = TreatmentPhaseModel()
+            model.treatmentType = phaseView.currentTreatmentType()
+            model.startDate     = phaseView.currentStartDate()
+            model.duration      = phaseView.currentDuration()
+            model.state         = .saved
+            self.onSaveButtonTapped?(model, idx)
+        }
+
+        // Add to container
+        phasesContainerView.addSubview(phaseView)
         if let last = phaseViews.last {
             NSLayoutConstraint.activate([
                 phaseView.topAnchor.constraint(equalTo: last.bottomAnchor, constant: phaseSpacing),
@@ -99,8 +222,6 @@ class TreatmentCell: UICollectionViewCell {
 
         phaseViews.append(phaseView)
         rebuildContainerHeight()
-        recomputeOverallBadge()
-        onCellHeightChanged?()
     }
 
     // MARK: - Delete Phase
@@ -110,14 +231,12 @@ class TreatmentCell: UICollectionViewCell {
         UIView.animate(withDuration: 0.25, animations: {
             phaseView.alpha = 0
         }) { _ in
-            // Re-find index inside completion — captures can go stale
             guard let idx = self.phaseViews.firstIndex(of: phaseView) else { return }
 
             let statusesCopy = self.phaseStatuses
             phaseView.removeFromSuperview()
             self.phaseViews.remove(at: idx)
 
-            // Re-index statuses from the snapshot
             var newStatuses: [Int: PhaseStatus] = [:]
             for i in 0 ..< self.phaseViews.count {
                 let oldKey = i < idx ? i : i + 1
@@ -129,6 +248,7 @@ class TreatmentCell: UICollectionViewCell {
                 view.configure(index: i)
             }
 
+            self.onPhaseDeleted?(idx)
             self.rebuildPhaseConstraints()
             self.rebuildContainerHeight()
             self.recomputeOverallBadge()
@@ -170,15 +290,33 @@ class TreatmentCell: UICollectionViewCell {
 
     // MARK: - Badge
     private func recomputeOverallBadge() {
-        guard !phaseViews.isEmpty else { applyBadge(.notStarted); return }
+        guard !phaseViews.isEmpty else {
+            applyBadge(.notStarted)
+            if wasCompleted { wasCompleted = false; onTreatmentReset?() }
+            return
+        }
+
+        guard phaseStatuses.count == phaseViews.count else { return }
+
         let statuses = Array(phaseStatuses.values)
-        if statuses.contains(.inProgress) {
-            applyBadge(.inProgress)
-        } else if statuses.count == phaseViews.count && statuses.allSatisfy({ $0 == .completed }) {
+        if statuses.allSatisfy({ $0 == .completed }) {
             applyBadge(.completed)
+            if !wasCompleted {
+                wasCompleted = true
+                let firstName = phaseViews.first.map { phaseName(from: $0) } ?? "Treatment"
+                onAllPhasesCompleted?(firstName)
+            }
+        } else if statuses.contains(.inProgress) {
+            applyBadge(.inProgress)
+            if wasCompleted { wasCompleted = false; onTreatmentReset?() }
         } else {
             applyBadge(.notStarted)
+            if wasCompleted { wasCompleted = false; onTreatmentReset?() }
         }
+    }
+
+    private func phaseName(from view: TreatmentPhaseView) -> String {
+        return JourneyState.shared.currentTreatmentName
     }
 
     private func applyBadge(_ status: PhaseStatus) {
@@ -189,17 +327,17 @@ class TreatmentCell: UICollectionViewCell {
         UIView.animate(withDuration: 0.3) {
             switch status {
             case .notStarted:
-                self.statusLabel.text = "Not Started"
+                self.statusLabel.text            = "Not Started"
                 self.statusLabel.backgroundColor = self.notStartedBg
-                self.statusLabel.textColor = self.notStartedTextColor
+                self.statusLabel.textColor       = self.notStartedTextColor
             case .inProgress:
-                self.statusLabel.text = "In Progress"
+                self.statusLabel.text            = "In Progress"
                 self.statusLabel.backgroundColor = self.lightPink
-                self.statusLabel.textColor = self.inProgressTextColor
+                self.statusLabel.textColor       = self.inProgressTextColor
             case .completed:
-                self.statusLabel.text = "Completed"
+                self.statusLabel.text            = "Completed"
                 self.statusLabel.backgroundColor = self.completedGreenBg
-                self.statusLabel.textColor = self.completedGreenColor
+                self.statusLabel.textColor       = self.completedGreenColor
             }
         }
     }
