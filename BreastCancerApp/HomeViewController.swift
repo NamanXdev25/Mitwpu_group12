@@ -357,7 +357,7 @@ class HomeViewController: UIViewController,
             guard let sectionType = HomeSectionType(rawValue: indexPath.section) else { return header }
             switch sectionType {
             case .mood:
-                header.configure(title: "How Are You Feeling?", showSeeAll: false)
+                header.configure(title: "Daily Check-In", showSeeAll: false)
             case .suggestion:
                 header.configure(title: "Suggested For You", showSeeAll: false)
             case .articles:
