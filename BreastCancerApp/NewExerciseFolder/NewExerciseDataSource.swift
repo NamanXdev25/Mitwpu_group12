@@ -79,11 +79,17 @@ extension NewExerciseDataSource: UICollectionViewDataSource {
             }
             
             let exercise = exercisePlan.exercises[indexPath.item]
+
+            // Ask the VC whether this exercise has been completed
+            let isCompleted = (delegate as? NewExerciseViewController)?
+                .isExerciseCompleted(at: indexPath.item) ?? false
+
             cell.configure(
                 title: exercise.title,
                 subtitle: "\(exercise.category) • \(exercise.difficulty)",
                 time: exercise.duration,
-                imageName: exercise.imageName
+                imageName: exercise.imageName,
+                completed: isCompleted
             )
             cell.delegate = delegate
             return cell

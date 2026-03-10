@@ -1081,6 +1081,7 @@ struct CategoryExercise {
     let name: String
     let details: String
     let imageName: String
+    let youtubeURL: String?
 }
 
 struct NewExerciseModel {
@@ -1089,6 +1090,7 @@ struct NewExerciseModel {
     let category: String
     let difficulty: String
     let duration: String
+    let youtubeURL: String?
 }
 
 struct NewExercisePlan {

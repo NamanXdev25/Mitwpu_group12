@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -21,7 +22,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="360" height="88"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Gxh-Px-PJY">
-                                <rect key="frame" x="16" y="10" width="68" height="68"/>
+                                <rect key="frame" x="51" y="10" width="68" height="68"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="68" id="vc5-3o-nah"/>
                                 </constraints>
@@ -32,13 +33,13 @@
                                 </userDefinedRuntimeAttributes>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xhX-Vy-brm">
-                                <rect key="frame" x="92" y="17" width="31.666666666666671" height="19.333333333333329"/>
+                                <rect key="frame" x="127.00000000000001" y="17" width="31.666666666666671" height="19.333333333333329"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AkZ-OM-TRx">
-                                <rect key="frame" x="92" y="37.333333333333336" width="46.666666666666657" height="15.666666666666664"/>
+                                <rect key="frame" x="127.00000000000001" y="37.333333333333336" width="46.666666666666671" height="15.666666666666664"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -59,7 +60,7 @@
                                 </connections>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clock" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="s5I-VH-2nQ">
-                                <rect key="frame" x="90" y="54.666666666666664" width="18" height="14.999999999999993"/>
+                                <rect key="frame" x="125" y="54.666666666666664" width="18" height="14.999999999999993"/>
                                 <color key="tintColor" systemColor="systemGrayColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="16.329999999999998" id="6Ff-Ao-Sy0"/>
@@ -67,11 +68,26 @@
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CZy-c4-804">
-                                <rect key="frame" x="110" y="54.333333333333336" width="33" height="15.666666666666664"/>
+                                <rect key="frame" x="145" y="54.333333333333336" width="33" height="15.666666666666664"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
                                 <color key="textColor" systemColor="systemGrayColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lt5-eb-5nl">
+                                <rect key="frame" x="8" y="26.666666666666671" width="35" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="ax9-fw-IbG"/>
+                                    <constraint firstAttribute="width" constant="35" id="uBa-Lg-CoA"/>
+                                </constraints>
+                                <color key="tintColor" systemColor="systemGrayColor"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain">
+                                    <imageReference key="image" image="circle" catalog="system" symbolScale="medium"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="radioButtonTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="aW6-Nr-rze"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -84,9 +100,11 @@
                             <constraint firstItem="s5I-VH-2nQ" firstAttribute="leading" secondItem="Gxh-Px-PJY" secondAttribute="trailing" constant="6" id="KOa-pS-Ikh"/>
                             <constraint firstItem="CZy-c4-804" firstAttribute="leading" secondItem="s5I-VH-2nQ" secondAttribute="trailing" constant="2" id="OMz-zq-h7p"/>
                             <constraint firstItem="AkZ-OM-TRx" firstAttribute="top" secondItem="xhX-Vy-brm" secondAttribute="bottom" constant="1" id="TvB-sS-yzT"/>
+                            <constraint firstItem="lt5-eb-5nl" firstAttribute="centerY" secondItem="r2G-sD-Yki" secondAttribute="centerY" id="YHW-A1-prb"/>
                             <constraint firstAttribute="trailing" secondItem="ABW-tK-G3n" secondAttribute="trailing" constant="8" id="dqD-FQ-szb"/>
-                            <constraint firstItem="Gxh-Px-PJY" firstAttribute="leading" secondItem="r2G-sD-Yki" secondAttribute="leading" constant="16" id="hua-RU-565"/>
+                            <constraint firstItem="Gxh-Px-PJY" firstAttribute="leading" secondItem="lt5-eb-5nl" secondAttribute="trailing" constant="8" id="mYV-Cj-BAf"/>
                             <constraint firstAttribute="bottom" secondItem="ABW-tK-G3n" secondAttribute="bottom" constant="29" id="oJY-Ox-nFl"/>
+                            <constraint firstItem="lt5-eb-5nl" firstAttribute="leading" secondItem="r2G-sD-Yki" secondAttribute="leading" constant="8" id="q8g-2m-lcP"/>
                             <constraint firstItem="s5I-VH-2nQ" firstAttribute="top" secondItem="AkZ-OM-TRx" secondAttribute="bottom" constant="1" id="sEg-cD-dwW"/>
                             <constraint firstItem="CZy-c4-804" firstAttribute="centerY" secondItem="s5I-VH-2nQ" secondAttribute="centerY" id="tJh-Hj-Vrh"/>
                             <constraint firstItem="Gxh-Px-PJY" firstAttribute="top" secondItem="r2G-sD-Yki" secondAttribute="top" constant="10" id="uIW-nn-Fyu"/>
@@ -111,6 +129,7 @@
                 <outlet property="clockIconImageView" destination="s5I-VH-2nQ" id="n4i-hC-l6N"/>
                 <outlet property="containerView" destination="r2G-sD-Yki" id="2Em-iI-5fh"/>
                 <outlet property="exerciseImageView" destination="Gxh-Px-PJY" id="IzD-sR-cLU"/>
+                <outlet property="radioButton" destination="lt5-eb-5nl" id="Nxq-sw-M0U"/>
                 <outlet property="subtitleLabel" destination="AkZ-OM-TRx" id="hQk-cQ-EED"/>
                 <outlet property="timeLabel" destination="CZy-c4-804" id="KBe-hM-o7h"/>
                 <outlet property="titleLabel" destination="xhX-Vy-brm" id="Xcc-jp-GbP"/>
@@ -120,12 +139,13 @@
     </objects>
     <resources>
         <image name="chevron.right" catalog="system" width="97" height="128"/>
+        <image name="circle" catalog="system" width="128" height="123"/>
         <image name="clock" catalog="system" width="128" height="123"/>
         <systemColor name="systemGray3Color">
-            <color red="0.7803921568627451" green="0.7803921568627451" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.78039215689999997" green="0.78039215689999997" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGrayColor">
-            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

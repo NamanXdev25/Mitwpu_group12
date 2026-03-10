@@ -56,8 +56,6 @@ class ExercisePlanCategoryViewController: UIViewController {
         return UICollectionViewCompositionalLayout { [weak self] sectionIndex, _ in
             guard let self else { return nil }
 
-            // Ask the data source directly — avoids raw value mismatch
-            // when the recommended section is hidden
             let isRecommended = sectionIndex == 0
                 && !ExerciseRecommendationEngine.recommendedCategories().isEmpty
             let itemCount = max(
@@ -85,7 +83,6 @@ class ExercisePlanCategoryViewController: UIViewController {
             let layoutSection = NSCollectionLayoutSection(group: group)
             layoutSection.interGroupSpacing = 0
 
-            // Recommended section gets extra bottom spacing to separate it from the rest
             let bottomInset: CGFloat = isRecommended ? 36 : 24
             layoutSection.contentInsets = NSDirectionalEdgeInsets(
                 top: 0, leading: 16, bottom: bottomInset, trailing: 16
@@ -127,7 +124,8 @@ class ExercisePlanCategoryViewController: UIViewController {
                 title: exercise.name,
                 category: "Exercise",
                 difficulty: "Medium",
-                duration: exercise.details
+                duration: exercise.details,
+                youtubeURL: exercise.youtubeURL
             )
         }
         return NewExercisePlan(

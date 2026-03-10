@@ -14,7 +14,7 @@ private func imageForExercise(_ name: String) -> String {
         return "wall_climbing"
     } else if lower.contains("heel raise") {
         return "standing_heel_raises"
-    } else if lower.contains("shoulder blade") || lower.contains("scapular") || lower.contains("shoulder roll") {
+    } else if lower.contains("shoulder blade") || lower.contains("scapular") || lower.contains("shoulder roll") || lower.contains("shoulder shrug") {
         return "shoulder_blade_squeeze"
     } else if lower.contains("posture alignment") {
         return "posture_alignment_against_wall"
@@ -23,11 +23,40 @@ private func imageForExercise(_ name: String) -> String {
     } else if lower.contains("arm raise") || lower.contains("arm lift") || lower.contains("arm stretch") ||
               lower.contains("shoulder abduction") || lower.contains("shoulder flexion") ||
               lower.contains("arm circle") || lower.contains("elbow") || lower.contains("resistance band") ||
-              lower.contains("band pull") {
+              lower.contains("band pull") || lower.contains("pendulum") {
         return "arm_lift"
+    } else if lower.contains("cat") || lower.contains("yoga") || lower.contains("breathing") || lower.contains("diaphragmatic") {
+        return "girl_stretch"
     } else {
         return "girl_stretch"
     }
+}
+
+// MARK: - YouTube URL Mapping
+// Master exercise → YouTube link mapping extracted from the reference document.
+private enum YouTubeLinks {
+    static let shoulderShrug           = "https://youtu.be/YT6qn6HVQyE?si=PpHh1leGZrKPQtIb"
+    static let shoulderRoll            = "https://youtu.be/X7NtgY9kCCM?si=Nvhx1KA62Tvmsgwn"
+    static let elbowFlexExtend         = "https://youtu.be/F5N6ubrWmmw?si=qCXqC0WH8lE5z-UW"
+    static let wristCircles            = "https://youtu.be/wRSk1_C6yOM?si=nscY-V5smyRzTIfi"
+    static let shoulderBladeSqueeze    = "https://youtu.be/YejnTLIA9K8?si=vfQ_tG2-FT8ThKAh"
+    static let pendulumArmSwing        = "https://youtu.be/YYvl59eU78M?si=JTUdsj-TtyO4y7mP"
+    static let wallCrawlFront          = "https://youtu.be/bfOEqkWTvZo?si=qVtYTZIP-g-a7z6C"
+    static let wallCrawlSide           = "https://youtu.be/Zaz48x6XVLQ?si=Xz6tyHEppgfkd1Qw"
+    static let gentleShoulderAbduction = "https://youtu.be/t6bOQbTdT6M?si=kMNiepwFvY_l-35r"
+    static let chestOpeningStretch     = "https://youtu.be/4CAsFh26GGo?si=GgIiAbRlY8f2qx4Y"
+    static let neckSideStretch         = "https://youtu.be/R0lkMPT53qA?si=ir-oXmi7pb-ZAMpf"
+    static let diaphragmaticBreathing  = "https://youtu.be/qhcBjSirMss?si=Cx7U1HAa1efkm345"
+    static let sitToStand              = "https://youtu.be/2rVOvOU_vmE?si=wD1YH1YD5QSbRxrV"
+    static let seatedKneeExtension     = "https://youtu.be/3f1k1huhRgI?si=nzQBbXkjsktyZN-j"
+    static let standingHeelRaises      = "https://youtu.be/fbqEjN9pyxI?si=92LN3XaSgtfwsblD"
+    static let resistanceBandRow       = "https://youtu.be/AFm1M-2UnPw?si=QXt5zlVmlSiIBHTb"
+    static let wallPushUp              = "https://youtu.be/w8in7tdjsaY?si=0hETEILuEQt6MgDd"
+    static let bodyweightMiniSquat     = "https://youtu.be/wqCvuhfRXRU?si=GInTZD7llKb2QAbB"
+    static let seatedCoreBracing       = "https://youtu.be/jDu3wEFGJTE?si=PyKe4zakk7igb1nv"
+    static let singleLegStand          = "https://youtu.be/ZLxyh_PEstI?si=_cpdUClY9NkZe2gr"
+    static let tandemStand             = "https://youtu.be/hcsAEpw3DW4?si=a4vgFpL2A0w_6TpU"
+    static let seatedCatCow            = "https://youtu.be/PMxA3xlFpAk?si=pFR1quEJJecKdthE"
 }
 
 // MARK: - Sample Data
@@ -35,169 +64,393 @@ extension ExercisePlanCategory {
 
     static let allCategories: [ExercisePlanCategory] = [
 
-        // 1. Before Chemotherapy
+        // ───────────────────────────────────────────────
+        // 1. Before Chemotherapy — 20–30 min | 4–5 days/week
+        // ───────────────────────────────────────────────
         ExercisePlanCategory(
             id: 1,
             title: "Before Chemotherapy",
-            subtitle: "30 min · Pre-chemo",
+            subtitle: "6 exercises · 20–30 min",
             importantNote: "Build strength and stamina before treatment starts. Stop if dizziness, pain, or unusual fatigue occurs.",
             exercises: [
-                CategoryExercise(name: "Brisk walking", details: "10–15 min", imageName: "standing_heel_raises"),
-                CategoryExercise(name: "Sit-to-stand from chair", details: "2 sets × 10 reps", imageName: imageForExercise("Sit-to-stand from chair")),
-                CategoryExercise(name: "Wall push-ups", details: "2 sets × 8 reps", imageName: imageForExercise("Wall push-ups")),
-                CategoryExercise(name: "Neck side stretch", details: "2 min", imageName: imageForExercise("Neck side stretch"))
+                CategoryExercise(name: "Sit-to-Stand",
+                                 details: "2 sets × 10 reps",
+                                 imageName: imageForExercise("Sit-to-Stand"),
+                                 youtubeURL: YouTubeLinks.sitToStand),
+                CategoryExercise(name: "Resistance Band Row",
+                                 details: "2 sets × 8 reps",
+                                 imageName: imageForExercise("Resistance Band Row"),
+                                 youtubeURL: YouTubeLinks.resistanceBandRow),
+                CategoryExercise(name: "Bodyweight Mini Squat",
+                                 details: "2 sets × 8 reps",
+                                 imageName: imageForExercise("Bodyweight Mini Squat"),
+                                 youtubeURL: YouTubeLinks.bodyweightMiniSquat),
+                CategoryExercise(name: "Shoulder Blade Squeeze",
+                                 details: "2 sets × 8 reps",
+                                 imageName: imageForExercise("Shoulder Blade Squeeze"),
+                                 youtubeURL: YouTubeLinks.shoulderBladeSqueeze),
+                CategoryExercise(name: "Chest Opening Stretch",
+                                 details: "2 min",
+                                 imageName: imageForExercise("Chest Opening Stretch"),
+                                 youtubeURL: YouTubeLinks.chestOpeningStretch),
+                CategoryExercise(name: "Diaphragmatic Breathing",
+                                 details: "3 min",
+                                 imageName: imageForExercise("Diaphragmatic Breathing"),
+                                 youtubeURL: YouTubeLinks.diaphragmaticBreathing)
             ],
             imageName: "standing_heel_raises"
         ),
 
-        // 2. During Chemotherapy
+        // ───────────────────────────────────────────────
+        // 2. During Chemotherapy — 10–20 min | Flexible
+        // ───────────────────────────────────────────────
         ExercisePlanCategory(
             id: 2,
             title: "During Chemotherapy",
-            subtitle: "20 min · During chemo",
+            subtitle: "6 exercises · 10–20 min",
             importantNote: "Some movement is better than none. On very tired days, even 5 minutes counts.",
             exercises: [
-                CategoryExercise(name: "Slow walking", details: "5-10 min", imageName: "arm_lift"),
-                CategoryExercise(name: "Seated knee extensions", details: "2 sets × 10 reps", imageName: imageForExercise("Seated knee extensions")),
-                CategoryExercise(name: "Seated arm raises (no weight)", details: "2 sets × 8 reps", imageName: imageForExercise("Seated arm raises (no weight)")),
-                CategoryExercise(name: "Deep diaphragmatic breathing", details: "3–5 min", imageName: imageForExercise("Deep diaphragmatic breathing"))
+                CategoryExercise(name: "Seated Knee Extension",
+                                 details: "2 sets × 10 reps",
+                                 imageName: imageForExercise("Seated Knee Extension"),
+                                 youtubeURL: YouTubeLinks.seatedKneeExtension),
+                CategoryExercise(name: "Sit-to-Stand",
+                                 details: "1–2 sets × 8 reps",
+                                 imageName: imageForExercise("Sit-to-Stand"),
+                                 youtubeURL: YouTubeLinks.sitToStand),
+                CategoryExercise(name: "Shoulder Shrug",
+                                 details: "1 set × 10 reps",
+                                 imageName: imageForExercise("Shoulder Shrug"),
+                                 youtubeURL: YouTubeLinks.shoulderShrug),
+                CategoryExercise(name: "Shoulder Roll",
+                                 details: "1 set × 10 reps",
+                                 imageName: imageForExercise("Shoulder Roll"),
+                                 youtubeURL: YouTubeLinks.shoulderRoll),
+                CategoryExercise(name: "Seated Cat-Cow",
+                                 details: "2 min",
+                                 imageName: imageForExercise("Seated Cat-Cow"),
+                                 youtubeURL: YouTubeLinks.seatedCatCow),
+                CategoryExercise(name: "Diaphragmatic Breathing",
+                                 details: "5 min",
+                                 imageName: imageForExercise("Diaphragmatic Breathing"),
+                                 youtubeURL: YouTubeLinks.diaphragmaticBreathing)
             ],
             imageName: "arm_lift"
         ),
 
-        // 3. Post-Chemo, Pre-Surgery
+        // ───────────────────────────────────────────────
+        // 3. Post-Chemo, Pre-Surgery — 20–25 min
+        // ───────────────────────────────────────────────
         ExercisePlanCategory(
             id: 3,
             title: "Post-Chemo",
-            subtitle: "20 min · 1–3 weeks",
+            subtitle: "6 exercises · 20–25 min",
             importantNote: "Focus on restoring energy without stressing the body before surgery.",
             exercises: [
-                CategoryExercise(name: "Walking (comfortable pace)", details: "15 min", imageName: "chest_open"),
-                CategoryExercise(name: "Resistance band row", details: "2 sets × 8 reps", imageName: imageForExercise("Resistance band row")),
-                CategoryExercise(name: "Standing heel raises", details: "2 sets × 10 reps", imageName: imageForExercise("Standing heel raises")),
-                CategoryExercise(name: "Chest opening stretch", details: "2 min", imageName: imageForExercise("Chest opening stretch"))
+                CategoryExercise(name: "Resistance Band Row",
+                                 details: "2 sets × 8 reps",
+                                 imageName: imageForExercise("Resistance Band Row"),
+                                 youtubeURL: YouTubeLinks.resistanceBandRow),
+                CategoryExercise(name: "Bodyweight Mini Squat",
+                                 details: "2 sets × 8 reps",
+                                 imageName: imageForExercise("Bodyweight Mini Squat"),
+                                 youtubeURL: YouTubeLinks.bodyweightMiniSquat),
+                CategoryExercise(name: "Standing Heel Raises",
+                                 details: "2 sets × 10 reps",
+                                 imageName: imageForExercise("Standing Heel Raises"),
+                                 youtubeURL: YouTubeLinks.standingHeelRaises),
+                CategoryExercise(name: "Shoulder Blade Squeeze",
+                                 details: "2 sets × 10 reps",
+                                 imageName: imageForExercise("Shoulder Blade Squeeze"),
+                                 youtubeURL: YouTubeLinks.shoulderBladeSqueeze),
+                CategoryExercise(name: "Neck Side Stretch",
+                                 details: "2 min",
+                                 imageName: imageForExercise("Neck Side Stretch"),
+                                 youtubeURL: YouTubeLinks.neckSideStretch),
+                CategoryExercise(name: "Diaphragmatic Breathing",
+                                 details: "3 min",
+                                 imageName: imageForExercise("Diaphragmatic Breathing"),
+                                 youtubeURL: YouTubeLinks.diaphragmaticBreathing)
             ],
             imageName: "chest_open"
         ),
 
-        // 4. Early Post-Surgery (Week 1) — Level 1 data inline
+        // ───────────────────────────────────────────────
+        // 4. Early Post-Surgery (Week 1) — 10–15 min daily
+        // ───────────────────────────────────────────────
         ExercisePlanCategory(
             id: 4,
             title: "Early Post-Surgery (Week 1)",
-            subtitle: "15 min · Week 1",
+            subtitle: "5 exercises · 10–15 min",
             importantNote: "Start the day after surgery and continue for 7 days unless your doctor says otherwise.",
             exercises: [
-                CategoryExercise(name: "Wall Climb Stretch", details: "1 min", imageName: "wall_climbing"),
-                CategoryExercise(name: "Shoulder Rolls", details: "1 min", imageName: "shoulder_blade_squeeze"),
-                CategoryExercise(name: "Chest-Opening Breaths", details: "1 min", imageName: "chest_open"),
-                CategoryExercise(name: "Corner Stretch", details: "2 min", imageName: "girl_stretch"),
-                CategoryExercise(name: "Scapular Retractions", details: "2 min", imageName: "shoulder_blade_squeeze")
+                CategoryExercise(name: "Shoulder Shrug",
+                                 details: "Gentle reps",
+                                 imageName: imageForExercise("Shoulder Shrug"),
+                                 youtubeURL: YouTubeLinks.shoulderShrug),
+                CategoryExercise(name: "Shoulder Roll",
+                                 details: "Gentle reps",
+                                 imageName: imageForExercise("Shoulder Roll"),
+                                 youtubeURL: YouTubeLinks.shoulderRoll),
+                CategoryExercise(name: "Wrist Circles",
+                                 details: "Gentle reps",
+                                 imageName: imageForExercise("Wrist Circles"),
+                                 youtubeURL: YouTubeLinks.wristCircles),
+                CategoryExercise(name: "Elbow Flex & Extend",
+                                 details: "Gentle reps",
+                                 imageName: imageForExercise("Elbow Flex & Extend"),
+                                 youtubeURL: YouTubeLinks.elbowFlexExtend),
+                CategoryExercise(name: "Shoulder Blade Squeeze",
+                                 details: "Gentle reps",
+                                 imageName: imageForExercise("Shoulder Blade Squeeze"),
+                                 youtubeURL: YouTubeLinks.shoulderBladeSqueeze)
             ],
             imageName: "wall_climbing"
         ),
 
-        // 5. Post-Surgery (Week 2) — Level 2 data inline
+        // ───────────────────────────────────────────────
+        // 5. Post-Surgery (Week 2) — 15–20 min
+        // ───────────────────────────────────────────────
         ExercisePlanCategory(
             id: 5,
             title: "Post-Surgery (Week 2)",
-            subtitle: "15 min · Week 2",
+            subtitle: "5 exercises · 15–20 min",
             importantNote: "Continue building strength and mobility. Listen to your body.",
             exercises: [
-                CategoryExercise(name: "Arm Stretch", details: "1 min", imageName: "arm_lift"),
-                CategoryExercise(name: "Elbows Together", details: "2 min", imageName: "posture_alignment_against_wall"),
-                CategoryExercise(name: "Elbows Push Back", details: "2 min", imageName: "chest_open"),
-                CategoryExercise(name: "Arm Lift", details: "3 min", imageName: "arm_lift"),
-                CategoryExercise(name: "Wall Crawl", details: "3 min", imageName: "wall_climbing")
+                CategoryExercise(name: "Pendulum Arm Swing",
+                                 details: "2 min",
+                                 imageName: imageForExercise("Pendulum Arm Swing"),
+                                 youtubeURL: YouTubeLinks.pendulumArmSwing),
+                CategoryExercise(name: "Wall Crawl (Front)",
+                                 details: "2 sets × 5 reps",
+                                 imageName: imageForExercise("Wall Crawl (Front)"),
+                                 youtubeURL: YouTubeLinks.wallCrawlFront),
+                CategoryExercise(name: "Wall Crawl (Side)",
+                                 details: "2 sets × 5 reps",
+                                 imageName: imageForExercise("Wall Crawl (Side)"),
+                                 youtubeURL: YouTubeLinks.wallCrawlSide),
+                CategoryExercise(name: "Shoulder Blade Squeeze",
+                                 details: "2 sets × 8 reps",
+                                 imageName: imageForExercise("Shoulder Blade Squeeze"),
+                                 youtubeURL: YouTubeLinks.shoulderBladeSqueeze),
+                CategoryExercise(name: "Gentle Shoulder Abduction",
+                                 details: "2 sets × 6 reps",
+                                 imageName: imageForExercise("Gentle Shoulder Abduction"),
+                                 youtubeURL: YouTubeLinks.gentleShoulderAbduction)
             ],
             imageName: "arm_lift"
         ),
 
-        // 6. Post-Surgery Recovery (Week 3-6)
+        // ───────────────────────────────────────────────
+        // 6. Post-Surgery Recovery (Week 3–6) — 20–25 min
+        // ───────────────────────────────────────────────
         ExercisePlanCategory(
             id: 6,
             title: "Post-Surgery Recovery",
-            subtitle: "25 min · 3-6 Weeks",
+            subtitle: "6 exercises · 20–25 min",
             importantNote: "Gradually improve shoulder movement. Watch for swelling, heaviness, or pain.",
             exercises: [
-                CategoryExercise(name: "Wall climbing (arm walk)", details: "2 sets × 5 reps", imageName: "wall_climbing"),
-                CategoryExercise(name: "Pendulum arm swing", details: "1–2 min", imageName: imageForExercise("Pendulum arm swing")),
-                CategoryExercise(name: "Shoulder blade squeeze", details: "2 sets × 8 reps", imageName: "shoulder_blade_squeeze"),
-                CategoryExercise(name: "Walking", details: "10–15 min", imageName: imageForExercise("Walking"))
+                CategoryExercise(name: "Wall Crawl (Front)",
+                                 details: "2 sets × 8 reps",
+                                 imageName: imageForExercise("Wall Crawl (Front)"),
+                                 youtubeURL: YouTubeLinks.wallCrawlFront),
+                CategoryExercise(name: "Wall Crawl (Side)",
+                                 details: "2 sets × 8 reps",
+                                 imageName: imageForExercise("Wall Crawl (Side)"),
+                                 youtubeURL: YouTubeLinks.wallCrawlSide),
+                CategoryExercise(name: "Resistance Band Row",
+                                 details: "2 sets × 8 reps",
+                                 imageName: imageForExercise("Resistance Band Row"),
+                                 youtubeURL: YouTubeLinks.resistanceBandRow),
+                CategoryExercise(name: "Sit-to-Stand",
+                                 details: "2 sets × 10 reps",
+                                 imageName: imageForExercise("Sit-to-Stand"),
+                                 youtubeURL: YouTubeLinks.sitToStand),
+                CategoryExercise(name: "Standing Heel Raises",
+                                 details: "2 sets × 10 reps",
+                                 imageName: imageForExercise("Standing Heel Raises"),
+                                 youtubeURL: YouTubeLinks.standingHeelRaises),
+                CategoryExercise(name: "Chest Opening Stretch",
+                                 details: "2 min",
+                                 imageName: imageForExercise("Chest Opening Stretch"),
+                                 youtubeURL: YouTubeLinks.chestOpeningStretch)
             ],
             imageName: nil
         ),
 
-        // 7. After Breast Reconstruction
+        // ───────────────────────────────────────────────
+        // 7. After Breast Reconstruction — 15–20 min
+        // ───────────────────────────────────────────────
         ExercisePlanCategory(
             id: 7,
             title: "After Breast Reconstruction",
-            subtitle: "20 min · 4-8 Weeks",
+            subtitle: "5 exercises · 15–20 min",
             importantNote: "Protect reconstructed tissue. Avoid chest loading and sudden arm movements.",
             exercises: [
-                CategoryExercise(name: "Posture alignment against wall", details: "2 min", imageName: "posture_alignment_against_wall"),
-                CategoryExercise(name: "Neck rotation stretch", details: "2 min", imageName: imageForExercise("Neck rotation stretch")),
-                CategoryExercise(name: "Gentle shoulder abduction", details: "2 sets × 6 reps", imageName: imageForExercise("Gentle shoulder abduction")),
-                CategoryExercise(name: "Slow walking", details: "10 min", imageName: imageForExercise("Slow walking"))
+                CategoryExercise(name: "Shoulder Shrug",
+                                 details: "Gentle reps",
+                                 imageName: imageForExercise("Shoulder Shrug"),
+                                 youtubeURL: YouTubeLinks.shoulderShrug),
+                CategoryExercise(name: "Shoulder Roll",
+                                 details: "Gentle reps",
+                                 imageName: imageForExercise("Shoulder Roll"),
+                                 youtubeURL: YouTubeLinks.shoulderRoll),
+                CategoryExercise(name: "Gentle Shoulder Abduction",
+                                 details: "2 sets × 6 reps",
+                                 imageName: imageForExercise("Gentle Shoulder Abduction"),
+                                 youtubeURL: YouTubeLinks.gentleShoulderAbduction),
+                CategoryExercise(name: "Chest Opening Stretch",
+                                 details: "2 min",
+                                 imageName: imageForExercise("Chest Opening Stretch"),
+                                 youtubeURL: YouTubeLinks.chestOpeningStretch),
+                CategoryExercise(name: "Diaphragmatic Breathing",
+                                 details: "3 min",
+                                 imageName: imageForExercise("Diaphragmatic Breathing"),
+                                 youtubeURL: YouTubeLinks.diaphragmaticBreathing)
             ],
             imageName: nil
         ),
 
-        // 8. Pre-Radiation Therapy
+        // ───────────────────────────────────────────────
+        // 8. Pre-Radiation Therapy — 15–20 min
+        // ───────────────────────────────────────────────
         ExercisePlanCategory(
             id: 8,
             title: "Pre-Radiation Therapy",
-            subtitle: "20 min · 1–2 weeks",
+            subtitle: "5 exercises · 15–20 min",
             importantNote: "Good shoulder mobility helps with radiation positioning.",
             exercises: [
-                CategoryExercise(name: "Shoulder flexion stretch", details: "2 sets × 5 reps", imageName: imageForExercise("Shoulder flexion stretch")),
-                CategoryExercise(name: "Arm circles (small range)", details: "2 sets × 6 reps", imageName: imageForExercise("Arm circles (small range)")),
-                CategoryExercise(name: "Resistance band pull-apart", details: "2 sets × 8 reps", imageName: imageForExercise("Resistance band pull-apart")),
-                CategoryExercise(name: "Walking", details: "10 min", imageName: imageForExercise("Walking"))
+                CategoryExercise(name: "Wall Crawl (Front)",
+                                 details: "2 sets × 6 reps",
+                                 imageName: imageForExercise("Wall Crawl (Front)"),
+                                 youtubeURL: YouTubeLinks.wallCrawlFront),
+                CategoryExercise(name: "Wall Crawl (Side)",
+                                 details: "2 sets × 6 reps",
+                                 imageName: imageForExercise("Wall Crawl (Side)"),
+                                 youtubeURL: YouTubeLinks.wallCrawlSide),
+                CategoryExercise(name: "Shoulder Blade Squeeze",
+                                 details: "2 sets × 10 reps",
+                                 imageName: imageForExercise("Shoulder Blade Squeeze"),
+                                 youtubeURL: YouTubeLinks.shoulderBladeSqueeze),
+                CategoryExercise(name: "Chest Opening Stretch",
+                                 details: "2 min",
+                                 imageName: imageForExercise("Chest Opening Stretch"),
+                                 youtubeURL: YouTubeLinks.chestOpeningStretch),
+                CategoryExercise(name: "Seated Cat-Cow",
+                                 details: "2 min",
+                                 imageName: imageForExercise("Seated Cat-Cow"),
+                                 youtubeURL: YouTubeLinks.seatedCatCow)
             ],
             imageName: nil
         ),
 
-        // 9. During & After Radiation Therapy
+        // ───────────────────────────────────────────────
+        // 9. During & After Radiation Therapy — 15–20 min
+        // ───────────────────────────────────────────────
         ExercisePlanCategory(
             id: 9,
             title: "During & After Radiation",
-            subtitle: "15–25 min",
+            subtitle: "5 exercises · 15–20 min",
             importantNote: "Fatigue and skin sensitivity are common. Reduce intensity if skin irritation increases.",
             exercises: [
-                CategoryExercise(name: "Gentle yoga stretch", details: "5 min", imageName: "girl_stretch"),
-                CategoryExercise(name: "Walking", details: "10–20 min", imageName: imageForExercise("Walking")),
-                CategoryExercise(name: "Shoulder side stretch", details: "2 sets × 5 reps", imageName: imageForExercise("Shoulder side stretch")),
-                CategoryExercise(name: "Deep breathing", details: "3–5 min", imageName: imageForExercise("Deep breathing"))
+                CategoryExercise(name: "Shoulder Shrug",
+                                 details: "Gentle reps",
+                                 imageName: imageForExercise("Shoulder Shrug"),
+                                 youtubeURL: YouTubeLinks.shoulderShrug),
+                CategoryExercise(name: "Shoulder Roll",
+                                 details: "Gentle reps",
+                                 imageName: imageForExercise("Shoulder Roll"),
+                                 youtubeURL: YouTubeLinks.shoulderRoll),
+                CategoryExercise(name: "Resistance Band Row",
+                                 details: "2 sets × 8 reps",
+                                 imageName: imageForExercise("Resistance Band Row"),
+                                 youtubeURL: YouTubeLinks.resistanceBandRow),
+                CategoryExercise(name: "Bodyweight Mini Squat",
+                                 details: "2 sets × 8 reps",
+                                 imageName: imageForExercise("Bodyweight Mini Squat"),
+                                 youtubeURL: YouTubeLinks.bodyweightMiniSquat),
+                CategoryExercise(name: "Diaphragmatic Breathing",
+                                 details: "3 min",
+                                 imageName: imageForExercise("Diaphragmatic Breathing"),
+                                 youtubeURL: YouTubeLinks.diaphragmaticBreathing)
             ],
             imageName: "girl_stretch"
         ),
 
-        // 10. Post-Treatment Recovery
+        // ───────────────────────────────────────────────
+        // 10. Post-Treatment Recovery — 25–30 min | 4–5 days/week
+        // ───────────────────────────────────────────────
         ExercisePlanCategory(
             id: 10,
             title: "Post-Treatment Recovery",
-            subtitle: "30 min · 3–6 months",
+            subtitle: "6 exercises · 25–30 min",
             importantNote: "Gradually rebuild strength and endurance. Progress slowly.",
             exercises: [
-                CategoryExercise(name: "Brisk walking", details: "20 min", imageName: "shoulder_blade_squeeze"),
-                CategoryExercise(name: "Bodyweight squats", details: "2 sets × 10 reps", imageName: imageForExercise("Bodyweight squats")),
-                CategoryExercise(name: "Resistance band rows", details: "2 sets × 10 reps", imageName: imageForExercise("Resistance band rows")),
-                CategoryExercise(name: "Seated core engagement", details: "2 sets × 10 reps", imageName: imageForExercise("Seated core engagement"))
+                CategoryExercise(name: "Sit-to-Stand",
+                                 details: "2 sets × 12 reps",
+                                 imageName: imageForExercise("Sit-to-Stand"),
+                                 youtubeURL: YouTubeLinks.sitToStand),
+                CategoryExercise(name: "Resistance Band Row",
+                                 details: "2 sets × 12 reps",
+                                 imageName: imageForExercise("Resistance Band Row"),
+                                 youtubeURL: YouTubeLinks.resistanceBandRow),
+                CategoryExercise(name: "Bodyweight Mini Squat",
+                                 details: "2 sets × 10 reps",
+                                 imageName: imageForExercise("Bodyweight Mini Squat"),
+                                 youtubeURL: YouTubeLinks.bodyweightMiniSquat),
+                CategoryExercise(name: "Wall Push-Up",
+                                 details: "2 sets × 8 reps",
+                                 imageName: imageForExercise("Wall Push-Up"),
+                                 youtubeURL: YouTubeLinks.wallPushUp),
+                CategoryExercise(name: "Single Leg Stand",
+                                 details: "3 sets × 20 sec",
+                                 imageName: imageForExercise("Single Leg Stand"),
+                                 youtubeURL: YouTubeLinks.singleLegStand),
+                CategoryExercise(name: "Chest Opening Stretch",
+                                 details: "2 min",
+                                 imageName: imageForExercise("Chest Opening Stretch"),
+                                 youtubeURL: YouTubeLinks.chestOpeningStretch)
             ],
             imageName: "shoulder_blade_squeeze"
         ),
 
-        // 11. Remission / Survivorship
+        // ───────────────────────────────────────────────
+        // 11. Remission / Survivorship — 30 min | 5 days/week
+        // ───────────────────────────────────────────────
         ExercisePlanCategory(
             id: 11,
             title: "Remission / Survivorship",
-            subtitle: "30 min · Long-term",
+            subtitle: "7 exercises · 30 min",
             importantNote: "Regular exercise supports long-term health and reduces recurrence risk.",
             exercises: [
-                CategoryExercise(name: "Moderate-intensity cardio", details: "30 min", imageName: "posture_alignment_against_wall"),
-                CategoryExercise(name: "Strength training session", details: "20–30 min", imageName: imageForExercise("Strength training session")),
-                CategoryExercise(name: "Flexibility stretching", details: "5–10 min", imageName: imageForExercise("Flexibility stretching")),
-                CategoryExercise(name: "Balance exercise (single-leg stand)", details: "5 min", imageName: imageForExercise("Balance exercise (single-leg stand)"))
+                CategoryExercise(name: "Bodyweight Mini Squat",
+                                 details: "3 sets × 12 reps",
+                                 imageName: imageForExercise("Bodyweight Mini Squat"),
+                                 youtubeURL: YouTubeLinks.bodyweightMiniSquat),
+                CategoryExercise(name: "Resistance Band Row",
+                                 details: "3 sets × 12 reps",
+                                 imageName: imageForExercise("Resistance Band Row"),
+                                 youtubeURL: YouTubeLinks.resistanceBandRow),
+                CategoryExercise(name: "Wall Push-Up",
+                                 details: "3 sets × 10 reps",
+                                 imageName: imageForExercise("Wall Push-Up"),
+                                 youtubeURL: YouTubeLinks.wallPushUp),
+                CategoryExercise(name: "Standing Heel Raises",
+                                 details: "3 sets × 15 reps",
+                                 imageName: imageForExercise("Standing Heel Raises"),
+                                 youtubeURL: YouTubeLinks.standingHeelRaises),
+                CategoryExercise(name: "Single Leg Stand",
+                                 details: "3 sets × 30 sec",
+                                 imageName: imageForExercise("Single Leg Stand"),
+                                 youtubeURL: YouTubeLinks.singleLegStand),
+                CategoryExercise(name: "Tandem Stand",
+                                 details: "3 sets × 30 sec",
+                                 imageName: imageForExercise("Tandem Stand"),
+                                 youtubeURL: YouTubeLinks.tandemStand),
+                CategoryExercise(name: "Seated Cat-Cow",
+                                 details: "3 min",
+                                 imageName: imageForExercise("Seated Cat-Cow"),
+                                 youtubeURL: YouTubeLinks.seatedCatCow)
             ],
             imageName: "posture_alignment_against_wall"
         )

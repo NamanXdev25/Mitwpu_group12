@@ -2,12 +2,14 @@ import UIKit
 
 protocol DetailExerciseCellDelegate: AnyObject {
     func didTapChevron(on cell: DetailExerciseCell)
+    func didTapRadioButton(on cell: DetailExerciseCell)
 }
 
 class DetailExerciseCell: UICollectionViewCell {
 
     // MARK: - IBOutlets
     @IBOutlet weak var containerView: UIView!
+    @IBOutlet weak var radioButton: UIButton!
     @IBOutlet weak var exerciseImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var subtitleLabel: UILabel!
@@ -18,13 +20,23 @@ class DetailExerciseCell: UICollectionViewCell {
     // MARK: - Delegate
     weak var delegate: DetailExerciseCellDelegate?
 
+    // MARK: - State
+    private(set) var isCompleted: Bool = false
+
     // MARK: - Lifecycle
     override func awakeFromNib() {
         super.awakeFromNib()
+        updateRadioAppearance()
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        isCompleted = false
+        updateRadioAppearance()
     }
 
     // MARK: - Configure
-    func configure(title: String, subtitle: String, time: String, imageName: String) {
+    func configure(title: String, subtitle: String, time: String, imageName: String, completed: Bool) {
         titleLabel.text = title
         subtitleLabel.text = subtitle
         timeLabel.text = time
@@ -35,10 +47,33 @@ class DetailExerciseCell: UICollectionViewCell {
             exerciseImageView.image = nil
             exerciseImageView.backgroundColor = UIColor.systemPink.withAlphaComponent(0.08)
         }
+
+        isCompleted = completed
+        updateRadioAppearance()
+    }
+
+    // MARK: - Radio Button
+    func setCompleted(_ completed: Bool) {
+        isCompleted = completed
+        updateRadioAppearance()
+    }
+
+    private func updateRadioAppearance() {
+        let symbolName = isCompleted ? "checkmark.circle.fill" : "circle"
+        let config = UIImage.SymbolConfiguration(pointSize: 22, weight: .medium)
+        let image = UIImage(systemName: symbolName, withConfiguration: config)
+        radioButton.setImage(image, for: .normal)
+        radioButton.tintColor = isCompleted
+            ? UIColor.systemPink
+            : UIColor.systemGray3
+    }
+
+    // MARK: - Actions
+    @IBAction func radioButtonTapped(_ sender: UIButton) {
+        delegate?.didTapRadioButton(on: self)
     }
 
     @IBAction func chevronTapped(_ sender: UIButton) {
         delegate?.didTapChevron(on: self)
     }
 }
-

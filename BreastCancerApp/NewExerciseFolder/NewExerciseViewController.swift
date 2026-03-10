@@ -19,6 +19,9 @@ class NewExerciseViewController: UIViewController {
     var exercisePlan: NewExercisePlan!
     private var dataSource: NewExerciseDataSource!
 
+    /// Tracks which exercise indices the user has completed (visited the video).
+    private var completedIndices: Set<Int> = []
+
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +29,7 @@ class NewExerciseViewController: UIViewController {
         setupData()
         setupCollectionView()
         setupBottomContainer()
+        updateBeginButtonTitle()
     }
 
     // MARK: - Setup
@@ -38,7 +42,7 @@ class NewExerciseViewController: UIViewController {
 
     private func setupData() {
         if exercisePlan == nil {
-            exercisePlan = NewExercisePlan.level1Exercises
+            //exercisePlan = NewExercisePlan.level1Exercises
         }
         dataSource = NewExerciseDataSource(exercisePlan: exercisePlan)
         dataSource.delegate = self
@@ -72,23 +76,76 @@ class NewExerciseViewController: UIViewController {
         bottomButtonContainer.layer.shadowRadius = 4
     }
 
-    // MARK: - IBActions
-    @IBAction func beginButtonTapped(_ sender: UIButton) {
-        guard let plan = exercisePlan, !plan.exercises.isEmpty else { return }
+    // MARK: - Begin / Continue Button
 
-        let storyboard = UIStoryboard(name: "NewExercise", bundle: nil)
-        guard let playerVC = storyboard.instantiateViewController(
-            withIdentifier: "ExercisePlayerViewController") as? ExercisePlayerViewController
-        else {
-            assertionFailure("ExercisePlayerViewController not found in NewExercise.storyboard")
+    private func updateBeginButtonTitle() {
+        // The button uses UIButtonConfiguration (set in storyboard with play.fill icon),
+        // so we MUST update via .configuration — NOT setTitle(_:for:).
+        let hasAnyCompleted = !completedIndices.isEmpty
+        beginButton.configuration?.title = hasAnyCompleted ? " Continue" : " Begin Now"
+    }
+
+    /// Returns the index of the first exercise that hasn't been completed yet,
+    /// or 0 if all are completed (restart from the top).
+    private func nextExerciseIndex() -> Int {
+        guard let plan = exercisePlan else { return 0 }
+        for i in 0..<plan.exercises.count {
+            if !completedIndices.contains(i) {
+                return i
+            }
+        }
+        return 0   // all done — wrap around
+    }
+
+    // MARK: - YouTube Navigation
+
+    private func openYouTubeVideo(for exercise: NewExerciseModel, at index: Int) {
+        guard let urlString = exercise.youtubeURL,
+              let url = URL(string: urlString) else {
+            showMissingVideoAlert(for: exercise.title)
             return
         }
 
-        playerVC.exercisePlan  = plan
-        playerVC.exerciseModel = plan.exercises[0]
-        playerVC.currentIndex  = 0
+        // Mark as completed before opening
+        completedIndices.insert(index)
+        updateBeginButtonTitle()
+        reloadExerciseCell(at: index)
 
-        navigationController?.pushViewController(playerVC, animated: true)
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    }
+
+    private func reloadExerciseCell(at exerciseIndex: Int) {
+        let indexPath = IndexPath(
+            item: exerciseIndex,
+            section: NewExerciseSectionType.exercises.rawValue
+        )
+        collectionView.reloadItems(at: [indexPath])
+    }
+
+    private func showMissingVideoAlert(for title: String) {
+        let alert = UIAlertController(
+            title: "Video Unavailable",
+            message: "The video for \"\(title)\" is not available yet.",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
+
+    // MARK: - Completion State Query (used by DataSource)
+
+    func isExerciseCompleted(at index: Int) -> Bool {
+        return completedIndices.contains(index)
+    }
+
+    // MARK: - IBActions
+
+    @IBAction func beginButtonTapped(_ sender: UIButton) {
+        guard let plan = exercisePlan, !plan.exercises.isEmpty else { return }
+
+        let index = nextExerciseIndex()
+        let exercise = plan.exercises[index]
+        openYouTubeVideo(for: exercise, at: index)
     }
 
     @IBAction func defaultButtonTapped(_ sender: UIButton) {
@@ -98,21 +155,28 @@ class NewExerciseViewController: UIViewController {
 
 // MARK: - DetailExerciseCellDelegate
 extension NewExerciseViewController: DetailExerciseCellDelegate {
+
     func didTapChevron(on cell: DetailExerciseCell) {
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
         guard indexPath.section == NewExerciseSectionType.exercises.rawValue else { return }
 
         let exercise = exercisePlan.exercises[indexPath.item]
+        openYouTubeVideo(for: exercise, at: indexPath.item)
+    }
 
-        let storyboard = UIStoryboard(name: "NewExercise", bundle: nil)
-        guard let playerVC = storyboard.instantiateViewController(
-            withIdentifier: "ExercisePlayerViewController") as? ExercisePlayerViewController
-        else { return }
+    func didTapRadioButton(on cell: DetailExerciseCell) {
+        guard let indexPath = collectionView.indexPath(for: cell) else { return }
+        guard indexPath.section == NewExerciseSectionType.exercises.rawValue else { return }
 
-        playerVC.exercisePlan  = exercisePlan
-        playerVC.exerciseModel = exercise
-        playerVC.currentIndex  = indexPath.item
+        // Toggle completion
+        let index = indexPath.item
+        if completedIndices.contains(index) {
+            completedIndices.remove(index)
+        } else {
+            completedIndices.insert(index)
+        }
 
-        navigationController?.pushViewController(playerVC, animated: true)
+        updateBeginButtonTitle()
+        reloadExerciseCell(at: index)
     }
 }
