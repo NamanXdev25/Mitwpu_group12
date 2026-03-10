@@ -59,12 +59,11 @@ class DetailExerciseCell: UICollectionViewCell {
     }
 
     private func updateRadioAppearance() {
+        // Only swap the SF Symbol — symbol scale (Medium) is set in the XIB.
         let symbolName = isCompleted ? "checkmark.circle.fill" : "circle"
-        let config = UIImage.SymbolConfiguration(pointSize: 22, weight: .medium)
-        let image = UIImage(systemName: symbolName, withConfiguration: config)
-        radioButton.setImage(image, for: .normal)
+        radioButton.configuration?.image = UIImage(systemName: symbolName)
         radioButton.tintColor = isCompleted
-            ? UIColor.systemPink
+            ? UIColor(named: "primary_color")
             : UIColor.systemGray3
     }
 

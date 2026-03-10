@@ -115,12 +115,35 @@ extension NewExerciseDataSource: UICollectionViewDataSource {
     }
 }
 
+// MARK: - UICollectionViewDelegate
+extension NewExerciseDataSource: UICollectionViewDelegate {
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard indexPath.section == NewExerciseSectionType.exercises.rawValue else { return }
+        guard let cell = collectionView.cellForItem(at: indexPath) as? DetailExerciseCell else { return }
+        // Reuse the existing chevron delegate path → opens YouTube
+        delegate?.didTapChevron(on: cell)
+    }
+}
+
 // MARK: - UICollectionViewDelegateFlowLayout
 extension NewExerciseDataSource: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         if section == 0 {
-            return CGSize(width: collectionView.bounds.width, height: 150)
+            // Measure title height so the header fits content — no fixed 150pt gap.
+            let titleFont = UIFont.boldSystemFont(ofSize: 28)
+            let maxWidth = collectionView.bounds.width - 40  // matches XIB: 20 leading + 20 trailing
+            let titleHeight = (exercisePlan.level as NSString).boundingRect(
+                with: CGSize(width: maxWidth, height: .greatestFiniteMagnitude),
+                options: [.usesLineFragmentOrigin, .usesFontLeading],
+                attributes: [.font: titleFont],
+                context: nil
+            ).height
+            // 20 top padding + title + 12 gap + 18 info stack + 4 bottom padding
+            // (note cell XIB adds 12pt internal top → 4 + 12 = 16pt visual gap)
+            let totalHeight = 20 + ceil(titleHeight) + 12 + 16
+            return CGSize(width: collectionView.bounds.width, height: totalHeight)
         }
         return .zero
     }
@@ -141,7 +164,7 @@ extension NewExerciseDataSource: UICollectionViewDelegateFlowLayout {
             let padding: CGFloat = 32 + 24 // horizontal + vertical padding
             let maxWidth = width - 32 - 32 // cell margins + container margins
             
-            let font = UIFont.systemFont(ofSize: 14)
+            let font = UIFont.systemFont(ofSize: 17) // matches XIB font size
             let boundingRect = noteText.boundingRect(
                 with: CGSize(width: maxWidth, height: .greatestFiniteMagnitude),
                 options: [.usesLineFragmentOrigin, .usesFontLeading],

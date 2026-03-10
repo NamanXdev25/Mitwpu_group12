@@ -225,7 +225,16 @@ class HomeViewController: UIViewController,
         let itemSize  = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(155))
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(155))
         let section   = NSCollectionLayoutSection(group: NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [NSCollectionLayoutItem(layoutSize: itemSize)]))
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 0, trailing: 16)
+
+        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(52))
+        section.boundarySupplementaryItems = [
+            NSCollectionLayoutBoundarySupplementaryItem(
+                layoutSize: headerSize,
+                elementKind: UICollectionView.elementKindSectionHeader,
+                alignment: .top
+            )
+        ]
         return section
     }
 
@@ -347,6 +356,8 @@ class HomeViewController: UIViewController,
             ) as! HomeHeaderCell
             guard let sectionType = HomeSectionType(rawValue: indexPath.section) else { return header }
             switch sectionType {
+            case .mood:
+                header.configure(title: "How Are You Feeling?", showSeeAll: false)
             case .suggestion:
                 header.configure(title: "Suggested For You", showSeeAll: false)
             case .articles:
