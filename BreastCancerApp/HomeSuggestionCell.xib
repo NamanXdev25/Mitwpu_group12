@@ -28,13 +28,13 @@
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Gentle Focus" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fXN-4Z-jbM">
-                                <rect key="frame" x="101" y="19" width="244" height="20.333333333333329"/>
+                                <rect key="frame" x="101" y="15.999999999999998" width="244" height="20.333333333333329"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="A soft breathing session to keep your energy steady." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A52-zc-cXx">
-                                <rect key="frame" x="101" y="43.333333333333336" width="244" height="38.000000000000007"/>
+                                <rect key="frame" x="101" y="40.333333333333336" width="244" height="38.000000000000007"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                 <color key="textColor" systemColor="systemGrayColor"/>
                                 <nil key="highlightedColor"/>
@@ -42,9 +42,10 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="A52-zc-cXx" secondAttribute="bottom" constant="8" id="2ge-3C-hnO"/>
                             <constraint firstItem="A52-zc-cXx" firstAttribute="leading" secondItem="AtC-SS-HuW" secondAttribute="trailing" constant="16" id="BKb-Vc-Sq1"/>
                             <constraint firstItem="A52-zc-cXx" firstAttribute="top" secondItem="fXN-4Z-jbM" secondAttribute="bottom" constant="4" id="Omv-NM-ZSQ"/>
-                            <constraint firstItem="fXN-4Z-jbM" firstAttribute="top" secondItem="lNU-cc-Lyi" secondAttribute="top" constant="19" id="U8y-em-XH2"/>
+                            <constraint firstItem="fXN-4Z-jbM" firstAttribute="top" secondItem="lNU-cc-Lyi" secondAttribute="top" constant="16" id="U8y-em-XH2"/>
                             <constraint firstAttribute="trailing" secondItem="fXN-4Z-jbM" secondAttribute="trailing" constant="16" id="YYy-Mp-gbG"/>
                             <constraint firstItem="fXN-4Z-jbM" firstAttribute="leading" secondItem="AtC-SS-HuW" secondAttribute="trailing" constant="16" id="fJU-p0-K5J"/>
                             <constraint firstItem="AtC-SS-HuW" firstAttribute="leading" secondItem="lNU-cc-Lyi" secondAttribute="leading" id="gb1-Sd-JbA"/>
@@ -80,7 +81,7 @@
     <resources>
         <image name="BreathingSessionsImage" width="864" height="1184"/>
         <systemColor name="systemGrayColor">
-            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

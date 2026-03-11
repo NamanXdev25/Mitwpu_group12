@@ -336,6 +336,19 @@ class HomeViewController: UIViewController,
                     withReuseIdentifier: "HomeSuggestionCell", for: indexPath
                 ) as! HomeSuggestionCell
                 cell.configure(with: suggestion)
+
+                // Index 1 is always the hobby cell — wire the memory popup directly,
+                // bypassing isHobbySuggestion() which can silently return false.
+                if indexPath.item == 1 {
+                    cell.onTap = { [weak self, weak cell] in
+                        guard let self, let sourceView = cell else { return }
+                        UserActivityStore.shared.recordHobbyTap(title: suggestion.title)
+                        self.openHobbyMemoryOptions(from: sourceView)
+                    }
+                } else {
+                    cell.onTap = nil
+                }
+
                 return cell
 
             case .article(let article):
