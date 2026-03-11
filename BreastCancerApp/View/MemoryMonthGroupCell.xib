@@ -193,6 +193,7 @@
                 <outlet property="polaroidCard2" destination="44l-Lh-GFq" id="1cl-pQ-4uV"/>
                 <outlet property="polaroidCard3" destination="ZeV-fv-neZ" id="rIW-mp-10Z"/>
                 <outlet property="polaroidCard4" destination="cLn-Dm-943" id="khU-cP-Llm"/>
+                <outlet property="separatorLine" destination="a3U-VT-WC0" id="OFd-1V-S1Z"/>
             </connections>
             <point key="canvasLocation" x="-293" y="77"/>
         </collectionViewCell>

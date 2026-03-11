@@ -179,11 +179,8 @@ final class MemoriesViewController: UIViewController,
         sortAndGroupMemories()
         collectionView.reloadData()
 
-        // Award coins for new memory (once per day)
         CoinRewardService.shared.awardMemoryCoinsIfEligible(on: self)
     }
-
-
 
     func didDeleteMemory(at index: Int) {
         memories.remove(at: index)
@@ -192,11 +189,10 @@ final class MemoriesViewController: UIViewController,
         collectionView.reloadData()
     }
 
-    // MARK: - Grouping (CHANGED TO MONTHLY)
+    // MARK: - Grouping
     private func sortAndGroupMemories() {
         let source = isFiltering ? filteredMemories : memories
 
-        // Group by month and year
         let grouped = Dictionary(grouping: source) { memory -> String in
             let components = calendar.dateComponents([.month, .year], from: memory.date)
             return "\(components.year!)-\(components.month!)"
@@ -209,18 +205,13 @@ final class MemoriesViewController: UIViewController,
             return (month: month, year: year, items: memories.sorted { $0.date > $1.date })
         }
         .sorted { a, b in
-            // Sort by year descending, then month descending
-            if a.year != b.year {
-                return a.year > b.year
-            }
+            if a.year != b.year { return a.year > b.year }
             return a.month > b.month
         }
     }
 
     // MARK: - CollectionView
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        1
-    }
+    func numberOfSections(in collectionView: UICollectionView) -> Int { 1 }
 
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
@@ -236,7 +227,9 @@ final class MemoriesViewController: UIViewController,
         ) as! MemoryMonthGroupCell
 
         let group = groupedMemories[indexPath.item]
-        cell.configure(with: group.items, month: group.month, year: group.year)
+        let isLast = indexPath.item == groupedMemories.count - 1
+
+        cell.configure(with: group.items, month: group.month, year: group.year, isLast: isLast)
 
         cell.onTap = { [weak self] in
             self?.openViewer(groupIndex: indexPath.item)
@@ -248,9 +241,7 @@ final class MemoriesViewController: UIViewController,
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-
-        let width = collectionView.bounds.width
-        return CGSize(width: width, height: 280)
+        CGSize(width: collectionView.bounds.width, height: 280)
     }
 
     // MARK: - Viewer
@@ -268,10 +259,19 @@ final class MemoriesViewController: UIViewController,
         monthVC.month = group.month
         monthVC.year = group.year
         
-        // Normal modal presentation with dimmed background
-        navController.modalPresentationStyle = .pageSheet
+        monthVC.onMemoriesChanged = { [weak self] updatedMemories in
+            guard let self else { return }
+            self.memories.removeAll { memory in
+                let c = self.calendar.dateComponents([.month, .year], from: memory.date)
+                return c.month == group.month && c.year == group.year
+            }
+            self.memories.append(contentsOf: updatedMemories)
+            MemoryStore.save(self.memories)
+            self.sortAndGroupMemories()
+            self.collectionView.reloadData()
+        }
         
-        // Optional: Configure the sheet presentation
+        navController.modalPresentationStyle = .pageSheet
         if let sheet = navController.sheetPresentationController {
             sheet.detents = [.large()]
             sheet.prefersGrabberVisible = false

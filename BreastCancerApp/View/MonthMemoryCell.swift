@@ -15,6 +15,10 @@ final class MonthMemoryCell: UICollectionViewCell {
     @IBOutlet private weak var imageView: UIImageView!
     @IBOutlet private weak var dateLabel: UILabel!
     @IBOutlet private weak var noteLabel: UILabel!
+    @IBOutlet private weak var menuButton: UIButton!
+    
+    var onEdit: (() -> Void)?
+    var onDelete: (() -> Void)?
     
     private let calendar = Calendar.current
     private var imageAspectRatioConstraint: NSLayoutConstraint?
@@ -25,6 +29,8 @@ final class MonthMemoryCell: UICollectionViewCell {
         dateLabel.text = nil
         noteLabel.text = nil
         noteLabel.isHidden = true
+        onEdit = nil
+        onDelete = nil
         
         if let constraint = imageAspectRatioConstraint {
             imageView.removeConstraint(constraint)
@@ -35,7 +41,6 @@ final class MonthMemoryCell: UICollectionViewCell {
     func configure(with memory: Memory) {
         imageView.image = memory.image
         
-        // Set aspect ratio constraint based on image
         if let image = memory.image {
             let aspectRatio = image.size.height / image.size.width
             
@@ -51,7 +56,6 @@ final class MonthMemoryCell: UICollectionViewCell {
             imageAspectRatioConstraint?.isActive = true
         }
         
-        // Configure date
         if calendar.isDateInToday(memory.date) {
             dateLabel.text = "Today"
         } else if calendar.isDateInYesterday(memory.date) {
@@ -62,12 +66,44 @@ final class MonthMemoryCell: UICollectionViewCell {
             dateLabel.text = formatter.string(from: memory.date)
         }
         
-        // Configure note
         if let note = memory.note, !note.isEmpty {
             noteLabel.text = note
             noteLabel.isHidden = false
         } else {
             noteLabel.isHidden = true
         }
+    }
+    
+    @IBAction private func menuButtonTapped(_ sender: UIButton) {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        alert.addAction(UIAlertAction(title: "Edit", style: .default) { [weak self] _ in
+            self?.onEdit?()
+        })
+        
+        alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+            self?.onDelete?()
+        })
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        
+        // Required for iPad popover
+        if let popover = alert.popoverPresentationController {
+            popover.sourceView = sender
+            popover.sourceRect = sender.bounds
+        }
+        
+        parentViewController?.present(alert, animated: true)
+    }
+}
+
+private extension UIView {
+    var parentViewController: UIViewController? {
+        var responder: UIResponder? = self
+        while let next = responder?.next {
+            if let vc = next as? UIViewController { return vc }
+            responder = next
+        }
+        return nil
     }
 }

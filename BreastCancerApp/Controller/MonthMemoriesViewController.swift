@@ -17,6 +17,9 @@ final class MonthMemoriesViewController: UIViewController {
     var month: Int = 1
     var year: Int = 2024
     
+    // Called when memories are mutated so the parent can persist changes
+    var onMemoriesChanged: (([Memory]) -> Void)?
+    
     private let calendar = Calendar.current
     
     // MARK: - Lifecycle
@@ -82,9 +85,7 @@ private extension MonthMemoriesViewController {
 // MARK: - Collection View
 extension MonthMemoriesViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        1
-    }
+    func numberOfSections(in collectionView: UICollectionView) -> Int { 1 }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         memories.count
@@ -104,6 +105,47 @@ extension MonthMemoriesViewController: UICollectionViewDataSource, UICollectionV
         
         cell.configure(with: memory)
         
+        cell.onDelete = { [weak self] in
+            self?.deleteMemory(at: indexPath.item)
+        }
+        
+        cell.onEdit = { [weak self] in
+            self?.openEditScreen(for: indexPath.item)
+        }
+        
         return cell
+    }
+}
+
+// MARK: - Edit & Delete
+private extension MonthMemoriesViewController {
+    
+    func deleteMemory(at index: Int) {
+        memories.remove(at: index)
+        collectionView.reloadData()
+        onMemoriesChanged?(memories)
+    }
+    
+    func openEditScreen(for index: Int) {
+        let storyboard = UIStoryboard(name: "memory", bundle: nil)
+        let addVC = storyboard.instantiateViewController(
+            withIdentifier: "AddMemoryViewController"
+        ) as! AddMemoryViewController
+        
+        addVC.memoryToEdit = memories[index]
+        addVC.editIndex = index
+        addVC.editDelegate = self
+        
+        present(UINavigationController(rootViewController: addVC), animated: true)
+    }
+}
+
+// MARK: - EditMemoryDelegate
+extension MonthMemoriesViewController: EditMemoryDelegate {
+    
+    func didEditMemory(_ memory: Memory, at index: Int) {
+        memories[index] = memory
+        collectionView.reloadItems(at: [IndexPath(item: index, section: 0)])
+        onMemoriesChanged?(memories)
     }
 }
