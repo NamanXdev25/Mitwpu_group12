@@ -10,6 +10,8 @@ import UIKit
 class SymptomCollectionViewCell: UICollectionViewCell {
     
     
+    @IBOutlet weak var logButton: UIButton!
+    
     @IBOutlet weak var symptomsGraphView: LineGraphView!
     
     @IBOutlet weak var titleLabel: UILabel!

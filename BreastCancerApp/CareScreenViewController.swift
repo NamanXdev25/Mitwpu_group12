@@ -723,6 +723,7 @@ extension CareScreenViewController: CareMedicationCellDelegate {
     func careMedicationCellDidTap(_ cell: CareMedicationCell) {
         let storyboard = UIStoryboard(name: "Medication", bundle: nil)
         if let medicationVC = storyboard.instantiateViewController(withIdentifier: "MedicationViewController") as? MedicationViewController {
+            medicationVC.displayDate = Date()
             let navController = UINavigationController(rootViewController: medicationVC)
             if let sheet = navController.sheetPresentationController {
                 sheet.detents = [.large()]
@@ -739,6 +740,7 @@ extension CareScreenViewController: CareSymptomsCellDelegate {
     func careSymptomsCellDidTapViewInsights(_ cell: CareSymptomsCell) {
         let storyboard = UIStoryboard(name: "symptomMain", bundle: nil)
         if let symptomsVC = storyboard.instantiateViewController(withIdentifier: "SymptomsViewController") as? SymptomsViewController {
+            symptomsVC.displayDate = Date()
             let navController = UINavigationController(rootViewController: symptomsVC)
             if let sheet = navController.sheetPresentationController {
                 sheet.detents = [.large()]

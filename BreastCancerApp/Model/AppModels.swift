@@ -711,13 +711,7 @@ struct HealthInsight: Codable, Identifiable {
     func formatGraphValue(_ value: Int) -> String {
         switch type {
         case .hydration:
-            if value < 1000 { return "\(value) ml" }
-            let liters = Double(value) / 1000.0
-            let formatter = NumberFormatter()
-            formatter.minimumFractionDigits = 0
-            formatter.maximumFractionDigits = 2
-            let litersString = formatter.string(from: NSNumber(value: liters)) ?? "\(liters)"
-            return "\(litersString) L"
+            return HealthInsightBuilder.formatHydrationAmount(value)
         case .symptoms:
             return "severity : \(value)"
         default:

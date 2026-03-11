@@ -22,11 +22,16 @@ class BarGraphView: UIView {
     private let topMargin: CGFloat = 30
     private let bottomLabelPadding: CGFloat = 30
     private var xibBarColor: UIColor = .systemPink
+    private var graphAccentColor: UIColor {
+        UIColor(named: "primary_colour")
+            ?? UIColor(named: "primary_color")
+            ?? UIColor(named: "PrimaryColor")
+            ?? .systemPink
+    }
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Capture the color you applied in the XIB editor
-        self.xibBarColor = self.backgroundColor ?? .systemPink
+        self.xibBarColor = graphAccentColor
         self.backgroundColor = .clear
         self.clipsToBounds = false
         setupTouch()

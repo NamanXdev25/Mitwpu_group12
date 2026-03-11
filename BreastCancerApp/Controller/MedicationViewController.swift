@@ -13,11 +13,15 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var Cancel: UIBarButtonItem!
     @IBOutlet weak var AddButton: UIBarButtonItem!
+
+    var displayDate: Date = Date()
+    var onDismiss: (() -> Void)?
     
     // MARK: - Data Source
+    private let calendar = Calendar.current
     var allMedications: [Medication] = []
-    var todaysMedications: [Medication] {
-        let filtered = allMedications.filter { $0.isScheduledFor(date: Date()) }
+    var displayedDateMedications: [Medication] {
+        let filtered = allMedications.filter { $0.isScheduledFor(date: normalizedDisplayDate) }
         
         return filtered.sorted { med1, med2 in
             let timeFormatter = DateFormatter()
@@ -44,7 +48,16 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        loadMedications()
         collectionView.reloadData()
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        if isBeingDismissed || navigationController?.isBeingDismissed == true {
+            onDismiss?()
+        }
     }
     
     private func setupNotificationObserver() {
@@ -101,11 +114,12 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
     
     // MARK: - Load Medications
     func loadMedications() {
-        if let history = MedicationHistory.shared.getHistory(for: Date()) {
+        if let history = MedicationHistory.shared.getHistory(for: normalizedDisplayDate) {
             allMedications = history.medications
         } else {
             allMedications = []
         }
+        navigationItem.prompt = displayedDateSectionTitle
     }
     
     // MARK: - Load Dummy Data
@@ -123,7 +137,7 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
     
     // MARK: - Save Medications
     func saveMedications() {
-        MedicationHistory.shared.saveMedications(allMedications, for: Date())
+        MedicationHistory.shared.saveMedications(allMedications, for: normalizedDisplayDate)
         
         // Post notification to update LogViewController
         NotificationCenter.default.post(
@@ -141,7 +155,7 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
         if section == 0 {
             return 1 // Stats header
         } else {
-            return todaysMedications.isEmpty ? 1 : todaysMedications.count
+            return displayedDateMedications.isEmpty ? 1 : displayedDateMedications.count
         }
     }
 
@@ -153,8 +167,8 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
                 return UICollectionViewCell()
             }
             
-            let total = todaysMedications.count
-            let taken = todaysMedications.filter { $0.isTaken }.count
+            let total = displayedDateMedications.count
+            let taken = displayedDateMedications.filter { $0.isTaken }.count
             let missed = total - taken
             
             cell.configure(total: total, taken: taken, missed: missed)
@@ -162,7 +176,7 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
         }
         
         // Medication items
-        if todaysMedications.isEmpty {
+        if displayedDateMedications.isEmpty {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "empty_state", for: indexPath)
             
             cell.contentView.subviews.forEach { $0.removeFromSuperview() }
@@ -190,7 +204,7 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
             return UICollectionViewCell()
         }
 
-        let med = todaysMedications[indexPath.row]
+        let med = displayedDateMedications[indexPath.row]
         cell.configureCell(with: med)
 
         cell.onCircleTapped = { [weak self, weak cell] in
@@ -200,7 +214,7 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
                 return
             }
             
-            let displayedMeds = self.todaysMedications
+            let displayedMeds = self.displayedDateMedications
             if dynamicIndexPath.row >= displayedMeds.count {
                 return
             }
@@ -216,13 +230,14 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
                 self.collectionView.reloadItems(at: [dynamicIndexPath, IndexPath(item: 0, section: 0)])
                 self.saveMedications()
 
-                // Check if ALL today's medications are now taken → award coins (once per day)
-                let allTaken = !self.todaysMedications.isEmpty &&
-                               self.todaysMedications.allSatisfy({ $0.isTaken })
-                CoinRewardService.shared.awardMedicationGoalIfEligible(
-                    allTaken: allTaken,
-                    on: self
-                )
+                if self.isDisplayingToday {
+                    let allTaken = !self.displayedDateMedications.isEmpty &&
+                        self.displayedDateMedications.allSatisfy({ $0.isTaken })
+                    CoinRewardService.shared.awardMedicationGoalIfEligible(
+                        allTaken: allTaken,
+                        on: self
+                    )
+                }
             }
 
 
@@ -242,7 +257,7 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
             ) as! MedicationHeaderView
             
             if indexPath.section == 1 {
-                header.configure(with: "Today")
+                header.configure(with: displayedDateSectionTitle)
             }
             
             return header
@@ -289,11 +304,11 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
                 config.trailingSwipeActionsConfigurationProvider = { [weak self] indexPath in
                     guard let self = self else { return nil }
                     
-                    if self.todaysMedications.isEmpty {
+                    if self.displayedDateMedications.isEmpty {
                         return nil
                     }
                     
-                    let displayedMeds = self.todaysMedications
+                    let displayedMeds = self.displayedDateMedications
                     if indexPath.row >= displayedMeds.count {
                         return nil
                     }
@@ -405,6 +420,25 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
             // Present within the same navigation controller (no nested modal)
             navigationController?.pushViewController(addVC, animated: true)
         }
+    }
+
+    private var normalizedDisplayDate: Date {
+        calendar.startOfDay(for: displayDate)
+    }
+
+    private var isDisplayingToday: Bool {
+        calendar.isDateInToday(normalizedDisplayDate)
+    }
+
+    private var displayedDateSectionTitle: String {
+        if isDisplayingToday {
+            return "Today"
+        }
+
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        return formatter.string(from: normalizedDisplayDate)
     }
 }
 

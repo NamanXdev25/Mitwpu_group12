@@ -18,7 +18,7 @@
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="POX-df-EV3">
-                        <rect key="frame" x="10" y="10" width="330" height="280"/>
+                        <rect key="frame" x="0.0" y="0.0" width="350" height="300"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Exercise Consistency" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fws-Hf-zoP">
                                 <rect key="frame" x="16" y="16" width="179" height="22"/>
@@ -33,14 +33,14 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YMO-GB-XJh" customClass="BarGraphView" customModule="BreastCancerApp" customModuleProvider="target">
-                                <rect key="frame" x="16" y="79" width="298" height="140"/>
+                                <rect key="frame" x="16" y="79" width="318" height="140"/>
                                 <color key="backgroundColor" red="0.8447265625" green="0.4406738281" blue="0.5673828125" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="140" id="9Ba-Ds-mYn"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2S5-WV-zvD">
-                                <rect key="frame" x="16" y="239" width="298" height="1"/>
+                                <rect key="frame" x="16" y="239" width="318" height="1"/>
                                 <color key="backgroundColor" systemColor="systemGray4Color"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="rbq-W0-ow6"/>
@@ -53,7 +53,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5 / 7" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Lv-Lk-rTh">
-                                <rect key="frame" x="285" y="248" width="29" height="17"/>
+                                <rect key="frame" x="305" y="248" width="29" height="17"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
                                 <color key="textColor" systemColor="secondaryLabelColor"/>
                                 <nil key="highlightedColor"/>
@@ -65,11 +65,19 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="140 min" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bfP-UZ-L0l">
-                                <rect key="frame" x="260" y="273" width="54" height="17"/>
+                                <rect key="frame" x="280" y="273" width="54" height="17"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
                                 <color key="textColor" systemColor="secondaryLabelColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="726-md-Z6s">
+                                <rect key="frame" x="250" y="11" width="84" height="32"/>
+                                <color key="tintColor" red="0.8447265625" green="0.4406738281" blue="0.5673828125" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Edit Plan">
+                                    <fontDescription key="titleFontDescription" type="system" pointSize="15"/>
+                                </buttonConfiguration>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
@@ -85,7 +93,9 @@
                             <constraint firstItem="Ge8-BO-kfD" firstAttribute="leading" secondItem="POX-df-EV3" secondAttribute="leading" constant="16" id="Wpb-xO-Ui6"/>
                             <constraint firstItem="6It-jw-s9G" firstAttribute="top" secondItem="2S5-WV-zvD" secondAttribute="bottom" constant="8" id="az6-Gl-YTz"/>
                             <constraint firstItem="2Lv-Lk-rTh" firstAttribute="firstBaseline" secondItem="6It-jw-s9G" secondAttribute="firstBaseline" id="cdU-oG-CD8"/>
+                            <constraint firstAttribute="trailing" secondItem="726-md-Z6s" secondAttribute="trailing" constant="16" id="eu8-0w-l1n"/>
                             <constraint firstItem="fws-Hf-zoP" firstAttribute="leading" secondItem="POX-df-EV3" secondAttribute="leading" constant="16" id="gxL-B4-D7W"/>
+                            <constraint firstItem="726-md-Z6s" firstAttribute="top" secondItem="POX-df-EV3" secondAttribute="top" constant="11" id="hvF-ts-fhW"/>
                             <constraint firstAttribute="trailing" secondItem="bfP-UZ-L0l" secondAttribute="trailing" constant="16" id="mrt-aG-vD6"/>
                             <constraint firstItem="YMO-GB-XJh" firstAttribute="leading" secondItem="POX-df-EV3" secondAttribute="leading" constant="16" id="n7x-Aj-u34"/>
                             <constraint firstItem="2S5-WV-zvD" firstAttribute="leading" secondItem="POX-df-EV3" secondAttribute="leading" constant="16" id="tiS-M7-IE1"/>
@@ -103,14 +113,15 @@
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <constraints>
-                <constraint firstItem="POX-df-EV3" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="10" id="05z-2D-Vgf"/>
-                <constraint firstItem="POX-df-EV3" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="10" id="2iN-Gh-cOJ"/>
-                <constraint firstAttribute="bottom" secondItem="POX-df-EV3" secondAttribute="bottom" constant="10" id="Oqz-RW-pR2"/>
-                <constraint firstAttribute="trailing" secondItem="POX-df-EV3" secondAttribute="trailing" constant="10" id="m9M-qN-svB"/>
+                <constraint firstItem="POX-df-EV3" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="05z-2D-Vgf"/>
+                <constraint firstItem="POX-df-EV3" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="2iN-Gh-cOJ"/>
+                <constraint firstAttribute="bottom" secondItem="POX-df-EV3" secondAttribute="bottom" id="Oqz-RW-pR2"/>
+                <constraint firstAttribute="trailing" secondItem="POX-df-EV3" secondAttribute="trailing" id="m9M-qN-svB"/>
             </constraints>
             <connections>
                 <outlet property="barChartContainerView" destination="YMO-GB-XJh" id="14I-tX-NnE"/>
                 <outlet property="dayActiveValueLabel" destination="2Lv-Lk-rTh" id="q6Z-n6-bgg"/>
+                <outlet property="editPlanButton" destination="726-md-Z6s" id="IIl-UP-rwH"/>
                 <outlet property="exerciseGraphView" destination="YMO-GB-XJh" id="5Za-F4-ZBZ"/>
                 <outlet property="subtitleLabel" destination="nhS-X7-nef" id="dAJ-2J-T2v"/>
                 <outlet property="titleLabel" destination="fws-Hf-zoP" id="YOu-T2-J5p"/>

@@ -42,6 +42,7 @@ class MedicationHistory {
 
     private func persist() {
         repository.saveHistory(history)
+        NotificationCenter.default.post(name: .medicationDataUpdated, object: nil)
     }
 
     func updateProgress(date: Date, taken: Int, goal: Int) {

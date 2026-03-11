@@ -44,6 +44,7 @@ class NewExerciseViewController: UIViewController {
         if exercisePlan == nil {
             //exercisePlan = NewExercisePlan.level1Exercises
         }
+        loadCompletedIndices()
         dataSource = NewExerciseDataSource(exercisePlan: exercisePlan)
         dataSource.delegate = self
     }
@@ -108,6 +109,7 @@ class NewExerciseViewController: UIViewController {
 
         // Mark as completed before opening
         completedIndices.insert(index)
+        setExerciseCompletion(for: index, completed: true)
         updateBeginButtonTitle()
         reloadExerciseCell(at: index)
 
@@ -136,6 +138,41 @@ class NewExerciseViewController: UIViewController {
 
     func isExerciseCompleted(at index: Int) -> Bool {
         return completedIndices.contains(index)
+    }
+
+    private func loadCompletedIndices() {
+        guard let plan = exercisePlan else {
+            completedIndices = []
+            return
+        }
+
+        let completedIDs = UserActivityStore.shared.completedExerciseIDs(on: Date())
+        completedIndices = Set(
+            plan.exercises.enumerated().compactMap { index, exercise in
+                completedIDs.contains(exerciseIdentifier(for: exercise)) ? index : nil
+            }
+        )
+    }
+
+    private func setExerciseCompletion(for index: Int, completed: Bool) {
+        guard let plan = exercisePlan, index < plan.exercises.count else { return }
+        let exercise = plan.exercises[index]
+        UserActivityStore.shared.setExerciseCompleted(
+            completed,
+            exerciseID: exerciseIdentifier(for: exercise),
+            title: exercise.title,
+            duration: exercise.duration
+        )
+    }
+
+    private func exerciseIdentifier(for exercise: NewExerciseModel) -> String {
+        let parts = [
+            exercisePlan?.level ?? "exercise",
+            exercise.title,
+            exercise.category,
+            exercise.duration
+        ]
+        return parts.joined(separator: "|")
     }
 
     // MARK: - IBActions
@@ -176,6 +213,7 @@ extension NewExerciseViewController: DetailExerciseCellDelegate {
             completedIndices.insert(index)
         }
 
+        setExerciseCompletion(for: index, completed: completedIndices.contains(index))
         updateBeginButtonTitle()
         reloadExerciseCell(at: index)
     }

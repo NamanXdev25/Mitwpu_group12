@@ -12,10 +12,14 @@ class SymptomsViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var CloseButton: UIBarButtonItem!
     
+    var displayDate: Date = Date()
+    var onDismiss: (() -> Void)?
+
     private let dataSource = SymptomDataSource.shared
+    private let calendar = Calendar.current
     private var userSymptoms: [Symptom] = []
     private var selectedSymptoms: [String: (severity: Int, note: String)] = [:]
-    private var todayLogs: [SymptomLog] = []
+    private var displayedLogs: [SymptomLog] = []
     private var lastLoadedDay = Calendar.current.startOfDay(for: Date())
     
     private enum Section: Int, CaseIterable {
@@ -47,6 +51,14 @@ class SymptomsViewController: UIViewController {
         loadData()
     }
 
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        if isBeingDismissed || navigationController?.isBeingDismissed == true {
+            onDismiss?()
+        }
+    }
+
     deinit {
         NotificationCenter.default.removeObserver(self, name: Notification.Name.NSCalendarDayChanged, object: nil)
     }
@@ -56,6 +68,8 @@ class SymptomsViewController: UIViewController {
     }
 
     @objc private func handleCalendarDayChanged() {
+        guard isDisplayingToday else { return }
+        displayDate = Date()
         loadData()
         NotificationCenter.default.post(name: NSNotification.Name("SymptomDataUpdated"), object: nil)
     }
@@ -165,7 +179,7 @@ class SymptomsViewController: UIViewController {
         config.headerMode = .supplementary
         config.trailingSwipeActionsConfigurationProvider = { [weak self] indexPath in
             guard let self = self else { return nil }
-            guard !self.todayLogs.isEmpty else { return nil }
+            guard !self.displayedLogs.isEmpty else { return nil }
             
             // delete functionality
             let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { action, view, completion in
@@ -201,14 +215,14 @@ class SymptomsViewController: UIViewController {
     private func loadData() {
         resetSelectionIfNeededForNewDay()
         userSymptoms = dataSource.getUserSymptoms()
-        todayLogs = dataSource.getTodayLogs()
+        displayedLogs = dataSource.getSymptomLogs(on: normalizedDisplayDate)
+        navigationItem.prompt = displayedDateSectionTitle
         collectionView.reloadData()
     }
 
     private func resetSelectionIfNeededForNewDay() {
-        let today = Calendar.current.startOfDay(for: Date())
-        guard today != lastLoadedDay else { return }
-        lastLoadedDay = today
+        guard normalizedDisplayDate != lastLoadedDay else { return }
+        lastLoadedDay = normalizedDisplayDate
         selectedSymptoms.removeAll()
     }
     
@@ -223,13 +237,14 @@ class SymptomsViewController: UIViewController {
                     symptomId: symptomId,
                     symptomName: symptom.name,
                     severity: data.severity,
-                    note: noteToSave
+                    note: noteToSave,
+                    on: normalizedDisplayDate
                 )
             }
         }
 
         selectedSymptoms.removeAll()
-        todayLogs = dataSource.getTodayLogs()
+        displayedLogs = dataSource.getSymptomLogs(on: normalizedDisplayDate)
         collectionView.reloadSections(
             IndexSet([Section.log.rawValue,
                       Section.button.rawValue,
@@ -258,7 +273,7 @@ class SymptomsViewController: UIViewController {
     
     // delete confirmation
     private func confirmDelete(at indexPath: IndexPath, completion: @escaping (Bool) -> Void) {
-        let log = todayLogs[indexPath.item]
+        let log = displayedLogs[indexPath.item]
         
         let alert = UIAlertController(
             title: "Delete Log?",
@@ -270,8 +285,8 @@ class SymptomsViewController: UIViewController {
             guard let self = self else { return }
             
             self.dataSource.deleteLog(logId: log.id)
-            self.todayLogs = self.dataSource.getTodayLogs()
-            if self.todayLogs.isEmpty {
+            self.displayedLogs = self.dataSource.getSymptomLogs(on: self.normalizedDisplayDate)
+            if self.displayedLogs.isEmpty {
                 self.collectionView.reloadSections(IndexSet([Section.today.rawValue]))
             } else {
                 self.collectionView.deleteItems(at: [indexPath])
@@ -315,6 +330,25 @@ class SymptomsViewController: UIViewController {
     @IBAction func closeButtonTapped(_ sender: UIBarButtonItem) {
         dismiss(animated: true)
     }
+
+    private var normalizedDisplayDate: Date {
+        calendar.startOfDay(for: displayDate)
+    }
+
+    private var isDisplayingToday: Bool {
+        calendar.isDateInToday(normalizedDisplayDate)
+    }
+
+    private var displayedDateSectionTitle: String {
+        if isDisplayingToday {
+            return "Today"
+        }
+
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        return formatter.string(from: normalizedDisplayDate)
+    }
 }
 
 // UICollectionViewDataSource
@@ -333,7 +367,7 @@ extension SymptomsViewController: UICollectionViewDataSource {
         case .button:
             return 1
         case .today:
-            return todayLogs.isEmpty ? 1 : todayLogs.count
+            return displayedLogs.isEmpty ? 1 : displayedLogs.count
         }
     }
     
@@ -387,7 +421,7 @@ extension SymptomsViewController: UICollectionViewDataSource {
             return cell
             
         case .today:
-            if todayLogs.isEmpty {
+            if displayedLogs.isEmpty {
                 // Use a plain UICollectionViewCell as fallback for empty state
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EmptyCell", for: indexPath)
                 
@@ -414,7 +448,7 @@ extension SymptomsViewController: UICollectionViewDataSource {
                 return cell
             } else {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SymptomLogCell", for: indexPath) as! SymptomLogCell
-                let log = todayLogs[indexPath.item]
+                let log = displayedLogs[indexPath.item]
                 cell.configure(with: log)
                 return cell
             }
@@ -445,7 +479,7 @@ extension SymptomsViewController: UICollectionViewDataSource {
                 self?.openEditList()
             }
         case .today:
-            header.configure(title: "Today", showButton: false)
+            header.configure(title: displayedDateSectionTitle, showButton: false)
             header.editTapped = nil
         case .button:
             return UICollectionReusableView()

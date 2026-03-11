@@ -18,6 +18,7 @@ class HydrationDataManager {
 
     private func persist() {
         repository.saveEntries(entries)
+        NotificationCenter.default.post(name: .hydrationDataUpdated, object: nil)
     }
 
     func addEntry(_ entry: HydrationEntry) {

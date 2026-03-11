@@ -132,6 +132,7 @@ class SymptomDataSource {
 
     private func persistLogs() {
         repository.saveLogs(todayLogs)
+        NotificationCenter.default.post(name: .symptomDataUpdated, object: nil)
     }
 
     private func persistUserSymptomIDs() {
@@ -193,8 +194,20 @@ class SymptomDataSource {
         persistUserSymptomIDs()
     }
 
-    func logSymptom(symptomId: String, symptomName: String, severity: Int, note: String = "") {
-        let log = SymptomLog(symptomId: symptomId, symptomName: symptomName, severity: severity, note: note)
+    func logSymptom(
+        symptomId: String,
+        symptomName: String,
+        severity: Int,
+        note: String = "",
+        on date: Date = Date()
+    ) {
+        let log = SymptomLog(
+            symptomId: symptomId,
+            symptomName: symptomName,
+            severity: severity,
+            note: note,
+            timestamp: timestampForLog(on: date)
+        )
         todayLogs.append(log)
         persistLogs()
     }
@@ -237,5 +250,21 @@ class SymptomDataSource {
             let logDay = calendar.startOfDay(for: log.timestamp)
             return logDay == targetDay
         }.sorted { $0.timestamp > $1.timestamp }
+    }
+
+    private func timestampForLog(on date: Date) -> Date {
+        let calendar = Calendar.current
+        let dayComponents = calendar.dateComponents([.year, .month, .day], from: date)
+        let currentTime = calendar.dateComponents([.hour, .minute, .second], from: Date())
+
+        var combined = DateComponents()
+        combined.year = dayComponents.year
+        combined.month = dayComponents.month
+        combined.day = dayComponents.day
+        combined.hour = currentTime.hour
+        combined.minute = currentTime.minute
+        combined.second = currentTime.second
+
+        return calendar.date(from: combined) ?? date
     }
 }
