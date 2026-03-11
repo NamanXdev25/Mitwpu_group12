@@ -546,18 +546,36 @@ class HomeModel {
 
     // MARK: - Articles
 
+    // MARK: - Articles
+
     static let articles: [Article] = [
         Article(
-            imageName: "article_image_1",
-            title:     "Debunking Common Breast Cancer Myths",
-            subtitle:  "You should know about the truth behind myths associated with Breast Cancer"
+            imageName: "article_1_hero",
+            title: "Understanding Breast Cancer: Basics and Treatment Options",
+            subtitle: "Early detection and advances in treatment have significantly improved survival rates."
         ),
         Article(
-            imageName: "article_image_2",
-            title:     "Implications of Dense Breast Tissue",
-            subtitle:  "You should know about the truth behind myths associated with Breast Cancer"
+            imageName: "article_2_hero",
+            title: "Managing Physical Side Effects of Breast Cancer Treatment",
+            subtitle: "Understanding what to expect and how to cope can help patients maintain comfort and quality of life."
+        ),
+        Article(
+            imageName: "article_3_hero",
+            title: "Post-Treatment Recovery and Follow-Up Care",
+            subtitle: "Recovery continues beyond the final treatment session."
+        ),
+        Article(
+            imageName: "article_4_hero",
+            title: "Nutrition and Healthy Eating During and After Treatment",
+            subtitle: "Good nutrition plays an important role in supporting the body during and after breast cancer treatment."
+        ),
+        Article(
+            imageName: "article_5_hero",
+            title: "Physical Activity and Exercise During Breast Cancer Recovery",
+            subtitle: "Physical activity is an important part of recovery during and after breast cancer treatment."
         )
     ]
+
 
     // MARK: - Hobby check
 

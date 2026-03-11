@@ -411,11 +411,11 @@ class HomeViewController: UIViewController,
             suggestions.map { HomeItem(type: .suggestion($0)) },
             toSection: .suggestion
         )
-
         snapshot.appendItems(
-            HomeModel.articles.map { HomeItem(type: .article($0)) },
+            Array(HomeModel.articles.prefix(3)).map { HomeItem(type: .article($0)) },
             toSection: .articles
         )
+
 
         dataSource.apply(snapshot, animatingDifferences: false)
     }

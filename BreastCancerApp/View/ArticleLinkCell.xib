@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ArticleLinkCell" id="gTV-IL-0wX" customClass="ArticleLinkCell" customModule="BreastCancerApp">
+            <rect key="frame" x="0.0" y="0.0" width="270" height="257"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="270" height="257"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="dbK-RX-hXE">
+                        <rect key="frame" x="8" y="16" width="254" height="225"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nS6-2b-S0A">
+                                <rect key="frame" x="0.0" y="0.0" width="254" height="20.333333333333332"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9K2-Gc-59a">
+                                <rect key="frame" x="0.0" y="20.333333333333329" width="254" height="204.66666666666669"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                            </button>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="9K2-Gc-59a" firstAttribute="leading" secondItem="dbK-RX-hXE" secondAttribute="leading" id="2tZ-yS-w1L"/>
+                        </constraints>
+                    </stackView>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstItem="dbK-RX-hXE" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="16" id="aed-BW-UXX"/>
+                <constraint firstAttribute="trailing" secondItem="dbK-RX-hXE" secondAttribute="trailing" constant="8" id="epe-9Z-vTM"/>
+                <constraint firstAttribute="bottom" secondItem="dbK-RX-hXE" secondAttribute="bottom" constant="16" id="jGa-Zh-rEY"/>
+                <constraint firstItem="dbK-RX-hXE" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="8" id="kbH-yu-ZJ2"/>
+            </constraints>
+            <size key="customSize" width="270" height="257"/>
+            <connections>
+                <outlet property="linkButton" destination="9K2-Gc-59a" id="q1q-4M-Hmd"/>
+                <outlet property="sourceLabel" destination="nS6-2b-S0A" id="XVr-16-z2q"/>
+            </connections>
+            <point key="canvasLocation" x="22.900763358778626" y="134.85915492957747"/>
+        </collectionViewCell>
+    </objects>
+</document>

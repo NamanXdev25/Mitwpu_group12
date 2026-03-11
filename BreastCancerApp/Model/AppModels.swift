@@ -322,13 +322,25 @@ struct AppointmentItemCodable: Codable {
 }
 
 // MARK: - Articles
+enum ContentBlockType: String, Decodable {
+    case text
+    case heading
+    case image
+    case boldText
+    case link
+}
+
+struct ContentBlock: Decodable {
+    let type: ContentBlockType
+    let value: String
+}
 
 struct ArticleModel: Decodable {
     let id: String
     let title: String
     let subtitle: String
     let imageName: String
-    let content: String
+    let contentBlocks: [ContentBlock]
 }
 
 struct ArticlesResponse: Decodable {

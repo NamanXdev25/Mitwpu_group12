@@ -5,7 +5,7 @@ class MindfulnessViewController: UIViewController {
     // MARK: - IBOutlet
     @IBOutlet weak var collectionView: UICollectionView!
 
-    private var dataSource: MindfulnessDataSource!
+    var dataSource: MindfulnessDataSource!
 
     // MARK: - Sections
     enum Section: Int, CaseIterable {
@@ -17,13 +17,18 @@ class MindfulnessViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        collectionView.collectionViewLayout = createCompositionalLayout()
-        collectionView.delegate = self
-
         dataSource = MindfulnessDataSource(viewController: self)
         collectionView.dataSource = dataSource
+        collectionView.delegate = self
 
         registerCells()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        dataSource.reloadMemories()
+        collectionView.collectionViewLayout = createCompositionalLayout()
+        collectionView.reloadData()
     }
 
     // MARK: - Cell Registration
@@ -40,6 +45,11 @@ class MindfulnessViewController: UIViewController {
         )
 
         collectionView.register(
+            UINib(nibName: "MemoryEmptyStateCell", bundle: nil),
+            forCellWithReuseIdentifier: "MemoryEmptyStateCell"
+        )
+
+        collectionView.register(
             UINib(nibName: "MindfulnessExploreLabelCell", bundle: nil),
             forCellWithReuseIdentifier: "MindfulnessExploreLabelCell"
         )
@@ -51,14 +61,15 @@ class MindfulnessViewController: UIViewController {
     }
 
     // MARK: - Layout
-    private func createCompositionalLayout() -> UICollectionViewCompositionalLayout {
+    func createCompositionalLayout() -> UICollectionViewCompositionalLayout {
 
-        UICollectionViewCompositionalLayout { sectionIndex, _ in
+        let hasMemories = !dataSource.memories.isEmpty
+
+        return UICollectionViewCompositionalLayout { sectionIndex, _ in
             guard let section = Section(rawValue: sectionIndex) else { return nil }
 
             switch section {
 
-            // 🔹 Positive Moments header (FULL WIDTH, STATIC HEIGHT)
             case .positiveMomentsHeader:
                 let item = NSCollectionLayoutItem(
                     layoutSize: NSCollectionLayoutSize(
@@ -66,7 +77,6 @@ class MindfulnessViewController: UIViewController {
                         heightDimension: .absolute(44)
                     )
                 )
-
                 let group = NSCollectionLayoutGroup.vertical(
                     layoutSize: NSCollectionLayoutSize(
                         widthDimension: .fractionalWidth(1),
@@ -74,54 +84,52 @@ class MindfulnessViewController: UIViewController {
                     ),
                     subitems: [item]
                 )
-
                 let section = NSCollectionLayoutSection(group: group)
                 section.contentInsets = NSDirectionalEdgeInsets(
-                    top: 16,
-                    leading: 16,
-                    bottom: 8,
-                    trailing: 8
+                    top: 16, leading: 16, bottom: 8, trailing: 8
                 )
                 return section
 
-            // 🔹 Memory cards (HORIZONTAL — DO NOT TOUCH)
             case .memories:
+                if !hasMemories {
+                    // Full width empty state
+                    let item = NSCollectionLayoutItem(
+                        layoutSize: NSCollectionLayoutSize(
+                            widthDimension: .fractionalWidth(1),
+                            heightDimension: .absolute(160)
+                        )
+                    )
+                    let group = NSCollectionLayoutGroup.vertical(
+                        layoutSize: NSCollectionLayoutSize(
+                            widthDimension: .fractionalWidth(1),
+                            heightDimension: .absolute(160)
+                        ),
+                        subitems: [item]
+                    )
+                    let section = NSCollectionLayoutSection(group: group)
+                    section.contentInsets = .init(top: 0, leading: 16, bottom: 24, trailing: 16)
+                    return section
+                }
+
+                // Horizontal scrolling memory cards
                 let item = NSCollectionLayoutItem(
                     layoutSize: .init(
                         widthDimension: .absolute(220),
                         heightDimension: .estimated(260)
                     )
                 )
-
-                // ✅ 8pt space BETWEEN cards
-                item.contentInsets = .init(
-                    top: 0,
-                    leading: 0,
-                    bottom: 0,
-                    trailing: 0
-                )
-
                 let group = NSCollectionLayoutGroup.horizontal(
                     layoutSize: .init(
-                        widthDimension: .absolute(220), // 🔥 KEY FIX
+                        widthDimension: .absolute(220),
                         heightDimension: .estimated(260)
                     ),
                     subitems: [item]
                 )
-
                 let section = NSCollectionLayoutSection(group: group)
                 section.orthogonalScrollingBehavior = .continuous
-
-                // ✅ 8pt padding at START and END of scroll
-                section.contentInsets = .init(
-                    top: 0,
-                    leading: 8,
-                    bottom: 24,
-                    trailing: 8
-                )
-
+                section.contentInsets = .init(top: 0, leading: 8, bottom: 24, trailing: 8)
                 return section
-            // 🔹 Explore section (UNCHANGED)
+
             case .explore:
                 let labelItem = NSCollectionLayoutItem(
                     layoutSize: NSCollectionLayoutSize(
@@ -129,14 +137,12 @@ class MindfulnessViewController: UIViewController {
                         heightDimension: .absolute(40)
                     )
                 )
-
                 let cardItem = NSCollectionLayoutItem(
                     layoutSize: NSCollectionLayoutSize(
                         widthDimension: .fractionalWidth(1),
                         heightDimension: .absolute(116)
                     )
                 )
-
                 let group = NSCollectionLayoutGroup.vertical(
                     layoutSize: NSCollectionLayoutSize(
                         widthDimension: .fractionalWidth(1),
@@ -144,20 +150,16 @@ class MindfulnessViewController: UIViewController {
                     ),
                     subitems: [labelItem, cardItem, cardItem]
                 )
-
                 let section = NSCollectionLayoutSection(group: group)
                 section.interGroupSpacing = 12
                 section.contentInsets = NSDirectionalEdgeInsets(
-                    top: 0,
-                    leading: 0,
-                    bottom: 12,
-                    trailing: 0
+                    top: 0, leading: 0, bottom: 12, trailing: 0
                 )
                 return section
             }
         }
     }
-    
+
     // MARK: - Navigation Helper
     func navigateToBreathingViewController() {
         let storyboard = UIStoryboard(name: "BreathingSessions", bundle: nil)

@@ -1,10 +1,3 @@
-//
-//  ArticleDetailViewController.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 10/01/26.
-//
-
 import UIKit
 
 class ArticleDetailViewController: UIViewController {
@@ -16,14 +9,12 @@ class ArticleDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         setupCollectionView()
     }
 
     private func setupCollectionView() {
-        // compositional layout
         collectionView.collectionViewLayout = createLayout()
-        
+
         dataSource = ArticleDetailDataSource(article: article)
         collectionView.dataSource = dataSource
 
@@ -31,24 +22,30 @@ class ArticleDetailViewController: UIViewController {
             UINib(nibName: "ArticleHeaderCell", bundle: nil),
             forCellWithReuseIdentifier: "ArticleHeaderCell"
         )
-
         collectionView.register(
             UINib(nibName: "ArticleContentCell", bundle: nil),
             forCellWithReuseIdentifier: "ArticleContentCell"
         )
+        collectionView.register(
+            UINib(nibName: "ArticleImageCell", bundle: nil),
+            forCellWithReuseIdentifier: "ArticleImageCell"
+        )
+        collectionView.register(
+            UINib(nibName: "ArticleLinkCell", bundle: nil),
+            forCellWithReuseIdentifier: "ArticleLinkCell"
+        )
     }
-    
+
     private func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
-            
+
             if sectionIndex == 0 {
-                // header section
                 let itemSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1.0),
                     heightDimension: .absolute(200)
                 )
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
-                
+
                 let groupSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1.0),
                     heightDimension: .absolute(200)
@@ -57,18 +54,17 @@ class ArticleDetailViewController: UIViewController {
                     layoutSize: groupSize,
                     subitems: [item]
                 )
-                
+
                 let section = NSCollectionLayoutSection(group: group)
                 return section
-                
+
             } else {
-                // content section
                 let itemSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1.0),
                     heightDimension: .estimated(500)
                 )
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
-                
+
                 let groupSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1.0),
                     heightDimension: .estimated(500)
@@ -77,19 +73,20 @@ class ArticleDetailViewController: UIViewController {
                     layoutSize: groupSize,
                     subitems: [item]
                 )
-                
+
                 let section = NSCollectionLayoutSection(group: group)
+                section.interGroupSpacing = 0
                 section.contentInsets = NSDirectionalEdgeInsets(
                     top: 0,
-                    leading: 0,
+                    leading: 16,
                     bottom: 0,
-                    trailing: 0
+                    trailing: 16
                 )
-                
+
                 return section
             }
         }
-        
+
         return layout
     }
 

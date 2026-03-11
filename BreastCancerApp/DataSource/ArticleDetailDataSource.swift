@@ -1,10 +1,3 @@
-//
-//  ArticleDetailDataSource.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 10/01/26.
-//
-
 import UIKit
 
 final class ArticleDetailDataSource: NSObject {
@@ -31,7 +24,13 @@ extension ArticleDetailDataSource: UICollectionViewDataSource {
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
-        1
+        switch Section(rawValue: section)! {
+        case .header:
+            return 1
+        case .content:
+            // +1 for the title at the top
+            return article.contentBlocks.count + 1
+        }
     }
 
     func collectionView(
@@ -39,9 +38,7 @@ extension ArticleDetailDataSource: UICollectionViewDataSource {
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
 
-        let section = Section(rawValue: indexPath.section)!
-
-        switch section {
+        switch Section(rawValue: indexPath.section)! {
 
         case .header:
             let cell = collectionView.dequeueReusableCell(
@@ -52,15 +49,89 @@ extension ArticleDetailDataSource: UICollectionViewDataSource {
             return cell
 
         case .content:
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "ArticleContentCell",
-                for: indexPath
-            ) as! ArticleContentCell
-            cell.configure(
-                title: article.title,
-                content: article.content
-            )
-            return cell
+
+            // index 0 = article title in bold
+            if indexPath.item == 0 {
+                let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: "ArticleContentCell",
+                    for: indexPath
+                ) as! ArticleContentCell
+                let attributed = NSAttributedString(
+                    string: article.title,
+                    attributes: [
+                        .font: UIFont.boldSystemFont(ofSize: 22),
+                        .foregroundColor: UIColor.label
+                    ]
+                )
+                cell.configureAttributed(text: attributed)
+                return cell
+            }
+
+            // offset by 1 to account for the title cell
+            let block = article.contentBlocks[indexPath.item - 1]
+
+            switch block.type {
+
+            case .heading:
+                let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: "ArticleContentCell",
+                    for: indexPath
+                ) as! ArticleContentCell
+                let attributed = NSAttributedString(
+                    string: block.value,
+                    attributes: [
+                        .font: UIFont.boldSystemFont(ofSize: 18),
+                        .foregroundColor: UIColor.label
+                    ]
+                )
+                cell.configureAttributed(text: attributed)
+                return cell
+
+            case .image:
+                let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: "ArticleImageCell",
+                    for: indexPath
+                ) as! ArticleImageCell
+                cell.configure(imageName: block.value)
+                return cell
+
+            case .boldText:
+                let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: "ArticleContentCell",
+                    for: indexPath
+                ) as! ArticleContentCell
+                cell.configureAttributed(text: parseInlineBold(block.value))
+                return cell
+
+            case .link:
+                let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: "ArticleLinkCell",
+                    for: indexPath
+                ) as! ArticleLinkCell
+                cell.configure(urlString: block.value)
+                return cell
+
+            case .text:
+                let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: "ArticleContentCell",
+                    for: indexPath
+                ) as! ArticleContentCell
+                cell.configure(title: "", content: block.value)
+                return cell
+            }
         }
+    }
+
+    private func parseInlineBold(_ raw: String) -> NSAttributedString {
+        let result = NSMutableAttributedString()
+        let parts = raw.components(separatedBy: "**")
+        for (i, part) in parts.enumerated() {
+            let isBold = i % 2 == 1
+            let font: UIFont = isBold
+                ? .boldSystemFont(ofSize: 16)
+                : .systemFont(ofSize: 16)
+            result.append(NSAttributedString(string: part, attributes: [.font: font]))
+        }
+        return result
     }
 }
