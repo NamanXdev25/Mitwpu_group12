@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="HealthDateCell" customModule="BreastCancerApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="389" height="180"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="389" height="180"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oCG-Rg-Wfd">
+                        <rect key="frame" x="20" y="0.0" width="349" height="180"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date of Diagnosis" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lj6-O9-oa7">
+                                <rect key="frame" x="16" y="80" width="128" height="20"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" style="compact" translatesAutoresizingMaskIntoConstraints="NO" id="j0i-1Z-gkW">
+                                <rect key="frame" x="205" y="73" width="128" height="34"/>
+                            </datePicker>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="j0i-1Z-gkW" firstAttribute="top" secondItem="oCG-Rg-Wfd" secondAttribute="top" constant="73" id="GRy-fC-3a9"/>
+                            <constraint firstItem="j0i-1Z-gkW" firstAttribute="centerY" secondItem="oCG-Rg-Wfd" secondAttribute="centerY" id="dqe-r4-kyQ"/>
+                            <constraint firstItem="lj6-O9-oa7" firstAttribute="centerY" secondItem="oCG-Rg-Wfd" secondAttribute="centerY" id="fA3-tK-85P"/>
+                            <constraint firstItem="lj6-O9-oa7" firstAttribute="leading" secondItem="oCG-Rg-Wfd" secondAttribute="leading" constant="16" id="gwP-LW-32o"/>
+                            <constraint firstAttribute="trailing" secondItem="j0i-1Z-gkW" secondAttribute="trailing" constant="16" id="oHe-kQ-elX"/>
+                            <constraint firstItem="j0i-1Z-gkW" firstAttribute="leading" secondItem="lj6-O9-oa7" secondAttribute="trailing" constant="61" id="ops-mf-ula"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="16"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="oCG-Rg-Wfd" secondAttribute="trailing" constant="20" id="JXX-pa-RY3"/>
+                <constraint firstItem="oCG-Rg-Wfd" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="20" id="aBa-ld-hN5"/>
+                <constraint firstAttribute="bottom" secondItem="oCG-Rg-Wfd" secondAttribute="bottom" id="jTM-Ah-SPX"/>
+                <constraint firstItem="oCG-Rg-Wfd" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="rJU-EZ-La2"/>
+            </constraints>
+            <size key="customSize" width="389" height="180"/>
+            <connections>
+                <outlet property="datePicker" destination="j0i-1Z-gkW" id="r4K-BD-tae"/>
+                <outlet property="titleLabel" destination="lj6-O9-oa7" id="t27-9k-kmt"/>
+            </connections>
+            <point key="canvasLocation" x="220.61068702290075" y="146.47887323943664"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

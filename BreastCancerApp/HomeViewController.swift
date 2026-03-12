@@ -34,8 +34,8 @@ class HomeViewController: UIViewController,
     // MARK: - UserDefaults keys
     private let kMoodKey             = "home_selectedMoodKey"
     private let kHasMoodSelected     = "home_hasUserSelectedMood"
-    private let kMoodDate            = "home_moodDate"       // date the mood was set
-    private let kDailyCacheData      = "home_dailyCacheData" // archived cache dictionary
+    private let kMoodDate            = "home_moodDate"
+    private let kDailyCacheData      = "home_dailyCacheData"
 
     // MARK: - DataSource
     private var dataSource: UICollectionViewDiffableDataSource<HomeSectionType, HomeItem>!
@@ -50,7 +50,6 @@ class HomeViewController: UIViewController,
         configureDataSource()
 
         if hasUserSelectedMood {
-            // Re-hydrate suggestions from cache (or regenerate if cache missing)
             refreshMoodSuggestions(for: selectedMoodKey)
         } else {
             refreshDefaultSuggestions()
@@ -71,21 +70,26 @@ class HomeViewController: UIViewController,
     }
 
     @IBAction func ProfileButtonTapped(_ sender: Any) {
-        print("👆 Profile button tapped")
+        let storyboard = UIStoryboard(name: "Profile", bundle: nil)
+
+        guard let navController = storyboard.instantiateViewController(
+            withIdentifier: "ProfileNavController"
+        ) as? UINavigationController else {
+            print("Could not load ProfileNavController from Profile.storyboard")
+            return
+        }
+
+        navController.modalPresentationStyle = .pageSheet
+        present(navController, animated: true)
     }
 
     // MARK: - Journey State Observer
-    // Called whenever JourneyState changes.
-    // Only redraws the snapshot so the journey card label updates immediately.
-    // Suggestions are NOT rebuilt here — caching rules decide when they update.
     @objc private func journeyStateChanged() {
         applySnapshot()
     }
 
     // MARK: - Mood persistence
 
-    /// Restores mood selection from UserDefaults.
-    /// If the saved mood date is not today, clears the saved state (next-day reset).
     private func restoreMoodState() {
         let today = todayDateString()
         let savedDate = UserDefaults.standard.string(forKey: kMoodDate) ?? ""
@@ -94,7 +98,6 @@ class HomeViewController: UIViewController,
             selectedMoodKey     = UserDefaults.standard.string(forKey: kMoodKey) ?? "happy"
             hasUserSelectedMood = UserDefaults.standard.bool(forKey: kHasMoodSelected)
         } else {
-            // New day — clear persisted mood so home starts fresh
             clearPersistedMood()
         }
     }
@@ -120,7 +123,6 @@ class HomeViewController: UIViewController,
               let decoded = try? JSONDecoder().decode([String: DailySuggestionCache].self, from: raw)
         else { return }
 
-        // Only keep entries for today — silently drop yesterday's cache
         let today = todayDateString()
         dailySuggestionCache = decoded.filter { $0.key.hasSuffix(today) }
     }
@@ -314,9 +316,9 @@ class HomeViewController: UIViewController,
                     withReuseIdentifier: "HomeMoodCell", for: indexPath
                 ) as! HomeMoodCell
                 cell.configure(
-                    title:              self.moodHeaderTitle(),
-                    moods:              HomeModel.moods,
-                    selectedMoodKey:    self.selectedMoodKey,
+                    title:               self.moodHeaderTitle(),
+                    moods:               HomeModel.moods,
+                    selectedMoodKey:     self.selectedMoodKey,
                     hasUserSelectedMood: self.hasUserSelectedMood
                 )
                 cell.onMoodTapped = { [weak self] mood in
@@ -337,8 +339,6 @@ class HomeViewController: UIViewController,
                 ) as! HomeSuggestionCell
                 cell.configure(with: suggestion)
 
-                // Index 1 is always the hobby cell — wire the memory popup directly,
-                // bypassing isHobbySuggestion() which can silently return false.
                 if indexPath.item == 1 {
                     cell.onTap = { [weak self, weak cell] in
                         guard let self, let sourceView = cell else { return }
@@ -416,7 +416,6 @@ class HomeViewController: UIViewController,
             toSection: .articles
         )
 
-
         dataSource.apply(snapshot, animatingDifferences: false)
     }
 
@@ -443,10 +442,6 @@ class HomeViewController: UIViewController,
     private func refreshMoodSuggestions(for moodKey: String) {
         let cacheKey = dailyCacheKey(for: moodKey)
 
-        // Return cached suggestions if available — this is intentional:
-        // once a mood's suggestions are generated for the day they stay stable
-        // even if journey state changes mid-day. The new journey context flows
-        // in on the next mood selection or next day.
         if let cached = dailySuggestionCache[cacheKey] {
             currentJournalSuggestion = Suggestion(
                 imageName: "Journal",
@@ -460,7 +455,6 @@ class HomeViewController: UIViewController,
             return
         }
 
-        // Generate fresh suggestions using the weighted engine
         currentJournalSuggestion = HomeModel.randomJournalSuggestion(
             for: moodKey,
             avoidingTitles: recentlyShownJournalTitles
@@ -471,7 +465,6 @@ class HomeViewController: UIViewController,
             avoiding: recentlyShownHobbyTitles
         )
 
-        // Cache and persist so suggestions survive app close/reopen today
         if let journal = currentJournalSuggestion,
            currentSuggestions.count >= 2 {
             let b = currentSuggestions[0]
@@ -528,35 +521,25 @@ class HomeViewController: UIViewController,
     }
 
     // MARK: - Journey cell text helper
-
-    /// Returns the single stage label shown on the Home journey card.
-    /// Progression: Not Started Yet → Diagnosed → Waiting for Result
-    ///              → <Treatment type e.g. Surgery / Radiation Therapy> → Recovery
     private func journeyStageText() -> String {
         let js = JourneyState.shared
 
-        // Nothing saved in journey yet
         guard js.isDiagnosisCompleted else { return "Not Started Yet" }
 
-        // Post-treatment always shows Recovery
         if js.currentStepTitle == "Post-Treatment" { return "Recovery" }
 
-        // Active treatment — prefer the in-progress phase name, then last saved phase
         if js.currentStepTitle == "Treatment" || js.isTreatmentCompleted {
             let phases = js.persistedPhaseStates
-            // 1. In-progress phase takes highest priority
             if let inProgress = phases.first(where: { $0.statusRaw == "inProgress" }),
                !inProgress.treatmentTypeRaw.isEmpty,
                inProgress.treatmentTypeRaw != "none" {
                 return inProgress.treatmentTypeRaw
             }
-            // 2. Last saved phase as fallback
             if let lastSaved = phases
                 .filter({ $0.isSaved && !$0.treatmentTypeRaw.isEmpty && $0.treatmentTypeRaw != "none" })
                 .last {
                 return lastSaved.treatmentTypeRaw
             }
-            // 3. Stored treatment name (legacy / edge-case)
             let name = js.currentTreatmentName
             if name != "Not started yet" && !name.isEmpty { return name }
             return "Treatment"
@@ -626,10 +609,10 @@ class HomeViewController: UIViewController,
             present(popup, animated: true)
             return
         }
-        popover.sourceView              = sourceView
-        popover.sourceRect              = sourceView.bounds
+        popover.sourceView               = sourceView
+        popover.sourceRect               = sourceView.bounds
         popover.permittedArrowDirections = [.up, .down]
-        popover.delegate                = popup
+        popover.delegate                 = popup
         present(popup, animated: true)
     }
 
