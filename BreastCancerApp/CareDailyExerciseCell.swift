@@ -2,34 +2,67 @@ import UIKit
 
 // MARK: - Protocol
 protocol CareDailyExerciseCellDelegate: AnyObject {
-    func careDailyExerciseCellDidTap(_ cell: CareDailyExerciseCell)
+    func careDailyExerciseCellDidTapBegin(_ cell: CareDailyExerciseCell)
 }
 
-class CareDailyExerciseCell: UICollectionViewCell {
+final class CareDailyExerciseCell: UICollectionViewCell {
 
     @IBOutlet weak var ExerciseContainer: UIView!
     @IBOutlet weak var ExerciseImage: UIImageView!
     @IBOutlet weak var ExerciseTitle: UILabel!
-    @IBOutlet weak var ExerciseTime: UILabel!
     @IBOutlet weak var ExerciseBeginButton: UIButton!
-    
+
+    // Optional: connect only if you add a dedicated empty-state label in storyboard/xib.
+    @IBOutlet weak var ExerciseEmptyStateLabel: UILabel?
+
     weak var delegate: CareDailyExerciseCellDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        ExerciseBeginButton.layer.cornerRadius = ExerciseBeginButton.frame.height / 2
-        
-        
-        ExerciseBeginButton.addTarget(self, action: #selector(handleTap), for: .touchUpInside)
+        ExerciseBeginButton.addTarget(self, action: #selector(handleBeginTap), for: .touchUpInside)
     }
 
-    func configure(title: String, duration: String, image: UIImage?) {
-        ExerciseTitle.text = title
-        ExerciseTime.text = duration
-        ExerciseImage.image = image
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        ExerciseTitle.text = nil
+        ExerciseImage.image = nil
+        ExerciseEmptyStateLabel?.text = nil
+        applyPlanState(hasPlan: true)
     }
-    
-    @objc private func handleTap() {
-        delegate?.careDailyExerciseCellDidTap(self)
+
+    func configure(title: String, image: UIImage?, hasPlan: Bool) {
+        applyPlanState(hasPlan: hasPlan)
+
+        if hasPlan {
+            ExerciseTitle.text = title
+            ExerciseImage.image = image
+            ExerciseEmptyStateLabel?.text = nil
+        } else {
+            let emptyText = "No plan added yet."
+            if let emptyLabel = ExerciseEmptyStateLabel {
+                emptyLabel.text = emptyText
+            } else {
+                // Fallback if there is no dedicated empty-state label wired.
+                ExerciseTitle.text = emptyText
+            }
+            ExerciseImage.image = nil
+        }
+    }
+
+    @objc private func handleBeginTap() {
+        delegate?.careDailyExerciseCellDidTapBegin(self)
+    }
+
+    private func applyPlanState(hasPlan: Bool) {
+        ExerciseImage.isHidden = !hasPlan
+        ExerciseBeginButton.isHidden = !hasPlan
+        ExerciseBeginButton.isEnabled = hasPlan
+
+        if ExerciseEmptyStateLabel != nil {
+            ExerciseTitle.isHidden = !hasPlan
+            ExerciseEmptyStateLabel?.isHidden = hasPlan
+        } else {
+            ExerciseTitle.isHidden = false
+        }
     }
 }

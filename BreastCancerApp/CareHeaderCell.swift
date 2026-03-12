@@ -24,8 +24,9 @@ class CareHeaderCell: UICollectionViewCell {
         Managelabel.addGestureRecognizer(tapGesture)
     }
 
-    func configure(title: String, showManage: Bool) {
+    func configure(title: String, showManage: Bool, actionTitle: String = "Manage") {
         Titlelabel.text = title
+        Managelabel.text = actionTitle
         Managelabel.isHidden = !showManage
     }
     

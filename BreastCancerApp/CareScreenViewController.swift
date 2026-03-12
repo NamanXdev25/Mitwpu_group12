@@ -5,6 +5,7 @@ class CareScreenViewController: UIViewController {
     @IBOutlet weak var CareCollectionView: UICollectionView!
 
     // MARK: - Properties
+    private let selectedExerciseCategoryIDKeyPrefix = "care_selected_exercise_category_id_v2"
     private var dataSource: UICollectionViewDiffableDataSource<CareSectionType, CareItem>!
     private var isHydrationExpanded = false
     private var appointmentRefreshTimer: Timer?
@@ -365,6 +366,7 @@ class CareScreenViewController: UIViewController {
             case .todayHeader:       return self.createHeaderSection()
             case .hydration:         return self.createHydrationSection()
             case .medication:        return self.createMedicationSection()
+            case .exerciseHeader:    return self.createHeaderSection()
             case .exercise:          return self.createExerciseSection()
             case .symptoms:          return self.createSymptomsSection()
             case .appointmentHeader: return self.createHeaderSection()
@@ -401,17 +403,17 @@ class CareScreenViewController: UIViewController {
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(84))
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 10, trailing: 16)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16)
         return section
     }
 
     private func createExerciseSection() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(84))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(109))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(84))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(109))
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 10, trailing: 16)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 22, trailing: 16)
         return section
     }
 
@@ -475,7 +477,13 @@ class CareScreenViewController: UIViewController {
     // MARK: - Cell Configuration Methods
     private func configureHeaderCell(_ collectionView: UICollectionView, indexPath: IndexPath, title: String, showManage: Bool) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CareHeaderCell", for: indexPath) as! CareHeaderCell
-        cell.configure(title: title, showManage: showManage)
+        let actionTitle: String
+        if title == "Exercises" {
+            actionTitle = selectedExerciseCategory() == nil ? "Add Plan" : "Change Plan"
+        } else {
+            actionTitle = "Manage"
+        }
+        cell.configure(title: title, showManage: showManage, actionTitle: actionTitle)
         cell.delegate = self
         return cell
     }
@@ -500,10 +508,24 @@ class CareScreenViewController: UIViewController {
         return cell
     }
 
-    private func configureExerciseCell(_ collectionView: UICollectionView, indexPath: IndexPath, title: String, duration: String, imageName: String?) -> UICollectionViewCell {
+    private func configureExerciseCell(_ collectionView: UICollectionView, indexPath: IndexPath, title: String, duration _: String, imageName: String?) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CareDailyExerciseCell", for: indexPath) as! CareDailyExerciseCell
-        let image = imageName != nil ? UIImage(named: imageName!) : UIImage(systemName: "figure.mixed.cardio")
-        cell.configure(title: title, duration: duration, image: image)
+        if let category = selectedExerciseCategory() {
+            let displayTitle = category.title
+            let image = UIImage(named: category.headerImageName ?? "") ?? UIImage(systemName: "figure.mixed.cardio")
+            cell.configure(
+                title: displayTitle,
+                image: image,
+                hasPlan: true
+            )
+        } else {
+            let image = imageName != nil ? UIImage(named: imageName!) : UIImage(systemName: "figure.mixed.cardio")
+            cell.configure(
+                title: title,
+                image: image,
+                hasPlan: false
+            )
+        }
         cell.delegate = self
         return cell
     }
@@ -544,6 +566,8 @@ class CareScreenViewController: UIViewController {
                 imageName: nil
             ))
         ], toSection: .medication)
+
+        snapshot.appendItems([CareItem(id: UUID(), type: .header(title: "Exercises", showManage: true))], toSection: .exerciseHeader)
 
         snapshot.appendItems([
             CareItem(id: UUID(), type: .exercise(
@@ -642,6 +666,80 @@ extension CareScreenViewController: UICollectionViewDelegate {
         default:
             break
         }
+    }
+}
+
+// MARK: - Exercise Plan State
+extension CareScreenViewController {
+    private var selectedExerciseCategoryIDKey: String {
+        let userKey = SupabaseUserContext.currentUserId?.uuidString ?? "anonymous"
+        return "\(selectedExerciseCategoryIDKeyPrefix)_\(userKey)"
+    }
+
+    private func selectedExerciseCategory() -> ExercisePlanCategory? {
+        guard let rawValue = UserDefaults.standard.object(forKey: selectedExerciseCategoryIDKey) as? Int else {
+            return nil
+        }
+        let id = rawValue
+        guard id > 0 else { return nil }
+        return ExercisePlanCategory.allCategories.first(where: { $0.id == id })
+    }
+
+    private func saveSelectedExerciseCategory(_ category: ExercisePlanCategory) {
+        UserDefaults.standard.set(category.id, forKey: selectedExerciseCategoryIDKey)
+    }
+
+    private func durationText(from subtitle: String) -> String {
+        let components = subtitle.components(separatedBy: "·")
+        if components.count >= 2 {
+            return components[1].trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+        return "15 min"
+    }
+
+    private func openExercisePlanPicker() {
+        let storyboard = UIStoryboard(name: "NewExercise", bundle: nil)
+        guard let pickerVC = storyboard.instantiateViewController(withIdentifier: "ExercisePlanCategoryViewController") as? ExercisePlanCategoryViewController else {
+            return
+        }
+
+        pickerVC.onCategorySelected = { [weak self] category in
+            guard let self = self else { return }
+            self.saveSelectedExerciseCategory(category)
+            self.applySnapshot(animatingDifferences: false)
+        }
+        navigationController?.pushViewController(pickerVC, animated: true)
+    }
+
+    private func openSelectedExercisePlanIfAvailable() {
+        guard let category = selectedExerciseCategory() else {
+            openExercisePlanPicker()
+            return
+        }
+
+        let plan = NewExercisePlan(
+            level: category.title,
+            duration: durationText(from: category.subtitle),
+            exerciseCount: category.exercises.count,
+            note: "Important: \(category.importantNote)",
+            exercises: category.exercises.map { exercise in
+                NewExerciseModel(
+                    imageName: exercise.imageName,
+                    title: exercise.name,
+                    category: "Exercise",
+                    difficulty: "Medium",
+                    duration: exercise.details,
+                    youtubeURL: exercise.youtubeURL
+                )
+            }
+        )
+
+        let storyboard = UIStoryboard(name: "NewExercise", bundle: nil)
+        guard let detailVC = storyboard.instantiateViewController(withIdentifier: "NewExerciseViewController") as? NewExerciseViewController else {
+            return
+        }
+        detailVC.exercisePlan = plan
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 }
 
@@ -755,6 +853,13 @@ extension CareScreenViewController: CareSymptomsCellDelegate {
 // MARK: - CareHeaderCellDelegate
 extension CareScreenViewController: CareHeaderCellDelegate {
     func careHeaderCellDidTapManage(_ cell: CareHeaderCell) {
+        if let indexPath = CareCollectionView.indexPath(for: cell),
+           let sectionType = CareSectionType(rawValue: indexPath.section),
+           sectionType == .exerciseHeader {
+            openExercisePlanPicker()
+            return
+        }
+
         let storyboard = UIStoryboard(name: "Appointments", bundle: nil)
         if let appointmentsVC = storyboard.instantiateViewController(withIdentifier: "AppointmentsViewController") as? AppointmentsViewController {
             let navController = UINavigationController(rootViewController: appointmentsVC)
@@ -780,11 +885,8 @@ extension CareScreenViewController: CareViewInsightsCellDelegate {
 
 // MARK: - CareDailyExerciseCellDelegate
 extension CareScreenViewController: CareDailyExerciseCellDelegate {
-    func careDailyExerciseCellDidTap(_ cell: CareDailyExerciseCell) {
-        let storyboard = UIStoryboard(name: "NewExercise", bundle: nil)
-        if let exerciseVC = storyboard.instantiateViewController(withIdentifier: "ExercisePlanCategoryViewController") as? ExercisePlanCategoryViewController {
-            navigationController?.pushViewController(exerciseVC, animated: true)
-        }
+    func careDailyExerciseCellDidTapBegin(_ cell: CareDailyExerciseCell) {
+        openSelectedExercisePlanIfAvailable()
     }
 }
 
