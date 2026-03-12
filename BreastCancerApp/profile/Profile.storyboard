@@ -62,21 +62,6 @@
             </objects>
             <point key="canvasLocation" x="1131" y="-9"/>
         </scene>
-        <!--Self Exam View Controller-->
-        <scene sceneID="4Ul-Ut-q5U">
-            <objects>
-                <viewController storyboardIdentifier="SelfExamViewController" id="vbn-qk-Ude" customClass="SelfExamViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="oRc-rd-fNK">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="UPN-2o-Rvu"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Qsp-fz-AUE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="839" y="671"/>
-        </scene>
         <!--Health Status View Controller-->
         <scene sceneID="Fyi-5E-PiB">
             <objects>
@@ -149,7 +134,7 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGray6Color">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
