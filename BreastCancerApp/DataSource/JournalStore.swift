@@ -12,13 +12,7 @@ class JournalStore {
     }
 
     func load() {
-        let saved = repository.loadEntries()
-        if saved.isEmpty {
-            entries = SampleJournalData.all
-            persist()
-        } else {
-            entries = saved
-        }
+        entries = repository.loadEntries()
     }
 
     private func persist() {

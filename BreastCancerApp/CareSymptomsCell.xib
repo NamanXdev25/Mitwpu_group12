@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -22,13 +22,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="361" height="150"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Symptoms logged" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bfa-L8-bcs">
-                                <rect key="frame" x="13" y="10" width="159.66666666666666" height="24"/>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
+                                <rect key="frame" x="13" y="9.9999999999999982" width="144.66666666666666" height="20.333333333333329"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="9Hz-z4-mDh">
-                                <rect key="frame" x="0.0" y="39" width="361" height="50"/>
+                                <rect key="frame" x="0.0" y="35.333333333333343" width="361" height="50"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="VbU-Ym-mas"/>
@@ -41,7 +41,7 @@
                                 </collectionViewFlowLayout>
                             </collectionView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rId-tn-vgg">
-                                <rect key="frame" x="7" y="94" width="347" height="1"/>
+                                <rect key="frame" x="7" y="90.333333333333329" width="347" height="1"/>
                                 <color key="backgroundColor" name="SeperatorColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="IHE-aV-QUx"/>
@@ -49,7 +49,7 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZR4-24-FQy">
-                                <rect key="frame" x="97.333333333333329" y="100" width="166.33333333333337" height="35"/>
+                                <rect key="frame" x="97.333333333333329" y="96.333333333333329" width="166.33333333333337" height="34.999999999999986"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" image="pencil.and.list.clipboard" catalog="system" title=" Log Symptoms">
                                     <color key="baseForegroundColor" name="TabBarcolour"/>

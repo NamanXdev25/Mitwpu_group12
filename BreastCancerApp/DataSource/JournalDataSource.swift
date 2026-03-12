@@ -1,8 +1,3 @@
-//
-//  JournalDataSource.swift
-//  journalTrial
-//
-
 import UIKit
 
 class JournalDataSource {
@@ -199,13 +194,19 @@ class JournalDataSource {
             
         // MAIN SCREEN SNAPSHOT
         case .mainScreen:
-            snapshot.appendSections([.streak, .actions, .recents])
-            
+            let hasEntries = !entries.isEmpty
+            var sections: [Section] = [.streak, .actions]
+            if hasEntries { sections.append(.recents) }
+            snapshot.appendSections(sections)
+
             snapshot.appendItems([UUID()], toSection: .streak)
             snapshot.appendItems(actions.map { $0.id }, toSection: .actions)
-            let recent3 = Array(entries.prefix(3))
-            snapshot.appendItems(recent3.map { $0.id }, toSection: .recents)
-            snapshot.reconfigureItems(recent3.map { $0.id })
+
+            if hasEntries {
+                let recent3 = Array(entries.prefix(3))
+                snapshot.appendItems(recent3.map { $0.id }, toSection: .recents)
+                snapshot.reconfigureItems(recent3.map { $0.id })
+            }
 
         // ALL JOURNALS SNAPSHOT
         case .allJournals:
