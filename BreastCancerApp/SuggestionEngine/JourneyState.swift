@@ -1,9 +1,3 @@
-//
-//  JourneyState.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 07/03/26.
-//
 
 import Foundation
 
@@ -13,7 +7,7 @@ struct PersistedPhaseState: Codable {
     var startDate: Date?
     var duration: String
     var isSaved: Bool
-    var statusRaw: String   // "notStarted" | "inProgress" | "completed"
+    var statusRaw: String
 }
 
 // MARK: - Codable post-treatment state (persisted to UserDefaults)
@@ -95,8 +89,6 @@ final class JourneyState {
             persistedPostTreatment = decoded
         }
 
-        // If treatment name is stale but we have saved phases,
-        // derive the name from the latest saved phase
         if (currentTreatmentName == "Not started yet" || currentTreatmentName.isEmpty)
             && !persistedPhaseStates.isEmpty {
             let latestSaved = persistedPhaseStates
@@ -155,7 +147,6 @@ final class JourneyState {
         isWaitCompleted      = false
         isTreatmentCompleted = false
         currentStepTitle     = "Diagnosed"
-        // Clear all phase + post-treatment state when diagnosis resets
         persistedPhaseStates    = []
         persistedTreatmentBadge = "notStarted"
         currentTreatmentName    = "Not started yet"
@@ -167,7 +158,6 @@ final class JourneyState {
         isWaitCompleted      = false
         isTreatmentCompleted = false
         currentStepTitle     = isDiagnosisCompleted ? "Waiting for Result" : "Diagnosed"
-        // Clear phase + post-treatment state when wait resets
         persistedPhaseStates    = []
         persistedTreatmentBadge = "notStarted"
         currentTreatmentName    = "Not started yet"

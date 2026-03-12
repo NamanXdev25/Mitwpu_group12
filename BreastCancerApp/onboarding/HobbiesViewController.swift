@@ -1,15 +1,8 @@
-//
-//  HobbiesViewController.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 13/01/26.
-//
 
 import UIKit
 
 class HobbiesViewController: UIViewController {
     
-    // IBOutlets
     @IBOutlet weak var progressBar: ProgressBarView!
     @IBOutlet weak var skipButton: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
@@ -19,7 +12,6 @@ class HobbiesViewController: UIViewController {
     private let hobbies = OnboardingDataSource.hobbies
     private var selectedHobbies: Set<String> = []
     
-    // override funcs
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -30,7 +22,6 @@ class HobbiesViewController: UIViewController {
         progressBar.setProgress(currentStep: 8, totalSteps: 9, animated: true)
     }
     
-    // function def
     private func setupUI() {
         progressBar.setProgress(0, animated: false)
         navigationItem.backButtonTitle = ""
@@ -43,11 +34,9 @@ class HobbiesViewController: UIViewController {
         collectionView.allowsMultipleSelection = true
         collectionView.backgroundColor = .clear
         
-        // register XIB cell
         let nib = UINib(nibName: "HobbyCell", bundle: nil)
         collectionView.register(nib, forCellWithReuseIdentifier: "HobbyCell")
         
-        // set flow layout with left alignment
         let layout = LeftAlignedCollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumInteritemSpacing = 12
@@ -69,18 +58,15 @@ class HobbiesViewController: UIViewController {
     }
     
     @IBAction func skipButtonTapped(_ sender: UIButton) {
-        // navigate to hobbies
         performSegue(withIdentifier: "showCompletion", sender: nil)
     }
     
     @IBAction func nextButtonTapped(_ sender: UIButton) {
         saveData()
-        print("Hobbies saved: \(selectedHobbies)")
         performSegue(withIdentifier: "showCompletion", sender: nil)
     }
 }
 
-// delegate and datasource
 extension HobbiesViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

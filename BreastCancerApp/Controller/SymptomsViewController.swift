@@ -1,9 +1,3 @@
-//
-//  SymptomsViewController.swift
-//  symptomTracking
-//
-//  Created by Shivani Dinesh on 04/01/26.
-//
 
 import UIKit
 
@@ -28,7 +22,6 @@ class SymptomsViewController: UIViewController {
         case today = 2
     }
     
-    // override funcs
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
@@ -40,7 +33,6 @@ class SymptomsViewController: UIViewController {
             object: nil
         )
         
-        // Add tap gesture to dismiss keyboard
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
@@ -79,12 +71,10 @@ class SymptomsViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.collectionViewLayout = createLayout()
         
-        // Register cells
         collectionView.register(UINib(nibName: "SymptomLogButtonCell", bundle: nil), forCellWithReuseIdentifier: "SymptomLogButtonCell")
         collectionView.register(UINib(nibName: "SymptomSelectionCell", bundle: nil), forCellWithReuseIdentifier: "SymptomSelectionCell")
         collectionView.register(UINib(nibName: "SymptomLogCell", bundle: nil), forCellWithReuseIdentifier: "SymptomLogCell")
         
-        // Register plain cell for empty state
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "EmptyCell")
         
         collectionView.register(
@@ -94,7 +84,6 @@ class SymptomsViewController: UIViewController {
         )
     }
     
-    // collection view layout
     private func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, layoutEnvironment in
             guard let self = self,
@@ -151,21 +140,18 @@ class SymptomsViewController: UIViewController {
     }
     
     private func createButtonSection() -> NSCollectionLayoutSection {
-        // Item
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .absolute(66)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
-        // Group
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .absolute(66)
         )
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         
-        // Section
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 0, bottom: 16, trailing: 0)
         
@@ -181,7 +167,6 @@ class SymptomsViewController: UIViewController {
             guard let self = self else { return nil }
             guard !self.displayedLogs.isEmpty else { return nil }
             
-            // delete functionality
             let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { action, view, completion in
                 self.confirmDelete(at: indexPath, completion: completion)
             }
@@ -198,7 +183,6 @@ class SymptomsViewController: UIViewController {
         section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 16, trailing: 16)
         section.interGroupSpacing = 8
         
-        // header
         let headerSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .absolute(50)
@@ -231,7 +215,6 @@ class SymptomsViewController: UIViewController {
 
         for (symptomId, data) in selectedSymptoms {
             if let symptom = userSymptoms.first(where: { $0.id == symptomId }) {
-                // Only save note if it's not empty
                 let noteToSave = data.note.trimmingCharacters(in: .whitespacesAndNewlines)
                 dataSource.logSymptom(
                     symptomId: symptomId,
@@ -251,7 +234,6 @@ class SymptomsViewController: UIViewController {
                       Section.today.rawValue])
         )
 
-        // Notify CareScreen to refresh its symptoms chip immediately
         NotificationCenter.default.post(name: NSNotification.Name("SymptomDataUpdated"), object: nil)
     }
     
@@ -271,7 +253,6 @@ class SymptomsViewController: UIViewController {
         collectionView.collectionViewLayout.invalidateLayout()
     }
     
-    // delete confirmation
     private func confirmDelete(at indexPath: IndexPath, completion: @escaping (Bool) -> Void) {
         let log = displayedLogs[indexPath.item]
         
@@ -291,7 +272,6 @@ class SymptomsViewController: UIViewController {
             } else {
                 self.collectionView.deleteItems(at: [indexPath])
             }
-            // Notify CareScreen to refresh its symptoms chip immediately
             NotificationCenter.default.post(name: NSNotification.Name("SymptomDataUpdated"), object: nil)
             completion(true)
         }
@@ -322,7 +302,6 @@ class SymptomsViewController: UIViewController {
             self?.loadData()
         }
 
-        // Push within the same navigation controller (no nested modal)
         navigationController?.pushViewController(editVC, animated: true)
     }
     
@@ -351,7 +330,6 @@ class SymptomsViewController: UIViewController {
     }
 }
 
-// UICollectionViewDataSource
 extension SymptomsViewController: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -422,13 +400,10 @@ extension SymptomsViewController: UICollectionViewDataSource {
             
         case .today:
             if displayedLogs.isEmpty {
-                // Use a plain UICollectionViewCell as fallback for empty state
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EmptyCell", for: indexPath)
                 
-                // Remove any existing subviews
                 cell.contentView.subviews.forEach { $0.removeFromSuperview() }
                 
-                // Create and configure label
                 let label = UILabel()
                 label.text = "No symptoms logged"
                 label.textAlignment = .center
@@ -489,7 +464,6 @@ extension SymptomsViewController: UICollectionViewDataSource {
     }
 }
 
-// UICollectionViewDelegate
 extension SymptomsViewController: UICollectionViewDelegate {
     
 }

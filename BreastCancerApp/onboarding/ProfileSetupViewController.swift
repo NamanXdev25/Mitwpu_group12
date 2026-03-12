@@ -1,9 +1,3 @@
-//
-//  ProfileSetupViewController.swift
-//  BreastCancerApp
-//
-//  Created by Shloka on 20/01/26.
-//
 
 import UIKit
 
@@ -37,7 +31,6 @@ class ProfileSetupViewController: UIViewController,
             layout.estimatedItemSize = .zero
         }
 
-        // Cell Registrations
         collectionView.register(
             UINib(nibName: "ProfileSetupWelcomeCollectionViewCell", bundle: nil),
             forCellWithReuseIdentifier: "ProfileSetupWelcomeCollectionViewCell"
@@ -64,7 +57,6 @@ class ProfileSetupViewController: UIViewController,
         collectionView.collectionViewLayout.invalidateLayout()
     }
 
-    // UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
         return 4
@@ -73,7 +65,6 @@ class ProfileSetupViewController: UIViewController,
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-        // Cell 0 — Welcome Header
         if indexPath.item == 0 {
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "ProfileSetupWelcomeCollectionViewCell",
@@ -85,7 +76,6 @@ class ProfileSetupViewController: UIViewController,
             return cell
         }
 
-        // Cell 1 — Profile Photo
         if indexPath.item == 1 {
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "ProfileSetupPhotoCollectionViewCell",
@@ -96,7 +86,6 @@ class ProfileSetupViewController: UIViewController,
             cell.instructionLabel.text = "Click the camera to add a photo"
             cell.delegate = self
 
-            // Set selected image if available
             if let image = selectedProfileImage {
                 cell.setProfileImage(image)
             }
@@ -104,7 +93,6 @@ class ProfileSetupViewController: UIViewController,
             return cell
         }
 
-        // Cell 2 — Form Fields
         if indexPath.item == 2 {
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "ProfileSetupFormCollectionViewCell",
@@ -117,7 +105,6 @@ class ProfileSetupViewController: UIViewController,
             return cell
         }
 
-        // Cell 3 — Continue Button + Footer
         let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: "ProfileSetupContinueCollectionViewCell",
             for: indexPath
@@ -132,7 +119,6 @@ class ProfileSetupViewController: UIViewController,
 
     }
 
-    // UICollectionViewDelegateFlowLayout
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -151,7 +137,6 @@ class ProfileSetupViewController: UIViewController,
         }
     }
 
-    // ProfileSetupPhotoCellDelegate
     func didTapCameraButton() {
         let alert = UIAlertController(
             title: "Profile Photo",
@@ -173,7 +158,6 @@ class ProfileSetupViewController: UIViewController,
         present(alert, animated: true)
     }
 
-    // Image Picker Helpers
     private func openImagePicker(sourceType: UIImagePickerController.SourceType) {
         let picker = UIImagePickerController()
         picker.sourceType = sourceType
@@ -193,7 +177,6 @@ class ProfileSetupViewController: UIViewController,
 
         picker.dismiss(animated: true)
 
-        // Reload only the photo cell
         collectionView.reloadItems(at: [IndexPath(item: 1, section: 0)])
     }
 
@@ -202,18 +185,15 @@ class ProfileSetupViewController: UIViewController,
     }
     
     func navigateToWelcome() {
-        // Save the user's name to OnboardingData before proceeding
         if let formCell = collectionView.cellForItem(at: IndexPath(item: 2, section: 0))
             as? ProfileSetupFormCollectionViewCell {
             
             let firstName = formCell.firstNameTextField.text ?? ""
             let lastName = formCell.lastNameTextField.text ?? ""
             
-            // Combine first and last name
             let fullName = "\(firstName) \(lastName)".trimmingCharacters(in: .whitespaces)
             OnboardingData.shared.userName = fullName.isEmpty ? "User" : fullName
             
-            print("📝 Saved user name: \(OnboardingData.shared.userName)")
         }
         
         let storyboard = UIStoryboard(name: "OnboardingMain", bundle: nil)

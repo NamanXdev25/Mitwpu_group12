@@ -67,7 +67,6 @@ class CareHydrationCell: UICollectionViewCell {
         CupSizeChevronButton.addTarget(self, action: #selector(cupTapped), for: .touchUpInside)
         Hydrationstepper.addTarget(self, action: #selector(stepperValueChanged(_:)), for: .valueChanged)
 
-        // Also open dropdown when value labels are tapped
         goalValueLabel.isUserInteractionEnabled = true
         cupSizeValueLabel.isUserInteractionEnabled = true
         goalValueLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(goalTapped)))
@@ -76,7 +75,7 @@ class CareHydrationCell: UICollectionViewCell {
 
     private func setupStepper() {
         Hydrationstepper.minimumValue = 0
-        Hydrationstepper.stepValue = 1 // 1 tick = 100 mL
+        Hydrationstepper.stepValue = 1
         Hydrationstepper.autorepeat = true
         Hydrationstepper.wraps = false
     }
@@ -99,12 +98,10 @@ class CareHydrationCell: UICollectionViewCell {
             currentAmountML = max(currentAmountML - cupSizeML, 0)
         }
 
-        // Re-sync from real ml so minus only disables at 0 mL
         configureStepperRange()
         render()
         delegate?.careHydrationCell(self, didChangeCurrentAmountML: currentAmountML)
 
-        // Award coins only when daily hydration goal is completed (once per day)
         if let vc = findViewController() {
             CoinRewardService.shared.awardHydrationGoalIfEligible(
                 currentML: currentAmountML,
@@ -114,7 +111,6 @@ class CareHydrationCell: UICollectionViewCell {
         }
     }
 
-    /// Walks responder chain to find the parent ViewController
     private func findViewController() -> UIViewController? {
         var responder: UIResponder? = self
         while let r = responder {

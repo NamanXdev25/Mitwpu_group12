@@ -1,7 +1,3 @@
-//
-//  ProfileHomeViewController.swift
-//  BreastCancerApp
-//
 
 import UIKit
 

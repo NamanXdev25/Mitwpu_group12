@@ -1,7 +1,3 @@
-//
-//  HealthDateCell.swift
-//  BreastCancerApp
-//
 
 import UIKit
 
@@ -20,7 +16,6 @@ class HealthDateCell: UICollectionViewCell {
         backgroundColor             = .clear
         contentView.backgroundColor = .clear
 
-        // Configure picker
         datePicker.datePickerMode           = .date
         datePicker.preferredDatePickerStyle = .compact
         datePicker.tintColor                = brandPink
@@ -29,7 +24,6 @@ class HealthDateCell: UICollectionViewCell {
 
         contentView.addSubview(datePicker)
 
-        // Pin to the right side of the cell, vertically centered
         NSLayoutConstraint.activate([
             datePicker.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             datePicker.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)

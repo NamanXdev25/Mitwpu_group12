@@ -8,7 +8,6 @@ final class SocialSignupCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var signUpButton: UIButton!
     @IBOutlet weak var donthaveAccountLabel: UILabel!
     
-    // Add closure for Sign In action
     var onSignInTapped: (() -> Void)?
     var onGoogleTapped: (() -> Void)?
     var onAppleTapped: (() -> Void)?
@@ -54,30 +53,24 @@ final class SocialSignupCollectionViewCell: UICollectionViewCell {
 
     @objc
     private func didTapGoogleContainer() {
-        print("Google signup tapped")
         onGoogleTapped?()
     }
 
     @objc
     private func didTapAppleContainer() {
-        print("Apple signup tapped")
         onAppleTapped?()
     }
 
-    // Actions
 
     @IBAction func didTapGoogle(_ sender: UIButton) {
-        print("Google signup tapped")
         onGoogleTapped?()
     }
 
     @IBAction func didTapApple(_ sender: UIButton) {
-        print("Apple login tapped")
         onAppleTapped?()
     }
 
     @IBAction func didTapSignUp(_ sender: UIButton) {
-        print("Sign In tapped")
         onSignInTapped?()
     }
 }

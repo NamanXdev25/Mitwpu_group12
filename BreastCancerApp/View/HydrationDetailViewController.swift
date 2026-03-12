@@ -1,9 +1,3 @@
-//
-//  HydrationDetailViewController.swift
-//  BreastCancerApp
-//
-//  Created by Shloka on 12/02/26.
-//
 
 import UIKit
 
@@ -18,7 +12,7 @@ class HydrationDetailViewController: UIViewController {
     // MARK: - Properties
     private var entries: [HydrationEntry] = []
     private let dataManager = HydrationDataManager.shared
-    private let dailyGoal = 3000 // 3 liters in ml
+    private let dailyGoal = 3000
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -38,12 +32,10 @@ class HydrationDetailViewController: UIViewController {
         title = "Hydration · \(getCurrentDateString())"
         navigationController?.navigationBar.prefersLargeTitles = false
         
-        // Add close button
         let closeButton = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(closeTapped))
         closeButton.tintColor = .label
         navigationItem.rightBarButtonItem = closeButton
         
-        // Setup labels
         goalLabel.text = "Goal: \(formatML(dailyGoal))"
         goalLabel.textColor = .systemGray
         goalLabel.font = .systemFont(ofSize: 15, weight: .regular)
@@ -88,7 +80,6 @@ class HydrationDetailViewController: UIViewController {
     }
     
     @IBAction func saveChangesTapped(_ sender: UIButton) {
-        // This will save automatically via dataManager
         dismiss(animated: true)
     }
     
@@ -177,7 +168,6 @@ extension HydrationDetailViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "HydrationEntryCell", for: indexPath)
         let entry = entries[indexPath.row]
         
-        // Configure cell
         var config = cell.defaultContentConfiguration()
         config.text = formatML(entry.amountML)
         config.textProperties.font = .systemFont(ofSize: 17, weight: .semibold)
@@ -200,11 +190,9 @@ extension HydrationDetailViewController: UITableViewDelegate {
         return 60
     }
     
-    // Swipe Actions
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let entry = entries[indexPath.row]
         
-        // Delete Action
         let deleteAction = UIContextualAction(style: .destructive, title: nil) { [weak self] _, _, completion in
             self?.dataManager.deleteEntry(withId: entry.id)
             self?.loadData()
@@ -213,7 +201,6 @@ extension HydrationDetailViewController: UITableViewDelegate {
         deleteAction.image = UIImage(systemName: "trash.fill")
         deleteAction.backgroundColor = .systemPink
         
-        // Edit Action
         let editAction = UIContextualAction(style: .normal, title: nil) { [weak self] _, _, completion in
             self?.showEditEntryAlert(for: entry)
             completion(true)

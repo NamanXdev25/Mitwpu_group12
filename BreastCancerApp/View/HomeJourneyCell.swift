@@ -1,9 +1,3 @@
-//
-//  HomeJourneyCell.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 03/03/26.
-//
 
 import UIKit
 

@@ -19,7 +19,6 @@ class CareMedicationCell: UICollectionViewCell {
         super.awakeFromNib()
         self.contentView.layer.masksToBounds = true
         
-        // Add tap gesture to the entire cell
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(cellTapped))
         self.contentView.addGestureRecognizer(tapGesture)
         self.contentView.isUserInteractionEnabled = true

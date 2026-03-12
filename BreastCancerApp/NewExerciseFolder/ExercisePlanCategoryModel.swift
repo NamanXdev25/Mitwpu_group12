@@ -1,9 +1,3 @@
-//
-//  ExercisePlanCategoryModel.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 13/02/26.
-//
 
 import Foundation
 
@@ -33,7 +27,6 @@ private func imageForExercise(_ name: String) -> String {
 }
 
 // MARK: - YouTube URL Mapping
-// Master exercise → YouTube link mapping extracted from the reference document.
 private enum YouTubeLinks {
     static let shoulderShrug           = "https://youtu.be/YT6qn6HVQyE?si=PpHh1leGZrKPQtIb"
     static let shoulderRoll            = "https://youtu.be/X7NtgY9kCCM?si=Nvhx1KA62Tvmsgwn"
@@ -64,9 +57,6 @@ extension ExercisePlanCategory {
 
     static let allCategories: [ExercisePlanCategory] = [
 
-        // ───────────────────────────────────────────────
-        // 1. Before Chemotherapy — 20–30 min | 4–5 days/week
-        // ───────────────────────────────────────────────
         ExercisePlanCategory(
             id: 1,
             title: "Before Chemotherapy",
@@ -101,9 +91,6 @@ extension ExercisePlanCategory {
             imageName: "standing_heel_raises"
         ),
 
-        // ───────────────────────────────────────────────
-        // 2. During Chemotherapy — 10–20 min | Flexible
-        // ───────────────────────────────────────────────
         ExercisePlanCategory(
             id: 2,
             title: "During Chemotherapy",
@@ -138,9 +125,6 @@ extension ExercisePlanCategory {
             imageName: "arm_lift"
         ),
 
-        // ───────────────────────────────────────────────
-        // 3. Post-Chemo, Pre-Surgery — 20–25 min
-        // ───────────────────────────────────────────────
         ExercisePlanCategory(
             id: 3,
             title: "Post-Chemo",
@@ -175,9 +159,6 @@ extension ExercisePlanCategory {
             imageName: "chest_open"
         ),
 
-        // ───────────────────────────────────────────────
-        // 4. Early Post-Surgery (Week 1) — 10–15 min daily
-        // ───────────────────────────────────────────────
         ExercisePlanCategory(
             id: 4,
             title: "Early Post-Surgery (Week 1)",
@@ -208,9 +189,6 @@ extension ExercisePlanCategory {
             imageName: "wall_climbing"
         ),
 
-        // ───────────────────────────────────────────────
-        // 5. Post-Surgery (Week 2) — 15–20 min
-        // ───────────────────────────────────────────────
         ExercisePlanCategory(
             id: 5,
             title: "Post-Surgery (Week 2)",
@@ -241,9 +219,6 @@ extension ExercisePlanCategory {
             imageName: "arm_lift"
         ),
 
-        // ───────────────────────────────────────────────
-        // 6. Post-Surgery Recovery (Week 3–6) — 20–25 min
-        // ───────────────────────────────────────────────
         ExercisePlanCategory(
             id: 6,
             title: "Post-Surgery Recovery",
@@ -278,9 +253,6 @@ extension ExercisePlanCategory {
             imageName: nil
         ),
 
-        // ───────────────────────────────────────────────
-        // 7. After Breast Reconstruction — 15–20 min
-        // ───────────────────────────────────────────────
         ExercisePlanCategory(
             id: 7,
             title: "After Breast Reconstruction",
@@ -311,9 +283,6 @@ extension ExercisePlanCategory {
             imageName: nil
         ),
 
-        // ───────────────────────────────────────────────
-        // 8. Pre-Radiation Therapy — 15–20 min
-        // ───────────────────────────────────────────────
         ExercisePlanCategory(
             id: 8,
             title: "Pre-Radiation Therapy",
@@ -344,9 +313,6 @@ extension ExercisePlanCategory {
             imageName: nil
         ),
 
-        // ───────────────────────────────────────────────
-        // 9. During & After Radiation Therapy — 15–20 min
-        // ───────────────────────────────────────────────
         ExercisePlanCategory(
             id: 9,
             title: "During & After Radiation",
@@ -377,9 +343,6 @@ extension ExercisePlanCategory {
             imageName: "girl_stretch"
         ),
 
-        // ───────────────────────────────────────────────
-        // 10. Post-Treatment Recovery — 25–30 min | 4–5 days/week
-        // ───────────────────────────────────────────────
         ExercisePlanCategory(
             id: 10,
             title: "Post-Treatment Recovery",
@@ -414,9 +377,6 @@ extension ExercisePlanCategory {
             imageName: "shoulder_blade_squeeze"
         ),
 
-        // ───────────────────────────────────────────────
-        // 11. Remission / Survivorship — 30 min | 5 days/week
-        // ───────────────────────────────────────────────
         ExercisePlanCategory(
             id: 11,
             title: "Remission / Survivorship",

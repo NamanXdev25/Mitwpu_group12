@@ -1,8 +1,3 @@
-//
-//  NewAppointmentReminderTimeCell.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 05/03/26.
 
 import UIKit
 

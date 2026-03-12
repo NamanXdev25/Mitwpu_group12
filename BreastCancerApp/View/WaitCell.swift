@@ -51,7 +51,6 @@ class WaitCell: UICollectionViewCell {
     var onSaveButtonTapped: (() -> Void)?
     var onEditButtonTapped: (() -> Void)?
     var onCellHeightChanged: (() -> Void)?
-    /// Fired when the saved countdown reaches 0 days — this is when Treatment unlocks
     var onWaitPeriodExpired: (() -> Void)?
 
     private var fadableViews: [UIView] {
@@ -288,8 +287,6 @@ class WaitCell: UICollectionViewCell {
         stepperUpButton.isUserInteractionEnabled   = false
         stepperDownButton.isUserInteractionEnabled = false
         daysTextField.isUserInteractionEnabled     = false
-        // FIX: Explicitly lock feeling buttons — this was missing, causing them
-        // to remain tappable after the cell is reconfigured from a saved state.
         feelingButtons.forEach { $0.isUserInteractionEnabled = false }
 
         let block = {
@@ -400,9 +397,6 @@ class WaitCell: UICollectionViewCell {
                 selectedFeelings = Set(feelings)
             }
             updateFeelingButtonStates()
-            // FIX: enterSavedState sets isUserInteractionEnabled = false on feeling buttons.
-            // Previously this was not called here, so buttons appeared saved (faded) but
-            // were still fully interactive on cell reuse.
             enterSavedState(animated: false)
         } else {
             isSaved = false
@@ -413,7 +407,6 @@ class WaitCell: UICollectionViewCell {
             saveButton.isUserInteractionEnabled = false
             editButton.isHidden = true
             fadableViews.forEach { $0.alpha = 1.0 }
-            // Ensure feeling buttons are interactive in edit mode
             feelingButtons.forEach { $0.isUserInteractionEnabled = true }
 
             if let days = model.daysWaited {
@@ -436,7 +429,6 @@ class WaitCell: UICollectionViewCell {
             } else {
                 applyDeselectedStyle(to: button)
             }
-            // Wire tap target — safe to add multiple times (UIKit deduplicates)
             button.addTarget(self, action: #selector(feelingButtonTapped(_:)), for: .touchUpInside)
         }
     }

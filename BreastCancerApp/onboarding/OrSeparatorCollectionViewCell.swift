@@ -1,9 +1,3 @@
-//
-//  OrSeparatorCollectionViewCell.swift
-//  BreastCancerApp
-//
-//  Created by Shloka on 19/01/26.
-//
 
 import UIKit
 

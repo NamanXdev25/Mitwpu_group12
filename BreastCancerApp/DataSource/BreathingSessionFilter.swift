@@ -1,9 +1,3 @@
-//
-//  BreathingSessionFilter.swift
-//  BreastCancerApp
-//
-//  Created by Shloka on 16/12/25.
-//
 import Foundation
 
 struct BreathingSessionFilter {

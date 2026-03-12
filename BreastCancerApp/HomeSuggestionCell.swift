@@ -25,7 +25,7 @@ class HomeSuggestionCell: UICollectionViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        onTap = nil // triggers didSet → removes gesture recognizer
+        onTap = nil
     }
 
     // MARK: - Configure

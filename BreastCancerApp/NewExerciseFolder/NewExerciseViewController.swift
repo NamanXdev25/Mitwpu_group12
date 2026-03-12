@@ -1,9 +1,3 @@
-//
-//  NewExerciseViewController.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 05/02/26.
-//
 
 import UIKit
 
@@ -19,7 +13,6 @@ class NewExerciseViewController: UIViewController {
     var exercisePlan: NewExercisePlan!
     private var dataSource: NewExerciseDataSource!
 
-    /// Tracks which exercise indices the user has completed (visited the video).
     private var completedIndices: Set<Int> = []
 
     // MARK: - Lifecycle
@@ -42,7 +35,6 @@ class NewExerciseViewController: UIViewController {
 
     private func setupData() {
         if exercisePlan == nil {
-            //exercisePlan = NewExercisePlan.level1Exercises
         }
         loadCompletedIndices()
         dataSource = NewExerciseDataSource(exercisePlan: exercisePlan)
@@ -80,14 +72,10 @@ class NewExerciseViewController: UIViewController {
     // MARK: - Begin / Continue Button
 
     private func updateBeginButtonTitle() {
-        // The button uses UIButtonConfiguration (set in storyboard with play.fill icon),
-        // so we MUST update via .configuration — NOT setTitle(_:for:).
         let hasAnyCompleted = !completedIndices.isEmpty
         beginButton.configuration?.title = hasAnyCompleted ? " Continue" : " Begin Now"
     }
 
-    /// Returns the index of the first exercise that hasn't been completed yet,
-    /// or 0 if all are completed (restart from the top).
     private func nextExerciseIndex() -> Int {
         guard let plan = exercisePlan else { return 0 }
         for i in 0..<plan.exercises.count {
@@ -95,7 +83,7 @@ class NewExerciseViewController: UIViewController {
                 return i
             }
         }
-        return 0   // all done — wrap around
+        return 0
     }
 
     // MARK: - YouTube Navigation
@@ -107,7 +95,6 @@ class NewExerciseViewController: UIViewController {
             return
         }
 
-        // Mark as completed before opening
         completedIndices.insert(index)
         setExerciseCompletion(for: index, completed: true)
         updateBeginButtonTitle()
@@ -186,7 +173,6 @@ class NewExerciseViewController: UIViewController {
     }
 
     @IBAction func defaultButtonTapped(_ sender: UIButton) {
-        print("Set as default tapped")
     }
 }
 
@@ -205,7 +191,6 @@ extension NewExerciseViewController: DetailExerciseCellDelegate {
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
         guard indexPath.section == NewExerciseSectionType.exercises.rawValue else { return }
 
-        // Toggle completion
         let index = indexPath.item
         if completedIndices.contains(index) {
             completedIndices.remove(index)

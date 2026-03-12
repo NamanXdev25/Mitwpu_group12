@@ -1,9 +1,3 @@
-//
-//  SocialLoginCollectionViewCell.swift
-//  BreastCancerApp
-//
-//  Created by Shloka on 19/01/26.
-//
 
 import UIKit
 
@@ -54,12 +48,10 @@ class SocialLoginCollectionViewCell: UICollectionViewCell {
     }
 
     @objc private func didTapGoogle() {
-        print("Google login tapped")
         onGoogleTapped?()
     }
 
     @objc private func didTapApple() {
-        print("Apple login tapped")
         onAppleTapped?()
     }
 

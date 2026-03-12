@@ -5,20 +5,16 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
     // MARK: - Outlets
     @IBOutlet weak var monthLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
-    // Navigation arrows
     @IBOutlet weak var cancelbutton: UIBarButtonItem!
     @IBOutlet weak var previousMonth: UIButton!
     @IBOutlet weak var nextMonth: UIButton!
     
-    // Picker Outlets
     @IBOutlet weak var pickerContainerView: UIView!
     @IBOutlet weak var monthYearPicker: UIPickerView!
     
-    // Header Interaction
     @IBOutlet weak var headerToggleButton: UIButton!
     @IBOutlet weak var chevronButton: UIButton!
     
-    // Appointments List
     @IBOutlet weak var appointmentsContainerView: UIView!
     @IBOutlet weak var dateHeaderLabel: UILabel!
     @IBOutlet weak var appointmentsTableView: UITableView!
@@ -33,7 +29,6 @@ class AppointmentsViewController: UIViewController, UICollectionViewDataSource, 
     var totalSquares = [String]()
     var appointmentsForSelectedDate: [AppointmentItem] = []
     
-    // Picker Data
     let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     var years = [Int]()
     

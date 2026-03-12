@@ -1,32 +1,22 @@
-//
-//  GuidedJournalViewController.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 27/11/25.
-//
 
 import UIKit
 
 class GuidedJournalViewController: UIViewController {
     
-    //IBOutlets
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var questionLabel: UILabel!
     @IBOutlet weak var textView: UITextView!
     
-    // variables
     var existingEntry: JournalEntry?
     private let placeholder = "Start Typing..."
     var categoryText: String = ""
     var questionText: String = ""
     
-    // set datasource
     let datasource = GuidedReflectionDataSource.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // UI
         view.backgroundColor = UIColor(named: "BackgroundColor")
         textView.delegate = self
         categoryLabel.text = categoryText
@@ -46,13 +36,11 @@ class GuidedJournalViewController: UIViewController {
         setupPlaceholder()
     }
     
-    // set ques & category
     func updateUI(with question: GuidedReflectionQuestion) {
         questionLabel.text = question.question
         categoryLabel.text = formattedCategoryTags(for: question)
     }
     
-    // categories
     func formattedCategoryTags(for question: GuidedReflectionQuestion) -> String {
         let categoryText = question.category.rawValue.replacingOccurrences(of: "_", with: " ").uppercased()
         guard let tags = question.tags, !tags.isEmpty else {
@@ -62,7 +50,6 @@ class GuidedJournalViewController: UIViewController {
         return "\(categoryText) • \(tagsText)"
     }
     
-    // IBActions
     @IBAction func submitTapped(_ sender: UIBarButtonItem) {
         let body = textView.text.trimmingCharacters(in: .whitespacesAndNewlines)
         if let old = existingEntry {
@@ -88,7 +75,6 @@ class GuidedJournalViewController: UIViewController {
             )
             JournalStore.shared.add(newEntry)
 
-            // Award coins for new guided journal entry (once per day)
             CoinRewardService.shared.awardJournalCoinsIfEligible(
                 reason: "Guided Journal 📝",
                 on: self
@@ -102,7 +88,6 @@ class GuidedJournalViewController: UIViewController {
 
 extension GuidedJournalViewController: UITextViewDelegate {
 
-    // placeholder text
     func setupPlaceholder() {
         guard existingEntry == nil else { return }
         textView.text = placeholder
@@ -124,7 +109,6 @@ extension GuidedJournalViewController: UITextViewDelegate {
         }
     }
 
-    // Character limit
     func textView(_ textView: UITextView,
                   shouldChangeTextIn range: NSRange,
                   replacementText text: String) -> Bool {

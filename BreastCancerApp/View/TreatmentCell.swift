@@ -9,18 +9,12 @@ class TreatmentCell: UICollectionViewCell {
 
     var onCellHeightChanged: (() -> Void)?
     var onSaveButtonTapped: ((TreatmentPhaseModel, Int) -> Void)?
-    /// Called when all phases are completed and the overall badge goes Completed.
     var onAllPhasesCompleted: ((String) -> Void)?
-    /// Called when a phase is deleted / edit reverted, dropping back below Completed.
     var onTreatmentReset: (() -> Void)?
 
-    /// Called whenever a phase's STATUS changes — VC updates its savedPhaseStates.
     var onPhaseStatusChanged: ((Int, PhaseStatus) -> Void)?
-    /// Called when + Add Phase is tapped — VC appends a new SavedPhaseState.
     var onPhaseAdded: (() -> Void)?
-    /// Called when a phase is deleted — VC removes from savedPhaseStates at that index.
     var onPhaseDeleted: ((Int) -> Void)?
-    /// Called whenever any field value inside a phase changes (before Save) — VC caches it.
     var onPhaseFieldsChanged: ((Int, TreatmentType, Date?, String) -> Void)?
 
     private var phaseViews: [TreatmentPhaseView] = []
@@ -69,8 +63,6 @@ class TreatmentCell: UICollectionViewCell {
     }
 
     // MARK: - Reuse restore
-    /// Called from cellForItemAt every time this cell is dequeued.
-    /// Tears down leftover phase views and rebuilds entirely from VC-owned state.
     func restoreState(phases: [SavedPhaseState], badgeStatus: PhaseStatus) {
         phaseViews.forEach { $0.removeFromSuperview() }
         phaseViews    = []
@@ -82,8 +74,6 @@ class TreatmentCell: UICollectionViewCell {
         }
 
         applyBadge(badgeStatus)
-        // Ensure containerHeightConstraint is accurate so getCellHeight() returns
-        // the correct value when the VC reads it synchronously right after restoreState.
         rebuildContainerHeight()
     }
 
@@ -145,7 +135,6 @@ class TreatmentCell: UICollectionViewCell {
     }
 
     // MARK: - Internal phase view builder
-    /// `savedState` is non-nil when restoring after cell reuse; nil when user taps + Add Phase.
     private func addPhaseViewInternal(index: Int, initialStatus: PhaseStatus, savedState: SavedPhaseState?) {
         guard let phaseView = Bundle.main.loadNibNamed("TreatmentPhaseView", owner: nil, options: nil)?.first as? TreatmentPhaseView else { return }
 
@@ -153,13 +142,10 @@ class TreatmentCell: UICollectionViewCell {
         phaseView.translatesAutoresizingMaskIntoConstraints = false
         phaseView.configure(index: index)
 
-        // ── Restore field values so unsaved input survives cell reuse ──
         if let saved = savedState {
             if saved.isSaved, let model = saved.model {
-                // Phase was fully saved — restore the complete saved model
                 phaseView.restoreSavedModel(model)
             } else if saved.treatmentType != .none || saved.startDate != nil || !saved.duration.isEmpty {
-                // Phase had in-progress unsaved input — restore raw field values
                 phaseView.restoreFields(
                     treatmentType: saved.treatmentType,
                     startDate:     saved.startDate,
@@ -168,7 +154,6 @@ class TreatmentCell: UICollectionViewCell {
             }
         }
 
-        // ── Wire callbacks ──
         phaseView.onStatusChanged = { [weak self] status in
             guard let self else { return }
             guard index < self.phaseViews.count else { return }
@@ -182,18 +167,15 @@ class TreatmentCell: UICollectionViewCell {
             self.deletePhase(phaseView)
         }
 
-        // Relay field changes up to VC so it can cache unsaved input in savedPhaseStates
         phaseView.onFieldsChanged = { [weak self] type, startDate, duration in
             guard let self else { return }
             guard let idx = self.phaseViews.firstIndex(of: phaseView) else { return }
             self.onPhaseFieldsChanged?(idx, type, startDate, duration)
         }
 
-        // Relay save up to VC
         phaseView.onSaved = { [weak self] in
             guard let self else { return }
             guard let idx = self.phaseViews.firstIndex(of: phaseView) else { return }
-            // Build and relay the saved model
             var model = TreatmentPhaseModel()
             model.treatmentType = phaseView.currentTreatmentType()
             model.startDate     = phaseView.currentStartDate()
@@ -202,7 +184,6 @@ class TreatmentCell: UICollectionViewCell {
             self.onSaveButtonTapped?(model, idx)
         }
 
-        // Add to container
         phasesContainerView.addSubview(phaseView)
         if let last = phaseViews.last {
             NSLayoutConstraint.activate([

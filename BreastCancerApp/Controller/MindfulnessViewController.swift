@@ -92,7 +92,6 @@ class MindfulnessViewController: UIViewController {
 
             case .memories:
                 if !hasMemories {
-                    // Full width empty state
                     let item = NSCollectionLayoutItem(
                         layoutSize: NSCollectionLayoutSize(
                             widthDimension: .fractionalWidth(1),
@@ -111,7 +110,6 @@ class MindfulnessViewController: UIViewController {
                     return section
                 }
 
-                // Horizontal scrolling memory cards
                 let item = NSCollectionLayoutItem(
                     layoutSize: .init(
                         widthDimension: .absolute(220),

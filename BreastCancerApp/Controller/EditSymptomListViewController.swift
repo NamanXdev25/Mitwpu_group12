@@ -1,29 +1,19 @@
-//
-//  EditSymptomListViewController.swift
-//  symptomTracking
-//
-//  Created by Shivani Dinesh on 04/01/26.
-//
 
 import UIKit
 
 class EditSymptomListViewController: UIViewController {
     
-    // IBOutlets
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var doneButton: UIBarButtonItem!
     @IBOutlet weak var BackButton: UIBarButtonItem!
     
-    // variable definitions
     private let dataSource = SymptomDataSource.shared
     
-    // Temporary local copies - work with these instead of modifying dataSource directly
     private var tempUserSymptoms: [Symptom] = []
     private var tempAvailableSymptoms: [Symptom] = []
     
     var onDismiss: (() -> Void)?
     
-    // override funcs
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
@@ -31,7 +21,6 @@ class EditSymptomListViewController: UIViewController {
         tableView.isEditing = true
     }
     
-    // func definitions
     private func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
@@ -39,7 +28,6 @@ class EditSymptomListViewController: UIViewController {
     }
     
     private func loadData() {
-        // Load into temporary arrays - don't modify dataSource yet
         tempUserSymptoms = dataSource.getUserSymptoms()
         tempAvailableSymptoms = dataSource.getAvailableSymptoms()
         tableView.reloadData()
@@ -52,45 +40,36 @@ class EditSymptomListViewController: UIViewController {
         present(alert, animated: true)
     }
     
-    // IBActions
     @IBAction func backButtonTapped(_ sender: Any) {
-        // Discard all changes - pop back to SymptomsViewController
         navigationController?.popViewController(animated: true)
     }
 
     @IBAction func doneButtonTapped(_ sender: Any) {
-        // Save all changes to dataSource
         saveChanges()
         
-        // Pop back to SymptomsViewController
         navigationController?.popViewController(animated: true)
         onDismiss?()
     }
     
     private func saveChanges() {
-        // Get original user symptoms
         let originalUserSymptoms = dataSource.getUserSymptoms()
         let originalIds = Set(originalUserSymptoms.map { $0.id })
         let newIds = Set(tempUserSymptoms.map { $0.id })
         
-        // Find symptoms that were removed
         let removedIds = originalIds.subtracting(newIds)
         for id in removedIds {
             dataSource.removeSymptomFromUserList(symptomId: id)
         }
         
-        // Find symptoms that were added
         let addedIds = newIds.subtracting(originalIds)
         for id in addedIds {
             dataSource.addSymptomToUserList(symptomId: id)
         }
         
-        // Update the order for all user symptoms
         dataSource.updateUserSymptomsOrderInMemory(tempUserSymptoms)
     }
 }
 
-// UITableViewDataSource - tableview setup
 extension EditSymptomListViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -108,7 +87,7 @@ extension EditSymptomListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "EditSymptomCell", for: indexPath) as! EditSymptomCell
         
-        if indexPath.section == 0 { // your list section
+        if indexPath.section == 0 {
             
             let symptom = tempUserSymptoms[indexPath.row]
             cell.configure(with: symptom, isInUserList: true)
@@ -119,7 +98,7 @@ extension EditSymptomListViewController: UITableViewDataSource {
                 self?.showInfoAlert(for: symptom)
             }
             
-        } else { // add section
+        } else {
             
             let symptom = tempAvailableSymptoms[indexPath.row]
             cell.configure(with: symptom, isInUserList: false)
@@ -157,7 +136,6 @@ extension EditSymptomListViewController: UITableViewDataSource {
             return
         }
         
-        // Reorder in temporary array only
         let movedSymptom = tempUserSymptoms.remove(at: sourceIndexPath.row)
         tempUserSymptoms.insert(movedSymptom, at: destinationIndexPath.row)
     }
@@ -169,7 +147,6 @@ extension EditSymptomListViewController: UITableViewDataSource {
         return .none
     }
     
-    // Work with temporary arrays instead of dataSource
     private func removeSymptomFromTemp(symptomId: String) {
         guard let index = tempUserSymptoms.firstIndex(where: { $0.id == symptomId }) else { return }
         let symptom = tempUserSymptoms.remove(at: index)
@@ -186,7 +163,6 @@ extension EditSymptomListViewController: UITableViewDataSource {
     }
 }
 
-// UITableViewDelegate
 extension EditSymptomListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

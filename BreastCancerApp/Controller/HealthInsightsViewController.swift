@@ -228,7 +228,6 @@ extension HealthInsightsViewController: UICollectionViewDelegateFlowLayout {
         case .hydration:
             presentHydrationDetail()
         case .exercise:
-            // TODO: Implement exercise detail
             break
         case .medication:
             presentMedicationDetail(for: selectedMedicationDate)
@@ -239,19 +238,15 @@ extension HealthInsightsViewController: UICollectionViewDelegateFlowLayout {
     
     // MARK: - Navigation
     private func presentHydrationDetail() {
-        // Instantiate the view controller from storyboard
         let storyboard = UIStoryboard(name: "Insights", bundle: nil)
         
         guard let hydrationVC = storyboard.instantiateViewController(withIdentifier: "HydrationDetailViewController") as? HydrationDetailViewController else {
-            print("Error: Could not instantiate HydrationDetailViewController")
             return
         }
         
-        // Embed in navigation controller
         let navController = UINavigationController(rootViewController: hydrationVC)
         navController.modalPresentationStyle = .pageSheet
         
-        // Configure sheet presentation (iOS 15+)
         if let sheet = navController.sheetPresentationController {
             sheet.detents = [.large()]
             sheet.prefersGrabberVisible = true
@@ -267,7 +262,6 @@ extension HealthInsightsViewController: UICollectionViewDelegateFlowLayout {
         guard let medicationVC = storyboard.instantiateViewController(
             withIdentifier: "MedicationViewController"
         ) as? MedicationViewController else {
-            print("Error: Could not instantiate MedicationViewController")
             return
         }
 
@@ -287,7 +281,6 @@ extension HealthInsightsViewController: UICollectionViewDelegateFlowLayout {
         guard let symptomsVC = storyboard.instantiateViewController(
             withIdentifier: "SymptomsViewController"
         ) as? SymptomsViewController else {
-            print("Error: Could not instantiate SymptomsViewController")
             return
         }
 

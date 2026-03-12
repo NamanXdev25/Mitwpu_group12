@@ -1,325 +1,4 @@
-//import UIKit
-//import AVFoundation
-//
-//final class BreathingPlayerViewController: UIViewController, AVAudioPlayerDelegate {
-//
-//    var session: BreathingSession?
-//
-//    @IBOutlet weak var backgroundImageView: UIImageView?
-//    @IBOutlet weak var videoContainerView: VideoPlayerContainerView?
-//    @IBOutlet weak var playButton: UIButton?
-//    @IBOutlet weak var timerView: CircularTimerView?
-//
-//    // Video (looping)
-//    private var videoQueuePlayer: AVQueuePlayer?
-//    private var videoLooper: AVPlayerLooper?
-//    private var playerLayer: AVPlayerLayer?
-//
-//    // Audio (single long track)
-//    private var audioPlayer: AVAudioPlayer?
-//
-//    // State
-//    private var isPlaying = false
-//    private var isFirstPlay = true
-//
-//    // Timer engine
-//    private var timer: Timer?
-//    private var secondsRemaining: Int = 0
-//    private var totalSessionDuration: Int = 0
-//    private var isTimerRunning = false
-//
-//    // MARK: - Nav bar config
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//
-//        let appearance = UINavigationBarAppearance()
-//        appearance.configureWithTransparentBackground()
-//        appearance.backgroundColor = .clear
-//        appearance.shadowColor = .clear
-//        appearance.titleTextAttributes = [
-//            .foregroundColor: UIColor.white,
-//            .font: UIFont.systemFont(ofSize: 20, weight: .bold)
-//        ]
-//
-//        navigationController?.navigationBar.standardAppearance = appearance
-//        navigationController?.navigationBar.scrollEdgeAppearance = appearance
-//        navigationController?.navigationBar.compactAppearance = appearance
-//    }
-//
-//    override func viewWillDisappear(_ animated: Bool) {
-//        super.viewWillDisappear(animated)
-//
-//        let defaultAppearance = UINavigationBarAppearance()
-//        defaultAppearance.configureWithDefaultBackground()
-//        defaultAppearance.titleTextAttributes = [
-//            .foregroundColor: UIColor.black,
-//            .font: UIFont.systemFont(ofSize: 20, weight: .semibold)
-//        ]
-//
-//        navigationController?.navigationBar.standardAppearance = defaultAppearance
-//        navigationController?.navigationBar.scrollEdgeAppearance = defaultAppearance
-//        navigationController?.navigationBar.compactAppearance = defaultAppearance
-//
-//        stopAllPlayback()
-//    }
-//
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//
-//        configureAVAudioSession()
-//        setupData()
-//        prepareLoopingVideoAndAudio()
-//        setupTapGesture()
-//        timerView?.reset()
-//    }
-//
-//    deinit {
-//        NotificationCenter.default.removeObserver(self)
-//        stopTimer()
-//    }
-//
-//    // MARK: - Setup
-//    private func configureAVAudioSession() {
-//        do {
-//            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
-//            try AVAudioSession.sharedInstance().setActive(true)
-//        } catch {
-//            print("AVAudioSession error: \(error)")
-//        }
-//    }
-//
-//    private func setupData() {
-//        guard let session else { return }
-//
-//        title = session.title
-//        backgroundImageView?.image = UIImage(named: session.imageName)
-//    }
-//
-//    private func prepareLoopingVideoAndAudio() {
-//        guard let session else { return }
-//        guard let media = BreathingMediaCatalog.media(for: session.title) else {
-//            print("No media mapping found for session title: \(session.title)")
-//            return
-//        }
-//
-//        prepareLoopingVideo(videoName: media.videoName)
-//        prepareAudio(audioName: media.audioName)
-//
-//        timerView?.reset()
-//        timerView?.updateProgress(secondsRemaining: secondsRemaining, totalDuration: max(totalSessionDuration, 1))
-//    }
-//
-//    private func prepareLoopingVideo(videoName: String) {
-//        guard let url = Bundle.main.url(forResource: videoName, withExtension: "mp4") else {
-//            print("Video not found: \(videoName).mp4")
-//            return
-//        }
-//
-//        let item = AVPlayerItem(url: url)
-//        let queue = AVQueuePlayer()
-//        queue.isMuted = true
-//        queue.actionAtItemEnd = .none
-//
-//        let looper = AVPlayerLooper(player: queue, templateItem: item)
-//        let layer = AVPlayerLayer(player: queue)
-//        layer.videoGravity = .resizeAspectFill
-//
-//        guard let videoContainerView else {
-//            print("videoContainerView outlet not connected")
-//            return
-//        }
-//
-//        layer.frame = videoContainerView.bounds
-//        videoContainerView.playerLayer = layer
-//
-//        videoQueuePlayer = queue
-//        videoLooper = looper
-//        playerLayer = layer
-//    }
-//
-//    private func prepareAudio(audioName: String) {
-//        let supportedExtensions = ["mp3", "m4a", "wav", "aac"]
-//        var foundURL: URL?
-//
-//        for ext in supportedExtensions {
-//            if let url = Bundle.main.url(forResource: audioName, withExtension: ext) {
-//                foundURL = url
-//                break
-//            }
-//        }
-//
-//        guard let audioURL = foundURL else {
-//            print("Audio not found for: \(audioName)")
-//            return
-//        }
-//
-//        do {
-//            let player = try AVAudioPlayer(contentsOf: audioURL)
-//            player.delegate = self
-//            player.prepareToPlay()
-//            audioPlayer = player
-//
-//            totalSessionDuration = max(Int(player.duration.rounded()), 1)
-//            secondsRemaining = totalSessionDuration
-//        } catch {
-//            print("Audio init failed: \(error)")
-//        }
-//    }
-//
-//    private func setupTapGesture() {
-//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(screenTapped))
-//        view.addGestureRecognizer(tapGesture)
-//    }
-//
-//    @objc private func screenTapped() {
-//        if !isFirstPlay {
-//            togglePlayPause()
-//        }
-//    }
-//
-//    // MARK: - Actions
-//    @IBAction func playButtonTapped(_ sender: UIButton) {
-//        if isFirstPlay {
-//            startBreathingSequence()
-//        } else {
-//            togglePlayPause()
-//        }
-//    }
-//
-//    private func startBreathingSequence() {
-//        guard audioPlayer != nil else {
-//            print("audioPlayer is nil - check media mapping or bundle file")
-//            return
-//        }
-//
-//        isFirstPlay = false
-//        isPlaying = true
-//
-//        playButton?.isHidden = true
-//        timerView?.showMessage("Take a deep breath in...")
-//
-//        videoQueuePlayer?.play()
-//        audioPlayer?.play()
-//
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
-//            self?.startTimer()
-//        }
-//
-//        hideBackground()
-//    }
-//
-//    private func togglePlayPause() {
-//        if isPlaying {
-//            // Pause
-//            audioPlayer?.pause()
-//            videoQueuePlayer?.pause()
-//            stopTimer()
-//            isPlaying = false
-//
-//            timerView?.setTimerTextHidden(true)
-//            playButton?.isHidden = false
-//            showBackground()
-//        } else {
-//            // Resume
-//            audioPlayer?.play()
-//            videoQueuePlayer?.play()
-//            startTimer()
-//            isPlaying = true
-//
-//            timerView?.setTimerTextHidden(false)
-//            playButton?.isHidden = true
-//            hideBackground()
-//        }
-//    }
-//
-//    // MARK: - Timer Engine
-//    private func startTimer() {
-//        stopTimer()
-//        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
-//            self?.tick()
-//        }
-//        isTimerRunning = true
-//    }
-//
-//    private func stopTimer() {
-//        timer?.invalidate()
-//        timer = nil
-//        isTimerRunning = false
-//    }
-//
-//    private func tick() {
-//        guard let audioPlayer else { return }
-//
-//        // sync timer with actual audio current time
-//        let current = Int(audioPlayer.currentTime.rounded())
-//        let total = max(totalSessionDuration, 1)
-//        secondsRemaining = max(total - current, 0)
-//
-//        timerView?.updateProgress(secondsRemaining: secondsRemaining, totalDuration: total)
-//
-//        if secondsRemaining <= 0 || !audioPlayer.isPlaying {
-//            handleSessionFinished()
-//        }
-//    }
-//
-//    private func handleSessionFinished() {
-//        stopTimer()
-//        audioPlayer?.pause()
-//        videoQueuePlayer?.pause()
-//        isPlaying = false
-//
-//        timerView?.setFullProgress()
-//        timerView?.showMessage("A quiet bloom marks your moment of peace")
-//
-//        CoinRewardService.shared.awardBreathingCoinsIfEligible(on: self)
-//
-//        playButton?.isHidden = true
-//        UIView.animate(withDuration: 0.3) {
-//            self.backgroundImageView?.alpha = 1
-//        }
-//
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
-//            guard let self else { return }
-//
-//            self.timerView?.reset()
-//            self.isFirstPlay = true
-//
-//            self.secondsRemaining = self.totalSessionDuration
-//            self.audioPlayer?.currentTime = 0
-//            self.videoQueuePlayer?.seek(to: .zero)
-//
-//            self.playButton?.isHidden = false
-//            let config = UIImage.SymbolConfiguration(pointSize: 60)
-//            self.playButton?.setImage(UIImage(systemName: "play.fill", withConfiguration: config), for: .normal)
-//        }
-//    }
-//
-//    // MARK: - AVAudioPlayerDelegate
-//    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-//        handleSessionFinished()
-//    }
-//
-//    // MARK: - View State
-//    private func showBackground() {
-//        UIView.animate(withDuration: 0.3) {
-//            self.backgroundImageView?.alpha = 1
-//        }
-//    }
-//
-//    private func hideBackground() {
-//        UIView.animate(withDuration: 0.5) {
-//            self.backgroundImageView?.alpha = 0
-//        }
-//    }
-//
-//    private func stopAllPlayback() {
-//        stopTimer()
-//        audioPlayer?.pause()
-//        videoQueuePlayer?.pause()
-//    }
-//}
 
-// BreathingPlayerViewController.swift
 import UIKit
 import AVFoundation
 import CoreMedia
@@ -333,19 +12,15 @@ final class BreathingPlayerViewController: UIViewController, AVAudioPlayerDelega
     @IBOutlet weak var playButton: UIButton?
     @IBOutlet weak var timerView: CircularTimerView?
 
-    // Video (looping)
     private var videoQueuePlayer: AVQueuePlayer?
     private var videoLooper: AVPlayerLooper?
     private var playerLayer: AVPlayerLayer?
 
-    // Audio (single long track)
     private var audioPlayer: AVAudioPlayer?
 
-    // State
     private var isPlaying = false
     private var isFirstPlay = true
 
-    // Timer
     private var timer: Timer?
     private var secondsRemaining: Int = 0
     private var totalSessionDuration: Int = 0
@@ -413,7 +88,6 @@ final class BreathingPlayerViewController: UIViewController, AVAudioPlayerDelega
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
             try AVAudioSession.sharedInstance().setActive(true)
         } catch {
-            print("AVAudioSession error: \(error)")
         }
     }
 
@@ -426,7 +100,6 @@ final class BreathingPlayerViewController: UIViewController, AVAudioPlayerDelega
     private func prepareLoopingVideoAndAudio() {
         guard let session else { return }
         guard let media = BreathingMediaCatalog.media(for: session.title) else {
-            print("No media mapping found for session title: \(session.title)")
             return
         }
 
@@ -450,7 +123,6 @@ final class BreathingPlayerViewController: UIViewController, AVAudioPlayerDelega
         loopEndTrim: Double
     ) {
         guard let url = Bundle.main.url(forResource: videoName, withExtension: "mp4") else {
-            print("Video not found: \(videoName).mp4")
             return
         }
 
@@ -463,7 +135,6 @@ final class BreathingPlayerViewController: UIViewController, AVAudioPlayerDelega
         let end = CMTimeSubtract(duration, endTrim)
 
         guard end > start else {
-            print("Invalid loop trims for \(videoName)")
             return
         }
 
@@ -477,7 +148,6 @@ final class BreathingPlayerViewController: UIViewController, AVAudioPlayerDelega
                 preferredTrackID: kCMPersistentTrackID_Invalid
             )
         else {
-            print("Video track missing for \(videoName)")
             return
         }
 
@@ -485,7 +155,6 @@ final class BreathingPlayerViewController: UIViewController, AVAudioPlayerDelega
             try compTrack.insertTimeRange(clipRange, of: srcTrack, at: .zero)
             compTrack.preferredTransform = srcTrack.preferredTransform
         } catch {
-            print("Failed to trim video: \(error)")
             return
         }
 
@@ -505,7 +174,6 @@ final class BreathingPlayerViewController: UIViewController, AVAudioPlayerDelega
         layer.needsDisplayOnBoundsChange = true
 
         guard let videoContainerView else {
-            print("videoContainerView outlet not connected")
             return
         }
 
@@ -532,7 +200,6 @@ final class BreathingPlayerViewController: UIViewController, AVAudioPlayerDelega
         }
 
         guard let audioURL = foundURL else {
-            print("Audio not found for: \(audioName)")
             return
         }
 
@@ -545,7 +212,6 @@ final class BreathingPlayerViewController: UIViewController, AVAudioPlayerDelega
             totalSessionDuration = max(Int(player.duration.rounded()), 1)
             secondsRemaining = totalSessionDuration
         } catch {
-            print("Audio init failed: \(error)")
         }
     }
 
@@ -571,7 +237,6 @@ final class BreathingPlayerViewController: UIViewController, AVAudioPlayerDelega
 
     private func startBreathingSequence() {
         guard audioPlayer != nil else {
-            print("audioPlayer is nil - check media mapping or bundle files")
             return
         }
 

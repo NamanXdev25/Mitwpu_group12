@@ -1,9 +1,3 @@
-//
-//  SymptomLogButtonCell.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 08/01/26.
-//
 
 import UIKit
 

@@ -1,9 +1,3 @@
-//
-//  MindfulnessDataLoader.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 15/12/25.
-//
 
 import Foundation
 
@@ -18,7 +12,6 @@ class MindfulnessDataLoader {
     private func load() {
         guard let url = Bundle.main.url(forResource: "moodSuggestion", withExtension: "json"),
               let data = try? Data(contentsOf: url) else {
-            print("Mindfulness JSON not found")
             return
         }
 
@@ -26,7 +19,6 @@ class MindfulnessDataLoader {
             let dec = JSONDecoder()
             root = try dec.decode(MindfulnessJSONRoot.self, from: data)
         } catch {
-            print("JSON decode error:", error)
         }
     }
 

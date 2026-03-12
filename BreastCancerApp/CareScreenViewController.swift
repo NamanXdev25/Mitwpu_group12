@@ -28,7 +28,6 @@ class CareScreenViewController: UIViewController {
     private let hydrationGoalOptionsML = [1500, 2000, 2500, 3000, 3500]
     private let hydrationCupOptionsML = [100, 150, 200, 250, 300]
 
-    // Custom dropdown UI
     private var dropdownOverlay: UIControl?
     private var dropdownPanel: UIView?
     private var dropdownTableView: UITableView?
@@ -640,12 +639,12 @@ extension CareScreenViewController: UICollectionViewDelegate {
         case .hydration:
             isHydrationExpanded.toggle()
             applySnapshot(animatingDifferences: true)
-        case .medication(let title, _, _):
-            print("👆 Selected medication: \(title)")
-        case .exercise(let title, _, _):
-            print("👆 Selected exercise: \(title)")
+        case .medication(_, _, _):
+            break
+        case .exercise(_, _, _):
+            break
         case .symptoms:
-            print("👆 View all symptoms tapped")
+            break
         case .appointment(_, _, _, _, _):
             guard let appointment = closestUpcomingAppointment() else { return }
             let storyboard = UIStoryboard(name: "Appointments", bundle: nil)
@@ -662,7 +661,7 @@ extension CareScreenViewController: UICollectionViewDelegate {
             }
             present(navController, animated: true)
         case .healthInsights:
-            print("👆 View health insights tapped")
+            break
         default:
             break
         }

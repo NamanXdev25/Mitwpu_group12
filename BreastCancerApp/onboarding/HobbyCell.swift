@@ -1,16 +1,10 @@
-//
-//  HobbyCell.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 13/01/26.
-//
 
 import UIKit
 
 class HobbyCell: UICollectionViewCell {
     
-    @IBOutlet private weak var containerView: UIView! // Tag 100
-    @IBOutlet private weak var titleLabel: UILabel!   // Tag 101
+    @IBOutlet private weak var containerView: UIView!
+    @IBOutlet private weak var titleLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -48,7 +42,7 @@ class HobbyCell: UICollectionViewCell {
         
         var frame = layoutAttributes.frame
         frame.size.width = ceil(size.width)
-        frame.size.height = 40 // Fixed height for all cells
+        frame.size.height = 40
         layoutAttributes.frame = frame
         
         return layoutAttributes

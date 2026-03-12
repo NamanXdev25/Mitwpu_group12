@@ -1,9 +1,3 @@
-//
-//  TreatmentOptionView.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 12/01/26.
-//
 
 import UIKit
 
@@ -52,7 +46,6 @@ class TreatmentOptionView: UIView {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         addGestureRecognizer(tapGesture)
         
-        // initial state
         updateSelectionState()
     }
     

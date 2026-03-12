@@ -1,9 +1,3 @@
-//
-//  AppointmentDateCell.swift
-//  Appointments
-//
-//  Created by Naman Bhansali on 11/01/26.
-//
 
 import UIKit
 
@@ -14,13 +8,11 @@ class AppointmentDateCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Make selection layer circular
         selectionLayer.layer.cornerRadius = selectionLayer.frame.width / 2
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        // Ensure selection layer stays circular even after layout changes
         selectionLayer.layer.cornerRadius = selectionLayer.frame.width / 2
     }
     

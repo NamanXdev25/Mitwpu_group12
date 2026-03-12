@@ -18,7 +18,6 @@ class CareHeaderCell: UICollectionViewCell {
         Titlelabel.text = ""
         Managelabel.text = "Manage"
         
-        // Make the Manage label tappable
         Managelabel.isUserInteractionEnabled = true
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(manageLabelTapped))
         Managelabel.addGestureRecognizer(tapGesture)

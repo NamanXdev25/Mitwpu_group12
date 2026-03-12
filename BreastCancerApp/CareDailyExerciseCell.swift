@@ -12,7 +12,6 @@ final class CareDailyExerciseCell: UICollectionViewCell {
     @IBOutlet weak var ExerciseTitle: UILabel!
     @IBOutlet weak var ExerciseBeginButton: UIButton!
 
-    // Optional: connect only if you add a dedicated empty-state label in storyboard/xib.
     @IBOutlet weak var ExerciseEmptyStateLabel: UILabel?
 
     weak var delegate: CareDailyExerciseCellDelegate?
@@ -42,7 +41,6 @@ final class CareDailyExerciseCell: UICollectionViewCell {
             if let emptyLabel = ExerciseEmptyStateLabel {
                 emptyLabel.text = emptyText
             } else {
-                // Fallback if there is no dedicated empty-state label wired.
                 ExerciseTitle.text = emptyText
             }
             ExerciseImage.image = nil

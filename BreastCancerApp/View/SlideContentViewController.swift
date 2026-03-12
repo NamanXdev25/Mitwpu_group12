@@ -1,9 +1,3 @@
-//
-//  SlideContentViewController.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 08/12/25.
-//
 
 import UIKit
 

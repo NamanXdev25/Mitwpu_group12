@@ -40,32 +40,24 @@ class StoreItemCell: UICollectionViewCell {
         itemImageView.image = UIImage(named: item.imageName)
 
         if showPrice {
-            // Nature / Wellness tab: show coin icon + price number
             coinImageView.isHidden = false
             priceLabel.isHidden    = false
             priceLabel.text        = "\(item.price)"
         } else {
-            // Your Items tab (regular unlocked item): show name, hide coin
             coinImageView.isHidden = true
             priceLabel.isHidden    = false
             priceLabel.text        = item.name
         }
 
-        // Clear any leftover base styling from cell reuse
         resetBaseStyle()
     }
 
     // MARK: - Your Items configure (bases + unlocked items)
 
-    /// Call this instead of configure() when populating the "Your Items" tab.
-    /// - isBase: pass true when the item represents a garden base tile.
-    /// - isSelectedBase: pass true when this base is currently active.
     func configureAsYourItem(_ item: StoreItem, isBase: Bool, isSelectedBase: Bool) {
-        // Reuse existing logic — no price shown in Your Items
         configure(with: item, showPrice: false)
 
         if isBase {
-            // Highlight border: green = active, gray = unlocked but not active
             cardContainerView.layer.borderWidth = isSelectedBase ? 3.0 : 1.5
             cardContainerView.layer.borderColor = isSelectedBase
                 ? UIColor.systemGreen.cgColor

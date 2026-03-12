@@ -1,7 +1,3 @@
-//
-//  HealthFieldCell.swift
-//  BreastCancerApp
-//
 
 import UIKit
 

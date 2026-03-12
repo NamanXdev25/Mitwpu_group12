@@ -1,9 +1,3 @@
-//
-//  ExploreLabelCell.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 10/12/25.
-//
 
 import UIKit
 
@@ -13,7 +7,6 @@ class MindfulnessExploreLabelCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
         
     }
 }

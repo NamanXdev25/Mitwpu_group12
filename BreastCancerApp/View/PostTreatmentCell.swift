@@ -35,9 +35,7 @@ class PostTreatmentCell: UICollectionViewCell {
     var onSaveButtonTapped: (() -> Void)?
     var onEditButtonTapped: (() -> Void)?
     var onCellHeightChanged: (() -> Void)?
-    /// Fired every time the user picks/clears a date inside the cell's own picker
     var onDateChanged: ((Date?) -> Void)?
-    /// Fired every time the symptom selection changes
     var onSymptomsChanged: ((Set<String>) -> Void)?
 
     private var fadableViews: [UIView] {
@@ -93,9 +91,6 @@ class PostTreatmentCell: UICollectionViewCell {
 
     // MARK: - Setup
     private func setupCell() {
-        // FIX: Removed the three UserDefaults.removeObject calls that were here.
-        // They wiped saved state every time the cell was dequeued from the reuse pool.
-        // State is now owned entirely by the VC via restoreState(_:).
 
         contentView.layer.cornerRadius = 16
         contentView.backgroundColor = .white
@@ -153,7 +148,6 @@ class PostTreatmentCell: UICollectionViewCell {
         selectedSymptoms = state.selectedSymptoms
         isSaved          = state.isSaved
 
-        // Restore date label
         if let date = selectedDate {
             let f = DateFormatter(); f.dateFormat = "dd/MM/yyyy"
             dateLabel.text      = f.string(from: date)
@@ -163,7 +157,6 @@ class PostTreatmentCell: UICollectionViewCell {
             dateLabel.textColor = .placeholderText
         }
 
-        // Restore symptom button appearances
         for (btn, title) in symptomTitles {
             selectedSymptoms.contains(title) ? applySelectedStyle(to: btn) : applyDeselectedStyle(to: btn)
         }
@@ -397,7 +390,6 @@ class PostTreatmentCell: UICollectionViewCell {
         updateSaveButtonState()
     }
 
-    /// Legacy configure() kept for any un-migrated call-sites.
     func configure() {
         for (btn, title) in symptomTitles {
             selectedSymptoms.contains(title) ? applySelectedStyle(to: btn) : applyDeselectedStyle(to: btn)

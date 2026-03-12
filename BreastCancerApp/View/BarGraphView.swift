@@ -1,9 +1,3 @@
-//
-//  BarGraphView.swift
-//  BreastCancerApp
-//
-//  Created by Shloka on 10/02/26.
-//
 import UIKit
 
 class BarGraphView: UIView {
@@ -17,7 +11,6 @@ class BarGraphView: UIView {
     private let dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
     private var selectedIndex: Int? { didSet { setNeedsDisplay() } }
     
-    // Layout Constants to match Figma
     private let sideMargin: CGFloat = 20
     private let topMargin: CGFloat = 30
     private let bottomLabelPadding: CGFloat = 30
@@ -109,21 +102,19 @@ class BarGraphView: UIView {
         
         barRects.removeAll()
         for (i, val) in dataPoints.enumerated() {
-            let barWidth = colWidth * 0.55 // Matches Figma spacing
+            let barWidth = colWidth * 0.55
             let barHeight = (CGFloat(val) / maxValue) * usableHeight
             let x = sideMargin + (CGFloat(i) * colWidth) + (colWidth - barWidth) / 2
             let y = (rect.height - bottomLabelPadding) - barHeight
             let barRect = CGRect(x: x, y: y, width: barWidth, height: barHeight)
             barRects.append(barRect)
             
-            // Draw Selection Highlight (Subtle Pink Column Background)
             if i == selectedIndex {
                 let highlightRect = CGRect(x: sideMargin + CGFloat(i) * colWidth, y: topMargin - 10, width: colWidth, height: rect.height - bottomLabelPadding - topMargin + 10)
                 xibBarColor.withAlphaComponent(0.08).setFill()
                 UIRectFill(highlightRect)
             }
             
-            // Minimal 4pt top rounding; rectangular base
             let path = UIBezierPath(roundedRect: barRect, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 4.0, height: 4.0))
             xibBarColor.setFill(); path.fill()
         }

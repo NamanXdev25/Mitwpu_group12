@@ -54,7 +54,6 @@ class VideoControlsCell: UICollectionViewCell {
         updateTimeLabels()
         updateProgress()
         
-        // Ensure play button matches current state (optional, but good practice)
         let config = UIImage.SymbolConfiguration(pointSize: 56, weight: .thin)
         let iconName = isPlaying ? "pause.circle.fill" : "play.circle.fill"
         playButton.setImage(UIImage(systemName: iconName, withConfiguration: config), for: .normal)

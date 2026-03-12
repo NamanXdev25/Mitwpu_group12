@@ -1,9 +1,3 @@
-//
-//  SymptomsDataSource.swift
-//  symptomTracking
-//
-//  Created by Shivani Dinesh on 04/01/26.
-//
 
 import Foundation
 
@@ -27,7 +21,6 @@ class SymptomDataSource {
         guard let url = Bundle.main.url(forResource: "Symptoms", withExtension: "json"),
               let data = try? Data(contentsOf: url),
               let symptomsData = try? JSONDecoder().decode(SymptomsData.self, from: data) else {
-            print("Failed to load symptoms from JSON")
             return
         }
 
@@ -56,8 +49,6 @@ class SymptomDataSource {
         }
     }
 
-    // Removes the historical built-in seed dataset that was previously auto-written.
-    // This keeps real user logs but drops only the exact known legacy sample pattern.
     private func removeLegacySeedLogsIfNeeded(from logs: [SymptomLog]) -> [SymptomLog] {
         guard !logs.isEmpty else { return logs }
 
@@ -115,7 +106,6 @@ class SymptomDataSource {
             }
         }
 
-        // Avoid deleting real user logs when only 1-2 signatures happen to overlap.
         guard removalIndices.count >= 8 else { return logs }
 
         return logs.enumerated().compactMap { index, log in

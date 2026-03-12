@@ -110,7 +110,6 @@ final class SupabaseAuthService {
                     return
                 }
 
-                // If email confirmation is disabled, signup usually returns a session.
                 if let session = try? JSONDecoder().decode(SupabaseAuthSessionResponse.self, from: payload.data) {
                     if session.access_token != nil {
                         self.completeSupabaseSession(
@@ -121,14 +120,12 @@ final class SupabaseAuthService {
                         return
                     }
 
-                    // Signup succeeded but no access token => confirmation flow.
                     if session.user != nil {
                         completion(.failure(.emailVerificationRequired))
                         return
                     }
                 }
 
-                // Fallback: try password grant if backend returned an unexpected payload.
                 self.signInWithPasswordSupabaseAuth(
                     email: normalizedEmail,
                     password: trimmedPassword,

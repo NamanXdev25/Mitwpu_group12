@@ -28,7 +28,6 @@ extension ArticleDetailDataSource: UICollectionViewDataSource {
         case .header:
             return 1
         case .content:
-            // +1 for the title at the top
             return article.contentBlocks.count + 1
         }
     }
@@ -50,7 +49,6 @@ extension ArticleDetailDataSource: UICollectionViewDataSource {
 
         case .content:
 
-            // index 0 = article title in bold
             if indexPath.item == 0 {
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: "ArticleContentCell",
@@ -67,7 +65,6 @@ extension ArticleDetailDataSource: UICollectionViewDataSource {
                 return cell
             }
 
-            // offset by 1 to account for the title cell
             let block = article.contentBlocks[indexPath.item - 1]
 
             switch block.type {

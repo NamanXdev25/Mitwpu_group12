@@ -1,9 +1,3 @@
-//
-//  ProgressBarView.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 12/01/26.
-//
 
 import UIKit
 

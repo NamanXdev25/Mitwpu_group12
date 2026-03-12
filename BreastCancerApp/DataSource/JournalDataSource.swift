@@ -2,7 +2,6 @@ import UIKit
 
 class JournalDataSource {
 
-    // Sections
     enum Section: Int, CaseIterable {
         case streak
         case actions
@@ -10,7 +9,6 @@ class JournalDataSource {
         case all
     }
 
-    // Action Cell
     struct JournalAction: Hashable {
         let id = UUID()
         let title: String
@@ -18,7 +16,6 @@ class JournalDataSource {
         let iconName: String
     }
 
-    // Variables
     private weak var collectionView: UICollectionView?
     private(set) var dataSource: UICollectionViewDiffableDataSource<Section, UUID>!
 
@@ -26,7 +23,6 @@ class JournalDataSource {
     private var streak: Int
     private var thisWeekCount: Int
 
-    // buttons
     var didTapSeeAll: (() -> Void)?
     
     var didTapBlankJournal: (() -> Void)?
@@ -36,7 +32,6 @@ class JournalDataSource {
     var didTapEdit: ((JournalEntry)->Void)?
 
 
-    // Modes
     private var mode: Mode
     
     enum Mode {
@@ -44,12 +39,10 @@ class JournalDataSource {
         case allJournals
     }
 
-    // Actions
     let actions: [JournalAction] = [
         JournalAction(title: "Guided Reflection", subtitle: "Prompts for everyday journaling", iconName: "sparkles")
     ]
 
-    // Init
     init(
         collectionView: UICollectionView,
         mode: Mode,
@@ -66,14 +59,12 @@ class JournalDataSource {
         configureDataSource()
     }
     
-    // Configure datasource
     private func configureDataSource() {
         guard let collectionView = collectionView else { return }
 
         dataSource = UICollectionViewDiffableDataSource<Section, UUID>(collectionView: collectionView) { collectionView, indexPath, id in
 
             switch self.mode {
-            // Main screen
             case .mainScreen:
                 guard let section = Section(rawValue: indexPath.section) else { return nil }
                 switch section {
@@ -99,7 +90,7 @@ class JournalDataSource {
                         )
                         cell.didTap = {
                             [weak self] in
-                            if indexPath.item == 0 {  // Guided Journal
+                            if indexPath.item == 0 {
                                 self?.didTapGuidedJournal?()
                             }
                         }
@@ -128,7 +119,6 @@ class JournalDataSource {
                         return nil
                 }
 
-            // All journals screen
             case .allJournals:
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: RecentJournalCell.reuseIdentifier,
@@ -150,7 +140,6 @@ class JournalDataSource {
             }
         }
 
-        // Headers
         dataSource.supplementaryViewProvider = { collectionView, kind, indexPath in
             guard kind == UICollectionView.elementKindSectionHeader else { return nil }
             guard let section = Section(rawValue: indexPath.section) else { return nil }
@@ -186,13 +175,11 @@ class JournalDataSource {
         }
     }
 
-    // SNAPSHOTS
     func applySnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, UUID>()
 
         switch mode {
             
-        // MAIN SCREEN SNAPSHOT
         case .mainScreen:
             let hasEntries = !entries.isEmpty
             var sections: [Section] = [.streak, .actions]
@@ -208,7 +195,6 @@ class JournalDataSource {
                 snapshot.reconfigureItems(recent3.map { $0.id })
             }
 
-        // ALL JOURNALS SNAPSHOT
         case .allJournals:
             snapshot.appendSections([.all])
             snapshot.appendItems(entries.map { $0.id }, toSection: .all)
@@ -216,7 +202,6 @@ class JournalDataSource {
         dataSource.apply(snapshot, animatingDifferences: false)
     }
 
-    // ITEM LOOKUP
     func item(for indexPath: IndexPath) -> JournalEntry? {
         let id = dataSource.itemIdentifier(for: indexPath)
         return entries.first(where: { $0.id == id })

@@ -75,7 +75,6 @@ final class SignUpViewController: UIViewController {
         guard let profileSetupVC = storyboard.instantiateViewController(
             withIdentifier: "ProfileSetupViewController"
         ) as? ProfileSetupViewController else {
-            print("Failed to instantiate ProfileSetupViewController")
             return
         }
         
@@ -110,7 +109,6 @@ extension SignUpViewController: UICollectionViewDataSource {
                 for: indexPath
             ) as! SignUpFormCell
             
-            // Set delegate
             cell.delegate = self
             return cell
 
@@ -163,7 +161,6 @@ extension SignUpViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-// SignUpFormCellDelegate
 extension SignUpViewController: SignUpFormCellDelegate {
     
     func signUpFormCellDidTapSignUp(_ cell: SignUpFormCell, email: String, password: String, reenterPassword: String, agreedToTerms: Bool) {

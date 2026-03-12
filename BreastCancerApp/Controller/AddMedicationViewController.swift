@@ -1,9 +1,3 @@
-//
-//  AddMedicationViewController.swift
-//  Medication
-//
-//  Created by Naman Bhansali on 15/01/26.
-//
 
 import UIKit
 
@@ -23,11 +17,9 @@ class AddMedicationViewController: UIViewController, UIPickerViewDelegate, UIPic
     @IBOutlet weak var noteTextView: UITextView!
     @IBOutlet weak var saveBarButton: UIBarButtonItem!
     
-    // Chevron Image Views
     @IBOutlet weak var repeatChevronImageView: UIImageView!
     @IBOutlet weak var timeChevronImageView: UIImageView!
     
-    // Popup Outlets
     @IBOutlet weak var pickerOverlay: UIView!
     @IBOutlet weak var pickerCard: UIView!
     @IBOutlet weak var repeatPicker: UIPickerView!
@@ -49,24 +41,21 @@ class AddMedicationViewController: UIViewController, UIPickerViewDelegate, UIPic
         setupChevronTapGestures()
         setupPickerOverlay()
         
-        // Prefill data if editing
         if let med = medicationToEdit {
             nameTextField.text = med.name
             repeatTextField.text = med.repeatOption
-            repeatTextField.textColor = .black  // Normal color when editing
+            repeatTextField.textColor = .black
             timeTextField.text = med.time
             noteTextView.text = med.note.isEmpty ? "Add a note (optional)" : med.note
             noteTextView.textColor = med.note.isEmpty ? .lightGray : .black
-            reminderSwitch.isOn = med.reminderEnabled  // Load reminder state
+            reminderSwitch.isOn = med.reminderEnabled
             title = "Edit Medication"
             
-            // Set picker to the correct repeat option
             if let index = repeatOptions.firstIndex(of: med.repeatOption) {
                 repeatPicker.selectRow(index, inComponent: 0, animated: false)
             }
         } else {
             title = "Add Medication"
-            // Set initial grayed out state for repeat field
             repeatTextField.text = "Every Day"
             repeatTextField.textColor = .lightGray
             reminderSwitch.isOn = true
@@ -81,7 +70,6 @@ class AddMedicationViewController: UIViewController, UIPickerViewDelegate, UIPic
         }
         noteTextView.delegate = self
         
-        // Configure time picker
         timePicker.datePickerMode = .time
         timePicker.preferredDatePickerStyle = .wheels
         timePicker.locale = Locale(identifier: "en_US")
@@ -142,7 +130,6 @@ class AddMedicationViewController: UIViewController, UIPickerViewDelegate, UIPic
     func showRepeatPicker() {
         view.endEditing(true)
         
-        // Sync picker to current selection
         if let currentText = repeatTextField.text,
            let index = repeatOptions.firstIndex(of: currentText) {
             repeatPicker.selectRow(index, inComponent: 0, animated: false)
@@ -164,7 +151,7 @@ class AddMedicationViewController: UIViewController, UIPickerViewDelegate, UIPic
         if !repeatPicker.isHidden {
             let selectedRow = repeatPicker.selectedRow(inComponent: 0)
             repeatTextField.text = repeatOptions[selectedRow]
-            repeatTextField.textColor = .black  // Change to normal color after selection
+            repeatTextField.textColor = .black
         } else if !timePicker.isHidden {
             let formatter = DateFormatter()
             formatter.timeStyle = .short
@@ -188,12 +175,11 @@ class AddMedicationViewController: UIViewController, UIPickerViewDelegate, UIPic
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         repeatTextField.text = repeatOptions[row]
-        repeatTextField.textColor = .black  // Change to normal color after selection
+        repeatTextField.textColor = .black
     }
     
     // MARK: - Actions
     @IBAction func closeTapped(_ sender: UIBarButtonItem) {
-        // Pop back to MedicationViewController
         navigationController?.popViewController(animated: true)
     }
     
@@ -226,7 +212,6 @@ class AddMedicationViewController: UIViewController, UIPickerViewDelegate, UIPic
             delegate?.didAddMedication(name: name, time: time, repeatOption: repeatText, note: note, reminderEnabled: reminderEnabled)
         }
         
-        // Pop back to MedicationViewController
         navigationController?.popViewController(animated: true)
     }
     

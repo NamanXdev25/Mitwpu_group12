@@ -1,9 +1,3 @@
-//
-//  SymptomHeaderView.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 25/11/25.
-//
 
 import UIKit
 

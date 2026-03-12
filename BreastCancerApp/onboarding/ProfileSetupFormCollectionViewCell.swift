@@ -1,9 +1,3 @@
-//
-//  ProfileSetupFormCollectionViewCell.swift
-//  BreastCancerApp
-//
-//  Created by SDC-USER on 20/01/26.
-//
 
 import UIKit
 

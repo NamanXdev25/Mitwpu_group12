@@ -1,33 +1,4 @@
-//
-//  HomeSuggestionEngine.swift
-//  BreastCancerApp
-//
 
-// Picks breathing + hobby suggestions using a weighted algorithm.
-//
-// WEIGHT BANDS — breathing:
-//   Phase × Mood combo   : +36–50  (highest — most personalised breathing signal)
-//   Phase match          : +15–32  (journey phase)
-//   Mood match           : +10–20  (current feeling)
-//   Tap history          : ×4
-//   Base                 : 10
-//
-// WEIGHT BANDS — hobby (tag-driven via HobbyActivityLoader):
-//   HARD GATE: Phase — phaseTags non-empty must match user's phase (else excluded)
-//   HARD GATE: Mood  — moodTags non-empty must match user's mood (else excluded)
-//   Phase tag match      : +30     (activity.phaseTags contains current phase)
-//   Mood tag match       : +20     (activity.moodTags contains current mood)
-//   Symptom tag match    : +25 ×n  (phase-typical symptoms baked into activity tags)
-//   Age range match      : +15
-//   Onboarding category  : +20
-//   Tap history          : ×4
-//   Base                 : 10
-//
-// NOTE: We do NOT ask users for symptoms during treatment.
-// Symptom awareness for hobbies/journal comes from the phaseTags + symptomTags
-// baked into hobbyActivities.json and journalPrompts.json — e.g. all activities
-// tagged ["chemotherapy"] were written for patients experiencing nausea/fatigue.
-// Breathing suggestions are scored by phase + mood only (no symptom input).
 
 import Foundation
 
@@ -60,8 +31,6 @@ struct HomeSuggestionEngine {
         let ctx = AppContext.current(moodKey: moodKey)
         var result: [Suggestion] = []
 
-        // ── Breathing ──────────────────────────────────────────────────────
-        // Scored by phase + mood only. No symptom input from user.
         let breathingCandidates = buildBreathingCandidates(from: content.breathing, moodKey: moodKey, ctx: ctx)
         let breathingFiltered   = breathingCandidates.filter { !recentBreathing.contains($0.title.lowercased()) }
         let breathingPool       = breathingFiltered.isEmpty ? breathingCandidates : breathingFiltered
@@ -78,10 +47,6 @@ struct HomeSuggestionEngine {
             ))
         }
 
-        // ── Hobby ──────────────────────────────────────────────────────────
-        // Tag-driven via HobbyActivityLoader. Activities have phaseTags,
-        // moodTags, symptomTags (typical for that phase), ageRange.
-        // The loader now enforces HARD GATES on mood and phase matching.
         if let activity = HobbyActivityLoader.shared.selectActivity(
             ctx:         ctx,
             avoidingIDs: recentHobbyIDs
@@ -98,8 +63,6 @@ struct HomeSuggestionEngine {
 
     // MARK: - Journal prompt
 
-    /// Returns the best journal prompt for the current context.
-    /// Replaces HomeModel.randomJournalSuggestion — call this instead.
     static func journalPrompt(
         for moodKey: String,
         avoidingIDs: Set<String> = []
@@ -125,18 +88,13 @@ struct HomeSuggestionEngine {
         }
     }
 
-    // Phase → preferred breathing (weight 15–32)
     private static func breathingPhaseScore(title: String, ctx: AppContext) -> Int {
-        // When phase is unknown ("Not Started Yet"), don't boost any phase-specific breathing
         if ctx.isPhaseUnknown { return 0 }
 
         let t = normalize(title)
         switch ctx.effectiveTreatmentType {
 
         case "chemotherapy":
-            // Chemo patients typically have nausea + fatigue — nausea relief
-            // and gentle recharge are clinically the most helpful breathing types.
-            // We don't ask for symptoms but we know what chemo patients feel.
             switch t {
             case "gentle recharge":      return 32
             case "deep rest":            return 28
@@ -220,7 +178,6 @@ struct HomeSuggestionEngine {
         }
     }
 
-    // Mood → preferred breathing (weight 10–20)
     private static func breathingMoodScore(title: String, moodKey: String) -> Int {
         let t = normalize(title)
         switch moodKey.lowercased() {
@@ -265,9 +222,7 @@ struct HomeSuggestionEngine {
         }
     }
 
-    // Mood × Phase combos for breathing (weight 36–50, highest band)
     private static func breathingMoodPhaseComboScore(title: String, moodKey: String, ctx: AppContext) -> Int {
-        // No combos when phase is unknown
         if ctx.isPhaseUnknown { return 0 }
 
         let t = normalize(title)
@@ -323,7 +278,6 @@ struct HomeSuggestionEngine {
         let m     = moodKey.lowercased()
         let phase = ctx.effectiveTreatmentType
 
-        // Mood × Phase combos (highest specificity)
         if m == "anxious" && ctx.isInActiveTreatment && t == "calmer mind" {
             return "Slow your exhale to quiet the fear around treatment."
         }
@@ -349,7 +303,6 @@ struct HomeSuggestionEngine {
             return "Steady breaths to help you take things one day at a time."
         }
 
-        // Phase-only overrides (skip when phase unknown)
         if !ctx.isPhaseUnknown {
             switch phase {
             case "chemotherapy":
@@ -378,7 +331,6 @@ struct HomeSuggestionEngine {
             }
         }
 
-        // Mood-only overrides (used when phase is unknown / "Not Started Yet")
         switch m {
         case "anxious":
             if t == "calmer mind"  { return "Slow, steady breaths to help quiet the worry." }
@@ -404,7 +356,6 @@ struct HomeSuggestionEngine {
     private static func pickDefaultBreathing(ctx: AppContext, avoiding: Set<String>) -> Suggestion? {
         let preferred: String
 
-        // When phase is unknown, use a universally good default
         if ctx.isPhaseUnknown {
             preferred = "Morning Appreciation"
         } else {
@@ -439,7 +390,6 @@ struct HomeSuggestionEngine {
     }
 
     private static func defaultBreathingSubtitle(title: String, ctx: AppContext) -> String {
-        // When phase is unknown, use mood-agnostic general subtitles
         if ctx.isPhaseUnknown {
             switch normalize(title) {
             case "morning appreciation": return "A warm breathing ritual to lift your spirits."

@@ -13,15 +13,12 @@ class UserProfileDataSource {
 
         if let savedProfile = repository.loadProfile() {
             self.userProfile = savedProfile
-            print("Loaded profile from repository")
         } else if let defaultProfile = UserProfileDataSource.loadFromJSON() {
             self.userProfile = defaultProfile
             repository.saveProfile(defaultProfile)
-            print("Loaded profile from JSON")
         } else {
             self.userProfile = ProfileUserProfile(profileImageBase64: nil)
             repository.saveProfile(self.userProfile)
-            print("Using hardcoded default profile")
         }
     }
 
@@ -103,21 +100,17 @@ class UserProfileDataSource {
     func transferFromOnboarding() {
         let onboardingData = OnboardingData.shared
         
-        // Extract first and last name from userName
         let nameParts = onboardingData.userName.split(separator: " ")
         let firstName = nameParts.first.map(String.init) ?? "User"
         let lastName = nameParts.count > 1 ? nameParts.dropFirst().joined(separator: " ") : ""
         
-        // Update profile with onboarding data
         userProfile.firstName = firstName
         userProfile.lastName = lastName
         
-        // Medical information - handle different treatment paths
         let treatmentStatus = onboardingData.treatmentStatus ?? ""
         
         switch treatmentStatus {
         case "Currently in treatment":
-            // Full data available
             if let diagnosisDate = onboardingData.diagnosisDate {
                 userProfile.diagnosisDate = onboardingData.formatDateForProfile(diagnosisDate)
             } else {
@@ -130,17 +123,15 @@ class UserProfileDataSource {
             userProfile.treatmentCompletionDate = ""
             
         case "Under Observation":
-            // Limited data
             userProfile.diagnosisDate = "NA"
-            userProfile.age = 32 // default
+            userProfile.age = 32
             userProfile.cancerStage = "NA"
             userProfile.treatmentState = "Observation"
             userProfile.treatmentCompletionDate = ""
             
         case "Post-treatment / in recovery":
-            // Completion date and interests
             userProfile.diagnosisDate = "NA"
-            userProfile.age = 32 // default
+            userProfile.age = 32
             userProfile.cancerStage = "NA"
             userProfile.treatmentState = "Completed"
             
@@ -151,15 +142,13 @@ class UserProfileDataSource {
             }
             
         case "Prefer not to say":
-            // Minimal data
             userProfile.diagnosisDate = "NA"
-            userProfile.age = 32 // default
+            userProfile.age = 32
             userProfile.cancerStage = "NA"
             userProfile.treatmentState = "Not Specified"
             userProfile.treatmentCompletionDate = ""
             
         default:
-            // Unknown status
             userProfile.diagnosisDate = "NA"
             userProfile.age = 32
             userProfile.cancerStage = "NA"
@@ -167,31 +156,20 @@ class UserProfileDataSource {
             userProfile.treatmentCompletionDate = ""
         }
         
-        // Save and notify
         persistProfile()
         notifyProfileUpdate()
         
-        print("✅ Profile updated from onboarding:")
-        print("Name: \(userProfile.fullName)")
-        print("Treatment Status: \(treatmentStatus)")
-        print("Age: \(userProfile.age)")
-        print("Stage: \(userProfile.cancerStage)")
-        print("Treatment State: \(userProfile.treatmentState)")
-        print("Diagnosis: \(userProfile.diagnosisDate)")
-        print("Completion: \(userProfile.treatmentCompletionDate)")
     }
 
     // MARK: - Persistence
 
     private func persistProfile() {
         repository.saveProfile(userProfile)
-        print("Profile saved to repository")
     }
 
     private static func loadFromJSON() -> ProfileUserProfile? {
         guard let url = Bundle.main.url(forResource: "defaultUser", withExtension: "json"),
               let data = try? Data(contentsOf: url) else {
-            print("Could not find defaultUser.json")
             return nil
         }
 
@@ -199,7 +177,6 @@ class UserProfileDataSource {
             let decoder = JSONDecoder()
             return try decoder.decode(ProfileUserProfile.self, from: data)
         } catch {
-            print("Failed to decode JSON: \(error)")
             return nil
         }
     }

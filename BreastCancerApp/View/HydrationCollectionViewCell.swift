@@ -1,9 +1,3 @@
-//
-//  HydrationCollectionViewCell.swift
-//  BreastCancerApp
-//
-//  Created by Shloka on 02/02/26.
-//
 
 import UIKit
 
@@ -19,7 +13,6 @@ class HydrationCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
 }

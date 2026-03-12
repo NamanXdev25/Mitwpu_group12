@@ -1,9 +1,3 @@
-//
-//  JournalCalendarCell.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 19/01/26.
-//
 
 import UIKit
 
@@ -31,7 +25,6 @@ class JournalCalendarCell: UICollectionViewCell {
     var totalSquares = [String]()
     var journalDays: Set<Date> = []
     
-    // Picker data
     let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     var years = [Int]()
     
@@ -120,7 +113,6 @@ class JournalCalendarCell: UICollectionViewCell {
         let isPickerVisible = !pickerContainerView.isHidden
         
         if isPickerVisible {
-            // Hide picker, show calendar
             pickerContainerView.isHidden = true
             calendarCollectionView.isHidden = false
             monthLabel.textColor = .label
@@ -128,7 +120,6 @@ class JournalCalendarCell: UICollectionViewCell {
                 self.chevronButton.transform = .identity
             }
         } else {
-            // Show picker, hide calendar
             pickerContainerView.isHidden = false
             calendarCollectionView.isHidden = true
             monthLabel.textColor = UIColor(named: "PrimaryColor") ?? UIColor(red: 0.91, green: 0.42, blue: 0.57, alpha: 1.0)

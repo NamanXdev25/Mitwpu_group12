@@ -10,7 +10,6 @@ final class HomeMoodSuggestionLoader {
         guard let url = Bundle.main.url(forResource: "moodSuggestion", withExtension: "json"),
               let rawData = try? Data(contentsOf: url),
               let rawText = String(data: rawData, encoding: .utf8) else {
-            print("Home moodSuggestion.json not found")
             return
         }
 
@@ -25,7 +24,6 @@ final class HomeMoodSuggestionLoader {
         do {
             root = try JSONDecoder().decode(HomeMoodSuggestionRoot.self, from: data)
         } catch {
-            print("Home moodSuggestion decode error:", error)
         }
     }
 

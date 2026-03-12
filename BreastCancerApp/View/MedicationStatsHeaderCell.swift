@@ -1,9 +1,3 @@
-//
-//  MedicationStatsHeaderCell.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 03/02/26.
-//
 
 import UIKit
 
@@ -23,7 +17,6 @@ class MedicationStatsHeaderCell: UICollectionViewCell {
         containerView.layer.cornerRadius = 12
         containerView.backgroundColor = .systemBackground
         
-        // Style labels
         totalScheduledLabel.font = .systemFont(ofSize: 15, weight: .regular)
         totalScheduledLabel.textColor = .systemGray
         totalScheduledLabel.text = "Total scheduled"

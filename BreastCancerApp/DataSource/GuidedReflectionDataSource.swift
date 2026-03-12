@@ -1,9 +1,3 @@
-//
-//  GuidedReflectionDataSource.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 27/11/25.
-//
 
 import Foundation
 
@@ -17,14 +11,12 @@ class GuidedReflectionDataSource {
 
     private func loadQuestions() {
         guard let url = Bundle.main.url(forResource: "GuidedReflectionData", withExtension: "json") else {
-            print("Failed to load JSON")
             return
         }
         do {
             let data = try Data(contentsOf: url)
             questions = try JSONDecoder().decode([GuidedReflectionQuestion].self, from: data)
         } catch {
-            print("JSON parsing error:", error)
         }
     }
 

@@ -22,7 +22,6 @@ class ExerciseInfoCell: UICollectionViewCell {
     }
     
     @IBAction func infoTapped(_ sender: Any) {
-        print("Info button tapped")
         
         if let btn = sender as? UIButton {
             onInfoTap?(btn)

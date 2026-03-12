@@ -1,9 +1,3 @@
-//
-//  MedicationViewController.swift
-//  BreastCancerApp
-//
-//  Created by Shloka Shetty on 3/12/25.
-//
 
 import UIKit
 
@@ -61,7 +55,6 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
     }
     
     private func setupNotificationObserver() {
-        // Listen for medication updates from LogViewController
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(medicationDataDidChange),
@@ -71,7 +64,6 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
     }
     
     @objc private func medicationDataDidChange() {
-        // Reload medications from history
         loadMedications()
         collectionView.reloadData()
     }
@@ -89,26 +81,22 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
 
     // MARK: - Cell Registration
     func registerCells() {
-        // Register stats header cell
         collectionView.register(
             UINib(nibName: "MedicationStatsHeaderCell", bundle: nil),
             forCellWithReuseIdentifier: "stats_header"
         )
         
-        // Register medication item cell
         collectionView.register(
             UINib(nibName: "MedicationItemCell", bundle: nil),
             forCellWithReuseIdentifier: "med_item"
         )
 
-        // Register header view
         collectionView.register(
             UINib(nibName: "MedicationHeaderView", bundle: nil),
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: "med_header"
         )
         
-        // Register cell for empty state
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "empty_state")
     }
     
@@ -139,7 +127,6 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
     func saveMedications() {
         MedicationHistory.shared.saveMedications(allMedications, for: normalizedDisplayDate)
         
-        // Post notification to update LogViewController
         NotificationCenter.default.post(
             name: NSNotification.Name("MedicationDataUpdated"),
             object: nil
@@ -148,12 +135,12 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
 
     // MARK: - UICollectionViewDataSource
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 2 // Section 0: Stats, Section 1: Medications
+        return 2
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == 0 {
-            return 1 // Stats header
+            return 1
         } else {
             return displayedDateMedications.isEmpty ? 1 : displayedDateMedications.count
         }
@@ -162,7 +149,6 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         if indexPath.section == 0 {
-            // Stats header cell
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "stats_header", for: indexPath) as? MedicationStatsHeaderCell else {
                 return UICollectionViewCell()
             }
@@ -175,7 +161,6 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
             return cell
         }
         
-        // Medication items
         if displayedDateMedications.isEmpty {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "empty_state", for: indexPath)
             
@@ -226,7 +211,6 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
             }) {
                 self.allMedications[index].isTaken.toggle()
                 
-                // Reload both the item and the stats header
                 self.collectionView.reloadItems(at: [dynamicIndexPath, IndexPath(item: 0, section: 0)])
                 self.saveMedications()
 
@@ -270,7 +254,6 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, environment) -> NSCollectionLayoutSection? in
             
             if sectionIndex == 0 {
-                // Stats header section
                 let itemSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1.0),
                     heightDimension: .estimated(90)
@@ -288,7 +271,6 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
                 
                 return section
             } else {
-                // Medication items section
                 var config = UICollectionLayoutListConfiguration(appearance: .plain)
                 config.backgroundColor = .clear
                 config.showsSeparators = false
@@ -321,14 +303,12 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
                         return nil
                     }
                     
-                    // DELETE ACTION
                     let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { action, view, completion in
                         self.confirmDelete(actualIndex: actualIndex, displayIndexPath: indexPath, completion: completion)
                     }
                     deleteAction.image = UIImage(systemName: "trash.fill")
                     deleteAction.backgroundColor = .systemRed
                     
-                    // EDIT ACTION
                     let editAction = UIContextualAction(style: .normal, title: "Edit") { action, view, completion in
                         self.openEditMedication(actualIndex: actualIndex)
                         completion(true)
@@ -401,7 +381,6 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
             addVC.indexToEdit = actualIndex
             addVC.delegate = self
             
-            // Present within the same navigation controller (no nested modal)
             navigationController?.pushViewController(addVC, animated: true)
         }
     }
@@ -417,7 +396,6 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
         if let addVC = storyboard.instantiateViewController(withIdentifier: "AddMedicationViewController") as? AddMedicationViewController {
             addVC.delegate = self
             
-            // Present within the same navigation controller (no nested modal)
             navigationController?.pushViewController(addVC, animated: true)
         }
     }

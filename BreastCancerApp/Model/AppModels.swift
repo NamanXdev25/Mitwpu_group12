@@ -1,15 +1,7 @@
-//
-//  AppModels.swift
-//  BreastCancerApp
-//
-//  Created by Naman Bhansali on 01/03/26.
-//
 
 import Foundation
 import CoreGraphics
 
-// Shared app-domain and reusable feature models live in this file.
-// Persistence transport DTOs, repositories, and UI-local enums stay in their feature files.
 
 // MARK: - Care
 
@@ -797,7 +789,6 @@ struct StoreItem: Codable {
     let imageName: String
     let price: Int
     let category: String
-    /// The base this item belongs to. nil = classic base (backwards compatible).
     var baseId: String?
 }
 

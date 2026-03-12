@@ -1,9 +1,3 @@
-//
-//  CalendarDateCell.swift
-//  BreastCancerApp
-//
-//  Created by Naman Bhansali on 27/11/25.
-//
 
 import UIKit
 
@@ -51,7 +45,6 @@ class SymptomCalendarDateCell: UICollectionViewCell {
             dotView.backgroundColor = UIColor(named: "SymptomsPrimaryColor")
         }
         
-        // FUTURE DATE — disabled
         if isFuture {
             dayLabel.textColor = .tertiaryLabel
             contentView.alpha = 0.4
@@ -62,7 +55,6 @@ class SymptomCalendarDateCell: UICollectionViewCell {
 
         contentView.alpha = 1.0
 
-        // TODAY
         if isToday {
             selectionLayer.backgroundColor =
             UIColor(named: "SymptomsPrimaryColor")?.withAlphaComponent(1.0)
@@ -71,7 +63,6 @@ class SymptomCalendarDateCell: UICollectionViewCell {
             dotView.backgroundColor = .white
         }
         
-        // highlight selected date
         if isSelected {
             selectionLayer.backgroundColor =
             UIColor(named: "SymptomsPrimaryColor")?.withAlphaComponent(0.2)

@@ -1,9 +1,3 @@
-//
-//  ExercisePlanSectionHeader.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 13/02/26.
-//
 
 import UIKit
 

@@ -1,9 +1,3 @@
-//
-//  MenuOptionCell.swift
-//  BreastCancerApp
-//
-//  Created by Shloka on 05/03/26.
-//
 
 import UIKit
 

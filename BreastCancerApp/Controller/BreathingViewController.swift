@@ -1,13 +1,3 @@
-//
-//  BreathingViewController.swift
-//
-//  Created by Shloka on 28/11/25.
-//
-//
-//  BreathingViewController.swift
-//
-//  Created by Shloka on 28/11/25.
-//
 
 import UIKit
 
@@ -27,7 +17,6 @@ class BreathingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Load all sessions first, then load favorites using the persisted order.
         allSessions = dataManager.getAllSessions()
         favoriteSessions = dataManager.getFavoriteSessions()
         filterTags = dataManager.getFilterTags()
@@ -38,10 +27,9 @@ class BreathingViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         
-        collectionView.setCollectionViewLayout(generateLayout(), animated: false) //apply compositional layout
+        collectionView.setCollectionViewLayout(generateLayout(), animated: false)
     }
     
-    // Layout Generation
     func generateLayout() -> UICollectionViewCompositionalLayout {
         return UICollectionViewCompositionalLayout { (sectionIndex, env) -> NSCollectionLayoutSection? in
             
@@ -52,7 +40,6 @@ class BreathingViewController: UIViewController {
             if sectionIndex == 0 {
                 
                 if self.favoriteSessions.isEmpty {
-                    //  SMALL LAYOUT (For "No Favorites" Message)
                     let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
                     let item = NSCollectionLayoutItem(layoutSize: itemSize)
                     
@@ -110,7 +97,6 @@ class BreathingViewController: UIViewController {
         }
     }
     
-    // Register Cells
     func registerCells() {
         collectionView.register(UINib(nibName: "FavoriteSessionCell", bundle: nil), forCellWithReuseIdentifier: "FavoriteSessionCell")
         collectionView.register(UINib(nibName: "BreathingEmptyStateCell", bundle: nil), forCellWithReuseIdentifier: "BreathingEmptyStateCell")
@@ -123,7 +109,6 @@ class BreathingViewController: UIViewController {
     }
 }
 
-// Data Source
 extension BreathingViewController: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -164,7 +149,7 @@ extension BreathingViewController: UICollectionViewDataSource {
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ListCell", for: indexPath) as! SessionListCell
             cell.delegate = self
-            cell.configureCell(session: filteredSessions[indexPath.row]) // Use Filtered List
+            cell.configureCell(session: filteredSessions[indexPath.row])
             return cell
         }
     }
@@ -185,7 +170,6 @@ extension BreathingViewController: UICollectionViewDataSource {
     }
 }
 
-// Filter Interaction Delegate
 extension BreathingViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -235,7 +219,6 @@ extension BreathingViewController: UICollectionViewDelegate {
     }
 }
 
-// Heart Button Delegate (Like/Unlike Logic)
 extension BreathingViewController: SessionCellDelegate {
     
     func didTapLikeButton(on cell: UICollectionViewCell) {
@@ -260,10 +243,8 @@ extension BreathingViewController: SessionCellDelegate {
             
             let isEmptyNow = favoriteSessions.isEmpty
             
-            // Persist favorites
             dataManager.saveFavoriteTitles(favoriteSessions.map(\.title))
             
-            //  Update UI
             collectionView.performBatchUpdates {
                 if let index = indexInFiltered {
                     collectionView.reloadItems(at: [IndexPath(item: index, section: 2)])
@@ -292,7 +273,6 @@ extension BreathingViewController: SessionCellDelegate {
                 filtered: &filteredSessions
             )
             
-            // Persist favorites
             dataManager.saveFavoriteTitles(favoriteSessions.map(\.title))
             
             collectionView.performBatchUpdates {

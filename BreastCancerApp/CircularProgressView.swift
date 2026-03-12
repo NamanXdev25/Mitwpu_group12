@@ -25,7 +25,6 @@ class CircularProgressView: UIView {
     @IBInspectable var progress: CGFloat = 0.6 {
         didSet {
             let clampedProgress = max(0, min(progress, 1))
-            // Rounded caps can make ~99% look fully closed; use butt cap until true completion.
             progressLayer.lineCap = clampedProgress >= 1 ? .round : .butt
             progressLayer.strokeEnd = clampedProgress
         }

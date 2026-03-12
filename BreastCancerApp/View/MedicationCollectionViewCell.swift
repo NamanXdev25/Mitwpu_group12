@@ -1,9 +1,3 @@
-//
-//  MedicationCollectionViewCell.swift
-//  BreastCancerApp
-//
-//  Created by Shloka on 02/02/26.
-//
 
 import UIKit
 

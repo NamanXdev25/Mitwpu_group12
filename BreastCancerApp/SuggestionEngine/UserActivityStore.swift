@@ -1,12 +1,4 @@
-//
-//  UserActivityStore.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 08/03/26.
-//
 
-// Tracks which suggestions the user taps over time.
-// Used to boost frequently-engaged items in future suggestions.
 
 import Foundation
 
@@ -104,7 +96,7 @@ final class UserActivityStore {
             .filter { $0.key.hasPrefix("h:") }
             .sorted { $0.value > $1.value }
             .prefix(limit)
-            .map { String($0.key.dropFirst(2)) }  // strip "h:" prefix
+            .map { String($0.key.dropFirst(2)) }
     }
 
     // MARK: - Helpers

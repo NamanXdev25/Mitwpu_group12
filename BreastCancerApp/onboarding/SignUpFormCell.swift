@@ -1,34 +1,27 @@
 import UIKit
 
-// Delegate Protocol
 protocol SignUpFormCellDelegate: AnyObject {
     func signUpFormCellDidTapSignUp(_ cell: SignUpFormCell, email: String, password: String, reenterPassword: String, agreedToTerms: Bool)
 }
 
 final class SignUpFormCell: UICollectionViewCell {
 
-    // Container Views
     @IBOutlet weak var emailContainerView: UIView!
     @IBOutlet weak var passwordContainerView: UIView!
     @IBOutlet weak var reenterPasswordContainerView: UIView!
 
-    // TextFields
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var reenterPasswordTextField: UITextField!
 
-    // Buttons
     @IBOutlet weak var agreeButton: UIButton!
     @IBOutlet weak var signUpButton: UIButton!
 
-    // Delegate
     weak var delegate: SignUpFormCellDelegate?
 
-    // State
     private var isChecked: Bool = false
     private var isPasswordVisible: Bool = false
 
-    // Lifecycle
     override func awakeFromNib() {
         super.awakeFromNib()
         configureInteraction()
@@ -37,14 +30,12 @@ final class SignUpFormCell: UICollectionViewCell {
         configureCheckbox()
     }
 
-    // Interaction
     private func configureInteraction() {
         contentView.isUserInteractionEnabled = true
         isUserInteractionEnabled = true
         agreeButton.isUserInteractionEnabled = true
     }
 
-    // TextFields
     private func configureTextFields() {
         emailTextField.borderStyle = .none
         passwordTextField.borderStyle = .none
@@ -54,7 +45,6 @@ final class SignUpFormCell: UICollectionViewCell {
         reenterPasswordTextField.isSecureTextEntry = true
     }
 
-    // Containers
     private func configureContainers() {
         let containers = [
             emailContainerView,
@@ -71,7 +61,6 @@ final class SignUpFormCell: UICollectionViewCell {
         }
     }
 
-    // Checkbox Setup
     private func configureCheckbox() {
         var config = UIButton.Configuration.plain()
         config.image = UIImage(systemName: "square")

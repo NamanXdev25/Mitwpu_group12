@@ -1,9 +1,3 @@
-//
-//  TopGradientView.swift
-//  BreastCancerApp
-//
-//  Created by Shloka on 16/12/25.
-//
 
 import UIKit
 
@@ -25,11 +19,6 @@ final class TopGradientView: UIView {
 
     private func setupGradient() {
         isUserInteractionEnabled = false
-        // gradientLayer.colors = [
-        //     UIColor(named: "primary_color")?.cgColor,
-        //     UIColor.clear.cgColor
-        // ]
-        // layer.addSublayer(gradientLayer)
     }
 
     override func layoutSubviews() {

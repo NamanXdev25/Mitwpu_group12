@@ -1,10 +1,3 @@
-//
-//  MedicationCell.swift
-//  Medication
-//
-//  Created by Naman Bhansali on 15/01/26.
-//
-//
 import UIKit
 
 class MedicationCell: UITableViewCell {

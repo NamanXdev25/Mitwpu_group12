@@ -1,9 +1,3 @@
-//
-//  RecentJournalCell.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 25/11/25.
-//
 
 import UIKit
 
@@ -25,23 +19,20 @@ class RecentJournalCell: UICollectionViewCell {
         moreButton.showsMenuAsPrimaryAction = true
     }
 
-    // formatted date
     func formattedJournalDate(_ date: Date) -> String {
         let calendar = Calendar.current
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
 
-        // If same year
         let thisYear = calendar.component(.year, from: Date())
         let entryYear = calendar.component(.year, from: date)
 
         if thisYear == entryYear {
-            formatter.setLocalizedDateFormatFromTemplate("EEE, MMM d")        // Fri, Dec 12
+            formatter.setLocalizedDateFormatFromTemplate("EEE, MMM d")
             return formatter.string(from: date)
         }
 
-        // If previous year
-        formatter.setLocalizedDateFormatFromTemplate("MMM d, yyyy")      // Dec 12, 2024
+        formatter.setLocalizedDateFormatFromTemplate("MMM d, yyyy")
         return formatter.string(from: date)
     }
 
@@ -58,7 +49,6 @@ class RecentJournalCell: UICollectionViewCell {
         descriptionLabel.text = entry.content
         dateLabel.text = formattedJournalDate(entry.date)
 
-        // Build menu
         let edit = UIAction(title: "Edit", image: UIImage(systemName: "pencil")) { _ in
             onEdit?(entry)
         }

@@ -1,7 +1,3 @@
-//
-//  ProfileHeaderCell.swift
-//  BreastCancerApp
-//
 
 import UIKit
 

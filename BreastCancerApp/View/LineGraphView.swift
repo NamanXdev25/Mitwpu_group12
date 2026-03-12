@@ -35,8 +35,8 @@ class LineGraphView: UIView {
     
     // MARK: - Layout Constants
     private let sideMargin: CGFloat = 30
-    private let topMargin: CGFloat = 15    // Tightened top margin
-    private let bottomLabelPadding: CGFloat = 35 // Optimized space for labels
+    private let topMargin: CGFloat = 15
+    private let bottomLabelPadding: CGFloat = 35
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -85,7 +85,6 @@ class LineGraphView: UIView {
         let colWidth = (bounds.width - (2 * sideMargin)) / CGFloat(dayNames.count - 1)
         for (i, label) in dayLabels.enumerated() {
             let x = sideMargin + CGFloat(i) * colWidth
-            // Positions labels at the very bottom edge of the view
             label.frame = CGRect(x: x - 20, y: bounds.height - 18, width: 40, height: 15)
         }
     }
@@ -204,7 +203,6 @@ class LineGraphView: UIView {
 
         for (i, val) in dataPoints.enumerated() {
             let x = sideMargin + CGFloat(i) * colWidth
-            // Maps the points to use the full height of the Graph View
             let y = (rect.height - bottomLabelPadding) - (CGFloat(val) / maxValue * usableHeight)
             let pt = CGPoint(x: x, y: y)
             pointLocations.append(pt)

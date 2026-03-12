@@ -1,15 +1,8 @@
-//
-//  JournalViewController.swift
-//  journalTrial
-//
-//  Created by Shivani Dinesh on 24/11/25.
-//
 
 import UIKit
 
 class JournalViewController: UIViewController {
     
-    //IBOutlets
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var addButton: UIButton!
 
@@ -23,7 +16,6 @@ class JournalViewController: UIViewController {
     var entries: [JournalEntry] {
         JournalStore.shared.entries
     }
-    //for streak & stats
     private var streak: Int {
         JournalStore.shared.entries.streakCount
     }
@@ -35,15 +27,12 @@ class JournalViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // UI (color/screen-title)
         view.backgroundColor = UIColor(named: "BackgroundColor")
         navigationItem.title = "Journal"
         collectionView.backgroundColor = UIColor(named: "BackgroundColor")
         
-        // build layout & register cells (XIBs)
         setupCollectionView()
 
-        // initialising data source
         journalDataSource = JournalDataSource(
             collectionView: collectionView,
             mode: .mainScreen,
@@ -56,7 +45,6 @@ class JournalViewController: UIViewController {
         journalDataSource.applySnapshot()
     }
     
-    // viewWillAppear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -94,9 +82,9 @@ class JournalViewController: UIViewController {
         
     func handleGuidedJournalTap() {
         if let todayEntry = JournalStore.shared.entries.todayGuidedEntry() {
-            openEntry(todayEntry)   // if already wrote today's guided journal
+            openEntry(todayEntry)
         } else {
-            openGuidedJournal()     // if first time today
+            openGuidedJournal()
         }
     }
     
@@ -162,7 +150,6 @@ class JournalViewController: UIViewController {
 extension JournalViewController {
     private func setupCollectionView() {
 
-        // Compositional Layout for all sections
         let layout = UICollectionViewCompositionalLayout { sectionIndex, environment -> NSCollectionLayoutSection? in
             guard let section = Section(rawValue: sectionIndex) else { return nil }
 
@@ -278,7 +265,6 @@ extension JournalViewController {
 
         collectionView.setCollectionViewLayout(layout, animated: false)
 
-        // register all XIBs
         collectionView.register(
             UINib(nibName: "JournalStreakCell", bundle: nil),
             forCellWithReuseIdentifier: JournalStreakCell.reuseIdentifier

@@ -13,12 +13,10 @@ class HomeArticleCell: UICollectionViewCell {
         ArticleImageView.contentMode = .scaleAspectFill
         ArticleImageView.clipsToBounds = true
 
-        // Force title to never clip
         ArticleTitleLable.numberOfLines = 0
         ArticleTitleLable.lineBreakMode = .byWordWrapping
         ArticleTitleLable.adjustsFontSizeToFitWidth = false
 
-        // Ensure trailing constraint doesn't cut off — override in case XIB is wrong
         ArticleTitleLable.translatesAutoresizingMaskIntoConstraints = false
         ArticleTitleLable.setContentCompressionResistancePriority(.required, for: .vertical)
         ArticleTitleLable.setContentHuggingPriority(.defaultLow, for: .horizontal)
@@ -33,8 +31,6 @@ class HomeArticleCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        // Re-pin title and subtitle trailing to contentView with 16pt padding
-        // in case the XIB constraint is clipping them
         let maxWidth = contentView.bounds.width - 32
         ArticleTitleLable.preferredMaxLayoutWidth = maxWidth
         ArticleSubheadLabel.preferredMaxLayoutWidth = maxWidth

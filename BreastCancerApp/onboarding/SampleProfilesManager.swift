@@ -1,13 +1,6 @@
-//
-//  SampleProfilesManager.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 21/01/26.
-//
 
 import Foundation
 
-// sample profiles
 class SampleProfilesManager {
     static let shared = SampleProfilesManager()
     
@@ -49,24 +42,23 @@ class SampleProfilesManager {
         )
     ]
     
-    // profiles stats for each sample profile type
     func getStatsForProfile(id: String) -> HealingGardenStats {
         switch id {
-        case "profile_1": // Currently in treatment
+        case "profile_1":
             return HealingGardenStats(
                 currentPoints: 3200,
                 totalPointsNeeded: 6000,
                 currentLevel: 1,
                 nextLevel: 2
             )
-        case "profile_2": // Under observation
+        case "profile_2":
             return HealingGardenStats(
                 currentPoints: 4800,
                 totalPointsNeeded: 6000,
                 currentLevel: 2,
                 nextLevel: 3
             )
-        case "profile_3": // Post-treatment
+        case "profile_3":
             return HealingGardenStats(
                 currentPoints: 8500,
                 totalPointsNeeded: 9000,
@@ -83,7 +75,6 @@ class SampleProfilesManager {
         }
     }
     
-    // Helper to get display text for profile card
     func getProfileSubtitle(for profile: UserProfile) -> String {
         switch profile.treatmentStatus {
         case "Currently in treatment":
@@ -109,13 +100,11 @@ class SampleProfilesManager {
         }
     }
     
-    // Load profile data into OnboardingData singleton
     func loadProfileIntoOnboardingData(_ profile: UserProfile) {
         OnboardingData.shared.userName = profile.name
         OnboardingData.shared.treatmentStatus = profile.treatmentStatus
         OnboardingData.shared.selectedHobbies = profile.hobbies
         
-        // Set treatment-specific data
         switch profile.treatmentStatus {
         case "Currently in treatment":
             OnboardingData.shared.diagnosisDate = profile.diagnosisDate

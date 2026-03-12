@@ -1,9 +1,3 @@
-//
-//  ArticleHeaderCell.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 10/01/26.
-//
 
 import UIKit
 

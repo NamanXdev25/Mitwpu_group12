@@ -1,23 +1,14 @@
-//
-//  OnboardingDataSource.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 12/01/26.
-//
 
 import Foundation
 
 struct OnboardingDataSource {
     
-    // Treatment Options
     static let treatmentOptions = [
         "Currently in treatment",
-        //"Under Observation",
         "Post-treatment / in recovery",
         "Prefer not to say"
     ]
     
-    // Hobbies
     static let hobbies = [
         "Drawing",
         "music",
@@ -34,7 +25,6 @@ struct OnboardingDataSource {
         "Journaling"
     ]
     
-    // Cancer Stages
     static let cancerStages = [
         "Stage 0",
         "Stage I",
@@ -44,7 +34,6 @@ struct OnboardingDataSource {
         "Not sure"
     ]
     
-    // Age Groups
     static let ageGroups = [
         "Below 18",
         "18-25",
@@ -56,7 +45,6 @@ struct OnboardingDataSource {
         "75+"
     ]
     
-    // Follow-up Frequency
     static let followUpFrequencies = [
         "Every month",
         "Every 2 months",
@@ -65,13 +53,11 @@ struct OnboardingDataSource {
         "Once a year"
     ]
     
-    // Post Treatment Focus
     static let postTreatmentInterests = [
         InterestOption(title: "Physical Strength", icon: "figure.strengthtraining.traditional"),
         InterestOption(title: "Mindfulness", icon: "figure.mind.and.body")
     ]
     
-    // Prefer Not To Say Interests
     static let preferNotToSayInterests = [
         InterestOption(title: "Physical Strength", icon: "figure.strengthtraining.traditional.circle.fill"),
         InterestOption(title: "Mindfulness", icon: "figure.mind.and.body.circle.fill"),

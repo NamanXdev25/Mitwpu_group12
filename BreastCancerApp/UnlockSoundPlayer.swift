@@ -20,7 +20,6 @@ final class UnlockSoundPlayer {
             try AVAudioSession.sharedInstance().setActive(true)
             try engine.start()
         } catch {
-            print("UnlockSoundPlayer init error: \(error)")
         }
     }
 
@@ -62,7 +61,6 @@ final class UnlockSoundPlayer {
                     env = exp(-4.8 * (t - attack) / duration)
                 }
 
-                // richer game-like timbre
                 let tone =
                     sin(phase) +
                     0.38 * sin(phase * 2.0) +
@@ -72,17 +70,14 @@ final class UnlockSoundPlayer {
             }
         }
 
-        // C major arpeggio unlock pattern
-        addNote(start: 0.00, duration: 0.19, freq: 523.25, amp: 0.20) // C5
-        addNote(start: 0.12, duration: 0.19, freq: 659.25, amp: 0.20) // E5
-        addNote(start: 0.24, duration: 0.21, freq: 783.99, amp: 0.20) // G5
-        addNote(start: 0.39, duration: 0.24, freq: 1046.50, amp: 0.24) // C6 (final shine)
+        addNote(start: 0.00, duration: 0.19, freq: 523.25, amp: 0.20)
+        addNote(start: 0.12, duration: 0.19, freq: 659.25, amp: 0.20)
+        addNote(start: 0.24, duration: 0.21, freq: 783.99, amp: 0.20)
+        addNote(start: 0.39, duration: 0.24, freq: 1046.50, amp: 0.24)
 
-        // sparkle layer
         addNote(start: 0.43, duration: 0.10, freq: 1567.98, amp: 0.07)
         addNote(start: 0.50, duration: 0.09, freq: 1318.51, amp: 0.06)
 
-        // clamp
         for i in 0..<Int(frameCount) {
             channel[i] = max(-0.95, min(0.95, channel[i]))
         }

@@ -1,9 +1,3 @@
-//
-//  WelcomeHeaderCollectionViewCell.swift
-//  BreastCancerApp
-//
-//  Created by Shloka on 18/01/26.
-//
 
 import UIKit
 
@@ -15,7 +9,6 @@ class WelcomeHeaderCollectionViewCell: UICollectionViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
 }

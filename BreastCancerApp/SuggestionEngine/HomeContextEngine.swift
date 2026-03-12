@@ -1,31 +1,18 @@
-//
-//  HomeContextEngine.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 08/03/26.
-//
 
-// A snapshot of everything we know about the user right now.
-// Built once per suggestion/prompt call so all engines read consistent data.
 
 import Foundation
 
 struct AppContext {
     let moodKey: String
-    let treatmentState: String        // "Ongoing" | "Completed" | "Observation" | "Not Specified"
-    let journeyPhase: String          // "Diagnosed" | "Waiting for Result" | "Treatment" | "Post-Treatment"
-    let treatmentName: String         // e.g. "Chemotherapy", "Surgery", "Not started yet"
-    let cancerStage: String           // "Stage II" etc.
+    let treatmentState: String
+    let journeyPhase: String
+    let treatmentName: String
+    let cancerStage: String
     let age: Int
     let gender: String
     let hobbies: [String]
-    let onboardingTreatmentPhase: String?  // from OnboardingData e.g. "Chemotherapy", "Surgery"
+    let onboardingTreatmentPhase: String?
 
-    // Journey completion flags — needed to distinguish
-    // "Not Started Yet" (default) from "Diagnosed" (user-confirmed).
-    // JourneyState.currentStepTitle defaults to "Diagnosed" even when
-    // the user has never opened the Journey screen, so we need these
-    // flags to know whether the journey data is real or just defaults.
     let isDiagnosisCompleted: Bool
     let isWaitCompleted: Bool
 
@@ -58,19 +45,11 @@ struct AppContext {
         treatmentState == "Completed" || journeyPhase == "Post-Treatment"
     }
 
-    /// True ONLY when the user has actually confirmed their diagnosis
-    /// in the Journey screen. "Diagnosed" is the default value of
-    /// journeyPhase even when the user has never opened Journey,
-    /// so we require isDiagnosisCompleted to be true.
     var isEarlyDiagnosis: Bool {
-        // If diagnosis hasn't been confirmed by the user, this is NOT
-        // an early diagnosis state — it's "Not Started Yet".
         guard isDiagnosisCompleted else { return false }
         return journeyPhase == "Diagnosed" || journeyPhase == "Waiting for Result"
     }
 
-    /// True when the user has NOT yet started their Journey
-    /// (no diagnosis confirmed, no treatment, no completion).
     var isPhaseUnknown: Bool {
         effectiveTreatmentType == "general"
             && !isPostTreatment
@@ -79,9 +58,7 @@ struct AppContext {
     }
 
     // MARK: - Effective treatment type
-    // Combines Journey screen data (higher priority) with Onboarding data (fallback)
     var effectiveTreatmentType: String {
-        // Journey screen data first — this is the most current and specific
         let name = treatmentName.lowercased()
         if name.contains("chemo")      { return "chemotherapy" }
         if name.contains("surg")       { return "surgery" }
@@ -91,7 +68,6 @@ struct AppContext {
         if name.contains("targeted")   { return "targeted" }
         if name.contains("stem")       { return "stemcell" }
 
-        // Onboarding phase as fallback
         let phase = (onboardingTreatmentPhase ?? "").lowercased()
         if phase.contains("chemo")     { return "chemotherapy" }
         if phase.contains("surg")      { return "surgery" }
@@ -134,7 +110,6 @@ struct HomeContextEngine {
         let ctx = AppContext.current(moodKey: moodKey)
         var candidates = buildAllPrompts(for: ctx)
 
-        // Filter recently shown if we still have enough variety
         let filtered = candidates.filter { !recentTitles.contains($0.title.lowercased()) }
         if filtered.count >= 3 { candidates = filtered }
 
@@ -146,29 +121,20 @@ struct HomeContextEngine {
     private static func buildAllPrompts(for ctx: AppContext) -> [WeightedItem] {
         var all: [WeightedItem] = []
 
-        // Layer 1 — Mood prompts from JSON (base weight 10)
         if let content = HomeMoodSuggestionLoader.shared.moodContent(for: ctx.moodKey) {
             for item in content.journaling {
                 all.append(WeightedItem(title: item.title, weight: 10, tags: ["mood"]))
             }
         }
 
-        // Layer 2 — Phase-specific prompts (weight 20–30)
-        // NOW FILTERED BY MOOD: only prompts relevant to the current mood are included
-        // Skipped when phase is unknown (user hasn't started Journey)
         if !ctx.isPhaseUnknown {
             all.append(contentsOf: phasePrompts(for: ctx))
         }
 
-        // Layer 3 — Mood × phase combos (weight 35–40, HIGHEST PRIORITY)
-        // These already check mood by definition
-        // Skipped when phase is unknown
         if !ctx.isPhaseUnknown {
             all.append(contentsOf: moodPhaseComboPrompts(for: ctx))
         }
 
-        // Layer 4 — General prompts (always available, for any mood/phase)
-        // These serve as fallback when phase is unknown or no specific match
         all.append(contentsOf: generalPrompts(for: ctx))
 
         return all
@@ -176,9 +142,7 @@ struct HomeContextEngine {
 
     // MARK: - General prompts (no phase/mood restriction, weight 8–15)
     private static func generalPrompts(for ctx: AppContext) -> [WeightedItem] {
-        // Lower weight than phase/mood-specific prompts so they yield
-        // when better matches exist, but still available as fallback.
-        let baseWeight = ctx.isPhaseUnknown ? 15 : 8  // Boost when phase unknown
+        let baseWeight = ctx.isPhaseUnknown ? 15 : 8
         return [
             WeightedItem(title: "How are you really doing today — not the answer you give people, but the honest one?", weight: baseWeight, tags: ["general"]),
             WeightedItem(title: "What is one thing you are proud of yourself for today?", weight: baseWeight, tags: ["general"]),
@@ -192,8 +156,6 @@ struct HomeContextEngine {
     }
 
     // MARK: - Phase-specific prompt bank (weight 20–28)
-    // NOW MOOD-AWARE: Each prompt is tagged with compatible moods.
-    // Prompts incompatible with the current mood are excluded.
     private static func phasePrompts(for ctx: AppContext) -> [WeightedItem] {
         var p: [WeightedItem] = []
         let mood = ctx.moodKey.lowercased()
@@ -264,10 +226,6 @@ struct HomeContextEngine {
         default: break
         }
 
-        // Journey-phase-based prompts (use journeyPhase directly)
-        // IMPORTANT: Only show "Diagnosed"/"Waiting" prompts if user actually
-        // confirmed diagnosis — otherwise these fire for "Not Started Yet" users
-        // because journeyPhase defaults to "Diagnosed".
         if ctx.isDiagnosisCompleted {
             switch ctx.journeyPhase {
             case "Diagnosed", "Waiting for Result":
@@ -292,8 +250,6 @@ struct HomeContextEngine {
     }
 
     // MARK: - Mood filtering helper
-    /// Only appends the prompt if the user's mood is in the compatible list,
-    /// or if no mood has been selected yet (mood == "general").
     private static func appendIfMoodMatches(
         _ array: inout [WeightedItem],
         mood: String,
@@ -301,7 +257,6 @@ struct HomeContextEngine {
         title: String,
         weight: Int
     ) {
-        // If no mood selected, allow all prompts
         if mood == "general" || compatibleMoods.contains(mood) {
             array.append(WeightedItem(title: title, weight: weight, tags: ["phase"]))
         }
@@ -359,7 +314,6 @@ struct HomeContextEngine {
                 WeightedItem(title: "What is helping you take things one day at a time?", weight: 37, tags: ["combo"]),
             ]
         }
-        // ── Additional mood × phase combos for coverage ────────────────
         if mood == "excited" && ctx.isInActiveTreatment {
             p += [
                 WeightedItem(title: "What is making you feel excited or hopeful today despite treatment?", weight: 38, tags: ["combo"]),

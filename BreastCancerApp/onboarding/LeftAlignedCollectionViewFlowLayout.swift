@@ -1,11 +1,4 @@
-//
-//  LeftAlignedCollectionViewFlowLayout.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 14/01/26.
-//
 
-// for hobby selection cells
 import UIKit
 
 class LeftAlignedCollectionViewFlowLayout: UICollectionViewFlowLayout {

@@ -1,9 +1,3 @@
-//
-//  CalendarDateCell.swift
-//  BreastCancerApp
-//
-//  Created by Naman Bhansali on 27/11/25.
-//
 
 import UIKit
 
@@ -43,19 +37,16 @@ class JournalCalendarDateCell: UICollectionViewCell {
     ) {
         dayLabel.text = day
         
-        // Reset
         selectionLayer.backgroundColor = .clear
         dotView.isHidden = true
         
         guard !day.isEmpty else { return }
         
-        // showing dot if journal exists
         if hasJournal {
             dotView.isHidden = false
             dotView.backgroundColor = UIColor(named: "PrimaryColor")
         }
         
-        // FUTURE DATE — disabled
         if isFuture {
             dayLabel.textColor = .tertiaryLabel
             contentView.alpha = 0.4
@@ -66,7 +57,6 @@ class JournalCalendarDateCell: UICollectionViewCell {
 
         contentView.alpha = 1.0
 
-        // TODAY
         if isToday {
             selectionLayer.backgroundColor =
             UIColor(named: "PrimaryColor")?.withAlphaComponent(1.0)
@@ -75,7 +65,6 @@ class JournalCalendarDateCell: UICollectionViewCell {
             dotView.backgroundColor = .white
         }
         
-        // highlight selected date
         if isSelected {
             selectionLayer.backgroundColor =
             UIColor(named: "PrimaryColor")?.withAlphaComponent(0.2)

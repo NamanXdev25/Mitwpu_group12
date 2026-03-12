@@ -26,7 +26,6 @@ class LoginViewController: UIViewController {
     }
 
     func goToSignUp() {
-        print("goToSignUp")
         let storyboard = UIStoryboard(name: "signupMain", bundle: nil)
         let vc = storyboard.instantiateViewController(
             withIdentifier: "SignUpViewController"
@@ -54,7 +53,6 @@ class LoginViewController: UIViewController {
         guard let profile = SampleProfilesManager.shared.sampleProfiles.first(
             where: { $0.email == normalizedEmail && $0.password == trimmedPassword }
         ) else {
-            print("Invalid credentials")
             showAuthAlert(message: "Invalid email or password.")
             return
         }
@@ -152,31 +150,26 @@ class LoginViewController: UIViewController {
     
     // MARK: - Profile Conversion Helper
     private func convertAndSaveProfile(_ loginProfile: UserProfile) {
-        // Extract first and last name
         let nameParts = loginProfile.name.split(separator: " ")
         let firstName = nameParts.first.map(String.init) ?? "User"
         let lastName = nameParts.count > 1 ? nameParts.dropFirst().joined(separator: " ") : ""
         
-        // Format dates
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd MMM yyyy"
         
         let diagnosisDateString = loginProfile.diagnosisDate.map { dateFormatter.string(from: $0) } ?? "NA"
         let treatmentCompletionDateString = loginProfile.treatmentCompletionDate.map { dateFormatter.string(from: $0) } ?? ""
         
-        // Determine age from currentAge string
         let age = extractAge(from: loginProfile.currentAge)
         
-        // Map treatment status to treatment state
         let treatmentState = mapTreatmentStatus(loginProfile.treatmentStatus)
         
-        // Create ProfileUserProfile
         let profileUserProfile = ProfileUserProfile(
             firstName: firstName,
             lastName: lastName,
-            profileImage: nil, // Profile image can be loaded separately if needed
+            profileImage: nil,
             diagnosisDate: diagnosisDateString,
-            gender: "Female", // Default value, can be extracted if available in UserProfile
+            gender: "Female",
             age: age,
             cancerStage: loginProfile.currentStage ?? "NA",
             treatmentState: treatmentState,
@@ -187,13 +180,10 @@ class LoginViewController: UIViewController {
             medicationsNotificationsEnabled: false
         )
         
-        // Save to UserProfileDataSource
         UserProfileDataSource.shared.updateProfile(profileUserProfile)
         
-        print("✅ Profile converted and saved for login user: \(firstName)")
     }
     
-    // Helper: Extract age from age range string
     private func extractAge(from ageString: String?) -> Int {
         guard let ageString = ageString else { return 32 }
         
@@ -215,7 +205,6 @@ class LoginViewController: UIViewController {
         return 32
     }
     
-    // Helper: Map treatment status to treatment state
     private func mapTreatmentStatus(_ status: String) -> String {
         switch status {
         case "Currently in treatment":

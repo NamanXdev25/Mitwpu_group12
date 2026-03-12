@@ -1,6 +1,3 @@
-//
-//  NotificationGroupCell.swift
-//
 
 import UIKit
 

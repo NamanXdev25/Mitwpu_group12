@@ -1,48 +1,33 @@
-//
-//  OnboardingData.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 12/01/26.
-//
 
 import Foundation
 
 class OnboardingData {
     
-    // singleton instance
     static let shared = OnboardingData()
     
-    var userName: String = "User" // default name for testing
+    var userName: String = "User"
     var treatmentStatus: String?
     
-    // currently in treatment
     var diagnosisDate: Date?
     var currentAge: String?
     var currentStage: String?
     
-    // under observation
     var lastCheckupDate: Date?
     var followUpFrequency: String?
     
-    // post treatment
     var treatmentCompletionDate: Date?
     var selectedInterests: [String] = []
     
-    // hobbies
     var selectedHobbies: [String] = []
     
-    // Currently in treatment
     var currentTreatmentPhase: String?
 
-    // Post-treatment
-    var maintenanceTherapy: String? // "Yes" or "No"
+    var maintenanceTherapy: String?
 
-    // Shared current focus
     var currentFocus: [String] = []
     
     private init() {}
     
-    // Reset all data
     func reset() {
         userName = "User"
         treatmentStatus = nil
@@ -59,7 +44,6 @@ class OnboardingData {
         currentFocus.removeAll()
     }
     
-    // Check if onboarding is complete
     func isComplete() -> Bool {
         return treatmentStatus != nil &&
                diagnosisDate != nil &&

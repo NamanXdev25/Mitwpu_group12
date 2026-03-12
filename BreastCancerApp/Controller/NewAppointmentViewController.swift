@@ -1,9 +1,3 @@
-//
-//  NewAppointmentViewController.swift
-//  Appointments
-//
-//  Created by Naman Bhansali on 10/01/26.
-//
 
 import UIKit
 
@@ -141,7 +135,6 @@ class NewAppointmentViewController: UIViewController {
     // MARK: Bar button action — handles both Edit and Save
     @IBAction func saveTapped(_ sender: UIBarButtonItem) {
         if isViewMode && !isEditing_ {
-            // Switch to edit mode
             isEditing_ = true
             rightBarButton.image = UIImage(systemName: "checkmark")
             rightBarButton.tintColor = UIColor(named: "primary_color")
@@ -150,7 +143,6 @@ class NewAppointmentViewController: UIViewController {
             return
         }
 
-        // Save path
         view.endEditing(true)
         guard validate() else { return }
 
@@ -302,7 +294,6 @@ extension NewAppointmentViewController: UICollectionViewDataSource {
         switch Section(rawValue: indexPath.section)! {
 
         case .details:
-            // disable text in view-only mode
             let cell = dequeue(tfCellID, collectionView, indexPath) as! NewAppointmentTextFieldCell
             switch DetailsRow(rawValue: indexPath.item)! {
             case .title:
@@ -320,7 +311,6 @@ extension NewAppointmentViewController: UICollectionViewDataSource {
             return cell
 
         case .dateTime:
-            // disable date/time text view in view-only mode
             let cell = dequeue(dtCellID, collectionView, indexPath) as! NewAppointmentDateTimeCell
             switch DateTimeRow(rawValue: indexPath.item)! {
             case .date:
@@ -342,12 +332,12 @@ extension NewAppointmentViewController: UICollectionViewDataSource {
                 let cell = dequeue(swCellID, collectionView, indexPath) as! NewAppointmentSwitchCell
                 cell.configure(isOn: reminderOn)
                 cell.onToggle = { [weak self] on in self?.reminderOn = on }
-                return cell  // reminder toggle always interactive
+                return cell
 
             } else if row == addButtonRow {
                 let cell = dequeue(remCellID, collectionView, indexPath) as! NewAppointmentReminderTimeCell
                 cell.onAdd = { [weak self] in self?.presentReminderPopup() }
-                return cell  // add reminder always interactive
+                return cell
 
             } else {
                 let offsetIndex = row - 1
@@ -356,14 +346,13 @@ extension NewAppointmentViewController: UICollectionViewDataSource {
                 cell.onDelete = { [weak self] in
                     self?.deleteReminderOffset(at: offsetIndex)
                 }
-                return cell  // delete reminder always interactive
+                return cell
             }
 
         case .note:
             let cell = dequeue(noteCellID, collectionView, indexPath) as! NewAppointmentNoteCell
             cell.configure(text: userNoteText)
             cell.onTextChange = { [weak self] in self?.userNoteText = $0 }
-            // disable note text view in view-only mode
             cell.noteTextView.isUserInteractionEnabled = fieldsEnabled
             return cell
         }

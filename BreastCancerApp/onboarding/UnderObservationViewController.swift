@@ -1,22 +1,15 @@
-//
-//  UnderObservationViewController.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 13/01/26.
-//
 
 import UIKit
 
 class UnderObservationViewController: UIViewController {
     
-    // IBOutlets
     @IBOutlet weak var progressBar: ProgressBarView!
     @IBOutlet weak var nextButton: UIButton!
     @IBOutlet weak var lastCheckupDatePicker: UIDatePicker!
     @IBOutlet weak var followUpButton: UIButton!
     @IBOutlet weak var followUpPickerView: UIView!
     @IBOutlet weak var followUpPicker: UIPickerView!
-    @IBOutlet weak var overlayView: UIView! // overlay for dimming & tap gesture
+    @IBOutlet weak var overlayView: UIView!
     
     private var selectedFollowUpFrequency: String?
     private let frequencyOptions = OnboardingDataSource.followUpFrequencies
@@ -52,7 +45,6 @@ class UnderObservationViewController: UIViewController {
     }
     
     private func setupGestures() {
-        // tap gesture for overlay
         let overlayTap = UITapGestureRecognizer(target: self, action: #selector(overlayTapped))
         overlayView.addGestureRecognizer(overlayTap)
     }
@@ -87,22 +79,16 @@ class UnderObservationViewController: UIViewController {
     }
     
     @IBAction func skipButtonTapped(_ sender: UIButton) {
-        // navigate to hobbies
         performSegue(withIdentifier: "showHobbies", sender: nil)
     }
     
     @IBAction func nextButtonTapped(_ sender: UIButton) {
         saveData()
-        print("Under Observation data saved:")
-        print("- Last Checkup: \(lastCheckupDatePicker.date)")
-        print("- Follow-up Frequency: \(selectedFollowUpFrequency ?? "none")")
         
-        // navigate to hobbies screen
         performSegue(withIdentifier: "showHobbies", sender: nil)
     }
 }
 
-// delegate & datasource
 extension UnderObservationViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1

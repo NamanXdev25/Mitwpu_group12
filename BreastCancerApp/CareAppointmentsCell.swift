@@ -11,7 +11,6 @@ class CareAppointmentsCell: UICollectionViewCell {
     @IBOutlet weak var AppointmentClockImage: UIImageView!
     @IBOutlet weak var AppointmentTimeLabel: UILabel!
 
-    // Programmatically created empty state label
     private var emptyLabel: UILabel = {
         let label = UILabel()
         label.text = "No appointments added"
@@ -27,7 +26,6 @@ class CareAppointmentsCell: UICollectionViewCell {
         super.awakeFromNib()
         AppointmentDateview.layer.cornerRadius = 12
 
-        // Add empty label to the white container view
         Appointmentconatiner.addSubview(emptyLabel)
         NSLayoutConstraint.activate([
             emptyLabel.centerXAnchor.constraint(equalTo: Appointmentconatiner.centerXAnchor),

@@ -88,9 +88,6 @@ final class SupabaseAppointmentRepository: AppointmentRepository {
 }
 
 final class SupabaseMedicationHistoryRepository: MedicationHistoryRepository {
-    // Transitional snapshot sync to preserve the current offline-first medication feature set.
-    // This keeps the app working while the medication module is moved toward the normalized
-    // `medications` + `medication_logs` schema.
     private let local: MedicationHistoryRepository
     private let userId: UUID
     private let client: SupabaseRESTClient
@@ -124,9 +121,6 @@ final class SupabaseMedicationHistoryRepository: MedicationHistoryRepository {
 
     private func syncFromCloudIntoLocal() {
         client.fetchRows(from: "medication_history_snapshots", filters: [SupabaseFilter(key: "user_id", op: "eq", value: userId.uuidString)]) { (rows: [MedicationHistorySnapshotSupabaseRow]) in
-            // Guard: never overwrite local data when cloud returns nothing.
-            // This prevents wiping medication history when the token is expired,
-            // RLS blocks the read, or the cloud table is empty after a migration.
             guard !rows.isEmpty else { return }
 
             let groupedByDate = Dictionary(grouping: rows, by: \.date_key)
@@ -180,9 +174,6 @@ final class SupabaseMedicationHistoryRepository: MedicationHistoryRepository {
             entry.toSupabaseDailyStatusRows(userId: userId, dateKey: dateKey)
         }
 
-        // Do not hard-delete all medication rows before upsert.
-        // Hard deletes can drop historical data from other devices that have not
-        // yet pulled the latest local snapshot.
         client.upsertRows(rows, into: "medication_history_snapshots", onConflict: "user_id,date_key")
         client.upsertRows(itemRows, into: "medication_items", onConflict: "id")
         client.upsertRows(planRows, into: "medication_plans", onConflict: "id")
@@ -305,10 +296,6 @@ final class SupabaseHydrationRepository: HydrationRepository {
                 )
             }
 
-            // Do not delete all user rows here.
-            // Multiple devices can have partially synced local snapshots; a full delete from one
-            // device would wipe hydration history uploaded by another device.
-            // Merge by per-day key instead.
             self.client.upsertRows(
                 rows,
                 into: "hydration_daily_status",
@@ -402,8 +389,6 @@ final class SupabaseSymptomRepository: SymptomRepository {
             self.client.upsertRows(logRows, into: "symptom_logs")
         }
 
-        // Keep exactly one preference row for the current user and always replace it
-        // with the latest selected symptom IDs.
         client.deleteAllRows(forUser: userId, from: "symptom_user_preferences") { _ in
             self.client.upsertRows([preferenceRow], into: "symptom_user_preferences")
         }
@@ -568,7 +553,6 @@ final class SupabaseJournalRepository: JournalRepository {
                 category: entry.category,
                 journal_date: entry.date,
                 created_at: orderedTimestamp,
-                // Preserve the current visible list order across reloads.
                 updated_at: orderedTimestamp
             )
         }
@@ -576,7 +560,6 @@ final class SupabaseJournalRepository: JournalRepository {
         let currentIDs = Set(rows.map(\.id))
         client.upsertRows(rows, into: "journals") { success in
             guard success else {
-                print("Supabase journals upsert failed for \(rows.count) rows")
                 return
             }
             guard self.isCurrentSyncGeneration(generation) else { return }
@@ -650,7 +633,6 @@ final class SupabaseBreathingRepository: BreathingRepository {
                 id: UUID(),
                 user_id: userId,
                 title: $0.element,
-                // Preserve the current visible order using an existing column.
                 created_at: now.addingTimeInterval(-Double($0.offset))
             )
         }

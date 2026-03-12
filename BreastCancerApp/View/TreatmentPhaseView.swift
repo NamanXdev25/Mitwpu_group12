@@ -26,7 +26,6 @@ class TreatmentPhaseView: UIView {
     var onSaved: (() -> Void)?
     var onStatusChanged: ((PhaseStatus) -> Void)?
     var onDeleteTapped: (() -> Void)?
-    /// Fired whenever any field value changes (before Save) so the VC can cache unsaved input.
     var onFieldsChanged: ((TreatmentType, Date?, String) -> Void)?
 
     // MARK: - Properties
@@ -39,7 +38,6 @@ class TreatmentPhaseView: UIView {
     private let pink      = UIColor(named: "pink") ?? UIColor(red: 0.91, green: 0.39, blue: 0.54, alpha: 1.0)
     private let lightPink = UIColor(red: 1.0,  green: 0.92, blue: 0.95, alpha: 1.0)
 
-    // Views that fade when saved
     private var fadableViews: [UIView] {
         [dropdownContainerView, startDateContainerView, durationTextField]
     }
@@ -228,9 +226,7 @@ class TreatmentPhaseView: UIView {
 
     // MARK: - Restore (called by TreatmentCell after cell reuse)
 
-    /// Restores unsaved in-progress field values typed by the user before they hit Save.
     func restoreFields(treatmentType: TreatmentType, startDate: Date?, duration: String) {
-        // Treatment type
         phaseModel.treatmentType = treatmentType
         if treatmentType != .none {
             dropdownLabel.text      = treatmentType.rawValue
@@ -240,7 +236,6 @@ class TreatmentPhaseView: UIView {
             dropdownLabel.textColor = .placeholderText
         }
 
-        // Start date
         selectedDate = startDate
         if let date = startDate {
             startDateLabel.text      = formatDate(date)
@@ -250,10 +245,8 @@ class TreatmentPhaseView: UIView {
             startDateLabel.textColor = .placeholderText
         }
 
-        // Duration
         durationTextField.text = duration.isEmpty ? nil : duration
 
-        // Ensure edit-mode UI state
         isSaved = false
         dropdownButton.isUserInteractionEnabled    = true
         startDateButton.isUserInteractionEnabled   = true
@@ -264,13 +257,11 @@ class TreatmentPhaseView: UIView {
         updateSaveButtonState()
     }
 
-    /// Restores a fully saved phase (user already tapped "Save Phase Details").
     func restoreSavedModel(_ model: TreatmentPhaseModel) {
         phaseModel   = model
         selectedDate = model.startDate
         isSaved      = true
 
-        // Populate labels
         if model.treatmentType != .none {
             dropdownLabel.text      = model.treatmentType.rawValue
             dropdownLabel.textColor = .black
@@ -281,7 +272,6 @@ class TreatmentPhaseView: UIView {
         }
         durationTextField.text = model.duration
 
-        // Lock interaction, show Edit button
         dropdownButton.isUserInteractionEnabled    = false
         startDateButton.isUserInteractionEnabled   = false
         durationTextField.isUserInteractionEnabled = false
@@ -290,7 +280,6 @@ class TreatmentPhaseView: UIView {
         editButton.alpha    = 1.0
         fadableViews.forEach { $0.alpha = 0.35 }
 
-        // Restart the status timer so badge stays live
         startStatusTimer()
         DispatchQueue.main.async { self.evaluateAndBroadcastStatus() }
     }

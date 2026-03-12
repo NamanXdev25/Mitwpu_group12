@@ -10,9 +10,6 @@ class HomeViewController: UIViewController,
     @IBOutlet weak var ProfileButton: UIBarButtonItem!
 
     // MARK: - Mood state
-    // selectedMoodKey and hasUserSelectedMood are persisted to UserDefaults keyed by today's
-    // date so they survive app close/reopen within the same day and reset automatically the
-    // next day.
     private var selectedMoodKey:      String = "happy"
     private var hasUserSelectedMood:  Bool   = false
 
@@ -20,15 +17,10 @@ class HomeViewController: UIViewController,
     private var currentJournalSuggestion: Suggestion?
     private var currentSuggestions:       [Suggestion] = []
 
-    // Recently-shown tracking (in-memory; resets on fresh launch which is acceptable —
-    // the daily cache prevents exact-same suggestions within a day regardless).
     private var recentlyShownJournalTitles  = Set<String>()
     private var recentlyShownBreathingTitles = Set<String>()
     private var recentlyShownHobbyTitles    = Set<String>()
 
-    // Daily suggestion cache — persisted to UserDefaults so suggestions survive
-    // app close/reopen within the same day.
-    // Key format: "<moodKey>_<yyyy-MM-dd>"
     private var dailySuggestionCache: [String: DailySuggestionCache] = [:]
 
     // MARK: - UserDefaults keys
@@ -75,7 +67,6 @@ class HomeViewController: UIViewController,
         guard let navController = storyboard.instantiateViewController(
             withIdentifier: "ProfileNavController"
         ) as? UINavigationController else {
-            print("Could not load ProfileNavController from Profile.storyboard")
             return
         }
 
@@ -687,7 +678,6 @@ class HomeViewController: UIViewController,
             navigationController?.pushViewController(vc, animated: true)
             return
         }
-        print("Journey screen not found. Check storyboard name and ViewController identifier.")
     }
 
     // MARK: - UICollectionViewDelegate

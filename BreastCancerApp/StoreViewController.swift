@@ -156,7 +156,6 @@ class StoreViewController: UIViewController {
     // MARK: - Purchase Confirmation
 
     private func showPurchaseConfirmation(for item: StoreItem) {
-        // Dry-run checks WITHOUT purchasing — just inspect state directly
         guard item.category != GardenManager.Category.yourItems.rawValue else { return }
 
         if gardenManager.unlockedItemIds.contains(item.id) {
@@ -170,7 +169,6 @@ class StoreViewController: UIViewController {
             return
         }
 
-        // User can afford it — show confirmation first, purchase only after "Yes"
         let alert = UIAlertController(
             title: "Purchase Item?",
             message: "Are you sure you want to purchase \"\(item.name)\" for \(item.price) coins?",
@@ -445,7 +443,6 @@ extension StoreViewController: UICollectionViewDataSource, UICollectionViewDeleg
             return
         }
 
-        // Show confirmation before purchasing
         showPurchaseConfirmation(for: item)
     }
 }

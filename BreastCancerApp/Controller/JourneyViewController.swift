@@ -5,7 +5,6 @@ struct SavedPhaseState {
     var status: PhaseStatus
     var model: TreatmentPhaseModel?
 
-    // Raw field values typed by the user — survive cell reuse even before Save
     var treatmentType: TreatmentType = .none
     var startDate: Date?             = nil
     var duration: String             = ""
@@ -100,11 +99,9 @@ class JourneyViewController: UIViewController {
         3: 397
     ]
 
-    // Treatment phase state — loaded from JourneyState on viewDidLoad, persisted on every change
     private var savedPhaseStates: [SavedPhaseState] = []
     private var treatmentBadgeStatus: PhaseStatus = .notStarted
 
-    // PostTreatment state — loaded from JourneyState on viewDidLoad, persisted on every change
     private var savedPostTreatmentState = SavedPostTreatmentState()
 
     // MARK: - Lifecycle
@@ -140,10 +137,6 @@ class JourneyViewController: UIViewController {
     }
 
     // MARK: - Treatment name sync
-    // Scans all phases for the last non-none treatment type.
-    // On delete: reverts to previous phase's type. On all deleted: clears to "Not started yet".
-    // Called after EVERY mutation (add, delete, field change, save) so Home + Exercise
-    // screens update immediately via JourneyState.didChangeNotification.
     private func syncTreatmentName() {
         let best = savedPhaseStates
             .filter { $0.treatmentType != .none }
@@ -231,8 +224,6 @@ class JourneyViewController: UIViewController {
             self.savedPhaseStates[index].startDate     = startDate
             self.savedPhaseStates[index].duration      = duration
             self.savedPhaseStates[index].isSaved       = false
-            // Sync immediately on dropdown change — drives Home label + exercise recs
-            // before Save is even tapped.
             self.syncTreatmentName()
             self.persistPhaseStates()
         }
@@ -240,17 +231,12 @@ class JourneyViewController: UIViewController {
         cell.onPhaseAdded = { [weak self] in
             guard let self else { return }
             self.savedPhaseStates.append(SavedPhaseState(status: .notStarted, model: nil))
-            // New blank phase doesn't change effective name, but persist the new count.
             self.persistPhaseStates()
         }
 
         cell.onPhaseDeleted = { [weak self] index in
             guard let self, index < self.savedPhaseStates.count else { return }
             self.savedPhaseStates.remove(at: index)
-            // Re-derive from remaining phases. If the last phase is deleted, reverts to
-            // "Not started yet". If Phase 2 is deleted and Phase 1 still has a type,
-            // correctly reverts to Phase 1's treatment. Fires didChangeNotification so
-            // Home screen and exercise recommendations update immediately.
             self.syncTreatmentName()
             self.persistPhaseStates()
         }
@@ -320,9 +306,7 @@ class JourneyViewController: UIViewController {
     }
 }
 
-////////////////////////////////////////////////////////////
 // MARK: - UICollectionViewDataSource
-////////////////////////////////////////////////////////////
 
 extension JourneyViewController: UICollectionViewDataSource {
 
@@ -447,9 +431,7 @@ extension JourneyViewController: UICollectionViewDataSource {
     }
 }
 
-////////////////////////////////////////////////////////////
 // MARK: - PostTreatment Calendar Popup
-////////////////////////////////////////////////////////////
 
 extension JourneyViewController {
 
@@ -555,9 +537,7 @@ extension JourneyViewController {
     }
 }
 
-////////////////////////////////////////////////////////////
 // MARK: - UICollectionViewDelegateFlowLayout
-////////////////////////////////////////////////////////////
 
 extension JourneyViewController: UICollectionViewDelegateFlowLayout {
 

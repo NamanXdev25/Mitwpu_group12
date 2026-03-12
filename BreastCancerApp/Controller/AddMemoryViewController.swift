@@ -9,11 +9,9 @@ final class AddMemoryViewController: UIViewController {
     @IBOutlet weak var cameraImageView: UIImageView!
     @IBOutlet weak var noteTextView: UITextView!
 
-    // Add mode
     var image: UIImage!
     weak var delegate: AddMemoryDelegate?
 
-    // Edit mode
     var memoryToEdit: Memory?
     var editIndex: Int?
     weak var editDelegate: EditMemoryDelegate?
@@ -70,8 +68,8 @@ final class AddMemoryViewController: UIViewController {
 
         if isEditMode, let original = memoryToEdit, let index = editIndex {
             let edited = Memory(
-                image: original.image, // image stays the same in edit mode
-                date: original.date,   // preserve original date
+                image: original.image,
+                date: original.date,
                 note: note
             )
             dismiss(animated: true) { [weak self] in

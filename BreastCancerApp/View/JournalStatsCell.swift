@@ -1,9 +1,3 @@
-//
-//  JournalStatsCell.swift
-//  journalTrial
-//
-//  Created by Shivani Dinesh on 24/11/25.
-//
 
 import UIKit
 
@@ -18,7 +12,6 @@ class JournalStatsCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
     
     func configure(total: Int, thisWeek: Int) {

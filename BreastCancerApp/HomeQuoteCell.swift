@@ -1,9 +1,3 @@
-//
-//  HomeQuoteCell.swift
-//  BreastCancerApp
-//
-//  Created by Naman Bhansali on 02/02/26.
-//
 
 import UIKit
 
@@ -14,7 +8,6 @@ class HomeQuoteCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
     
     // MARK: - Configure

@@ -1,9 +1,3 @@
-//
-//  ProfileSetupWelcomeCollectionViewCell.swift
-//  BreastCancerApp
-//
-//  Created by Shloka on 20/01/26.
-//
 
 import UIKit
 

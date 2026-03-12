@@ -1,9 +1,3 @@
-//
-//  InterestsCell.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 14/01/26.
-//
 
 import UIKit
 

@@ -1,7 +1,3 @@
-//
-//  HealthStatusViewController.swift
-//  BreastCancerApp
-//
 
 import UIKit
 
@@ -65,7 +61,7 @@ class HealthStatusViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
 
-    private var profile      = UserProfileStore.shared.profile  // HealthProfileModel
+    private var profile      = UserProfileStore.shared.profile
     var isEditingProfile     = false
 
     private let firstNameIP  = IndexPath(item: 0, section: 1)
@@ -77,7 +73,7 @@ class HealthStatusViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        profile = UserProfileStore.shared.profile   // always load fresh
+        profile = UserProfileStore.shared.profile
         isEditingProfile = false
         title = "Health Status"
         setupCollectionView()

@@ -1,9 +1,3 @@
-//
-//  EditSymptomCell.swift
-//  symptomTracking
-//
-//  Created by Shivani Dinesh on 04/01/26.
-//
 
 import UIKit
 

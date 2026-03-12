@@ -1,9 +1,3 @@
-//
-//  NewExerciseDataSource.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 05/02/26.
-//
 
 import UIKit
 
@@ -32,7 +26,7 @@ class NewExerciseDataSource: NSObject {
 extension NewExerciseDataSource: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 3 // header, note (optional), exercises
+        return 3
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -40,7 +34,7 @@ extension NewExerciseDataSource: UICollectionViewDataSource {
         
         switch sectionType {
         case .header:
-            return 0 // Using supplementary view
+            return 0
         case .note:
             return hasNote() ? 1 : 0
         case .exercises:
@@ -55,7 +49,7 @@ extension NewExerciseDataSource: UICollectionViewDataSource {
         
         switch sectionType {
         case .header:
-            return UICollectionViewCell() // Not used
+            return UICollectionViewCell()
             
         case .note:
             guard let cell = collectionView.dequeueReusableCell(
@@ -80,7 +74,6 @@ extension NewExerciseDataSource: UICollectionViewDataSource {
             
             let exercise = exercisePlan.exercises[indexPath.item]
 
-            // Ask the VC whether this exercise has been completed
             let isCompleted = (delegate as? NewExerciseViewController)?
                 .isExerciseCompleted(at: indexPath.item) ?? false
 
@@ -121,7 +114,6 @@ extension NewExerciseDataSource: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard indexPath.section == NewExerciseSectionType.exercises.rawValue else { return }
         guard let cell = collectionView.cellForItem(at: indexPath) as? DetailExerciseCell else { return }
-        // Reuse the existing chevron delegate path → opens YouTube
         delegate?.didTapChevron(on: cell)
     }
 }
@@ -131,17 +123,14 @@ extension NewExerciseDataSource: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         if section == 0 {
-            // Measure title height so the header fits content — no fixed 150pt gap.
             let titleFont = UIFont.boldSystemFont(ofSize: 28)
-            let maxWidth = collectionView.bounds.width - 40  // matches XIB: 20 leading + 20 trailing
+            let maxWidth = collectionView.bounds.width - 40
             let titleHeight = (exercisePlan.level as NSString).boundingRect(
                 with: CGSize(width: maxWidth, height: .greatestFiniteMagnitude),
                 options: [.usesLineFragmentOrigin, .usesFontLeading],
                 attributes: [.font: titleFont],
                 context: nil
             ).height
-            // 20 top padding + title + 12 gap + 18 info stack + 4 bottom padding
-            // (note cell XIB adds 12pt internal top → 4 + 12 = 16pt visual gap)
             let totalHeight = 20 + ceil(titleHeight) + 12 + 16
             return CGSize(width: collectionView.bounds.width, height: totalHeight)
         }
@@ -159,12 +148,11 @@ extension NewExerciseDataSource: UICollectionViewDelegateFlowLayout {
         case .header:
             return .zero
         case .note:
-            // Dynamic height based on note text
             let noteText = exercisePlan.note ?? ""
-            let padding: CGFloat = 32 + 24 // horizontal + vertical padding
-            let maxWidth = width - 32 - 32 // cell margins + container margins
+            let padding: CGFloat = 32 + 24
+            let maxWidth = width - 32 - 32
             
-            let font = UIFont.systemFont(ofSize: 17) // matches XIB font size
+            let font = UIFont.systemFont(ofSize: 17)
             let boundingRect = noteText.boundingRect(
                 with: CGSize(width: maxWidth, height: .greatestFiniteMagnitude),
                 options: [.usesLineFragmentOrigin, .usesFontLeading],
@@ -195,7 +183,7 @@ extension NewExerciseDataSource: UICollectionViewDelegateFlowLayout {
         case .note:
             return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         case .exercises:
-            return UIEdgeInsets(top: 16, left: 16, bottom: 100, right: 16) // Bottom padding for fixed buttons
+            return UIEdgeInsets(top: 16, left: 16, bottom: 100, right: 16)
         }
     }
 }

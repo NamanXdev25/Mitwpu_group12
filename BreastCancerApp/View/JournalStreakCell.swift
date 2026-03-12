@@ -1,9 +1,3 @@
-//
-//  JournalStreakCellCollectionViewCell.swift
-//  journalTrial
-//
-//  Created by Shivani Dinesh on 24/11/25.
-//
 
 import UIKit
 
@@ -21,7 +15,6 @@ class JournalStreakCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
     
     func configure(streak: Int) {

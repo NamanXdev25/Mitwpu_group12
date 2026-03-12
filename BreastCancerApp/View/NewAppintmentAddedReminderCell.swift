@@ -1,9 +1,3 @@
-//
-//  NewAppintmentAddedReminderCell.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 06/03/26.
-//
 
 import UIKit
 

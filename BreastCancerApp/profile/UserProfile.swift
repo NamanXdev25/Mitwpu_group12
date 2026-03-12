@@ -1,12 +1,6 @@
-//
-//  UserProfile.swift
-//  BreastCancerApp
-//
 
 import UIKit
 
-// HealthProfileModel is the display/editing model used by the Profile feature screens.
-// It bridges from the main app's ProfileUserProfile (source of truth in UserProfileDataSource).
 struct HealthProfileModel {
     var firstName: String
     var lastName: String

@@ -1,9 +1,3 @@
-//
-//  MemoryUIExtensions.swift
-//  BreastCancerApp
-//
-//  Created by Naman Bhansali on 01/03/26.
-//
 
 import UIKit
 

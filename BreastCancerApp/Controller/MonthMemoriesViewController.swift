@@ -1,9 +1,3 @@
-//
-//  MonthMemoriesViewController.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 12/02/26.
-//
 
 import UIKit
 
@@ -17,7 +11,6 @@ final class MonthMemoriesViewController: UIViewController {
     var month: Int = 1
     var year: Int = 2024
     
-    // Called when memories are mutated so the parent can persist changes
     var onMemoriesChanged: (([Memory]) -> Void)?
     
     private let calendar = Calendar.current
@@ -99,7 +92,6 @@ extension MonthMemoriesViewController: UICollectionViewDataSource, UICollectionV
         
         let memory = memories[indexPath.item]
         
-        // Set width for self-sizing
         let width = collectionView.bounds.width - 32
         cell.contentView.widthAnchor.constraint(equalToConstant: width).isActive = true
         

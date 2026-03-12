@@ -21,7 +21,6 @@ class DiagnosisCell: UICollectionViewCell {
     private var datePickerContainerView: UIView?
     private var isSaved = false
 
-    /// Locked overlay view — shown when this card is not yet unlocked
     private var lockOverlayView: UIView?
 
     // MARK: - Persistence
@@ -86,9 +85,8 @@ class DiagnosisCell: UICollectionViewCell {
         overlay.backgroundColor = UIColor.white.withAlphaComponent(0.65)
         overlay.layer.cornerRadius = 16
         overlay.translatesAutoresizingMaskIntoConstraints = false
-        overlay.isUserInteractionEnabled = true // absorbs touches
+        overlay.isUserInteractionEnabled = true
 
-        // Lock icon
         let lockImage = UIImageView(image: UIImage(systemName: "lock.fill"))
         lockImage.tintColor = UIColor(white: 0.5, alpha: 1)
         lockImage.contentMode = .scaleAspectFit
@@ -147,7 +145,6 @@ class DiagnosisCell: UICollectionViewCell {
     // MARK: - Save
     @objc private func saveButtonTapped() {
         isSaved = true
-        // Persist
         if let text = dateTextField.text, !text.isEmpty {
             UserDefaults.standard.set(text, forKey: kDiagnosisDate)
         }
@@ -226,7 +223,6 @@ class DiagnosisCell: UICollectionViewCell {
         picker.tintColor = pink
         picker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
 
-        // Button row: Reset | Done
         let buttonStack = UIStackView()
         buttonStack.axis = .horizontal
         buttonStack.distribution = .fillEqually
@@ -278,7 +274,7 @@ class DiagnosisCell: UICollectionViewCell {
 
     @objc private func resetDateTapped() {
         dateTextField.text = nil
-        onDateSelected?(Date.distantPast) // signal cleared
+        onDateSelected?(Date.distantPast)
         saveButton.isUserInteractionEnabled = false
         UIView.animate(withDuration: 0.2) { self.saveButton.alpha = 0.4 }
         dismissDatePicker()
@@ -311,7 +307,6 @@ class DiagnosisCell: UICollectionViewCell {
 
     // MARK: - Configure
     func configure(with model: DiagnosisModel) {
-        // UserDefaults is source of truth — overrides model passed in
         let savedStatus = UserDefaults.standard.string(forKey: kDiagnosisStatus)
         let savedDateString = UserDefaults.standard.string(forKey: kDiagnosisDate)
 

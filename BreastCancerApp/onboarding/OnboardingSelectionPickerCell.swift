@@ -1,9 +1,3 @@
-//
-//  OnboardingSelectionPickerCell.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 01/03/26.
-//
 
 import UIKit
 

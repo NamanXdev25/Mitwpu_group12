@@ -1,7 +1,3 @@
-//
-//  HealthDropdownCell.swift
-//  BreastCancerApp
-//
 
 import UIKit
 

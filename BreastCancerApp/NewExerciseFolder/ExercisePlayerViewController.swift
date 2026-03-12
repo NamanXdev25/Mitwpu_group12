@@ -304,7 +304,6 @@ extension ExercisePlayerViewController: ExercisePlayerDataSourceDelegate {
     }
 
     func didTapInfo(from button: UIButton) {
-        // These can later be moved into NewExerciseModel as properties
         let benefits    = ["Improves shoulder flexibility", "Reduces stiffness",
                            "Enhances range of motion",     "Promotes lymphatic drainage"]
         let precautions = ["Stop if you feel sharp pain",  "Keep breathing steadily",
@@ -335,7 +334,6 @@ extension ExercisePlayerViewController: ExercisePlayerDataSourceDelegate {
             if cell.isDone {
                 showToast(message: "Exercise marked as done ✓")
 
-                // Award coins (once per day)
                 CoinRewardService.shared.awardExerciseCoinsIfEligible(on: self)
             }
         }

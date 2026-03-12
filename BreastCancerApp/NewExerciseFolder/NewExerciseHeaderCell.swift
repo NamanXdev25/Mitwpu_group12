@@ -1,9 +1,3 @@
-//
-//  NewExerciseHeaderCell.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 05/02/26.
-//
 
 import UIKit
 

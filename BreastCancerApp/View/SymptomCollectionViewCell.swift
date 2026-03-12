@@ -1,9 +1,3 @@
-//
-//  SymptomCollectionViewCell.swift
-//  BreastCancerApp
-//
-//  Created by Shloka on 03/02/26.
-//
 
 import UIKit
 
@@ -24,7 +18,6 @@ class SymptomCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
 }

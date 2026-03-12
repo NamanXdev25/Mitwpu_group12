@@ -8,9 +8,7 @@ class FavoriteSessionCell: UICollectionViewCell {
     @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var gradientContainerView: UIView?
     
-    // --- MATERIAL GRADIENT ELEMENT ---
     
-    // Using standard UIVisualEffectView for Material Design
     private let materialBlur = FadingMaterialView(effect: UIBlurEffect(style: .light))
     
     weak var delegate: SessionCellDelegate?
@@ -47,7 +45,7 @@ class FavoriteSessionCell: UICollectionViewCell {
         likeButton.setImage(UIImage(systemName: heartName), for: .normal)
         
         if let image = sessionImageView.image {
-            let isDark = image.isDark // Uses extension below
+            let isDark = image.isDark
             nameLabel?.textColor = isDark ? .white : .black
             materialBlur.effect = isDark ? UIBlurEffect(style: .dark) : UIBlurEffect(style: .light)
         }
@@ -60,14 +58,12 @@ class FavoriteSessionCell: UICollectionViewCell {
 
 // MARK: - Fading Material View (Pure UIKit approach)
 final class FadingMaterialView: UIVisualEffectView {
-    // gradient manner opacity
     override func layoutSubviews() {
         super.layoutSubviews()
-        let maskLayer = CAGradientLayer() // Used internally as a mask 
+        let maskLayer = CAGradientLayer()
         maskLayer.frame = self.bounds
         maskLayer.colors = [UIColor.clear.cgColor, UIColor.white.cgColor]
         
-        // Blur starts 30% down for a smooth upper-edge blend
         maskLayer.locations = [0.3, 1.0]
         self.layer.mask = maskLayer
     }

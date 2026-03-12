@@ -1,9 +1,3 @@
-//
-//  PersistenceDTOs.swift
-//  BreastCancerApp
-//
-//  Created by Codex on 08/03/26.
-//
 
 import Foundation
 

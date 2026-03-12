@@ -1,9 +1,3 @@
-//
-//  MonthMemoryCell.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 12/02/26.
-//
 
 import UIKit
 
@@ -87,7 +81,6 @@ final class MonthMemoryCell: UICollectionViewCell {
         
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         
-        // Required for iPad popover
         if let popover = alert.popoverPresentationController {
             popover.sourceView = sender
             popover.sourceRect = sender.bounds

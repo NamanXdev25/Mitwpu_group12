@@ -1,15 +1,8 @@
-//
-//  SymptomSelectionCell.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 08/01/26.
-//
 
 import UIKit
 
 final class SymptomSelectionCell: UICollectionViewCell {
 
-    // IBOutlets
     @IBOutlet weak var checkboxButton: UIButton!
     @IBOutlet weak var symptomNameLabel: UILabel!
     @IBOutlet weak var infoButton: UIButton!
@@ -19,7 +12,6 @@ final class SymptomSelectionCell: UICollectionViewCell {
     @IBOutlet weak var severeLabel: UILabel!
     @IBOutlet weak var noteTextView: UITextView!
 
-    // Callbacks
     var onCheckboxTapped: (() -> Void)?
     var onInfoTapped: (() -> Void)?
     var onSliderChanged: ((Int) -> Void)?
@@ -45,7 +37,6 @@ final class SymptomSelectionCell: UICollectionViewCell {
         symptomNameLabel.text = symptom.name
         severitySlider.value = Float(severity)
         
-        // Configure note text view
         if note.isEmpty {
             setPlaceholder()
         } else {
@@ -56,23 +47,18 @@ final class SymptomSelectionCell: UICollectionViewCell {
         setSelected(isSelected)
     }
 
-    // UI setup
     private func setupUI() {
-        // slider config
         severitySlider.minimumValue = 0
         severitySlider.maximumValue = 4
         severitySlider.isContinuous = true
 
-        // note text view config
         noteTextView.delegate = self
         noteTextView.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         setPlaceholder()
 
-        // initial collapsed state
         sliderContainerView.isHidden = true
         noteTextView.isHidden = true
 
-        // Button actions
         checkboxButton.addTarget(self, action: #selector(checkboxTapped), for: .touchUpInside)
         infoButton.addTarget(self, action: #selector(infoTapped), for: .touchUpInside)
         severitySlider.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
@@ -83,7 +69,6 @@ final class SymptomSelectionCell: UICollectionViewCell {
         noteTextView.textColor = .systemGray
     }
 
-    // selection
     private func setSelected(_ selected: Bool) {
         isSymptomSelected = selected
 
@@ -96,13 +81,11 @@ final class SymptomSelectionCell: UICollectionViewCell {
         sliderContainerView.isHidden = !selected
         noteTextView.isHidden = !selected
         
-        // Reset placeholder when deselected
         if !selected {
             setPlaceholder()
         }
     }
 
-    // actions
     @objc private func checkboxTapped() {
         onCheckboxTapped?()
     }

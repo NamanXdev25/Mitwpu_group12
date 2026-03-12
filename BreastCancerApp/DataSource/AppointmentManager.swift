@@ -1,9 +1,3 @@
-//
-//  AppointmentManager.swift
-//  Appointments
-//
-//  Created by Naman Bhansali on 11/01/26.
-//
 
 import Foundation
 

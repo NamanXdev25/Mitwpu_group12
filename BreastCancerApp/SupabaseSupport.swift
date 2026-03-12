@@ -179,22 +179,18 @@ final class SupabaseRESTClient {
         completion: @escaping ([T]) -> Void
     ) {
         guard let request = makeRequest(method: "GET", table: table, filters: filters, onConflict: nil) else {
-            print("Supabase fetch skipped: missing configuration for table", table)
             completion([])
             return
         }
 
         session.dataTask(with: request) { [weak self, decoder] data, response, _ in
             guard let data else {
-                print("Supabase fetch returned no data for table", table)
                 completion([])
                 return
             }
 
             if let http = response as? HTTPURLResponse {
-                // On 401, attempt a token refresh and retry the fetch once.
                 if http.statusCode == 401 {
-                    print("Supabase fetch 401 for table", table, "– attempting token refresh")
                     self?.refreshAccessToken { refreshed in
                         guard refreshed,
                               let retryRequest = self?.makeRequest(method: "GET", table: table, filters: filters, onConflict: nil) else {
@@ -211,9 +207,7 @@ final class SupabaseRESTClient {
                 }
 
                 if !(200..<300).contains(http.statusCode) {
-                    print("Supabase fetch failed:", table, "status:", http.statusCode)
                     if let body = String(data: data, encoding: .utf8) {
-                        print("Supabase fetch body:", body)
                     }
                 }
             }
@@ -240,7 +234,6 @@ final class SupabaseRESTClient {
             onConflict: onConflict,
             body: rows
         ) else {
-            print("Supabase upsert skipped: missing configuration for table", table)
             completion?(false)
             return
         }
@@ -264,7 +257,6 @@ final class SupabaseRESTClient {
         }
 
         guard let request = makeRequest(method: "DELETE", table: table, filters: filters, onConflict: nil) else {
-            print("Supabase delete skipped: missing configuration for table", table)
             completion?(false)
             return
         }
@@ -335,12 +327,9 @@ final class SupabaseRESTClient {
 
         session.dataTask(with: request) { data, response, error in
             if let error {
-                print("Supabase \(action) error:", error.localizedDescription)
             }
             if let http = response as? HTTPURLResponse, !(200..<300).contains(http.statusCode) {
-                print("Supabase \(action) failed:", table, "status:", http.statusCode)
                 if let data, let body = String(data: data, encoding: .utf8) {
-                    print("Supabase \(action) body:", body)
                 }
             }
 
@@ -350,7 +339,6 @@ final class SupabaseRESTClient {
 
         semaphore.wait()
 
-        // If we got a 401, try refreshing the token and retry once.
         if !requestSuccess {
             let refreshSemaphore = DispatchSemaphore(value: 0)
             var didRefresh = false
@@ -361,7 +349,6 @@ final class SupabaseRESTClient {
             refreshSemaphore.wait()
 
             if didRefresh {
-                // Rebuild the request with the new access token.
                 guard var retryRequest = request.url.flatMap({ _ in Optional(request) }) else { return false }
                 let newToken = SupabaseAuthSessionStore.accessToken ?? SupabaseConfiguration.current?.anonKey ?? ""
                 retryRequest.setValue("Bearer \(newToken)", forHTTPHeaderField: "Authorization")
@@ -370,7 +357,6 @@ final class SupabaseRESTClient {
                 session.dataTask(with: retryRequest) { data, response, error in
                     requestSuccess = error == nil && (response as? HTTPURLResponse).map { 200..<300 ~= $0.statusCode } == true
                     if !requestSuccess {
-                        print("Supabase \(action) retry failed:", table)
                     }
                     retrySemaphore.signal()
                 }.resume()
@@ -389,7 +375,6 @@ final class SupabaseRESTClient {
             return
         }
 
-        // Prevent concurrent refreshes.
         let shouldRefresh = refreshQueue.sync { () -> Bool in
             guard !isRefreshing else { return false }
             isRefreshing = true
@@ -416,7 +401,6 @@ final class SupabaseRESTClient {
             guard let data,
                   let http = response as? HTTPURLResponse,
                   (200..<300).contains(http.statusCode) else {
-                print("Supabase token refresh failed")
                 completion(false)
                 return
             }
@@ -430,7 +414,6 @@ final class SupabaseRESTClient {
 
             guard let session = try? JSONDecoder().decode(RefreshResponse.self, from: data),
                   let newAccessToken = session.access_token, !newAccessToken.isEmpty else {
-                print("Supabase token refresh returned invalid session")
                 completion(false)
                 return
             }
@@ -441,7 +424,6 @@ final class SupabaseRESTClient {
                 tokenType: session.token_type,
                 expiresIn: session.expires_in
             )
-            print("Supabase token refreshed successfully")
             completion(true)
         }.resume()
     }

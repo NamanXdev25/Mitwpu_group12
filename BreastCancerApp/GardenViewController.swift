@@ -10,16 +10,11 @@ class GardenViewController: UIViewController {
     @IBOutlet weak var itemCollectionView: UICollectionView!
     @IBOutlet weak var storeButton: UIButton!
 
-    // MARK: - Level Card Outlets  ← Connect these in your storyboard
-    /// The "Level 1" label (top-left of the card)
+    // MARK: - Level Card Outlets
     @IBOutlet weak var levelTitleLabel: UILabel!
-    /// The "500 Points to next garden" subtitle label
     @IBOutlet weak var pointsToNextLabel: UILabel!
-    /// Connect your UIProgressView here (the pink bar)
     @IBOutlet weak var levelProgressView: UIProgressView!
-    /// The "4200" current-points label (left side of fraction)
     @IBOutlet weak var currentPointsLabel: UILabel!
-    /// The "5000" total-points label (right side of fraction)
     @IBOutlet weak var totalPointsLabel: UILabel!
 
     var gardenScene: GardenScene?
@@ -33,7 +28,6 @@ class GardenViewController: UIViewController {
         setupSpriteKit()
         setupGestures()
         observeNotifications()
-        // Style the progress view tint to match your pink colour
         levelProgressView?.progressTintColor = UIColor(red: 0.93, green: 0.29, blue: 0.47, alpha: 1.0)
         levelProgressView?.trackTintColor    = UIColor.systemGray5
     }
@@ -64,7 +58,6 @@ class GardenViewController: UIViewController {
     private func updateLevelCard() {
         let p = gardenManager.levelProgress
 
-        // Level 1 = 5000 total, Level 2 = 10000, Level 3 = 15000, ...
         let levelTotal = p.currentLevel * GardenLevelProgress.pointsPerLevel
         let pointsLeft = max(0, levelTotal - p.currentPoints)
 
@@ -200,7 +193,6 @@ extension GardenViewController: UICollectionViewDelegate, UICollectionViewDataSo
                         didSelectItemAt indexPath: IndexPath) {
         let item = trayItems[indexPath.item]
 
-        // Tapping a base tile switches the active garden base
         if item.id.hasPrefix("base_") {
             if let base = gardenManager.allBases.first(where: {
                 $0.id == item.baseId && $0.isUnlocked
@@ -210,7 +202,6 @@ extension GardenViewController: UICollectionViewDelegate, UICollectionViewDataSo
             return
         }
 
-        // Tapping a regular item enters placement mode
         gardenScene?.enterPlacementMode(for: item.imageName)
     }
 }
@@ -231,7 +222,7 @@ class GardenScene: SKScene {
     private enum PlacedItemUserDataKey {
         static let assetName = "assetName"
         static let instanceId = "instanceId"
-        static let imageName = "imageName" // Legacy key used by older builds.
+        static let imageName = "imageName"
     }
 
     // MARK: - Lifecycle

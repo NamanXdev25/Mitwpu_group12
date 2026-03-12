@@ -1,9 +1,3 @@
-//
-//  NewAppointmentTextFieldCell.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 04/03/26.
-//
 
 import UIKit
 

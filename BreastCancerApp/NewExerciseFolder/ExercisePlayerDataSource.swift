@@ -1,30 +1,15 @@
-//
-//  ExercisePlayerDataSource.swift
-//  BreastCancerApp
-//
-//  Created by Shivani Dinesh on 19/02/26.
-//
 
 import UIKit
 
 protocol ExercisePlayerDataSourceDelegate: AnyObject {
-    /// Called when the video cell is ready so the VC can keep a weak ref
     func didConfigureVideoCell(_ cell: VideoPlayerCell)
-    /// Called when AVPlayer reports the real video duration
     func didUpdateTotalDuration(_ seconds: Double)
-    /// Called when the info (i) button is tapped
     func didTapInfo(from button: UIButton)
-    /// Called when play/pause is toggled
     func didTogglePlayPause()
-    /// Called when restart is tapped
     func didRestart()
-    /// Called when loop is toggled
     func didToggleLoop(enabled: Bool)
-    /// Called when slider seek ends
     func didSeek(toProgress progress: Float)
-    /// Called when "Mark as Done" is tapped
     func didTapMarkAsDone()
-    /// Called when "Next" is tapped
     func didTapNext()
 }
 
@@ -76,7 +61,6 @@ extension ExercisePlayerDataSource: UICollectionViewDataSource, UICollectionView
                 self.delegate?.didUpdateTotalDuration(seconds)
             }
 
-            // Video file name convention: match the imageName (same asset name, different extension)
             cell.configure(videoName: exercise.imageName, imageName: exercise.imageName)
             delegate?.didConfigureVideoCell(cell)
 
@@ -119,7 +103,7 @@ extension ExercisePlayerDataSource: UICollectionViewDataSource, UICollectionView
                 withReuseIdentifier: "ActionButtonsCell", for: indexPath) as! ActionButtonsCell
 
             cell.setIsLastExercise(isLastExercise)
-            cell.setDone(false) // default; VC can update after
+            cell.setDone(false)
 
             cell.onMarkAsDone = { [weak self] in self?.delegate?.didTapMarkAsDone() }
             cell.onNext       = { [weak self] in self?.delegate?.didTapNext() }
@@ -133,9 +117,6 @@ extension ExercisePlayerDataSource: UICollectionViewDataSource, UICollectionView
 
     // MARK: - Helper
     private func descriptionFor(_ exercise: NewExerciseModel) -> String {
-        // Derive a sensible description from the model data.
-        // You can later extend NewExerciseModel with a `description` property
-        // and remove this helper entirely.
         return "A \(exercise.difficulty.lowercased())-difficulty \(exercise.category.lowercased()) exercise. Duration: \(exercise.duration)."
     }
 }

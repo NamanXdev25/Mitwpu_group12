@@ -56,7 +56,6 @@ class VideoPlayerCell: UICollectionViewCell {
         }
         
         guard let validPath = path else {
-            print("Video file not found: \(videoName)")
             return
         }
         
