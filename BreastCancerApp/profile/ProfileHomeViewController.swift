@@ -141,9 +141,10 @@ extension ProfileHomeViewController: UICollectionViewDelegate {
                 withIdentifier: "HealthStatusViewController") as! HealthStatusViewController
             navigationController?.pushViewController(vc, animated: true)
         case 2:
-            let vc = storyboard?.instantiateViewController(
-                withIdentifier: "SelfExamViewController") as! SelfExamViewController
-            navigationController?.pushViewController(vc, animated: true)
+            let storyboard = UIStoryboard(name: "selfexam", bundle: nil)
+                let vc = storyboard.instantiateViewController(
+                    withIdentifier: "SelfExamineViewController") as! SelfExamineViewController
+                navigationController?.pushViewController(vc, animated: true)
         default: break
         }
     }
