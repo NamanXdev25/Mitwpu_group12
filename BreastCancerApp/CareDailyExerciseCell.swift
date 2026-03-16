@@ -15,17 +15,37 @@ final class CareDailyExerciseCell: UICollectionViewCell {
     @IBOutlet weak var ExerciseEmptyStateLabel: UILabel?
 
     weak var delegate: CareDailyExerciseCellDelegate?
+    private let generatedEmptyLabel: UILabel = {
+        let label = UILabel()
+        label.text = "No plan added yet"
+        label.textAlignment = .center
+        label.textColor = .secondaryLabel
+        label.font = UIFont.systemFont(ofSize: 15, weight: .medium)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.isHidden = true
+        return label
+    }()
 
     override func awakeFromNib() {
         super.awakeFromNib()
         ExerciseBeginButton.addTarget(self, action: #selector(handleBeginTap), for: .touchUpInside)
+
+        if ExerciseEmptyStateLabel == nil {
+            ExerciseContainer.addSubview(generatedEmptyLabel)
+            NSLayoutConstraint.activate([
+                generatedEmptyLabel.centerXAnchor.constraint(equalTo: ExerciseContainer.centerXAnchor),
+                generatedEmptyLabel.centerYAnchor.constraint(equalTo: ExerciseContainer.centerYAnchor),
+                generatedEmptyLabel.leadingAnchor.constraint(equalTo: ExerciseContainer.leadingAnchor, constant: 16),
+                generatedEmptyLabel.trailingAnchor.constraint(equalTo: ExerciseContainer.trailingAnchor, constant: -16)
+            ])
+        }
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
         ExerciseTitle.text = nil
         ExerciseImage.image = nil
-        ExerciseEmptyStateLabel?.text = nil
+        activeEmptyLabel().text = nil
         applyPlanState(hasPlan: true)
     }
 
@@ -35,14 +55,9 @@ final class CareDailyExerciseCell: UICollectionViewCell {
         if hasPlan {
             ExerciseTitle.text = title
             ExerciseImage.image = image
-            ExerciseEmptyStateLabel?.text = nil
+            activeEmptyLabel().text = nil
         } else {
-            let emptyText = "No plan added yet."
-            if let emptyLabel = ExerciseEmptyStateLabel {
-                emptyLabel.text = emptyText
-            } else {
-                ExerciseTitle.text = emptyText
-            }
+            activeEmptyLabel().text = "No plan added yet"
             ExerciseImage.image = nil
         }
     }
@@ -55,12 +70,11 @@ final class CareDailyExerciseCell: UICollectionViewCell {
         ExerciseImage.isHidden = !hasPlan
         ExerciseBeginButton.isHidden = !hasPlan
         ExerciseBeginButton.isEnabled = hasPlan
+        ExerciseTitle.isHidden = !hasPlan
+        activeEmptyLabel().isHidden = hasPlan
+    }
 
-        if ExerciseEmptyStateLabel != nil {
-            ExerciseTitle.isHidden = !hasPlan
-            ExerciseEmptyStateLabel?.isHidden = hasPlan
-        } else {
-            ExerciseTitle.isHidden = false
-        }
+    private func activeEmptyLabel() -> UILabel {
+        ExerciseEmptyStateLabel ?? generatedEmptyLabel
     }
 }

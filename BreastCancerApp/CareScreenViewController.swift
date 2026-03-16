@@ -688,6 +688,10 @@ extension CareScreenViewController {
         UserDefaults.standard.set(category.id, forKey: selectedExerciseCategoryIDKey)
     }
 
+    private func clearSelectedExerciseCategory() {
+        UserDefaults.standard.removeObject(forKey: selectedExerciseCategoryIDKey)
+    }
+
     private func durationText(from subtitle: String) -> String {
         let components = subtitle.components(separatedBy: "·")
         if components.count >= 2 {
@@ -705,6 +709,11 @@ extension CareScreenViewController {
         pickerVC.onCategorySelected = { [weak self] category in
             guard let self = self else { return }
             self.saveSelectedExerciseCategory(category)
+            self.applySnapshot(animatingDifferences: false)
+        }
+        pickerVC.onCategoryDeselected = { [weak self] in
+            guard let self = self else { return }
+            self.clearSelectedExerciseCategory()
             self.applySnapshot(animatingDifferences: false)
         }
         navigationController?.pushViewController(pickerVC, animated: true)
@@ -738,6 +747,15 @@ extension CareScreenViewController {
             return
         }
         detailVC.exercisePlan = plan
+        detailVC.onPlanStateChanged = { [weak self] hasExercises in
+            guard let self = self else { return }
+            if hasExercises {
+                self.saveSelectedExerciseCategory(category)
+            } else {
+                self.clearSelectedExerciseCategory()
+            }
+            self.applySnapshot(animatingDifferences: false)
+        }
         navigationController?.pushViewController(detailVC, animated: true)
     }
 }

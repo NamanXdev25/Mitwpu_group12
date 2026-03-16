@@ -11,6 +11,7 @@ class NewExerciseViewController: UIViewController {
 
     // MARK: - Properties
     var exercisePlan: NewExercisePlan!
+    var onPlanStateChanged: ((Bool) -> Void)?
     private var dataSource: NewExerciseDataSource!
 
     private var completedIndices: Set<Int> = []
@@ -99,6 +100,7 @@ class NewExerciseViewController: UIViewController {
         setExerciseCompletion(for: index, completed: true)
         updateBeginButtonTitle()
         reloadExerciseCell(at: index)
+        onPlanStateChanged?(!completedIndices.isEmpty)
 
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
@@ -201,5 +203,6 @@ extension NewExerciseViewController: DetailExerciseCellDelegate {
         setExerciseCompletion(for: index, completed: completedIndices.contains(index))
         updateBeginButtonTitle()
         reloadExerciseCell(at: index)
+        onPlanStateChanged?(!completedIndices.isEmpty)
     }
 }

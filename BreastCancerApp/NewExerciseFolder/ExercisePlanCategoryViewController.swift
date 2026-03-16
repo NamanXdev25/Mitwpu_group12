@@ -9,6 +9,7 @@ class ExercisePlanCategoryViewController: UIViewController {
     // MARK: - Properties
     private var dataSource: ExercisePlanCategoryDataSource!
     var onCategorySelected: ((ExercisePlanCategory) -> Void)?
+    var onCategoryDeselected: (() -> Void)?
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -108,6 +109,13 @@ class ExercisePlanCategoryViewController: UIViewController {
         let storyboard = UIStoryboard(name: "NewExercise", bundle: nil)
         if let detailVC = storyboard.instantiateViewController(withIdentifier: "NewExerciseViewController") as? NewExerciseViewController {
             detailVC.exercisePlan = plan
+            detailVC.onPlanStateChanged = { [weak self] hasExercises in
+                if hasExercises {
+                    self?.onCategorySelected?(category)
+                } else {
+                    self?.onCategoryDeselected?()
+                }
+            }
             navigationController?.pushViewController(detailVC, animated: true)
         }
     }
@@ -144,7 +152,6 @@ class ExercisePlanCategoryViewController: UIViewController {
 // MARK: - ExercisePlanCategorySelectionDelegate
 extension ExercisePlanCategoryViewController: ExercisePlanCategorySelectionDelegate {
     func didSelectCategory(_ category: ExercisePlanCategory) {
-        onCategorySelected?(category)
         navigateToExerciseDetail(with: category)
     }
 }
