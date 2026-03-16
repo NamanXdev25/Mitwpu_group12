@@ -48,7 +48,7 @@ extension SelfExamineViewController: UICollectionViewDataSource {
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
-        4
+        3
     }
 
     func collectionView(
@@ -57,7 +57,7 @@ extension SelfExamineViewController: UICollectionViewDataSource {
     ) -> UICollectionViewCell {
 
         let identifiers = [
-            "SectionTitleCell",
+            
             "SelfExamCardsContainerCell",
             "GuidesCardCell",
             "ActionsContainerCell"
@@ -70,10 +70,10 @@ extension SelfExamineViewController: UICollectionViewDataSource {
 
         switch (indexPath.item, cell) {
 
-        case (2, let guidesCell as GuidesCardCell):
+        case (1, let guidesCell as GuidesCardCell):
             guidesCell.delegate = self
 
-        case (3, let actionsCell as ActionsContainerCell):
+        case (2, let actionsCell as ActionsContainerCell):
             actionsCell.delegate = self
 
         default:
@@ -97,16 +97,15 @@ extension SelfExamineViewController: UICollectionViewDelegateFlowLayout {
 
         switch indexPath.item {
         case 0:
-            return CGSize(width: width, height: 45)
-        case 1:
             return CGSize(width: width, height: 200)
-        case 2:
+        case 1:
             return CGSize(width: width, height: 180)
-        case 3:
+        case 2:
             return CGSize(width: width, height: 140)
         default:
             return CGSize(width: width, height: 60)
         }
+
     }
 }
 
@@ -132,4 +131,4 @@ extension SelfExamineViewController: ActionsContainerCellDelegate {
     func didTapViewPastTests(from cell: ActionsContainerCell) {
         performSegue(withIdentifier: "showTestHistory", sender: cell)
     }
-} 
+}

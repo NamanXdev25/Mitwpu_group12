@@ -36,9 +36,9 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7CT-Pu-7mt">
-                                <rect key="frame" x="144" y="58" width="173" height="139"/>
+                                <rect key="frame" x="144" y="58" width="173" height="135"/>
                                 <string key="text">Use opposite hands to examine each breast with two fingertip pads, using small circular motions &amp; covering entire area of breast</string>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -53,7 +53,7 @@
                             <constraint firstItem="hfc-D6-oyQ" firstAttribute="top" secondItem="kPp-Ld-zcB" secondAttribute="top" constant="12" id="WtL-5K-Wak"/>
                             <constraint firstAttribute="bottom" secondItem="hfc-D6-oyQ" secondAttribute="bottom" constant="12" id="ZFO-Yg-kFj"/>
                             <constraint firstItem="hfc-D6-oyQ" firstAttribute="leading" secondItem="kPp-Ld-zcB" secondAttribute="leading" constant="12" id="aXg-kO-2ib"/>
-                            <constraint firstAttribute="bottom" secondItem="7CT-Pu-7mt" secondAttribute="bottom" constant="12" id="nkj-lK-yGh"/>
+                            <constraint firstAttribute="bottom" secondItem="7CT-Pu-7mt" secondAttribute="bottom" constant="16" id="nkj-lK-yGh"/>
                             <constraint firstAttribute="trailing" secondItem="UG6-2i-NUu" secondAttribute="trailing" constant="12" id="u65-4d-Rcs"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>

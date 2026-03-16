@@ -318,13 +318,14 @@ class PostTreatmentCell: UICollectionViewCell {
 
         let resetBtn = UIButton(type: .system)
         resetBtn.setTitle("Reset", for: .normal)
-        resetBtn.setTitleColor(.systemRed, for: .normal)
-        resetBtn.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        resetBtn.setTitleColor(pink, for: .normal)
+        resetBtn.titleLabel?.font = .boldSystemFont(ofSize: 16)
 
         let doneBtn = UIButton(type: .system)
         doneBtn.setTitle("Done", for: .normal)
         doneBtn.titleLabel?.font = .boldSystemFont(ofSize: 16)
         doneBtn.setTitleColor(pink, for: .normal)
+
 
         buttonStack.addArrangedSubview(resetBtn)
         buttonStack.addArrangedSubview(doneBtn)

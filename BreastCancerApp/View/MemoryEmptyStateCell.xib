@@ -10,32 +10,32 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="MemoryEmptyStateCell" customModule="BreastCancerApp">
-            <rect key="frame" x="0.0" y="0.0" width="361" height="157"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="MemoryEmptyStateCell" customModule="BreastCancerApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="479" height="237"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="361" height="157"/>
+                <rect key="frame" x="0.0" y="0.0" width="479" height="237"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZkT-BY-qU9">
-                        <rect key="frame" x="0.0" y="8" width="361" height="141"/>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tzg-VX-sod">
+                        <rect key="frame" x="0.0" y="8" width="479" height="221"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your memories will appear here. add your first little moment ✨" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I2f-cZ-oYb">
-                                <rect key="frame" x="16" y="51.666666666666657" width="329" height="38"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your little moments will appear here. Add your first one!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BTH-o1-HXS">
+                                <rect key="frame" x="16" y="16" width="447" height="189"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                                <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="I2f-cZ-oYb" firstAttribute="leading" secondItem="ZkT-BY-qU9" secondAttribute="leading" constant="16" id="B7b-g4-xkG"/>
-                            <constraint firstItem="I2f-cZ-oYb" firstAttribute="centerY" secondItem="ZkT-BY-qU9" secondAttribute="centerY" id="HPD-DK-3Eq"/>
-                            <constraint firstAttribute="trailing" secondItem="I2f-cZ-oYb" secondAttribute="trailing" constant="16" id="SJp-zd-u3z"/>
-                            <constraint firstItem="I2f-cZ-oYb" firstAttribute="centerX" secondItem="ZkT-BY-qU9" secondAttribute="centerX" id="sJy-Vt-gQH"/>
+                            <constraint firstItem="BTH-o1-HXS" firstAttribute="leading" secondItem="Tzg-VX-sod" secondAttribute="leading" constant="16" id="TYW-B8-sgu"/>
+                            <constraint firstItem="BTH-o1-HXS" firstAttribute="top" secondItem="Tzg-VX-sod" secondAttribute="top" constant="16" id="Zei-dG-j3t"/>
+                            <constraint firstAttribute="bottom" secondItem="BTH-o1-HXS" secondAttribute="bottom" constant="16" id="b4E-dJ-GKR"/>
+                            <constraint firstAttribute="trailing" secondItem="BTH-o1-HXS" secondAttribute="trailing" constant="16" id="xbj-IU-Iwa"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="number" keyPath="Layer.cornerRadius">
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                 <integer key="value" value="12"/>
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
@@ -44,17 +44,17 @@
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <constraints>
-                <constraint firstItem="ZkT-BY-qU9" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="I0w-nM-0IH"/>
-                <constraint firstAttribute="trailing" secondItem="ZkT-BY-qU9" secondAttribute="trailing" id="JHf-UK-bfU"/>
-                <constraint firstItem="ZkT-BY-qU9" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="8" id="vIo-vF-OCD"/>
-                <constraint firstAttribute="bottom" secondItem="ZkT-BY-qU9" secondAttribute="bottom" constant="8" id="yyl-FU-6zJ"/>
+                <constraint firstAttribute="trailing" secondItem="Tzg-VX-sod" secondAttribute="trailing" id="2tZ-Ve-ahE"/>
+                <constraint firstItem="Tzg-VX-sod" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="7oC-Ho-8ih"/>
+                <constraint firstAttribute="bottom" secondItem="Tzg-VX-sod" secondAttribute="bottom" constant="8" id="MF1-42-qCd"/>
+                <constraint firstItem="Tzg-VX-sod" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="8" id="puu-64-2hT"/>
             </constraints>
-            <size key="customSize" width="361" height="157"/>
+            <size key="customSize" width="479" height="237"/>
             <connections>
-                <outlet property="containerView" destination="ZkT-BY-qU9" id="ofm-lE-JFt"/>
-                <outlet property="messageLabel" destination="I2f-cZ-oYb" id="fDd-BN-8dP"/>
+                <outlet property="containerView" destination="Tzg-VX-sod" id="sWp-L0-hSM"/>
+                <outlet property="messageLabel" destination="BTH-o1-HXS" id="x4k-MH-0Zd"/>
             </connections>
-            <point key="canvasLocation" x="376.3358778625954" y="95.422535211267615"/>
+            <point key="canvasLocation" x="466.41221374045801" y="202.46478873239437"/>
         </collectionViewCell>
     </objects>
     <resources>

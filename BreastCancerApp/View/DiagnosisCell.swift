@@ -231,9 +231,10 @@ class DiagnosisCell: UICollectionViewCell {
 
         let resetButton = UIButton(type: .system)
         resetButton.setTitle("Reset", for: .normal)
-        resetButton.setTitleColor(.systemRed, for: .normal)
-        resetButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        resetButton.setTitleColor(pink, for: .normal)
+        resetButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
         resetButton.addTarget(self, action: #selector(resetDateTapped), for: .touchUpInside)
+
 
         let doneButton = UIButton(type: .system)
         doneButton.setTitle("Done", for: .normal)
