@@ -11,6 +11,7 @@ class NewExerciseViewController: UIViewController {
 
     // MARK: - Properties
     var exercisePlan: NewExercisePlan!
+    var exerciseCategoryID: Int?
     var onPlanStateChanged: ((Bool) -> Void)?
     private var dataSource: NewExerciseDataSource!
 
@@ -175,6 +176,46 @@ class NewExerciseViewController: UIViewController {
     }
 
     @IBAction func defaultButtonTapped(_ sender: UIButton) {
+        guard let categoryID = exerciseCategoryID, categoryID > 0 else { return }
+
+        let userKey = SupabaseUserContext.currentUserId?.uuidString ?? "anonymous"
+        let key = "care_selected_exercise_category_id_v2_\(userKey)"
+        UserDefaults.standard.set(categoryID, forKey: key)
+
+        NotificationCenter.default.post(
+            name: NSNotification.Name("ExerciseDefaultPlanChanged"),
+            object: nil
+        )
+
+        let toastLabel = UILabel()
+        toastLabel.backgroundColor = UIColor.black.withAlphaComponent(0.8)
+        toastLabel.textColor = .white
+        toastLabel.textAlignment = .center
+        toastLabel.font = UIFont.systemFont(ofSize: 15, weight: .medium)
+        toastLabel.text = "Plan added"
+        toastLabel.alpha = 1.0
+        toastLabel.layer.cornerRadius = 18
+        toastLabel.clipsToBounds = true
+        
+        let maxWidth = view.frame.width - 60
+        let expectedSize = toastLabel.sizeThatFits(CGSize(width: maxWidth, height: .greatestFiniteMagnitude))
+        let width = min(expectedSize.width + 48, maxWidth)
+        let height = max(expectedSize.height + 16, 36)
+        
+        toastLabel.frame = CGRect(
+            x: view.frame.width / 2 - width / 2,
+            y: view.frame.height - bottomButtonContainer.frame.height - 40 - height,
+            width: width,
+            height: height
+        )
+        
+        view.addSubview(toastLabel)
+        
+        UIView.animate(withDuration: 0.3, delay: 1.5, options: .curveEaseOut, animations: {
+            toastLabel.alpha = 0.0
+        }, completion: { _ in
+            toastLabel.removeFromSuperview()
+        })
     }
 }
 

@@ -66,6 +66,13 @@ class CareScreenViewController: UIViewController {
             object: nil
         )
 
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(exerciseDefaultPlanDidChange),
+            name: NSNotification.Name("ExerciseDefaultPlanChanged"),
+            object: nil
+        )
+
         startAppointmentRefreshTimer()
     }
 
@@ -97,6 +104,10 @@ class CareScreenViewController: UIViewController {
 
     @objc private func symptomDataDidChange() {
         applySnapshot(animatingDifferences: true)
+    }
+
+    @objc private func exerciseDefaultPlanDidChange() {
+        applySnapshot(animatingDifferences: false)
     }
 
     // MARK: - Appointment Refresh Timer
@@ -747,6 +758,7 @@ extension CareScreenViewController {
             return
         }
         detailVC.exercisePlan = plan
+        detailVC.exerciseCategoryID = category.id
         detailVC.onPlanStateChanged = { [weak self] hasExercises in
             guard let self = self else { return }
             if hasExercises {

@@ -109,6 +109,7 @@ class ExercisePlanCategoryViewController: UIViewController {
         let storyboard = UIStoryboard(name: "NewExercise", bundle: nil)
         if let detailVC = storyboard.instantiateViewController(withIdentifier: "NewExerciseViewController") as? NewExerciseViewController {
             detailVC.exercisePlan = plan
+            detailVC.exerciseCategoryID = category.id
             detailVC.onPlanStateChanged = { [weak self] hasExercises in
                 if hasExercises {
                     self?.onCategorySelected?(category)
