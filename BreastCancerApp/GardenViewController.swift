@@ -35,7 +35,6 @@ class GardenViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
-        self.title = "Healing Garden"
         itemCollectionView.reloadData()
         updateLevelCard()
     }
