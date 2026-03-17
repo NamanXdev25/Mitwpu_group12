@@ -93,7 +93,7 @@ final class BreathingPlayerViewController: UIViewController, AVAudioPlayerDelega
 
     private func setupData() {
         guard let session else { return }
-        title = session.title
+        title = ""
         backgroundImageView?.image = UIImage(named: session.imageName)
     }
 

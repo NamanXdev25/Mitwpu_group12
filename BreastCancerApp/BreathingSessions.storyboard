@@ -117,7 +117,7 @@
                             <outlet property="backgroundImageView" destination="Y4l-mU-GY8" id="MHb-al-wFA"/>
                         </connections>
                     </view>
-                    <navigationItem key="navigationItem" title="Gentle Focus" id="VXJ-aY-Ney"/>
+                    <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="VXJ-aY-Ney"/>
                     <connections>
                         <outlet property="backgroundImageView" destination="Y4l-mU-GY8" id="cC6-ke-ayS"/>
                         <outlet property="playButton" destination="n20-O2-vXr" id="k6S-Ge-MXE"/>

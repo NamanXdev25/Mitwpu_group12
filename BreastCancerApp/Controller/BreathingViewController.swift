@@ -107,6 +107,10 @@ class BreathingViewController: UIViewController {
         
         collectionView.register(UINib(nibName: "HeaderView", bundle: nil), forSupplementaryViewOfKind: "header", withReuseIdentifier: "HeaderView")
     }
+
+    @objc private func closePresentedPlayer() {
+        self.dismiss(animated: true, completion: nil)
+    }
 }
 
 extension BreathingViewController: UICollectionViewDataSource {
@@ -207,12 +211,16 @@ extension BreathingViewController: UICollectionViewDelegate {
                     
                     playerVC.session = session
                     
-                    if let nav = self.navigationController {
-                        nav.pushViewController(playerVC, animated: true)
-                    } else {
-                        playerVC.modalPresentationStyle = .fullScreen
-                        self.present(playerVC, animated: true, completion: nil)
+                    playerVC.navigationItem.leftBarButtonItem = UIBarButtonItem(
+                        barButtonSystemItem: .close, target: self, action: #selector(closePresentedPlayer)
+                    )
+                    let nav = UINavigationController(rootViewController: playerVC)
+                    if let sheet = nav.sheetPresentationController {
+                        sheet.detents = [.large()]
+                        sheet.prefersGrabberVisible = true
+                        sheet.prefersScrollingExpandsWhenScrolledToEdge = false
                     }
+                    self.present(nav, animated: true, completion: nil)
                 }
             }
         }
