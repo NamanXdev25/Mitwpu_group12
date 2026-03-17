@@ -256,6 +256,7 @@ final class SupabaseHydrationRepository: HydrationRepository {
         client.fetchRows(from: "hydration_daily_status", filters: [SupabaseFilter(key: "user_id", op: "eq", value: userId.uuidString)]) { (rows: [HydrationDailySupabaseRow]) in
             guard !rows.isEmpty else { return }
             let dailyEntries = rows
+                .filter { $0.consumed_ml > 0 }
                 .map(HydrationEntry.init(supabaseDailyRow:))
                 .sorted { $0.timestamp > $1.timestamp }
             self.local.saveEntries(dailyEntries)
@@ -276,7 +277,7 @@ final class SupabaseHydrationRepository: HydrationRepository {
             let existingGoalByDateKey = Dictionary(uniqueKeysWithValues: existingRows.map { ($0.date_key, $0.goal_ml) })
             let todayKey = DateFormatter.supabaseDateKey.string(from: calendar.startOfDay(for: Date()))
 
-            let rows = groupedByDate.map { dayStart, dayEntries in
+            var rowsToUpsert = groupedByDate.map { dayStart, dayEntries in
                 let dateKey = DateFormatter.supabaseDateKey.string(from: dayStart)
                 let consumedML = dayEntries.reduce(0) { $0 + $1.amountML }
                 let goalML: Int
@@ -296,8 +297,25 @@ final class SupabaseHydrationRepository: HydrationRepository {
                 )
             }
 
+            let localDateKeys = Set(rowsToUpsert.map(\.date_key))
+            for existingRow in existingRows {
+                if !localDateKeys.contains(existingRow.date_key) {
+                    rowsToUpsert.append(
+                        HydrationDailySupabaseRow(
+                            id: existingRow.id,
+                            user_id: self.userId,
+                            date_key: existingRow.date_key,
+                            date_epoch: existingRow.date_epoch,
+                            consumed_ml: 0,
+                            goal_ml: existingRow.goal_ml,
+                            updated_at: Date()
+                        )
+                    )
+                }
+            }
+
             self.client.upsertRows(
-                rows,
+                rowsToUpsert,
                 into: "hydration_daily_status",
                 onConflict: "user_id,date_key"
             )
