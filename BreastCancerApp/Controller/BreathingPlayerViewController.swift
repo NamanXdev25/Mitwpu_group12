@@ -122,70 +122,78 @@ final class BreathingPlayerViewController: UIViewController, AVAudioPlayerDelega
         loopStartTrim: Double,
         loopEndTrim: Double
     ) {
-        guard let url = Bundle.main.url(forResource: videoName, withExtension: "mp4") else {
-            return
+        Task { [weak self] in
+            guard let self = self else { return }
+            guard let url = Bundle.main.url(forResource: videoName, withExtension: "mp4") else {
+                return
+            }
+
+            let asset = AVURLAsset(url: url)
+            guard let duration = try? await asset.load(.duration) else { return }
+            let timescale: CMTimeScale = max(duration.timescale, 600)
+
+            let start = CMTime(seconds: max(0, loopStartTrim), preferredTimescale: timescale)
+            let endTrim = CMTime(seconds: max(0, loopEndTrim), preferredTimescale: timescale)
+            let end = CMTimeSubtract(duration, endTrim)
+
+            guard end > start else {
+                return
+            }
+
+            let clipRange = CMTimeRange(start: start, end: end)
+            let composition = AVMutableComposition()
+
+            guard
+                let tracks = try? await asset.loadTracks(withMediaType: .video),
+                let srcTrack = tracks.first,
+                let compTrack = composition.addMutableTrack(
+                    withMediaType: .video,
+                    preferredTrackID: kCMPersistentTrackID_Invalid
+                )
+            else {
+                return
+            }
+
+            do {
+                try compTrack.insertTimeRange(clipRange, of: srcTrack, at: .zero)
+                if let transform = try? await srcTrack.load(.preferredTransform) {
+                    compTrack.preferredTransform = transform
+                }
+            } catch {
+                return
+            }
+
+            let item = AVPlayerItem(asset: composition)
+            item.seekingWaitsForVideoCompositionRendering = false
+
+            let queue = AVQueuePlayer()
+            queue.actionAtItemEnd = .none
+            queue.isMuted = true
+            queue.automaticallyWaitsToMinimizeStalling = false
+
+            let loopRange = CMTimeRange(start: .zero, duration: clipRange.duration)
+            let looper = AVPlayerLooper(player: queue, templateItem: item, timeRange: loopRange)
+
+            await MainActor.run {
+                guard let videoContainerView = self.videoContainerView else {
+                    return
+                }
+
+                let layer = AVPlayerLayer(player: queue)
+                layer.videoGravity = .resizeAspectFill
+                layer.needsDisplayOnBoundsChange = true
+
+                videoContainerView.playerLayer = nil
+                videoContainerView.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
+
+                layer.frame = videoContainerView.bounds
+                videoContainerView.layer.addSublayer(layer)
+
+                self.videoQueuePlayer = queue
+                self.videoLooper = looper
+                self.playerLayer = layer
+            }
         }
-
-        let asset = AVAsset(url: url)
-        let duration = asset.duration
-        let timescale: CMTimeScale = max(duration.timescale, 600)
-
-        let start = CMTime(seconds: max(0, loopStartTrim), preferredTimescale: timescale)
-        let endTrim = CMTime(seconds: max(0, loopEndTrim), preferredTimescale: timescale)
-        let end = CMTimeSubtract(duration, endTrim)
-
-        guard end > start else {
-            return
-        }
-
-        let clipRange = CMTimeRange(start: start, end: end)
-        let composition = AVMutableComposition()
-
-        guard
-            let srcTrack = asset.tracks(withMediaType: .video).first,
-            let compTrack = composition.addMutableTrack(
-                withMediaType: .video,
-                preferredTrackID: kCMPersistentTrackID_Invalid
-            )
-        else {
-            return
-        }
-
-        do {
-            try compTrack.insertTimeRange(clipRange, of: srcTrack, at: .zero)
-            compTrack.preferredTransform = srcTrack.preferredTransform
-        } catch {
-            return
-        }
-
-        let item = AVPlayerItem(asset: composition)
-        item.seekingWaitsForVideoCompositionRendering = false
-
-        let queue = AVQueuePlayer()
-        queue.actionAtItemEnd = .none
-        queue.isMuted = true
-        queue.automaticallyWaitsToMinimizeStalling = false
-
-        let loopRange = CMTimeRange(start: .zero, duration: clipRange.duration)
-        let looper = AVPlayerLooper(player: queue, templateItem: item, timeRange: loopRange)
-
-        let layer = AVPlayerLayer(player: queue)
-        layer.videoGravity = .resizeAspectFill
-        layer.needsDisplayOnBoundsChange = true
-
-        guard let videoContainerView else {
-            return
-        }
-
-        videoContainerView.playerLayer = nil
-        videoContainerView.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
-
-        layer.frame = videoContainerView.bounds
-        videoContainerView.layer.addSublayer(layer)
-
-        videoQueuePlayer = queue
-        videoLooper = looper
-        playerLayer = layer
     }
 
     private func prepareAudio(audioName: String) {

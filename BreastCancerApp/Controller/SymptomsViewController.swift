@@ -200,7 +200,6 @@ class SymptomsViewController: UIViewController {
         resetSelectionIfNeededForNewDay()
         userSymptoms = dataSource.getUserSymptoms()
         displayedLogs = dataSource.getSymptomLogs(on: normalizedDisplayDate)
-        navigationItem.prompt = displayedDateSectionTitle
         collectionView.reloadData()
     }
 

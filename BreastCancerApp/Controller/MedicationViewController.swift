@@ -104,10 +104,7 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
     func loadMedications() {
         if let history = MedicationHistory.shared.getHistory(for: normalizedDisplayDate) {
             allMedications = history.medications
-        } else {
-            allMedications = []
         }
-        navigationItem.prompt = displayedDateSectionTitle
     }
     
     // MARK: - Load Dummy Data
