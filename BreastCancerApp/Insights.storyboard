@@ -1,51 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="V6G-kb-ubt">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Health Insights-->
-        <scene sceneID="hGT-bY-b6M">
-            <objects>
-                <viewController storyboardIdentifier="HealthInsightsViewController" id="3k7-6G-Xb5" customClass="HealthInsightsViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="TBL-yB-Nbx">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="f2D-Er-W8K">
-                                <rect key="frame" x="0.0" y="172" width="393" height="612"/>
-                                <color key="backgroundColor" red="0.93411726799999995" green="0.93411726799999995" blue="0.93411726799999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="wJR-Uq-rFW">
-                                    <size key="itemSize" width="128" height="128"/>
-                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                </collectionViewFlowLayout>
-                                <cells/>
-                            </collectionView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="l8V-XO-Zog"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="l8V-XO-Zog" firstAttribute="trailing" secondItem="f2D-Er-W8K" secondAttribute="trailing" id="1M4-dC-rLb"/>
-                            <constraint firstItem="f2D-Er-W8K" firstAttribute="top" secondItem="l8V-XO-Zog" secondAttribute="top" id="Ac6-eg-QgO"/>
-                            <constraint firstItem="l8V-XO-Zog" firstAttribute="bottom" secondItem="f2D-Er-W8K" secondAttribute="bottom" id="YqQ-Yn-gsO"/>
-                            <constraint firstItem="f2D-Er-W8K" firstAttribute="leading" secondItem="l8V-XO-Zog" secondAttribute="leading" id="zbD-LB-cU7"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" title="Health Insights" largeTitleDisplayMode="never" id="Ysx-Lk-dVB"/>
-                    <connections>
-                        <outlet property="collectionView" destination="f2D-Er-W8K" id="NEs-a4-9uk"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="nI3-Kk-QmJ" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1064.885496183206" y="130.98591549295776"/>
-        </scene>
         <!--Hydration-->
         <scene sceneID="yQ7-pu-G9d">
             <objects>
@@ -161,26 +124,146 @@
             </objects>
             <point key="canvasLocation" x="1976.3358778625955" y="130.98591549295776"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="OBn-JE-QtT">
+        <!--Filter-->
+        <scene sceneID="bCD-lg-nfz">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="V6G-kb-ubt" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="InsightDatePickerViewController" title="Filter" modalPresentationStyle="pageSheet" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ZUq-kM-OsM" customClass="InsightDatePickerViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="dDF-du-bdi">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="793"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" style="inline" translatesAutoresizingMaskIntoConstraints="NO" id="bdJ-FJ-Hz2">
+                                <rect key="frame" x="16" y="149.99999999999997" width="361" height="353.33333333333326"/>
+                                <color key="tintColor" name="PrimaryColor"/>
+                            </datePicker>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="b9y-5m-vcr"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="bdJ-FJ-Hz2" firstAttribute="top" secondItem="b9y-5m-vcr" secondAttribute="top" constant="80" id="OCg-zT-coX"/>
+                            <constraint firstItem="bdJ-FJ-Hz2" firstAttribute="trailing" secondItem="b9y-5m-vcr" secondAttribute="trailing" constant="-16" id="iCr-Mo-bbt"/>
+                            <constraint firstItem="bdJ-FJ-Hz2" firstAttribute="leading" secondItem="b9y-5m-vcr" secondAttribute="leading" constant="16" id="vQe-AR-LW7"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Filter" id="Uwp-nG-sbu">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="tbM-aO-8Mk">
+                            <connections>
+                                <action selector="cancelTapped:" destination="ZUq-kM-OsM" id="TQA-cR-4rd"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="AKI-mp-iwG">
+                            <color key="tintColor" name="primary_color"/>
+                            <connections>
+                                <action selector="applyTapped:" destination="ZUq-kM-OsM" id="mZ8-VU-lDd"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics"/>
+                    <modalPageSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <connections>
+                        <outlet property="datePicker" destination="bdJ-FJ-Hz2" id="8CQ-jc-Qcs"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Lyv-Le-3KM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1985.4961832061067" y="856.33802816901414"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="VTs-Wg-t9i">
+            <objects>
+                <navigationController storyboardIdentifier="InsightDatePickerNavigationController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="NAf-aE-wdP" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="PRM-lj-3gj">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="bxD-SE-LnU">
                         <rect key="frame" x="0.0" y="118" width="393" height="54"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="3k7-6G-Xb5" kind="relationship" relationship="rootViewController" id="Z6z-tp-ri8"/>
+                        <segue destination="ZUq-kM-OsM" kind="relationship" relationship="rootViewController" id="lu6-OM-Qb8"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="VqO-gT-GO7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SxA-QO-Wij" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1058.7786259541983" y="856.33802816901414"/>
+        </scene>
+        <!--Health Insights-->
+        <scene sceneID="Ye4-hY-IKy">
+            <objects>
+                <viewController storyboardIdentifier="HealthInsightsViewController" id="3r1-Sq-1gL" customClass="HealthInsightsViewController" customModule="BreastCancerApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="7zN-iS-ixe">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="4cl-ZQ-9FP">
+                                <rect key="frame" x="0.0" y="172" width="393" height="612"/>
+                                <color key="backgroundColor" red="0.93411726799999995" green="0.93411726799999995" blue="0.93411726799999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="8FF-a6-Z2r">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="4kh-b6-RdF"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="4cl-ZQ-9FP" firstAttribute="leading" secondItem="4kh-b6-RdF" secondAttribute="leading" id="4ue-Fq-iDh"/>
+                            <constraint firstItem="4cl-ZQ-9FP" firstAttribute="top" secondItem="4kh-b6-RdF" secondAttribute="top" id="KGL-JL-s5Y"/>
+                            <constraint firstItem="4kh-b6-RdF" firstAttribute="bottom" secondItem="4cl-ZQ-9FP" secondAttribute="bottom" id="SXl-0q-tKa"/>
+                            <constraint firstItem="4kh-b6-RdF" firstAttribute="trailing" secondItem="4cl-ZQ-9FP" secondAttribute="trailing" id="kKj-Xj-juy"/>
+                        </constraints>
+                    </view>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="Health Insights" largeTitleDisplayMode="never" id="SsN-Lv-Bh5">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="line.3.horizontal.decrease" catalog="system" id="KVD-bG-Ub9">
+                            <color key="tintColor" name="bg 1"/>
+                            <connections>
+                                <action selector="filterButtonTapped:" destination="3r1-Sq-1gL" id="o8H-59-575"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="collectionView" destination="4cl-ZQ-9FP" id="ANT-8V-aGv"/>
+                        <outlet property="filterBarButton" destination="KVD-bG-Ub9" id="wpK-yj-Kc6"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Md0-5I-Y1I" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1064.885496183206" y="130.98591549295776"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="yGi-zG-L93">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="bGc-Uj-MeB" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="CBm-fK-jgn">
+                        <rect key="frame" x="0.0" y="118" width="393" height="54"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="3r1-Sq-1gL" kind="relationship" relationship="rootViewController" id="5sU-MY-Zzl"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Oev-ZQ-NBP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="138.1679389312977" y="130.98591549295776"/>
         </scene>
     </scenes>
     <resources>
+        <image name="line.3.horizontal.decrease" catalog="system" width="128" height="73"/>
+        <namedColor name="PrimaryColor">
+            <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="bg 1">
+            <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+        <namedColor name="primary_color">
+            <color red="0.90980392156862744" green="0.41568627450980394" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

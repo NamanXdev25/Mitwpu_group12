@@ -17,7 +17,7 @@ class HydrationDetailViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()  
+        setupUI()
         setupTableView()
         loadData()
     }
@@ -36,9 +36,9 @@ class HydrationDetailViewController: UIViewController {
         closeButton.tintColor = .label
         navigationItem.rightBarButtonItem = closeButton
         
-        goalLabel.text = "Goal: \(formatML(dailyGoal))"
-        goalLabel.textColor = .systemGray
-        goalLabel.font = .systemFont(ofSize: 15, weight: .regular)
+        goalLabel?.text = "Goal: \(formatML(dailyGoal))"
+        goalLabel?.textColor = .systemGray
+        goalLabel?.font = .systemFont(ofSize: 15, weight: .regular)
     }
     
     private func setupTableView() {
