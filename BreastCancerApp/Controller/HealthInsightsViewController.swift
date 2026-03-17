@@ -200,8 +200,6 @@ extension HealthInsightsViewController: UICollectionViewDataSource {
             }
             return cell
             
-        default:
-            return UICollectionViewCell()
         }
     }
 }
@@ -213,9 +211,6 @@ extension HealthInsightsViewController: UICollectionViewDelegateFlowLayout {
         
         switch insight.type {
         case .symptoms, .exercise, .hydration, .medication:
-            
-            return CGSize(width: width, height: 320)
-        default:
             return CGSize(width: width, height: 320)
         }
     }

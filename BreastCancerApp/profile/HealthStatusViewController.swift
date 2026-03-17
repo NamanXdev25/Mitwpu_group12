@@ -137,14 +137,29 @@ extension HealthStatusViewController {
             navigationItem.rightBarButtonItem = UIBarButtonItem(customView: wrapper)
 
         } else {
-            let btn                 = UIButton(type: .custom)
-            btn.setTitle("Edit", for: .normal)
-            btn.setTitleColor(.white, for: .normal)
-            btn.setTitleColor(UIColor.white.withAlphaComponent(0.7), for: .highlighted)
-            btn.titleLabel?.font    = .systemFont(ofSize: 15, weight: .semibold)
-            btn.backgroundColor     = brandPink
-            btn.layer.cornerRadius  = 18
-            btn.contentEdgeInsets   = UIEdgeInsets(top: 8, left: 24, bottom: 8, right: 24)
+            let btn = UIButton(type: .custom)
+            if #available(iOS 15.0, *) {
+                var config = UIButton.Configuration.filled()
+                config.title = "Edit"
+                config.baseForegroundColor = .white
+                config.baseBackgroundColor = brandPink
+                config.background.cornerRadius = 18
+                config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 24, bottom: 8, trailing: 24)
+                config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+                    var outgoing = incoming
+                    outgoing.font = .systemFont(ofSize: 15, weight: .semibold)
+                    return outgoing
+                }
+                btn.configuration = config
+            } else {
+                btn.setTitle("Edit", for: .normal)
+                btn.setTitleColor(.white, for: .normal)
+                btn.setTitleColor(UIColor.white.withAlphaComponent(0.7), for: .highlighted)
+                btn.titleLabel?.font    = .systemFont(ofSize: 15, weight: .semibold)
+                btn.backgroundColor     = brandPink
+                btn.layer.cornerRadius  = 18
+                btn.contentEdgeInsets   = UIEdgeInsets(top: 8, left: 24, bottom: 8, right: 24)
+            }
             btn.addTarget(self, action: #selector(editTapped), for: .touchUpInside)
             btn.sizeToFit()
             navigationItem.rightBarButtonItem = UIBarButtonItem(customView: btn)

@@ -207,8 +207,7 @@ final class SupabaseRESTClient {
                 }
 
                 if !(200..<300).contains(http.statusCode) {
-                    if let body = String(data: data, encoding: .utf8) {
-                    }
+                    _ = String(data: data, encoding: .utf8)
                 }
             }
             let rows = (try? decoder.decode([T].self, from: data)) ?? []
@@ -326,10 +325,11 @@ final class SupabaseRESTClient {
         var requestSuccess = false
 
         session.dataTask(with: request) { data, response, error in
-            if let error {
+            if error != nil {
             }
             if let http = response as? HTTPURLResponse, !(200..<300).contains(http.statusCode) {
-                if let data, let body = String(data: data, encoding: .utf8) {
+                if let data {
+                    _ = String(data: data, encoding: .utf8)
                 }
             }
 

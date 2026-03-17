@@ -146,7 +146,7 @@
         <!--Navigation Controller-->
         <scene sceneID="eDQ-U9-U4f">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="mA4-0A-clU" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="HydrationDetailNavController" automaticallyAdjustsScrollViewInsets="NO" id="mA4-0A-clU" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="GCA-ec-2dA">
                         <rect key="frame" x="0.0" y="118" width="393" height="54"/>

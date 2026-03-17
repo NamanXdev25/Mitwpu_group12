@@ -202,7 +202,8 @@ class DiagnosisCell: UICollectionViewCell {
     }
 
     private func showDatePickerOverlay() {
-        guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else { return }
+        guard let windowScene = UIApplication.shared.connectedScenes.first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene,
+              let window = windowScene.windows.first(where: { $0.isKeyWindow }) else { return }
 
         overlayView = UIView(frame: window.bounds)
         overlayView?.backgroundColor = UIColor.black.withAlphaComponent(0.5)

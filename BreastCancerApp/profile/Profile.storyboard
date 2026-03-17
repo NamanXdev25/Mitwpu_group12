@@ -55,7 +55,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="collectionView" destination="UDC-Gf-MgK" id="eSM-mT-pZm"/>
-                        <segue destination="jkM-XM-fju" kind="show" id="UZ1-tE-g92"/>
+                        <segue destination="jkM-XM-fju" kind="show" identifier="showHealthStatus" id="UZ1-tE-g92"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="h1K-xl-hZE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

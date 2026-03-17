@@ -192,7 +192,7 @@
         <scene sceneID="XqW-Rk-Eh9">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7AG-es-OdJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="zVO-Zc-f0R" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="NewExerciseNavController" automaticallyAdjustsScrollViewInsets="NO" id="zVO-Zc-f0R" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="27i-Jt-fHO">
                         <rect key="frame" x="0.0" y="118" width="393" height="54"/>

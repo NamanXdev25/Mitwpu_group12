@@ -378,7 +378,7 @@
         <!--Navigation Controller-->
         <scene sceneID="vAu-Mw-p0V">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="wJn-h4-eQD" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="HealingGardenStoreNavController" automaticallyAdjustsScrollViewInsets="NO" id="wJn-h4-eQD" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="eSo-QQ-eJv">
                         <rect key="frame" x="0.0" y="118" width="393" height="54"/>
