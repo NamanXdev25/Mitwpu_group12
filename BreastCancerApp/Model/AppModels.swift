@@ -11,6 +11,7 @@ enum CareSectionType: Int, CaseIterable {
     case medication
     case exerciseHeader
     case exercise
+    case symptomsHeader
     case symptoms
     case appointmentHeader
     case appointments

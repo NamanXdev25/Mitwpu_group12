@@ -378,6 +378,7 @@ class CareScreenViewController: UIViewController {
             case .medication:        return self.createMedicationSection()
             case .exerciseHeader:    return self.createHeaderSection()
             case .exercise:          return self.createExerciseSection()
+            case .symptomsHeader:    return self.createHeaderSection()
             case .symptoms:          return self.createSymptomsSection()
             case .appointmentHeader: return self.createHeaderSection()
             case .appointments:      return self.createAppointmentsSection()
@@ -423,7 +424,7 @@ class CareScreenViewController: UIViewController {
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(109))
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 22, trailing: 16)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16)
         return section
     }
 
@@ -586,6 +587,8 @@ class CareScreenViewController: UIViewController {
                 imageName: nil
             ))
         ], toSection: .exercise)
+
+        snapshot.appendItems([CareItem(id: UUID(), type: .header(title: "Symptoms", showManage: false))], toSection: .symptomsHeader)
 
         let chips = todaySymptomChips()
         snapshot.appendItems([
