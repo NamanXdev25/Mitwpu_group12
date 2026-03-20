@@ -1,4 +1,3 @@
-
 import UIKit
 
 class MedicationViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
@@ -371,15 +370,10 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
     // MARK: - Edit Medication
     func openEditMedication(actualIndex: Int) {
         let storyboard = UIStoryboard(name: "Medication", bundle: nil)
-        
-        if let addVC = storyboard.instantiateViewController(withIdentifier: "AddMedicationViewController") as? AddMedicationViewController {
-            let selectedMed = allMedications[actualIndex]
-            addVC.medicationToEdit = selectedMed
-            addVC.indexToEdit = actualIndex
-            addVC.delegate = self
-            
-            navigationController?.pushViewController(addVC, animated: true)
-        }
+        guard let addVC = storyboard.instantiateViewController(withIdentifier: "NewAddMedicationViewController") as? NewAddMedicationViewController else { return }
+        addVC.medicationToEdit = allMedications[actualIndex]
+        addVC.delegate = self
+        navigationController?.pushViewController(addVC, animated: true)
     }
     
     // MARK: - IBActions
@@ -389,12 +383,9 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
     
     @IBAction func addButtonTapped(_ sender: UIBarButtonItem) {
         let storyboard = UIStoryboard(name: "Medication", bundle: nil)
-        
-        if let addVC = storyboard.instantiateViewController(withIdentifier: "AddMedicationViewController") as? AddMedicationViewController {
-            addVC.delegate = self
-            
-            navigationController?.pushViewController(addVC, animated: true)
-        }
+        guard let addVC = storyboard.instantiateViewController(withIdentifier: "NewAddMedicationViewController") as? NewAddMedicationViewController else { return }
+        addVC.delegate = self
+        navigationController?.pushViewController(addVC, animated: true)
     }
 
     private var normalizedDisplayDate: Date {
@@ -417,31 +408,17 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
     }
 }
 
-// MARK: - AddMedicationDelegate
-extension MedicationViewController: AddMedicationDelegate {
-    
-    func didAddMedication(name: String, time: String, repeatOption: String, note: String, reminderEnabled: Bool) {
-        let newPill = Medication(name: name, note: note, time: time, repeatOption: repeatOption, isTaken: false, reminderEnabled: reminderEnabled)
-        allMedications.append(newPill)
+// MARK: - NewAddMedicationDelegate
+extension MedicationViewController: NewAddMedicationDelegate {
+
+    func didSaveMedications(_ medications: [Medication]) {
+        if let editTarget = medications.first,
+           let existingIndex = allMedications.firstIndex(where: { $0.id == editTarget.id }) {
+            allMedications.remove(at: existingIndex)
+        }
+        allMedications.append(contentsOf: medications)
         MedicationReminderScheduler.shared.syncReminders(for: allMedications)
-        collectionView.reloadData()
         saveMedications()
-    }
-    
-    func didEditMedication(index: Int, name: String, time: String, repeatOption: String, note: String, reminderEnabled: Bool) {
-        let updatedPill = Medication(
-            id: allMedications[index].id,
-            name: name,
-            note: note,
-            time: time,
-            repeatOption: repeatOption,
-            isTaken: allMedications[index].isTaken,
-            reminderEnabled: reminderEnabled
-        )
-        
-        allMedications[index] = updatedPill
-        MedicationReminderScheduler.shared.syncReminders(for: allMedications)
         collectionView.reloadData()
-        saveMedications()
     }
 }

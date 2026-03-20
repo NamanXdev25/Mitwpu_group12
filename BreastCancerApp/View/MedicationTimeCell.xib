@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="MedicationTimeCell" customModule="BreastCancerApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="51"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="393" height="51"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qop-go-6ie">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="51"/>
+                        <subviews>
+                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" style="compact" translatesAutoresizingMaskIntoConstraints="NO" id="60O-om-rrz">
+                                <rect key="frame" x="8" y="8" width="96" height="36"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="96" id="QCb-nV-ch6"/>
+                                </constraints>
+                            </datePicker>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LvP-EA-1n6">
+                                <rect key="frame" x="353" y="9.6666666666666643" width="32" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="32" id="42v-W1-xgU"/>
+                                    <constraint firstAttribute="width" constant="32" id="PBd-e0-Mgh"/>
+                                </constraints>
+                                <color key="tintColor" systemColor="systemRedColor"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled">
+                                    <imageReference key="image" image="minus" catalog="system" symbolScale="small"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="deleteTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="GdC-RF-LfV"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="LvP-EA-1n6" secondAttribute="trailing" constant="8" id="N1Z-ys-BD5"/>
+                            <constraint firstItem="60O-om-rrz" firstAttribute="centerY" secondItem="Qop-go-6ie" secondAttribute="centerY" id="Tva-UI-pdp"/>
+                            <constraint firstItem="LvP-EA-1n6" firstAttribute="centerY" secondItem="60O-om-rrz" secondAttribute="centerY" id="WTn-k4-ia2"/>
+                            <constraint firstItem="60O-om-rrz" firstAttribute="leading" secondItem="Qop-go-6ie" secondAttribute="leading" constant="8" id="XSS-JS-Lg7"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="Qop-go-6ie" secondAttribute="trailing" id="HYB-a0-cM8"/>
+                <constraint firstItem="Qop-go-6ie" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="OTh-oP-v3o"/>
+                <constraint firstItem="Qop-go-6ie" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="PGA-yV-SXe"/>
+                <constraint firstAttribute="bottom" secondItem="Qop-go-6ie" secondAttribute="bottom" id="i0f-N9-iGS"/>
+            </constraints>
+            <connections>
+                <outlet property="deleteButton" destination="LvP-EA-1n6" id="SPW-i4-2OX"/>
+                <outlet property="timePicker" destination="60O-om-rrz" id="zyp-eL-OTd"/>
+            </connections>
+            <point key="canvasLocation" x="28.244274809160306" y="76.408450704225359"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="minus" catalog="system" width="128" height="26"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemRedColor">
+            <color red="1" green="0.2196078431372549" blue="0.23529411764705882" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>
