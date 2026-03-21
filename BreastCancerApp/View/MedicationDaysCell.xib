@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -21,13 +21,14 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ecf-Ko-vxJ">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="51"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="0bW-eQ-cSX">
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="0bW-eQ-cSX">
                                 <rect key="frame" x="8" y="8" width="377" height="35"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b8g-lJ-mPO">
-                                        <rect key="frame" x="0.0" y="0.0" width="34.666666666666664" height="35"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="35" height="35"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="35" id="Bpp-Om-hUX"/>
+                                            <constraint firstAttribute="height" constant="40" id="Bpp-Om-hUX"/>
+                                            <constraint firstAttribute="width" constant="40" id="Wpp-Om-hUX"/>
                                         </constraints>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="filled" title="S"/>
@@ -36,9 +37,10 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zNs-RB-JH1">
-                                        <rect key="frame" x="55.666666666666671" y="0.0" width="38.666666666666671" height="35"/>
+                                        <rect key="frame" x="57" y="0.0" width="35" height="35"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="35" id="bjV-XJ-Fke"/>
+                                            <constraint firstAttribute="height" constant="40" id="bjV-XJ-Fke"/>
+                                            <constraint firstAttribute="width" constant="40" id="WjV-XJ-Fke"/>
                                         </constraints>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="M"/>
@@ -47,9 +49,10 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Wl-c0-VIQ">
-                                        <rect key="frame" x="115.33333333333333" y="0.0" width="34.666666666666671" height="35"/>
+                                        <rect key="frame" x="114" y="0.0" width="35" height="35"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="35" id="e3Q-Aj-59P"/>
+                                            <constraint firstAttribute="height" constant="40" id="e3Q-Aj-59P"/>
+                                            <constraint firstAttribute="width" constant="40" id="W3Q-Aj-59P"/>
                                         </constraints>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="T"/>
@@ -58,9 +61,10 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bb8-q8-eoP">
-                                        <rect key="frame" x="171" y="0.0" width="40.333333333333343" height="35"/>
+                                        <rect key="frame" x="171" y="0.0" width="35" height="35"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="35" id="KbC-5T-RSI"/>
+                                            <constraint firstAttribute="height" constant="40" id="KbC-5T-RSI"/>
+                                            <constraint firstAttribute="width" constant="40" id="WbC-5T-RSI"/>
                                         </constraints>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="W"/>
@@ -69,9 +73,10 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H2k-Ec-ZcF">
-                                        <rect key="frame" x="232.33333333333334" y="0.0" width="34.666666666666657" height="35"/>
+                                        <rect key="frame" x="228" y="0.0" width="35" height="35"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="35" id="8QD-R0-Boq"/>
+                                            <constraint firstAttribute="height" constant="40" id="8QD-R0-Boq"/>
+                                            <constraint firstAttribute="width" constant="40" id="WQD-R0-Boq"/>
                                         </constraints>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="T"/>
@@ -80,9 +85,10 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fvj-kR-q32">
-                                        <rect key="frame" x="288" y="0.0" width="33.333333333333314" height="35"/>
+                                        <rect key="frame" x="285" y="0.0" width="35" height="35"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="35" id="Pza-wu-5JG"/>
+                                            <constraint firstAttribute="height" constant="40" id="Pza-wu-5JG"/>
+                                            <constraint firstAttribute="width" constant="40" id="Wza-wu-5JG"/>
                                         </constraints>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="F"/>
@@ -91,9 +97,10 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dTi-oZ-YvS">
-                                        <rect key="frame" x="342.33333333333331" y="0.0" width="34.666666666666686" height="35"/>
+                                        <rect key="frame" x="342" y="0.0" width="35" height="35"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="35" id="DDt-vx-w1R"/>
+                                            <constraint firstAttribute="height" constant="40" id="DDt-vx-w1R"/>
+                                            <constraint firstAttribute="width" constant="40" id="WDt-vx-w1R"/>
                                         </constraints>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="S"/>

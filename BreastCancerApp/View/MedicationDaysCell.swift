@@ -17,13 +17,6 @@ class MedicationDaysCell: UICollectionViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        if let stack = contentView.subviews.first?.subviews.compactMap({ $0 as? UIStackView }).first {
-            let buttonCount = CGFloat(7)
-            let buttonWidth = CGFloat(35)
-            let availableWidth = UIScreen.main.bounds.width - 32 - 32
-            let spacing = (availableWidth - buttonCount * buttonWidth) / (buttonCount - 1)
-            stack.spacing = max(4, spacing)
-        }
     }
 
     func configure(selectedDays: Set<Int>) {
@@ -48,11 +41,14 @@ class MedicationDaysCell: UICollectionViewCell {
         for (index, btn) in dayButtons.enumerated() {
             let selected = selectedDays.contains(index + 1)
             let title = btn.configuration?.title ?? btn.title(for: .normal) ?? ""
+            
             var config = selected ? UIButton.Configuration.filled() : UIButton.Configuration.plain()
             config.title = title
             config.cornerStyle = .capsule
-            config.baseBackgroundColor = selected ? primary : .clear
+            config.baseBackgroundColor = selected ? primary : primary?.withAlphaComponent(0.1)
             config.baseForegroundColor = selected ? .white : primary
+            config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+            
             btn.configuration = config
         }
     }
