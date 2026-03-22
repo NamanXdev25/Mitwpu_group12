@@ -1,19 +1,15 @@
-
 import UIKit
 import UserNotifications
+import SwiftUI
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
-
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         AppBackend.setCurrent(.supabase)
-
         SupabaseMigrationService.shared.runIfNeeded()
         UNUserNotificationCenter.current().delegate = self
         ReminderResyncService.syncAll()
-
         return true
     }
 
