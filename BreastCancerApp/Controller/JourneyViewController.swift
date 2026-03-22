@@ -114,6 +114,10 @@ class JourneyViewController: UIViewController {
         if JourneyState.shared.isWaitCompleted      { waitModel.status      = "Completed" }
         if JourneyState.shared.isTreatmentCompleted { treatmentModel.status = "Completed" }
 
+        diagnosisModel.diagnosisDate = JourneyState.shared.diagnosisDate
+        waitModel.daysWaited = JourneyState.shared.waitDaysInput
+        waitModel.selectedFeelings = Set(JourneyState.shared.waitSymptoms)
+
         savedPhaseStates     = JourneyState.shared.persistedPhaseStates.map { SavedPhaseState.from($0) }
         treatmentBadgeStatus = PhaseStatus.from(rawStringValue: JourneyState.shared.persistedTreatmentBadge)
         savedPostTreatmentState = SavedPostTreatmentState.from(JourneyState.shared.persistedPostTreatment)
@@ -239,6 +243,11 @@ class JourneyViewController: UIViewController {
             self.savedPhaseStates.remove(at: index)
             self.syncTreatmentName()
             self.persistPhaseStates()
+            
+            if self.savedPhaseStates.isEmpty {
+                self.savedPostTreatmentState = SavedPostTreatmentState()
+                JourneyState.shared.resetTreatment()
+            }
         }
 
         cell.onAllPhasesCompleted = { [weak self] phaseName in
@@ -335,6 +344,7 @@ extension JourneyViewController: UICollectionViewDataSource {
             cell.onSaveButtonTapped = { [weak self] in
                 guard let self else { return }
                 self.diagnosisModel.status = "Completed"
+                JourneyState.shared.saveDiagnosisState(date: self.diagnosisModel.diagnosisDate)
                 JourneyState.shared.completeDiagnosis()
                 UIView.performWithoutAnimation {
                     self.collectionView.reloadItems(at: [
@@ -368,9 +378,12 @@ extension JourneyViewController: UICollectionViewDataSource {
                 withReuseIdentifier: "WaitCell", for: indexPath) as? WaitCell
             else { return UICollectionViewCell() }
 
-            cell.onSaveButtonTapped = { [weak self] in
+            cell.onSaveButtonTapped = { [weak self] days, symptoms in
                 guard let self else { return }
                 self.waitModel.status = "Completed"
+                self.waitModel.daysWaited = days
+                self.waitModel.selectedFeelings = Set(symptoms)
+                JourneyState.shared.saveWaitState(days: days, symptoms: symptoms)
                 UIView.performWithoutAnimation {
                     self.collectionView.reloadItems(at: [IndexPath(item: 1, section: 0)])
                 }

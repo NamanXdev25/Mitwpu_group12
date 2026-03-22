@@ -151,7 +151,8 @@ class NewExerciseViewController: UIViewController {
             completed,
             exerciseID: exerciseIdentifier(for: exercise),
             title: exercise.title,
-            duration: exercise.duration
+            duration: exercise.duration,
+            planId: exerciseCategoryID
         )
     }
 
@@ -178,9 +179,8 @@ class NewExerciseViewController: UIViewController {
     @IBAction func defaultButtonTapped(_ sender: UIButton) {
         guard let categoryID = exerciseCategoryID, categoryID > 0 else { return }
 
-        let userKey = SupabaseUserContext.currentUserId?.uuidString ?? "anonymous"
-        let key = "care_selected_exercise_category_id_v2_\(userKey)"
-        UserDefaults.standard.set(categoryID, forKey: key)
+        let exerciseRepo: ExerciseRepository = RepositoryFactory.makeExerciseRepository()
+        exerciseRepo.saveSelectedPlanID(categoryID)
 
         NotificationCenter.default.post(
             name: NSNotification.Name("ExerciseDefaultPlanChanged"),

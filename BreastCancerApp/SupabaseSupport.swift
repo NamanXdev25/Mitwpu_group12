@@ -281,7 +281,10 @@ final class SupabaseRESTClient {
             resolvingAgainstBaseURL: false
         )
 
-        var queryItems = [URLQueryItem(name: "select", value: "*")]
+        var queryItems = [URLQueryItem]()
+        if method == "GET" {
+            queryItems.append(URLQueryItem(name: "select", value: "*"))
+        }
         queryItems.append(contentsOf: filters.map { $0.asQueryItem() })
         if let onConflict {
             queryItems.append(URLQueryItem(name: "on_conflict", value: onConflict))
@@ -329,7 +332,8 @@ final class SupabaseRESTClient {
             }
             if let http = response as? HTTPURLResponse, !(200..<300).contains(http.statusCode) {
                 if let data {
-                    _ = String(data: data, encoding: .utf8)
+                    let errorStr = String(data: data, encoding: .utf8) ?? "Unknown"
+                    print("⚠️ Supabase Write Error [\(action) \(table)]: \(errorStr)")
                 }
             }
 

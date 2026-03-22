@@ -7,6 +7,15 @@ struct ExerciseCompletionRecord: Codable, Hashable {
     let title: String
     let duration: String
     let completedAt: Date
+    let planId: Int?
+
+    init(id: String, title: String, duration: String, completedAt: Date, planId: Int? = nil) {
+        self.id = id
+        self.title = title
+        self.duration = duration
+        self.completedAt = completedAt
+        self.planId = planId
+    }
 }
 
 final class UserActivityStore {
@@ -14,9 +23,9 @@ final class UserActivityStore {
     private init() { load() }
 
     private let key = "uas_tapCounts"
-    private let exerciseKey = "uas_exerciseCompletions"
     private var tapCounts: [String: Int] = [:]
     private var exerciseCompletions: [String: [ExerciseCompletionRecord]] = [:]
+    private lazy var exerciseRepo: ExerciseRepository = RepositoryFactory.makeExerciseRepository()
 
     // MARK: - Recording taps
 
@@ -45,6 +54,7 @@ final class UserActivityStore {
         exerciseID: String,
         title: String,
         duration: String,
+        planId: Int? = nil,
         date: Date = Date()
     ) {
         let key = dateKey(for: date)
@@ -58,7 +68,8 @@ final class UserActivityStore {
                     id: exerciseID,
                     title: title,
                     duration: duration,
-                    completedAt: date
+                    completedAt: date,
+                    planId: planId
                 )
             )
             records.sort { $0.completedAt > $1.completedAt }
@@ -127,18 +138,11 @@ final class UserActivityStore {
 
     private func save() {
         UserDefaults.standard.set(tapCounts, forKey: key)
-        if let encoded = try? JSONEncoder().encode(exerciseCompletions) {
-            UserDefaults.standard.set(encoded, forKey: exerciseKey)
-        }
+        exerciseRepo.saveCompletions(exerciseCompletions)
     }
 
     private func load() {
         tapCounts = UserDefaults.standard.dictionary(forKey: key) as? [String: Int] ?? [:]
-        if let data = UserDefaults.standard.data(forKey: exerciseKey),
-           let decoded = try? JSONDecoder().decode([String: [ExerciseCompletionRecord]].self, from: data) {
-            exerciseCompletions = decoded
-        } else {
-            exerciseCompletions = [:]
-        }
+        exerciseCompletions = exerciseRepo.loadCompletions()
     }
 }

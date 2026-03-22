@@ -714,3 +714,204 @@ extension ProfileUserProfile {
         )
     }
 }
+
+// MARK: - Exercise Completion DTO
+
+struct ExerciseCompletionSupabaseRow: Codable {
+    let id: String
+    let user_id: UUID
+    let date_key: String
+    let plan_id: Int
+    let exercise_name: String
+    let completed_at: Date
+    let updated_at: Date?
+}
+
+struct ExerciseSelectedPlanSupabaseRow: Codable {
+    let user_id: UUID
+    let plan_id: Int
+    let updated_at: Date?
+}
+
+extension ExerciseCompletionRecord {
+    init(supabaseRow: ExerciseCompletionSupabaseRow) {
+        // Extract the original composite id from the Supabase row's PK (format: userId#dateKey#originalId)
+        let components = supabaseRow.id.components(separatedBy: "#")
+        let originalId = components.count > 2 ? components[2...].joined(separator: "#") : (components.last ?? supabaseRow.id)
+
+        self.init(
+            id: originalId,
+            title: supabaseRow.exercise_name,
+            duration: "",
+            completedAt: supabaseRow.completed_at,
+            planId: supabaseRow.plan_id
+        )
+    }
+
+    func toSupabaseRow(userId: UUID, dateKey: String) -> ExerciseCompletionSupabaseRow? {
+        guard let planId else { return nil }
+        return ExerciseCompletionSupabaseRow(
+            id: "\(userId.uuidString)#\(dateKey)#\(id)",
+            user_id: userId,
+            date_key: dateKey,
+            plan_id: planId,
+            exercise_name: title,
+            completed_at: completedAt,
+            updated_at: Date()
+        )
+    }
+}
+
+// MARK: - Journey State DTO
+
+struct JourneyStateSupabaseRow: Codable {
+    let user_id: UUID
+    let is_diagnosis_completed: Bool
+    let is_wait_completed: Bool
+    let is_treatment_completed: Bool
+    let current_step_title: String
+    let current_treatment_name: String
+    let persisted_treatment_badge: String
+
+    let diagnosis_date: Date?
+    let days_until_return: Int?
+    let symptoms_of_days_until_return: String
+    let post_treatment_recovery_start_date: Date?
+    let post_treatment_symptoms: String
+
+    let updated_at: Date?
+
+    enum CodingKeys: String, CodingKey {
+        case user_id, is_diagnosis_completed, is_wait_completed, is_treatment_completed
+        case current_step_title, current_treatment_name, persisted_treatment_badge
+        case diagnosis_date, days_until_return, symptoms_of_days_until_return
+        case post_treatment_recovery_start_date, post_treatment_symptoms, updated_at
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(user_id, forKey: .user_id)
+        try container.encode(is_diagnosis_completed, forKey: .is_diagnosis_completed)
+        try container.encode(is_wait_completed, forKey: .is_wait_completed)
+        try container.encode(is_treatment_completed, forKey: .is_treatment_completed)
+        try container.encode(current_step_title, forKey: .current_step_title)
+        try container.encode(current_treatment_name, forKey: .current_treatment_name)
+        try container.encode(persisted_treatment_badge, forKey: .persisted_treatment_badge)
+        try container.encode(symptoms_of_days_until_return, forKey: .symptoms_of_days_until_return)
+        try container.encode(post_treatment_symptoms, forKey: .post_treatment_symptoms)
+        try container.encode(updated_at, forKey: .updated_at)
+
+        if let diagnosis_date = diagnosis_date { try container.encode(diagnosis_date, forKey: .diagnosis_date) }
+        else { try container.encodeNil(forKey: .diagnosis_date) }
+
+        if let days_until_return = days_until_return { try container.encode(days_until_return, forKey: .days_until_return) }
+        else { try container.encodeNil(forKey: .days_until_return) }
+
+        if let post_treatment_recovery_start_date = post_treatment_recovery_start_date { try container.encode(post_treatment_recovery_start_date, forKey: .post_treatment_recovery_start_date) }
+        else { try container.encodeNil(forKey: .post_treatment_recovery_start_date) }
+    }
+}
+
+struct TreatmentPhaseSupabaseRow: Codable {
+    let id: String
+    let user_id: UUID
+    let treatment_type: String
+    let start_date: Date?
+    let duration: String
+    let status: String
+    let is_saved: Bool
+    let updated_at: Date?
+}
+
+extension PersistedJourneySnapshot {
+    init(journeyRow: JourneyStateSupabaseRow, phaseRows: [TreatmentPhaseSupabaseRow]) {
+        let decoder = JSONDecoder()
+
+        let phaseStates: [PersistedPhaseState] = phaseRows.map { row in
+            PersistedPhaseState(
+                treatmentTypeRaw: row.treatment_type,
+                startDate: row.start_date,
+                duration: row.duration,
+                isSaved: row.is_saved,
+                statusRaw: row.status
+            )
+        }
+
+        let waitSymptoms: [String]
+        if let data = journeyRow.symptoms_of_days_until_return.data(using: .utf8),
+           let decoded = try? decoder.decode([String].self, from: data) {
+            waitSymptoms = decoded
+        } else {
+            waitSymptoms = []
+        }
+
+        let postSymptoms: [String]
+        if let data = journeyRow.post_treatment_symptoms.data(using: .utf8),
+           let decoded = try? decoder.decode([String].self, from: data) {
+            postSymptoms = decoded
+        } else {
+            postSymptoms = []
+        }
+
+        let postTreatment = PersistedPostTreatmentState(
+            selectedDate: journeyRow.post_treatment_recovery_start_date,
+            selectedSymptoms: postSymptoms,
+            isSaved: journeyRow.post_treatment_recovery_start_date != nil || !postSymptoms.isEmpty
+        )
+
+        self.init(
+            isDiagnosisCompleted: journeyRow.is_diagnosis_completed,
+            isWaitCompleted: journeyRow.is_wait_completed,
+            isTreatmentCompleted: journeyRow.is_treatment_completed,
+            currentStepTitle: journeyRow.current_step_title,
+            currentTreatmentName: journeyRow.current_treatment_name,
+            persistedTreatmentBadge: journeyRow.persisted_treatment_badge,
+            phaseStates: phaseStates,
+            postTreatment: postTreatment,
+            diagnosisDate: journeyRow.diagnosis_date,
+            waitDaysInput: journeyRow.days_until_return,
+            waitSymptoms: waitSymptoms
+        )
+    }
+
+    func toJourneySupabaseRow(userId: UUID) -> JourneyStateSupabaseRow {
+        let encoder = JSONEncoder()
+
+        let waitSymptomsJSON = (try? encoder.encode(waitSymptoms)).flatMap { String(data: $0, encoding: .utf8) } ?? "[]"
+        let postSymptomsJSON = (try? encoder.encode(postTreatment.selectedSymptoms)).flatMap { String(data: $0, encoding: .utf8) } ?? "[]"
+
+        return JourneyStateSupabaseRow(
+            user_id: userId,
+            is_diagnosis_completed: isDiagnosisCompleted,
+            is_wait_completed: isWaitCompleted,
+            is_treatment_completed: isTreatmentCompleted,
+            current_step_title: currentStepTitle,
+            current_treatment_name: currentTreatmentName,
+            persisted_treatment_badge: persistedTreatmentBadge,
+
+            diagnosis_date: diagnosisDate,
+            days_until_return: waitDaysInput,
+            symptoms_of_days_until_return: waitSymptomsJSON,
+            post_treatment_recovery_start_date: postTreatment.selectedDate,
+            post_treatment_symptoms: postSymptomsJSON,
+
+            updated_at: Date()
+        )
+    }
+
+    func toTreatmentPhaseRows(userId: UUID) -> [TreatmentPhaseSupabaseRow] {
+        return phaseStates.enumerated().map { index, phase in
+            TreatmentPhaseSupabaseRow(
+                id: "\(userId.uuidString)#phase#\(index)",
+                user_id: userId,
+                treatment_type: phase.treatmentTypeRaw,
+                start_date: phase.startDate,
+                duration: phase.duration,
+                status: phase.statusRaw,
+                is_saved: phase.isSaved,
+                updated_at: Date()
+            )
+        }
+    }
+}
+

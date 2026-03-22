@@ -709,6 +709,174 @@ final class SupabaseProfileRepository: ProfileRepository {
     }
 }
 
+final class SupabaseExerciseRepository: ExerciseRepository {
+    private let local: ExerciseRepository
+    private let userId: UUID
+    private let client: SupabaseRESTClient
+
+    init(
+        local: ExerciseRepository = UserDefaultsExerciseRepository(),
+        userId: UUID = SupabaseUserContext.userId,
+        client: SupabaseRESTClient = .shared
+    ) {
+        self.local = local
+        self.userId = userId
+        self.client = client
+    }
+
+    func loadCompletions() -> [String: [ExerciseCompletionRecord]] {
+        let cached = local.loadCompletions()
+        syncCompletionsFromCloud()
+        return cached
+    }
+
+    func saveCompletions(_ completions: [String: [ExerciseCompletionRecord]]) {
+        local.saveCompletions(completions)
+        syncCompletionsToCloud(completions)
+    }
+
+    func loadSelectedPlanID() -> Int? {
+        let cached = local.loadSelectedPlanID()
+        syncPlanFromCloud()
+        return cached
+    }
+
+    func saveSelectedPlanID(_ id: Int?) {
+        local.saveSelectedPlanID(id)
+        syncPlanToCloud(id)
+    }
+
+    // MARK: - Cloud sync helpers
+
+    private func syncCompletionsFromCloud() {
+        client.fetchRows(from: "exercise_completions", filters: [SupabaseFilter(key: "user_id", op: "eq", value: userId.uuidString)]) { (rows: [ExerciseCompletionSupabaseRow]) in
+            guard !rows.isEmpty else { return }
+            var map: [String: [ExerciseCompletionRecord]] = [:]
+            for row in rows {
+                let record = ExerciseCompletionRecord(supabaseRow: row)
+                map[row.date_key, default: []].append(record)
+            }
+            for key in map.keys {
+                map[key]?.sort { $0.completedAt > $1.completedAt }
+            }
+            self.local.saveCompletions(map)
+        }
+    }
+
+    private func syncCompletionsToCloud(_ completions: [String: [ExerciseCompletionRecord]]) {
+        guard client.isConfigured else { return }
+
+        let rows = completions.flatMap { dateKey, records in
+            records.compactMap { $0.toSupabaseRow(userId: userId, dateKey: dateKey) }
+        }
+
+        guard !rows.isEmpty else { return }
+        client.upsertRows(rows, into: "exercise_completions")
+    }
+
+    private func syncPlanFromCloud() {
+        client.fetchRows(from: "exercise_selected_plans", filters: [SupabaseFilter(key: "user_id", op: "eq", value: userId.uuidString)]) { (rows: [ExerciseSelectedPlanSupabaseRow]) in
+            if let row = rows.first {
+                self.local.saveSelectedPlanID(row.plan_id)
+            }
+        }
+    }
+
+    private func syncPlanToCloud(_ id: Int?) {
+        guard client.isConfigured else { return }
+
+        if let id, id > 0 {
+            let row = ExerciseSelectedPlanSupabaseRow(
+                user_id: userId,
+                plan_id: id,
+                updated_at: Date()
+            )
+            client.upsertRows([row], into: "exercise_selected_plans", onConflict: "user_id")
+        } else {
+            client.deleteAllRows(forUser: userId, from: "exercise_selected_plans")
+        }
+    }
+}
+
+final class SupabaseJourneyRepository: JourneyRepository {
+    private let local: JourneyRepository
+    private let userId: UUID
+    private let client: SupabaseRESTClient
+
+    init(
+        local: JourneyRepository = UserDefaultsJourneyRepository(),
+        userId: UUID = SupabaseUserContext.userId,
+        client: SupabaseRESTClient = .shared
+    ) {
+        self.local = local
+        self.userId = userId
+        self.client = client
+    }
+
+    func loadState() -> PersistedJourneySnapshot? {
+        let cached = local.loadState()
+        syncFromCloudIntoLocal()
+        return cached
+    }
+
+    func saveState(_ state: PersistedJourneySnapshot) {
+        local.saveState(state)
+        syncSnapshotToCloud(state)
+    }
+
+    private func syncFromCloudIntoLocal() {
+        let dispatchGroup = DispatchGroup()
+
+        var journeyRow: JourneyStateSupabaseRow?
+        var phaseRows: [TreatmentPhaseSupabaseRow] = []
+
+        let filter = [SupabaseFilter(key: "user_id", op: "eq", value: userId.uuidString)]
+
+        dispatchGroup.enter()
+        client.fetchRows(from: "journey_state", filters: filter) { (rows: [JourneyStateSupabaseRow]) in
+            journeyRow = rows.first
+            dispatchGroup.leave()
+        }
+
+        dispatchGroup.enter()
+        client.fetchRows(from: "treatment_phases", filters: filter) { (rows: [TreatmentPhaseSupabaseRow]) in
+            phaseRows = rows
+            dispatchGroup.leave()
+        }
+
+        dispatchGroup.notify(queue: .main) { [weak self] in
+            guard let self, let row = journeyRow else { return }
+            let sortedPhases = phaseRows.sorted {
+                let id1 = Int($0.id.components(separatedBy: "#").last ?? "0") ?? 0
+                let id2 = Int($1.id.components(separatedBy: "#").last ?? "0") ?? 0
+                return id1 < id2
+            }
+            let snapshot = PersistedJourneySnapshot(journeyRow: row, phaseRows: sortedPhases)
+            self.local.saveState(snapshot)
+        }
+    }
+
+    private func syncSnapshotToCloud(_ state: PersistedJourneySnapshot) {
+        guard client.isConfigured else { return }
+
+        let journeyRow = state.toJourneySupabaseRow(userId: userId)
+        let phaseRows = state.toTreatmentPhaseRows(userId: userId)
+
+        // 1. Upsert parent row
+        client.upsertRows([journeyRow], into: "journey_state", onConflict: "user_id")
+        
+        // 2. Clear old children fully decoupled onto the serial write queue
+        let filters = [SupabaseFilter(key: "user_id", op: "eq", value: userId.uuidString)]
+        client.deleteRows(from: "treatment_phases", filters: filters) { [weak self] _ in
+            guard let self else { return }
+            // 3. Upsert new children
+            if !phaseRows.isEmpty {
+                self.client.upsertRows(phaseRows, into: "treatment_phases", onConflict: "id")
+            }
+        }
+    }
+}
+
 private extension DateFormatter {
     static let supabaseDateKey: DateFormatter = {
         let formatter = DateFormatter()
@@ -717,3 +885,4 @@ private extension DateFormatter {
         return formatter
     }()
 }
+

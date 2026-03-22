@@ -17,23 +17,34 @@ struct PersistedPostTreatmentState: Codable {
     var isSaved: Bool
 }
 
+// MARK: - Codable journey snapshot (full state for repository sync)
+struct PersistedJourneySnapshot: Codable {
+    var isDiagnosisCompleted: Bool
+    var isWaitCompleted: Bool
+    var isTreatmentCompleted: Bool
+    var currentStepTitle: String
+    var currentTreatmentName: String
+    var persistedTreatmentBadge: String
+    var phaseStates: [PersistedPhaseState]
+    var postTreatment: PersistedPostTreatmentState
+    var diagnosisDate: Date?
+    var waitDaysInput: Int?
+    var waitSymptoms: [String]
+}
+
 final class JourneyState {
 
     static let shared = JourneyState()
+    
+    private var saveWorkItem: DispatchWorkItem?
+
     private init() { restore() }
 
     // MARK: - Notification name
     static let didChangeNotification = Notification.Name("JourneyStateDidChange")
 
-    // MARK: - Persistence keys
-    private let kDiagnosisCompleted  = "js_diagnosisCompleted"
-    private let kWaitCompleted       = "js_waitCompleted"
-    private let kTreatmentCompleted  = "js_treatmentCompleted"
-    private let kStepTitle           = "js_stepTitle"
-    private let kTreatmentName       = "js_treatmentName"
-    private let kPhaseStates         = "js_phaseStates"
-    private let kTreatmentBadge      = "js_treatmentBadge"
-    private let kPostTreatment       = "js_postTreatment"
+    // MARK: - Repository
+    private lazy var repository: JourneyRepository = RepositoryFactory.makeJourneyRepository()
 
     // MARK: - Section unlock flags
     private(set) var isDiagnosisCompleted   = false
@@ -53,41 +64,50 @@ final class JourneyState {
         selectedDate: nil, selectedSymptoms: [], isSaved: false
     )
 
+    // MARK: - Detailed state properties requirements
+    private(set) var diagnosisDate: Date?
+    private(set) var waitDaysInput: Int?
+    private(set) var waitSymptoms: [String] = []
+
     // MARK: - Persist / Restore
     private func save() {
-        let d = UserDefaults.standard
-        d.set(isDiagnosisCompleted,  forKey: kDiagnosisCompleted)
-        d.set(isWaitCompleted,       forKey: kWaitCompleted)
-        d.set(isTreatmentCompleted,  forKey: kTreatmentCompleted)
-        d.set(currentStepTitle,      forKey: kStepTitle)
-        d.set(currentTreatmentName,  forKey: kTreatmentName)
-        d.set(persistedTreatmentBadge, forKey: kTreatmentBadge)
+        saveWorkItem?.cancel()
 
-        if let data = try? JSONEncoder().encode(persistedPhaseStates) {
-            d.set(data, forKey: kPhaseStates)
+        let snapshot = PersistedJourneySnapshot(
+            isDiagnosisCompleted: isDiagnosisCompleted,
+            isWaitCompleted: isWaitCompleted,
+            isTreatmentCompleted: isTreatmentCompleted,
+            currentStepTitle: currentStepTitle,
+            currentTreatmentName: currentTreatmentName,
+            persistedTreatmentBadge: persistedTreatmentBadge,
+            phaseStates: persistedPhaseStates,
+            postTreatment: persistedPostTreatment,
+            diagnosisDate: diagnosisDate,
+            waitDaysInput: waitDaysInput,
+            waitSymptoms: waitSymptoms
+        )
+
+        let workItem = DispatchWorkItem { [weak self] in
+            self?.repository.saveState(snapshot)
         }
-        if let data = try? JSONEncoder().encode(persistedPostTreatment) {
-            d.set(data, forKey: kPostTreatment)
-        }
+        saveWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: workItem)
     }
 
     private func restore() {
-        let d = UserDefaults.standard
-        isDiagnosisCompleted  = d.bool(forKey: kDiagnosisCompleted)
-        isWaitCompleted       = d.bool(forKey: kWaitCompleted)
-        isTreatmentCompleted  = d.bool(forKey: kTreatmentCompleted)
-        currentStepTitle      = d.string(forKey: kStepTitle)      ?? "Diagnosed"
-        currentTreatmentName  = d.string(forKey: kTreatmentName)  ?? "Not started yet"
-        persistedTreatmentBadge = d.string(forKey: kTreatmentBadge) ?? "notStarted"
+        guard let snapshot = repository.loadState() else { return }
 
-        if let data = d.data(forKey: kPhaseStates),
-           let decoded = try? JSONDecoder().decode([PersistedPhaseState].self, from: data) {
-            persistedPhaseStates = decoded
-        }
-        if let data = d.data(forKey: kPostTreatment),
-           let decoded = try? JSONDecoder().decode(PersistedPostTreatmentState.self, from: data) {
-            persistedPostTreatment = decoded
-        }
+        isDiagnosisCompleted    = snapshot.isDiagnosisCompleted
+        isWaitCompleted         = snapshot.isWaitCompleted
+        isTreatmentCompleted    = snapshot.isTreatmentCompleted
+        currentStepTitle        = snapshot.currentStepTitle
+        currentTreatmentName    = snapshot.currentTreatmentName
+        persistedTreatmentBadge = snapshot.persistedTreatmentBadge
+        persistedPhaseStates    = snapshot.phaseStates
+        persistedPostTreatment  = snapshot.postTreatment
+        diagnosisDate           = snapshot.diagnosisDate
+        waitDaysInput           = snapshot.waitDaysInput
+        waitSymptoms            = snapshot.waitSymptoms
 
         if (currentTreatmentName == "Not started yet" || currentTreatmentName.isEmpty)
             && !persistedPhaseStates.isEmpty {
@@ -109,6 +129,17 @@ final class JourneyState {
 
     func savePostTreatmentState(_ state: PersistedPostTreatmentState) {
         persistedPostTreatment = state
+        save()
+    }
+
+    func saveDiagnosisState(date: Date?) {
+        diagnosisDate = date
+        save()
+    }
+
+    func saveWaitState(days: Int?, symptoms: [String]) {
+        waitDaysInput = days
+        waitSymptoms = symptoms
         save()
     }
 
@@ -151,6 +182,9 @@ final class JourneyState {
         persistedTreatmentBadge = "notStarted"
         currentTreatmentName    = "Not started yet"
         persistedPostTreatment  = PersistedPostTreatmentState(selectedDate: nil, selectedSymptoms: [], isSaved: false)
+        diagnosisDate           = nil
+        waitDaysInput           = nil
+        waitSymptoms            = []
         save(); post()
     }
 
@@ -162,14 +196,18 @@ final class JourneyState {
         persistedTreatmentBadge = "notStarted"
         currentTreatmentName    = "Not started yet"
         persistedPostTreatment  = PersistedPostTreatmentState(selectedDate: nil, selectedSymptoms: [], isSaved: false)
+        waitDaysInput           = nil
+        waitSymptoms            = []
         save(); post()
     }
 
     func resetTreatment() {
         isTreatmentCompleted    = false
+        persistedPhaseStates    = []
         persistedTreatmentBadge = "notStarted"
         currentTreatmentName    = "Not started yet"
         currentStepTitle        = isWaitCompleted ? "Treatment" : "Waiting for Result"
+        persistedPostTreatment  = PersistedPostTreatmentState(selectedDate: nil, selectedSymptoms: [], isSaved: false)
         save(); post()
     }
 

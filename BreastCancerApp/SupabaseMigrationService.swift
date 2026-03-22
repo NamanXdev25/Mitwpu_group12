@@ -26,6 +26,12 @@ final class SupabaseMigrationService {
     private let localSymptoms: SymptomRepository
     private let cloudSymptoms: SymptomRepository
 
+    private let localExercise: ExerciseRepository
+    private let cloudExercise: ExerciseRepository
+
+    private let localJourney: JourneyRepository
+    private let cloudJourney: JourneyRepository
+
     private init(
         localAppointments: AppointmentRepository = UserDefaultsAppointmentRepository(),
         cloudAppointments: AppointmentRepository = SupabaseAppointmentRepository(),
@@ -40,7 +46,11 @@ final class SupabaseMigrationService {
         localBreathing: BreathingRepository = UserDefaultsBreathingRepository(),
         cloudBreathing: BreathingRepository = SupabaseBreathingRepository(),
         localSymptoms: SymptomRepository = UserDefaultsSymptomRepository(),
-        cloudSymptoms: SymptomRepository = SupabaseSymptomRepository()
+        cloudSymptoms: SymptomRepository = SupabaseSymptomRepository(),
+        localExercise: ExerciseRepository = UserDefaultsExerciseRepository(),
+        cloudExercise: ExerciseRepository = SupabaseExerciseRepository(),
+        localJourney: JourneyRepository = UserDefaultsJourneyRepository(),
+        cloudJourney: JourneyRepository = SupabaseJourneyRepository()
     ) {
         self.localAppointments = localAppointments
         self.cloudAppointments = cloudAppointments
@@ -56,6 +66,10 @@ final class SupabaseMigrationService {
         self.cloudBreathing = cloudBreathing
         self.localSymptoms = localSymptoms
         self.cloudSymptoms = cloudSymptoms
+        self.localExercise = localExercise
+        self.cloudExercise = cloudExercise
+        self.localJourney = localJourney
+        self.cloudJourney = cloudJourney
     }
 
     func runIfNeeded() {
@@ -74,6 +88,21 @@ final class SupabaseMigrationService {
         cloudSymptoms.saveLogs(migratedSymptomLogs)
         cloudSymptoms.saveUserSymptomIDs(localSymptoms.loadUserSymptomIDs())
         GardenManager.shared.syncWithCloudIfNeeded()
+
+        // Exercise completions
+        let localCompletions = localExercise.loadCompletions()
+        if !localCompletions.isEmpty {
+            cloudExercise.saveCompletions(localCompletions)
+        }
+        // Selected exercise plan
+        if let planID = localExercise.loadSelectedPlanID() {
+            cloudExercise.saveSelectedPlanID(planID)
+        }
+
+        // Journey state
+        if let journeySnapshot = localJourney.loadState() {
+            cloudJourney.saveState(journeySnapshot)
+        }
 
         defaults.set(true, forKey: migrationFlagKey)
     }

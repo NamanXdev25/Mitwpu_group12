@@ -41,3 +41,15 @@ protocol ProfileRepository {
     func loadProfile() -> ProfileUserProfile?
     func saveProfile(_ profile: ProfileUserProfile)
 }
+
+protocol ExerciseRepository {
+    func loadCompletions() -> [String: [ExerciseCompletionRecord]]
+    func saveCompletions(_ completions: [String: [ExerciseCompletionRecord]])
+    func loadSelectedPlanID() -> Int?
+    func saveSelectedPlanID(_ id: Int?)
+}
+
+protocol JourneyRepository {
+    func loadState() -> PersistedJourneySnapshot?
+    func saveState(_ state: PersistedJourneySnapshot)
+}

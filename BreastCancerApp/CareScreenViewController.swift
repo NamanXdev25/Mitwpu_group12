@@ -5,7 +5,7 @@ class CareScreenViewController: UIViewController {
     @IBOutlet weak var CareCollectionView: UICollectionView!
 
     // MARK: - Properties
-    private let selectedExerciseCategoryIDKeyPrefix = "care_selected_exercise_category_id_v2"
+    private let exerciseRepo: ExerciseRepository = RepositoryFactory.makeExerciseRepository()
     private var dataSource: UICollectionViewDiffableDataSource<CareSectionType, CareItem>!
     private var isHydrationExpanded = false
     private var appointmentRefreshTimer: Timer?
@@ -684,26 +684,19 @@ extension CareScreenViewController: UICollectionViewDelegate {
 
 // MARK: - Exercise Plan State
 extension CareScreenViewController {
-    private var selectedExerciseCategoryIDKey: String {
-        let userKey = SupabaseUserContext.currentUserId?.uuidString ?? "anonymous"
-        return "\(selectedExerciseCategoryIDKeyPrefix)_\(userKey)"
-    }
-
     private func selectedExerciseCategory() -> ExercisePlanCategory? {
-        guard let rawValue = UserDefaults.standard.object(forKey: selectedExerciseCategoryIDKey) as? Int else {
+        guard let id = exerciseRepo.loadSelectedPlanID(), id > 0 else {
             return nil
         }
-        let id = rawValue
-        guard id > 0 else { return nil }
         return ExercisePlanCategory.allCategories.first(where: { $0.id == id })
     }
 
     private func saveSelectedExerciseCategory(_ category: ExercisePlanCategory) {
-        UserDefaults.standard.set(category.id, forKey: selectedExerciseCategoryIDKey)
+        exerciseRepo.saveSelectedPlanID(category.id)
     }
 
     private func clearSelectedExerciseCategory() {
-        UserDefaults.standard.removeObject(forKey: selectedExerciseCategoryIDKey)
+        exerciseRepo.saveSelectedPlanID(nil)
     }
 
     private func durationText(from subtitle: String) -> String {

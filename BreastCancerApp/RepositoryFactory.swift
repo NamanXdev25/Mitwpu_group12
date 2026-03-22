@@ -32,4 +32,12 @@ enum RepositoryFactory {
     static func makeProfileRepository() -> ProfileRepository {
         SupabaseProfileRepository()
     }
+
+    static func makeExerciseRepository() -> ExerciseRepository {
+        SupabaseExerciseRepository()
+    }
+
+    static func makeJourneyRepository() -> JourneyRepository {
+        SupabaseJourneyRepository()
+    }
 }

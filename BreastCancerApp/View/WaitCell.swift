@@ -48,7 +48,7 @@ class WaitCell: UICollectionViewCell {
     private var didSetupButtons = false
     private var lockOverlayView: UIView?
 
-    var onSaveButtonTapped: (() -> Void)?
+    var onSaveButtonTapped: ((Int, [String]) -> Void)?
     var onEditButtonTapped: (() -> Void)?
     var onCellHeightChanged: (() -> Void)?
     var onWaitPeriodExpired: (() -> Void)?
@@ -277,7 +277,7 @@ class WaitCell: UICollectionViewCell {
         defaults.set(Array(selectedFeelings), forKey: kFeelings)
 
         enterSavedState(animated: true)
-        onSaveButtonTapped?()
+        onSaveButtonTapped?(currentDays, Array(selectedFeelings))
     }
 
     private func enterSavedState(animated: Bool) {
@@ -388,8 +388,16 @@ class WaitCell: UICollectionViewCell {
         stepperUpButton.isUserInteractionEnabled   = true
         stepperDownButton.isUserInteractionEnabled = true
 
-        let wasSaved = UserDefaults.standard.object(forKey: kSaveDate) != nil
+        let localSaved = UserDefaults.standard.object(forKey: kSaveDate) != nil
+        let wasSaved = localSaved || model.status == "Completed"
+
         if wasSaved {
+            if !localSaved {
+                // Restore local cache from remote model state
+                UserDefaults.standard.set(Date(), forKey: kSaveDate)
+                UserDefaults.standard.set(model.daysWaited ?? 0, forKey: kDaysInput)
+                UserDefaults.standard.set(Array(model.selectedFeelings), forKey: kFeelings)
+            }
             isSaved = true
             currentDays = remainingDays()
             daysTextField.text = currentDays > 0 ? "\(currentDays)" : "0"
