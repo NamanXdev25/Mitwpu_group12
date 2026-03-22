@@ -10,24 +10,24 @@ class HomeViewController: UIViewController,
     @IBOutlet weak var ProfileButton: UIBarButtonItem!
 
     // MARK: - Mood state
-    private var selectedMoodKey:      String = "happy"
-    private var hasUserSelectedMood:  Bool   = false
+    private var selectedMoodKey: String = "happy"
+    private var hasUserSelectedMood: Bool = false
 
     // MARK: - Suggestion state
     private var currentJournalSuggestion: Suggestion?
-    private var currentSuggestions:       [Suggestion] = []
+    private var currentSuggestions: [Suggestion] = []
 
-    private var recentlyShownJournalTitles  = Set<String>()
+    private var recentlyShownJournalTitles = Set<String>()
     private var recentlyShownBreathingTitles = Set<String>()
-    private var recentlyShownHobbyTitles    = Set<String>()
+    private var recentlyShownHobbyTitles = Set<String>()
 
     private var dailySuggestionCache: [String: DailySuggestionCache] = [:]
 
     // MARK: - UserDefaults keys
-    private let kMoodKey             = "home_selectedMoodKey"
-    private let kHasMoodSelected     = "home_hasUserSelectedMood"
-    private let kMoodDate            = "home_moodDate"
-    private let kDailyCacheData      = "home_dailyCacheData"
+    private let kMoodKey = "home_selectedMoodKey"
+    private let kHasMoodSelected = "home_hasUserSelectedMood"
+    private let kMoodDate = "home_moodDate"
+    private let kDailyCacheData = "home_dailyCacheData"
 
     // MARK: - DataSource
     private var dataSource: UICollectionViewDiffableDataSource<HomeSectionType, HomeItem>!
@@ -86,7 +86,7 @@ class HomeViewController: UIViewController,
         let savedDate = UserDefaults.standard.string(forKey: kMoodDate) ?? ""
 
         if savedDate == today {
-            selectedMoodKey     = UserDefaults.standard.string(forKey: kMoodKey) ?? "happy"
+            selectedMoodKey = UserDefaults.standard.string(forKey: kMoodKey) ?? "happy"
             hasUserSelectedMood = UserDefaults.standard.bool(forKey: kHasMoodSelected)
         } else {
             clearPersistedMood()
@@ -94,13 +94,13 @@ class HomeViewController: UIViewController,
     }
 
     private func persistMoodState() {
-        UserDefaults.standard.set(selectedMoodKey,     forKey: kMoodKey)
+        UserDefaults.standard.set(selectedMoodKey, forKey: kMoodKey)
         UserDefaults.standard.set(hasUserSelectedMood, forKey: kHasMoodSelected)
-        UserDefaults.standard.set(todayDateString(),   forKey: kMoodDate)
+        UserDefaults.standard.set(todayDateString(), forKey: kMoodDate)
     }
 
     private func clearPersistedMood() {
-        selectedMoodKey     = "happy"
+        selectedMoodKey = "happy"
         hasUserSelectedMood = false
         UserDefaults.standard.removeObject(forKey: kMoodKey)
         UserDefaults.standard.removeObject(forKey: kHasMoodSelected)
@@ -150,12 +150,14 @@ class HomeViewController: UIViewController,
             "HomeSuggestionCell",
             "HomeArticleCell"
         ]
+
         for identifier in cellIdentifiers {
             HomeCollectionView.register(
                 UINib(nibName: identifier, bundle: nil),
                 forCellWithReuseIdentifier: identifier
             )
         }
+
         HomeCollectionView.register(
             UINib(nibName: "HomeHeaderCell", bundle: nil),
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
@@ -166,8 +168,8 @@ class HomeViewController: UIViewController,
     // MARK: - Setup Collection View
     private func setupCollectionView() {
         HomeCollectionView.collectionViewLayout = createCompositionalLayout()
-        HomeCollectionView.delegate             = self
-        HomeCollectionView.backgroundColor      = UIColor(named: "logsbgcolor") ?? .systemBackground
+        HomeCollectionView.delegate = self
+        HomeCollectionView.backgroundColor = UIColor(named: "logsbgcolor") ?? .systemBackground
         HomeCollectionView.contentInsetAdjustmentBehavior = .automatic
     }
 
@@ -175,49 +177,77 @@ class HomeViewController: UIViewController,
     private func createCompositionalLayout() -> UICollectionViewLayout {
         UICollectionViewCompositionalLayout { [weak self] sectionIndex, _ in
             guard let self,
-                  let sectionType = HomeSectionType(rawValue: sectionIndex)
-            else { return nil }
+                  let sectionType = HomeSectionType(rawValue: sectionIndex) else {
+                return nil
+            }
 
             switch sectionType {
-            case .title:      return self.createEmptySection()
-            case .quote:      return self.createQuoteSection()
-            case .journey:    return self.createJourneySection()
-            case .mood:       return self.createMoodSection()
-            case .journal:    return self.createJournalSection()
-            case .suggestion: return self.createSuggestionSection()
-            case .articles:   return self.createArticlesSection()
+            case .title:
+                return self.createEmptySection()
+            case .quote:
+                return self.createQuoteSection()
+            case .journey:
+                return self.createJourneySection()
+            case .mood:
+                return self.createMoodSection()
+            case .journal:
+                return self.createJournalSection()
+            case .suggestion:
+                return self.createSuggestionSection()
+            case .articles:
+                return self.createArticlesSection()
             }
         }
     }
 
     private func createEmptySection() -> NSCollectionLayoutSection {
-        let itemSize  = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(0))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(0))
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(0))
-        let section   = NSCollectionLayoutSection(group: NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [NSCollectionLayoutItem(layoutSize: itemSize)]))
+        let section = NSCollectionLayoutSection(
+            group: NSCollectionLayoutGroup.horizontal(
+                layoutSize: groupSize,
+                subitems: [NSCollectionLayoutItem(layoutSize: itemSize)]
+            )
+        )
         section.contentInsets = .zero
         return section
     }
 
     private func createQuoteSection() -> NSCollectionLayoutSection {
-        let itemSize  = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(100))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(100))
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(100))
-        let section   = NSCollectionLayoutSection(group: NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [NSCollectionLayoutItem(layoutSize: itemSize)]))
+        let section = NSCollectionLayoutSection(
+            group: NSCollectionLayoutGroup.horizontal(
+                layoutSize: groupSize,
+                subitems: [NSCollectionLayoutItem(layoutSize: itemSize)]
+            )
+        )
         section.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 16, bottom: 8, trailing: 16)
         return section
     }
 
     private func createJourneySection() -> NSCollectionLayoutSection {
-        let itemSize  = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(130))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(130))
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(130))
-        let section   = NSCollectionLayoutSection(group: NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [NSCollectionLayoutItem(layoutSize: itemSize)]))
+        let section = NSCollectionLayoutSection(
+            group: NSCollectionLayoutGroup.horizontal(
+                layoutSize: groupSize,
+                subitems: [NSCollectionLayoutItem(layoutSize: itemSize)]
+            )
+        )
         section.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 16, bottom: 8, trailing: 16)
         return section
     }
 
     private func createMoodSection() -> NSCollectionLayoutSection {
-        let itemSize  = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(155))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(155))
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(155))
-        let section   = NSCollectionLayoutSection(group: NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [NSCollectionLayoutItem(layoutSize: itemSize)]))
+        let section = NSCollectionLayoutSection(
+            group: NSCollectionLayoutGroup.horizontal(
+                layoutSize: groupSize,
+                subitems: [NSCollectionLayoutItem(layoutSize: itemSize)]
+            )
+        )
         section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 0, trailing: 16)
 
         let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(52))
@@ -232,19 +262,27 @@ class HomeViewController: UIViewController,
     }
 
     private func createJournalSection() -> NSCollectionLayoutSection {
-        let itemSize  = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(120))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(120))
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(120))
-        let section   = NSCollectionLayoutSection(group: NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [NSCollectionLayoutItem(layoutSize: itemSize)]))
+        let section = NSCollectionLayoutSection(
+            group: NSCollectionLayoutGroup.horizontal(
+                layoutSize: groupSize,
+                subitems: [NSCollectionLayoutItem(layoutSize: itemSize)]
+            )
+        )
         section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 4, trailing: 16)
         return section
     }
 
     private func createSuggestionSection() -> NSCollectionLayoutSection {
-        let itemSize  = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(116))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(116))
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(116))
-        let group     = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [NSCollectionLayoutItem(layoutSize: itemSize)])
-        let section   = NSCollectionLayoutSection(group: group)
-        section.contentInsets     = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 0, trailing: 16)
+        let group = NSCollectionLayoutGroup.vertical(
+            layoutSize: groupSize,
+            subitems: [NSCollectionLayoutItem(layoutSize: itemSize)]
+        )
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 0, trailing: 16)
         section.interGroupSpacing = 12
 
         let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(52))
@@ -259,11 +297,14 @@ class HomeViewController: UIViewController,
     }
 
     private func createArticlesSection() -> NSCollectionLayoutSection {
-        let itemSize  = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(273))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(273))
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(273))
-        let group     = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [NSCollectionLayoutItem(layoutSize: itemSize)])
-        let section   = NSCollectionLayoutSection(group: group)
-        section.contentInsets     = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 12, trailing: 16)
+        let group = NSCollectionLayoutGroup.vertical(
+            layoutSize: groupSize,
+            subitems: [NSCollectionLayoutItem(layoutSize: itemSize)]
+        )
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 12, trailing: 16)
         section.interGroupSpacing = 12
 
         let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(52))
@@ -290,26 +331,29 @@ class HomeViewController: UIViewController,
 
             case .quote(let quote):
                 let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: "HomeQuoteCell", for: indexPath
+                    withReuseIdentifier: "HomeQuoteCell",
+                    for: indexPath
                 ) as! HomeQuoteCell
                 cell.configure(quote: quote)
                 return cell
 
             case .journey(let stage):
                 let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: "HomeJourneyCell", for: indexPath
+                    withReuseIdentifier: "HomeJourneyCell",
+                    for: indexPath
                 ) as! HomeJourneyCell
                 cell.configure(journeyStage: stage)
                 return cell
 
             case .mood:
                 let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: "HomeMoodCell", for: indexPath
+                    withReuseIdentifier: "HomeMoodCell",
+                    for: indexPath
                 ) as! HomeMoodCell
                 cell.configure(
-                    title:               self.moodHeaderTitle(),
-                    moods:               HomeModel.moods,
-                    selectedMoodKey:     self.selectedMoodKey,
+                    title: self.moodHeaderTitle(),
+                    moods: HomeModel.moods,
+                    selectedMoodKey: self.selectedMoodKey,
                     hasUserSelectedMood: self.hasUserSelectedMood
                 )
                 cell.onMoodTapped = { [weak self] mood in
@@ -319,14 +363,16 @@ class HomeViewController: UIViewController,
 
             case .journal(let journalSuggestion):
                 let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: "HomeJournalCell", for: indexPath
+                    withReuseIdentifier: "HomeJournalCell",
+                    for: indexPath
                 ) as! HomeJournalCell
                 cell.configure(with: journalSuggestion)
                 return cell
 
             case .suggestion(let suggestion):
                 let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: "HomeSuggestionCell", for: indexPath
+                    withReuseIdentifier: "HomeSuggestionCell",
+                    for: indexPath
                 ) as! HomeSuggestionCell
                 cell.configure(with: suggestion)
 
@@ -344,7 +390,8 @@ class HomeViewController: UIViewController,
 
             case .article(let article):
                 let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: "HomeArticleCell", for: indexPath
+                    withReuseIdentifier: "HomeArticleCell",
+                    for: indexPath
                 ) as! HomeArticleCell
                 cell.configure(with: article)
                 return cell
@@ -353,23 +400,34 @@ class HomeViewController: UIViewController,
 
         dataSource.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath in
             guard kind == UICollectionView.elementKindSectionHeader else { return nil }
+
             let header = collectionView.dequeueReusableSupplementaryView(
                 ofKind: kind,
                 withReuseIdentifier: "HomeHeaderCell",
                 for: indexPath
             ) as! HomeHeaderCell
-            guard let sectionType = HomeSectionType(rawValue: indexPath.section) else { return header }
+
+            guard let sectionType = HomeSectionType(rawValue: indexPath.section) else {
+                return header
+            }
+
             switch sectionType {
             case .mood:
                 header.configure(title: "Daily Check-In", showSeeAll: false)
+
             case .suggestion:
                 header.configure(title: "Suggested For You", showSeeAll: false)
+
             case .articles:
                 header.configure(title: "Articles", showSeeAll: true)
-                header.onSeeAllTapped = { [weak self] in self?.navigateToArticles() }
+                header.onSeeAllTapped = { [weak self] in
+                    self?.navigateToArticles()
+                }
+
             default:
                 break
             }
+
             return header
         }
     }
@@ -382,9 +440,10 @@ class HomeViewController: UIViewController,
 
         snapshot.appendItems([HomeItem(type: .quote(HomeModel.quote))], toSection: .quote)
 
-        snapshot.appendItems([HomeItem(type: .journey(
-            stage: journeyStageText()
-        ))], toSection: .journey)
+        snapshot.appendItems(
+            [HomeItem(type: .journey(stage: journeyStageText()))],
+            toSection: .journey
+        )
 
         snapshot.appendItems([HomeItem(type: .mood)], toSection: .mood)
 
@@ -398,10 +457,12 @@ class HomeViewController: UIViewController,
         let suggestions = currentSuggestions.isEmpty
             ? HomeModel.randomSuggestions(for: selectedMoodKey)
             : currentSuggestions
+
         snapshot.appendItems(
             suggestions.map { HomeItem(type: .suggestion($0)) },
             toSection: .suggestion
         )
+
         snapshot.appendItems(
             Array(HomeModel.articles.prefix(3)).map { HomeItem(type: .article($0)) },
             toSection: .articles
@@ -413,7 +474,7 @@ class HomeViewController: UIViewController,
     // MARK: - Suggestion refresh
 
     private func updateSuggestions(for mood: Mood) {
-        selectedMoodKey     = mood.title.lowercased()
+        selectedMoodKey = mood.title.lowercased()
         hasUserSelectedMood = true
         persistMoodState()
         refreshMoodSuggestions(for: selectedMoodKey)
@@ -436,12 +497,20 @@ class HomeViewController: UIViewController,
         if let cached = dailySuggestionCache[cacheKey] {
             currentJournalSuggestion = Suggestion(
                 imageName: "Journal",
-                title:     cached.journalPrompt,
-                subtitle:  "Start Writing..."
+                title: cached.journalPrompt,
+                subtitle: "Start Writing..."
             )
             currentSuggestions = [
-                Suggestion(imageName: cached.breathingImage, title: cached.breathingTitle, subtitle: cached.breathingSubtitle),
-                Suggestion(imageName: cached.hobbyImage,     title: cached.hobbyTitle,     subtitle: cached.hobbySubtitle)
+                Suggestion(
+                    imageName: cached.breathingImage,
+                    title: cached.breathingTitle,
+                    subtitle: cached.breathingSubtitle
+                ),
+                Suggestion(
+                    imageName: cached.hobbyImage,
+                    title: cached.hobbyTitle,
+                    subtitle: cached.hobbySubtitle
+                )
             ]
             return
         }
@@ -450,6 +519,7 @@ class HomeViewController: UIViewController,
             for: moodKey,
             avoidingTitles: recentlyShownJournalTitles
         )
+
         currentSuggestions = HomeSuggestionEngine.moodSuggestions(
             for: moodKey,
             avoiding: recentlyShownBreathingTitles,
@@ -460,14 +530,15 @@ class HomeViewController: UIViewController,
            currentSuggestions.count >= 2 {
             let b = currentSuggestions[0]
             let h = currentSuggestions[1]
+
             dailySuggestionCache[cacheKey] = DailySuggestionCache(
-                breathingTitle:    b.title,
+                breathingTitle: b.title,
                 breathingSubtitle: b.subtitle,
-                breathingImage:    b.imageName,
-                hobbyTitle:        h.title,
-                hobbySubtitle:     h.subtitle,
-                hobbyImage:        h.imageName,
-                journalPrompt:     journal.title
+                breathingImage: b.imageName,
+                hobbyTitle: h.title,
+                hobbySubtitle: h.subtitle,
+                hobbyImage: h.imageName,
+                journalPrompt: journal.title
             )
             persistDailyCache()
         }
@@ -475,6 +546,7 @@ class HomeViewController: UIViewController,
         if let t = currentJournalSuggestion?.title.normalizedSuggestionTitle {
             recentlyShownJournalTitles.insert(t)
         }
+
         trackShownSuggestions()
         trimHistoryIfNeeded()
     }
@@ -485,6 +557,7 @@ class HomeViewController: UIViewController,
         if let t = currentSuggestions.first?.title.normalizedSuggestionTitle {
             recentlyShownBreathingTitles.insert(t)
         }
+
         if currentSuggestions.count > 1 {
             recentlyShownHobbyTitles.insert(currentSuggestions[1].title.normalizedSuggestionTitle)
         }
@@ -497,12 +570,14 @@ class HomeViewController: UIViewController,
                 recentlyShownJournalTitles.insert(t)
             }
         }
+
         if recentlyShownBreathingTitles.count > 8 {
             recentlyShownBreathingTitles.removeAll()
             if let t = currentSuggestions.first?.title.normalizedSuggestionTitle {
                 recentlyShownBreathingTitles.insert(t)
             }
         }
+
         if recentlyShownHobbyTitles.count > 8 {
             recentlyShownHobbyTitles.removeAll()
             if currentSuggestions.count > 1 {
@@ -521,18 +596,22 @@ class HomeViewController: UIViewController,
 
         if js.currentStepTitle == "Treatment" || js.isTreatmentCompleted {
             let phases = js.persistedPhaseStates
+
             if let inProgress = phases.first(where: { $0.statusRaw == "inProgress" }),
                !inProgress.treatmentTypeRaw.isEmpty,
                inProgress.treatmentTypeRaw != "none" {
                 return inProgress.treatmentTypeRaw
             }
+
             if let lastSaved = phases
                 .filter({ $0.isSaved && !$0.treatmentTypeRaw.isEmpty && $0.treatmentTypeRaw != "none" })
                 .last {
                 return lastSaved.treatmentTypeRaw
             }
+
             let name = js.currentTreatmentName
             if name != "Not started yet" && !name.isEmpty { return name }
+
             return "Treatment"
         }
 
@@ -555,14 +634,18 @@ class HomeViewController: UIViewController,
 
         playerVC.session = session
         playerVC.navigationItem.leftBarButtonItem = UIBarButtonItem(
-            barButtonSystemItem: .close, target: self, action: #selector(closePresentedModal)
+            barButtonSystemItem: .close,
+            target: self,
+            action: #selector(closePresentedModal)
         )
+
         let nav = UINavigationController(rootViewController: playerVC)
         if let sheet = nav.sheetPresentationController {
             sheet.detents = [.large()]
             sheet.prefersGrabberVisible = true
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
         }
+
         present(nav, animated: true)
     }
 
@@ -574,14 +657,18 @@ class HomeViewController: UIViewController,
 
         journalVC.prefilledTitle = prefilledTitle
         journalVC.navigationItem.leftBarButtonItem = UIBarButtonItem(
-            barButtonSystemItem: .close, target: self, action: #selector(closePresentedModal)
+            barButtonSystemItem: .close,
+            target: self,
+            action: #selector(closePresentedModal)
         )
+
         let nav = UINavigationController(rootViewController: journalVC)
         if let sheet = nav.sheetPresentationController {
             sheet.detents = [.large()]
             sheet.prefersGrabberVisible = true
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
         }
+
         present(nav, animated: true)
     }
 
@@ -592,26 +679,35 @@ class HomeViewController: UIViewController,
         ) as! AddMemoryPopupViewController
 
         popup.modalPresentationStyle = .popover
-        popup.preferredContentSize   = CGSize(width: 260, height: 150)
-        popup.onCamera = { [weak self] in self?.presentImagePicker(sourceType: .camera) }
-        popup.onPhotos = { [weak self] in self?.presentImagePicker(sourceType: .photoLibrary) }
+        popup.preferredContentSize = CGSize(width: 260, height: 150)
+
+        popup.onCamera = { [weak self] in
+            self?.presentImagePicker(sourceType: .camera)
+        }
+
+        popup.onPhotos = { [weak self] in
+            self?.presentImagePicker(sourceType: .photoLibrary)
+        }
 
         guard let popover = popup.popoverPresentationController else {
             present(popup, animated: true)
             return
         }
-        popover.sourceView               = sourceView
-        popover.sourceRect               = sourceView.bounds
+
+        popover.sourceView = sourceView
+        popover.sourceRect = sourceView.bounds
         popover.permittedArrowDirections = [.up, .down]
-        popover.delegate                 = popup
+        popover.delegate = popup
+
         present(popup, animated: true)
     }
 
     private func presentImagePicker(sourceType: UIImagePickerController.SourceType) {
         guard UIImagePickerController.isSourceTypeAvailable(sourceType) else { return }
-        let picker        = UIImagePickerController()
+
+        let picker = UIImagePickerController()
         picker.sourceType = sourceType
-        picker.delegate   = self
+        picker.delegate = self
         present(picker, animated: true)
     }
 
@@ -623,6 +719,7 @@ class HomeViewController: UIViewController,
             picker.dismiss(animated: true)
             return
         }
+
         picker.dismiss(animated: true) { [weak self] in
             self?.openAddMemoryScreen(with: image)
         }
@@ -637,9 +734,50 @@ class HomeViewController: UIViewController,
         let addVC = storyboard.instantiateViewController(
             withIdentifier: "AddMemoryViewController"
         ) as! AddMemoryViewController
-        addVC.image    = image
+
+        addVC.image = image
         addVC.delegate = self
+
         present(UINavigationController(rootViewController: addVC), animated: true)
+    }
+
+    private func showMemorySavedPopup(for memory: Memory) {
+        let popup = MemorySavedPopupView.instantiate()
+        popup.configure(with: memory.image)
+
+        popup.onViewMemory = { [weak self, weak popup] in
+            popup?.dismissAnimated {
+                self?.openMindfulnessTab()
+            }
+        }
+
+        popup.onStayHome = { [weak popup] in
+            popup?.dismissAnimated()
+        }
+
+        popup.show(in: tabBarController?.view ?? view)
+    }
+
+    private func openMindfulnessTab() {
+        guard let tabBarController = tabBarController,
+              let viewControllers = tabBarController.viewControllers else {
+            return
+        }
+
+        guard let mindfulnessIndex = viewControllers.firstIndex(where: { controller in
+            if let nav = controller as? UINavigationController {
+                return nav.viewControllers.first is MindfulnessViewController
+            }
+            return controller is MindfulnessViewController
+        }) else {
+            return
+        }
+
+        tabBarController.selectedIndex = mindfulnessIndex
+
+        if let nav = viewControllers[mindfulnessIndex] as? UINavigationController {
+            nav.popToRootViewController(animated: false)
+        }
     }
 
     func didAddMemory(_ memory: Memory) {
@@ -647,6 +785,7 @@ class HomeViewController: UIViewController,
         memories.append(memory)
         MemoryStore.save(memories)
         CoinRewardService.shared.awardMemoryCoinsIfEligible(on: self)
+        showMemorySavedPopup(for: memory)
     }
 
     @objc private func closePresentedModal() {
@@ -666,12 +805,14 @@ class HomeViewController: UIViewController,
 
     private func navigateToJourney() {
         let sb = UIStoryboard(name: "JourneyMain", bundle: nil)
+
         if let vc = sb.instantiateViewController(
             withIdentifier: "JourneyViewController"
         ) as? JourneyViewController {
             navigationController?.pushViewController(vc, animated: true)
             return
         }
+
         if let vc = sb.instantiateViewController(
             withIdentifier: "JourneyDetailsViewController"
         ) as? JourneyDetailsViewController {
@@ -700,6 +841,7 @@ class HomeViewController: UIViewController,
             let isBreathing = sessions.contains {
                 $0.title.caseInsensitiveCompare(suggestion.title) == .orderedSame
             }
+
             if isBreathing {
                 UserActivityStore.shared.recordBreathingTap(title: suggestion.title)
                 openBreathingSessionAsSheet(withTitle: suggestion.title)
@@ -712,20 +854,24 @@ class HomeViewController: UIViewController,
         case .article(let article):
             let articlesDataSource = ArticlesDataSource()
             articlesDataSource.loadArticles()
-            guard let fullArticle = articlesDataSource.articles.first(
-                where: { $0.title == article.title }
-            ) else { return }
+
+            guard let fullArticle = articlesDataSource.articles.first(where: {
+                $0.title == article.title
+            }) else { return }
+
             let storyboard = UIStoryboard(name: "ArticlesMain", bundle: nil)
             if let detailVC = storyboard.instantiateViewController(
                 withIdentifier: "ArticleDetailViewController"
             ) as? ArticleDetailViewController {
                 detailVC.article = fullArticle
+
                 let nav = UINavigationController(rootViewController: detailVC)
                 if let sheet = nav.sheetPresentationController {
                     sheet.detents = [.large()]
                     sheet.prefersGrabberVisible = true
                     sheet.prefersScrollingExpandsWhenScrolledToEdge = false
                 }
+
                 present(nav, animated: true)
             }
 
@@ -735,16 +881,16 @@ class HomeViewController: UIViewController,
     }
 }
 
-// MARK: - DailySuggestionCache (Codable for UserDefaults persistence)
+// MARK: - DailySuggestionCache
 
 private struct DailySuggestionCache: Codable {
-    let breathingTitle:    String
+    let breathingTitle: String
     let breathingSubtitle: String
-    let breathingImage:    String
-    let hobbyTitle:        String
-    let hobbySubtitle:     String
-    let hobbyImage:        String
-    let journalPrompt:     String
+    let breathingImage: String
+    let hobbyTitle: String
+    let hobbySubtitle: String
+    let hobbyImage: String
+    let journalPrompt: String
 }
 
 // MARK: - String helper
