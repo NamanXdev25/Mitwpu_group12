@@ -157,6 +157,19 @@ final class SupabaseRESTClient {
     private let refreshQueue = DispatchQueue(label: "BreastCancerApp.SupabaseRESTClient.refreshQueue")
     private var isRefreshing = false
 
+    // MARK: - Fetch throttle (prevents excessive Disk IO on Supabase Free Tier)
+    private var lastFetchTime: [String: Date] = [:]
+    private let fetchCooldown: TimeInterval = 60  // seconds
+
+    private func shouldThrottleFetch(table: String) -> Bool {
+        if let last = lastFetchTime[table],
+           Date().timeIntervalSince(last) < fetchCooldown {
+            return true
+        }
+        lastFetchTime[table] = Date()
+        return false
+    }
+
     init(session: URLSession = .shared) {
         self.session = session
 
@@ -178,6 +191,12 @@ final class SupabaseRESTClient {
         filters: [SupabaseFilter] = [],
         completion: @escaping ([T]) -> Void
     ) {
+        // Skip if this table was already fetched within the cooldown window
+        guard !shouldThrottleFetch(table: table) else {
+            completion([])
+            return
+        }
+
         guard let request = makeRequest(method: "GET", table: table, filters: filters, onConflict: nil) else {
             completion([])
             return

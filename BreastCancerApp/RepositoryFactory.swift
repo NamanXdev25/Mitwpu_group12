@@ -1,43 +1,30 @@
 import Foundation
 
 enum RepositoryFactory {
-    static func makeAppointmentRepository() -> AppointmentRepository {
-        SupabaseAppointmentRepository()
-    }
 
-    static func makeMedicationHistoryRepository() -> MedicationHistoryRepository {
-        SupabaseMedicationHistoryRepository()
-    }
+    // MARK: - Cached singletons (prevents duplicate cloud syncs)
 
-    static func makeMemoryRepository() -> MemoryRepository {
-        SupabaseMemoryRepository()
-    }
+    private static let _appointment: AppointmentRepository = SupabaseAppointmentRepository()
+    private static let _medication: MedicationHistoryRepository = SupabaseMedicationHistoryRepository()
+    private static let _memory: MemoryRepository = SupabaseMemoryRepository()
+    private static let _hydration: HydrationRepository = SupabaseHydrationRepository()
+    private static let _symptom: SymptomRepository = SupabaseSymptomRepository()
+    private static let _journal: JournalRepository = SupabaseJournalRepository()
+    private static let _breathing: BreathingRepository = SupabaseBreathingRepository()
+    private static let _profile: ProfileRepository = SupabaseProfileRepository()
+    private static let _exercise: ExerciseRepository = SupabaseExerciseRepository()
+    private static let _journey: JourneyRepository = SupabaseJourneyRepository()
 
-    static func makeHydrationRepository() -> HydrationRepository {
-        SupabaseHydrationRepository()
-    }
+    // MARK: - Factory accessors
 
-    static func makeSymptomRepository() -> SymptomRepository {
-        SupabaseSymptomRepository()
-    }
-
-    static func makeJournalRepository() -> JournalRepository {
-        SupabaseJournalRepository()
-    }
-
-    static func makeBreathingRepository() -> BreathingRepository {
-        SupabaseBreathingRepository()
-    }
-
-    static func makeProfileRepository() -> ProfileRepository {
-        SupabaseProfileRepository()
-    }
-
-    static func makeExerciseRepository() -> ExerciseRepository {
-        SupabaseExerciseRepository()
-    }
-
-    static func makeJourneyRepository() -> JourneyRepository {
-        SupabaseJourneyRepository()
-    }
+    static func makeAppointmentRepository() -> AppointmentRepository { _appointment }
+    static func makeMedicationHistoryRepository() -> MedicationHistoryRepository { _medication }
+    static func makeMemoryRepository() -> MemoryRepository { _memory }
+    static func makeHydrationRepository() -> HydrationRepository { _hydration }
+    static func makeSymptomRepository() -> SymptomRepository { _symptom }
+    static func makeJournalRepository() -> JournalRepository { _journal }
+    static func makeBreathingRepository() -> BreathingRepository { _breathing }
+    static func makeProfileRepository() -> ProfileRepository { _profile }
+    static func makeExerciseRepository() -> ExerciseRepository { _exercise }
+    static func makeJourneyRepository() -> JourneyRepository { _journey }
 }
