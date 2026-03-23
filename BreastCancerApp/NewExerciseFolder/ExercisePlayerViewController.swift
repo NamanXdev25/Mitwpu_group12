@@ -11,6 +11,7 @@ class ExercisePlayerViewController: UIViewController {
     var exerciseModel: NewExerciseModel!
     var exercisePlan: NewExercisePlan!
     var currentIndex: Int = 0
+    var onExerciseMarkedDone: ((Int) -> Void)?
 
     // MARK: - Private Properties
     private var dataSource: ExercisePlayerDataSource!
@@ -97,7 +98,7 @@ class ExercisePlayerViewController: UIViewController {
         let h = VideoPlayerCell.videoHeight + 40
         let size = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(h))
         let section = NSCollectionLayoutSection(group: .vertical(layoutSize: size, subitems: [.init(layoutSize: size)]))
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 45, bottom: 0, trailing: 45)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
         return section
     }
 
@@ -294,12 +295,33 @@ extension ExercisePlayerViewController: ExercisePlayerDataSourceDelegate {
 
     func didConfigureVideoCell(_ cell: VideoPlayerCell) {
         activeVideoCell = cell
+        // Sync controls to reflect that video starts playing automatically
+        DispatchQueue.main.async {
+            if let controlsCell = self.collectionView.cellForItem(
+                at: IndexPath(item: 0, section: 2)
+            ) as? VideoControlsCell {
+                controlsCell.isPlaying = true
+                let config = UIImage.SymbolConfiguration(pointSize: 56, weight: .thin)
+                controlsCell.playButton.setImage(
+                    UIImage(systemName: "pause.circle.fill", withConfiguration: config),
+                    for: .normal
+                )
+                controlsCell.startProgressTimer()
+            }
+        }
     }
 
     func didUpdateTotalDuration(_ seconds: Double) {
         totalDuration = seconds
         DispatchQueue.main.async {
-            self.collectionView.reloadSections(IndexSet(integer: 2))
+            // Update the controls cell directly — reloading section 2 resets isPlaying state
+            if let controlsCell = self.collectionView.cellForItem(
+                at: IndexPath(item: 0, section: 2)
+            ) as? VideoControlsCell {
+                controlsCell.totalSeconds = Int(seconds)
+                controlsCell.updateTimeLabels()
+                controlsCell.updateProgress()
+            }
         }
     }
 
@@ -313,16 +335,46 @@ extension ExercisePlayerViewController: ExercisePlayerDataSourceDelegate {
 
     func didTogglePlayPause() {
         guard let player = activeVideoCell?.player else { return }
-        player.timeControlStatus == .playing ? activeVideoCell?.pause() : activeVideoCell?.play()
+        let isCurrentlyPlaying = player.timeControlStatus == .playing
+
+        if isCurrentlyPlaying {
+            activeVideoCell?.pause()
+        } else {
+            activeVideoCell?.play()
+        }
+        if let controlsCell = collectionView.cellForItem(
+            at: IndexPath(item: 0, section: 2)
+        ) as? VideoControlsCell {
+            controlsCell.isPlaying = !isCurrentlyPlaying
+            let iconName = controlsCell.isPlaying ? "pause.circle.fill" : "play.circle.fill"
+            let config = UIImage.SymbolConfiguration(pointSize: 56, weight: .thin)
+            controlsCell.playButton.setImage(UIImage(systemName: iconName, withConfiguration: config), for: .normal)
+            if controlsCell.isPlaying {
+                controlsCell.startProgressTimer()
+            } else {
+                controlsCell.stopProgressTimer()
+            }
+        }
     }
 
     func didRestart() {
         activeVideoCell?.seek(to: 0)
         activeVideoCell?.play()
+
+        if let controlsCell = collectionView.cellForItem(
+            at: IndexPath(item: 0, section: 2)
+        ) as? VideoControlsCell {
+            controlsCell.currentSeconds = 0
+            controlsCell.isPlaying = true
+            let config = UIImage.SymbolConfiguration(pointSize: 56, weight: .thin)
+            controlsCell.playButton.setImage(UIImage(systemName: "pause.circle.fill", withConfiguration: config), for: .normal)
+            controlsCell.updateProgress()
+            controlsCell.updateTimeLabels()
+            controlsCell.startProgressTimer()
+        }
     }
 
     func didToggleLoop(enabled: Bool) {
-        activeVideoCell?.isLooping = enabled
     }
 
     func didSeek(toProgress progress: Float) {
@@ -333,7 +385,7 @@ extension ExercisePlayerViewController: ExercisePlayerDataSourceDelegate {
         if let cell = collectionView.cellForItem(at: IndexPath(item: 0, section: 3)) as? ActionButtonsCell {
             if cell.isDone {
                 showToast(message: "Exercise marked as done ✓")
-
+                onExerciseMarkedDone?(currentIndex)
                 CoinRewardService.shared.awardExerciseCoinsIfEligible(on: self)
             }
         }

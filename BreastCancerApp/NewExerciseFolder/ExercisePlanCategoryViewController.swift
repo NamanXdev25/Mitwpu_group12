@@ -1,4 +1,3 @@
-
 import UIKit
 
 class ExercisePlanCategoryViewController: UIViewController {
@@ -126,8 +125,8 @@ class ExercisePlanCategoryViewController: UIViewController {
             NewExerciseModel(
                 imageName: exercise.imageName,
                 title: exercise.name,
-                category: "Exercise",
-                difficulty: "Medium",
+                category: category.title,
+                difficulty: "",
                 duration: exercise.details,
                 youtubeURL: exercise.youtubeURL
             )

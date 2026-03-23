@@ -76,7 +76,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Rjf-6D-9cB">
-                                <rect key="frame" x="0.0" y="172" width="393" height="512"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="684"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="gsq-S4-Prp">
                                     <size key="itemSize" width="128" height="128"/>
@@ -92,10 +92,10 @@
                         <constraints>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="xmv-Uc-i8y" secondAttribute="trailing" id="7fk-vp-Ids"/>
                             <constraint firstItem="xmv-Uc-i8y" firstAttribute="top" secondItem="Rjf-6D-9cB" secondAttribute="bottom" id="DZz-el-JkA"/>
+                            <constraint firstItem="Rjf-6D-9cB" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="HvY-as-p3E"/>
                             <constraint firstItem="xmv-Uc-i8y" firstAttribute="bottom" secondItem="vDu-zF-Fre" secondAttribute="bottom" id="IgU-mz-yfJ"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="Rjf-6D-9cB" secondAttribute="trailing" id="RCc-97-P2N"/>
                             <constraint firstItem="Rjf-6D-9cB" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="nrY-Qx-0VX"/>
-                            <constraint firstItem="Rjf-6D-9cB" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="thI-v6-EhX"/>
                             <constraint firstItem="xmv-Uc-i8y" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="zu2-fY-E9G"/>
                         </constraints>
                     </view>
@@ -191,7 +191,6 @@
         <!--Navigation Controller-->
         <scene sceneID="XqW-Rk-Eh9">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="7AG-es-OdJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <navigationController storyboardIdentifier="NewExerciseNavController" automaticallyAdjustsScrollViewInsets="NO" id="zVO-Zc-f0R" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="27i-Jt-fHO">
@@ -203,6 +202,7 @@
                         <segue destination="Y6W-OH-hqX" kind="relationship" relationship="rootViewController" id="NhQ-s7-aDf"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7AG-es-OdJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="965.64885496183206" y="-7.042253521126761"/>
         </scene>
