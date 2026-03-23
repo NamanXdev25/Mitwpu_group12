@@ -33,6 +33,7 @@ class VideoPlayerCell: UICollectionViewCell {
     // MARK: - Layout
     override func layoutSubviews() {
         super.layoutSubviews()
+        containerView.layoutIfNeeded()
         playerLayer?.frame = containerView.bounds
     }
 
@@ -83,9 +84,12 @@ class VideoPlayerCell: UICollectionViewCell {
         )
 
         playerLayer = AVPlayerLayer(player: player)
-        playerLayer?.videoGravity = .resizeAspectFill
-        playerLayer?.frame = containerView.bounds
+        playerLayer?.videoGravity = .resizeAspect
         containerView.layer.insertSublayer(playerLayer!, above: videoImageView.layer)
+
+        // Force layout so containerView.bounds is correct before setting the frame
+        containerView.layoutIfNeeded()
+        playerLayer?.frame = containerView.bounds
 
         player?.isMuted = isMuted
         updateSpeakerIcon()
