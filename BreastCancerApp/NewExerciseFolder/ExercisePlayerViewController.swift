@@ -295,12 +295,33 @@ extension ExercisePlayerViewController: ExercisePlayerDataSourceDelegate {
 
     func didConfigureVideoCell(_ cell: VideoPlayerCell) {
         activeVideoCell = cell
+        // Sync controls to reflect that video starts playing automatically
+        DispatchQueue.main.async {
+            if let controlsCell = self.collectionView.cellForItem(
+                at: IndexPath(item: 0, section: 2)
+            ) as? VideoControlsCell {
+                controlsCell.isPlaying = true
+                let config = UIImage.SymbolConfiguration(pointSize: 56, weight: .thin)
+                controlsCell.playButton.setImage(
+                    UIImage(systemName: "pause.circle.fill", withConfiguration: config),
+                    for: .normal
+                )
+                controlsCell.startProgressTimer()
+            }
+        }
     }
 
     func didUpdateTotalDuration(_ seconds: Double) {
         totalDuration = seconds
         DispatchQueue.main.async {
-            self.collectionView.reloadSections(IndexSet(integer: 2))
+            // Update the controls cell directly — reloading section 2 resets isPlaying state
+            if let controlsCell = self.collectionView.cellForItem(
+                at: IndexPath(item: 0, section: 2)
+            ) as? VideoControlsCell {
+                controlsCell.totalSeconds = Int(seconds)
+                controlsCell.updateTimeLabels()
+                controlsCell.updateProgress()
+            }
         }
     }
 
@@ -314,16 +335,50 @@ extension ExercisePlayerViewController: ExercisePlayerDataSourceDelegate {
 
     func didTogglePlayPause() {
         guard let player = activeVideoCell?.player else { return }
-        player.timeControlStatus == .playing ? activeVideoCell?.pause() : activeVideoCell?.play()
+        let isCurrentlyPlaying = player.timeControlStatus == .playing
+
+        if isCurrentlyPlaying {
+            activeVideoCell?.pause()
+        } else {
+            activeVideoCell?.play()
+        }
+
+        // Sync the controls cell UI to match
+        if let controlsCell = collectionView.cellForItem(
+            at: IndexPath(item: 0, section: 2)
+        ) as? VideoControlsCell {
+            controlsCell.isPlaying = !isCurrentlyPlaying
+            let iconName = controlsCell.isPlaying ? "pause.circle.fill" : "play.circle.fill"
+            let config = UIImage.SymbolConfiguration(pointSize: 56, weight: .thin)
+            controlsCell.playButton.setImage(UIImage(systemName: iconName, withConfiguration: config), for: .normal)
+            if controlsCell.isPlaying {
+                controlsCell.startProgressTimer()
+            } else {
+                controlsCell.stopProgressTimer()
+            }
+        }
     }
 
     func didRestart() {
         activeVideoCell?.seek(to: 0)
         activeVideoCell?.play()
+
+        if let controlsCell = collectionView.cellForItem(
+            at: IndexPath(item: 0, section: 2)
+        ) as? VideoControlsCell {
+            controlsCell.currentSeconds = 0
+            controlsCell.isPlaying = true
+            let config = UIImage.SymbolConfiguration(pointSize: 56, weight: .thin)
+            controlsCell.playButton.setImage(UIImage(systemName: "pause.circle.fill", withConfiguration: config), for: .normal)
+            controlsCell.updateProgress()
+            controlsCell.updateTimeLabels()
+            controlsCell.startProgressTimer()
+        }
     }
 
     func didToggleLoop(enabled: Bool) {
-        activeVideoCell?.isLooping = enabled
+        // Looping is managed internally by VideoPlayerCell via targetDuration.
+        // The loop button has no effect when a target duration is set.
     }
 
     func didSeek(toProgress progress: Float) {

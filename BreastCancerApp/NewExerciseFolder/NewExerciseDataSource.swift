@@ -1,4 +1,3 @@
-
 import UIKit
 
 enum NewExerciseSectionType: Int, CaseIterable {
@@ -79,7 +78,7 @@ extension NewExerciseDataSource: UICollectionViewDataSource {
 
             cell.configure(
                 title: exercise.title,
-                subtitle: "\(exercise.category) • \(exercise.difficulty)",
+                subtitle: exercise.duration,
                 time: exercise.duration,
                 imageName: exercise.imageName,
                 completed: isCompleted

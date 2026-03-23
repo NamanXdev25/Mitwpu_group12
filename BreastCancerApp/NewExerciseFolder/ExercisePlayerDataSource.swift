@@ -1,4 +1,3 @@
-
 import UIKit
 
 protocol ExercisePlayerDataSourceDelegate: AnyObject {
@@ -56,12 +55,16 @@ extension ExercisePlayerDataSource: UICollectionViewDataSource, UICollectionView
                 withReuseIdentifier: "VideoPlayerCell", for: indexPath) as! VideoPlayerCell
 
             cell.onDurationChanged = { [weak self] seconds in
-                guard let self = self else { return }
+                guard let self else { return }
                 self.totalDuration = seconds
                 self.delegate?.didUpdateTotalDuration(seconds)
             }
 
-            cell.configure(videoName: exercise.imageName, imageName: exercise.imageName)
+            // ⚠️ Must set targetDuration BEFORE configure() — configure() snapshots it immediately
+            cell.targetDuration = Self.parseTargetDuration(exercise.duration)
+
+            let videoName = exercise.title.replacingOccurrences(of: " ", with: "_")
+            cell.configure(videoName: videoName, imageName: exercise.imageName)
             delegate?.didConfigureVideoCell(cell)
 
             return cell
@@ -115,8 +118,31 @@ extension ExercisePlayerDataSource: UICollectionViewDataSource, UICollectionView
         }
     }
 
-    // MARK: - Helper
+    // MARK: - Helpers
+
     private func descriptionFor(_ exercise: NewExerciseModel) -> String {
-        return "A \(exercise.difficulty.lowercased())-difficulty \(exercise.category.lowercased()) exercise. Duration: \(exercise.duration)."
+        return "Duration: \(exercise.duration). Follow the video and move at a comfortable pace."
+    }
+
+    /// Parses "4 min", "2.5 min", "30 sec" → seconds as Double. Returns 0 if unparseable.
+    static func parseTargetDuration(_ duration: String) -> Double {
+        let lower = duration.lowercased().trimmingCharacters(in: .whitespaces)
+
+        // Extract numeric portion (digits + decimal point only)
+        var numericString = ""
+        for ch in lower {
+            if ch.isNumber || ch == "." {
+                numericString.append(ch)
+            }
+        }
+
+        guard let value = Double(numericString), value > 0 else { return 0 }
+
+        if lower.contains("sec") {
+            return value
+        } else {
+            // Default to minutes → convert to seconds
+            return value * 60
+        }
     }
 }
