@@ -13,6 +13,8 @@ final class ObservationsContainerCell: UICollectionViewCell {
     var selectedNippleChange: String?
     var selectedPainLevel: String?
 
+    var onSelectionChanged: ((Bool) -> Void)?
+
     private let skinOptions = [
         "None",
         "Dimpling/puckering",
@@ -50,87 +52,92 @@ final class ObservationsContainerCell: UICollectionViewCell {
         lumpsSwitch.isOn = false
         sizeSwitch.isOn = false
 
-        var dict = UserDefaults.standard.dictionary(forKey: "latestObservations") ?? [:]
-        dict["lumps"] = false
-        dict["sizeChange"] = false
-        UserDefaults.standard.set(dict, forKey: "latestObservations")
-
         selectedSkinChange = "None"
         selectedNippleChange = "None"
         selectedPainLevel = "None"
 
         configureButtonDefaults()
         configureMenus()
+        notifySelectionChange()
     }
 
-    // MARK: - Actions
     @IBAction private func lumpsSwitchChanged(_ sender: UISwitch) {
         saveObservation(key: "lumps", value: sender.isOn)
+        notifySelectionChange()
     }
 
     @IBAction private func sizeSwitchChanged(_ sender: UISwitch) {
         saveObservation(key: "sizeChange", value: sender.isOn)
+        notifySelectionChange()
     }
 
     @IBAction private func skinChangesTapped(_ sender: UIButton) {
-        presentActionSheet(
-            title: "Skin Changes",
-            options: skinOptions
-        ) { [weak self] value in
+        presentActionSheet(title: "Skin Changes", options: skinOptions) { [weak self] value in
             self?.applySkinSelection(value)
         }
     }
 
     @IBAction private func nippleChangesTapped(_ sender: UIButton) {
-        presentActionSheet(
-            title: "Nipple changes",
-            options: nippleOptions
-        ) { [weak self] value in
+        presentActionSheet(title: "Nipple changes", options: nippleOptions) { [weak self] value in
             self?.applyNippleSelection(value)
         }
     }
 
     @IBAction private func painTapped(_ sender: UIButton) {
-        presentActionSheet(
-            title: "Pain / Tenderness",
-            options: painOptions
-        ) { [weak self] value in
+        presentActionSheet(title: "Pain / Tenderness", options: painOptions) { [weak self] value in
             self?.applyPainSelection(value)
         }
     }
 
-    // MARK: - Apply Selections
     private func applySkinSelection(_ option: String) {
         selectedSkinChange = option
         skinChangesButton.setTitle(option, for: .normal)
         skinChangesButton.setTitleColor(
-            UIColor(named: "pink") ?? .systemPink,
+            option == "None" ? (UIColor(named: "mutedText") ?? .systemGray) : (UIColor(named: "pink") ?? .systemPink),
             for: .normal
         )
         saveObservation(key: "skinChanges", value: option)
+        notifySelectionChange()
     }
 
     private func applyNippleSelection(_ option: String) {
         selectedNippleChange = option
         nippleChangesButton.setTitle(option, for: .normal)
         nippleChangesButton.setTitleColor(
-            UIColor(named: "pink") ?? .systemPink,
+            option == "None" ? (UIColor(named: "mutedText") ?? .systemGray) : (UIColor(named: "pink") ?? .systemPink),
             for: .normal
         )
         saveObservation(key: "nippleChanges", value: option)
+        notifySelectionChange()
     }
 
     private func applyPainSelection(_ option: String) {
         selectedPainLevel = option
         painButton.setTitle(option, for: .normal)
         painButton.setTitleColor(
-            UIColor(named: "pink") ?? .systemPink,
+            option == "None" ? (UIColor(named: "mutedText") ?? .systemGray) : (UIColor(named: "pink") ?? .systemPink),
             for: .normal
         )
         saveObservation(key: "pain", value: option)
+        notifySelectionChange()
     }
 
-    // MARK: - Menus
+    private func hasSelectedSymptom() -> Bool {
+        let skin = selectedSkinChange ?? "None"
+        let nipple = selectedNippleChange ?? "None"
+        let pain = selectedPainLevel ?? "None"
+
+        return lumpsSwitch.isOn ||
+               sizeSwitch.isOn ||
+               skin != "None" ||
+               nipple != "None" ||
+               pain != "None"
+    }
+
+    private func notifySelectionChange() {
+        onSelectionChanged?(hasSelectedSymptom())
+    }
+
     private func configureMenus() {
         if #available(iOS 14.0, *) {
             skinChangesButton.menu = UIMenu(
@@ -165,7 +172,6 @@ final class ObservationsContainerCell: UICollectionViewCell {
         }
     }
 
-    // MARK: - Defaults
     private func configureButtonDefaults() {
         let mutedColor = UIColor(named: "mutedText") ?? .systemGray
 
@@ -179,14 +185,12 @@ final class ObservationsContainerCell: UICollectionViewCell {
         painButton.setTitleColor(mutedColor, for: .normal)
     }
 
-    // MARK: - Persistence
     private func saveObservation(key: String, value: Any) {
         var dict = UserDefaults.standard.dictionary(forKey: "latestObservations") ?? [:]
         dict[key] = value
         UserDefaults.standard.set(dict, forKey: "latestObservations")
     }
 
-    // MARK: - Action Sheet
     private func presentActionSheet(
         title: String,
         options: [String],
@@ -206,9 +210,7 @@ final class ObservationsContainerCell: UICollectionViewCell {
             )
         }
 
-        alert.addAction(
-            UIAlertAction(title: "Cancel", style: .cancel)
-        )
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
 
         if let vc = firstAvailableViewController() {
             if let popover = alert.popoverPresentationController {
@@ -245,7 +247,6 @@ final class ObservationsContainerCell: UICollectionViewCell {
     }
 }
 
-// MARK: - ObservationsCollector
 extension ObservationsContainerCell: ObservationsCollector {
 
     func collectObservations() -> [ObservationItem] {

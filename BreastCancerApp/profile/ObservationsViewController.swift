@@ -9,18 +9,23 @@ final class ObservationsViewController: UIViewController {
     @IBOutlet private weak var collectionView: UICollectionView!
     @IBOutlet private weak var doneBarButton: UIBarButtonItem!
 
+    private var shouldShowDisclaimer = false
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        layout.minimumLineSpacing = 0
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 16, right: 16)
+        layout.minimumLineSpacing = 16
         layout.minimumInteritemSpacing = 0
         collectionView.setCollectionViewLayout(layout, animated: false)
 
-        let nib = UINib(nibName: "ObservationsContainerCell", bundle: nil)
-        collectionView.register(nib, forCellWithReuseIdentifier: "ObservationsContainerCell")
+        let observationsNib = UINib(nibName: "ObservationsContainerCell", bundle: nil)
+        collectionView.register(observationsNib, forCellWithReuseIdentifier: "ObservationsContainerCell")
+
+        let disclaimerNib = UINib(nibName: "ObservationDisclaimerCell", bundle: nil)
+        collectionView.register(disclaimerNib, forCellWithReuseIdentifier: "ObservationDisclaimerCell")
 
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -33,9 +38,8 @@ final class ObservationsViewController: UIViewController {
     private func doneTapped() {
         var observations: [ObservationItem] = []
 
-        if let cell = collectionView.visibleCells.first,
-           let collector = cell as? ObservationsCollector {
-            observations = collector.collectObservations()
+        if let cell = collectionView.visibleCells.first(where: { $0 is ObservationsContainerCell }) as? ObservationsCollector {
+            observations = cell.collectObservations()
         }
 
         if observations.isEmpty {
@@ -64,7 +68,7 @@ extension ObservationsViewController: UICollectionViewDataSource, UICollectionVi
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
-        1
+        shouldShowDisclaimer ? 2 : 1
     }
 
     func collectionView(
@@ -72,10 +76,28 @@ extension ObservationsViewController: UICollectionViewDataSource, UICollectionVi
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
 
-        collectionView.dequeueReusableCell(
-            withReuseIdentifier: "ObservationsContainerCell",
+        if indexPath.item == 0 {
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "ObservationsContainerCell",
+                for: indexPath
+            ) as! ObservationsContainerCell
+
+            cell.onSelectionChanged = { [weak self] shouldShow in
+                guard let self else { return }
+
+                if self.shouldShowDisclaimer != shouldShow {
+                    self.shouldShowDisclaimer = shouldShow
+                    self.collectionView.reloadData()
+                }
+            }
+
+            return cell
+        }
+
+        return collectionView.dequeueReusableCell(
+            withReuseIdentifier: "ObservationDisclaimerCell",
             for: indexPath
-        ) as! ObservationsContainerCell
+        )
     }
 
     func collectionView(
@@ -88,6 +110,10 @@ extension ObservationsViewController: UICollectionViewDataSource, UICollectionVi
         let horizontalInsets = layout.sectionInset.left + layout.sectionInset.right
         let width = collectionView.bounds.width - horizontalInsets
 
-        return CGSize(width: width, height: 360)
+        if indexPath.item == 0 {
+            return CGSize(width: width, height: 360)
+        } else {
+            return CGSize(width: width, height: 134)
+        }
     }
 }
