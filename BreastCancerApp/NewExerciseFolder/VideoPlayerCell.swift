@@ -15,7 +15,6 @@ class VideoPlayerCell: UICollectionViewCell {
     var isMuted = false
 
     // MARK: - Target Duration
-    /// Set this BEFORE calling configure(). The clip will loop until this many seconds have elapsed.
     var targetDuration: Double = 0
 
     var onDurationChanged: ((Double) -> Void)?
@@ -66,7 +65,7 @@ class VideoPlayerCell: UICollectionViewCell {
         }
 
         guard let validPath = path else {
-            print("⚠️ VideoPlayerCell: video file not found for '\(videoName)'")
+            print("VideoPlayerCell: video file not found for '\(videoName)'")
             return
         }
 
@@ -86,15 +85,12 @@ class VideoPlayerCell: UICollectionViewCell {
         playerLayer = AVPlayerLayer(player: player)
         playerLayer?.videoGravity = .resizeAspect
         containerView.layer.insertSublayer(playerLayer!, above: videoImageView.layer)
-
-        // Force layout so containerView.bounds is correct before setting the frame
         containerView.layoutIfNeeded()
         playerLayer?.frame = containerView.bounds
 
         player?.isMuted = isMuted
         updateSpeakerIcon()
 
-        // Snapshot targetDuration now — prepareForReuse resets it to 0
         let target = self.targetDuration
 
         durationObserver = playerItem.observe(\.duration, options: [.new, .initial]) { [weak self] item, _ in
@@ -106,7 +102,6 @@ class VideoPlayerCell: UICollectionViewCell {
             self.clipDuration = seconds
 
             DispatchQueue.main.async {
-                // Report target duration to controls so slider shows correct total
                 let reported = target > 0 ? target : seconds
                 self.onDurationChanged?(reported)
                 self.startLoopingPlayback(target: target)
@@ -171,7 +166,6 @@ class VideoPlayerCell: UICollectionViewCell {
 
     func seek(to seconds: Double) {
         guard clipDuration > 0 else { return }
-        // Map logical position within targetDuration → position within the short clip
         let clipPosition = seconds.truncatingRemainder(dividingBy: clipDuration)
         let time = CMTime(seconds: clipPosition, preferredTimescale: 600)
         player?.seek(to: time)

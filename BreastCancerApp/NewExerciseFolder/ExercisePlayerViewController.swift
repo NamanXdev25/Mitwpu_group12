@@ -342,8 +342,6 @@ extension ExercisePlayerViewController: ExercisePlayerDataSourceDelegate {
         } else {
             activeVideoCell?.play()
         }
-
-        // Sync the controls cell UI to match
         if let controlsCell = collectionView.cellForItem(
             at: IndexPath(item: 0, section: 2)
         ) as? VideoControlsCell {
@@ -377,8 +375,6 @@ extension ExercisePlayerViewController: ExercisePlayerDataSourceDelegate {
     }
 
     func didToggleLoop(enabled: Bool) {
-        // Looping is managed internally by VideoPlayerCell via targetDuration.
-        // The loop button has no effect when a target duration is set.
     }
 
     func didSeek(toProgress progress: Float) {

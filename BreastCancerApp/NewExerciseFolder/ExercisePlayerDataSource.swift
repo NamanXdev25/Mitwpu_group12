@@ -59,8 +59,6 @@ extension ExercisePlayerDataSource: UICollectionViewDataSource, UICollectionView
                 self.totalDuration = seconds
                 self.delegate?.didUpdateTotalDuration(seconds)
             }
-
-            // ⚠️ Must set targetDuration BEFORE configure() — configure() snapshots it immediately
             cell.targetDuration = Self.parseTargetDuration(exercise.duration)
 
             let videoName = exercise.title.replacingOccurrences(of: " ", with: "_")
@@ -123,12 +121,8 @@ extension ExercisePlayerDataSource: UICollectionViewDataSource, UICollectionView
     private func descriptionFor(_ exercise: NewExerciseModel) -> String {
         return "Duration: \(exercise.duration). Follow the video and move at a comfortable pace."
     }
-
-    /// Parses "4 min", "2.5 min", "30 sec" → seconds as Double. Returns 0 if unparseable.
     static func parseTargetDuration(_ duration: String) -> Double {
         let lower = duration.lowercased().trimmingCharacters(in: .whitespaces)
-
-        // Extract numeric portion (digits + decimal point only)
         var numericString = ""
         for ch in lower {
             if ch.isNumber || ch == "." {
@@ -141,7 +135,6 @@ extension ExercisePlayerDataSource: UICollectionViewDataSource, UICollectionView
         if lower.contains("sec") {
             return value
         } else {
-            // Default to minutes → convert to seconds
             return value * 60
         }
     }
