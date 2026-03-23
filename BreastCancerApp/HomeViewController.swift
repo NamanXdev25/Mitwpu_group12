@@ -438,7 +438,7 @@ class HomeViewController: UIViewController,
         var snapshot = NSDiffableDataSourceSnapshot<HomeSectionType, HomeItem>()
         snapshot.appendSections(HomeSectionType.allCases)
 
-        snapshot.appendItems([HomeItem(type: .quote(HomeModel.quote))], toSection: .quote)
+        snapshot.appendItems([HomeItem(type: .quote(DailyQuoteLoader.shared.todayQuote()))], toSection: .quote)
 
         snapshot.appendItems(
             [HomeItem(type: .journey(stage: journeyStageText()))],

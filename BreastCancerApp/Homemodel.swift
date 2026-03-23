@@ -1,4 +1,3 @@
-
 import Foundation
 
 class HomeModel {
@@ -11,7 +10,7 @@ class HomeModel {
         Mood(imageName: "AnxiousImage", title: "Anxious")
     ]
 
-    static let quote = "My body and I are working together beautifully"
+    static var quote: String { DailyQuoteLoader.shared.todayQuote() }
 
     private static let fallbackBreathingImageName = "BreathingSessionsImage"
     private static let journalingImageName        = "Journal"

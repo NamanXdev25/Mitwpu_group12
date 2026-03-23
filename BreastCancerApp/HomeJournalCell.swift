@@ -5,7 +5,6 @@ class HomeJournalCell: UICollectionViewCell {
     
     @IBOutlet weak var TitleLabel: UILabel!
     @IBOutlet weak var StartwritingLabel: UILabel!
-    @IBOutlet weak var micbutton: UIButton!
 
     override func awakeFromNib() {
         super.awakeFromNib()
