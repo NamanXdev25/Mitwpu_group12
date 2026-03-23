@@ -11,6 +11,7 @@ class ExercisePlayerViewController: UIViewController {
     var exerciseModel: NewExerciseModel!
     var exercisePlan: NewExercisePlan!
     var currentIndex: Int = 0
+    var onExerciseMarkedDone: ((Int) -> Void)?
 
     // MARK: - Private Properties
     private var dataSource: ExercisePlayerDataSource!
@@ -333,7 +334,7 @@ extension ExercisePlayerViewController: ExercisePlayerDataSourceDelegate {
         if let cell = collectionView.cellForItem(at: IndexPath(item: 0, section: 3)) as? ActionButtonsCell {
             if cell.isDone {
                 showToast(message: "Exercise marked as done ✓")
-
+                onExerciseMarkedDone?(currentIndex)
                 CoinRewardService.shared.awardExerciseCoinsIfEligible(on: self)
             }
         }

@@ -1,4 +1,3 @@
-
 import UIKit
 
 class NewExerciseViewController: UIViewController {
@@ -88,22 +87,30 @@ class NewExerciseViewController: UIViewController {
         return 0
     }
 
-    // MARK: - YouTube Navigation
+    // MARK: - Player Navigation
 
-    private func openYouTubeVideo(for exercise: NewExerciseModel, at index: Int) {
-        guard let urlString = exercise.youtubeURL,
-              let url = URL(string: urlString) else {
-            showMissingVideoAlert(for: exercise.title)
-            return
+    private func openExercisePlayer(for exercise: NewExerciseModel, at index: Int) {
+        let storyboard = UIStoryboard(name: "NewExercise", bundle: nil)
+        guard let playerVC = storyboard.instantiateViewController(
+            withIdentifier: "ExercisePlayerViewController"
+        ) as? ExercisePlayerViewController else { return }
+
+        playerVC.exerciseModel = exercise
+        playerVC.exercisePlan  = exercisePlan
+        playerVC.currentIndex  = index
+        playerVC.onExerciseMarkedDone = { [weak self] completedIndex in
+            self?.markExerciseAsDone(at: completedIndex)
         }
+        navigationController?.pushViewController(playerVC, animated: true)
+    }
 
+    private func markExerciseAsDone(at index: Int) {
+        guard !completedIndices.contains(index) else { return }
         completedIndices.insert(index)
         setExerciseCompletion(for: index, completed: true)
         updateBeginButtonTitle()
         reloadExerciseCell(at: index)
         onPlanStateChanged?(!completedIndices.isEmpty)
-
-        UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
 
     private func reloadExerciseCell(at exerciseIndex: Int) {
@@ -112,16 +119,6 @@ class NewExerciseViewController: UIViewController {
             section: NewExerciseSectionType.exercises.rawValue
         )
         collectionView.reloadItems(at: [indexPath])
-    }
-
-    private func showMissingVideoAlert(for title: String) {
-        let alert = UIAlertController(
-            title: "Video Unavailable",
-            message: "The video for \"\(title)\" is not available yet.",
-            preferredStyle: .alert
-        )
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
     }
 
     // MARK: - Completion State Query (used by DataSource)
@@ -173,7 +170,7 @@ class NewExerciseViewController: UIViewController {
 
         let index = nextExerciseIndex()
         let exercise = plan.exercises[index]
-        openYouTubeVideo(for: exercise, at: index)
+        openExercisePlayer(for: exercise, at: index)
     }
 
     @IBAction func defaultButtonTapped(_ sender: UIButton) {
@@ -227,7 +224,7 @@ extension NewExerciseViewController: DetailExerciseCellDelegate {
         guard indexPath.section == NewExerciseSectionType.exercises.rawValue else { return }
 
         let exercise = exercisePlan.exercises[indexPath.item]
-        openYouTubeVideo(for: exercise, at: indexPath.item)
+        openExercisePlayer(for: exercise, at: indexPath.item)
     }
 
     func didTapRadioButton(on cell: DetailExerciseCell) {
