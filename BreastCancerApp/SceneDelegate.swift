@@ -37,11 +37,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func sceneDidBecomeActive(_ scene: UIScene) {
         ReminderResyncService.syncAll()
+        SyncManager.shared.pullAllAndStartTimer()
     }
 
     func sceneWillResignActive(_ scene: UIScene) {}
     func sceneWillEnterForeground(_ scene: UIScene) {}
-    func sceneDidEnterBackground(_ scene: UIScene) {}
+
+    func sceneDidEnterBackground(_ scene: UIScene) {
+        SyncManager.shared.pushDirtyAndStopTimer()
+    }
 
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
         guard let url = URLContexts.first?.url else { return }

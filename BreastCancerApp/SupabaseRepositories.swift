@@ -22,19 +22,19 @@ final class SupabaseAppointmentRepository: AppointmentRepository {
     }
 
     func loadAppointments() -> [String: [AppointmentItem]] {
-        let cached = local.loadAppointments()
-        syncFromCloudIntoLocal()
-        return cached
+        return local.loadAppointments()
     }
 
     func saveAppointments(_ appointments: [String: [AppointmentItem]]) {
         local.saveAppointments(appointments)
-        syncSnapshotToCloud(appointments)
+        SyncManager.shared.markDirty(.appointments)
     }
 
-    private func syncFromCloudIntoLocal() {
+    // MARK: - SyncManager hooks
+
+    func pullFromCloud(completion: @escaping () -> Void) {
         client.fetchRows(from: "appointments", filters: [SupabaseFilter(key: "user_id", op: "eq", value: userId.uuidString)]) { (rows: [AppointmentSupabaseRow]) in
-            guard !rows.isEmpty else { return }
+            guard !rows.isEmpty else { completion(); return }
             self.client.fetchRows(from: "appointment_reminders", filters: [SupabaseFilter(key: "user_id", op: "eq", value: self.userId.uuidString)]) { (reminderRows: [AppointmentReminderSupabaseRow]) in
                 let reminderMap = Dictionary(grouping: reminderRows, by: \.appointment_id)
                 let calendar = Calendar.current
@@ -51,12 +51,14 @@ final class SupabaseAppointmentRepository: AppointmentRepository {
                 }
 
                 self.local.saveAppointments(map)
+                completion()
             }
         }
     }
 
-    private func syncSnapshotToCloud(_ appointments: [String: [AppointmentItem]]) {
+    func pushToCloud() {
         guard client.isConfigured else { return }
+        let appointments = local.loadAppointments()
 
         let flattenedAppointments = appointments.values.flatMap { $0 }
         let appointmentById = Dictionary(uniqueKeysWithValues: flattenedAppointments.map { ($0.id, $0) })
@@ -109,19 +111,19 @@ final class SupabaseMedicationHistoryRepository: MedicationHistoryRepository {
     }
 
     func loadHistory() -> [String: MedicationHistoryEntry] {
-        let cached = local.loadHistory()
-        syncFromCloudIntoLocal()
-        return cached
+        return local.loadHistory()
     }
 
     func saveHistory(_ history: [String: MedicationHistoryEntry]) {
         local.saveHistory(history)
-        syncSnapshotToCloud(history)
+        SyncManager.shared.markDirty(.medicationHistory)
     }
 
-    private func syncFromCloudIntoLocal() {
+    // MARK: - SyncManager hooks
+
+    func pullFromCloud(completion: @escaping () -> Void) {
         client.fetchRows(from: "medication_history_snapshots", filters: [SupabaseFilter(key: "user_id", op: "eq", value: userId.uuidString)]) { (rows: [MedicationHistorySnapshotSupabaseRow]) in
-            guard !rows.isEmpty else { return }
+            guard !rows.isEmpty else { completion(); return }
 
             let groupedByDate = Dictionary(grouping: rows, by: \.date_key)
 
@@ -154,11 +156,13 @@ final class SupabaseMedicationHistoryRepository: MedicationHistoryRepository {
                     ]
                 )
             }
+            completion()
         }
     }
 
-    private func syncSnapshotToCloud(_ history: [String: MedicationHistoryEntry]) {
+    func pushToCloud() {
         guard client.isConfigured else { return }
+        let history = local.loadHistory()
 
         let rows = history.map { dateKey, entry in
             entry.toSupabaseRow(userId: userId, dateKey: dateKey)
@@ -197,25 +201,27 @@ final class SupabaseMemoryRepository: MemoryRepository {
     }
 
     func loadMemories() -> [Memory] {
-        let cached = local.loadMemories()
-        syncFromCloudIntoLocal()
-        return cached
+        return local.loadMemories()
     }
 
     func saveMemories(_ memories: [Memory]) {
         local.saveMemories(memories)
-        syncSnapshotToCloud(memories)
+        SyncManager.shared.markDirty(.memories)
     }
 
-    private func syncFromCloudIntoLocal() {
+    // MARK: - SyncManager hooks
+
+    func pullFromCloud(completion: @escaping () -> Void) {
         client.fetchRows(from: "memories", filters: [SupabaseFilter(key: "user_id", op: "eq", value: userId.uuidString)]) { (rows: [MemorySupabaseRow]) in
-            guard !rows.isEmpty else { return }
+            guard !rows.isEmpty else { completion(); return }
             self.local.saveMemories(rows.map(Memory.init(supabaseRow:)).sorted { $0.date > $1.date })
+            completion()
         }
     }
 
-    private func syncSnapshotToCloud(_ memories: [Memory]) {
+    func pushToCloud() {
         guard client.isConfigured else { return }
+        let memories = local.loadMemories()
 
         let rows = memories.map { $0.toSupabaseRow(userId: userId) }
         client.deleteAllRows(forUser: userId, from: "memories") { _ in
@@ -242,29 +248,31 @@ final class SupabaseHydrationRepository: HydrationRepository {
     }
 
     func loadEntries() -> [HydrationEntry] {
-        let cached = local.loadEntries()
-        syncFromCloudIntoLocal()
-        return cached
+        return local.loadEntries()
     }
 
     func saveEntries(_ entries: [HydrationEntry]) {
         local.saveEntries(entries)
-        syncSnapshotToCloud(entries)
+        SyncManager.shared.markDirty(.hydration)
     }
 
-    private func syncFromCloudIntoLocal() {
+    // MARK: - SyncManager hooks
+
+    func pullFromCloud(completion: @escaping () -> Void) {
         client.fetchRows(from: "hydration_daily_status", filters: [SupabaseFilter(key: "user_id", op: "eq", value: userId.uuidString)]) { (rows: [HydrationDailySupabaseRow]) in
-            guard !rows.isEmpty else { return }
+            guard !rows.isEmpty else { completion(); return }
             let dailyEntries = rows
                 .filter { $0.consumed_ml > 0 }
                 .map(HydrationEntry.init(supabaseDailyRow:))
                 .sorted { $0.timestamp > $1.timestamp }
             self.local.saveEntries(dailyEntries)
+            completion()
         }
     }
 
-    private func syncSnapshotToCloud(_ entries: [HydrationEntry]) {
+    func pushToCloud() {
         guard client.isConfigured else { return }
+        let entries = local.loadEntries()
 
         let calendar = Calendar.current
         let groupedByDate = Dictionary(grouping: entries) { entry in
@@ -349,50 +357,55 @@ final class SupabaseSymptomRepository: SymptomRepository {
         let cleaned = removeLegacySeedLogsIfNeeded(from: cached)
         if cleaned.count != cached.count {
             local.saveLogs(cleaned)
-            if client.isConfigured {
-                uploadCurrentState()
-            }
+            SyncManager.shared.markDirty(.symptoms)
         }
-        syncFromCloudIntoLocal()
         return cleaned
     }
 
     func saveLogs(_ logs: [SymptomLog]) {
         let cleaned = removeLegacySeedLogsIfNeeded(from: logs)
         local.saveLogs(cleaned)
-        uploadCurrentState()
+        SyncManager.shared.markDirty(.symptoms)
     }
 
     func loadUserSymptomIDs() -> [String] {
-        let cached = local.loadUserSymptomIDs()
-        syncFromCloudIntoLocal()
-        return cached
+        return local.loadUserSymptomIDs()
     }
 
     func saveUserSymptomIDs(_ ids: [String]) {
         local.saveUserSymptomIDs(ids)
-        uploadCurrentState()
+        SyncManager.shared.markDirty(.symptoms)
     }
 
-    private func syncFromCloudIntoLocal() {
+    // MARK: - SyncManager hooks
+
+    func pullFromCloud(completion: @escaping () -> Void) {
+        let group = DispatchGroup()
+
+        group.enter()
         client.fetchRows(from: "symptom_logs", filters: [SupabaseFilter(key: "user_id", op: "eq", value: userId.uuidString)]) { (rows: [SymptomLogSupabaseRow]) in
-            guard !rows.isEmpty else { return }
+            guard !rows.isEmpty else { group.leave(); return }
             let orderedLogs = rows.map(SymptomLog.init(supabaseRow:)).sorted { $0.timestamp > $1.timestamp }
             let cleanedLogs = self.removeLegacySeedLogsIfNeeded(from: orderedLogs)
             self.local.saveLogs(cleanedLogs)
 
             if cleanedLogs.count != orderedLogs.count {
-                self.uploadCurrentState()
+                SyncManager.shared.markDirty(.symptoms)
             }
+            group.leave()
         }
 
+        group.enter()
         client.fetchRows(from: "symptom_user_preferences", filters: [SupabaseFilter(key: "user_id", op: "eq", value: userId.uuidString)]) { (rows: [SymptomPreferenceSupabaseRow]) in
-            guard !rows.isEmpty else { return }
+            guard !rows.isEmpty else { group.leave(); return }
             self.local.saveUserSymptomIDs(rows.first?.user_symptom_ids ?? [])
+            group.leave()
         }
+
+        group.notify(queue: .global(qos: .utility)) { completion() }
     }
 
-    private func uploadCurrentState() {
+    func pushToCloud() {
         guard client.isConfigured else { return }
 
         let logRows = local.loadLogs().map { $0.toSupabaseRow(userId: userId) }
@@ -495,18 +508,12 @@ final class SupabaseJournalRepository: JournalRepository {
     }
 
     func loadEntries() -> [JournalEntry] {
-        let cached = local.loadEntries()
-        if cached.isEmpty {
-            syncFromCloudIntoLocal()
-        } else {
-            syncSnapshotToCloud(cached)
-        }
-        return cached
+        return local.loadEntries()
     }
 
     func saveEntries(_ entries: [JournalEntry]) {
         local.saveEntries(entries)
-        syncSnapshotToCloud(entries)
+        SyncManager.shared.markDirty(.journal)
     }
 
     private func beginSyncGeneration() -> Int {
@@ -520,7 +527,9 @@ final class SupabaseJournalRepository: JournalRepository {
         syncStateQueue.sync { latestSyncGeneration == generation }
     }
 
-    private func syncFromCloudIntoLocal() {
+    // MARK: - SyncManager hooks
+
+    func pullFromCloud(completion: @escaping () -> Void) {
         client.fetchRows(from: "journals", filters: [SupabaseFilter(key: "user_id", op: "eq", value: userId.uuidString)]) { (rows: [JournalSupabaseRow]) in
             let orderedEntries = rows
                 .sorted {
@@ -540,16 +549,17 @@ final class SupabaseJournalRepository: JournalRepository {
             if !localEntries.isEmpty && localIDs != cloudIDs {
                 let mergedEntries = localEntries + orderedEntries.filter { !localIDs.contains($0.id) }
                 self.local.saveEntries(mergedEntries)
-                self.syncSnapshotToCloud(mergedEntries)
-                return
+                SyncManager.shared.markDirty(.journal)
+            } else {
+                self.local.saveEntries(orderedEntries)
             }
-
-            self.local.saveEntries(orderedEntries)
+            completion()
         }
     }
 
-    private func syncSnapshotToCloud(_ entries: [JournalEntry]) {
+    func pushToCloud() {
         guard client.isConfigured else { return }
+        let entries = local.loadEntries()
         let generation = beginSyncGeneration()
 
         guard !entries.isEmpty else {
@@ -577,9 +587,7 @@ final class SupabaseJournalRepository: JournalRepository {
 
         let currentIDs = Set(rows.map(\.id))
         client.upsertRows(rows, into: "journals") { success in
-            guard success else {
-                return
-            }
+            guard success else { return }
             guard self.isCurrentSyncGeneration(generation) else { return }
 
             self.client.fetchRows(
@@ -622,28 +630,30 @@ final class SupabaseBreathingRepository: BreathingRepository {
     }
 
     func loadFavoriteTitles() -> [String] {
-        let cached = local.loadFavoriteTitles()
-        syncFromCloudIntoLocal()
-        return cached
+        return local.loadFavoriteTitles()
     }
 
     func saveFavoriteTitles(_ titles: [String]) {
         local.saveFavoriteTitles(titles)
-        syncSnapshotToCloud(titles)
+        SyncManager.shared.markDirty(.breathing)
     }
 
-    private func syncFromCloudIntoLocal() {
+    // MARK: - SyncManager hooks
+
+    func pullFromCloud(completion: @escaping () -> Void) {
         client.fetchRows(from: "breathing_favorites", filters: [SupabaseFilter(key: "user_id", op: "eq", value: userId.uuidString)]) { (rows: [BreathingFavoriteSupabaseRow]) in
-            guard !rows.isEmpty else { return }
+            guard !rows.isEmpty else { completion(); return }
             let orderedTitles = rows
                 .sorted { ($0.created_at ?? .distantPast) > ($1.created_at ?? .distantPast) }
                 .map(\.title)
             self.local.saveFavoriteTitles(orderedTitles)
+            completion()
         }
     }
 
-    private func syncSnapshotToCloud(_ titles: [String]) {
+    func pushToCloud() {
         guard client.isConfigured else { return }
+        let titles = local.loadFavoriteTitles()
 
         let now = Date()
         let rows = titles.enumerated().map {
@@ -677,34 +687,34 @@ final class SupabaseProfileRepository: ProfileRepository {
     }
 
     func loadProfile() -> ProfileUserProfile? {
-        let cached = local.loadProfile()
-        syncFromCloudIntoLocal()
-        return cached
+        return local.loadProfile()
     }
 
     func saveProfile(_ profile: ProfileUserProfile) {
         local.saveProfile(profile)
-        syncSnapshotToCloud(profile)
+        SyncManager.shared.markDirty(.profile)
     }
 
-    private func syncFromCloudIntoLocal() {
+    // MARK: - SyncManager hooks
+
+    func pullFromCloud(completion: @escaping () -> Void) {
         client.fetchRows(
             from: "user_profiles",
             filters: [SupabaseFilter(key: "user_id", op: "eq", value: userId.uuidString)]
         ) { (rows: [UserProfileSupabaseRow]) in
             if let row = rows.first {
                 self.local.saveProfile(ProfileUserProfile(supabaseRow: row))
-                return
+            } else if let localProfile = self.local.loadProfile() {
+                // No cloud data yet — push local profile up
+                SyncManager.shared.markDirty(.profile)
             }
-
-            if let localProfile = self.local.loadProfile() {
-                self.syncSnapshotToCloud(localProfile)
-            }
+            completion()
         }
     }
 
-    private func syncSnapshotToCloud(_ profile: ProfileUserProfile) {
+    func pushToCloud() {
         guard client.isConfigured else { return }
+        guard let profile = local.loadProfile() else { return }
         client.upsertRows([profile.toSupabaseRow(userId: userId)], into: "user_profiles", onConflict: "user_id")
     }
 }
@@ -725,32 +735,31 @@ final class SupabaseExerciseRepository: ExerciseRepository {
     }
 
     func loadCompletions() -> [String: [ExerciseCompletionRecord]] {
-        let cached = local.loadCompletions()
-        syncCompletionsFromCloud()
-        return cached
+        return local.loadCompletions()
     }
 
     func saveCompletions(_ completions: [String: [ExerciseCompletionRecord]]) {
         local.saveCompletions(completions)
-        syncCompletionsToCloud(completions)
+        SyncManager.shared.markDirty(.exercise)
     }
 
     func loadSelectedPlanID() -> Int? {
-        let cached = local.loadSelectedPlanID()
-        syncPlanFromCloud()
-        return cached
+        return local.loadSelectedPlanID()
     }
 
     func saveSelectedPlanID(_ id: Int?) {
         local.saveSelectedPlanID(id)
-        syncPlanToCloud(id)
+        SyncManager.shared.markDirty(.exercise)
     }
 
-    // MARK: - Cloud sync helpers
+    // MARK: - SyncManager hooks
 
-    private func syncCompletionsFromCloud() {
+    func pullFromCloud(completion: @escaping () -> Void) {
+        let group = DispatchGroup()
+
+        group.enter()
         client.fetchRows(from: "exercise_completions", filters: [SupabaseFilter(key: "user_id", op: "eq", value: userId.uuidString)]) { (rows: [ExerciseCompletionSupabaseRow]) in
-            guard !rows.isEmpty else { return }
+            guard !rows.isEmpty else { group.leave(); return }
             var map: [String: [ExerciseCompletionRecord]] = [:]
             for row in rows {
                 let record = ExerciseCompletionRecord(supabaseRow: row)
@@ -760,32 +769,34 @@ final class SupabaseExerciseRepository: ExerciseRepository {
                 map[key]?.sort { $0.completedAt > $1.completedAt }
             }
             self.local.saveCompletions(map)
-        }
-    }
-
-    private func syncCompletionsToCloud(_ completions: [String: [ExerciseCompletionRecord]]) {
-        guard client.isConfigured else { return }
-
-        let rows = completions.flatMap { dateKey, records in
-            records.compactMap { $0.toSupabaseRow(userId: userId, dateKey: dateKey) }
+            group.leave()
         }
 
-        guard !rows.isEmpty else { return }
-        client.upsertRows(rows, into: "exercise_completions")
-    }
-
-    private func syncPlanFromCloud() {
+        group.enter()
         client.fetchRows(from: "exercise_selected_plans", filters: [SupabaseFilter(key: "user_id", op: "eq", value: userId.uuidString)]) { (rows: [ExerciseSelectedPlanSupabaseRow]) in
             if let row = rows.first {
                 self.local.saveSelectedPlanID(row.plan_id)
             }
+            group.leave()
         }
+
+        group.notify(queue: .global(qos: .utility)) { completion() }
     }
 
-    private func syncPlanToCloud(_ id: Int?) {
+    func pushToCloud() {
         guard client.isConfigured else { return }
 
-        if let id, id > 0 {
+        // Push completions
+        let completions = local.loadCompletions()
+        let rows = completions.flatMap { dateKey, records in
+            records.compactMap { $0.toSupabaseRow(userId: userId, dateKey: dateKey) }
+        }
+        if !rows.isEmpty {
+            client.upsertRows(rows, into: "exercise_completions")
+        }
+
+        // Push selected plan
+        if let id = local.loadSelectedPlanID(), id > 0 {
             let row = ExerciseSelectedPlanSupabaseRow(
                 user_id: userId,
                 plan_id: id,
@@ -814,17 +825,17 @@ final class SupabaseJourneyRepository: JourneyRepository {
     }
 
     func loadState() -> PersistedJourneySnapshot? {
-        let cached = local.loadState()
-        syncFromCloudIntoLocal()
-        return cached
+        return local.loadState()
     }
 
     func saveState(_ state: PersistedJourneySnapshot) {
         local.saveState(state)
-        syncSnapshotToCloud(state)
+        SyncManager.shared.markDirty(.journey)
     }
 
-    private func syncFromCloudIntoLocal() {
+    // MARK: - SyncManager hooks
+
+    func pullFromCloud(completion: @escaping () -> Void) {
         let dispatchGroup = DispatchGroup()
 
         var journeyRow: JourneyStateSupabaseRow?
@@ -845,7 +856,7 @@ final class SupabaseJourneyRepository: JourneyRepository {
         }
 
         dispatchGroup.notify(queue: .main) { [weak self] in
-            guard let self, let row = journeyRow else { return }
+            guard let self, let row = journeyRow else { completion(); return }
             let sortedPhases = phaseRows.sorted {
                 let id1 = Int($0.id.components(separatedBy: "#").last ?? "0") ?? 0
                 let id2 = Int($1.id.components(separatedBy: "#").last ?? "0") ?? 0
@@ -853,19 +864,21 @@ final class SupabaseJourneyRepository: JourneyRepository {
             }
             let snapshot = PersistedJourneySnapshot(journeyRow: row, phaseRows: sortedPhases)
             self.local.saveState(snapshot)
+            completion()
         }
     }
 
-    private func syncSnapshotToCloud(_ state: PersistedJourneySnapshot) {
+    func pushToCloud() {
         guard client.isConfigured else { return }
+        guard let state = local.loadState() else { return }
 
         let journeyRow = state.toJourneySupabaseRow(userId: userId)
         let phaseRows = state.toTreatmentPhaseRows(userId: userId)
 
         // 1. Upsert parent row
         client.upsertRows([journeyRow], into: "journey_state", onConflict: "user_id")
-        
-        // 2. Clear old children fully decoupled onto the serial write queue
+
+        // 2. Clear old children then upsert new ones
         let filters = [SupabaseFilter(key: "user_id", op: "eq", value: userId.uuidString)]
         client.deleteRows(from: "treatment_phases", filters: filters) { [weak self] _ in
             guard let self else { return }
@@ -885,4 +898,3 @@ private extension DateFormatter {
         return formatter
     }()
 }
-
