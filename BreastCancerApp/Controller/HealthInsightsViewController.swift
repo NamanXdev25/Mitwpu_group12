@@ -247,8 +247,7 @@ extension HealthInsightsViewController: UICollectionViewDataSource {
             }
             cell.symptomsGraphView.onDataPointSelected = { [weak self] index in
                 guard let self, index < filterDates.count else { return }
-                self.selectedSymptomDate             = filterDates[index]
-                self.shouldHighlightSymptomSelection = true
+                self.presentSymptomsDetail(for: filterDates[index])
             }
             if shouldHighlightSymptomSelection,
                let selIdx = selectedIndex(for: selectedSymptomDate, within: filterDates) {
@@ -276,7 +275,7 @@ extension HealthInsightsViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath) {
         switch healthInsights[indexPath.item].type {
-        case .hydration:  presentHydrationDetail()
+        case .hydration:  break
         case .exercise:   break
         case .medication: presentMedicationDetail(for: selectedMedicationDate)
         case .symptoms:   presentSymptomsDetail(for: selectedSymptomDate)

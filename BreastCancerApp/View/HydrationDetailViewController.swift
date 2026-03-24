@@ -1,4 +1,3 @@
-
 import UIKit
 
 class HydrationDetailViewController: UIViewController {
@@ -42,6 +41,10 @@ class HydrationDetailViewController: UIViewController {
     }
     
     private func setupTableView() {
+        guard let tableView else {
+            assertionFailure("tableView outlet is nil — check the IBOutlet connection in the storyboard for HydrationDetailViewController")
+            return
+        }
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "HydrationEntryCell")
@@ -56,18 +59,18 @@ class HydrationDetailViewController: UIViewController {
             calendar.isDate($0.timestamp, inSameDayAs: today)
         }
         updateProgressUI()
-        tableView.reloadData()
+        tableView?.reloadData()
     }
     
     private func updateProgressUI() {
         let total = entries.reduce(0) { $0 + $1.amountML }
-        totalLabel.text = formatML(total)
-        totalLabel.font = .systemFont(ofSize: 32, weight: .bold)
-        
+        totalLabel?.text = formatML(total)
+        totalLabel?.font = .systemFont(ofSize: 32, weight: .bold)
+
         let glasses = Double(total) / 250.0
-        progressLabel.text = String(format: "%.0f / %d glasses", glasses, dailyGoal / 250)
-        progressLabel.textColor = .systemGray
-        progressLabel.font = .systemFont(ofSize: 15, weight: .regular)
+        progressLabel?.text = String(format: "%.0f / %d glasses", glasses, dailyGoal / 250)
+        progressLabel?.textColor = .systemGray
+        progressLabel?.font = .systemFont(ofSize: 15, weight: .regular)
     }
     
     // MARK: - Actions

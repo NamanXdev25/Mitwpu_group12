@@ -252,7 +252,7 @@ final class BreathingPlayerViewController: UIViewController, AVAudioPlayerDelega
         isPlaying = true
 
         playButton?.isHidden = true
-        timerView?.showMessage("Take a deep breath in...")
+        timerView?.showMessage("Take a deep breath in")
 
         videoQueuePlayer?.play()
         audioPlayer?.play()
