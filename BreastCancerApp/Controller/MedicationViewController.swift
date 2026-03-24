@@ -411,9 +411,10 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
 // MARK: - NewAddMedicationDelegate
 extension MedicationViewController: NewAddMedicationDelegate {
 
-    func didSaveMedications(_ medications: [Medication]) {
-        if let editTarget = medications.first,
-           let existingIndex = allMedications.firstIndex(where: { $0.id == editTarget.id }) {
+    func didSaveMedications(_ medications: [Medication], editedId: String?) {
+        let idToRemove = editedId ?? medications.first?.id
+        if let targetId = idToRemove,
+           let existingIndex = allMedications.firstIndex(where: { $0.id == targetId }) {
             allMedications.remove(at: existingIndex)
         }
         allMedications.append(contentsOf: medications)

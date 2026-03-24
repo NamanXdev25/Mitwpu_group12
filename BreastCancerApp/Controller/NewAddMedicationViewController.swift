@@ -8,7 +8,7 @@
 import UIKit
 
 protocol NewAddMedicationDelegate: AnyObject {
-    func didSaveMedications(_ medications: [Medication])
+    func didSaveMedications(_ medications: [Medication], editedId: String?)
 }
 
 private enum Section: Int, CaseIterable {
@@ -144,7 +144,7 @@ class NewAddMedicationViewController: UIViewController {
     @IBAction func saveTapped(_ sender: UIBarButtonItem) {
         view.endEditing(true)
         guard validate() else { return }
-        delegate?.didSaveMedications(buildMedications())
+        delegate?.didSaveMedications(buildMedications(), editedId: medicationToEdit?.id)
         navigationController?.popViewController(animated: true)
     }
 
