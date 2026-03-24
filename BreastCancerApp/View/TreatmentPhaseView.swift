@@ -35,6 +35,10 @@ class TreatmentPhaseView: UIView {
     private var isSaved = false
     private var statusTimer: Timer?
 
+    // Date picker overlay references (mirrors DiagnosisCell pattern)
+    private var overlayView: UIView?
+    private var datePickerContainerView: UIView?
+
     private let pink      = UIColor(named: "pink") ?? UIColor(red: 0.91, green: 0.39, blue: 0.54, alpha: 1.0)
     private let lightPink = UIColor(red: 1.0,  green: 0.92, blue: 0.95, alpha: 1.0)
 
@@ -106,7 +110,7 @@ class TreatmentPhaseView: UIView {
 
     // MARK: - IBActions
     @IBAction func dropdownTapped(_ sender: UIButton) { showTreatmentPicker() }
-    @IBAction func dateTapped(_ sender: UIButton)     { showDatePicker() }
+    @IBAction func dateTapped(_ sender: UIButton)     { showDatePickerOverlay() }
     @IBAction func saveTapped(_ sender: UIButton)     { commitSave() }
     @IBAction func editTapped(_ sender: UIButton)     { revertToEditMode() }
     @IBAction func deleteTapped(_ sender: UIButton)   { onDeleteTapped?() }
@@ -225,7 +229,6 @@ class TreatmentPhaseView: UIView {
     }
 
     // MARK: - Restore (called by TreatmentCell after cell reuse)
-
     func restoreFields(treatmentType: TreatmentType, startDate: Date?, duration: String) {
         phaseModel.treatmentType = treatmentType
         if treatmentType != .none {
@@ -453,88 +456,130 @@ extension TreatmentPhaseView {
     }
 }
 
-// MARK: - Date Picker Popup
+// MARK: - Date Picker Overlay (mirrors DiagnosisCell exactly)
 extension TreatmentPhaseView {
 
-    private func showDatePicker() {
-        guard let window = self.window else { return }
+    private func showDatePickerOverlay() {
+        // Use the active foreground window — same pattern as DiagnosisCell
+        guard let windowScene = UIApplication.shared.connectedScenes
+                .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene,
+              let window = windowScene.windows.first(where: { $0.isKeyWindow }) else { return }
 
+        // --- Dim overlay ---
         let dimView = UIView(frame: window.bounds)
-        dimView.backgroundColor = UIColor.black.withAlphaComponent(0.35)
-        dimView.tag = 8002
+        dimView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         dimView.alpha = 0
-        window.addSubview(dimView)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissDatePickerOverlay))
+        dimView.addGestureRecognizer(tapGesture)
+        overlayView = dimView
 
+        // --- White card container ---
         let container = UIView()
-        container.backgroundColor = .systemBackground
+        container.backgroundColor = .white
         container.layer.cornerRadius = 16
         container.translatesAutoresizingMaskIntoConstraints = false
-        dimView.addSubview(container)
+        datePickerContainerView = container
 
-        NSLayoutConstraint.activate([
-            container.centerXAnchor.constraint(equalTo: dimView.centerXAnchor),
-            container.centerYAnchor.constraint(equalTo: dimView.centerYAnchor),
-            container.widthAnchor.constraint(equalToConstant: 340),
-            container.heightAnchor.constraint(equalToConstant: 420)
-        ])
+        // --- Inline date picker (same as DiagnosisCell) ---
+        let picker = UIDatePicker()
+        picker.preferredDatePickerStyle = .inline   // ← This is the key: .inline allows year/month tap to switch to scroll wheel
+        picker.datePickerMode = .date
+        picker.maximumDate = Date()
+        picker.translatesAutoresizingMaskIntoConstraints = false
+        picker.tintColor = pink
+        // Pre-select the already-chosen date if any
+        if let existing = selectedDate {
+            picker.date = existing
+        }
+        picker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
 
-        let datePicker = UIDatePicker()
-        datePicker.datePickerMode = .date
-        datePicker.maximumDate = Date()
-        datePicker.preferredDatePickerStyle = .inline
-        datePicker.tintColor = pink
-        datePicker.date = selectedDate ?? Date()
-        datePicker.translatesAutoresizingMaskIntoConstraints = false
-        container.addSubview(datePicker)
+        // --- Reset / Done buttons ---
+        let buttonStack = UIStackView()
+        buttonStack.axis = .horizontal
+        buttonStack.distribution = .fillEqually
+        buttonStack.spacing = 12
+        buttonStack.translatesAutoresizingMaskIntoConstraints = false
+
+        let resetButton = UIButton(type: .system)
+        resetButton.setTitle("Reset", for: .normal)
+        resetButton.setTitleColor(pink, for: .normal)
+        resetButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
+        resetButton.addTarget(self, action: #selector(resetDateTapped), for: .touchUpInside)
 
         let doneButton = UIButton(type: .system)
         doneButton.setTitle("Done", for: .normal)
-        doneButton.titleLabel?.font = .boldSystemFont(ofSize: 16)
         doneButton.setTitleColor(pink, for: .normal)
-        doneButton.translatesAutoresizingMaskIntoConstraints = false
-        container.addSubview(doneButton)
+        doneButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
+        doneButton.addTarget(self, action: #selector(dismissDatePickerOverlay), for: .touchUpInside)
+
+        buttonStack.addArrangedSubview(resetButton)
+        buttonStack.addArrangedSubview(doneButton)
+
+        container.addSubview(picker)
+        container.addSubview(buttonStack)
+
+        window.addSubview(dimView)
+        window.addSubview(container)
 
         NSLayoutConstraint.activate([
-            datePicker.topAnchor.constraint(equalTo: container.topAnchor, constant: 12),
-            datePicker.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 12),
-            datePicker.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -12),
-            doneButton.topAnchor.constraint(equalTo: datePicker.bottomAnchor, constant: 4),
-            doneButton.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -12),
-            doneButton.centerXAnchor.constraint(equalTo: container.centerXAnchor)
+            container.centerXAnchor.constraint(equalTo: window.centerXAnchor),
+            container.centerYAnchor.constraint(equalTo: window.centerYAnchor),
+            container.widthAnchor.constraint(equalToConstant: 350),
+
+            picker.topAnchor.constraint(equalTo: container.topAnchor, constant: 20),
+            picker.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 10),
+            picker.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -10),
+
+            buttonStack.topAnchor.constraint(equalTo: picker.bottomAnchor, constant: 10),
+            buttonStack.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 24),
+            buttonStack.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -24),
+            buttonStack.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -20),
+            buttonStack.heightAnchor.constraint(equalToConstant: 44)
         ])
 
-        datePicker.addTarget(self, action: #selector(datePickerChanged(_:)), for: .valueChanged)
-
-        doneButton.addAction(UIAction { [weak self] _ in
-            guard let self else { return }
-            self.selectedDate = datePicker.date
-            self.startDateLabel.text = self.formatDate(datePicker.date)
-            self.startDateLabel.textColor = .black
-            if self.isSaved { self.revertToEditMode() }
-            self.notifyFieldsChanged()
-            self.dismissDatePicker()
-            self.updateSaveButtonState()
-        }, for: .touchUpInside)
-
-        let outsideTap = UITapGestureRecognizer(target: self, action: #selector(dismissDatePicker))
-        outsideTap.cancelsTouchesInView = false
-        dimView.addGestureRecognizer(outsideTap)
-
+        // Spring-in animation (same as DiagnosisCell)
+        container.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+        container.alpha = 0
         UIView.animate(withDuration: 0.3, delay: 0,
-                       usingSpringWithDamping: 0.75,
-                       initialSpringVelocity: 0.5,
-                       options: .curveEaseOut) { dimView.alpha = 1 }
+                       usingSpringWithDamping: 0.8,
+                       initialSpringVelocity: 0,
+                       options: .curveEaseOut) {
+            dimView.alpha = 1
+            container.alpha = 1
+            container.transform = .identity
+        }
     }
 
-    @objc private func datePickerChanged(_ picker: UIDatePicker) {
-        selectedDate = picker.date
-        startDateLabel.text = formatDate(picker.date)
+    @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
+        // Live-update the label as the user scrolls (matches DiagnosisCell behaviour)
+        selectedDate = sender.date
+        startDateLabel.text = formatDate(sender.date)
         startDateLabel.textColor = .black
         notifyFieldsChanged()
+        updateSaveButtonState()
     }
 
-    @objc private func dismissDatePicker() {
-        guard let window = self.window, let dimView = window.viewWithTag(8002) else { return }
-        UIView.animate(withDuration: 0.2, animations: { dimView.alpha = 0 }) { _ in dimView.removeFromSuperview() }
+    @objc private func resetDateTapped() {
+        selectedDate = nil
+        startDateLabel.text = nil
+        startDateLabel.textColor = .placeholderText
+        notifyFieldsChanged()
+        updateSaveButtonState()
+        dismissDatePickerOverlay()
+    }
+
+    @objc private func dismissDatePickerOverlay() {
+        UIView.animate(withDuration: 0.2, animations: {
+            self.overlayView?.alpha = 0
+            self.datePickerContainerView?.alpha = 0
+            self.datePickerContainerView?.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+        }) { _ in
+            self.overlayView?.removeFromSuperview()
+            self.datePickerContainerView?.removeFromSuperview()
+            self.overlayView = nil
+            self.datePickerContainerView = nil
+        }
+
+        if isSaved { revertToEditMode() }
     }
 }
