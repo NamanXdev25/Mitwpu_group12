@@ -23,6 +23,14 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupCollectionView()
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
     }
 
     func goToSignUp() {
@@ -266,7 +274,7 @@ class LoginViewController: UIViewController {
         collectionView.delaysContentTouches = false
         collectionView.canCancelContentTouches = true
 
-        collectionView.keyboardDismissMode = .interactive
+        collectionView.keyboardDismissMode = .onDrag
         collectionView.backgroundColor = .white
 
         collectionView.contentInset = UIEdgeInsets(

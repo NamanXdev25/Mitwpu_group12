@@ -22,6 +22,15 @@ class ProfileSetupViewController: UIViewController,
         collectionView.contentInset = UIEdgeInsets(top: 40, left: 0, bottom: 0, right: 0)
         collectionView.scrollIndicatorInsets = collectionView.contentInset
         collectionView.contentInsetAdjustmentBehavior = .never
+        
+        // Keyboard Support
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+        collectionView.keyboardDismissMode = .onDrag
+
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
 
 
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
@@ -55,6 +64,28 @@ class ProfileSetupViewController: UIViewController,
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         collectionView.collectionViewLayout.invalidateLayout()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
+    }
+
+    @objc private func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            let contentInsets = UIEdgeInsets(top: 40, left: 0, bottom: keyboardSize.height + 20, right: 0)
+            collectionView.contentInset = contentInsets
+            collectionView.scrollIndicatorInsets = contentInsets
+        }
+    }
+
+    @objc private func keyboardWillHide(notification: NSNotification) {
+        let contentInsets = UIEdgeInsets(top: 40, left: 0, bottom: 0, right: 0)
+        collectionView.contentInset = contentInsets
+        collectionView.scrollIndicatorInsets = contentInsets
     }
 
     func collectionView(_ collectionView: UICollectionView,

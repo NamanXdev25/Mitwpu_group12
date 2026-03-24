@@ -24,6 +24,14 @@ final class SignUpViewController: UIViewController {
         view.backgroundColor = .systemBackground
         setupCollectionView()
         registerCells()
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
     }
 
     private func setupCollectionView() {
@@ -44,6 +52,7 @@ final class SignUpViewController: UIViewController {
         layout.sectionInset = .zero
 
         collectionView.setCollectionViewLayout(layout, animated: false)
+        collectionView.keyboardDismissMode = .onDrag
     }
 
     private func registerCells() {
