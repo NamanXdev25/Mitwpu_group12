@@ -742,42 +742,12 @@ class HomeViewController: UIViewController,
     }
 
     private func showMemorySavedPopup(for memory: Memory) {
-        let popup = MemorySavedPopupView.instantiate()
-        popup.configure(with: memory.image)
-
-        popup.onViewMemory = { [weak self, weak popup] in
-            popup?.dismissAnimated {
-                self?.openMindfulnessTab()
-            }
-        }
-
-        popup.onStayHome = { [weak popup] in
-            popup?.dismissAnimated()
-        }
-
-        popup.show(in: tabBarController?.view ?? view)
-    }
-
-    private func openMindfulnessTab() {
-        guard let tabBarController = tabBarController,
-              let viewControllers = tabBarController.viewControllers else {
-            return
-        }
-
-        guard let mindfulnessIndex = viewControllers.firstIndex(where: { controller in
-            if let nav = controller as? UINavigationController {
-                return nav.viewControllers.first is MindfulnessViewController
-            }
-            return controller is MindfulnessViewController
-        }) else {
-            return
-        }
-
-        tabBarController.selectedIndex = mindfulnessIndex
-
-        if let nav = viewControllers[mindfulnessIndex] as? UINavigationController {
-            nav.popToRootViewController(animated: false)
-        }
+        let containerView = tabBarController?.view ?? view!
+        MemoryCardFlyInAnimator.show(
+            memory: memory,
+            in: containerView,
+            tabBar: tabBarController?.tabBar
+        )
     }
 
     func didAddMemory(_ memory: Memory) {
