@@ -15,19 +15,47 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window.makeKeyAndVisible()
         self.window = window
 
-        // 2. After animation completes, transition to TabbarMain
+        // 2. After animation completes, transition to whichever storyboard is set in Info.plist
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.5) {
-            let storyboard = UIStoryboard(name: "TabbarMain", bundle: nil)
-            guard let mainVC = storyboard.instantiateInitialViewController() else {
-                print("❌ Could not load TabbarMain storyboard")
+            var preferredName = "TabbarMain"
+            
+            // 1. Try modern Scene Configuration setting (where Xcode puts it for iOS 13+ apps)
+            if let sceneManifest = Bundle.main.infoDictionary?["UIApplicationSceneManifest"] as? [String: Any],
+               let sceneConfigs = sceneManifest["UISceneConfigurations"] as? [String: Any],
+               let appRoles = sceneConfigs["UIWindowSceneSessionRoleApplication"] as? [[String: Any]],
+               let firstRole = appRoles.first,
+               let sceneStoryboard = firstRole["UISceneStoryboardFile"] as? String {
+                preferredName = sceneStoryboard
+            }
+            // 2. Try legacy UIMainStoryboardFile key (if it wasn't found above)
+            else if let mainStoryboard = Bundle.main.infoDictionary?["UIMainStoryboardFile"] as? String {
+                preferredName = mainStoryboard
+            }
+
+            // Try preferred storyboard first, fall back to TabbarMain
+            let storyboardsToTry = preferredName == "TabbarMain" ? ["TabbarMain"] : [preferredName, "TabbarMain"]
+            var mainVC: UIViewController?
+
+            for name in storyboardsToTry {
+                if let vc = UIStoryboard(name: name, bundle: nil).instantiateInitialViewController() {
+                    mainVC = vc
+                    break
+                } else {
+                    print("⚠️ Could not load storyboard: \(name), trying fallback...")
+                }
+            }
+
+            guard let rootVC = mainVC else {
+                print("❌ No storyboard could be loaded. Check your storyboard names.")
                 return
             }
+
             UIView.transition(
                 with: window,
                 duration: 0.6,
                 options: .transitionCrossDissolve,
                 animations: {
-                    window.rootViewController = mainVC
+                    window.rootViewController = rootVC
                 }
             )
         }
