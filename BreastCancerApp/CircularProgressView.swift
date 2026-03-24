@@ -63,7 +63,7 @@ class CircularProgressView: UIView {
     
     private func updatePaths() {
         let center = CGPoint(x: bounds.midX, y: bounds.midY)
-        let radius = (min(bounds.width, bounds.height) - lineWidth) / 2 * 0.800
+        let radius = (min(bounds.width, bounds.height) - lineWidth) / 2
         let circularPath = UIBezierPath(arcCenter: center, radius: radius, startAngle: -CGFloat.pi / 2, endAngle: 1.5 * CGFloat.pi, clockwise: true)
         
         trackLayer.path = circularPath.cgPath

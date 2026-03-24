@@ -1,10 +1,5 @@
 import Foundation
 
-/// Central coordinator for all Supabase cloud sync.
-/// Local UserDefaults = source of truth during runtime.
-/// Supabase = backup + persistence.
-///
-/// Pull on app start, push only dirty repos every 60s or on background.
 final class SyncManager {
 
     static let shared = SyncManager()
@@ -33,19 +28,19 @@ final class SyncManager {
 
     // MARK: - Public API
 
-    /// Mark a domain as needing a push to cloud.
     func markDirty(_ domain: DataDomain) {
         lock.lock()
         dirtyDomains.insert(domain)
         lock.unlock()
     }
 
-    /// Called on app foreground. Pulls all data from cloud into local, then starts the periodic sync timer.
     func pullAllAndStartTimer() {
         guard !isPulling else { return }
         isPulling = true
 
-        DispatchQueue.global(qos: .utility).async { [weak self] in
+        let jitter = Double.random(in: 0...20)
+
+        DispatchQueue.global(qos: .utility).asyncAfter(deadline: .now() + jitter) { [weak self] in
             self?.pullAll()
             DispatchQueue.main.async {
                 self?.isPulling = false
@@ -54,7 +49,6 @@ final class SyncManager {
         }
     }
 
-    /// Called on app background. Pushes all dirty repos and stops the timer.
     func pushDirtyAndStopTimer() {
         stopTimer()
         pushDirty()
@@ -67,8 +61,6 @@ final class SyncManager {
 
         let repos = resolveRepositories()
 
-        // Pull each domain. These are synchronous-ish (they use completion blocks internally)
-        // but we fire them all concurrently and wait.
         let group = DispatchGroup()
 
         group.enter()
@@ -118,16 +110,16 @@ final class SyncManager {
 
         for domain in domainsToSync {
             switch domain {
-            case .appointments:   repos.appointments.pushToCloud()
+            case .appointments:      repos.appointments.pushToCloud()
             case .medicationHistory: repos.medication.pushToCloud()
-            case .memories:       repos.memory.pushToCloud()
-            case .hydration:      repos.hydration.pushToCloud()
-            case .symptoms:       repos.symptoms.pushToCloud()
-            case .journal:        repos.journal.pushToCloud()
-            case .breathing:      repos.breathing.pushToCloud()
-            case .profile:        repos.profile.pushToCloud()
-            case .exercise:       repos.exercise.pushToCloud()
-            case .journey:        repos.journey.pushToCloud()
+            case .memories:          repos.memory.pushToCloud()
+            case .hydration:         repos.hydration.pushToCloud()
+            case .symptoms:          repos.symptoms.pushToCloud()
+            case .journal:           repos.journal.pushToCloud()
+            case .breathing:         repos.breathing.pushToCloud()
+            case .profile:           repos.profile.pushToCloud()
+            case .exercise:          repos.exercise.pushToCloud()
+            case .journey:           repos.journey.pushToCloud()
             }
         }
     }
@@ -164,7 +156,7 @@ final class SyncManager {
     }
 
     private func resolveRepositories() -> Repos {
-        // RepositoryFactory returns cached singletons, so we can safely cast
+    
         Repos(
             appointments: RepositoryFactory.makeAppointmentRepository() as! SupabaseAppointmentRepository,
             medication: RepositoryFactory.makeMedicationHistoryRepository() as! SupabaseMedicationHistoryRepository,
