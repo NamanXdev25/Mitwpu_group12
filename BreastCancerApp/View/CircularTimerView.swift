@@ -56,7 +56,7 @@ class CircularTimerView: UIView {
         NSLayoutConstraint.activate([
             glassContainer.centerXAnchor.constraint(equalTo: centerXAnchor),
             glassContainer.centerYAnchor.constraint(equalTo: centerYAnchor),
-            glassContainer.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.8),
+            glassContainer.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.626),
             glassContainer.heightAnchor.constraint(equalTo: glassContainer.widthAnchor),
             
             blurEffectView.topAnchor.constraint(equalTo: glassContainer.topAnchor),
