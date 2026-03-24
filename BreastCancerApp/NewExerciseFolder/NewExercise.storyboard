@@ -159,7 +159,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="udg-v1-6ky">
-                                <rect key="frame" x="0.0" y="188" width="393" height="596"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="784"/>
                                 <color key="backgroundColor" name="BackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="glp-Dc-aNZ">
                                     <size key="itemSize" width="128" height="128"/>
@@ -174,9 +174,9 @@
                         <color key="backgroundColor" name="BackgroundColor"/>
                         <constraints>
                             <constraint firstItem="cfI-7j-rbi" firstAttribute="trailing" secondItem="udg-v1-6ky" secondAttribute="trailing" id="3zK-3M-BGk"/>
+                            <constraint firstItem="udg-v1-6ky" firstAttribute="top" secondItem="IOI-1S-XWS" secondAttribute="top" id="4sx-te-VCn"/>
                             <constraint firstItem="cfI-7j-rbi" firstAttribute="bottom" secondItem="udg-v1-6ky" secondAttribute="bottom" id="FM0-eX-fzu"/>
                             <constraint firstItem="udg-v1-6ky" firstAttribute="leading" secondItem="cfI-7j-rbi" secondAttribute="leading" id="Ktf-KI-0mL"/>
-                            <constraint firstItem="udg-v1-6ky" firstAttribute="top" secondItem="cfI-7j-rbi" secondAttribute="top" constant="16" id="g0Y-Zi-bS4"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Exercise Plans" largeTitleDisplayMode="never" id="w2K-Bx-VkN"/>
@@ -186,7 +186,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Rjh-jb-Y0e" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-158" y="-7"/>
+            <point key="canvasLocation" x="-158.01526717557252" y="-7.042253521126761"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="XqW-Rk-Eh9">
