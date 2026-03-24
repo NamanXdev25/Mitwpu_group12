@@ -13,6 +13,19 @@ class OnboardingMindfulnessViewController: UIViewController {
         super.viewDidLoad()
         setupCollectionView()
         setupUI()
+        wireSkipButton()
+    }
+
+    /// The storyboard skip button is wired to a different VC;
+    /// retarget it to self so it works with a programmatic nav controller.
+    private func wireSkipButton() {
+        for subview in view.subviews {
+            if let button = subview as? UIButton,
+               button.titleLabel?.text == "Skip" || button.configuration?.title == "Skip" {
+                button.addTarget(self, action: #selector(skipButtonTapped(_:)), for: .touchUpInside)
+                break
+            }
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -51,6 +64,10 @@ class OnboardingMindfulnessViewController: UIViewController {
     }
 
     @IBAction func nextButtonTapped(_ sender: UIButton) {
+        performSegue(withIdentifier: "showHealth", sender: nil)
+    }
+
+    @IBAction func skipButtonTapped(_ sender: UIButton) {
         performSegue(withIdentifier: "showHealth", sender: nil)
     }
 }

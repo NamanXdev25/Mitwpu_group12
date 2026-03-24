@@ -39,16 +39,37 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 preferredName = "TabbarMain"
             }
 
-            // Try preferred storyboard first, fall back to TabbarMain
-            let storyboardsToTry = preferredName == "TabbarMain" ? ["TabbarMain"] : [preferredName, "TabbarMain"]
+            // If signup flow or onboarding is incomplete
             var mainVC: UIViewController?
 
-            for name in storyboardsToTry {
-                if let vc = UIStoryboard(name: name, bundle: nil).instantiateInitialViewController() {
-                    mainVC = vc
-                    break
+            if preferredName == "signupMain" {
+                if isLoggedIn && !hasCompletedOnboarding {
+                    // Resume onboarding at ProfileSetupViewController
+                    let loginSB = UIStoryboard(name: "Login", bundle: nil)
+                    if let profileVC = loginSB.instantiateViewController(withIdentifier: "ProfileSetupViewController") as? ProfileSetupViewController {
+                        mainVC = profileVC
+                    }
                 } else {
-                    print("⚠️ Could not load storyboard: \(name), trying fallback...")
+                    // Start welcome / signup flow for non-logged-in users
+                    let onboardingSB = UIStoryboard(name: "OnboardingMain", bundle: nil)
+                    if let welcomeVC = onboardingSB.instantiateViewController(withIdentifier: "WelcomeViewController") as? WelcomeViewController {
+                        let navController = UINavigationController(rootViewController: welcomeVC)
+                        navController.isNavigationBarHidden = true
+                        mainVC = navController
+                    }
+                }
+            }
+
+            // Fall back to preferred storyboard, then TabbarMain
+            if mainVC == nil {
+                let storyboardsToTry = preferredName == "TabbarMain" ? ["TabbarMain"] : [preferredName, "TabbarMain"]
+                for name in storyboardsToTry {
+                    if let vc = UIStoryboard(name: name, bundle: nil).instantiateInitialViewController() {
+                        mainVC = vc
+                        break
+                    } else {
+                        print("⚠️ Could not load storyboard: \(name), trying fallback...")
+                    }
                 }
             }
 

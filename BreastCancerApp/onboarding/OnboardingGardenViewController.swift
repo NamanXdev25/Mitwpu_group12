@@ -13,6 +13,18 @@ class OnboardingGardenViewController: UIViewController {
         super.viewDidLoad()
         setupCollectionView()
         setupUI()
+        wireSkipButton()
+    }
+
+    /// Retarget the storyboard skip button to self so it works with the programmatic nav controller.
+    private func wireSkipButton() {
+        for subview in view.subviews {
+            if let button = subview as? UIButton,
+               button.titleLabel?.text == "Skip" || button.configuration?.title == "Skip" {
+                button.addTarget(self, action: #selector(skipButtonTapped(_:)), for: .touchUpInside)
+                break
+            }
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -51,6 +63,10 @@ class OnboardingGardenViewController: UIViewController {
     }
 
     @IBAction func nextButtonTapped(_ sender: UIButton) {
+        performSegue(withIdentifier: "showPrivacyScreen", sender: nil)
+    }
+
+    @IBAction func skipButtonTapped(_ sender: UIButton) {
         performSegue(withIdentifier: "showPrivacyScreen", sender: nil)
     }
 }

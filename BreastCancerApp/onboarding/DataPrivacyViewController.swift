@@ -20,6 +20,11 @@ class DataPrivacyViewController: UIViewController {
     }
 
     @IBAction func skipButtonTapped(_ sender: UIButton) {
+        UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
+        if AppBackend.current == .supabase {
+            SupabaseAuthService.shared.markCurrentUserOnboardingCompleted()
+        }
+        
         let storyboard = UIStoryboard(name: "TabbarMain", bundle: nil)
         guard let tabBarController = storyboard.instantiateInitialViewController() as? UITabBarController else {
             fatalError("TabBarMain must have UITabBarController as initial VC")

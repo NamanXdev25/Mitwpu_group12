@@ -229,12 +229,14 @@ class ProfileSetupViewController: UIViewController,
         
         let storyboard = UIStoryboard(name: "OnboardingMain", bundle: nil)
 
-        guard let navController = storyboard.instantiateViewController(
-            withIdentifier: "OnboardingNavController"
-        ) as? UINavigationController else {
-            fatalError("OnboardingNavController ID missing")
+        guard let mindfulnessVC = storyboard.instantiateViewController(
+            withIdentifier: "OnboardingMindfulnessViewController"
+        ) as? OnboardingMindfulnessViewController else {
+            fatalError("OnboardingMindfulnessViewController ID missing")
         }
 
+        let navController = UINavigationController(rootViewController: mindfulnessVC)
+        navController.isNavigationBarHidden = true
         navController.modalPresentationStyle = .fullScreen
         present(navController, animated: true)
     }

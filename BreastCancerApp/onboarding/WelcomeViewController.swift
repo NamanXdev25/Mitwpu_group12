@@ -7,6 +7,7 @@ class WelcomeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        continueButton.addTarget(self, action: #selector(continueButtonTapped(_:)), for: .touchUpInside)
     }
 
     override func viewDidLayoutSubviews() {
@@ -18,7 +19,15 @@ class WelcomeViewController: UIViewController {
         introImageView.layer.mask = mask
     }
 
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        // Block the storyboard segue so we navigate to SignUp instead
+        return false
+    }
+
     @IBAction func continueButtonTapped(_ sender: UIButton) {
-        performSegue(withIdentifier: "showMindfulness", sender: nil)
+        let signupSB = UIStoryboard(name: "signupMain", bundle: nil)
+        if let signupVC = signupSB.instantiateViewController(withIdentifier: "SignUpViewController") as? SignUpViewController {
+            navigationController?.pushViewController(signupVC, animated: true)
+        }
     }
 }
