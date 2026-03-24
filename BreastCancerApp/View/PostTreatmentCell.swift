@@ -30,6 +30,10 @@ class PostTreatmentCell: UICollectionViewCell {
     private var symptomTitles: [UIButton: String] = [:]
     private var lockOverlayView: UIView?
 
+    // Date picker overlay references (mirrors DiagnosisCell pattern)
+    private var overlayView: UIView?
+    private var datePickerContainerView: UIView?
+
     // MARK: - Callbacks
     var onDateTapped: (() -> Void)?
     var onSaveButtonTapped: (() -> Void)?
@@ -210,7 +214,7 @@ class PostTreatmentCell: UICollectionViewCell {
     }
 
     // MARK: - IBActions
-    @IBAction func dateTapped(_ sender: UIButton)       { showInternalDatePicker() }
+    @IBAction func dateTapped(_ sender: UIButton)       { showDatePickerOverlay() }
     @IBAction func painTapped(_ sender: UIButton)       {}
     @IBAction func numbnessTapped(_ sender: UIButton)   {}
     @IBAction func swellingTapped(_ sender: UIButton)   {}
@@ -277,94 +281,126 @@ class PostTreatmentCell: UICollectionViewCell {
         }
     }
 
-    // MARK: - Internal Date Picker
-    private func showInternalDatePicker() {
-        guard let window = self.window else { return }
+    // MARK: - Date Picker Overlay (mirrors DiagnosisCell exactly — no fixed height on container)
+    private func showDatePickerOverlay() {
+        guard let windowScene = UIApplication.shared.connectedScenes
+                .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene,
+              let window = windowScene.windows.first(where: { $0.isKeyWindow }) else { return }
 
+        // --- Dim overlay ---
         let dimView = UIView(frame: window.bounds)
-        dimView.backgroundColor = UIColor.black.withAlphaComponent(0.35)
-        dimView.tag = 9001
+        dimView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         dimView.alpha = 0
-        window.addSubview(dimView)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissDatePickerOverlay))
+        tapGesture.cancelsTouchesInView = false
+        dimView.addGestureRecognizer(tapGesture)
+        overlayView = dimView
 
+        // --- White card container (NO fixed heightAnchor — lets picker resize freely) ---
         let container = UIView()
-        container.backgroundColor = .systemBackground
+        container.backgroundColor = .white
         container.layer.cornerRadius = 16
         container.translatesAutoresizingMaskIntoConstraints = false
-        dimView.addSubview(container)
+        datePickerContainerView = container
 
-        NSLayoutConstraint.activate([
-            container.centerXAnchor.constraint(equalTo: dimView.centerXAnchor),
-            container.centerYAnchor.constraint(equalTo: dimView.centerYAnchor),
-            container.widthAnchor.constraint(equalToConstant: 340),
-            container.heightAnchor.constraint(equalToConstant: 460)
-        ])
-
+        // --- Inline date picker ---
         let picker = UIDatePicker()
+        picker.preferredDatePickerStyle = .inline   // tapping year header → scroll wheel works because container has no fixed height
         picker.datePickerMode = .date
-        picker.preferredDatePickerStyle = .inline
-        picker.tintColor = pink
         picker.maximumDate = Date()
+        picker.tintColor = pink
         picker.date = selectedDate ?? Date()
         picker.translatesAutoresizingMaskIntoConstraints = false
-        container.addSubview(picker)
+        picker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
 
+        // --- Reset / Done buttons ---
         let buttonStack = UIStackView()
         buttonStack.axis = .horizontal
         buttonStack.distribution = .fillEqually
         buttonStack.spacing = 12
         buttonStack.translatesAutoresizingMaskIntoConstraints = false
+
+        let resetButton = UIButton(type: .system)
+        resetButton.setTitle("Reset", for: .normal)
+        resetButton.setTitleColor(pink, for: .normal)
+        resetButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
+        resetButton.addTarget(self, action: #selector(resetDateTapped), for: .touchUpInside)
+
+        let doneButton = UIButton(type: .system)
+        doneButton.setTitle("Done", for: .normal)
+        doneButton.setTitleColor(pink, for: .normal)
+        doneButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
+        doneButton.addTarget(self, action: #selector(dismissDatePickerOverlay), for: .touchUpInside)
+
+        buttonStack.addArrangedSubview(resetButton)
+        buttonStack.addArrangedSubview(doneButton)
+
+        container.addSubview(picker)
         container.addSubview(buttonStack)
 
-        let resetBtn = UIButton(type: .system)
-        resetBtn.setTitle("Reset", for: .normal)
-        resetBtn.setTitleColor(pink, for: .normal)
-        resetBtn.titleLabel?.font = .boldSystemFont(ofSize: 16)
-
-        let doneBtn = UIButton(type: .system)
-        doneBtn.setTitle("Done", for: .normal)
-        doneBtn.titleLabel?.font = .boldSystemFont(ofSize: 16)
-        doneBtn.setTitleColor(pink, for: .normal)
-
-
-        buttonStack.addArrangedSubview(resetBtn)
-        buttonStack.addArrangedSubview(doneBtn)
+        window.addSubview(dimView)
+        window.addSubview(container)
 
         NSLayoutConstraint.activate([
-            picker.topAnchor.constraint(equalTo: container.topAnchor, constant: 12),
-            picker.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 12),
-            picker.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -12),
-            buttonStack.topAnchor.constraint(equalTo: picker.bottomAnchor, constant: 4),
-            buttonStack.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -12),
+            container.centerXAnchor.constraint(equalTo: window.centerXAnchor),
+            container.centerYAnchor.constraint(equalTo: window.centerYAnchor),
+            container.widthAnchor.constraint(equalToConstant: 350),
+
+            picker.topAnchor.constraint(equalTo: container.topAnchor, constant: 20),
+            picker.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 10),
+            picker.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -10),
+
+            buttonStack.topAnchor.constraint(equalTo: picker.bottomAnchor, constant: 10),
             buttonStack.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 24),
             buttonStack.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -24),
+            buttonStack.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -20),
             buttonStack.heightAnchor.constraint(equalToConstant: 44)
         ])
 
-        picker.addTarget(self, action: #selector(pickerChanged(_:)), for: .valueChanged)
-
-        doneBtn.addAction(UIAction { [weak self] _ in
-            guard let self else { return }
-            if let date = self.selectedDate { self.commitDate(date) }
-            self.dismissPicker()
-        }, for: .touchUpInside)
-
-        resetBtn.addAction(UIAction { [weak self] _ in
-            guard let self else { return }
-            self.clearSelectedDate()
-            self.dismissPicker()
-        }, for: .touchUpInside)
-
-        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissPicker))
-        tap.cancelsTouchesInView = false
-        dimView.addGestureRecognizer(tap)
-
-        UIView.animate(withDuration: 0.22) { dimView.alpha = 1 }
+        // Spring-in animation
+        container.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+        container.alpha = 0
+        UIView.animate(withDuration: 0.3, delay: 0,
+                       usingSpringWithDamping: 0.8,
+                       initialSpringVelocity: 0,
+                       options: .curveEaseOut) {
+            dimView.alpha = 1
+            container.alpha = 1
+            container.transform = .identity
+        }
     }
 
-    @objc private func pickerChanged(_ picker: UIDatePicker) { commitDate(picker.date) }
+    @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
+        // Live-update label as user scrolls — no need to tap Done to see selection
+        selectedDate = sender.date
+        let f = DateFormatter(); f.dateFormat = "dd/MM/yyyy"
+        dateLabel.text      = f.string(from: sender.date)
+        dateLabel.textColor = .black
+        onDateChanged?(sender.date)
+        if isSaved { revertToEditMode() }
+        updateSaveButtonState()
+    }
 
-    private func commitDate(_ date: Date) {
+    @objc private func resetDateTapped() {
+        clearSelectedDate()
+        dismissDatePickerOverlay()
+    }
+
+    @objc private func dismissDatePickerOverlay() {
+        UIView.animate(withDuration: 0.2, animations: {
+            self.overlayView?.alpha = 0
+            self.datePickerContainerView?.alpha = 0
+            self.datePickerContainerView?.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+        }) { _ in
+            self.overlayView?.removeFromSuperview()
+            self.datePickerContainerView?.removeFromSuperview()
+            self.overlayView = nil
+            self.datePickerContainerView = nil
+        }
+    }
+
+    // MARK: - Public helpers (called by JourneyViewController calendar popup)
+    func updateSelectedDate(_ date: Date) {
         selectedDate = date
         let f = DateFormatter(); f.dateFormat = "dd/MM/yyyy"
         dateLabel.text      = f.string(from: date)
@@ -373,14 +409,6 @@ class PostTreatmentCell: UICollectionViewCell {
         if isSaved { revertToEditMode() }
         updateSaveButtonState()
     }
-
-    @objc private func dismissPicker() {
-        guard let window = self.window, let dim = window.viewWithTag(9001) else { return }
-        UIView.animate(withDuration: 0.2, animations: { dim.alpha = 0 }) { _ in dim.removeFromSuperview() }
-    }
-
-    // MARK: - Public helpers (called by JourneyViewController calendar popup)
-    func updateSelectedDate(_ date: Date) { commitDate(date) }
 
     func clearSelectedDate() {
         selectedDate        = nil
