@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -11,10 +11,10 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="ExerciseInfoCell" customModule="BreastCancerApp" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="393" height="180"/>
+            <rect key="frame" x="0.0" y="0.0" width="393" height="140"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="393" height="180"/>
+                <rect key="frame" x="0.0" y="0.0" width="393" height="140"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="titleLabel" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IAB-zp-cmZ">
@@ -44,39 +44,15 @@
                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gcd-GZ-Zqk">
-                        <rect key="frame" x="20" y="94.666666666666671" width="70" height="23"/>
-                        <color key="backgroundColor" name="Less_Exercise"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="70" id="X27-1v-QVC"/>
-                            <constraint firstAttribute="height" constant="23" id="rhX-2P-dht"/>
-                        </constraints>
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                <integer key="value" value="10"/>
-                            </userDefinedRuntimeAttribute>
-                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
-                        </userDefinedRuntimeAttributes>
-                    </view>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2dW-Db-j7e">
-                        <rect key="frame" x="30" y="96.666666666666671" width="31" height="14.333333333333329"/>
-                        <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
-                        <color key="textColor" name="beginner_color"/>
-                        <nil key="highlightedColor"/>
-                    </label>
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <constraints>
                 <constraint firstItem="api-xJ-yxF" firstAttribute="top" secondItem="IAB-zp-cmZ" secondAttribute="bottom" constant="12" id="6bR-FM-FUs"/>
-                <constraint firstItem="2dW-Db-j7e" firstAttribute="top" secondItem="api-xJ-yxF" secondAttribute="bottom" constant="10" id="7k3-az-FLM"/>
                 <constraint firstAttribute="trailing" secondItem="IAB-zp-cmZ" secondAttribute="trailing" constant="56" id="A27-Ty-hFc"/>
                 <constraint firstItem="IAB-zp-cmZ" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="16" id="J2Z-37-B2X"/>
                 <constraint firstItem="IAB-zp-cmZ" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="20" id="K17-YH-U2K"/>
                 <constraint firstAttribute="trailing" secondItem="M1j-4e-BtK" secondAttribute="trailing" constant="20" id="UsV-0Y-DPu"/>
-                <constraint firstItem="Gcd-GZ-Zqk" firstAttribute="top" secondItem="api-xJ-yxF" secondAttribute="bottom" constant="8" id="ViE-sC-KSz"/>
-                <constraint firstItem="2dW-Db-j7e" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="30" id="aOu-Bj-Hep"/>
-                <constraint firstItem="Gcd-GZ-Zqk" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="20" id="e8X-OF-TfR"/>
                 <constraint firstItem="M1j-4e-BtK" firstAttribute="centerY" secondItem="IAB-zp-cmZ" secondAttribute="centerY" id="hh3-yM-nh1"/>
                 <constraint firstAttribute="trailing" secondItem="api-xJ-yxF" secondAttribute="trailing" constant="36" id="ole-up-F1d"/>
                 <constraint firstItem="api-xJ-yxF" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="20" id="tLx-Tm-sZJ"/>
@@ -85,8 +61,6 @@
             <connections>
                 <outlet property="descriptionLabel" destination="api-xJ-yxF" id="OKm-Mb-ZLY"/>
                 <outlet property="infoButton" destination="M1j-4e-BtK" id="4ot-hV-6w1"/>
-                <outlet property="levelBackgroundView" destination="Gcd-GZ-Zqk" id="gMn-JK-yj9"/>
-                <outlet property="levelLabel" destination="2dW-Db-j7e" id="cxX-nR-LgS"/>
                 <outlet property="titleLabel" destination="IAB-zp-cmZ" id="g0D-LJ-zdl"/>
             </connections>
             <point key="canvasLocation" x="113.74045801526717" y="88.732394366197184"/>
@@ -94,12 +68,6 @@
     </objects>
     <resources>
         <image name="info.circle" catalog="system" width="128" height="123"/>
-        <namedColor name="Less_Exercise">
-            <color red="0.94900000095367432" green="0.85100001096725464" blue="0.87800002098083496" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="beginner_color">
-            <color red="0.20000000298023224" green="0.20000000298023224" blue="0.20000000298023224" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="plusbuttoncolor">
             <color red="0.9100000262260437" green="0.41600000858306885" blue="0.57300001382827759" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

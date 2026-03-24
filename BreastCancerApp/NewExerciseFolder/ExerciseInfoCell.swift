@@ -5,9 +5,6 @@ class ExerciseInfoCell: UICollectionViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var infoButton: UIButton!
     @IBOutlet weak var descriptionLabel: UILabel!
-    @IBOutlet weak var levelLabel: UILabel!
-    
-    @IBOutlet weak var levelBackgroundView: UIView!
     
     var onInfoTap: ((_ infoButton: UIButton) -> Void)?
     
@@ -15,10 +12,9 @@ class ExerciseInfoCell: UICollectionViewCell {
         super.awakeFromNib()
     }
     
-    func configure(title: String, description: String, level: String) {
+    func configure(title: String, description: String) {
         titleLabel.text = title
         descriptionLabel.text = description
-        levelLabel.text = level
     }
     
     @IBAction func infoTapped(_ sender: Any) {

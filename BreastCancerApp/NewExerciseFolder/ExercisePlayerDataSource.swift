@@ -74,8 +74,7 @@ extension ExercisePlayerDataSource: UICollectionViewDataSource, UICollectionView
 
             cell.configure(
                 title: exercise.title,
-                description: descriptionFor(exercise),
-                level: exercise.difficulty
+                description: descriptionFor(exercise)
             )
 
             cell.onInfoTap = { [weak self] button in
