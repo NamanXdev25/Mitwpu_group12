@@ -30,6 +30,7 @@ class NewExerciseViewController: UIViewController {
     private func setupNavigationBar() {
         navigationController?.setNavigationBarHidden(false, animated: false)
         navigationItem.title = nil
+        navigationItem.largeTitleDisplayMode = .never
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
     }

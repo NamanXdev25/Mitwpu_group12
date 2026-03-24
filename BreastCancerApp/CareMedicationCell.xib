@@ -36,13 +36,13 @@
                                 <buttonConfiguration key="configuration" style="plain" image="info.circle" catalog="system"/>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Medication" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="67J-Qh-cab">
-                                <rect key="frame" x="57.999999999999993" y="19" width="88.333333333333314" height="20.333333333333329"/>
+                                <rect key="frame" x="57.999999999999993" y="21" width="88.333333333333314" height="20.333333333333329"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2/3 Taken" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="epA-XK-byU">
-                                <rect key="frame" x="58.000000000000007" y="39.333333333333336" width="66.666666666666686" height="18"/>
+                                <rect key="frame" x="58.000000000000007" y="41.333333333333336" width="66.666666666666686" height="18"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                 <color key="textColor" systemColor="systemGrayColor"/>
                                 <nil key="highlightedColor"/>
@@ -54,7 +54,7 @@
                             <constraint firstItem="rCw-T2-Qqv" firstAttribute="centerY" secondItem="to6-hE-ggb" secondAttribute="centerY" id="Ewi-MB-LZD"/>
                             <constraint firstItem="FcB-3r-7zX" firstAttribute="centerY" secondItem="rCw-T2-Qqv" secondAttribute="centerY" id="Ijo-bu-7pq"/>
                             <constraint firstItem="67J-Qh-cab" firstAttribute="leading" secondItem="rCw-T2-Qqv" secondAttribute="trailing" id="ToM-fN-ZFf"/>
-                            <constraint firstItem="67J-Qh-cab" firstAttribute="top" secondItem="to6-hE-ggb" secondAttribute="top" constant="19" id="X9G-cn-ouF"/>
+                            <constraint firstItem="67J-Qh-cab" firstAttribute="top" secondItem="to6-hE-ggb" secondAttribute="top" constant="21" id="X9G-cn-ouF"/>
                             <constraint firstItem="epA-XK-byU" firstAttribute="leading" secondItem="rCw-T2-Qqv" secondAttribute="trailing" id="eX6-mV-9Rt"/>
                             <constraint firstItem="epA-XK-byU" firstAttribute="top" secondItem="67J-Qh-cab" secondAttribute="bottom" id="iO0-oL-apL"/>
                             <constraint firstItem="rCw-T2-Qqv" firstAttribute="leading" secondItem="to6-hE-ggb" secondAttribute="leading" constant="8" id="xxu-nn-lWs"/>
