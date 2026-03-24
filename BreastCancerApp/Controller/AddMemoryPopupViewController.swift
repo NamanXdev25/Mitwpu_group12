@@ -2,14 +2,11 @@ import UIKit
 
 final class AddMemoryPopupViewController: UIViewController {
 
-    // MARK: - Outlets
     @IBOutlet weak var collectionView: UICollectionView!
 
-    // MARK: - Callbacks
     var onCamera: (() -> Void)?
     var onPhotos: (() -> Void)?
 
-    // MARK: - Options
     private enum Option {
         case camera
         case photos
@@ -17,7 +14,6 @@ final class AddMemoryPopupViewController: UIViewController {
 
     private let options: [Option] = [.camera, .photos]
 
-    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
@@ -25,7 +21,6 @@ final class AddMemoryPopupViewController: UIViewController {
     }
 }
 
-// MARK: - Configuration
 private extension AddMemoryPopupViewController {
 
     func configureView() {
@@ -37,6 +32,13 @@ private extension AddMemoryPopupViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
 
+        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.minimumLineSpacing = 0
+            layout.minimumInteritemSpacing = 0
+            layout.sectionInset = .zero
+            layout.estimatedItemSize = .zero
+        }
+
         collectionView.register(
             UINib(nibName: "AddMemoryOptionCell", bundle: nil),
             forCellWithReuseIdentifier: "AddMemoryOptionCell"
@@ -44,9 +46,7 @@ private extension AddMemoryPopupViewController {
     }
 }
 
-// MARK: - UICollectionView DataSource & Delegate
-extension AddMemoryPopupViewController: UICollectionViewDataSource,
-                                        UICollectionViewDelegateFlowLayout {
+extension AddMemoryPopupViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
@@ -91,12 +91,9 @@ extension AddMemoryPopupViewController: UICollectionViewDataSource,
     }
 }
 
-// MARK: - Force Popover on iPhone
 extension AddMemoryPopupViewController: UIPopoverPresentationControllerDelegate {
 
-    func adaptivePresentationStyle(
-        for controller: UIPresentationController
-    ) -> UIModalPresentationStyle {
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         .none
     }
 }

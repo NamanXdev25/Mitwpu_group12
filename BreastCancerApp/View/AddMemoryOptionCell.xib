@@ -33,11 +33,11 @@
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <constraints>
-                <constraint firstItem="BWV-SS-BeW" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="8Ml-pE-qwX"/>
-                <constraint firstItem="BWV-SS-BeW" firstAttribute="centerY" secondItem="gBp-jw-D2h" secondAttribute="centerY" id="ESY-GO-X6O"/>
+                <constraint firstItem="gBp-jw-D2h" firstAttribute="centerY" secondItem="BWV-SS-BeW" secondAttribute="centerY" id="99q-sz-9Er"/>
                 <constraint firstAttribute="trailing" secondItem="gBp-jw-D2h" secondAttribute="trailing" constant="16" id="ScG-rD-Noy"/>
                 <constraint firstItem="gBp-jw-D2h" firstAttribute="leading" secondItem="BWV-SS-BeW" secondAttribute="trailing" constant="12" id="aGx-gl-v82"/>
                 <constraint firstItem="BWV-SS-BeW" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="4" id="f1k-32-dY9"/>
+                <constraint firstItem="gBp-jw-D2h" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="iJb-BK-7uU"/>
             </constraints>
             <size key="customSize" width="357" height="239"/>
             <connections>
