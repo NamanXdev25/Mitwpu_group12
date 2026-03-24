@@ -32,6 +32,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 preferredName = mainStoryboard
             }
 
+            let isLoggedIn = UserDefaults.standard.bool(forKey: "isLoggedIn")
+            let hasCompletedOnboarding = UserDefaults.standard.bool(forKey: "hasCompletedOnboarding")
+
+            if isLoggedIn && hasCompletedOnboarding {
+                preferredName = "TabbarMain"
+            }
+
             // Try preferred storyboard first, fall back to TabbarMain
             let storyboardsToTry = preferredName == "TabbarMain" ? ["TabbarMain"] : [preferredName, "TabbarMain"]
             var mainVC: UIViewController?
