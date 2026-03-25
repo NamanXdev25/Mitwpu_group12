@@ -5,6 +5,10 @@ class MindfulnessDataSource: NSObject, UICollectionViewDataSource {
     weak var viewController: MindfulnessViewController?
     private(set) var memories: [Memory] = []
 
+    private var recentMemories: [Memory] {
+        Array(memories.prefix(3))
+    }
+
     init(viewController: MindfulnessViewController) {
         self.viewController = viewController
         super.init()
@@ -30,7 +34,7 @@ class MindfulnessDataSource: NSObject, UICollectionViewDataSource {
             return 1
 
         case .memories:
-            return memories.isEmpty ? 1 : memories.count
+            return recentMemories.isEmpty ? 1 : recentMemories.count
 
         case .explore:
             return 3
@@ -60,7 +64,7 @@ class MindfulnessDataSource: NSObject, UICollectionViewDataSource {
             return cell
 
         case .memories:
-            if memories.isEmpty {
+            if recentMemories.isEmpty {
                 return collectionView.dequeueReusableCell(
                     withReuseIdentifier: "MemoryEmptyStateCell",
                     for: indexPath
@@ -72,7 +76,7 @@ class MindfulnessDataSource: NSObject, UICollectionViewDataSource {
                 for: indexPath
             ) as! HomeMemoryCell
 
-            cell.configureWithMemory(memories[indexPath.item])
+            cell.configureWithMemory(recentMemories[indexPath.item])
             return cell
 
         case .explore:
