@@ -50,12 +50,14 @@ class CompletionViewController: UIViewController {
         switch status {
 
         case "Currently in treatment":
+            js.saveDiagnosisState(date: data.diagnosisDate)
             js.completeDiagnosis()
             js.completeWait()
             let phaseName = data.currentTreatmentPhase ?? "Treatment"
             js.updateTreatmentPhaseName(phaseName)
 
         case "Post-treatment / in recovery":
+            js.saveDiagnosisState(date: data.diagnosisDate)
             js.completeDiagnosis()
             js.completeWait()
             js.completeTreatment(phaseName: data.currentTreatmentPhase ?? "Treatment")
@@ -63,7 +65,6 @@ class CompletionViewController: UIViewController {
         default:
             break
         }
-
     }
 
     @IBAction func homeButtonTapped(_ sender: UIButton) {
