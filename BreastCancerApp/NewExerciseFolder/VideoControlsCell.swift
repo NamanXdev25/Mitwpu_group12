@@ -203,22 +203,23 @@ class VideoControlsCell: UICollectionViewCell {
 
         UIView.animate(withDuration: 0.3, animations: {
             toastLabel.alpha = 1
-        }) { _ in
-            UIView.animate(withDuration: 0.3, delay: 1.0, animations: {
-                toastLabel.alpha = 0
-            }) { _ in
-                toastLabel.removeFromSuperview()
-            }
-        }
+        }, completion: { _ in
+            UIView.animate(
+                withDuration: 0.3,
+                delay: 1.0,
+                animations: { toastLabel.alpha = 0 },
+                completion: { _ in toastLabel.removeFromSuperview() }
+            )
+        })
     }
 
     func animateButton(_ button: UIButton) {
         UIView.animate(withDuration: 0.1, animations: {
             button.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
-        }) { _ in
+        }, completion: { _ in
             UIView.animate(withDuration: 0.1) {
                 button.transform = .identity
             }
-        }
+        })
     }
 }

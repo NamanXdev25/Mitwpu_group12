@@ -60,7 +60,7 @@ class PostTreatmentCell: UICollectionViewCell {
     // MARK: - Lock Overlay
 
     func setLocked(_ locked: Bool) {
-        locked ? showLockOverlay() : removeLockOverlay()
+        if locked { showLockOverlay() } else { removeLockOverlay() }
     }
 
     private func showLockOverlay() {
@@ -168,7 +168,7 @@ class PostTreatmentCell: UICollectionViewCell {
         }
 
         for (btn, title) in symptomTitles {
-            selectedSymptoms.contains(title) ? applySelectedStyle(to: btn) : applyDeselectedStyle(to: btn)
+            if selectedSymptoms.contains(title) { applySelectedStyle(to: btn) } else { applyDeselectedStyle(to: btn) }
         }
 
         if isSaved {
@@ -265,7 +265,7 @@ class PostTreatmentCell: UICollectionViewCell {
         editButton.isHidden = false
         editButton.alpha = 1.0
         let block = { self.fadableViews.forEach { $0.alpha = 0.35 } }
-        animated ? UIView.animate(withDuration: 0.3, animations: block) : block()
+        if animated { UIView.animate(withDuration: 0.3, animations: block) } else { block() }
     }
 
     // MARK: - Edit
@@ -416,12 +416,12 @@ class PostTreatmentCell: UICollectionViewCell {
             self.overlayView?.alpha = 0
             self.datePickerContainerView?.alpha = 0
             self.datePickerContainerView?.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
-        }) { _ in
+        }, completion: { _ in
             self.overlayView?.removeFromSuperview()
             self.datePickerContainerView?.removeFromSuperview()
             self.overlayView = nil
             self.datePickerContainerView = nil
-        }
+        })
     }
 
     // MARK: - Public helpers (called by JourneyViewController calendar popup)
@@ -447,7 +447,7 @@ class PostTreatmentCell: UICollectionViewCell {
 
     func configure() {
         for (btn, title) in symptomTitles {
-            selectedSymptoms.contains(title) ? applySelectedStyle(to: btn) : applyDeselectedStyle(to: btn)
+            if selectedSymptoms.contains(title) { applySelectedStyle(to: btn) } else { applyDeselectedStyle(to: btn) }
         }
         if !isSaved { updateSaveButtonState() }
     }

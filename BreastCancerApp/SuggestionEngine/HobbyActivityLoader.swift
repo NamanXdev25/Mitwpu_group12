@@ -171,10 +171,8 @@ final class HobbyActivityLoader {
             w += 20
         }
 
-        for tag in a.symptomTags {
-            if phaseTypicallyProducesSymptom(normalize(tag), for: ctx) {
-                w += 25
-            }
+        for tag in a.symptomTags where phaseTypicallyProducesSymptom(normalize(tag), for: ctx) {
+            w += 25
         }
 
         if a.ageRange.count == 2 {
@@ -274,10 +272,8 @@ final class HobbyActivityLoader {
 
         if moodIsSelected && !p.moodTags.isEmpty { w += 20 }
 
-        for tag in p.symptomTags {
-            if phaseTypicallyProducesSymptom(normalize(tag), for: ctx) {
-                w += 25
-            }
+        for tag in p.symptomTags where phaseTypicallyProducesSymptom(normalize(tag), for: ctx) {
+            w += 25
         }
 
         if p.ageRange.count == 2 {

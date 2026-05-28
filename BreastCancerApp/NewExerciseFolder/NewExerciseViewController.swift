@@ -85,10 +85,8 @@ class NewExerciseViewController: UIViewController {
 
     private func nextExerciseIndex() -> Int {
         guard let plan = exercisePlan else { return 0 }
-        for i in 0 ..< plan.exercises.count {
-            if !completedIndices.contains(i) {
-                return i
-            }
+        for i in 0 ..< plan.exercises.count where !completedIndices.contains(i) {
+            return i
         }
         return 0
     }
@@ -214,11 +212,13 @@ class NewExerciseViewController: UIViewController {
 
         view.addSubview(toastLabel)
 
-        UIView.animate(withDuration: 0.3, delay: 1.5, options: .curveEaseOut, animations: {
-            toastLabel.alpha = 0.0
-        }, completion: { _ in
-            toastLabel.removeFromSuperview()
-        })
+        UIView.animate(
+            withDuration: 0.3,
+            delay: 1.5,
+            options: .curveEaseOut,
+            animations: { toastLabel.alpha = 0.0 },
+            completion: { _ in toastLabel.removeFromSuperview() }
+        )
     }
 }
 

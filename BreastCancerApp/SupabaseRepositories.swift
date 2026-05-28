@@ -1,3 +1,4 @@
+// swiftlint:disable file_length
 import Foundation
 
 private extension SupabaseRESTClient {
@@ -306,20 +307,18 @@ final class SupabaseHydrationRepository: HydrationRepository {
             }
 
             let localDateKeys = Set(rowsToUpsert.map(\.date_key))
-            for existingRow in existingRows {
-                if !localDateKeys.contains(existingRow.date_key) {
-                    rowsToUpsert.append(
-                        HydrationDailySupabaseRow(
-                            id: existingRow.id,
-                            user_id: self.userId,
-                            date_key: existingRow.date_key,
-                            date_epoch: existingRow.date_epoch,
-                            consumed_ml: 0,
-                            goal_ml: existingRow.goal_ml,
-                            updated_at: Date()
-                        )
+            for existingRow in existingRows where !localDateKeys.contains(existingRow.date_key) {
+                rowsToUpsert.append(
+                    HydrationDailySupabaseRow(
+                        id: existingRow.id,
+                        user_id: self.userId,
+                        date_key: existingRow.date_key,
+                        date_epoch: existingRow.date_epoch,
+                        consumed_ml: 0,
+                        goal_ml: existingRow.goal_ml,
+                        updated_at: Date()
                     )
-                }
+                )
             }
 
             self.client.upsertRows(

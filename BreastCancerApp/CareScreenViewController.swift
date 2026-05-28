@@ -1,3 +1,4 @@
+// swiftlint:disable file_length
 import UIKit
 
 class CareScreenViewController: UIViewController {
@@ -276,10 +277,8 @@ class CareScreenViewController: UIViewController {
 
         var seen = Set<String>()
         var uniqueNames: [String] = []
-        for log in todayLogs {
-            if seen.insert(log.symptomName).inserted {
-                uniqueNames.append(log.symptomName)
-            }
+        for log in todayLogs where seen.insert(log.symptomName).inserted {
+            uniqueNames.append(log.symptomName)
         }
 
         guard !uniqueNames.isEmpty else { return [] }
@@ -776,16 +775,17 @@ extension CareScreenViewController: CareHydrationCellDelegate {
             options: hydrationGoalOptionsML,
             selected: hydrationGoalML,
             anchorView: cell.GoalChevronButton,
-            titleForOption: { [weak self] in self?.goalTitle($0) ?? "" }
-        ) { [weak self] selectedGoal in
-            guard let self = self else { return }
-            self.hydrationGoalML = selectedGoal
-            self.hydrationCurrentAmountML = min(self.hydrationCurrentAmountML, selectedGoal)
-            HydrationDataManager.shared.setTotalForToday(self.hydrationCurrentAmountML)
-            self.hydrationCurrentAmountML = HydrationDataManager.shared.getTotalForDate(Date())
-            self.saveHydrationState()
-            self.applySnapshot(animatingDifferences: false)
-        }
+            titleForOption: { [weak self] in self?.goalTitle($0) ?? "" },
+            onSelect: { [weak self] selectedGoal in
+                guard let self = self else { return }
+                self.hydrationGoalML = selectedGoal
+                self.hydrationCurrentAmountML = min(self.hydrationCurrentAmountML, selectedGoal)
+                HydrationDataManager.shared.setTotalForToday(self.hydrationCurrentAmountML)
+                self.hydrationCurrentAmountML = HydrationDataManager.shared.getTotalForDate(Date())
+                self.saveHydrationState()
+                self.applySnapshot(animatingDifferences: false)
+            }
+        )
     }
 
     func careHydrationCellDidTapCupSize(_ cell: CareHydrationCell) {
@@ -793,13 +793,14 @@ extension CareScreenViewController: CareHydrationCellDelegate {
             options: hydrationCupOptionsML,
             selected: hydrationCupSizeML,
             anchorView: cell.CupSizeChevronButton,
-            titleForOption: { [weak self] in self?.cupTitle($0) ?? "" }
-        ) { [weak self] selectedCup in
-            guard let self = self else { return }
-            self.hydrationCupSizeML = selectedCup
-            self.saveHydrationState()
-            self.applySnapshot(animatingDifferences: false)
-        }
+            titleForOption: { [weak self] in self?.cupTitle($0) ?? "" },
+            onSelect: { [weak self] selectedCup in
+                guard let self = self else { return }
+                self.hydrationCupSizeML = selectedCup
+                self.saveHydrationState()
+                self.applySnapshot(animatingDifferences: false)
+            }
+        )
     }
 
     func careHydrationCell(_ cell: CareHydrationCell, didChangeCurrentAmountML amountML: Int) {
