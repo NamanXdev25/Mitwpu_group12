@@ -8,7 +8,7 @@ class HydrationDataManager {
 
     init(repository: HydrationRepository = RepositoryFactory.makeHydrationRepository()) {
         self.repository = repository
-        self.entries = repository.loadEntries()
+        entries = repository.loadEntries()
         let normalized = normalizedDailyEntries(from: entries)
         if !hasSameContent(lhs: normalized, rhs: entries) {
             entries = normalized
@@ -122,8 +122,8 @@ class HydrationDataManager {
         guard lhs.count == rhs.count else { return false }
         return zip(lhs, rhs).allSatisfy {
             $0.id == $1.id &&
-            $0.amountML == $1.amountML &&
-            $0.timestamp == $1.timestamp
+                $0.amountML == $1.amountML &&
+                $0.timestamp == $1.timestamp
         }
     }
 }

@@ -5,12 +5,11 @@ protocol ProfileHeaderCellDelegate: AnyObject {
 }
 
 final class ProfileHeaderCell: UICollectionViewCell {
-
     static let reuseIdentifier = "ProfileHeaderCell"
 
-    @IBOutlet private weak var profileImageView: UIImageView!
-    @IBOutlet private weak var nameLabel: UILabel!
-    @IBOutlet private weak var cameraButton: UIButton!
+    @IBOutlet private var profileImageView: UIImageView!
+    @IBOutlet private var nameLabel: UILabel!
+    @IBOutlet private var cameraButton: UIButton!
 
     weak var delegate: ProfileHeaderCellDelegate?
 
@@ -37,7 +36,7 @@ final class ProfileHeaderCell: UICollectionViewCell {
         cameraButton.isHidden = !isEditing
     }
 
-    @IBAction private func cameraTapped(_ sender: UIButton) {
+    @IBAction private func cameraTapped(_: UIButton) {
         delegate?.didTapCamera()
     }
 }

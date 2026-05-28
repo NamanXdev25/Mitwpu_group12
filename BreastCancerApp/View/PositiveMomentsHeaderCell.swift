@@ -1,9 +1,8 @@
 import UIKit
 
 class PositiveMomentsHeaderCell: UICollectionViewCell {
-
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var manageButton: UIButton!
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var manageButton: UIButton!
 
     var onManageTap: (() -> Void)?
 

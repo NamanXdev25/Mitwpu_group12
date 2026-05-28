@@ -1,14 +1,7 @@
-
 import UIKit
 
 class CareInsightCell: UICollectionViewCell {
+    @IBOutlet var InsightView: UIView!
 
-    @IBOutlet weak var InsightView: UIView!
-    
-    @IBOutlet weak var InsightLabel: UILabel!
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-
+    @IBOutlet var InsightLabel: UILabel!
 }

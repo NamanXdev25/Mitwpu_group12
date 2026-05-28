@@ -8,9 +8,8 @@
 import UIKit
 
 class MedicationRepetitionViewCell: UICollectionViewCell {
-
-    @IBOutlet weak var everyDayButton: UIButton!
-    @IBOutlet weak var customButton: UIButton!
+    @IBOutlet var everyDayButton: UIButton!
+    @IBOutlet var customButton: UIButton!
 
     var onRepeatChanged: ((Bool) -> Void)?
 

@@ -1,13 +1,11 @@
-
 import UIKit
 
 class HomeJourneyCell: UICollectionViewCell {
-
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var subtitleLabel: UILabel!
-    @IBOutlet weak var treatmentLabel: UILabel!
-    @IBOutlet weak var phaseLabel: UILabel!
-    @IBOutlet weak var cardView: UIView!
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var subtitleLabel: UILabel!
+    @IBOutlet var treatmentLabel: UILabel!
+    @IBOutlet var phaseLabel: UILabel!
+    @IBOutlet var cardView: UIView!
 
     override func awakeFromNib() {
         super.awakeFromNib()

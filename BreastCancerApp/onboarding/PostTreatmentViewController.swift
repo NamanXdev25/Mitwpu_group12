@@ -1,16 +1,15 @@
 import UIKit
 
 class PostTreatmentViewController: UIViewController {
+    @IBOutlet var progressBar: ProgressBarView!
+    @IBOutlet var nextButton: UIButton!
+    @IBOutlet var collectionView: UICollectionView!
 
-    @IBOutlet weak var progressBar: ProgressBarView!
-    @IBOutlet weak var nextButton: UIButton!
-    @IBOutlet weak var collectionView: UICollectionView!
-
-    private var completionDate: Date = Date()
+    private var completionDate: Date = .init()
     private var selectedMaintenanceTherapy: String?
 
     private let maintenanceOptions = OnboardingDataSource.maintenanceTherapyOptions
-    private let dateCellID      = "OnboardingDatePickerCell"
+    private let dateCellID = "OnboardingDatePickerCell"
     private let selectionCellID = "OnboardingSelectionPickerCell"
 
     override func viewDidLoad() {
@@ -31,10 +30,14 @@ class PostTreatmentViewController: UIViewController {
     }
 
     private func setupCollectionView() {
-        collectionView.register(UINib(nibName: dateCellID, bundle: nil),
-                                forCellWithReuseIdentifier: dateCellID)
-        collectionView.register(UINib(nibName: selectionCellID, bundle: nil),
-                                forCellWithReuseIdentifier: selectionCellID)
+        collectionView.register(
+            UINib(nibName: dateCellID, bundle: nil),
+            forCellWithReuseIdentifier: dateCellID
+        )
+        collectionView.register(
+            UINib(nibName: selectionCellID, bundle: nil),
+            forCellWithReuseIdentifier: selectionCellID
+        )
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.collectionViewLayout = makeLayout()
@@ -55,11 +58,15 @@ class PostTreatmentViewController: UIViewController {
     }
 
     private static func makeSection(topInset: CGFloat) -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                              heightDimension: .estimated(90))
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(90)
+        )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                               heightDimension: .estimated(90))
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(90)
+        )
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
         section.interGroupSpacing = 16
@@ -73,41 +80,54 @@ class PostTreatmentViewController: UIViewController {
         nextButton.alpha = isValid ? 1.0 : 0.5
     }
 
-    @IBAction func nextButtonTapped(_ sender: UIButton) {
+    @IBAction func nextButtonTapped(_: UIButton) {
         OnboardingData.shared.treatmentCompletionDate = completionDate
         OnboardingData.shared.maintenanceTherapy = selectedMaintenanceTherapy
         performSegue(withIdentifier: "showFocus", sender: nil)
     }
 
-    @IBAction func skipButtonTapped(_ sender: UIButton) {
+    @IBAction func skipButtonTapped(_: UIButton) {
         performSegue(withIdentifier: "showFocus", sender: nil)
     }
 }
 
 extension PostTreatmentViewController: UICollectionViewDataSource {
+    func numberOfSections(in _: UICollectionView) -> Int {
+        1
+    }
 
-    func numberOfSections(in collectionView: UICollectionView) -> Int { 1 }
+    func collectionView(
+        _: UICollectionView,
+        numberOfItemsInSection _: Int
+    ) -> Int {
+        2
+    }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        numberOfItemsInSection section: Int) -> Int { 2 }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
         if indexPath.item == 0 {
-            let cell = collectionView.dequeueReusableCell(
+            guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: dateCellID, for: indexPath
-            ) as! OnboardingDatePickerCell
+            ) as? OnboardingDatePickerCell else {
+                fatalError("Expected OnboardingDatePickerCell for reuse identifier '\(dateCellID)' at \(indexPath)")
+            }
             cell.configure(title: "When did you complete treatment?", fieldName: "Completion Date", maximumDate: Date())
             cell.onDateChanged = { [weak self] date in self?.completionDate = date }
             return cell
         } else {
-            let cell = collectionView.dequeueReusableCell(
+            guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: selectionCellID, for: indexPath
-            ) as! OnboardingSelectionPickerCell
-            cell.configure(title: "Are you on maintenance therapy?",
-                           fieldName: "Maintenance Therapy",
-                           options: maintenanceOptions,
-                           selectedValue: selectedMaintenanceTherapy)
+            ) as? OnboardingSelectionPickerCell else {
+                fatalError("Expected OnboardingSelectionPickerCell for reuse identifier '\(selectionCellID)' at \(indexPath)")
+            }
+            cell.configure(
+                title: "Are you on maintenance therapy?",
+                fieldName: "Maintenance Therapy",
+                options: maintenanceOptions,
+                selectedValue: selectedMaintenanceTherapy
+            )
             cell.onOptionSelected = { [weak self] option in
                 guard let self else { return }
                 self.selectedMaintenanceTherapy = option

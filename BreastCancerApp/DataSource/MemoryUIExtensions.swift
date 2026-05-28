@@ -1,4 +1,3 @@
-
 import UIKit
 
 extension Memory {
@@ -14,7 +13,7 @@ extension Memory {
         note: String?
     ) {
         self.id = id
-        self.imageData = image?.jpegData(compressionQuality: 0.8)
+        imageData = image?.jpegData(compressionQuality: 0.8)
         self.date = date
         self.note = note
     }

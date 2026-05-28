@@ -12,4 +12,3 @@ struct SelfExamStep {
     let description: String
     let imageName: String
 }
-

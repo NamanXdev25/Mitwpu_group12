@@ -1,30 +1,31 @@
 import Foundation
 
 class HomeModel {
-
     static let moods: [Mood] = [
         Mood(imageName: "ExcitedImage", title: "Excited"),
-        Mood(imageName: "HappyImage",   title: "Happy"),
-        Mood(imageName: "SadImage",     title: "Sad"),
-        Mood(imageName: "TiredImage",   title: "Tired"),
-        Mood(imageName: "AnxiousImage", title: "Anxious")
+        Mood(imageName: "HappyImage", title: "Happy"),
+        Mood(imageName: "SadImage", title: "Sad"),
+        Mood(imageName: "TiredImage", title: "Tired"),
+        Mood(imageName: "AnxiousImage", title: "Anxious"),
     ]
 
-    static var quote: String { DailyQuoteLoader.shared.todayQuote() }
+    static var quote: String {
+        DailyQuoteLoader.shared.todayQuote()
+    }
 
     private static let fallbackBreathingImageName = "BreathingSessionsImage"
-    private static let journalingImageName        = "Journal"
+    private static let journalingImageName = "Journal"
 
     // MARK: - Breathing helpers
 
     private static func preferredBreathingTitle(for moodKey: String) -> String {
         switch moodKey.lowercased() {
-        case "happy":   return "Inner Calm"
-        case "sad":     return "Healing Reflections"
+        case "happy": return "Inner Calm"
+        case "sad": return "Healing Reflections"
         case "anxious": return "Calmer Mind"
-        case "tired":   return "Gentle Recharge"
+        case "tired": return "Gentle Recharge"
         case "excited": return "Morning Appreciation"
-        default:        return "Gentle Focus"
+        default: return "Gentle Focus"
         }
     }
 
@@ -76,26 +77,28 @@ class HomeModel {
     // MARK: - Journal (separate cell)
 
     static func initialJournalSuggestion(for moodKey: String) -> Suggestion {
-        guard let content   = HomeMoodSuggestionLoader.shared.moodContent(for: moodKey),
-              let journaling = content.journaling.first else {
+        guard let content = HomeMoodSuggestionLoader.shared.moodContent(for: moodKey),
+              let journaling = content.journaling.first
+        else {
             return fallbackJournalSuggestion
         }
         return Suggestion(
             imageName: journalingImageName,
-            title:     journaling.title,
-            subtitle:  subtitle(for: journaling, fallback: "Start Writing...")
+            title: journaling.title,
+            subtitle: subtitle(for: journaling, fallback: "Start Writing...")
         )
     }
 
     static func journalSuggestion(for moodKey: String) -> Suggestion {
-        guard let content   = HomeMoodSuggestionLoader.shared.moodContent(for: moodKey),
-              let journaling = content.journaling.first else {
+        guard let content = HomeMoodSuggestionLoader.shared.moodContent(for: moodKey),
+              let journaling = content.journaling.first
+        else {
             return fallbackJournalSuggestion
         }
         return Suggestion(
             imageName: journalingImageName,
-            title:     journaling.title,
-            subtitle:  subtitle(for: journaling, fallback: "Start Writing...")
+            title: journaling.title,
+            subtitle: subtitle(for: journaling, fallback: "Start Writing...")
         )
     }
 
@@ -119,8 +122,8 @@ class HomeModel {
         }
         return Suggestion(
             imageName: journalingImageName,
-            title:     promptTitle,
-            subtitle:  "Start Writing..."
+            title: promptTitle,
+            subtitle: "Start Writing..."
         )
     }
 
@@ -134,15 +137,15 @@ class HomeModel {
         if let breathing = breathingItem(for: moodKey, from: content) {
             output.append(Suggestion(
                 imageName: breathingImageName(for: breathing.title),
-                title:     breathing.title,
-                subtitle:  subtitle(for: breathing, fallback: "A soft breathing session.")
+                title: breathing.title,
+                subtitle: subtitle(for: breathing, fallback: "A soft breathing session.")
             ))
         }
         if let hobby = content.hobby.first {
             output.append(Suggestion(
                 imageName: hobbyImageName(for: hobby),
-                title:     hobby.title,
-                subtitle:  subtitle(for: hobby, fallback: "Enjoy this hobby at your own pace.")
+                title: hobby.title,
+                subtitle: subtitle(for: hobby, fallback: "Enjoy this hobby at your own pace.")
             ))
         }
         return output.isEmpty ? fallbackSuggestedForYou : output
@@ -156,15 +159,15 @@ class HomeModel {
         if let breathing = breathingItem(for: moodKey, from: content) {
             output.append(Suggestion(
                 imageName: breathingImageName(for: breathing.title),
-                title:     breathing.title,
-                subtitle:  subtitle(for: breathing, fallback: "A soft breathing session.")
+                title: breathing.title,
+                subtitle: subtitle(for: breathing, fallback: "A soft breathing session.")
             ))
         }
         if let hobby = content.hobby.first {
             output.append(Suggestion(
                 imageName: hobbyImageName(for: hobby),
-                title:     hobby.title,
-                subtitle:  subtitle(for: hobby, fallback: "Enjoy this hobby at your own pace.")
+                title: hobby.title,
+                subtitle: subtitle(for: hobby, fallback: "Enjoy this hobby at your own pace.")
             ))
         }
         return output.isEmpty ? fallbackSuggestedForYou : output
@@ -173,7 +176,7 @@ class HomeModel {
     static func randomSuggestions(
         for moodKey: String,
         avoidingBreathingTitles: Set<String> = [],
-        avoidingHobbyTitles: Set<String>     = []
+        avoidingHobbyTitles: Set<String> = []
     ) -> [Suggestion] {
         guard let content = HomeMoodSuggestionLoader.shared.moodContent(for: moodKey) else {
             return fallbackSuggestedForYou
@@ -182,15 +185,15 @@ class HomeModel {
         if let breathing = randomItem(from: content.breathing, avoidingTitles: avoidingBreathingTitles) {
             output.append(Suggestion(
                 imageName: breathingImageName(for: breathing.title),
-                title:     breathing.title,
-                subtitle:  subtitle(for: breathing, fallback: "A soft breathing session.")
+                title: breathing.title,
+                subtitle: subtitle(for: breathing, fallback: "A soft breathing session.")
             ))
         }
         if let hobby = randomItem(from: content.hobby, avoidingTitles: avoidingHobbyTitles) {
             output.append(Suggestion(
                 imageName: hobbyImageName(for: hobby),
-                title:     hobby.title,
-                subtitle:  subtitle(for: hobby, fallback: "Enjoy this hobby at your own pace.")
+                title: hobby.title,
+                subtitle: subtitle(for: hobby, fallback: "Enjoy this hobby at your own pace.")
             ))
         }
         return output.isEmpty ? fallbackSuggestedForYou : output
@@ -200,21 +203,21 @@ class HomeModel {
 
     private static let fallbackJournalSuggestion = Suggestion(
         imageName: "Journal",
-        title:     "Write about someone who brings joy and why they matter.",
-        subtitle:  "Start Writing..."
+        title: "Write about someone who brings joy and why they matter.",
+        subtitle: "Start Writing..."
     )
 
     private static let fallbackSuggestedForYou: [Suggestion] = [
         Suggestion(
             imageName: "BreathingSessionsImage",
-            title:     "Gentle Focus",
-            subtitle:  "A soft breathing session to keep your energy steady."
+            title: "Gentle Focus",
+            subtitle: "A soft breathing session to keep your energy steady."
         ),
         Suggestion(
             imageName: "Cooking",
-            title:     "Cooking",
-            subtitle:  "Make a snack you love and enjoy the process."
-        )
+            title: "Cooking",
+            subtitle: "Make a snack you love and enjoy the process."
+        ),
     ]
 
     // MARK: - Articles
@@ -246,9 +249,8 @@ class HomeModel {
             imageName: "article_5_hero",
             title: "Physical Activity and Exercise During Breast Cancer Recovery",
             subtitle: "Physical activity is an important part of recovery during and after breast cancer treatment."
-        )
+        ),
     ]
-
 
     // MARK: - Hobby check
 
@@ -264,16 +266,17 @@ class HomeModel {
 }
 
 // MARK: - Mood header text (used by HomeViewController)
+
 extension HomeModel {
     static func moodHeaderText(for moodKey: String, hasUserSelectedMood: Bool) -> String {
         guard hasUserSelectedMood else { return "How are you feeling right now?" }
         switch moodKey.lowercased() {
         case "anxious": return "Take a breath - you're safe here"
-        case "sad":     return "Let's take this gently today"
-        case "tired":   return "Energy feels low - We've got you"
-        case "happy":   return "Keep the good energy going"
+        case "sad": return "Let's take this gently today"
+        case "tired": return "Energy feels low - We've got you"
+        case "happy": return "Keep the good energy going"
         case "excited": return "Great to see you feeling excited!"
-        default:        return "How are you feeling right now?"
+        default: return "How are you feeling right now?"
         }
     }
 }

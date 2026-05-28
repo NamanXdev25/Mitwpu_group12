@@ -1,12 +1,10 @@
 import Foundation
 
-struct BreathingSessionFilter {
-
+enum BreathingSessionFilter {
     static func apply(
         sessions: [BreathingSession],
         category: String
     ) -> [BreathingSession] {
-
         guard category != "All" else {
             return sessions
         }

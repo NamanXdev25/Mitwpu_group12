@@ -1,10 +1,8 @@
-
 import UIKit
 
 class BlankJournalViewController: UIViewController {
-
-    @IBOutlet weak var titleTextView: UITextView!
-    @IBOutlet weak var textView: UITextView!
+    @IBOutlet var titleTextView: UITextView!
+    @IBOutlet var textView: UITextView!
 
     var existingEntry: JournalEntry?
     var prefilledTitle: String?
@@ -73,7 +71,7 @@ class BlankJournalViewController: UIViewController {
         textView.textColor = .systemGray3
     }
 
-    @IBAction func doneTapped(_ sender: UIBarButtonItem) {
+    @IBAction func doneTapped(_: UIBarButtonItem) {
         let rawTitle = titleTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
         let title = (rawTitle == titlePlaceholderText) ? "" : rawTitle
 
@@ -114,8 +112,6 @@ class BlankJournalViewController: UIViewController {
         }
 
         closeAfterSave()
-
-
     }
 
     private func closeAfterSave() {
@@ -130,10 +126,11 @@ class BlankJournalViewController: UIViewController {
 }
 
 extension BlankJournalViewController: UITextViewDelegate {
-
-    func textView(_ textView: UITextView,
-                  shouldChangeTextIn range: NSRange,
-                  replacementText text: String) -> Bool {
+    func textView(
+        _ textView: UITextView,
+        shouldChangeTextIn range: NSRange,
+        replacementText text: String
+    ) -> Bool {
         if textView === titleTextView {
             if isPrefilledHomeTitle {
                 return false

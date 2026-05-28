@@ -801,14 +801,11 @@ struct JourneyStateSupabaseRow: Codable {
         try container.encode(post_treatment_symptoms, forKey: .post_treatment_symptoms)
         try container.encode(updated_at, forKey: .updated_at)
 
-        if let diagnosis_date = diagnosis_date { try container.encode(diagnosis_date, forKey: .diagnosis_date) }
-        else { try container.encodeNil(forKey: .diagnosis_date) }
+        if let diagnosis_date = diagnosis_date { try container.encode(diagnosis_date, forKey: .diagnosis_date) } else { try container.encodeNil(forKey: .diagnosis_date) }
 
-        if let days_until_return = days_until_return { try container.encode(days_until_return, forKey: .days_until_return) }
-        else { try container.encodeNil(forKey: .days_until_return) }
+        if let days_until_return = days_until_return { try container.encode(days_until_return, forKey: .days_until_return) } else { try container.encodeNil(forKey: .days_until_return) }
 
-        if let post_treatment_recovery_start_date = post_treatment_recovery_start_date { try container.encode(post_treatment_recovery_start_date, forKey: .post_treatment_recovery_start_date) }
-        else { try container.encodeNil(forKey: .post_treatment_recovery_start_date) }
+        if let post_treatment_recovery_start_date = post_treatment_recovery_start_date { try container.encode(post_treatment_recovery_start_date, forKey: .post_treatment_recovery_start_date) } else { try container.encodeNil(forKey: .post_treatment_recovery_start_date) }
     }
 }
 
@@ -914,4 +911,3 @@ extension PersistedJourneySnapshot {
         }
     }
 }
-

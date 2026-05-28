@@ -1,14 +1,8 @@
-
 import UIKit
 
 class HomeJournalCell: UICollectionViewCell {
-    
-    @IBOutlet weak var TitleLabel: UILabel!
-    @IBOutlet weak var StartwritingLabel: UILabel!
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
+    @IBOutlet var TitleLabel: UILabel!
+    @IBOutlet var StartwritingLabel: UILabel!
 
     func configure(with suggestion: Suggestion) {
         TitleLabel.text = suggestion.title

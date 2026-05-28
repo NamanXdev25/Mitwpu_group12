@@ -6,24 +6,27 @@ protocol DetailExerciseCellDelegate: AnyObject {
 }
 
 class DetailExerciseCell: UICollectionViewCell {
-
     // MARK: - IBOutlets
-    @IBOutlet weak var containerView: UIView!
-    @IBOutlet weak var radioButton: UIButton!
-    @IBOutlet weak var exerciseImageView: UIImageView!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var subtitleLabel: UILabel!
-    @IBOutlet weak var timeLabel: UILabel!
-    @IBOutlet weak var clockIconImageView: UIImageView!
-    @IBOutlet weak var chevronButton: UIButton!
+
+    @IBOutlet var containerView: UIView!
+    @IBOutlet var radioButton: UIButton!
+    @IBOutlet var exerciseImageView: UIImageView!
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var subtitleLabel: UILabel!
+    @IBOutlet var timeLabel: UILabel!
+    @IBOutlet var clockIconImageView: UIImageView!
+    @IBOutlet var chevronButton: UIButton!
 
     // MARK: - Delegate
+
     weak var delegate: DetailExerciseCellDelegate?
 
     // MARK: - State
+
     private(set) var isCompleted: Bool = false
 
     // MARK: - Lifecycle
+
     override func awakeFromNib() {
         super.awakeFromNib()
         updateRadioAppearance()
@@ -36,6 +39,7 @@ class DetailExerciseCell: UICollectionViewCell {
     }
 
     // MARK: - Configure
+
     func configure(title: String, subtitle: String, time: String, imageName: String, completed: Bool) {
         titleLabel.text = title
         subtitleLabel.text = subtitle
@@ -53,6 +57,7 @@ class DetailExerciseCell: UICollectionViewCell {
     }
 
     // MARK: - Radio Button
+
     func setCompleted(_ completed: Bool) {
         isCompleted = completed
         updateRadioAppearance()
@@ -67,11 +72,12 @@ class DetailExerciseCell: UICollectionViewCell {
     }
 
     // MARK: - Actions
-    @IBAction func radioButtonTapped(_ sender: UIButton) {
+
+    @IBAction func radioButtonTapped(_: UIButton) {
         delegate?.didTapRadioButton(on: self)
     }
 
-    @IBAction func chevronTapped(_ sender: UIButton) {
+    @IBAction func chevronTapped(_: UIButton) {
         delegate?.didTapChevron(on: self)
     }
 }

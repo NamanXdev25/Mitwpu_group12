@@ -358,7 +358,7 @@ final class SupabaseRESTClient {
                 retryRequest.setValue("Bearer \(newToken)", forHTTPHeaderField: "Authorization")
 
                 let retrySemaphore = DispatchSemaphore(value: 0)
-                session.dataTask(with: retryRequest) { data, response, error in
+                session.dataTask(with: retryRequest) { _, response, error in
                     requestSuccess = error == nil && (response as? HTTPURLResponse).map { 200..<300 ~= $0.statusCode } == true
                     if !requestSuccess {
                     }

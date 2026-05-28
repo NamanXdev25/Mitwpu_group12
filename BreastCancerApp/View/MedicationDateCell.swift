@@ -1,25 +1,19 @@
 import UIKit
 
 class MedicationDateCell: UICollectionViewCell {
+    @IBOutlet var dayLabel: UILabel!
+    @IBOutlet var selectionLayer: UIView!
+    @IBOutlet var dotView: UIView!
 
-    @IBOutlet weak var dayLabel: UILabel!
-    @IBOutlet weak var selectionLayer: UIView!
-    @IBOutlet weak var dotView: UIView!
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-    
     func configure(day: String, isSelected: Bool, hasMedications: Bool, isFuture: Bool, isToday: Bool) {
-        
         dayLabel.text = day
         dayLabel.textColor = .black
         dayLabel.isHidden = false
         dayLabel.alpha = 1.0
-        
+
         selectionLayer.backgroundColor = .clear
         selectionLayer.isHidden = false
-        
+
         if let dot = dotView {
             dot.isHidden = true
         }
@@ -32,12 +26,12 @@ class MedicationDateCell: UICollectionViewCell {
             dayLabel.alpha = 0.5
             selectionLayer.backgroundColor = .clear
             dotView?.isHidden = true
-            self.isUserInteractionEnabled = false
+            isUserInteractionEnabled = false
             return
         }
-        
-        self.isUserInteractionEnabled = true
-        
+
+        isUserInteractionEnabled = true
+
         if isToday {
             selectionLayer.backgroundColor = UIColor(red: 0.85, green: 0.40, blue: 0.50, alpha: 1.0)
             dayLabel.textColor = .white

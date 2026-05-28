@@ -1,17 +1,18 @@
 import UIKit
 
 final class BreathingPlayerRootView: UIView {
-
-    @IBOutlet weak var backgroundImageView: UIImageView!
+    @IBOutlet var backgroundImageView: UIImageView!
 
     func showBackground(animated: Bool = true) {
         let animations = {
             self.backgroundImageView.alpha = 1
         }
 
-        animated
-        ? UIView.animate(withDuration: 0.3, animations: animations)
-        : animations()
+        if animated {
+            UIView.animate(withDuration: 0.3, animations: animations)
+        } else {
+            animations()
+        }
     }
 
     func hideBackground(animated: Bool = true) {
@@ -19,9 +20,10 @@ final class BreathingPlayerRootView: UIView {
             self.backgroundImageView.alpha = 0
         }
 
-        animated
-        ? UIView.animate(withDuration: 0.5, animations: animations)
-        : animations()
+        if animated {
+            UIView.animate(withDuration: 0.5, animations: animations)
+        } else {
+            animations()
+        }
     }
 }
-

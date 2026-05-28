@@ -2,7 +2,6 @@ import Foundation
 import UIKit
 
 class UserProfileDataSource {
-
     static let shared = UserProfileDataSource()
     private(set) var userProfile: ProfileUserProfile
     private let repository: ProfileRepository
@@ -12,20 +11,20 @@ class UserProfileDataSource {
         self.repository = repository
 
         if let savedProfile = repository.loadProfile() {
-            self.userProfile = savedProfile
+            userProfile = savedProfile
         } else if let defaultProfile = UserProfileDataSource.loadFromJSON() {
-            self.userProfile = defaultProfile
+            userProfile = defaultProfile
             repository.saveProfile(defaultProfile)
         } else {
-            self.userProfile = ProfileUserProfile(profileImageBase64: nil)
-            repository.saveProfile(self.userProfile)
+            userProfile = ProfileUserProfile(profileImageBase64: nil)
+            repository.saveProfile(userProfile)
         }
     }
 
     // MARK: - Update Profile
 
     func updateProfile(_ profile: ProfileUserProfile) {
-        self.userProfile = profile
+        userProfile = profile
         persistProfile()
         notifyProfileUpdate()
     }
@@ -96,19 +95,19 @@ class UserProfileDataSource {
         persistProfile()
         notifyProfileUpdate()
     }
-    
+
     func transferFromOnboarding() {
         let onboardingData = OnboardingData.shared
-        
+
         let nameParts = onboardingData.userName.split(separator: " ")
         let firstName = nameParts.first.map(String.init) ?? "User"
         let lastName = nameParts.count > 1 ? nameParts.dropFirst().joined(separator: " ") : ""
-        
+
         userProfile.firstName = firstName
         userProfile.lastName = lastName
-        
+
         let treatmentStatus = onboardingData.treatmentStatus ?? ""
-        
+
         switch treatmentStatus {
         case "Currently in treatment":
             if let diagnosisDate = onboardingData.diagnosisDate {
@@ -116,38 +115,38 @@ class UserProfileDataSource {
             } else {
                 userProfile.diagnosisDate = "NA"
             }
-            
+
             userProfile.age = onboardingData.getApproximateAge()
             userProfile.cancerStage = onboardingData.currentStage ?? "NA"
             userProfile.treatmentState = "Ongoing"
             userProfile.treatmentCompletionDate = ""
-            
+
         case "Under Observation":
             userProfile.diagnosisDate = "NA"
             userProfile.age = 32
             userProfile.cancerStage = "NA"
             userProfile.treatmentState = "Observation"
             userProfile.treatmentCompletionDate = ""
-            
+
         case "Post-treatment / in recovery":
             userProfile.diagnosisDate = "NA"
             userProfile.age = 32
             userProfile.cancerStage = "NA"
             userProfile.treatmentState = "Completed"
-            
+
             if let completionDate = onboardingData.treatmentCompletionDate {
                 userProfile.treatmentCompletionDate = onboardingData.formatDateForProfile(completionDate)
             } else {
                 userProfile.treatmentCompletionDate = "NA"
             }
-            
+
         case "Prefer not to say":
             userProfile.diagnosisDate = "NA"
             userProfile.age = 32
             userProfile.cancerStage = "NA"
             userProfile.treatmentState = "Not Specified"
             userProfile.treatmentCompletionDate = ""
-            
+
         default:
             userProfile.diagnosisDate = "NA"
             userProfile.age = 32
@@ -155,10 +154,9 @@ class UserProfileDataSource {
             userProfile.treatmentState = "Unknown"
             userProfile.treatmentCompletionDate = ""
         }
-        
+
         persistProfile()
         notifyProfileUpdate()
-        
     }
 
     // MARK: - Persistence
@@ -169,7 +167,8 @@ class UserProfileDataSource {
 
     private static func loadFromJSON() -> ProfileUserProfile? {
         guard let url = Bundle.main.url(forResource: "defaultUser", withExtension: "json"),
-              let data = try? Data(contentsOf: url) else {
+              let data = try? Data(contentsOf: url)
+        else {
             return nil
         }
 
@@ -194,7 +193,8 @@ extension ProfileUserProfile {
     var profileImage: UIImage? {
         get {
             guard let base64 = profileImageBase64,
-                  let data = Data(base64Encoded: base64) else {
+                  let data = Data(base64Encoded: base64)
+            else {
                 return nil
             }
             return UIImage(data: data)

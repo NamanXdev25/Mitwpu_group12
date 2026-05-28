@@ -1,4 +1,3 @@
-
 import Foundation
 
 class SymptomDataSource {
@@ -20,7 +19,8 @@ class SymptomDataSource {
     private func loadSymptomsFromJSON() {
         guard let url = Bundle.main.url(forResource: "Symptoms", withExtension: "json"),
               let data = try? Data(contentsOf: url),
-              let symptomsData = try? JSONDecoder().decode(SymptomsData.self, from: data) else {
+              let symptomsData = try? JSONDecoder().decode(SymptomsData.self, from: data)
+        else {
             return
         }
 
@@ -33,7 +33,7 @@ class SymptomDataSource {
         if currentUserSymptomsOrder.isEmpty {
             let defaults = allSymptoms.filter {
                 defaultSymptomIDs.contains($0.id.lowercased()) ||
-                defaultSymptomIDs.contains($0.name.lowercased())
+                    defaultSymptomIDs.contains($0.name.lowercased())
             }
             currentUserSymptomsOrder = defaults.map { $0.id }
             persistUserSymptomIDs()
@@ -83,7 +83,7 @@ class SymptomDataSource {
             SeedSignature(symptomId: "appetite_loss", severity: 4, dayOffset: 26),
             SeedSignature(symptomId: "fatigue", severity: 2, dayOffset: 28),
             SeedSignature(symptomId: "headache", severity: 3, dayOffset: 30),
-            SeedSignature(symptomId: "pain", severity: 2, dayOffset: 30)
+            SeedSignature(symptomId: "pain", severity: 2, dayOffset: 30),
         ]
 
         var removalIndices = Set<Int>()
@@ -148,10 +148,8 @@ class SymptomDataSource {
             }
         }
 
-        for symptom in userSymptoms {
-            if !ordered.contains(where: { $0.id == symptom.id }) {
-                ordered.append(symptom)
-            }
+        for symptom in userSymptoms where !ordered.contains(where: { $0.id == symptom.id }) {
+            ordered.append(symptom)
         }
 
         return ordered

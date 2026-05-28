@@ -1,12 +1,12 @@
 import UIKit
 
 final class YearFilterViewController: UIViewController {
-
-    @IBOutlet private weak var pickerView: UIPickerView!
-    @IBOutlet private weak var cancelButton: UIButton!
-    @IBOutlet private weak var doneButton: UIButton!
+    @IBOutlet private var pickerView: UIPickerView!
+    @IBOutlet private var cancelButton: UIButton!
+    @IBOutlet private var doneButton: UIButton!
 
     /// Earliest year where logs exist (set by caller)
+    // swiftlint:disable:next implicitly_unwrapped_optional
     var earliestLogYear: Int!
 
     /// Optional preselected year
@@ -44,7 +44,7 @@ final class YearFilterViewController: UIViewController {
             return
         }
 
-        years = Array(earliestLogYear...currentYear)
+        years = Array(earliestLogYear ... currentYear)
         pickerView.reloadAllComponents()
     }
 
@@ -61,11 +61,11 @@ final class YearFilterViewController: UIViewController {
 
     // MARK: - Actions
 
-    @IBAction private func cancelTapped(_ sender: UIButton) {
+    @IBAction private func cancelTapped(_: UIButton) {
         dismiss(animated: true)
     }
 
-    @IBAction private func doneTapped(_ sender: UIButton) {
+    @IBAction private func doneTapped(_: UIButton) {
         let row = pickerView.selectedRow(inComponent: 0)
         guard row >= 0, row < years.count else {
             dismiss(animated: true)
@@ -78,27 +78,27 @@ final class YearFilterViewController: UIViewController {
 }
 
 // MARK: - UIPickerViewDataSource
-extension YearFilterViewController: UIPickerViewDataSource {
 
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+extension YearFilterViewController: UIPickerViewDataSource {
+    func numberOfComponents(in _: UIPickerView) -> Int {
         return 1
     }
 
     func pickerView(
-        _ pickerView: UIPickerView,
-        numberOfRowsInComponent component: Int
+        _: UIPickerView,
+        numberOfRowsInComponent _: Int
     ) -> Int {
         return years.count
     }
 }
 
 // MARK: - UIPickerViewDelegate
-extension YearFilterViewController: UIPickerViewDelegate {
 
+extension YearFilterViewController: UIPickerViewDelegate {
     func pickerView(
-        _ pickerView: UIPickerView,
+        _: UIPickerView,
         titleForRow row: Int,
-        forComponent component: Int
+        forComponent _: Int
     ) -> String? {
         return "\(years[row])"
     }

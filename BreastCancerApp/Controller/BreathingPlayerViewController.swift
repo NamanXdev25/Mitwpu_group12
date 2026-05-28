@@ -1,16 +1,14 @@
-
-import UIKit
 import AVFoundation
 import CoreMedia
+import UIKit
 
 final class BreathingPlayerViewController: UIViewController, AVAudioPlayerDelegate {
-
     var session: BreathingSession?
 
-    @IBOutlet weak var backgroundImageView: UIImageView?
-    @IBOutlet weak var videoContainerView: VideoPlayerContainerView?
-    @IBOutlet weak var playButton: UIButton?
-    @IBOutlet weak var timerView: CircularTimerView?
+    @IBOutlet var backgroundImageView: UIImageView?
+    @IBOutlet var videoContainerView: VideoPlayerContainerView?
+    @IBOutlet var playButton: UIButton?
+    @IBOutlet var timerView: CircularTimerView?
 
     private var videoQueuePlayer: AVQueuePlayer?
     private var videoLooper: AVPlayerLooper?
@@ -27,6 +25,7 @@ final class BreathingPlayerViewController: UIViewController, AVAudioPlayerDelega
     private var isTimerRunning = false
 
     // MARK: - Lifecycle
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
@@ -36,7 +35,7 @@ final class BreathingPlayerViewController: UIViewController, AVAudioPlayerDelega
         appearance.shadowColor = .clear
         appearance.titleTextAttributes = [
             .foregroundColor: UIColor.black,
-            .font: UIFont.systemFont(ofSize: 20, weight: .bold)
+            .font: UIFont.systemFont(ofSize: 20, weight: .bold),
         ]
 
         navigationController?.navigationBar.standardAppearance = appearance
@@ -51,7 +50,7 @@ final class BreathingPlayerViewController: UIViewController, AVAudioPlayerDelega
         defaultAppearance.configureWithDefaultBackground()
         defaultAppearance.titleTextAttributes = [
             .foregroundColor: UIColor.black,
-            .font: UIFont.systemFont(ofSize: 20, weight: .semibold)
+            .font: UIFont.systemFont(ofSize: 20, weight: .semibold),
         ]
 
         navigationController?.navigationBar.standardAppearance = defaultAppearance
@@ -83,12 +82,12 @@ final class BreathingPlayerViewController: UIViewController, AVAudioPlayerDelega
     }
 
     // MARK: - Setup
+
     private func configureAVAudioSession() {
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
             try AVAudioSession.sharedInstance().setActive(true)
-        } catch {
-        }
+        } catch {}
     }
 
     private func setupData() {
@@ -219,8 +218,7 @@ final class BreathingPlayerViewController: UIViewController, AVAudioPlayerDelega
 
             totalSessionDuration = max(Int(player.duration.rounded()), 1)
             secondsRemaining = totalSessionDuration
-        } catch {
-        }
+        } catch {}
     }
 
     private func setupTapGesture() {
@@ -235,7 +233,8 @@ final class BreathingPlayerViewController: UIViewController, AVAudioPlayerDelega
     }
 
     // MARK: - Actions
-    @IBAction func playButtonTapped(_ sender: UIButton) {
+
+    @IBAction func playButtonTapped(_: UIButton) {
         if isFirstPlay {
             startBreathingSequence()
         } else {
@@ -287,6 +286,7 @@ final class BreathingPlayerViewController: UIViewController, AVAudioPlayerDelega
     }
 
     // MARK: - Timer Engine
+
     private func startTimer() {
         stopTimer()
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
@@ -348,11 +348,13 @@ final class BreathingPlayerViewController: UIViewController, AVAudioPlayerDelega
     }
 
     // MARK: - AVAudioPlayerDelegate
-    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+
+    func audioPlayerDidFinishPlaying(_: AVAudioPlayer, successfully _: Bool) {
         handleSessionFinished()
     }
 
     // MARK: - UI Helpers
+
     private func showBackground() {
         UIView.animate(withDuration: 0.3) {
             self.backgroundImageView?.alpha = 1

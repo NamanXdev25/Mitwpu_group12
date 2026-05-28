@@ -1,12 +1,10 @@
-
 import Foundation
 
 class SampleProfilesManager {
     static let shared = SampleProfilesManager()
-    
+
     private init() {}
     let sampleProfiles: [UserProfile] = [
-
         UserProfile(
             id: "profile_1",
             name: "Sophie Anderson",
@@ -39,9 +37,9 @@ class SampleProfilesManager {
             followUpFrequency: "Every 2 months",
             treatmentCompletionDate: nil,
             interests: nil
-        )
+        ),
     ]
-    
+
     func getStatsForProfile(id: String) -> HealingGardenStats {
         switch id {
         case "profile_1":
@@ -74,7 +72,7 @@ class SampleProfilesManager {
             )
         }
     }
-    
+
     func getProfileSubtitle(for profile: UserProfile) -> String {
         switch profile.treatmentStatus {
         case "Currently in treatment":
@@ -82,49 +80,48 @@ class SampleProfilesManager {
                 return "\(stage) • Active Treatment"
             }
             return "Active Treatment"
-            
+
         case "Under Observation":
             if let frequency = profile.followUpFrequency {
                 return "Under Observation • \(frequency)"
             }
             return "Under Observation"
-            
+
         case "Post-treatment / in recovery":
             return "Post-treatment Recovery"
-            
+
         case "Prefer not to say":
             return "Wellness Journey"
-            
+
         default:
             return profile.treatmentStatus
         }
     }
-    
+
     func loadProfileIntoOnboardingData(_ profile: UserProfile) {
         OnboardingData.shared.userName = profile.name
         OnboardingData.shared.treatmentStatus = profile.treatmentStatus
         OnboardingData.shared.selectedHobbies = profile.hobbies
-        
+
         switch profile.treatmentStatus {
         case "Currently in treatment":
             OnboardingData.shared.diagnosisDate = profile.diagnosisDate
             OnboardingData.shared.currentAge = profile.currentAge
             OnboardingData.shared.currentStage = profile.currentStage
-            
+
         case "Under Observation":
             OnboardingData.shared.lastCheckupDate = profile.lastCheckupDate
             OnboardingData.shared.followUpFrequency = profile.followUpFrequency
-            
+
         case "Post-treatment / in recovery":
             OnboardingData.shared.treatmentCompletionDate = profile.treatmentCompletionDate
             OnboardingData.shared.selectedInterests = profile.interests ?? []
-            
+
         case "Prefer not to say":
             OnboardingData.shared.selectedInterests = profile.interests ?? []
-            
+
         default:
             break
         }
     }
 }
-

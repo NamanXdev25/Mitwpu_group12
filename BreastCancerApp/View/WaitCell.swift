@@ -1,45 +1,48 @@
 import UIKit
 
 class WaitCell: UICollectionViewCell {
-
     // MARK: - IBOutlets
-    @IBOutlet weak var containerView: UIView!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var statusLabel: UILabel!
-    @IBOutlet weak var daysWaitedLabel: UILabel!
-    @IBOutlet weak var daysTextField: UITextField!
-    @IBOutlet weak var stepperUpButton: UIButton!
-    @IBOutlet weak var stepperDownButton: UIButton!
-    @IBOutlet weak var feelingsQuestionLabel: UILabel!
-    @IBOutlet weak var feelingsSubtitleLabel: UILabel!
 
-    @IBOutlet weak var sadButton: UIButton!
-    @IBOutlet weak var anxiousButton: UIButton!
-    @IBOutlet weak var overwhelmedButton: UIButton!
-    @IBOutlet weak var scaredButton: UIButton!
-    @IBOutlet weak var angryButton: UIButton!
-    @IBOutlet weak var numbButton: UIButton!
-    @IBOutlet weak var hopefulButton: UIButton!
-    @IBOutlet weak var calmButton: UIButton!
+    @IBOutlet var containerView: UIView!
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var statusLabel: UILabel!
+    @IBOutlet var daysWaitedLabel: UILabel!
+    @IBOutlet var daysTextField: UITextField!
+    @IBOutlet var stepperUpButton: UIButton!
+    @IBOutlet var stepperDownButton: UIButton!
+    @IBOutlet var feelingsQuestionLabel: UILabel!
+    @IBOutlet var feelingsSubtitleLabel: UILabel!
 
-    @IBOutlet weak var saveButton: UIButton!
-    @IBOutlet weak var editButton: UIButton!
+    @IBOutlet var sadButton: UIButton!
+    @IBOutlet var anxiousButton: UIButton!
+    @IBOutlet var overwhelmedButton: UIButton!
+    @IBOutlet var scaredButton: UIButton!
+    @IBOutlet var angryButton: UIButton!
+    @IBOutlet var numbButton: UIButton!
+    @IBOutlet var hopefulButton: UIButton!
+    @IBOutlet var calmButton: UIButton!
+
+    @IBOutlet var saveButton: UIButton!
+    @IBOutlet var editButton: UIButton!
 
     // MARK: - Colors
-    private let lightPinkColor  = UIColor(displayP3Red: 0.9882352941, green: 0.9098039216, blue: 0.9372549020, alpha: 1.0)
-    private let darkPinkColor   = UIColor(displayP3Red: 0.9098039216, green: 0.4156862745, blue: 0.5725490196, alpha: 1.0)
-    private let inProgressBg    = UIColor(red: 1.0,  green: 0.92, blue: 0.95, alpha: 1.0)
-    private let inProgressText  = UIColor(red: 0.91, green: 0.39, blue: 0.54, alpha: 1.0)
-    private let savedGreenColor = UIColor(red: 0.2,  green: 0.6,  blue: 0.2,  alpha: 1.0)
-    private let savedGreenBg    = UIColor(red: 0.85, green: 0.95, blue: 0.85, alpha: 1.0)
-    private let notStartedBg    = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1.0)
+
+    private let lightPinkColor = UIColor(displayP3Red: 0.9882352941, green: 0.9098039216, blue: 0.9372549020, alpha: 1.0)
+    private let darkPinkColor = UIColor(displayP3Red: 0.9098039216, green: 0.4156862745, blue: 0.5725490196, alpha: 1.0)
+    private let inProgressBg = UIColor(red: 1.0, green: 0.92, blue: 0.95, alpha: 1.0)
+    private let inProgressText = UIColor(red: 0.91, green: 0.39, blue: 0.54, alpha: 1.0)
+    private let savedGreenColor = UIColor(red: 0.2, green: 0.6, blue: 0.2, alpha: 1.0)
+    private let savedGreenBg = UIColor(red: 0.85, green: 0.95, blue: 0.85, alpha: 1.0)
+    private let notStartedBg = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1.0)
 
     // MARK: - Persistence Keys
-    private let kSaveDate  = "waitCell_saveDate"
+
+    private let kSaveDate = "waitCell_saveDate"
     private let kDaysInput = "waitCell_daysInput"
-    private let kFeelings  = "waitCell_feelings"
+    private let kFeelings = "waitCell_feelings"
 
     // MARK: - State
+
     private var selectedFeelings: Set<String> = []
     private var currentDays: Int = 0
     private var feelingButtons: [UIButton] = []
@@ -57,11 +60,12 @@ class WaitCell: UICollectionViewCell {
         return [
             daysWaitedLabel, daysTextField,
             stepperUpButton, stepperDownButton,
-            feelingsQuestionLabel, feelingsSubtitleLabel
+            feelingsQuestionLabel, feelingsSubtitleLabel,
         ] + feelingButtons
     }
 
     // MARK: - Lifecycle
+
     override func awakeFromNib() {
         super.awakeFromNib()
         setupStaticUI()
@@ -77,8 +81,13 @@ class WaitCell: UICollectionViewCell {
     }
 
     // MARK: - Lock Overlay
+
     func setLocked(_ locked: Bool) {
-        locked ? showLockOverlay() : removeLockOverlay()
+        if locked {
+            showLockOverlay()
+        } else {
+            removeLockOverlay()
+        }
     }
 
     private func showLockOverlay() {
@@ -98,7 +107,7 @@ class WaitCell: UICollectionViewCell {
             lockImage.centerXAnchor.constraint(equalTo: overlay.centerXAnchor),
             lockImage.centerYAnchor.constraint(equalTo: overlay.centerYAnchor),
             lockImage.widthAnchor.constraint(equalToConstant: 28),
-            lockImage.heightAnchor.constraint(equalToConstant: 28)
+            lockImage.heightAnchor.constraint(equalToConstant: 28),
         ])
 
         containerView.addSubview(overlay)
@@ -106,7 +115,7 @@ class WaitCell: UICollectionViewCell {
             overlay.topAnchor.constraint(equalTo: containerView.topAnchor),
             overlay.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             overlay.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            overlay.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+            overlay.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
         ])
         lockOverlayView = overlay
     }
@@ -117,6 +126,7 @@ class WaitCell: UICollectionViewCell {
     }
 
     // MARK: - Static UI
+
     private func setupStaticUI() {
         containerView.layer.cornerRadius = 16
         containerView.layer.shadowColor = UIColor.black.cgColor
@@ -168,18 +178,18 @@ class WaitCell: UICollectionViewCell {
     private func setupFeelingButtons() {
         feelingButtons = [
             sadButton, anxiousButton, overwhelmedButton, scaredButton,
-            angryButton, numbButton, hopefulButton, calmButton
+            angryButton, numbButton, hopefulButton, calmButton,
         ].compactMap { $0 }
 
         buttonFeelingMap = [:]
-        if let b = sadButton         { buttonFeelingMap[b] = "Sad" }
-        if let b = anxiousButton     { buttonFeelingMap[b] = "Anxious" }
+        if let b = sadButton { buttonFeelingMap[b] = "Sad" }
+        if let b = anxiousButton { buttonFeelingMap[b] = "Anxious" }
         if let b = overwhelmedButton { buttonFeelingMap[b] = "Overwhelmed" }
-        if let b = scaredButton      { buttonFeelingMap[b] = "Scared" }
-        if let b = angryButton       { buttonFeelingMap[b] = "Angry" }
-        if let b = numbButton        { buttonFeelingMap[b] = "Numb" }
-        if let b = hopefulButton     { buttonFeelingMap[b] = "Hopeful" }
-        if let b = calmButton        { buttonFeelingMap[b] = "Calm" }
+        if let b = scaredButton { buttonFeelingMap[b] = "Scared" }
+        if let b = angryButton { buttonFeelingMap[b] = "Angry" }
+        if let b = numbButton { buttonFeelingMap[b] = "Numb" }
+        if let b = hopefulButton { buttonFeelingMap[b] = "Hopeful" }
+        if let b = calmButton { buttonFeelingMap[b] = "Calm" }
 
         for button in feelingButtons {
             button.layer.cornerRadius = 20
@@ -192,6 +202,7 @@ class WaitCell: UICollectionViewCell {
     }
 
     // MARK: - Feeling Button Styling
+
     private func applySelectedStyle(to button: UIButton) {
         let title = buttonFeelingMap[button] ?? ""
         var config = UIButton.Configuration.plain()
@@ -200,7 +211,7 @@ class WaitCell: UICollectionViewCell {
         config.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16)
         config.attributedTitle = AttributedString(title, attributes: AttributeContainer([
             .foregroundColor: UIColor.white,
-            .font: UIFont.systemFont(ofSize: 15)
+            .font: UIFont.systemFont(ofSize: 15),
         ]))
         button.configuration = config
     }
@@ -213,17 +224,18 @@ class WaitCell: UICollectionViewCell {
         config.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16)
         config.attributedTitle = AttributedString(title, attributes: AttributeContainer([
             .foregroundColor: darkPinkColor,
-            .font: UIFont.systemFont(ofSize: 15)
+            .font: UIFont.systemFont(ofSize: 15),
         ]))
         button.configuration = config
     }
 
     // MARK: - Actions
+
     private func setupActions() {
-        stepperUpButton.addTarget(self,   action: #selector(stepperUpTapped),   for: .touchUpInside)
+        stepperUpButton.addTarget(self, action: #selector(stepperUpTapped), for: .touchUpInside)
         stepperDownButton.addTarget(self, action: #selector(stepperDownTapped), for: .touchUpInside)
-        saveButton.addTarget(self,        action: #selector(saveButtonTapped),  for: .touchUpInside)
-        editButton.addTarget(self,        action: #selector(editButtonTapped),  for: .touchUpInside)
+        saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
+        editButton.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
     }
 
     @objc private func stepperUpTapped() {
@@ -267,6 +279,7 @@ class WaitCell: UICollectionViewCell {
     }
 
     // MARK: - Save
+
     @objc private func saveButtonTapped() {
         guard !selectedFeelings.isEmpty else { return }
         isSaved = true
@@ -284,9 +297,9 @@ class WaitCell: UICollectionViewCell {
         refreshCountdownBadge()
         applyEditStyle()
 
-        stepperUpButton.isUserInteractionEnabled   = false
+        stepperUpButton.isUserInteractionEnabled = false
         stepperDownButton.isUserInteractionEnabled = false
-        daysTextField.isUserInteractionEnabled     = false
+        daysTextField.isUserInteractionEnabled = false
         feelingButtons.forEach { $0.isUserInteractionEnabled = false }
 
         let block = {
@@ -303,6 +316,7 @@ class WaitCell: UICollectionViewCell {
     }
 
     // MARK: - Edit
+
     @objc private func editButtonTapped() {
         let defaults = UserDefaults.standard
         defaults.removeObject(forKey: kSaveDate)
@@ -316,9 +330,9 @@ class WaitCell: UICollectionViewCell {
         isSaved = false
         applySaveStyle()
 
-        stepperUpButton.isUserInteractionEnabled   = true
+        stepperUpButton.isUserInteractionEnabled = true
         stepperDownButton.isUserInteractionEnabled = true
-        daysTextField.isUserInteractionEnabled     = true
+        daysTextField.isUserInteractionEnabled = true
         feelingButtons.forEach { $0.isUserInteractionEnabled = true }
 
         UIView.animate(withDuration: 0.3) {
@@ -331,6 +345,7 @@ class WaitCell: UICollectionViewCell {
     }
 
     // MARK: - Countdown Badge
+
     private func refreshCountdownBadge() {
         guard isSaved else { applyBadge(.notStarted); return }
         let remaining = remainingDays()
@@ -372,6 +387,7 @@ class WaitCell: UICollectionViewCell {
     }
 
     // MARK: - Save Button State
+
     private func updateSaveButtonState() {
         let shouldEnable = !selectedFeelings.isEmpty
         saveButton.isUserInteractionEnabled = shouldEnable
@@ -381,11 +397,15 @@ class WaitCell: UICollectionViewCell {
     }
 
     // MARK: - Height
-    func getCellHeight() -> CGFloat { return 510 }
+
+    func getCellHeight() -> CGFloat {
+        return 510
+    }
 
     // MARK: - Configure
+
     func configure(with model: WaitModel) {
-        stepperUpButton.isUserInteractionEnabled   = true
+        stepperUpButton.isUserInteractionEnabled = true
         stepperDownButton.isUserInteractionEnabled = true
 
         let localSaved = UserDefaults.standard.object(forKey: kSaveDate) != nil
@@ -443,10 +463,13 @@ class WaitCell: UICollectionViewCell {
 }
 
 // MARK: - UITextFieldDelegate
+
 extension WaitCell: UITextFieldDelegate {
-    func textField(_ textField: UITextField,
-                   shouldChangeCharactersIn range: NSRange,
-                   replacementString string: String) -> Bool {
+    func textField(
+        _: UITextField,
+        shouldChangeCharactersIn _: NSRange,
+        replacementString string: String
+    ) -> Bool {
         if string.isEmpty { return true }
         return string.unicodeScalars.allSatisfy { CharacterSet.decimalDigits.contains($0) }
     }

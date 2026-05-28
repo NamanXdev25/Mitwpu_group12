@@ -1,9 +1,8 @@
 import UIKit
 
 class NewAppointmentDateTimeCell: UICollectionViewCell {
-
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var datePicker: UIDatePicker!
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var datePicker: UIDatePicker!
 
     var onDateChange: ((Date) -> Void)?
     var onNoneTapped: (() -> Void)?
@@ -41,14 +40,15 @@ class NewAppointmentDateTimeCell: UICollectionViewCell {
         // and deactivate it so we can control it dynamically.
         if let existing = superview.constraints.first(where: {
             ($0.firstItem as? UIView) == superview && $0.firstAttribute == .trailing &&
-            ($0.secondItem as? UIDatePicker) == datePicker && $0.secondAttribute == .trailing
+                ($0.secondItem as? UIDatePicker) == datePicker && $0.secondAttribute == .trailing
         }) {
             existing.isActive = false
         }
 
         // Re-create the trailing constraint so we can adjust its constant.
         let trailing = superview.trailingAnchor.constraint(
-            equalTo: datePicker.trailingAnchor, constant: 16)
+            equalTo: datePicker.trailingAnchor, constant: 16
+        )
         trailing.isActive = true
         pickerTrailingConstraint = trailing
 

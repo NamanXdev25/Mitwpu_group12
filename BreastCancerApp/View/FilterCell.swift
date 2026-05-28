@@ -1,18 +1,12 @@
-
 import UIKit
 
 class FilterCell: UICollectionViewCell {
+    @IBOutlet var containerView: UIView!
+    @IBOutlet var titleLabel: UILabel!
 
-    @IBOutlet weak var containerView: UIView!
-    @IBOutlet weak var titleLabel: UILabel!
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-    
     func configure(text: String, isSelected: Bool) {
         titleLabel.text = text
-        
+
         if isSelected {
             containerView.backgroundColor = UIColor(named: "primary_color")
             titleLabel.textColor = .white
@@ -21,5 +15,4 @@ class FilterCell: UICollectionViewCell {
             titleLabel.textColor = .darkGray
         }
     }
-
 }

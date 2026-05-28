@@ -1,18 +1,18 @@
 import UIKit
 
 // MARK: - Protocol
+
 protocol CareDailyExerciseCellDelegate: AnyObject {
     func careDailyExerciseCellDidTapBegin(_ cell: CareDailyExerciseCell)
 }
 
 final class CareDailyExerciseCell: UICollectionViewCell {
+    @IBOutlet var ExerciseContainer: UIView!
+    @IBOutlet var ExerciseImage: UIImageView!
+    @IBOutlet var ExerciseTitle: UILabel!
+    @IBOutlet var ExerciseBeginButton: UIButton!
 
-    @IBOutlet weak var ExerciseContainer: UIView!
-    @IBOutlet weak var ExerciseImage: UIImageView!
-    @IBOutlet weak var ExerciseTitle: UILabel!
-    @IBOutlet weak var ExerciseBeginButton: UIButton!
-
-    @IBOutlet weak var ExerciseEmptyStateLabel: UILabel?
+    @IBOutlet var ExerciseEmptyStateLabel: UILabel?
 
     weak var delegate: CareDailyExerciseCellDelegate?
     private let generatedEmptyLabel: UILabel = {
@@ -36,7 +36,7 @@ final class CareDailyExerciseCell: UICollectionViewCell {
                 generatedEmptyLabel.centerXAnchor.constraint(equalTo: ExerciseContainer.centerXAnchor),
                 generatedEmptyLabel.centerYAnchor.constraint(equalTo: ExerciseContainer.centerYAnchor),
                 generatedEmptyLabel.leadingAnchor.constraint(equalTo: ExerciseContainer.leadingAnchor, constant: 16),
-                generatedEmptyLabel.trailingAnchor.constraint(equalTo: ExerciseContainer.trailingAnchor, constant: -16)
+                generatedEmptyLabel.trailingAnchor.constraint(equalTo: ExerciseContainer.trailingAnchor, constant: -16),
             ])
         }
     }

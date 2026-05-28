@@ -1,8 +1,6 @@
-
 import UIKit
 
 extension UIView {
-    
     @IBInspectable var cornerRadius: CGFloat {
         get {
             return layer.cornerRadius
@@ -12,7 +10,7 @@ extension UIView {
             layer.masksToBounds = newValue > 0
         }
     }
-    
+
     @IBInspectable var borderWidth: CGFloat {
         get {
             return layer.borderWidth
@@ -21,7 +19,7 @@ extension UIView {
             layer.borderWidth = newValue
         }
     }
-    
+
     @IBInspectable var borderColor: UIColor? {
         get {
             if let color = layer.borderColor {
@@ -36,7 +34,6 @@ extension UIView {
 }
 
 extension UIButton {
-    
     @IBInspectable var adjustsFontSizeToFitWidth: Bool {
         get {
             return titleLabel?.adjustsFontSizeToFitWidth ?? false

@@ -1,11 +1,10 @@
 import UIKit
 
 class StoreItemCell: UICollectionViewCell {
-
-    @IBOutlet weak var cardContainerView: UIView!
-    @IBOutlet weak var itemImageView: UIImageView!
-    @IBOutlet weak var priceLabel: UILabel!
-    @IBOutlet weak var coinImageView: UIImageView!
+    @IBOutlet var cardContainerView: UIView!
+    @IBOutlet var itemImageView: UIImageView!
+    @IBOutlet var priceLabel: UILabel!
+    @IBOutlet var coinImageView: UIImageView!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -41,12 +40,12 @@ class StoreItemCell: UICollectionViewCell {
 
         if showPrice {
             coinImageView.isHidden = false
-            priceLabel.isHidden    = false
-            priceLabel.text        = "\(item.price)"
+            priceLabel.isHidden = false
+            priceLabel.text = "\(item.price)"
         } else {
             coinImageView.isHidden = true
-            priceLabel.isHidden    = false
-            priceLabel.text        = item.name
+            priceLabel.isHidden = false
+            priceLabel.text = item.name
         }
 
         resetBaseStyle()
@@ -76,18 +75,18 @@ class StoreItemCell: UICollectionViewCell {
     // MARK: - Active badge ("✓ Active" shown on the selected base tile)
 
     private func addActiveBadge() {
-        let tag = 9_001
+        let tag = 9001
         guard contentView.viewWithTag(tag) == nil else { return }
 
         let badge = UILabel()
-        badge.tag             = tag
-        badge.text            = "✓ Active"
-        badge.font            = .systemFont(ofSize: 9, weight: .bold)
-        badge.textColor       = .white
+        badge.tag = tag
+        badge.text = "✓ Active"
+        badge.font = .systemFont(ofSize: 9, weight: .bold)
+        badge.textColor = .white
         badge.backgroundColor = UIColor.systemGreen
-        badge.textAlignment   = .center
+        badge.textAlignment = .center
         badge.layer.cornerRadius = 6
-        badge.clipsToBounds   = true
+        badge.clipsToBounds = true
         badge.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(badge)
 
@@ -95,12 +94,12 @@ class StoreItemCell: UICollectionViewCell {
             badge.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
             badge.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
             badge.heightAnchor.constraint(equalToConstant: 16),
-            badge.widthAnchor.constraint(equalToConstant: 48)
+            badge.widthAnchor.constraint(equalToConstant: 48),
         ])
     }
 
     private func removeActiveBadge() {
-        contentView.viewWithTag(9_001)?.removeFromSuperview()
+        contentView.viewWithTag(9001)?.removeFromSuperview()
     }
 
     private func resetBaseStyle() {

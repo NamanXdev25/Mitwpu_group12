@@ -1,11 +1,10 @@
 import UIKit
 
 class ArticleCell: UICollectionViewCell {
-
-    @IBOutlet weak var containerView: UIView!
-    @IBOutlet weak var articleImageView: UIImageView!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var subtitleLabel: UILabel!
+    @IBOutlet var containerView: UIView!
+    @IBOutlet var articleImageView: UIImageView!
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var subtitleLabel: UILabel!
 
     private var subtitleBottomConstraint: NSLayoutConstraint?
 

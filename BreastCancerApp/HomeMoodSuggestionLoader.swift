@@ -4,12 +4,15 @@ final class HomeMoodSuggestionLoader {
     static let shared = HomeMoodSuggestionLoader()
     private(set) var root: HomeMoodSuggestionRoot?
 
-    private init() { load() }
+    private init() {
+        load()
+    }
 
     private func load() {
         guard let url = Bundle.main.url(forResource: "moodSuggestion", withExtension: "json"),
               let rawData = try? Data(contentsOf: url),
-              let rawText = String(data: rawData, encoding: .utf8) else {
+              let rawText = String(data: rawData, encoding: .utf8)
+        else {
             return
         }
 
@@ -23,8 +26,7 @@ final class HomeMoodSuggestionLoader {
 
         do {
             root = try JSONDecoder().decode(HomeMoodSuggestionRoot.self, from: data)
-        } catch {
-        }
+        } catch {}
     }
 
     func moodContent(for key: String) -> HomeMoodSuggestionContent? {

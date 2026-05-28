@@ -1,8 +1,7 @@
 import UIKit
 
 class ArticleImageCell: UICollectionViewCell {
-
-    @IBOutlet weak var articleImageView: UIImageView!
+    @IBOutlet var articleImageView: UIImageView!
 
     override func awakeFromNib() {
         super.awakeFromNib()

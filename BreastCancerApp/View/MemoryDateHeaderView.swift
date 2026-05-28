@@ -1,10 +1,9 @@
 import UIKit
 
 final class MemoryDateHeaderView: UICollectionReusableView {
-
     static let reuseIdentifier = "MemoryDateHeaderView"
 
-    @IBOutlet private weak var titleLabel: UILabel!
+    @IBOutlet private var titleLabel: UILabel!
 
     private let calendar = Calendar.current
 

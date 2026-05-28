@@ -1,7 +1,6 @@
 import UIKit
 
 final class ArticlesDataSource: NSObject {
-
     var articles: [ArticleModel] = []
 
     func loadArticles() {
@@ -18,10 +17,9 @@ final class ArticlesDataSource: NSObject {
 }
 
 extension ArticlesDataSource: UICollectionViewDataSource {
-
     func collectionView(
-        _ collectionView: UICollectionView,
-        numberOfItemsInSection section: Int
+        _: UICollectionView,
+        numberOfItemsInSection _: Int
     ) -> Int {
         articles.count
     }
@@ -30,10 +28,12 @@ extension ArticlesDataSource: UICollectionViewDataSource {
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(
+        guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: "ArticleCell",
             for: indexPath
-        ) as! ArticleCell
+        ) as? ArticleCell else {
+            fatalError("Expected ArticleCell for reuse identifier 'ArticleCell' at \(indexPath)")
+        }
         cell.configure(with: articles[indexPath.item])
         return cell
     }

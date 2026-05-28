@@ -8,16 +8,11 @@
 import UIKit
 
 class MedicationDaysCell: UICollectionViewCell {
-
     @IBOutlet var dayButtons: [UIButton]!
 
     var onDaysChanged: ((Set<Int>) -> Void)?
 
     private var selectedDays = Set<Int>()
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
 
     func configure(selectedDays: Set<Int>) {
         self.selectedDays = selectedDays
@@ -41,14 +36,14 @@ class MedicationDaysCell: UICollectionViewCell {
         for (index, btn) in dayButtons.enumerated() {
             let selected = selectedDays.contains(index + 1)
             let title = btn.configuration?.title ?? btn.title(for: .normal) ?? ""
-            
+
             var config = selected ? UIButton.Configuration.filled() : UIButton.Configuration.plain()
             config.title = title
             config.cornerStyle = .capsule
             config.baseBackgroundColor = selected ? primary : primary?.withAlphaComponent(0.1)
             config.baseForegroundColor = selected ? .white : primary
             config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-            
+
             btn.configuration = config
         }
     }

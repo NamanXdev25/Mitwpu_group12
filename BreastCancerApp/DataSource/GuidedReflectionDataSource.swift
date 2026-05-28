@@ -1,4 +1,3 @@
-
 import Foundation
 
 class GuidedReflectionDataSource {
@@ -16,17 +15,17 @@ class GuidedReflectionDataSource {
         do {
             let data = try Data(contentsOf: url)
             questions = try JSONDecoder().decode([GuidedReflectionQuestion].self, from: data)
-        } catch {
-        }
+        } catch {}
     }
 
     func getQuestions(for category: ReflectionCategory) -> [GuidedReflectionQuestion] {
         questions.filter { $0.category == category }
     }
+
     func getRandomQuestion(for category: ReflectionCategory) -> GuidedReflectionQuestion? {
         getQuestions(for: category).randomElement()
     }
-    
+
     func getTodaysQuestion() -> GuidedReflectionQuestion? {
         let defaults = UserDefaults.standard
         let today = currentDateString()

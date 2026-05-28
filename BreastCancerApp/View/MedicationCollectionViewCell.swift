@@ -1,22 +1,20 @@
-
 import UIKit
 
 class MedicationCollectionViewCell: UICollectionViewCell {
-    
-    @IBOutlet weak var editButton: UIButton!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var subtitleLabel: UILabel!
-    @IBOutlet weak var adherenceRateLabel: UILabel!
-    @IBOutlet weak var metricCaptionLabel: UILabel!
-    @IBOutlet weak var dosesTakenLabel: UILabel!
-    @IBOutlet weak var dosesMissedLabel: UILabel!
+    @IBOutlet var editButton: UIButton!
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var subtitleLabel: UILabel!
+    @IBOutlet var adherenceRateLabel: UILabel!
+    @IBOutlet var metricCaptionLabel: UILabel!
+    @IBOutlet var dosesTakenLabel: UILabel!
+    @IBOutlet var dosesMissedLabel: UILabel!
     @IBOutlet var statusIcons: [UIImageView]!
 
     var onStatusIconTapped: ((Int) -> Void)?
     private var selectedStatusIndex: Int?
     private var statusValues: [Int] = []
     private var isStatusSelectionEnabled = false
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
         setupStatusIconGestures()

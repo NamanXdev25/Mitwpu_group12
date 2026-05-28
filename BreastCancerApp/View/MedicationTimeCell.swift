@@ -8,9 +8,8 @@
 import UIKit
 
 class MedicationTimeCell: UICollectionViewCell {
-
-    @IBOutlet weak var timePicker: UIDatePicker!
-    @IBOutlet weak var deleteButton: UIButton!
+    @IBOutlet var timePicker: UIDatePicker!
+    @IBOutlet var deleteButton: UIButton!
 
     var onDelete: (() -> Void)?
     var onTimeChange: ((Date) -> Void)?
@@ -26,7 +25,7 @@ class MedicationTimeCell: UICollectionViewCell {
         timePicker.date = time
     }
 
-    @IBAction func deleteTapped(_ sender: UIButton) {
+    @IBAction func deleteTapped(_: UIButton) {
         onDelete?()
     }
 

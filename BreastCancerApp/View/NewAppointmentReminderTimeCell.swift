@@ -1,11 +1,7 @@
-
-import UIKit
-
 import UIKit
 
 class NewAppointmentReminderTimeCell: UICollectionViewCell {
-
-    @IBOutlet weak var addReminderButton: UIButton!
+    @IBOutlet var addReminderButton: UIButton!
 
     var onAdd: (() -> Void)?
 
@@ -25,7 +21,7 @@ class NewAppointmentReminderTimeCell: UICollectionViewCell {
         addReminderButton.configuration = config
     }
 
-    @IBAction func addReminderTapped(_ sender: UIButton) {
+    @IBAction func addReminderTapped(_: UIButton) {
         onAdd?()
     }
 }

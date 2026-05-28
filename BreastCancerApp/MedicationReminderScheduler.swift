@@ -61,8 +61,8 @@ final class MedicationReminderScheduler {
         for (key, group) in grouped {
             guard let first = group.first,
                   let dateComponents = triggerDateComponents(
-                    forTimeString: first.time,
-                    repeatOption: first.repeatOption
+                      forTimeString: first.time,
+                      repeatOption: first.repeatOption
                   )
             else { continue }
 
@@ -109,7 +109,7 @@ final class MedicationReminderScheduler {
             "Every Wed": 4,
             "Every Thu": 5,
             "Every Fri": 6,
-            "Every Sat": 7
+            "Every Sat": 7,
         ]
 
         return mapping[repeatOption]

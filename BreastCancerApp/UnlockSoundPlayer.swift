@@ -1,5 +1,5 @@
-import Foundation
 import AVFoundation
+import Foundation
 
 final class UnlockSoundPlayer {
     static let shared = UnlockSoundPlayer()
@@ -9,7 +9,7 @@ final class UnlockSoundPlayer {
     private let format: AVAudioFormat
 
     private init() {
-        format = AVAudioFormat(standardFormatWithSampleRate: 44_100, channels: 1)!
+        format = AVAudioFormat(standardFormatWithSampleRate: 44100, channels: 1)!
 
         engine.attach(player)
         engine.connect(player, to: engine.mainMixerNode, format: format)
@@ -19,8 +19,7 @@ final class UnlockSoundPlayer {
             try AVAudioSession.sharedInstance().setCategory(.playback, options: [.mixWithOthers])
             try AVAudioSession.sharedInstance().setActive(true)
             try engine.start()
-        } catch {
-        }
+        } catch {}
     }
 
     func playUnlock() {
@@ -50,7 +49,7 @@ final class UnlockSoundPlayer {
 
             let attack = 0.010
 
-            for frame in startFrame..<endFrame {
+            for frame in startFrame ..< endFrame {
                 let t = Double(frame - startFrame) / sampleRate
                 let phase = 2.0 * Double.pi * freq * t
 
@@ -78,7 +77,7 @@ final class UnlockSoundPlayer {
         addNote(start: 0.43, duration: 0.10, freq: 1567.98, amp: 0.07)
         addNote(start: 0.50, duration: 0.09, freq: 1318.51, amp: 0.06)
 
-        for i in 0..<Int(frameCount) {
+        for i in 0 ..< Int(frameCount) {
             channel[i] = max(-0.95, min(0.95, channel[i]))
         }
 

@@ -1,11 +1,10 @@
 import UIKit
 
 final class MemoryEmptyStateCell: UICollectionViewCell {
-
     static let reuseIdentifier = "MemoryEmptyStateCell"
 
-    @IBOutlet weak var containerView: UIView!
-    @IBOutlet weak var messageLabel: UILabel!
+    @IBOutlet var containerView: UIView!
+    @IBOutlet var messageLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()

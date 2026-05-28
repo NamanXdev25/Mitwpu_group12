@@ -1,21 +1,22 @@
-import UIKit
 import SpriteKit
+import UIKit
 
 // MARK: - GardenViewController
 
 class GardenViewController: UIViewController {
-
     // MARK: - Existing Storyboard Outlets
-    @IBOutlet weak var gardenSKView: SKView!
-    @IBOutlet weak var itemCollectionView: UICollectionView!
-    @IBOutlet weak var storeButton: UIButton!
+
+    @IBOutlet var gardenSKView: SKView!
+    @IBOutlet var itemCollectionView: UICollectionView!
+    @IBOutlet var storeButton: UIButton!
 
     // MARK: - Level Card Outlets
-    @IBOutlet weak var levelTitleLabel: UILabel!
-    @IBOutlet weak var pointsToNextLabel: UILabel!
-    @IBOutlet weak var levelProgressView: UIProgressView!
-    @IBOutlet weak var currentPointsLabel: UILabel!
-    @IBOutlet weak var totalPointsLabel: UILabel!
+
+    @IBOutlet var levelTitleLabel: UILabel!
+    @IBOutlet var pointsToNextLabel: UILabel!
+    @IBOutlet var levelProgressView: UIProgressView!
+    @IBOutlet var currentPointsLabel: UILabel!
+    @IBOutlet var totalPointsLabel: UILabel!
 
     var gardenScene: GardenScene?
     private let gardenManager = GardenManager.shared
@@ -29,12 +30,12 @@ class GardenViewController: UIViewController {
         setupGestures()
         observeNotifications()
         levelProgressView?.progressTintColor = UIColor(red: 0.93, green: 0.29, blue: 0.47, alpha: 1.0)
-        levelProgressView?.trackTintColor    = UIColor.systemGray5
+        levelProgressView?.trackTintColor = UIColor.systemGray5
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
+        navigationController?.setNavigationBarHidden(false, animated: false)
         itemCollectionView.reloadData()
         updateLevelCard()
     }
@@ -60,10 +61,10 @@ class GardenViewController: UIViewController {
         let levelTotal = p.currentLevel * GardenLevelProgress.pointsPerLevel
         let pointsLeft = max(0, levelTotal - p.currentPoints)
 
-        levelTitleLabel?.text    = "Level \(p.currentLevel)"
-        pointsToNextLabel?.text  = "\(pointsLeft) Points to next garden"
+        levelTitleLabel?.text = "Level \(p.currentLevel)"
+        pointsToNextLabel?.text = "\(pointsLeft) Points to next garden"
         currentPointsLabel?.text = "\(p.currentPoints)"
-        totalPointsLabel?.text   = "\(levelTotal)"
+        totalPointsLabel?.text = "\(levelTotal)"
 
         let ratio = Float(p.currentPoints) / Float(levelTotal)
         UIView.animate(withDuration: 0.5) {
@@ -94,7 +95,7 @@ class GardenViewController: UIViewController {
         itemCollectionView.reloadData()
     }
 
-    @objc private func handleLevelChanged(_ note: Notification) {
+    @objc private func handleLevelChanged(_: Notification) {
         DispatchQueue.main.async { [weak self] in
             self?.updateLevelCard()
             self?.itemCollectionView.reloadData()
@@ -109,7 +110,7 @@ class GardenViewController: UIViewController {
 
         let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
         pan.minimumNumberOfTouches = 1
-        pan.cancelsTouchesInView   = false
+        pan.cancelsTouchesInView = false
         gardenSKView.addGestureRecognizer(pan)
     }
 
@@ -124,17 +125,17 @@ class GardenViewController: UIViewController {
     // MARK: - Collection View Setup
 
     private func setupCollectionView() {
-        itemCollectionView.delegate    = self
-        itemCollectionView.dataSource  = self
+        itemCollectionView.delegate = self
+        itemCollectionView.dataSource = self
 
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection         = .horizontal
-        layout.minimumLineSpacing      = 0
+        layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
-        layout.itemSize                = CGSize(width: 85, height: 110)
+        layout.itemSize = CGSize(width: 85, height: 110)
         itemCollectionView.collectionViewLayout = layout
         itemCollectionView.showsHorizontalScrollIndicator = false
-        itemCollectionView.showsVerticalScrollIndicator   = false
+        itemCollectionView.showsVerticalScrollIndicator = false
     }
 
     // MARK: - SpriteKit Setup
@@ -143,21 +144,22 @@ class GardenViewController: UIViewController {
         let initialSize = gardenSKView.bounds.size == .zero
             ? UIScreen.main.bounds.size : gardenSKView.bounds.size
         let scene = GardenScene(size: initialSize)
-        scene.scaleMode       = .resizeFill
+        scene.scaleMode = .resizeFill
         scene.backgroundColor = .clear
-        scene.gardenManager   = gardenManager
+        scene.gardenManager = gardenManager
         gardenSKView.presentScene(scene)
         gardenSKView.allowsTransparency = true
-        self.gardenScene = scene
+        gardenScene = scene
     }
 
     // MARK: - Store Button
 
-    @IBAction func storeButtonTapped(_ sender: UIButton) {
+    @IBAction func storeButtonTapped(_: UIButton) {
         let storyboard = UIStoryboard(name: "Healinggarden", bundle: nil)
         if let storeVC = storyboard.instantiateViewController(
-            withIdentifier: "StoreViewController") as? StoreViewController {
-            self.navigationController?.pushViewController(storeVC, animated: true)
+            withIdentifier: "StoreViewController"
+        ) as? StoreViewController {
+            navigationController?.pushViewController(storeVC, animated: true)
         }
     }
 }
@@ -165,31 +167,37 @@ class GardenViewController: UIViewController {
 // MARK: - UICollectionView DataSource / Delegate
 
 extension GardenViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-
     private var trayItems: [StoreItem] {
         return gardenManager.trayItems
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        numberOfItemsInSection section: Int) -> Int {
+    func collectionView(
+        _: UICollectionView,
+        numberOfItemsInSection _: Int
+    ) -> Int {
         return trayItems.count
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: "ItemCell", for: indexPath) as? GardenItemCell else {
+            withReuseIdentifier: "ItemCell", for: indexPath
+        ) as? GardenItemCell else {
             return UICollectionViewCell()
         }
-        let items  = trayItems
-        let item   = items[indexPath.item]
+        let items = trayItems
+        let item = items[indexPath.item]
         let isLast = indexPath.item == items.count - 1
         cell.configure(with: item, isLast: isLast)
         return cell
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        didSelectItemAt indexPath: IndexPath) {
+    func collectionView(
+        _: UICollectionView,
+        didSelectItemAt indexPath: IndexPath
+    ) {
         let item = trayItems[indexPath.item]
 
         if item.id.hasPrefix("base_") {
@@ -208,7 +216,6 @@ extension GardenViewController: UICollectionViewDelegate, UICollectionViewDataSo
 // MARK: - GardenScene
 
 class GardenScene: SKScene {
-
     var gardenManager: GardenManager?
     var activePlacementNode: SKNode?
     var isDragging = false
@@ -226,11 +233,11 @@ class GardenScene: SKScene {
 
     // MARK: - Lifecycle
 
-    override func didMove(to view: SKView) {
+    override func didMove(to _: SKView) {
         setupCamera()
-        let baseId    = gardenManager?.selectedBase.id        ?? "classic"
+        let baseId = gardenManager?.selectedBase.id ?? "classic"
         let imageName = gardenManager?.selectedBase.imageName ?? "garden_base"
-        loadedBaseId  = baseId
+        loadedBaseId = baseId
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.setupGardenBase(imageName: imageName)
@@ -301,13 +308,13 @@ class GardenScene: SKScene {
     private func restorePlacedItems(for baseId: String) {
         guard let items = gardenManager?.loadPlacedItems(for: baseId) else { return }
         for item in items {
-            let sprite         = SKSpriteNode(imageNamed: item.imageName)
-            sprite.position    = CGPoint(x: item.positionX, y: item.positionY)
-            sprite.zPosition   = item.zPosition
-            sprite.name        = "placed_item"
-            sprite.userData    = [
+            let sprite = SKSpriteNode(imageNamed: item.imageName)
+            sprite.position = CGPoint(x: item.positionX, y: item.positionY)
+            sprite.zPosition = item.zPosition
+            sprite.name = "placed_item"
+            sprite.userData = [
                 PlacedItemUserDataKey.assetName: item.imageName,
-                PlacedItemUserDataKey.instanceId: item.id
+                PlacedItemUserDataKey.instanceId: item.id,
             ]
             sprite.setScale(0.15)
             sprite.anchorPoint = CGPoint(x: 0.5, y: 0.2)
@@ -327,16 +334,16 @@ class GardenScene: SKScene {
     private func setupCamera() {
         cameraNode.position = CGPoint(x: frame.midX, y: frame.midY)
         addChild(cameraNode)
-        self.camera = cameraNode
+        camera = cameraNode
     }
 
     private func setupGardenBase(imageName: String) {
         if gardenBaseNode == nil {
-            let base       = SKSpriteNode(imageNamed: imageName)
-            base.name      = "garden_base"
+            let base = SKSpriteNode(imageNamed: imageName)
+            base.name = "garden_base"
             base.zPosition = -1
             addChild(base)
-            self.gardenBaseNode = base
+            gardenBaseNode = base
         }
         guard let base = gardenBaseNode else { return }
         repositionBase(base)
@@ -346,7 +353,7 @@ class GardenScene: SKScene {
 
     private func repositionBase(_ base: SKSpriteNode) {
         let t = base.texture?.size() ?? CGSize(width: 1, height: 1)
-        base.setScale(max(self.size.width / t.width, self.size.height / t.height))
+        base.setScale(max(size.width / t.width, size.height / t.height))
         base.position = CGPoint(x: frame.midX, y: frame.midY)
     }
 
@@ -356,8 +363,10 @@ class GardenScene: SKScene {
         if sender.state == .began { initialCameraScale = cameraNode.xScale }
         let newScale = initialCameraScale / sender.scale
         if let base = gardenBaseNode {
-            let maxPossible = min(base.size.width / self.size.width,
-                                  base.size.height / self.size.height)
+            let maxPossible = min(
+                base.size.width / size.width,
+                base.size.height / size.height
+            )
             cameraNode.setScale(max(0.4, min(newScale, maxPossible)))
         }
         constrainCamera()
@@ -365,19 +374,19 @@ class GardenScene: SKScene {
 
     func handlePan(_ sender: UIPanGestureRecognizer) {
         if isDragging { return }
-        let t = sender.translation(in: self.view)
+        let t = sender.translation(in: view)
         cameraNode.position = CGPoint(
             x: cameraNode.position.x - t.x * cameraNode.xScale,
             y: cameraNode.position.y + t.y * cameraNode.yScale
         )
         constrainCamera()
-        sender.setTranslation(.zero, in: self.view)
+        sender.setTranslation(.zero, in: view)
     }
 
     private func constrainCamera() {
         guard let base = gardenBaseNode else { return }
-        let hw = max(0, (base.size.width  - self.size.width  * cameraNode.xScale) / 2)
-        let hh = max(0, (base.size.height - self.size.height * cameraNode.yScale) / 2)
+        let hw = max(0, (base.size.width - size.width * cameraNode.xScale) / 2)
+        let hh = max(0, (base.size.height - size.height * cameraNode.yScale) / 2)
         let cx = base.position.x, cy = base.position.y
         cameraNode.position.x = max(cx - hw, min(cameraNode.position.x, cx + hw))
         cameraNode.position.y = max(cy - hh, min(cameraNode.position.y, cy + hh))
@@ -387,23 +396,23 @@ class GardenScene: SKScene {
 
     func enterPlacementMode(for imageName: String) {
         cancelPlacement()
-        let container       = SKNode()
-        container.position  = cameraNode.position
+        let container = SKNode()
+        container.position = cameraNode.position
         container.zPosition = 1000
-        container.name      = "placement_container"
+        container.name = "placement_container"
         container.addChild(makeDiamondHighlight(valid: true))
-        let item            = SKSpriteNode(imageNamed: imageName)
-        item.name           = "moving_item"
-        item.alpha          = 0.85
-        item.userData       = [PlacedItemUserDataKey.assetName: imageName]
+        let item = SKSpriteNode(imageNamed: imageName)
+        item.name = "moving_item"
+        item.alpha = 0.85
+        item.userData = [PlacedItemUserDataKey.assetName: imageName]
         item.setScale(0.15)
-        item.anchorPoint    = CGPoint(x: 0.5, y: 0.2)
+        item.anchorPoint = CGPoint(x: 0.5, y: 0.2)
         container.addChild(item)
         addConfirmButtons(to: container)
         addChild(container)
         activePlacementNode = container
-        isDragging          = true
-        isPlacementValid    = true
+        isDragging = true
+        isPlacementValid = true
         updateButtonStates(in: container, valid: true)
     }
 
@@ -411,25 +420,25 @@ class GardenScene: SKScene {
 
     private func enterMoveMode(for node: SKSpriteNode) {
         cancelPlacement()
-        let container       = SKNode()
-        container.position  = node.position
+        let container = SKNode()
+        container.position = node.position
         container.zPosition = 1000
-        container.name      = "placement_container"
+        container.name = "placement_container"
         container.addChild(makeDiamondHighlight(valid: true))
-        let item            = SKSpriteNode(imageNamed: node.userData?[PlacedItemUserDataKey.assetName] as? String ?? "")
-        item.name           = "moving_item"
-        item.alpha          = 0.85
-        item.userData       = node.userData
+        let item = SKSpriteNode(imageNamed: node.userData?[PlacedItemUserDataKey.assetName] as? String ?? "")
+        item.name = "moving_item"
+        item.alpha = 0.85
+        item.userData = node.userData
         item.setScale(node.xScale)
-        item.anchorPoint    = node.anchorPoint
+        item.anchorPoint = node.anchorPoint
         container.addChild(item)
         addDirectionalArrows(to: container)
         addConfirmButtons(to: container)
         node.removeFromParent()
         addChild(container)
         activePlacementNode = container
-        isDragging          = false
-        isPlacementValid    = true
+        isDragging = false
+        isPlacementValid = true
         updateButtonStates(in: container, valid: true)
     }
 
@@ -440,11 +449,11 @@ class GardenScene: SKScene {
         p.move(to: CGPoint(x: 0, y: 12)); p.addLine(to: CGPoint(x: 22, y: 0))
         p.addLine(to: CGPoint(x: 0, y: -12)); p.addLine(to: CGPoint(x: -22, y: 0))
         p.closeSubpath()
-        d.path        = p
-        d.fillColor   = valid ? UIColor(red: 0.0,  green: 0.85, blue: 0.0, alpha: 0.35)
-                               : UIColor(red: 0.95, green: 0.1,  blue: 0.1, alpha: 0.45)
-        d.strokeColor = valid ? UIColor(red: 0.0,  green: 0.7,  blue: 0.0, alpha: 0.8)
-                               : UIColor(red: 0.8,  green: 0.0,  blue: 0.0, alpha: 0.8)
+        d.path = p
+        d.fillColor = valid ? UIColor(red: 0.0, green: 0.85, blue: 0.0, alpha: 0.35)
+            : UIColor(red: 0.95, green: 0.1, blue: 0.1, alpha: 0.45)
+        d.strokeColor = valid ? UIColor(red: 0.0, green: 0.7, blue: 0.0, alpha: 0.8)
+            : UIColor(red: 0.8, green: 0.0, blue: 0.0, alpha: 0.8)
         d.lineWidth = 1.5; d.zPosition = -0.5; d.name = "placement_highlight"
         return d
     }
@@ -452,20 +461,28 @@ class GardenScene: SKScene {
     // MARK: - Confirm Buttons
 
     private func addConfirmButtons(to container: SKNode) {
-        let cancelBtn       = makeRoundedButton(symbol: "✕",
-            bgColor: UIColor(red: 0.85, green: 0.1, blue: 0.1, alpha: 1.0), size: 26)
-        cancelBtn.position  = CGPoint(x: -30, y: 55); cancelBtn.name = "btn_cancel"
+        let cancelBtn = makeRoundedButton(
+            symbol: "✕",
+            bgColor: UIColor(red: 0.85, green: 0.1, blue: 0.1, alpha: 1.0),
+            size: 26
+        )
+        cancelBtn.position = CGPoint(x: -30, y: 55); cancelBtn.name = "btn_cancel"
         container.addChild(cancelBtn)
-        let confirmBtn      = makeRoundedButton(symbol: "✓",
-            bgColor: UIColor(white: 0.55, alpha: 1.0), size: 26)
+        let confirmBtn = makeRoundedButton(
+            symbol: "✓",
+            bgColor: UIColor(white: 0.55, alpha: 1.0),
+            size: 26
+        )
         confirmBtn.position = CGPoint(x: 30, y: 55); confirmBtn.name = "btn_confirm"
         container.addChild(confirmBtn)
     }
 
     private func makeRoundedButton(symbol: String, bgColor: UIColor, size: CGFloat) -> SKNode {
         let node = SKNode()
-        let bg   = SKShapeNode(rectOf: CGSize(width: size * 1.9, height: size * 1.9),
-                               cornerRadius: size * 0.4)
+        let bg = SKShapeNode(
+            rectOf: CGSize(width: size * 1.9, height: size * 1.9),
+            cornerRadius: size * 0.4
+        )
         bg.fillColor = bgColor; bg.strokeColor = UIColor.white.withAlphaComponent(0.3)
         bg.lineWidth = 1.5; bg.name = "button_bg"; node.addChild(bg)
         let lbl = SKLabelNode(text: symbol)
@@ -477,15 +494,15 @@ class GardenScene: SKScene {
 
     private func updateButtonStates(in container: SKNode, valid: Bool) {
         if let h = container.childNode(withName: "placement_highlight") as? SKShapeNode {
-            h.fillColor   = valid ? UIColor(red: 0.0,  green: 0.85, blue: 0.0, alpha: 0.35)
-                                  : UIColor(red: 0.95, green: 0.1,  blue: 0.1, alpha: 0.45)
-            h.strokeColor = valid ? UIColor(red: 0.0,  green: 0.7,  blue: 0.0, alpha: 0.8)
-                                  : UIColor(red: 0.8,  green: 0.0,  blue: 0.0, alpha: 0.8)
+            h.fillColor = valid ? UIColor(red: 0.0, green: 0.85, blue: 0.0, alpha: 0.35)
+                : UIColor(red: 0.95, green: 0.1, blue: 0.1, alpha: 0.45)
+            h.strokeColor = valid ? UIColor(red: 0.0, green: 0.7, blue: 0.0, alpha: 0.8)
+                : UIColor(red: 0.8, green: 0.0, blue: 0.0, alpha: 0.8)
         }
         if let btn = container.childNode(withName: "btn_confirm"),
-           let bg  = btn.childNode(withName: "button_bg") as? SKShapeNode {
+           let bg = btn.childNode(withName: "button_bg") as? SKShapeNode {
             bg.fillColor = valid ? UIColor(red: 0.1, green: 0.75, blue: 0.1, alpha: 1.0)
-                                 : UIColor(white: 0.55, alpha: 1.0)
+                : UIColor(white: 0.55, alpha: 1.0)
         }
     }
 
@@ -507,10 +524,10 @@ class GardenScene: SKScene {
 
     private func isInsideGrassArea(_ pos: CGPoint) -> Bool {
         guard let base = gardenBaseNode else { return true }
-        let cx  = base.position.x
-        let cy  = base.position.y - base.size.height * base.yScale * 0.02
-        let px  = pos.x - cx, py = pos.y - cy
-        let hw  = base.size.width  * base.xScale * 0.80
+        let cx = base.position.x
+        let cy = base.position.y - base.size.height * base.yScale * 0.02
+        let px = pos.x - cx, py = pos.y - cy
+        let hw = base.size.width * base.xScale * 0.80
         let hhu = base.size.height * base.yScale * 0.25
         let hhd = base.size.height * base.yScale * 0.13
         return (abs(px / hw) + abs(py / (py >= 0 ? hhu : hhd))) <= 1.0
@@ -521,7 +538,7 @@ class GardenScene: SKScene {
     private func addDirectionalArrows(to container: SKNode) {
         let offset: CGFloat = 22, vs: CGFloat = 20
         [(CGFloat(0), CGFloat(0), offset + vs),
-         (.pi, 0, -offset + vs), (.pi/2, -offset, vs), (-.pi/2, offset, vs)].forEach { r, dx, dy in
+         (.pi, 0, -offset + vs), (.pi / 2, -offset, vs), (-.pi / 2, offset, vs)].forEach { r, dx, dy in
             let a = makeArrowNode(); a.zRotation = r; a.position = CGPoint(x: dx, y: dy)
             container.addChild(a)
         }
@@ -535,7 +552,7 @@ class GardenScene: SKScene {
         p.addLine(to: CGPoint(x: -6, y: 2)); p.addLine(to: CGPoint(x: -12, y: 2))
         p.closeSubpath()
         a.path = p
-        a.fillColor   = UIColor(red: 0.15, green: 0.82, blue: 0.15, alpha: 1.0)
+        a.fillColor = UIColor(red: 0.15, green: 0.82, blue: 0.15, alpha: 1.0)
         a.strokeColor = UIColor(red: 0.05, green: 0.45, blue: 0.05, alpha: 1.0)
         a.lineWidth = 1.5; a.name = "placement_arrow"; a.isUserInteractionEnabled = false
         let up = SKAction.scale(to: 1.12, duration: 0.45)
@@ -547,16 +564,18 @@ class GardenScene: SKScene {
 
     // MARK: - Touch Handling
 
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with _: UIEvent?) {
         guard let touch = touches.first else { return }
-        let loc   = touch.location(in: self)
+        let loc = touch.location(in: self)
         let nodes = nodes(at: loc)
         if let active = activePlacementNode {
             for n in nodes {
-                if n.name == "btn_cancel"  || n.parent?.name == "btn_cancel"  { cancelPlacement(); return }
+                if n.name == "btn_cancel" || n.parent?.name == "btn_cancel" { cancelPlacement(); return }
                 if n.name == "btn_confirm" || n.parent?.name == "btn_confirm" { if isPlacementValid { confirmPlacement() }; return }
             }
-            for n in nodes where n.name == "moving_item" || n.parent == active { isDragging = true; return }
+            for n in nodes where n.name == "moving_item" || n.parent == active {
+                isDragging = true; return
+            }
             if isPlacementValid { confirmPlacement() }
             return
         }
@@ -565,29 +584,31 @@ class GardenScene: SKScene {
         }
     }
 
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override func touchesMoved(_ touches: Set<UITouch>, with _: UIEvent?) {
         guard let touch = touches.first, let c = activePlacementNode else { return }
         isDragging = true
         c.children.filter { $0.name == "placement_arrow" }.forEach { $0.isHidden = true }
         let pos = touch.location(in: self)
-        c.position   = pos
+        c.position = pos
         isPlacementValid = isInsideGrassArea(pos) && !isOverlappingPlacedItem(at: pos, excluding: c)
         updateButtonStates(in: c, valid: isPlacementValid)
     }
 
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override func touchesEnded(_: Set<UITouch>, with _: UIEvent?) {
         guard isDragging else { return }
         isDragging = false
         activePlacementNode?.children.filter { $0.name == "placement_arrow" }.forEach { $0.isHidden = false }
     }
 
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) { isDragging = false }
+    override func touchesCancelled(_: Set<UITouch>, with _: UIEvent?) {
+        isDragging = false
+    }
 
     // MARK: - Confirm / Cancel
 
     func confirmPlacement() {
         guard isPlacementValid,
-              let c     = activePlacementNode,
+              let c = activePlacementNode,
               let ghost = c.childNode(withName: "moving_item") as? SKSpriteNode else { cancelPlacement(); return }
         let assetName = (ghost.userData?[PlacedItemUserDataKey.assetName] as? String)?
             .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
@@ -596,14 +617,14 @@ class GardenScene: SKScene {
             return
         }
         let instanceId = (ghost.userData?[PlacedItemUserDataKey.instanceId] as? String) ?? UUID().uuidString
-        let f         = SKSpriteNode(imageNamed: assetName)
-        f.position    = c.position; f.anchorPoint = ghost.anchorPoint
+        let f = SKSpriteNode(imageNamed: assetName)
+        f.position = c.position; f.anchorPoint = ghost.anchorPoint
         f.setScale(ghost.xScale); f.name = "placed_item"
-        f.userData    = [
+        f.userData = [
             PlacedItemUserDataKey.assetName: assetName,
-            PlacedItemUserDataKey.instanceId: instanceId
+            PlacedItemUserDataKey.instanceId: instanceId,
         ]
-        f.zPosition   = 1000 - c.position.y; f.alpha = 1.0
+        f.zPosition = 1000 - c.position.y; f.alpha = 1.0
         addChild(f); cancelPlacement()
         savePlacedItems(for: loadedBaseId)
     }
@@ -613,7 +634,7 @@ class GardenScene: SKScene {
         activePlacementNode = nil; isDragging = false; isPlacementValid = true
     }
 
-    override func willMove(from view: SKView) {
+    override func willMove(from _: SKView) {
         savePlacedItems(for: loadedBaseId)
     }
 }

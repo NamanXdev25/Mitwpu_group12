@@ -1,11 +1,10 @@
 import UIKit
 
 class TreatmentCell: UICollectionViewCell {
-
-    @IBOutlet weak var treatmentTitleLabel: UILabel!
-    @IBOutlet weak var statusLabel: UILabel!
-    @IBOutlet weak var separatorView: UIView!
-    @IBOutlet weak var addPhaseButton: UIButton!
+    @IBOutlet var treatmentTitleLabel: UILabel!
+    @IBOutlet var statusLabel: UILabel!
+    @IBOutlet var separatorView: UIView!
+    @IBOutlet var addPhaseButton: UIButton!
 
     var onCellHeightChanged: (() -> Void)?
     var onSaveButtonTapped: ((TreatmentPhaseModel, Int) -> Void)?
@@ -22,14 +21,14 @@ class TreatmentCell: UICollectionViewCell {
     private var wasCompleted = false
     private var lockOverlayView: UIView?
 
-    private let lightPink           = UIColor(red: 1.0,  green: 0.92, blue: 0.95, alpha: 1.0)
+    private let lightPink = UIColor(red: 1.0, green: 0.92, blue: 0.95, alpha: 1.0)
     private let inProgressTextColor = UIColor(red: 0.91, green: 0.39, blue: 0.54, alpha: 1.0)
-    private let completedGreenColor = UIColor(red: 0.2,  green: 0.6,  blue: 0.2,  alpha: 1.0)
-    private let completedGreenBg    = UIColor(red: 0.85, green: 0.95, blue: 0.85, alpha: 1.0)
-    private let notStartedTextColor = UIColor(red: 0.4,  green: 0.4,  blue: 0.4,  alpha: 1.0)
-    private let notStartedBg        = UIColor(red: 0.94, green: 0.94, blue: 0.94, alpha: 1.0)
+    private let completedGreenColor = UIColor(red: 0.2, green: 0.6, blue: 0.2, alpha: 1.0)
+    private let completedGreenBg = UIColor(red: 0.85, green: 0.95, blue: 0.85, alpha: 1.0)
+    private let notStartedTextColor = UIColor(red: 0.4, green: 0.4, blue: 0.4, alpha: 1.0)
+    private let notStartedBg = UIColor(red: 0.94, green: 0.94, blue: 0.94, alpha: 1.0)
 
-    private let phaseHeight: CGFloat  = 285
+    private let phaseHeight: CGFloat = 285
     private let phaseSpacing: CGFloat = 12
 
     private let phasesContainerView: UIView = {
@@ -37,6 +36,7 @@ class TreatmentCell: UICollectionViewCell {
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
+
     private var containerHeightConstraint: NSLayoutConstraint?
 
     override func awakeFromNib() {
@@ -56,18 +56,19 @@ class TreatmentCell: UICollectionViewCell {
             phasesContainerView.topAnchor.constraint(equalTo: separatorView.bottomAnchor, constant: 12),
             phasesContainerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             phasesContainerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            phasesContainerView.bottomAnchor.constraint(equalTo: addPhaseButton.topAnchor, constant: -12)
+            phasesContainerView.bottomAnchor.constraint(equalTo: addPhaseButton.topAnchor, constant: -12),
         ])
         containerHeightConstraint = phasesContainerView.heightAnchor.constraint(equalToConstant: 0)
         containerHeightConstraint?.isActive = true
     }
 
     // MARK: - Reuse restore
+
     func restoreState(phases: [SavedPhaseState], badgeStatus: PhaseStatus) {
         phaseViews.forEach { $0.removeFromSuperview() }
-        phaseViews    = []
+        phaseViews = []
         phaseStatuses = [:]
-        wasCompleted  = (badgeStatus == .completed)
+        wasCompleted = (badgeStatus == .completed)
 
         for (i, saved) in phases.enumerated() {
             addPhaseViewInternal(index: i, initialStatus: saved.status, savedState: saved)
@@ -78,8 +79,13 @@ class TreatmentCell: UICollectionViewCell {
     }
 
     // MARK: - Lock Overlay
+
     func setLocked(_ locked: Bool) {
-        locked ? showLockOverlay() : removeLockOverlay()
+        if locked {
+            showLockOverlay()
+        } else {
+            removeLockOverlay()
+        }
     }
 
     private func showLockOverlay() {
@@ -99,7 +105,7 @@ class TreatmentCell: UICollectionViewCell {
             lockImage.centerXAnchor.constraint(equalTo: overlay.centerXAnchor),
             lockImage.centerYAnchor.constraint(equalTo: overlay.centerYAnchor),
             lockImage.widthAnchor.constraint(equalToConstant: 28),
-            lockImage.heightAnchor.constraint(equalToConstant: 28)
+            lockImage.heightAnchor.constraint(equalToConstant: 28),
         ])
 
         contentView.addSubview(overlay)
@@ -107,7 +113,7 @@ class TreatmentCell: UICollectionViewCell {
             overlay.topAnchor.constraint(equalTo: contentView.topAnchor),
             overlay.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             overlay.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            overlay.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            overlay.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
         lockOverlayView = overlay
     }
@@ -125,7 +131,8 @@ class TreatmentCell: UICollectionViewCell {
     }
 
     // MARK: - Add Phase (user-initiated via + button)
-    @IBAction func addPhaseTapped(_ sender: UIButton) {
+
+    @IBAction func addPhaseTapped(_: UIButton) {
         let index = phaseViews.count
         phaseStatuses[index] = .notStarted
         addPhaseViewInternal(index: index, initialStatus: .notStarted, savedState: nil)
@@ -135,6 +142,7 @@ class TreatmentCell: UICollectionViewCell {
     }
 
     // MARK: - Internal phase view builder
+
     private func addPhaseViewInternal(index: Int, initialStatus: PhaseStatus, savedState: SavedPhaseState?) {
         guard let phaseView = Bundle.main.loadNibNamed("TreatmentPhaseView", owner: nil, options: nil)?.first as? TreatmentPhaseView else { return }
 
@@ -148,8 +156,8 @@ class TreatmentCell: UICollectionViewCell {
             } else if saved.treatmentType != .none || saved.startDate != nil || !saved.duration.isEmpty {
                 phaseView.restoreFields(
                     treatmentType: saved.treatmentType,
-                    startDate:     saved.startDate,
-                    duration:      saved.duration
+                    startDate: saved.startDate,
+                    duration: saved.duration
                 )
             }
         }
@@ -178,9 +186,9 @@ class TreatmentCell: UICollectionViewCell {
             guard let idx = self.phaseViews.firstIndex(of: phaseView) else { return }
             var model = TreatmentPhaseModel()
             model.treatmentType = phaseView.currentTreatmentType()
-            model.startDate     = phaseView.currentStartDate()
-            model.duration      = phaseView.currentDuration()
-            model.state         = .saved
+            model.startDate = phaseView.currentStartDate()
+            model.duration = phaseView.currentDuration()
+            model.state = .saved
             self.onSaveButtonTapped?(model, idx)
         }
 
@@ -190,14 +198,14 @@ class TreatmentCell: UICollectionViewCell {
                 phaseView.topAnchor.constraint(equalTo: last.bottomAnchor, constant: phaseSpacing),
                 phaseView.leadingAnchor.constraint(equalTo: phasesContainerView.leadingAnchor),
                 phaseView.trailingAnchor.constraint(equalTo: phasesContainerView.trailingAnchor),
-                phaseView.heightAnchor.constraint(equalToConstant: phaseHeight)
+                phaseView.heightAnchor.constraint(equalToConstant: phaseHeight),
             ])
         } else {
             NSLayoutConstraint.activate([
                 phaseView.topAnchor.constraint(equalTo: phasesContainerView.topAnchor),
                 phaseView.leadingAnchor.constraint(equalTo: phasesContainerView.leadingAnchor),
                 phaseView.trailingAnchor.constraint(equalTo: phasesContainerView.trailingAnchor),
-                phaseView.heightAnchor.constraint(equalToConstant: phaseHeight)
+                phaseView.heightAnchor.constraint(equalToConstant: phaseHeight),
             ])
         }
 
@@ -206,12 +214,13 @@ class TreatmentCell: UICollectionViewCell {
     }
 
     // MARK: - Delete Phase
+
     private func deletePhase(_ phaseView: TreatmentPhaseView) {
         guard phaseViews.contains(phaseView) else { return }
 
         UIView.animate(withDuration: 0.25, animations: {
             phaseView.alpha = 0
-        }) { _ in
+        }, completion: { _ in
             guard let idx = self.phaseViews.firstIndex(of: phaseView) else { return }
 
             let statusesCopy = self.phaseStatuses
@@ -234,7 +243,7 @@ class TreatmentCell: UICollectionViewCell {
             self.rebuildContainerHeight()
             self.recomputeOverallBadge()
             self.onCellHeightChanged?()
-        }
+        })
     }
 
     private func rebuildPhaseConstraints() {
@@ -250,7 +259,7 @@ class TreatmentCell: UICollectionViewCell {
                     view.topAnchor.constraint(equalTo: phasesContainerView.topAnchor),
                     view.leadingAnchor.constraint(equalTo: phasesContainerView.leadingAnchor),
                     view.trailingAnchor.constraint(equalTo: phasesContainerView.trailingAnchor),
-                    view.heightAnchor.constraint(equalToConstant: phaseHeight)
+                    view.heightAnchor.constraint(equalToConstant: phaseHeight),
                 ])
             } else {
                 let prev = phaseViews[i - 1]
@@ -258,7 +267,7 @@ class TreatmentCell: UICollectionViewCell {
                     view.topAnchor.constraint(equalTo: prev.bottomAnchor, constant: phaseSpacing),
                     view.leadingAnchor.constraint(equalTo: phasesContainerView.leadingAnchor),
                     view.trailingAnchor.constraint(equalTo: phasesContainerView.trailingAnchor),
-                    view.heightAnchor.constraint(equalToConstant: phaseHeight)
+                    view.heightAnchor.constraint(equalToConstant: phaseHeight),
                 ])
             }
         }
@@ -270,6 +279,7 @@ class TreatmentCell: UICollectionViewCell {
     }
 
     // MARK: - Badge
+
     private func recomputeOverallBadge() {
         guard !phaseViews.isEmpty else {
             applyBadge(.notStarted)
@@ -296,7 +306,7 @@ class TreatmentCell: UICollectionViewCell {
         }
     }
 
-    private func phaseName(from view: TreatmentPhaseView) -> String {
+    private func phaseName(from _: TreatmentPhaseView) -> String {
         return JourneyState.shared.currentTreatmentName
     }
 
@@ -308,23 +318,27 @@ class TreatmentCell: UICollectionViewCell {
         UIView.animate(withDuration: 0.3) {
             switch status {
             case .notStarted:
-                self.statusLabel.text            = "Not Started"
+                self.statusLabel.text = "Not Started"
                 self.statusLabel.backgroundColor = self.notStartedBg
-                self.statusLabel.textColor       = self.notStartedTextColor
+                self.statusLabel.textColor = self.notStartedTextColor
             case .inProgress:
-                self.statusLabel.text            = "In Progress"
+                self.statusLabel.text = "In Progress"
                 self.statusLabel.backgroundColor = self.lightPink
-                self.statusLabel.textColor       = self.inProgressTextColor
+                self.statusLabel.textColor = self.inProgressTextColor
             case .completed:
-                self.statusLabel.text            = "Completed"
+                self.statusLabel.text = "Completed"
                 self.statusLabel.backgroundColor = self.completedGreenBg
-                self.statusLabel.textColor       = self.completedGreenColor
+                self.statusLabel.textColor = self.completedGreenColor
             }
         }
     }
 
     func configure(with model: TreatmentModel) {
-        model.status == "Completed" ? applyBadge(.completed) : applyBadge(.notStarted)
+        if model.status == "Completed" {
+            applyBadge(.completed)
+        } else {
+            applyBadge(.notStarted)
+        }
     }
 
     func getCellHeight() -> CGFloat {

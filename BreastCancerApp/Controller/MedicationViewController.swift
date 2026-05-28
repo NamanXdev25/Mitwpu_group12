@@ -1,12 +1,11 @@
 import UIKit
 
 class MedicationViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+    @IBOutlet var collectionView: UICollectionView!
+    @IBOutlet var Cancel: UIBarButtonItem!
+    @IBOutlet var AddButton: UIBarButtonItem!
 
-    @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var Cancel: UIBarButtonItem!
-    @IBOutlet weak var AddButton: UIBarButtonItem!
-
-    var displayDate: Date = Date()
+    var displayDate: Date = .init()
     var onDismiss: (() -> Void)?
 
     private let calendar = Calendar.current
@@ -98,9 +97,16 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
             Medication(name: "Aspirin", note: "Take with food", time: "8:00 AM", repeatOption: "Every Day", isTaken: false, reminderEnabled: true),
             Medication(name: "Vitamin D", note: "Morning supplement", time: "9:00 AM", repeatOption: "Every Day", isTaken: false, reminderEnabled: true),
             Medication(name: "Blood Pressure Med", note: "", time: "12:00 PM", repeatOption: "Every Day", isTaken: false, reminderEnabled: true),
-            Medication(name: "Thyroid Medicine", note: "Take on empty stomach", time: "7:00 AM", repeatOption: "Every Day", isTaken: false, reminderEnabled: true),
+            Medication(
+                name: "Thyroid Medicine",
+                note: "Take on empty stomach",
+                time: "7:00 AM",
+                repeatOption: "Every Day",
+                isTaken: false,
+                reminderEnabled: true
+            ),
             Medication(name: "Omega-3", note: "", time: "6:00 PM", repeatOption: "Every Mon", isTaken: false, reminderEnabled: false),
-            Medication(name: "Allergy Medicine", note: "Only if needed", time: "10:00 PM", repeatOption: "Every Day", isTaken: false, reminderEnabled: true)
+            Medication(name: "Allergy Medicine", note: "Only if needed", time: "10:00 PM", repeatOption: "Every Day", isTaken: false, reminderEnabled: true),
         ]
         saveMedications()
     }
@@ -113,11 +119,11 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
         )
     }
 
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
+    func numberOfSections(in _: UICollectionView) -> Int {
         return 2
     }
 
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == 0 {
             return 1
         } else {
@@ -126,64 +132,73 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
         if indexPath.section == 0 {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "stats_header", for: indexPath) as? MedicationStatsHeaderCell else {
-                return UICollectionViewCell()
-            }
-
-            let meds = displayedDateMedications
-
-            if meds.isEmpty {
-                cell.configureEmpty()
-            } else {
-                let total = meds.count
-                let taken = meds.filter { $0.isTaken }.count
-                let missed = meds.filter { med in
-                    guard !med.isTaken else { return false }
-                    let formatter = DateFormatter()
-                    formatter.dateFormat = "h:mm a"
-                    formatter.locale = Locale(identifier: "en_US_POSIX")
-                    guard let scheduledTime = formatter.date(from: med.time) else { return false }
-                    let cal = Calendar.current
-                    let components = cal.dateComponents([.hour, .minute], from: scheduledTime)
-                    guard let scheduledToday = cal.date(
-                        bySettingHour: components.hour ?? 0,
-                        minute: components.minute ?? 0,
-                        second: 0,
-                        of: normalizedDisplayDate
-                    ) else { return false }
-                    return Date() > scheduledToday.addingTimeInterval(5 * 60)
-                }.count
-                cell.configure(total: total, taken: taken, missed: missed)
-            }
-
-            return cell
+            return configureHeaderCell(collectionView: collectionView, indexPath: indexPath)
         }
 
         if displayedDateMedications.isEmpty {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "empty_state", for: indexPath)
-            cell.contentView.subviews.forEach { $0.removeFromSuperview() }
-
-            let label = UILabel()
-            label.text = "No medications added"
-            label.textAlignment = .center
-            label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-            label.textColor = .systemGray
-            label.translatesAutoresizingMaskIntoConstraints = false
-
-            cell.contentView.addSubview(label)
-            NSLayoutConstraint.activate([
-                label.centerXAnchor.constraint(equalTo: cell.contentView.centerXAnchor),
-                label.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-                label.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 20),
-                label.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -20)
-            ])
-
-            cell.backgroundColor = .clear
-            return cell
+            return configureEmptyStateCell(collectionView: collectionView, indexPath: indexPath)
         }
 
+        return configureMedicationCell(collectionView: collectionView, indexPath: indexPath)
+    }
+
+    private func configureHeaderCell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "stats_header", for: indexPath) as? MedicationStatsHeaderCell else {
+            return UICollectionViewCell()
+        }
+
+        let meds = displayedDateMedications
+        if meds.isEmpty {
+            cell.configureEmpty()
+        } else {
+            let total = meds.count
+            let taken = meds.filter { $0.isTaken }.count
+            let missed = meds.filter { med in
+                guard !med.isTaken else { return false }
+                let formatter = DateFormatter()
+                formatter.dateFormat = "h:mm a"
+                formatter.locale = Locale(identifier: "en_US_POSIX")
+                guard let scheduledTime = formatter.date(from: med.time) else { return false }
+                let cal = Calendar.current
+                let components = cal.dateComponents([.hour, .minute], from: scheduledTime)
+                guard let scheduledToday = cal.date(
+                    bySettingHour: components.hour ?? 0,
+                    minute: components.minute ?? 0,
+                    second: 0,
+                    of: normalizedDisplayDate
+                ) else { return false }
+                return Date() > scheduledToday.addingTimeInterval(5 * 60)
+            }.count
+            cell.configure(total: total, taken: taken, missed: missed)
+        }
+        return cell
+    }
+
+    private func configureEmptyStateCell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "empty_state", for: indexPath)
+        cell.contentView.subviews.forEach { $0.removeFromSuperview() }
+
+        let label = UILabel()
+        label.text = "No medications added"
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        label.textColor = .systemGray
+        label.translatesAutoresizingMaskIntoConstraints = false
+
+        cell.contentView.addSubview(label)
+        NSLayoutConstraint.activate([
+            label.centerXAnchor.constraint(equalTo: cell.contentView.centerXAnchor),
+            label.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
+            label.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 20),
+            label.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -20),
+        ])
+
+        cell.backgroundColor = .clear
+        return cell
+    }
+
+    private func configureMedicationCell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "med_item", for: indexPath) as? MedicationItemCell else {
             return UICollectionViewCell()
         }
@@ -209,7 +224,7 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
 
                 if self.isDisplayingToday {
                     let allTaken = !self.displayedDateMedications.isEmpty &&
-                        self.displayedDateMedications.allSatisfy({ $0.isTaken })
+                        self.displayedDateMedications.allSatisfy { $0.isTaken }
                     CoinRewardService.shared.awardMedicationGoalIfEligible(
                         allTaken: allTaken,
                         on: self
@@ -217,17 +232,19 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
                 }
             }
         }
-
         return cell
     }
 
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String,
+                        at indexPath: IndexPath) -> UICollectionReusableView {
         if kind == UICollectionView.elementKindSectionHeader {
-            let header = collectionView.dequeueReusableSupplementaryView(
+            guard let header = collectionView.dequeueReusableSupplementaryView(
                 ofKind: kind,
                 withReuseIdentifier: "med_header",
                 for: indexPath
-            ) as! MedicationHeaderView
+            ) as? MedicationHeaderView else {
+                fatalError("Expected MedicationHeaderView for reuse identifier 'med_header' at \(indexPath)")
+            }
 
             if indexPath.section == 1 {
                 header.configure(with: displayedDateSectionTitle)
@@ -239,83 +256,89 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
     }
 
     func generateLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout { (sectionIndex, environment) -> NSCollectionLayoutSection? in
-
+        return UICollectionViewCompositionalLayout { [weak self] sectionIndex, environment -> NSCollectionLayoutSection? in
             if sectionIndex == 0 {
-                let itemSize = NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(1.0),
-                    heightDimension: .estimated(90)
-                )
-                let item = NSCollectionLayoutItem(layoutSize: itemSize)
-                let groupSize = NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(1.0),
-                    heightDimension: .estimated(90)
-                )
-                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-                let section = NSCollectionLayoutSection(group: group)
-                section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 16, trailing: 0)
-                return section
+                return self?.createStatsSection()
             } else {
-                var config = UICollectionLayoutListConfiguration(appearance: .plain)
-                config.backgroundColor = .clear
-                config.showsSeparators = false
-                config.headerMode = .supplementary
-
-                config.itemSeparatorHandler = { indexPath, sectionSeparatorConfiguration in
-                    var configuration = sectionSeparatorConfiguration
-                    configuration.topSeparatorVisibility = .hidden
-                    configuration.bottomSeparatorVisibility = .hidden
-                    return configuration
-                }
-
-                config.trailingSwipeActionsConfigurationProvider = { [weak self] indexPath in
-                    guard let self = self else { return nil }
-
-                    if self.displayedDateMedications.isEmpty { return nil }
-
-                    let displayedMeds = self.displayedDateMedications
-                    if indexPath.row >= displayedMeds.count { return nil }
-
-                    let medToEdit = displayedMeds[indexPath.row]
-
-                    guard let actualIndex = self.allMedications.firstIndex(where: {
-                        $0.name == medToEdit.name && $0.time == medToEdit.time && $0.repeatOption == medToEdit.repeatOption
-                    }) else { return nil }
-
-                    let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { action, view, completion in
-                        self.confirmDelete(actualIndex: actualIndex, displayIndexPath: indexPath, completion: completion)
-                    }
-                    deleteAction.image = UIImage(systemName: "trash.fill")
-                    deleteAction.backgroundColor = .systemRed
-
-                    let editAction = UIContextualAction(style: .normal, title: "Edit") { action, view, completion in
-                        self.openEditMedication(actualIndex: actualIndex)
-                        completion(true)
-                    }
-                    editAction.image = UIImage(systemName: "pencil")
-                    editAction.backgroundColor = .systemBlue
-
-                    let swipeConfig = UISwipeActionsConfiguration(actions: [deleteAction, editAction])
-                    swipeConfig.performsFirstActionWithFullSwipe = true
-                    return swipeConfig
-                }
-
-                let section = NSCollectionLayoutSection.list(using: config, layoutEnvironment: environment)
-                let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(40))
-                let header = NSCollectionLayoutBoundarySupplementaryItem(
-                    layoutSize: headerSize,
-                    elementKind: UICollectionView.elementKindSectionHeader,
-                    alignment: .top
-                )
-                section.boundarySupplementaryItems = [header]
-                section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-                return section
+                return self?.createListSection(environment: environment)
             }
         }
-        return layout
     }
 
-    func confirmDelete(actualIndex: Int, displayIndexPath: IndexPath, completion: @escaping (Bool) -> Void) {
+    private func createStatsSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .estimated(90)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .estimated(90)
+        )
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 16, trailing: 0)
+        return section
+    }
+
+    private func createListSection(environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
+        var config = UICollectionLayoutListConfiguration(appearance: .plain)
+        config.backgroundColor = .clear
+        config.showsSeparators = false
+        config.headerMode = .supplementary
+
+        config.itemSeparatorHandler = { _, sectionSeparatorConfiguration in
+            var configuration = sectionSeparatorConfiguration
+            configuration.topSeparatorVisibility = .hidden
+            configuration.bottomSeparatorVisibility = .hidden
+            return configuration
+        }
+
+        config.trailingSwipeActionsConfigurationProvider = { [weak self] indexPath in
+            return self?.createSwipeActions(for: indexPath)
+        }
+
+        let section = NSCollectionLayoutSection.list(using: config, layoutEnvironment: environment)
+        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(40))
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: headerSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .top
+        )
+        section.boundarySupplementaryItems = [header]
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+        return section
+    }
+
+    private func createSwipeActions(for indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        if displayedDateMedications.isEmpty { return nil }
+        let displayedMeds = displayedDateMedications
+        if indexPath.row >= displayedMeds.count { return nil }
+        let medToEdit = displayedMeds[indexPath.row]
+
+        guard let actualIndex = allMedications.firstIndex(where: {
+            $0.name == medToEdit.name && $0.time == medToEdit.time && $0.repeatOption == medToEdit.repeatOption
+        }) else { return nil }
+
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { [weak self] _, _, completion in
+            self?.confirmDelete(actualIndex: actualIndex, displayIndexPath: indexPath, completion: completion)
+        }
+        deleteAction.image = UIImage(systemName: "trash.fill")
+        deleteAction.backgroundColor = .systemRed
+
+        let editAction = UIContextualAction(style: .normal, title: "Edit") { [weak self] _, _, completion in
+            self?.openEditMedication(actualIndex: actualIndex)
+            completion(true)
+        }
+        editAction.image = UIImage(systemName: "pencil")
+        editAction.backgroundColor = .systemBlue
+
+        let swipeConfig = UISwipeActionsConfiguration(actions: [deleteAction, editAction])
+        swipeConfig.performsFirstActionWithFullSwipe = true
+        return swipeConfig
+    }
+
+    func confirmDelete(actualIndex: Int, displayIndexPath _: IndexPath, completion: @escaping (Bool) -> Void) {
         let medName = allMedications[actualIndex].name
         let alert = UIAlertController(
             title: "Delete Medication?",
@@ -340,19 +363,21 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
 
     func openEditMedication(actualIndex: Int) {
         let storyboard = UIStoryboard(name: "Medication", bundle: nil)
-        guard let addVC = storyboard.instantiateViewController(withIdentifier: "NewAddMedicationViewController") as? NewAddMedicationViewController else { return }
+        guard let addVC = storyboard.instantiateViewController(withIdentifier: "NewAddMedicationViewController") as? NewAddMedicationViewController
+        else { return }
         addVC.medicationToEdit = allMedications[actualIndex]
         addVC.delegate = self
         navigationController?.pushViewController(addVC, animated: true)
     }
 
-    @IBAction func cancelButtonTapped(_ sender: UIBarButtonItem) {
+    @IBAction func cancelButtonTapped(_: UIBarButtonItem) {
         dismiss(animated: true)
     }
 
-    @IBAction func addButtonTapped(_ sender: UIBarButtonItem) {
+    @IBAction func addButtonTapped(_: UIBarButtonItem) {
         let storyboard = UIStoryboard(name: "Medication", bundle: nil)
-        guard let addVC = storyboard.instantiateViewController(withIdentifier: "NewAddMedicationViewController") as? NewAddMedicationViewController else { return }
+        guard let addVC = storyboard.instantiateViewController(withIdentifier: "NewAddMedicationViewController") as? NewAddMedicationViewController
+        else { return }
         addVC.delegate = self
         navigationController?.pushViewController(addVC, animated: true)
     }
@@ -377,7 +402,6 @@ class MedicationViewController: UIViewController, UICollectionViewDataSource, UI
 }
 
 extension MedicationViewController: NewAddMedicationDelegate {
-
     func didSaveMedications(_ medications: [Medication], editedId: String?) {
         let idToRemove = editedId ?? medications.first?.id
         if let targetId = idToRemove,

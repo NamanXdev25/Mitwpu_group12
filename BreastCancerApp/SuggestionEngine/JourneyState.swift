@@ -1,7 +1,7 @@
-
 import Foundation
 
 // MARK: - Codable phase state (persisted to UserDefaults)
+
 struct PersistedPhaseState: Codable {
     var treatmentTypeRaw: String
     var startDate: Date?
@@ -11,6 +11,7 @@ struct PersistedPhaseState: Codable {
 }
 
 // MARK: - Codable post-treatment state (persisted to UserDefaults)
+
 struct PersistedPostTreatmentState: Codable {
     var selectedDate: Date?
     var selectedSymptoms: [String]
@@ -18,6 +19,7 @@ struct PersistedPostTreatmentState: Codable {
 }
 
 // MARK: - Codable journey snapshot (full state for repository sync)
+
 struct PersistedJourneySnapshot: Codable {
     var isDiagnosisCompleted: Bool
     var isWaitCompleted: Bool
@@ -33,43 +35,52 @@ struct PersistedJourneySnapshot: Codable {
 }
 
 final class JourneyState {
-
     static let shared = JourneyState()
-    
+
     private var saveWorkItem: DispatchWorkItem?
 
-    private init() { restore() }
+    private init() {
+        restore()
+    }
 
     // MARK: - Notification name
+
     static let didChangeNotification = Notification.Name("JourneyStateDidChange")
 
     // MARK: - Repository
+
     private lazy var repository: JourneyRepository = RepositoryFactory.makeJourneyRepository()
 
     // MARK: - Section unlock flags
-    private(set) var isDiagnosisCompleted   = false
-    private(set) var isWaitCompleted        = false
-    private(set) var isTreatmentCompleted   = false
+
+    private(set) var isDiagnosisCompleted = false
+    private(set) var isWaitCompleted = false
+    private(set) var isTreatmentCompleted = false
 
     // MARK: - Journey summary for Home screen
+
     private(set) var currentStepTitle: String = "Diagnosed"
     private(set) var currentTreatmentName: String = "Not started yet"
 
     // MARK: - Treatment phase persistence (read by JourneyViewController on load)
+
     private(set) var persistedPhaseStates: [PersistedPhaseState] = []
     private(set) var persistedTreatmentBadge: String = "notStarted"
 
     // MARK: - Post-treatment persistence (read by JourneyViewController on load)
+
     private(set) var persistedPostTreatment = PersistedPostTreatmentState(
         selectedDate: nil, selectedSymptoms: [], isSaved: false
     )
 
     // MARK: - Detailed state properties requirements
+
     private(set) var diagnosisDate: Date?
     private(set) var waitDaysInput: Int?
     private(set) var waitSymptoms: [String] = []
 
     // MARK: - Persist / Restore
+
     private func save() {
         saveWorkItem?.cancel()
 
@@ -97,20 +108,20 @@ final class JourneyState {
     private func restore() {
         guard let snapshot = repository.loadState() else { return }
 
-        isDiagnosisCompleted    = snapshot.isDiagnosisCompleted
-        isWaitCompleted         = snapshot.isWaitCompleted
-        isTreatmentCompleted    = snapshot.isTreatmentCompleted
-        currentStepTitle        = snapshot.currentStepTitle
-        currentTreatmentName    = snapshot.currentTreatmentName
+        isDiagnosisCompleted = snapshot.isDiagnosisCompleted
+        isWaitCompleted = snapshot.isWaitCompleted
+        isTreatmentCompleted = snapshot.isTreatmentCompleted
+        currentStepTitle = snapshot.currentStepTitle
+        currentTreatmentName = snapshot.currentTreatmentName
         persistedTreatmentBadge = snapshot.persistedTreatmentBadge
-        persistedPhaseStates    = snapshot.phaseStates
-        persistedPostTreatment  = snapshot.postTreatment
-        diagnosisDate           = snapshot.diagnosisDate
-        waitDaysInput           = snapshot.waitDaysInput
-        waitSymptoms            = snapshot.waitSymptoms
+        persistedPhaseStates = snapshot.phaseStates
+        persistedPostTreatment = snapshot.postTreatment
+        diagnosisDate = snapshot.diagnosisDate
+        waitDaysInput = snapshot.waitDaysInput
+        waitSymptoms = snapshot.waitSymptoms
 
-        if (currentTreatmentName == "Not started yet" || currentTreatmentName.isEmpty)
-            && !persistedPhaseStates.isEmpty {
+        if currentTreatmentName == "Not started yet" || currentTreatmentName.isEmpty,
+           !persistedPhaseStates.isEmpty {
             let latestSaved = persistedPhaseStates
                 .filter { $0.isSaved && $0.treatmentTypeRaw != "none" && !$0.treatmentTypeRaw.isEmpty }
                 .last
@@ -121,8 +132,9 @@ final class JourneyState {
     }
 
     // MARK: - Phase state persistence (called by JourneyViewController)
+
     func savePhaseStates(_ states: [PersistedPhaseState], badgeStatus: String) {
-        persistedPhaseStates    = states
+        persistedPhaseStates = states
         persistedTreatmentBadge = badgeStatus
         save()
     }
@@ -144,22 +156,23 @@ final class JourneyState {
     }
 
     // MARK: - Mutation helpers
+
     func completeDiagnosis() {
         isDiagnosisCompleted = true
-        currentStepTitle     = "Waiting for Result"
+        currentStepTitle = "Waiting for Result"
         save(); post()
     }
 
     func completeWait() {
-        isWaitCompleted  = true
+        isWaitCompleted = true
         currentStepTitle = "Treatment"
         save(); post()
     }
 
     func completeTreatment(phaseName: String) {
-        isTreatmentCompleted   = true
-        currentTreatmentName   = phaseName
-        currentStepTitle       = "Post-Treatment"
+        isTreatmentCompleted = true
+        currentTreatmentName = phaseName
+        currentStepTitle = "Post-Treatment"
         save(); post()
     }
 
@@ -175,39 +188,39 @@ final class JourneyState {
 
     func resetDiagnosis() {
         isDiagnosisCompleted = false
-        isWaitCompleted      = false
+        isWaitCompleted = false
         isTreatmentCompleted = false
-        currentStepTitle     = "Diagnosed"
-        persistedPhaseStates    = []
+        currentStepTitle = "Diagnosed"
+        persistedPhaseStates = []
         persistedTreatmentBadge = "notStarted"
-        currentTreatmentName    = "Not started yet"
-        persistedPostTreatment  = PersistedPostTreatmentState(selectedDate: nil, selectedSymptoms: [], isSaved: false)
-        diagnosisDate           = nil
-        waitDaysInput           = nil
-        waitSymptoms            = []
+        currentTreatmentName = "Not started yet"
+        persistedPostTreatment = PersistedPostTreatmentState(selectedDate: nil, selectedSymptoms: [], isSaved: false)
+        diagnosisDate = nil
+        waitDaysInput = nil
+        waitSymptoms = []
         save(); post()
     }
 
     func resetWait() {
-        isWaitCompleted      = false
+        isWaitCompleted = false
         isTreatmentCompleted = false
-        currentStepTitle     = isDiagnosisCompleted ? "Waiting for Result" : "Diagnosed"
-        persistedPhaseStates    = []
+        currentStepTitle = isDiagnosisCompleted ? "Waiting for Result" : "Diagnosed"
+        persistedPhaseStates = []
         persistedTreatmentBadge = "notStarted"
-        currentTreatmentName    = "Not started yet"
-        persistedPostTreatment  = PersistedPostTreatmentState(selectedDate: nil, selectedSymptoms: [], isSaved: false)
-        waitDaysInput           = nil
-        waitSymptoms            = []
+        currentTreatmentName = "Not started yet"
+        persistedPostTreatment = PersistedPostTreatmentState(selectedDate: nil, selectedSymptoms: [], isSaved: false)
+        waitDaysInput = nil
+        waitSymptoms = []
         save(); post()
     }
 
     func resetTreatment() {
-        isTreatmentCompleted    = false
-        persistedPhaseStates    = []
+        isTreatmentCompleted = false
+        persistedPhaseStates = []
         persistedTreatmentBadge = "notStarted"
-        currentTreatmentName    = "Not started yet"
-        currentStepTitle        = isWaitCompleted ? "Treatment" : "Waiting for Result"
-        persistedPostTreatment  = PersistedPostTreatmentState(selectedDate: nil, selectedSymptoms: [], isSaved: false)
+        currentTreatmentName = "Not started yet"
+        currentStepTitle = isWaitCompleted ? "Treatment" : "Waiting for Result"
+        persistedPostTreatment = PersistedPostTreatmentState(selectedDate: nil, selectedSymptoms: [], isSaved: false)
         save(); post()
     }
 

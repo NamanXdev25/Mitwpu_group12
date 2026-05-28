@@ -1,13 +1,12 @@
-import UIKit
-import AVFoundation
 import AudioToolbox
+import AVFoundation
+import UIKit
 
 class StoreViewController: UIViewController {
-
-    @IBOutlet weak var storeCollectionView: UICollectionView!
-    @IBOutlet weak var categorySegmentedControl: UISegmentedControl!
-    @IBOutlet weak var currentcoinvalue: UILabel!
-    @IBOutlet weak var coinimage: UIImageView!
+    @IBOutlet var storeCollectionView: UICollectionView!
+    @IBOutlet var categorySegmentedControl: UISegmentedControl!
+    @IBOutlet var currentcoinvalue: UILabel!
+    @IBOutlet var coinimage: UIImageView!
 
     private let gardenManager = GardenManager.shared
     private var currentData: [StoreItem] = []
@@ -56,18 +55,22 @@ class StoreViewController: UIViewController {
 
     private func setupCollectionView() {
         storeCollectionView.dataSource = self
-        storeCollectionView.delegate   = self
+        storeCollectionView.delegate = self
         storeCollectionView.setCollectionViewLayout(createLayout(), animated: false)
     }
 
     private func createLayout() -> UICollectionViewLayout {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5),
-                                              heightDimension: .fractionalHeight(1.0))
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(0.5),
+            heightDimension: .fractionalHeight(1.0)
+        )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
 
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                               heightDimension: .fractionalWidth(0.65))
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalWidth(0.65)
+        )
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
         let section = NSCollectionLayoutSection(group: group)
@@ -91,7 +94,7 @@ class StoreViewController: UIViewController {
             emptyYourItemsLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             emptyYourItemsLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
             emptyYourItemsLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            emptyYourItemsLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            emptyYourItemsLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
         ])
     }
 
@@ -101,11 +104,11 @@ class StoreViewController: UIViewController {
 
     // MARK: - Segment / Data
 
-    @objc private func segmentValueChanged(_ sender: UISegmentedControl) {
+    @objc private func segmentValueChanged(_: UISegmentedControl) {
         updateData()
     }
 
-    @IBAction func segmentChanged(_ sender: UISegmentedControl) {
+    @IBAction func segmentChanged(_: UISegmentedControl) {
         updateData()
     }
 
@@ -118,7 +121,7 @@ class StoreViewController: UIViewController {
     private func updateEmptyState() {
         let showEmpty = isShowingYourItems && currentData.isEmpty
         emptyYourItemsLabel.isHidden = !showEmpty
-        storeCollectionView.isHidden  = showEmpty
+        storeCollectionView.isHidden = showEmpty
     }
 
     private func updateData() {
@@ -185,7 +188,7 @@ class StoreViewController: UIViewController {
                 self.showUnlockCelebration(for: item) { [weak self] in
                     self?.navigationController?.popViewController(animated: true)
                 }
-            case .insufficientCoins(let missingCoins, _, _):
+            case let .insufficientCoins(missingCoins, _, _):
                 self.showInsufficientCoinsAlert(for: item, missing: missingCoins)
             case .alreadyUnlocked:
                 self.showAlreadyUnlockedAlert(for: item)
@@ -230,6 +233,14 @@ class StoreViewController: UIViewController {
         playUnlockSound()
         startConfetti()
 
+        let overlay = setupUnlockOverlay()
+        let card = setupUnlockCard(in: overlay)
+        let (icon, sparkle) = setupUnlockContent(in: card, item: item)
+
+        animateUnlockCelebration(overlay: overlay, card: card, icon: icon, sparkle: sparkle, completion: completion)
+    }
+
+    private func setupUnlockOverlay() -> UIView {
         let overlay = UIView()
         overlay.translatesAutoresizingMaskIntoConstraints = false
         overlay.backgroundColor = UIColor.black.withAlphaComponent(0.30)
@@ -240,9 +251,12 @@ class StoreViewController: UIViewController {
             overlay.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             overlay.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             overlay.topAnchor.constraint(equalTo: view.topAnchor),
-            overlay.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            overlay.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
+        return overlay
+    }
 
+    private func setupUnlockCard(in overlay: UIView) -> UIVisualEffectView {
         let card = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialLight))
         card.translatesAutoresizingMaskIntoConstraints = false
         card.layer.cornerRadius = 22
@@ -255,9 +269,12 @@ class StoreViewController: UIViewController {
             card.centerYAnchor.constraint(equalTo: overlay.centerYAnchor),
             card.leadingAnchor.constraint(greaterThanOrEqualTo: overlay.leadingAnchor, constant: 24),
             card.trailingAnchor.constraint(lessThanOrEqualTo: overlay.trailingAnchor, constant: -24),
-            card.widthAnchor.constraint(equalToConstant: 300)
+            card.widthAnchor.constraint(equalToConstant: 300),
         ])
+        return card
+    }
 
+    private func setupUnlockContent(in card: UIVisualEffectView, item: StoreItem) -> (UIImageView, UIImageView) {
         let container = card.contentView
 
         let icon = UIImageView(image: UIImage(named: item.imageName))
@@ -265,19 +282,19 @@ class StoreViewController: UIViewController {
         icon.contentMode = .scaleAspectFit
         icon.layer.shadowColor = UIColor.systemYellow.cgColor
         icon.layer.shadowOpacity = 0
-        icon.layer.shadowRadius  = 0
+        icon.layer.shadowRadius = 0
 
         let title = UILabel()
         title.translatesAutoresizingMaskIntoConstraints = false
-        title.text      = "Hurray!"
-        title.font      = .systemFont(ofSize: 28, weight: .black)
+        title.text = "Hurray!"
+        title.font = .systemFont(ofSize: 28, weight: .black)
         title.textAlignment = .center
         title.textColor = .label
 
         let subtitle = UILabel()
         subtitle.translatesAutoresizingMaskIntoConstraints = false
-        subtitle.text      = "You unlocked \(item.name)"
-        subtitle.font      = .systemFont(ofSize: 18, weight: .semibold)
+        subtitle.text = "You unlocked \(item.name)"
+        subtitle.font = .systemFont(ofSize: 18, weight: .semibold)
         subtitle.textAlignment = .center
         subtitle.textColor = .label
         subtitle.numberOfLines = 2
@@ -309,13 +326,19 @@ class StoreViewController: UIViewController {
             sparkle.topAnchor.constraint(equalTo: container.topAnchor, constant: 14),
             sparkle.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -14),
             sparkle.widthAnchor.constraint(equalToConstant: 22),
-            sparkle.heightAnchor.constraint(equalToConstant: 22)
+            sparkle.heightAnchor.constraint(equalToConstant: 22),
         ])
 
+        return (icon, sparkle)
+    }
+
+    private func animateUnlockCelebration(
+        overlay: UIView, card: UIVisualEffectView, icon: UIImageView, sparkle: UIImageView, completion: (() -> Void)?
+    ) {
         card.transform = CGAffineTransform(scaleX: 0.65, y: 0.65).translatedBy(x: 0, y: 40)
         UIView.animate(withDuration: 0.25) { overlay.alpha = 1 }
         UIView.animate(withDuration: 0.55, delay: 0, usingSpringWithDamping: 0.68, initialSpringVelocity: 0.65) {
-            card.alpha     = 1
+            card.alpha = 1
             card.transform = .identity
         }
 
@@ -324,10 +347,10 @@ class StoreViewController: UIViewController {
         addSparkleSpin(on: sparkle.layer)
         addShimmer(on: card)
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            self.stopConfetti()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+            self?.stopConfetti()
             UIView.animate(withDuration: 0.25, animations: {
-                card.alpha    = 0
+                card.alpha = 0
                 overlay.alpha = 0
             }, completion: { _ in
                 overlay.removeFromSuperview()
@@ -337,7 +360,7 @@ class StoreViewController: UIViewController {
     }
 
     private func addGlowPulse(on layer: CALayer) {
-        layer.shadowColor  = UIColor.systemYellow.cgColor
+        layer.shadowColor = UIColor.systemYellow.cgColor
         layer.shadowOffset = .zero
         layer.shadowRadius = 18
         let glow = CABasicAnimation(keyPath: "shadowOpacity")
@@ -348,7 +371,7 @@ class StoreViewController: UIViewController {
 
     private func addCardPulse(on layer: CALayer) {
         let pulse = CAKeyframeAnimation(keyPath: "transform.scale")
-        pulse.values   = [1.0, 1.10, 0.97, 1.06, 1.0]
+        pulse.values = [1.0, 1.10, 0.97, 1.06, 1.0]
         pulse.keyTimes = [0, 0.25, 0.5, 0.75, 1]
         pulse.duration = 0.65
         layer.add(pulse, forKey: "unlockPulse")
@@ -364,14 +387,18 @@ class StoreViewController: UIViewController {
     private func addShimmer(on target: UIView) {
         target.layoutIfNeeded()
         let shimmer = CAGradientLayer()
-        shimmer.frame = CGRect(x: -target.bounds.width, y: 0,
-                               width: target.bounds.width * 2, height: target.bounds.height)
-        shimmer.colors    = [UIColor.clear.cgColor, UIColor.white.withAlphaComponent(0.55).cgColor, UIColor.clear.cgColor]
+        shimmer.frame = CGRect(
+            x: -target.bounds.width,
+            y: 0,
+            width: target.bounds.width * 2,
+            height: target.bounds.height
+        )
+        shimmer.colors = [UIColor.clear.cgColor, UIColor.white.withAlphaComponent(0.55).cgColor, UIColor.clear.cgColor]
         shimmer.locations = [0, 0.5, 1]
         target.layer.addSublayer(shimmer)
         let animation = CABasicAnimation(keyPath: "transform.translation.x")
         animation.fromValue = -target.bounds.width; animation.toValue = target.bounds.width
-        animation.duration  = 0.9
+        animation.duration = 0.9
         animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
         shimmer.add(animation, forKey: "shimmerMove")
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { shimmer.removeFromSuperlayer() }
@@ -381,17 +408,17 @@ class StoreViewController: UIViewController {
         activeConfettiLayer?.removeFromSuperlayer()
         let emitter = CAEmitterLayer()
         emitter.emitterPosition = CGPoint(x: view.bounds.midX, y: -20)
-        emitter.emitterShape    = .line
-        emitter.emitterSize     = CGSize(width: view.bounds.width, height: 2)
-        emitter.birthRate       = 1
-        emitter.zPosition       = 9999
+        emitter.emitterShape = .line
+        emitter.emitterSize = CGSize(width: view.bounds.width, height: 2)
+        emitter.birthRate = 1
+        emitter.zPosition = 9999
         let colors: [UIColor] = [.systemPink, .systemYellow, .systemMint, .systemTeal, .systemOrange]
         emitter.emitterCells = colors.map { color in
             let cell = CAEmitterCell()
             cell.birthRate = 8; cell.lifetime = 3.5; cell.velocity = 220
             cell.velocityRange = 70; cell.emissionLongitude = .pi; cell.emissionRange = .pi / 5
             cell.spin = 2.5; cell.spinRange = 3.5; cell.scale = 0.22; cell.scaleRange = 0.12
-            cell.color    = color.cgColor
+            cell.color = color.cgColor
             cell.contents = UIImage(systemName: "circle.fill")?.cgImage
             return cell
         }
@@ -414,13 +441,14 @@ class StoreViewController: UIViewController {
 // MARK: - UICollectionView DataSource / Delegate
 
 extension StoreViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_: UICollectionView, numberOfItemsInSection _: Int) -> Int {
         currentData.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "StoreCell", for: indexPath) as! StoreItemCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "StoreCell", for: indexPath) as? StoreItemCell else {
+            fatalError("Expected StoreItemCell for reuse identifier 'StoreCell' at \(indexPath)")
+        }
         let item = currentData[indexPath.item]
 
         if isShowingYourItems {
@@ -433,7 +461,7 @@ extension StoreViewController: UICollectionViewDataSource, UICollectionViewDeleg
         return cell
     }
 
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    func collectionView(_: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = currentData[indexPath.item]
 
         if isShowingYourItems {

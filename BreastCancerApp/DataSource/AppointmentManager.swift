@@ -1,4 +1,3 @@
-
 import Foundation
 
 class AppointmentManager {
@@ -9,7 +8,7 @@ class AppointmentManager {
 
     init(repository: AppointmentRepository = RepositoryFactory.makeAppointmentRepository()) {
         self.repository = repository
-        self.appointments = repository.loadAppointments()
+        appointments = repository.loadAppointments()
     }
 
     func getDateKey(for date: Date) -> String {

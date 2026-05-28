@@ -1,22 +1,22 @@
-
 import UIKit
 
 class ProfileHomeViewController: UIViewController {
-
-    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet var collectionView: UICollectionView!
 
     var notifications = NotificationItem.defaultItems()
 
-    private var profile: HealthProfileModel { UserProfileStore.shared.profile }
+    private var profile: HealthProfileModel {
+        UserProfileStore.shared.profile
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor           = UIColor(named: "BackgroundColor") ?? .systemBackground
+        view.backgroundColor = UIColor(named: "BackgroundColor") ?? .systemBackground
         collectionView.backgroundColor = UIColor(named: "BackgroundColor") ?? .systemBackground
-        collectionView.dataSource      = self
-        collectionView.delegate        = self
+        collectionView.dataSource = self
+        collectionView.delegate = self
         registerCells()
-        
+
         navigationItem.leftBarButtonItem?.target = self
         navigationItem.leftBarButtonItem?.action = #selector(dismissTapped)
         navigationItem.rightBarButtonItem?.target = self
@@ -35,7 +35,7 @@ class ProfileHomeViewController: UIViewController {
             object: nil
         )
     }
-    
+
     @objc private func dismissTapped() {
         dismiss(animated: true)
     }
@@ -52,58 +52,84 @@ class ProfileHomeViewController: UIViewController {
     deinit { NotificationCenter.default.removeObserver(self) }
 
     private func registerCells() {
-        collectionView.register(UINib(nibName: "UserProfileHeaderCell", bundle: nil),
-                                forCellWithReuseIdentifier: "UserProfileHeaderCell")
-        collectionView.register(UINib(nibName: "MenuOptionCell", bundle: nil),
-                                forCellWithReuseIdentifier: "MenuOptionCell")
-        collectionView.register(UINib(nibName: "SectionTitleCell", bundle: nil),
-                                forCellWithReuseIdentifier: "SectionTitleCell")
-        collectionView.register(UINib(nibName: "NotificationGroupCell", bundle: nil),
-                                forCellWithReuseIdentifier: "NotificationGroupCell")
+        collectionView.register(
+            UINib(nibName: "UserProfileHeaderCell", bundle: nil),
+            forCellWithReuseIdentifier: "UserProfileHeaderCell"
+        )
+        collectionView.register(
+            UINib(nibName: "MenuOptionCell", bundle: nil),
+            forCellWithReuseIdentifier: "MenuOptionCell"
+        )
+        collectionView.register(
+            UINib(nibName: "SectionTitleCell", bundle: nil),
+            forCellWithReuseIdentifier: "SectionTitleCell"
+        )
+        collectionView.register(
+            UINib(nibName: "NotificationGroupCell", bundle: nil),
+            forCellWithReuseIdentifier: "NotificationGroupCell"
+        )
     }
 }
 
 extension ProfileHomeViewController: UICollectionViewDataSource {
+    func collectionView(
+        _: UICollectionView,
+        numberOfItemsInSection _: Int
+    ) -> Int {
+        5
+    }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        numberOfItemsInSection section: Int) -> Int { 5 }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
         switch indexPath.item {
-
         case 0:
-            let cell = collectionView.dequeueReusableCell(
+            guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "UserProfileHeaderCell",
-                for: indexPath) as! UserProfileHeaderCell
+                for: indexPath
+            ) as? UserProfileHeaderCell else {
+                fatalError("Expected UserProfileHeaderCell for reuse identifier 'UserProfileHeaderCell' at \(indexPath)")
+            }
             cell.configure(
-                name:  "\(profile.firstName) \(profile.lastName)",
+                name: "\(profile.firstName) \(profile.lastName)",
                 image: profile.profileImage
             )
             return cell
 
         case 1:
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "MenuOptionCell", for: indexPath) as! MenuOptionCell
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "MenuOptionCell", for: indexPath
+            ) as? MenuOptionCell else {
+                fatalError("Expected MenuOptionCell for reuse identifier 'MenuOptionCell' at \(indexPath)")
+            }
             cell.configure(title: "Health Status")
             return cell
 
         case 2:
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "MenuOptionCell", for: indexPath) as! MenuOptionCell
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "MenuOptionCell", for: indexPath
+            ) as? MenuOptionCell else {
+                fatalError("Expected MenuOptionCell for reuse identifier 'MenuOptionCell' at \(indexPath)")
+            }
             cell.configure(title: "Self Exam")
             return cell
 
         case 3:
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "SectionTitleCell", for: indexPath) as! SectionTitleCell
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "SectionTitleCell", for: indexPath
+            ) as? SectionTitleCell else {
+                fatalError("Expected SectionTitleCell for reuse identifier 'SectionTitleCell' at \(indexPath)")
+            }
             return cell
 
         case 4:
-            let cell = collectionView.dequeueReusableCell(
+            guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "NotificationGroupCell",
-                for: indexPath) as! NotificationGroupCell
+                for: indexPath
+            ) as? NotificationGroupCell else {
+                fatalError("Expected NotificationGroupCell for reuse identifier 'NotificationGroupCell' at \(indexPath)")
+            }
             cell.configure(notifications: notifications)
             return cell
 
@@ -114,10 +140,11 @@ extension ProfileHomeViewController: UICollectionViewDataSource {
 }
 
 extension ProfileHomeViewController: UICollectionViewDelegateFlowLayout {
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout _: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
         switch indexPath.item {
         case 0: return CGSize(width: collectionView.frame.width, height: 180)
         case 3: return CGSize(width: collectionView.frame.width, height: 60)
@@ -126,25 +153,36 @@ extension ProfileHomeViewController: UICollectionViewDelegateFlowLayout {
         }
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        minimumLineSpacingForSectionAt section: Int) -> CGFloat { 12 }
+    func collectionView(
+        _: UICollectionView,
+        layout _: UICollectionViewLayout,
+        minimumLineSpacingForSectionAt _: Int
+    ) -> CGFloat {
+        12
+    }
 }
 
 extension ProfileHomeViewController: UICollectionViewDelegate {
-
-    func collectionView(_ collectionView: UICollectionView,
-                        didSelectItemAt indexPath: IndexPath) {
+    func collectionView(
+        _: UICollectionView,
+        didSelectItemAt indexPath: IndexPath
+    ) {
         switch indexPath.item {
         case 1:
-            let vc = storyboard?.instantiateViewController(
-                withIdentifier: "HealthStatusViewController") as! HealthStatusViewController
+            guard let vc = storyboard?.instantiateViewController(
+                withIdentifier: "HealthStatusViewController"
+            ) as? HealthStatusViewController else {
+                fatalError("Expected HealthStatusViewController for identifier 'HealthStatusViewController'")
+            }
             navigationController?.pushViewController(vc, animated: true)
         case 2:
             let storyboard = UIStoryboard(name: "selfexam", bundle: nil)
-                let vc = storyboard.instantiateViewController(
-                    withIdentifier: "SelfExamineViewController") as! SelfExamineViewController
-                navigationController?.pushViewController(vc, animated: true)
+            guard let vc = storyboard.instantiateViewController(
+                withIdentifier: "SelfExamineViewController"
+            ) as? SelfExamineViewController else {
+                fatalError("Expected SelfExamineViewController for identifier 'SelfExamineViewController'")
+            }
+            navigationController?.pushViewController(vc, animated: true)
         default: break
         }
     }

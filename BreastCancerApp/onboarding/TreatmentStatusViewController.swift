@@ -1,14 +1,15 @@
 import UIKit
 
 class TreatmentStatusViewController: UIViewController {
-    @IBOutlet weak var progressBar: ProgressBarView!
-    @IBOutlet weak var stackView: UIStackView!
-    @IBOutlet weak var nextButton: UIButton!
+    @IBOutlet var progressBar: ProgressBarView!
+    @IBOutlet var stackView: UIStackView!
+    @IBOutlet var nextButton: UIButton!
 
     private var treatmentOptions: [String] = []
     private var selectedIndex: Int? {
         didSet { updateNextButtonState() }
     }
+
     private var optionViews: [TreatmentOptionView] = []
 
     override func viewDidLoad() {
@@ -54,11 +55,11 @@ class TreatmentStatusViewController: UIViewController {
         nextButton.alpha = selectedIndex != nil ? 1.0 : 0.5
     }
 
-    @IBAction func skipButtonTapped(_ sender: UIButton) {
+    @IBAction func skipButtonTapped(_: UIButton) {
         performSegue(withIdentifier: "showHobbies", sender: nil)
     }
 
-    @IBAction func nextButtonTapped(_ sender: UIButton) {
+    @IBAction func nextButtonTapped(_: UIButton) {
         guard let index = selectedIndex else { return }
 
         let identifier: String

@@ -1,15 +1,14 @@
 import UIKit
 
 class ArticleContentCell: UICollectionViewCell {
-
-    @IBOutlet weak var contentLabel: UILabel!
+    @IBOutlet var contentLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         contentLabel.numberOfLines = 0
     }
 
-    func configure(title: String, content: String) {
+    func configure(title _: String, content: String) {
         contentLabel.attributedText = nil
         contentLabel.text = content
         contentLabel.font = .systemFont(ofSize: 16)

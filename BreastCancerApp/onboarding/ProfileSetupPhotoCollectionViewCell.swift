@@ -5,11 +5,10 @@ protocol ProfileSetupPhotoCellDelegate: AnyObject {
 }
 
 class ProfileSetupPhotoCollectionViewCell: UICollectionViewCell {
-
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var instructionLabel: UILabel!
-    @IBOutlet weak var cameraButton: UIButton!
-    @IBOutlet weak var profileImageView: UIImageView!
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var instructionLabel: UILabel!
+    @IBOutlet var cameraButton: UIButton!
+    @IBOutlet var profileImageView: UIImageView!
 
     weak var delegate: ProfileSetupPhotoCellDelegate?
 
@@ -30,7 +29,7 @@ class ProfileSetupPhotoCollectionViewCell: UICollectionViewCell {
         profileImageView.clipsToBounds = true
     }
 
-    @IBAction func cameraButtonTapped(_ sender: UIButton) {
+    @IBAction func cameraButtonTapped(_: UIButton) {
         delegate?.didTapCameraButton()
     }
 

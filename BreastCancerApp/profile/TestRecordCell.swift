@@ -1,18 +1,20 @@
 import UIKit
 
 final class TestRecordCell: UICollectionViewCell {
-
     // MARK: - Outlets
-    @IBOutlet private weak var dateLabel: UILabel!
-    @IBOutlet private weak var chevronButton: UIButton!
-    @IBOutlet private weak var itemsStack: UIStackView!
-    @IBOutlet private weak var separator: UIView!
+
+    @IBOutlet private var dateLabel: UILabel!
+    @IBOutlet private var chevronButton: UIButton!
+    @IBOutlet private var itemsStack: UIStackView!
+    @IBOutlet private var separator: UIView!
 
     // MARK: - Callbacks
+
     var onChevronTap: (() -> Void)?
     var onRequestDelete: (() -> Void)?
 
     // MARK: - Private Properties
+
     private weak var detailsContainer: UIView?
     private weak var detailsStack: UIStackView?
 
@@ -21,6 +23,7 @@ final class TestRecordCell: UICollectionViewCell {
     private let rowHeight: CGFloat = 44
 
     // MARK: - Lifecycle
+
     override func awakeFromNib() {
         super.awakeFromNib()
         setupSeparator()
@@ -35,6 +38,7 @@ final class TestRecordCell: UICollectionViewCell {
     }
 
     // MARK: - Setup
+
     private func setupSeparator() {
         separator.backgroundColor = UIColor(white: 0.85, alpha: 1)
         separator.isHidden = false
@@ -64,6 +68,7 @@ final class TestRecordCell: UICollectionViewCell {
     }
 
     // MARK: - Configuration
+
     func configure(date: Date, details: [ObservationItem]? = nil) {
         dateLabel.text = formatDate(date)
         clearDetails()
@@ -90,6 +95,7 @@ final class TestRecordCell: UICollectionViewCell {
     }
 
     // MARK: - Date Formatting
+
     private func formatDate(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
@@ -97,6 +103,7 @@ final class TestRecordCell: UICollectionViewCell {
     }
 
     // MARK: - Details Container Creation
+
     private func createDetailsContainer() -> UIView {
         let container = UIView()
         container.backgroundColor = .white
@@ -120,11 +127,12 @@ final class TestRecordCell: UICollectionViewCell {
             stack.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: containerInsets.left),
             stack.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -containerInsets.right),
             stack.topAnchor.constraint(equalTo: container.topAnchor, constant: containerInsets.top),
-            stack.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -containerInsets.bottom)
+            stack.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -containerInsets.bottom),
         ])
     }
 
     // MARK: - Details Population
+
     private func populateDetails(
         stack: UIStackView,
         with details: [ObservationItem]
@@ -186,6 +194,7 @@ final class TestRecordCell: UICollectionViewCell {
     }
 
     // MARK: - Chevron Animation
+
     private func rotateChevron(down: Bool, animated: Bool) {
         let transform = down
             ? CGAffineTransform(rotationAngle: .pi / 2)
@@ -201,18 +210,18 @@ final class TestRecordCell: UICollectionViewCell {
     }
 
     // MARK: - Actions
+
     @IBAction private func chevronTapped(_ sender: UIButton) {
         let isExpanded = sender.transform != .identity
         rotateChevron(down: !isExpanded, animated: true)
         onChevronTap?()
     }
 
-    @objc private func didSwipeLeft(_ gesture: UISwipeGestureRecognizer) {
+    @objc private func didSwipeLeft(_: UISwipeGestureRecognizer) {
         onRequestDelete?()
     }
-    
+
     func setSeparatorHidden(_ hidden: Bool) {
         separator.isHidden = hidden
     }
-
 }

@@ -21,22 +21,87 @@ class BreathingDataManager {
         let favoriteTitles = repository.loadFavoriteTitles()
         let favorites = Set(favoriteTitles)
 
-        var sessions = [
-            BreathingSession(title: "Gentle Focus", category: "Meditation", duration: "15 min", imageName: "gentle_focus", isFavorite: false, videoFileName: "Gentle"),
-            BreathingSession(title: "Healing Reflections", category: "Gratitude", duration: "10 min", imageName: "healing_reflections", isFavorite: false, videoFileName: "healing_video"),
-            BreathingSession(title: "Calmer Mind", category: "Stress Relief", duration: "10 min", imageName: "calmer_mind", isFavorite: false, videoFileName: "calm_video"),
-            BreathingSession(title: "Inner Calm", category: "Meditation", duration: "8 min", imageName: "inner_calm", isFavorite: false, videoFileName: "inner_video"),
-            BreathingSession(title: "Gentle Recharge", category: "Stress Relief", duration: "13 min", imageName: "gentle_recharge", isFavorite: false, videoFileName: "recharge_video"),
-            BreathingSession(title: "Nausea Relief", category: "Wellness", duration: "7 min", imageName: "nausea_relief", isFavorite: false, videoFileName: "nausea_video"),
-            BreathingSession(title: "Morning Appreciation", category: "Gratitude", duration: "5 min", imageName: "morning_appreciation", isFavorite: false, videoFileName: "morning_video"),
-            BreathingSession(title: "Deep Rest", category: "Sleep", duration: "16 min", imageName: "deep_rest", isFavorite: false, videoFileName: "sleep_video")
-        ]
+        var sessions = makeMeditationAndStressSessions() + makeWellnessAndSleepSessions()
 
         for i in sessions.indices {
             sessions[i].isFavorite = favorites.contains(sessions[i].title)
         }
 
         return sessions
+    }
+
+    private func makeMeditationAndStressSessions() -> [BreathingSession] {
+        [
+            BreathingSession(
+                title: "Gentle Focus",
+                category: "Meditation",
+                duration: "15 min",
+                imageName: "gentle_focus",
+                isFavorite: false,
+                videoFileName: "Gentle"
+            ),
+            BreathingSession(
+                title: "Healing Reflections",
+                category: "Gratitude",
+                duration: "10 min",
+                imageName: "healing_reflections",
+                isFavorite: false,
+                videoFileName: "healing_video"
+            ),
+            BreathingSession(
+                title: "Calmer Mind",
+                category: "Stress Relief",
+                duration: "10 min",
+                imageName: "calmer_mind",
+                isFavorite: false,
+                videoFileName: "calm_video"
+            ),
+            BreathingSession(
+                title: "Inner Calm",
+                category: "Meditation",
+                duration: "8 min",
+                imageName: "inner_calm",
+                isFavorite: false,
+                videoFileName: "inner_video"
+            ),
+        ]
+    }
+
+    private func makeWellnessAndSleepSessions() -> [BreathingSession] {
+        [
+            BreathingSession(
+                title: "Gentle Recharge",
+                category: "Stress Relief",
+                duration: "13 min",
+                imageName: "gentle_recharge",
+                isFavorite: false,
+                videoFileName: "recharge_video"
+            ),
+            BreathingSession(
+                title: "Nausea Relief",
+                category: "Wellness",
+                duration: "7 min",
+                imageName: "nausea_relief",
+                isFavorite: false,
+                videoFileName: "nausea_video"
+            ),
+            BreathingSession(
+                title: "Morning Appreciation",
+                category: "Gratitude",
+                duration: "5 min",
+                imageName: "morning_appreciation",
+                isFavorite: false,
+                videoFileName: "morning_video"
+            ),
+            BreathingSession(
+                title: "Deep Rest",
+                category: "Sleep",
+                duration: "16 min",
+                imageName: "deep_rest",
+                isFavorite: false,
+                videoFileName: "sleep_video"
+            ),
+        ]
     }
 
     func saveFavoriteTitles(_ titles: [String]) {

@@ -1,29 +1,31 @@
 import UIKit
 
 class PostTreatmentCell: UICollectionViewCell {
-
     // MARK: - IBOutlets
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var statusLabel: UILabel!
-    @IBOutlet weak var separatorView: UIView!
-    @IBOutlet weak var dateContainerView: UIView!
-    @IBOutlet weak var dateLabel: UILabel!
-    @IBOutlet weak var dateButton: UIButton!
-    @IBOutlet weak var painButton: UIButton!
-    @IBOutlet weak var numbnessButton: UIButton!
-    @IBOutlet weak var swellingButton: UIButton!
-    @IBOutlet weak var stiffnessButton: UIButton!
-    @IBOutlet weak var fatigueButton: UIButton!
-    @IBOutlet weak var saveButton: UIButton!
-    @IBOutlet weak var editButton: UIButton!
+
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var statusLabel: UILabel!
+    @IBOutlet var separatorView: UIView!
+    @IBOutlet var dateContainerView: UIView!
+    @IBOutlet var dateLabel: UILabel!
+    @IBOutlet var dateButton: UIButton!
+    @IBOutlet var painButton: UIButton!
+    @IBOutlet var numbnessButton: UIButton!
+    @IBOutlet var swellingButton: UIButton!
+    @IBOutlet var stiffnessButton: UIButton!
+    @IBOutlet var fatigueButton: UIButton!
+    @IBOutlet var saveButton: UIButton!
+    @IBOutlet var editButton: UIButton!
 
     // MARK: - Colors
-    private let pink            = UIColor(named: "pink") ?? UIColor(red: 0.91, green: 0.39, blue: 0.54, alpha: 1.0)
-    private let lightPink       = UIColor(red: 1.0,  green: 0.92, blue: 0.95, alpha: 1.0)
-    private let savedGreenColor = UIColor(red: 0.2,  green: 0.6,  blue: 0.2,  alpha: 1.0)
-    private let savedGreenBg    = UIColor(red: 0.85, green: 0.95, blue: 0.85, alpha: 1.0)
+
+    private let pink = UIColor(named: "pink") ?? UIColor(red: 0.91, green: 0.39, blue: 0.54, alpha: 1.0)
+    private let lightPink = UIColor(red: 1.0, green: 0.92, blue: 0.95, alpha: 1.0)
+    private let savedGreenColor = UIColor(red: 0.2, green: 0.6, blue: 0.2, alpha: 1.0)
+    private let savedGreenBg = UIColor(red: 0.85, green: 0.95, blue: 0.85, alpha: 1.0)
 
     // MARK: - State (VC owns all persistence via restoreState)
+
     private var selectedSymptoms: Set<String> = []
     private var selectedDate: Date?
     private var isSaved = false
@@ -35,6 +37,7 @@ class PostTreatmentCell: UICollectionViewCell {
     private var datePickerContainerView: UIView?
 
     // MARK: - Callbacks
+
     var onDateTapped: (() -> Void)?
     var onSaveButtonTapped: (() -> Void)?
     var onEditButtonTapped: (() -> Void)?
@@ -48,12 +51,14 @@ class PostTreatmentCell: UICollectionViewCell {
     }
 
     // MARK: - Lifecycle
+
     override func awakeFromNib() {
         super.awakeFromNib()
         setupCell()
     }
 
     // MARK: - Lock Overlay
+
     func setLocked(_ locked: Bool) {
         locked ? showLockOverlay() : removeLockOverlay()
     }
@@ -75,7 +80,7 @@ class PostTreatmentCell: UICollectionViewCell {
             lockImage.centerXAnchor.constraint(equalTo: overlay.centerXAnchor),
             lockImage.centerYAnchor.constraint(equalTo: overlay.centerYAnchor),
             lockImage.widthAnchor.constraint(equalToConstant: 28),
-            lockImage.heightAnchor.constraint(equalToConstant: 28)
+            lockImage.heightAnchor.constraint(equalToConstant: 28),
         ])
 
         contentView.addSubview(overlay)
@@ -83,7 +88,7 @@ class PostTreatmentCell: UICollectionViewCell {
             overlay.topAnchor.constraint(equalTo: contentView.topAnchor),
             overlay.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             overlay.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            overlay.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            overlay.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
         lockOverlayView = overlay
     }
@@ -94,8 +99,8 @@ class PostTreatmentCell: UICollectionViewCell {
     }
 
     // MARK: - Setup
-    private func setupCell() {
 
+    private func setupCell() {
         contentView.layer.cornerRadius = 16
         contentView.backgroundColor = .white
 
@@ -110,11 +115,11 @@ class PostTreatmentCell: UICollectionViewCell {
         dateContainerView.layer.cornerRadius = 10
 
         symptomTitles = [
-            painButton:      "Pain",
-            numbnessButton:  "Numbness",
-            swellingButton:  "Swelling",
+            painButton: "Pain",
+            numbnessButton: "Numbness",
+            swellingButton: "Swelling",
             stiffnessButton: "Stiffness",
-            fatigueButton:   "Fatigue"
+            fatigueButton: "Fatigue",
         ]
 
         for (btn, _) in symptomTitles {
@@ -147,17 +152,18 @@ class PostTreatmentCell: UICollectionViewCell {
     }
 
     // MARK: - Restore State (called by JourneyViewController on every dequeue)
+
     func restoreState(_ state: SavedPostTreatmentState) {
-        selectedDate     = state.selectedDate
+        selectedDate = state.selectedDate
         selectedSymptoms = state.selectedSymptoms
-        isSaved          = state.isSaved
+        isSaved = state.isSaved
 
         if let date = selectedDate {
             let f = DateFormatter(); f.dateFormat = "dd/MM/yyyy"
-            dateLabel.text      = f.string(from: date)
+            dateLabel.text = f.string(from: date)
             dateLabel.textColor = .black
         } else {
-            dateLabel.text      = nil
+            dateLabel.text = nil
             dateLabel.textColor = .placeholderText
         }
 
@@ -166,24 +172,25 @@ class PostTreatmentCell: UICollectionViewCell {
         }
 
         if isSaved {
-            statusLabel.text            = "Completed"
+            statusLabel.text = "Completed"
             statusLabel.backgroundColor = savedGreenBg
-            statusLabel.textColor       = savedGreenColor
+            statusLabel.textColor = savedGreenColor
             enterSavedState(animated: false)
         } else {
-            statusLabel.text            = "Not Started"
-            statusLabel.textColor       = UIColor(white: 0.5, alpha: 1)
+            statusLabel.text = "Not Started"
+            statusLabel.textColor = UIColor(white: 0.5, alpha: 1)
             statusLabel.backgroundColor = UIColor(white: 0.94, alpha: 1)
             symptomTitles.keys.forEach { $0.isUserInteractionEnabled = true }
             dateButton.isUserInteractionEnabled = true
-            saveButton.isHidden  = false
-            editButton.isHidden  = true
+            saveButton.isHidden = false
+            editButton.isHidden = true
             fadableViews.forEach { $0.alpha = 1.0 }
             updateSaveButtonState()
         }
     }
 
     // MARK: - Symptom Styling
+
     private func applySelectedStyle(to button: UIButton) {
         var cfg = button.configuration ?? UIButton.Configuration.filled()
         cfg.baseBackgroundColor = pink
@@ -199,6 +206,7 @@ class PostTreatmentCell: UICollectionViewCell {
     }
 
     // MARK: - Symptom Tap
+
     @objc private func symptomTapped(_ sender: UIButton) {
         guard let title = symptomTitles[sender] else { return }
         if selectedSymptoms.contains(title) {
@@ -214,19 +222,23 @@ class PostTreatmentCell: UICollectionViewCell {
     }
 
     // MARK: - IBActions
-    @IBAction func dateTapped(_ sender: UIButton)       { showDatePickerOverlay() }
-    @IBAction func painTapped(_ sender: UIButton)       {}
-    @IBAction func numbnessTapped(_ sender: UIButton)   {}
-    @IBAction func swellingTapped(_ sender: UIButton)   {}
-    @IBAction func stiffnessTapped(_ sender: UIButton)  {}
-    @IBAction func fatigueTapped(_ sender: UIButton)    {}
 
-    @IBAction func saveTapped(_ sender: UIButton) {
+    @IBAction func dateTapped(_: UIButton) {
+        showDatePickerOverlay()
+    }
+
+    @IBAction func painTapped(_: UIButton) {}
+    @IBAction func numbnessTapped(_: UIButton) {}
+    @IBAction func swellingTapped(_: UIButton) {}
+    @IBAction func stiffnessTapped(_: UIButton) {}
+    @IBAction func fatigueTapped(_: UIButton) {}
+
+    @IBAction func saveTapped(_: UIButton) {
         guard selectedDate != nil, !selectedSymptoms.isEmpty else { return }
         commitSave()
     }
 
-    @IBAction func editTapped(_ sender: UIButton) {
+    @IBAction func editTapped(_: UIButton) {
         revertToEditMode()
     }
 
@@ -235,11 +247,12 @@ class PostTreatmentCell: UICollectionViewCell {
     }
 
     // MARK: - Save
+
     private func commitSave() {
         isSaved = true
-        statusLabel.text            = "Completed"
+        statusLabel.text = "Completed"
         statusLabel.backgroundColor = savedGreenBg
-        statusLabel.textColor       = savedGreenColor
+        statusLabel.textColor = savedGreenColor
         enterSavedState(animated: true)
         onSaveButtonTapped?()
     }
@@ -250,20 +263,21 @@ class PostTreatmentCell: UICollectionViewCell {
         dateButton.isUserInteractionEnabled = false
         saveButton.isHidden = true
         editButton.isHidden = false
-        editButton.alpha    = 1.0
+        editButton.alpha = 1.0
         let block = { self.fadableViews.forEach { $0.alpha = 0.35 } }
         animated ? UIView.animate(withDuration: 0.3, animations: block) : block()
     }
 
     // MARK: - Edit
+
     private func revertToEditMode() {
         isSaved = false
         symptomTitles.keys.forEach { $0.isUserInteractionEnabled = true }
         dateButton.isUserInteractionEnabled = true
         editButton.isHidden = true
         saveButton.isHidden = false
-        statusLabel.text            = "Not Started"
-        statusLabel.textColor       = UIColor(white: 0.5, alpha: 1)
+        statusLabel.text = "Not Started"
+        statusLabel.textColor = UIColor(white: 0.5, alpha: 1)
         statusLabel.backgroundColor = UIColor(white: 0.94, alpha: 1)
         UIView.animate(withDuration: 0.3) {
             self.fadableViews.forEach { $0.alpha = 1.0 }
@@ -273,6 +287,7 @@ class PostTreatmentCell: UICollectionViewCell {
     }
 
     // MARK: - Save Button State
+
     private func updateSaveButtonState() {
         let enabled = selectedDate != nil && !selectedSymptoms.isEmpty
         saveButton.isUserInteractionEnabled = enabled
@@ -282,10 +297,11 @@ class PostTreatmentCell: UICollectionViewCell {
     }
 
     // MARK: - Date Picker Overlay (mirrors DiagnosisCell exactly — no fixed height on container)
+
     private func showDatePickerOverlay() {
         guard let windowScene = UIApplication.shared.connectedScenes
-                .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene,
-              let window = windowScene.windows.first(where: { $0.isKeyWindow }) else { return }
+            .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene,
+            let window = windowScene.windows.first(where: { $0.isKeyWindow }) else { return }
 
         // --- Dim overlay ---
         let dimView = UIView(frame: window.bounds)
@@ -297,29 +313,68 @@ class PostTreatmentCell: UICollectionViewCell {
         overlayView = dimView
 
         // --- White card container (NO fixed heightAnchor — lets picker resize freely) ---
+        let container = makePickerContainer()
+        datePickerContainerView = container
+
+        let picker = buildInlineDatePicker()
+        let buttonStack = buildPickerButtonStack()
+
+        container.addSubview(picker)
+        container.addSubview(buttonStack)
+        window.addSubview(dimView)
+        window.addSubview(container)
+
+        NSLayoutConstraint.activate([
+            container.centerXAnchor.constraint(equalTo: window.centerXAnchor),
+            container.centerYAnchor.constraint(equalTo: window.centerYAnchor),
+            container.widthAnchor.constraint(equalToConstant: 350),
+            picker.topAnchor.constraint(equalTo: container.topAnchor, constant: 20),
+            picker.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 10),
+            picker.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -10),
+            buttonStack.topAnchor.constraint(equalTo: picker.bottomAnchor, constant: 10),
+            buttonStack.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 24),
+            buttonStack.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -24),
+            buttonStack.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -20),
+            buttonStack.heightAnchor.constraint(equalToConstant: 44),
+        ])
+
+        // Spring-in animation
+        container.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+        container.alpha = 0
+        UIView.animate(
+            withDuration: 0.3,
+            delay: 0,
+            usingSpringWithDamping: 0.8,
+            initialSpringVelocity: 0,
+            options: .curveEaseOut
+        ) {
+            dimView.alpha = 1
+            container.alpha = 1
+            container.transform = .identity
+        }
+    }
+
+    private func makePickerContainer() -> UIView {
         let container = UIView()
         container.backgroundColor = .white
         container.layer.cornerRadius = 16
         container.translatesAutoresizingMaskIntoConstraints = false
-        datePickerContainerView = container
+        return container
+    }
 
-        // --- Inline date picker ---
+    private func buildInlineDatePicker() -> UIDatePicker {
         let picker = UIDatePicker()
-        picker.preferredDatePickerStyle = .inline   // tapping year header → scroll wheel works because container has no fixed height
+        picker.preferredDatePickerStyle = .inline
         picker.datePickerMode = .date
         picker.maximumDate = Date()
         picker.tintColor = pink
         picker.date = selectedDate ?? Date()
         picker.translatesAutoresizingMaskIntoConstraints = false
         picker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
+        return picker
+    }
 
-        // --- Reset / Done buttons ---
-        let buttonStack = UIStackView()
-        buttonStack.axis = .horizontal
-        buttonStack.distribution = .fillEqually
-        buttonStack.spacing = 12
-        buttonStack.translatesAutoresizingMaskIntoConstraints = false
-
+    private func buildPickerButtonStack() -> UIStackView {
         let resetButton = UIButton(type: .system)
         resetButton.setTitle("Reset", for: .normal)
         resetButton.setTitleColor(pink, for: .normal)
@@ -332,49 +387,19 @@ class PostTreatmentCell: UICollectionViewCell {
         doneButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
         doneButton.addTarget(self, action: #selector(dismissDatePickerOverlay), for: .touchUpInside)
 
-        buttonStack.addArrangedSubview(resetButton)
-        buttonStack.addArrangedSubview(doneButton)
-
-        container.addSubview(picker)
-        container.addSubview(buttonStack)
-
-        window.addSubview(dimView)
-        window.addSubview(container)
-
-        NSLayoutConstraint.activate([
-            container.centerXAnchor.constraint(equalTo: window.centerXAnchor),
-            container.centerYAnchor.constraint(equalTo: window.centerYAnchor),
-            container.widthAnchor.constraint(equalToConstant: 350),
-
-            picker.topAnchor.constraint(equalTo: container.topAnchor, constant: 20),
-            picker.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 10),
-            picker.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -10),
-
-            buttonStack.topAnchor.constraint(equalTo: picker.bottomAnchor, constant: 10),
-            buttonStack.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 24),
-            buttonStack.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -24),
-            buttonStack.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -20),
-            buttonStack.heightAnchor.constraint(equalToConstant: 44)
-        ])
-
-        // Spring-in animation
-        container.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
-        container.alpha = 0
-        UIView.animate(withDuration: 0.3, delay: 0,
-                       usingSpringWithDamping: 0.8,
-                       initialSpringVelocity: 0,
-                       options: .curveEaseOut) {
-            dimView.alpha = 1
-            container.alpha = 1
-            container.transform = .identity
-        }
+        let stack = UIStackView(arrangedSubviews: [resetButton, doneButton])
+        stack.axis = .horizontal
+        stack.distribution = .fillEqually
+        stack.spacing = 12
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
     }
 
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
         // Live-update label as user scrolls — no need to tap Done to see selection
         selectedDate = sender.date
         let f = DateFormatter(); f.dateFormat = "dd/MM/yyyy"
-        dateLabel.text      = f.string(from: sender.date)
+        dateLabel.text = f.string(from: sender.date)
         dateLabel.textColor = .black
         onDateChanged?(sender.date)
         if isSaved { revertToEditMode() }
@@ -400,10 +425,11 @@ class PostTreatmentCell: UICollectionViewCell {
     }
 
     // MARK: - Public helpers (called by JourneyViewController calendar popup)
+
     func updateSelectedDate(_ date: Date) {
         selectedDate = date
         let f = DateFormatter(); f.dateFormat = "dd/MM/yyyy"
-        dateLabel.text      = f.string(from: date)
+        dateLabel.text = f.string(from: date)
         dateLabel.textColor = .black
         onDateChanged?(date)
         if isSaved { revertToEditMode() }
@@ -411,8 +437,8 @@ class PostTreatmentCell: UICollectionViewCell {
     }
 
     func clearSelectedDate() {
-        selectedDate        = nil
-        dateLabel.text      = nil
+        selectedDate = nil
+        dateLabel.text = nil
         dateLabel.textColor = .placeholderText
         onDateChanged?(nil)
         if isSaved { revertToEditMode() }
@@ -426,5 +452,7 @@ class PostTreatmentCell: UICollectionViewCell {
         if !isSaved { updateSaveButtonState() }
     }
 
-    func getCellHeight() -> CGFloat { return 397 }
+    func getCellHeight() -> CGFloat {
+        return 397
+    }
 }

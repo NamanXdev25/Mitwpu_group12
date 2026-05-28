@@ -1,26 +1,21 @@
 import UIKit
 
 class ActionButtonsCell: UICollectionViewCell {
-
-    @IBOutlet weak var markAsDoneButton: UIButton!
-    @IBOutlet weak var nextButton: UIButton!
+    @IBOutlet var markAsDoneButton: UIButton!
+    @IBOutlet var nextButton: UIButton!
 
     var onMarkAsDone: (() -> Void)?
     var onNext: (() -> Void)?
-    
+
     private(set) var isDone: Bool = false
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-
-    @IBAction func markAsDoneTapped(_ sender: Any) {
+    @IBAction func markAsDoneTapped(_: Any) {
         isDone.toggle()
         setDone(isDone)
         onMarkAsDone?()
     }
 
-    @IBAction func nextTapped(_ sender: Any) {
+    @IBAction func nextTapped(_: Any) {
         onNext?()
     }
 

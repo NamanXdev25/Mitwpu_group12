@@ -13,9 +13,10 @@ protocol ExercisePlayerDataSourceDelegate: AnyObject {
 }
 
 // MARK: - ExercisePlayerDataSource
-class ExercisePlayerDataSource: NSObject {
 
+class ExercisePlayerDataSource: NSObject {
     // MARK: - Properties
+
     let exercise: NewExerciseModel
     let exercisePlan: NewExercisePlan
     let currentIndex: Int
@@ -24,10 +25,11 @@ class ExercisePlayerDataSource: NSObject {
     weak var delegate: ExercisePlayerDataSourceDelegate?
 
     // MARK: - Init
+
     init(exercise: NewExerciseModel, plan: NewExercisePlan, index: Int) {
         self.exercise = exercise
-        self.exercisePlan = plan
-        self.currentIndex = index
+        exercisePlan = plan
+        currentIndex = index
     }
 
     var isLastExercise: Bool {
@@ -36,23 +38,26 @@ class ExercisePlayerDataSource: NSObject {
 }
 
 // MARK: - UICollectionViewDataSource & Delegate
-extension ExercisePlayerDataSource: UICollectionViewDataSource, UICollectionViewDelegate {
 
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
+extension ExercisePlayerDataSource: UICollectionViewDataSource, UICollectionViewDelegate {
+    func numberOfSections(in _: UICollectionView) -> Int {
         return 4
     }
 
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_: UICollectionView, numberOfItemsInSection _: Int) -> Int {
         return 1
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch indexPath.section {
-
         // MARK: Section 0 — Video Player
+
         case 0:
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "VideoPlayerCell", for: indexPath) as! VideoPlayerCell
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "VideoPlayerCell", for: indexPath
+            ) as? VideoPlayerCell else {
+                fatalError("Expected VideoPlayerCell for reuse identifier 'VideoPlayerCell' at \(indexPath)")
+            }
 
             cell.onDurationChanged = { [weak self] seconds in
                 guard let self else { return }
@@ -68,9 +73,13 @@ extension ExercisePlayerDataSource: UICollectionViewDataSource, UICollectionView
             return cell
 
         // MARK: Section 1 — Exercise Info
+
         case 1:
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "ExerciseInfoCell", for: indexPath) as! ExerciseInfoCell
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "ExerciseInfoCell", for: indexPath
+            ) as? ExerciseInfoCell else {
+                fatalError("Expected ExerciseInfoCell for reuse identifier 'ExerciseInfoCell' at \(indexPath)")
+            }
 
             cell.configure(
                 title: exercise.title,
@@ -84,29 +93,37 @@ extension ExercisePlayerDataSource: UICollectionViewDataSource, UICollectionView
             return cell
 
         // MARK: Section 2 — Video Controls
+
         case 2:
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "VideoControlsCell", for: indexPath) as! VideoControlsCell
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "VideoControlsCell", for: indexPath
+            ) as? VideoControlsCell else {
+                fatalError("Expected VideoControlsCell for reuse identifier 'VideoControlsCell' at \(indexPath)")
+            }
 
             cell.configure(currentTime: 0, totalTime: Int(totalDuration))
 
             cell.onPlayPause = { [weak self] in self?.delegate?.didTogglePlayPause() }
-            cell.onRestart   = { [weak self] in self?.delegate?.didRestart() }
-            cell.onLoop      = { [weak self] looping in self?.delegate?.didToggleLoop(enabled: looping) }
-            cell.onSeek      = { [weak self] progress in self?.delegate?.didSeek(toProgress: progress) }
+            cell.onRestart = { [weak self] in self?.delegate?.didRestart() }
+            cell.onLoop = { [weak self] looping in self?.delegate?.didToggleLoop(enabled: looping) }
+            cell.onSeek = { [weak self] progress in self?.delegate?.didSeek(toProgress: progress) }
 
             return cell
 
         // MARK: Section 3 — Action Buttons
+
         case 3:
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "ActionButtonsCell", for: indexPath) as! ActionButtonsCell
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "ActionButtonsCell", for: indexPath
+            ) as? ActionButtonsCell else {
+                fatalError("Expected ActionButtonsCell for reuse identifier 'ActionButtonsCell' at \(indexPath)")
+            }
 
             cell.setIsLastExercise(isLastExercise)
             cell.setDone(false)
 
             cell.onMarkAsDone = { [weak self] in self?.delegate?.didTapMarkAsDone() }
-            cell.onNext       = { [weak self] in self?.delegate?.didTapNext() }
+            cell.onNext = { [weak self] in self?.delegate?.didTapNext() }
 
             return cell
 
@@ -123,8 +140,8 @@ extension ExercisePlayerDataSource: UICollectionViewDataSource, UICollectionView
     }
 
     // MARK: - Exercise Descriptions
-    private static let exerciseDescriptions: [String: String] = [
 
+    private static let exerciseDescriptions: [String: String] = [
         // Mobility / Early Recovery
         "Shoulder Shrug": "Lift both shoulders up toward your ears, then slowly lower them down to release tension and improve mobility.",
         "Shoulder Roll": "Roll your shoulders in a large circular motion to loosen the joints and reduce upper-body stiffness.",
@@ -136,8 +153,10 @@ extension ExercisePlayerDataSource: UICollectionViewDataSource, UICollectionView
         "Wall Crawl (Side)": "Walk your fingers up a wall at your side at 90 degrees to build shoulder abduction mobility through a pain-free arc.",
         "Gentle Shoulder Abduction": "Slowly raise one arm out to the side to a comfortable height and lower it with control to ease shoulder stiffness.",
         "Chest Opening Stretch": "Lie on your back with arms out to the sides to open the chest and release tightness across the front of the shoulders.",
-        "Neck Side Stretch": "Tilt your head toward one shoulder until you feel a gentle pull to relieve neck tension and improve cervical flexibility.",
-        "Diaphragmatic Breathing": "Breathe deeply into your belly, letting your abdomen rise on the inhale, to strengthen the diaphragm and promote relaxation.",
+        "Neck Side Stretch": "Tilt your head toward one shoulder until you feel a gentle pull to relieve neck tension and "
+            + "improve cervical flexibility.",
+        "Diaphragmatic Breathing": "Breathe deeply into your belly, letting your abdomen rise on the inhale, to strengthen "
+            + "the diaphragm and promote relaxation.",
 
         // Light Strength
         "Sit-to-Stand": "Lean forward from the edge of your chair and push through your feet to stand, building leg and hip strength for daily movement.",
@@ -145,7 +164,8 @@ extension ExercisePlayerDataSource: UICollectionViewDataSource, UICollectionView
         "Standing Heel Raises": "Rise onto the balls of your feet and lower back down with control to strengthen the calves and improve ankle stability.",
         "Resistance Band Row": "Pull a resistance band toward you with elbows back and shoulder blades squeezed to build upper-back strength.",
         "Wall Push-Up": "Bend your elbows to bring your chest toward the wall and push back to strengthen the chest, shoulders, and arms.",
-        "Bodyweight Mini Squat": "Bend your knees slightly as if sitting back into a chair, then return to standing, to build lower-body strength with low joint impact.",
+        "Bodyweight Mini Squat": "Bend your knees slightly as if sitting back into a chair, then return to standing, to build "
+            + "lower-body strength with low joint impact.",
         "Seated Core Bracing": "Gently draw your lower abdomen inward while seated to activate deep core stabilisers that protect your spine.",
 
         // Balance
@@ -153,7 +173,7 @@ extension ExercisePlayerDataSource: UICollectionViewDataSource, UICollectionView
         "Tandem Stand": "Place one foot directly in front of the other, heel to toe, to train postural control and reduce fall risk.",
 
         // Gentle Yoga
-        "Seated Cat-Cow": "Alternate between arching and rounding your spine in a chair to mobilise the entire back and relieve tension."
+        "Seated Cat-Cow": "Alternate between arching and rounding your spine in a chair to mobilise the entire back and relieve tension.",
     ]
     static func parseTargetDuration(_ duration: String) -> Double {
         let lower = duration.lowercased().trimmingCharacters(in: .whitespaces)

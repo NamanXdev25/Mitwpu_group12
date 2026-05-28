@@ -1,4 +1,3 @@
-
 import Foundation
 
 final class UserDefaultsAppointmentRepository: AppointmentRepository {
@@ -57,7 +56,8 @@ final class UserDefaultsMedicationHistoryRepository: MedicationHistoryRepository
 
         guard let legacyKey,
               let data = userDefaults.data(forKey: legacyKey),
-              let decoded = try? JSONDecoder().decode([String: MedicationHistoryEntryDTO].self, from: data) else {
+              let decoded = try? JSONDecoder().decode([String: MedicationHistoryEntryDTO].self, from: data)
+        else {
             return [:]
         }
 
@@ -241,7 +241,8 @@ final class UserDefaultsProfileRepository: ProfileRepository {
         }
 
         guard let legacyKey,
-              let data = userDefaults.data(forKey: legacyKey) else {
+              let data = userDefaults.data(forKey: legacyKey)
+        else {
             return nil
         }
         return try? JSONDecoder().decode(ProfileUserProfile.self, from: data)
@@ -271,7 +272,8 @@ final class UserDefaultsExerciseRepository: ExerciseRepository {
 
     func loadCompletions() -> [String: [ExerciseCompletionRecord]] {
         guard let data = userDefaults.data(forKey: completionsKey),
-              let decoded = try? JSONDecoder().decode([String: [ExerciseCompletionRecord]].self, from: data) else {
+              let decoded = try? JSONDecoder().decode([String: [ExerciseCompletionRecord]].self, from: data)
+        else {
             return [:]
         }
         return decoded
@@ -301,14 +303,14 @@ final class UserDefaultsJourneyRepository: JourneyRepository {
     private let userDefaults: UserDefaults
     private let key: String
 
-    private let kDiagnosisCompleted  = "js_diagnosisCompleted"
-    private let kWaitCompleted       = "js_waitCompleted"
-    private let kTreatmentCompleted  = "js_treatmentCompleted"
-    private let kStepTitle           = "js_stepTitle"
-    private let kTreatmentName       = "js_treatmentName"
-    private let kPhaseStates         = "js_phaseStates"
-    private let kTreatmentBadge      = "js_treatmentBadge"
-    private let kPostTreatment       = "js_postTreatment"
+    private let kDiagnosisCompleted = "js_diagnosisCompleted"
+    private let kWaitCompleted = "js_waitCompleted"
+    private let kTreatmentCompleted = "js_treatmentCompleted"
+    private let kStepTitle = "js_stepTitle"
+    private let kTreatmentName = "js_treatmentName"
+    private let kPhaseStates = "js_phaseStates"
+    private let kTreatmentBadge = "js_treatmentBadge"
+    private let kPostTreatment = "js_postTreatment"
 
     init(userDefaults: UserDefaults = .standard, key: String = "js_journey_snapshot") {
         self.userDefaults = userDefaults
@@ -340,17 +342,17 @@ final class UserDefaultsJourneyRepository: JourneyRepository {
         }
 
         return PersistedJourneySnapshot(
-            isDiagnosisCompleted:  d.bool(forKey: kDiagnosisCompleted),
-            isWaitCompleted:      d.bool(forKey: kWaitCompleted),
+            isDiagnosisCompleted: d.bool(forKey: kDiagnosisCompleted),
+            isWaitCompleted: d.bool(forKey: kWaitCompleted),
             isTreatmentCompleted: d.bool(forKey: kTreatmentCompleted),
-            currentStepTitle:     d.string(forKey: kStepTitle) ?? "Diagnosed",
+            currentStepTitle: d.string(forKey: kStepTitle) ?? "Diagnosed",
             currentTreatmentName: d.string(forKey: kTreatmentName) ?? "Not started yet",
             persistedTreatmentBadge: d.string(forKey: kTreatmentBadge) ?? "notStarted",
-            phaseStates:          phaseStates,
-            postTreatment:        postTreatment,
-            diagnosisDate:        nil,
-            waitDaysInput:        nil,
-            waitSymptoms:         []
+            phaseStates: phaseStates,
+            postTreatment: postTreatment,
+            diagnosisDate: nil,
+            waitDaysInput: nil,
+            waitSymptoms: []
         )
     }
 
@@ -362,12 +364,12 @@ final class UserDefaultsJourneyRepository: JourneyRepository {
 
         // Also write legacy keys so existing code continues to work
         let d = userDefaults
-        d.set(state.isDiagnosisCompleted,      forKey: kDiagnosisCompleted)
-        d.set(state.isWaitCompleted,            forKey: kWaitCompleted)
-        d.set(state.isTreatmentCompleted,       forKey: kTreatmentCompleted)
-        d.set(state.currentStepTitle,           forKey: kStepTitle)
-        d.set(state.currentTreatmentName,       forKey: kTreatmentName)
-        d.set(state.persistedTreatmentBadge,    forKey: kTreatmentBadge)
+        d.set(state.isDiagnosisCompleted, forKey: kDiagnosisCompleted)
+        d.set(state.isWaitCompleted, forKey: kWaitCompleted)
+        d.set(state.isTreatmentCompleted, forKey: kTreatmentCompleted)
+        d.set(state.currentStepTitle, forKey: kStepTitle)
+        d.set(state.currentTreatmentName, forKey: kTreatmentName)
+        d.set(state.persistedTreatmentBadge, forKey: kTreatmentBadge)
         if let data = try? JSONEncoder().encode(state.phaseStates) {
             d.set(data, forKey: kPhaseStates)
         }
@@ -376,4 +378,3 @@ final class UserDefaultsJourneyRepository: JourneyRepository {
         }
     }
 }
-

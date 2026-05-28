@@ -1,13 +1,7 @@
-
 import UIKit
 
 class OnboardingFocusSectionHeaderCell: UICollectionViewCell {
-
-    @IBOutlet weak var titleLabel: UILabel!
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
+    @IBOutlet var titleLabel: UILabel!
 
     func configure(title: String) {
         titleLabel.text = title

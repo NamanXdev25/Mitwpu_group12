@@ -1,14 +1,12 @@
-
 import Foundation
 
-struct OnboardingDataSource {
-    
+enum OnboardingDataSource {
     static let treatmentOptions = [
         "Currently in treatment",
         "Post-treatment / in recovery",
-        "Prefer not to say"
+        "Prefer not to say",
     ]
-    
+
     static let hobbies = [
         "Drawing",
         "music",
@@ -22,18 +20,18 @@ struct OnboardingDataSource {
         "Walking",
         "Talking to family",
         "Gardening",
-        "Journaling"
+        "Journaling",
     ]
-    
+
     static let cancerStages = [
         "Stage 0",
         "Stage I",
         "Stage II",
         "Stage III",
         "Stage IV",
-        "Not sure"
+        "Not sure",
     ]
-    
+
     static let ageGroups = [
         "Below 18",
         "18-25",
@@ -42,27 +40,27 @@ struct OnboardingDataSource {
         "46-55",
         "56-65",
         "66-75",
-        "75+"
+        "75+",
     ]
-    
+
     static let followUpFrequencies = [
         "Every month",
         "Every 2 months",
         "Every 3 months",
         "Every 6 months",
-        "Once a year"
+        "Once a year",
     ]
-    
+
     static let postTreatmentInterests = [
         InterestOption(title: "Physical Strength", icon: "figure.strengthtraining.traditional"),
-        InterestOption(title: "Mindfulness", icon: "figure.mind.and.body")
+        InterestOption(title: "Mindfulness", icon: "figure.mind.and.body"),
     ]
-    
+
     static let preferNotToSayInterests = [
         InterestOption(title: "Physical Strength", icon: "figure.strengthtraining.traditional.circle.fill"),
         InterestOption(title: "Mindfulness", icon: "figure.mind.and.body.circle.fill"),
         InterestOption(title: "Prevention", icon: "magnifyingglass.circle.fill"),
-        InterestOption(title: "Learning", icon: "book.circle.fill")
+        InterestOption(title: "Learning", icon: "book.circle.fill"),
     ]
 
     static let treatmentPhases = [
@@ -70,18 +68,18 @@ struct OnboardingDataSource {
         "Chemotherapy",
         "Surgery",
         "Radiation Therapy",
-        "Hormone Therapy"
+        "Hormone Therapy",
     ]
 
     static let maintenanceTherapyOptions = [
         "Yes",
-        "No"
+        "No",
     ]
 
     static let currentFocusOptions = [
-        FocusOption(title: "Exercise",          icon: "figure.walk"),
-        FocusOption(title: "Mindfulness",         icon: "figure.mind.and.body"),
-        FocusOption(title: "Journaling",        icon: "book.closed"),
-        FocusOption(title: "Routine Tracking",  icon: "checklist")
+        FocusOption(title: "Exercise", icon: "figure.walk"),
+        FocusOption(title: "Mindfulness", icon: "figure.mind.and.body"),
+        FocusOption(title: "Journaling", icon: "book.closed"),
+        FocusOption(title: "Routine Tracking", icon: "checklist"),
     ]
 }

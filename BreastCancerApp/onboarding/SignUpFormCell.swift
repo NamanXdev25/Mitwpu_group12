@@ -5,17 +5,16 @@ protocol SignUpFormCellDelegate: AnyObject {
 }
 
 final class SignUpFormCell: UICollectionViewCell {
+    @IBOutlet var emailContainerView: UIView!
+    @IBOutlet var passwordContainerView: UIView!
+    @IBOutlet var reenterPasswordContainerView: UIView!
 
-    @IBOutlet weak var emailContainerView: UIView!
-    @IBOutlet weak var passwordContainerView: UIView!
-    @IBOutlet weak var reenterPasswordContainerView: UIView!
+    @IBOutlet var emailTextField: UITextField!
+    @IBOutlet var passwordTextField: UITextField!
+    @IBOutlet var reenterPasswordTextField: UITextField!
 
-    @IBOutlet weak var emailTextField: UITextField!
-    @IBOutlet weak var passwordTextField: UITextField!
-    @IBOutlet weak var reenterPasswordTextField: UITextField!
-
-    @IBOutlet weak var agreeButton: UIButton!
-    @IBOutlet weak var signUpButton: UIButton!
+    @IBOutlet var agreeButton: UIButton!
+    @IBOutlet var signUpButton: UIButton!
 
     weak var delegate: SignUpFormCellDelegate?
 
@@ -49,10 +48,10 @@ final class SignUpFormCell: UICollectionViewCell {
         let containers = [
             emailContainerView,
             passwordContainerView,
-            reenterPasswordContainerView
+            reenterPasswordContainerView,
         ]
 
-        containers.forEach { view in
+        for view in containers {
             view?.layer.cornerRadius = 12
             view?.layer.borderWidth = 1
             view?.layer.borderColor = UIColor.brandPink.cgColor
@@ -85,40 +84,40 @@ final class SignUpFormCell: UICollectionViewCell {
         sender.configuration = config
     }
 
-    @IBAction func togglePasswordVisibility(_ sender: UIButton) {
+    @IBAction func togglePasswordVisibility(_: UIButton) {
         isPasswordVisible.toggle()
         passwordTextField.isSecureTextEntry = !isPasswordVisible
         reenterPasswordTextField.isSecureTextEntry = !isPasswordVisible
     }
 
-    @IBAction func signUpTapped(_ sender: UIButton) {
+    @IBAction func signUpTapped(_: UIButton) {
         let email = emailTextField.text ?? ""
         let password = passwordTextField.text ?? ""
         let reenterPassword = reenterPasswordTextField.text ?? ""
-        
+
         guard !email.isEmpty else {
             showAlert(message: "Please enter your email")
             return
         }
-        
+
         guard !password.isEmpty else {
             showAlert(message: "Please enter a password")
             return
         }
-        
+
         guard password == reenterPassword else {
             showAlert(message: "Passwords don't match")
             return
         }
-        
+
         guard isChecked else {
             showAlert(message: "Please agree to terms and conditions")
             return
         }
-        
+
         delegate?.signUpFormCellDidTapSignUp(self, email: email, password: password, reenterPassword: reenterPassword, agreedToTerms: isChecked)
     }
-    
+
     private func showAlert(message: String) {
         var responder: UIResponder? = self
         while let next = responder?.next {
@@ -134,5 +133,5 @@ final class SignUpFormCell: UICollectionViewCell {
 }
 
 extension UIColor {
-    static let brandPink = UIColor(named: "primary_color")!
+    static let brandPink = UIColor(named: "primary_color") ?? UIColor(red: 0.85, green: 0.40, blue: 0.50, alpha: 1.0)
 }

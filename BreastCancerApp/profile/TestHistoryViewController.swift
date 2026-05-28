@@ -1,10 +1,9 @@
 import UIKit
 
 final class TestHistoryViewController: UIViewController,
-                                       UICollectionViewDataSource,
-                                       UICollectionViewDelegate {
-
-    @IBOutlet private weak var collectionView: UICollectionView!
+    UICollectionViewDataSource,
+    UICollectionViewDelegate {
+    @IBOutlet private var collectionView: UICollectionView!
 
     private var records: [TestRecord] = []
     private var filteredRecords: [TestRecord] = []
@@ -102,7 +101,10 @@ final class TestHistoryViewController: UIViewController,
     private func updateEmptyState() {
         if filteredRecords.isEmpty {
             let nib = UINib(nibName: "selfexamEmptyStateCell", bundle: nil)
-            let view = nib.instantiate(withOwner: nil).first as! UIView
+            guard let view = nib.instantiate(withOwner: nil).first as? UIView else {
+                collectionView.backgroundView = nil
+                return
+            }
             collectionView.backgroundView = view
         } else {
             collectionView.backgroundView = nil
@@ -120,13 +122,13 @@ final class TestHistoryViewController: UIViewController,
         )
     }
 
-    @objc private func handleTestRecordAdded(_ notification: Notification) {
+    @objc private func handleTestRecordAdded(_: Notification) {
         loadData()
     }
 
     // MARK: - Filter Button
 
-    @IBAction private func filterButtonTapped(_ sender: UIBarButtonItem) {
+    @IBAction private func filterButtonTapped(_: UIBarButtonItem) {
         let storyboard = UIStoryboard(name: "selfexam", bundle: nil)
 
         guard let vc = storyboard.instantiateViewController(
@@ -150,13 +152,13 @@ final class TestHistoryViewController: UIViewController,
 
     // MARK: - UICollectionViewDataSource
 
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
+    func numberOfSections(in _: UICollectionView) -> Int {
         1
     }
 
     func collectionView(
-        _ collectionView: UICollectionView,
-        numberOfItemsInSection section: Int
+        _: UICollectionView,
+        numberOfItemsInSection _: Int
     ) -> Int {
         filteredRecords.count
     }
@@ -165,11 +167,12 @@ final class TestHistoryViewController: UIViewController,
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
-
-        let cell = collectionView.dequeueReusableCell(
+        guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: "TestRecordCell",
             for: indexPath
-        ) as! TestRecordCell
+        ) as? TestRecordCell else {
+            fatalError("Expected TestRecordCell for reuse identifier 'TestRecordCell' at \(indexPath)")
+        }
 
         configureCell(cell, at: indexPath)
         return cell
@@ -194,7 +197,7 @@ final class TestHistoryViewController: UIViewController,
     }
 
     func collectionView(
-        _ collectionView: UICollectionView,
+        _: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
         toggleExpansion(at: indexPath)
@@ -226,7 +229,6 @@ final class TestHistoryViewController: UIViewController,
     private func createSwipeActions(
         for indexPath: IndexPath
     ) -> UISwipeActionsConfiguration? {
-
         let deleteAction = UIContextualAction(
             style: .destructive,
             title: "Delete"

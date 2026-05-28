@@ -1,8 +1,7 @@
 import UIKit
 
 final class AddMemoryPopupViewController: UIViewController {
-
-    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet var collectionView: UICollectionView!
 
     var onCamera: (() -> Void)?
     var onPhotos: (() -> Void)?
@@ -22,7 +21,6 @@ final class AddMemoryPopupViewController: UIViewController {
 }
 
 private extension AddMemoryPopupViewController {
-
     func configureView() {
         view.backgroundColor = .clear
     }
@@ -47,19 +45,23 @@ private extension AddMemoryPopupViewController {
 }
 
 extension AddMemoryPopupViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-
-    func collectionView(_ collectionView: UICollectionView,
-                        numberOfItemsInSection section: Int) -> Int {
+    func collectionView(
+        _: UICollectionView,
+        numberOfItemsInSection _: Int
+    ) -> Int {
         options.count
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
-        let cell = collectionView.dequeueReusableCell(
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: "AddMemoryOptionCell",
             for: indexPath
-        ) as! AddMemoryOptionCell
+        ) as? AddMemoryOptionCell else {
+            fatalError("Expected AddMemoryOptionCell for reuse identifier 'AddMemoryOptionCell' at \(indexPath)")
+        }
 
         switch options[indexPath.item] {
         case .camera:
@@ -71,9 +73,10 @@ extension AddMemoryPopupViewController: UICollectionViewDataSource, UICollection
         return cell
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        didSelectItemAt indexPath: IndexPath) {
-
+    func collectionView(
+        _: UICollectionView,
+        didSelectItemAt indexPath: IndexPath
+    ) {
         dismiss(animated: true)
 
         switch options[indexPath.item] {
@@ -84,16 +87,17 @@ extension AddMemoryPopupViewController: UICollectionViewDataSource, UICollection
         }
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout _: UICollectionViewLayout,
+        sizeForItemAt _: IndexPath
+    ) -> CGSize {
         CGSize(width: collectionView.bounds.width, height: 68)
     }
 }
 
 extension AddMemoryPopupViewController: UIPopoverPresentationControllerDelegate {
-
-    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+    func adaptivePresentationStyle(for _: UIPresentationController) -> UIModalPresentationStyle {
         .none
     }
 }

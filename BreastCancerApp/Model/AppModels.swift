@@ -1,4 +1,3 @@
-
 import Foundation
 import CoreGraphics
 
@@ -1021,7 +1020,7 @@ enum PhaseState {
 
 struct TreatmentPhaseModel {
     var treatmentType: TreatmentType = .none
-    var startDate: Date? = nil
+    var startDate: Date?
     var duration: String = ""
     var state: PhaseState = .editing
 }

@@ -1,36 +1,37 @@
 import Foundation
 
 extension Notification.Name {
-    static let hydrationDataUpdated  = Notification.Name("HydrationDataUpdated")
+    static let hydrationDataUpdated = Notification.Name("HydrationDataUpdated")
     static let medicationDataUpdated = Notification.Name("MedicationDataUpdated")
-    static let symptomDataUpdated    = Notification.Name("SymptomDataUpdated")
-    static let exerciseDataUpdated   = Notification.Name("ExerciseDataUpdated")
+    static let symptomDataUpdated = Notification.Name("SymptomDataUpdated")
+    static let exerciseDataUpdated = Notification.Name("ExerciseDataUpdated")
 }
 
 struct HealthInsightBuilder {
-
-    private let calendar               = Calendar.current
-    private let hydrationGoalKey       = "care_hydration_goal_ml"
+    private let calendar = Calendar.current
+    private let hydrationGoalKey = "care_hydration_goal_ml"
     private let defaultHydrationGoalML = 3000
 
     // MARK: - Public entry point
+
     func buildInsights(filter: InsightDateFilter = .currentWeek) -> [HealthInsight] {
         let templates = HealthInsightResponse.loadFromFile()
         guard !templates.isEmpty else { return [] }
         return templates.map { template in
             switch template.type {
-            case .hydration:  return buildHydrationInsight(from: template,  filter: filter)
-            case .exercise:   return buildExerciseInsight(from: template,   filter: filter)
+            case .hydration: return buildHydrationInsight(from: template, filter: filter)
+            case .exercise: return buildExerciseInsight(from: template, filter: filter)
             case .medication: return buildMedicationInsight(from: template, filter: filter)
-            case .symptoms:   return buildSymptomsInsight(from: template,   filter: filter)
+            case .symptoms: return buildSymptomsInsight(from: template, filter: filter)
             }
         }
     }
 
     // MARK: - Static formatter
+
     static func formatHydrationAmount(_ amountML: Int) -> String {
         if amountML < 1000 { return "\(amountML) ml" }
-        let liters    = Double(amountML) / 1000.0
+        let liters = Double(amountML) / 1000.0
         let formatter = NumberFormatter()
         formatter.minimumFractionDigits = 0
         formatter.maximumFractionDigits = 1
@@ -40,16 +41,19 @@ struct HealthInsightBuilder {
     }
 
     // MARK: - Hydration
+
     private func buildHydrationInsight(
         from template: HealthInsight,
         filter: InsightDateFilter
     ) -> HealthInsight {
-        let dates         = resolveDates(for: filter)
-        let elapsedDates  = elapsed(dates)
-        let dailyValues   = dates.map { HydrationDataManager.shared.getTotalForDate($0) }
+        let dates = resolveDates(for: filter)
+        let elapsedDates = elapsed(dates)
+        let dailyValues = dates.map { HydrationDataManager.shared.getTotalForDate($0) }
         let elapsedValues = elapsedDates.map { HydrationDataManager.shared.getTotalForDate($0) }
-        let goalML        = max(UserDefaults.standard.integer(forKey: hydrationGoalKey),
-                               defaultHydrationGoalML)
+        let goalML = max(
+            UserDefaults.standard.integer(forKey: hydrationGoalKey),
+            defaultHydrationGoalML
+        )
 
         // Total hydration for the selected week (only elapsed days)
         let weekTotalML = elapsedValues.reduce(0, +)
@@ -71,13 +75,14 @@ struct HealthInsightBuilder {
     }
 
     // MARK: - Medication
+
     private func buildMedicationInsight(
         from template: HealthInsight,
         filter: InsightDateFilter
     ) -> HealthInsight {
-        let dates        = resolveDates(for: filter)
+        let dates = resolveDates(for: filter)
         let elapsedDates = elapsed(dates)
-        let allHistory   = MedicationHistory.shared.getAllHistory()
+        let allHistory = MedicationHistory.shared.getAllHistory()
 
         let statusValues = dates.map { date -> Int in
             guard date <= calendar.startOfDay(for: Date()) else { return -1 }
@@ -87,9 +92,9 @@ struct HealthInsightBuilder {
         }
 
         let elapsedEntries = elapsedDates.compactMap { historyEntry(for: $0, in: allHistory) }
-        let taken     = elapsedEntries.reduce(0) { $0 + $1.taken }
-        let goal      = elapsedEntries.reduce(0) { $0 + $1.goal }
-        let missed    = max(goal - taken, 0)
+        let taken = elapsedEntries.reduce(0) { $0 + $1.taken }
+        let goal = elapsedEntries.reduce(0) { $0 + $1.goal }
+        let missed = max(goal - taken, 0)
         let adherence = goal == 0 ? 0 : Int((Double(taken) / Double(goal) * 100).rounded())
 
         return HealthInsight(
@@ -104,14 +109,15 @@ struct HealthInsightBuilder {
     }
 
     // MARK: - Exercise
+
     private func buildExerciseInsight(
         from template: HealthInsight,
         filter: InsightDateFilter
     ) -> HealthInsight {
-        let dates          = resolveDates(for: filter)
+        let dates = resolveDates(for: filter)
         let completedByDay = dates.map { UserActivityStore.shared.completedExercises(on: $0) }
-        let activeDays     = completedByDay.filter { !$0.isEmpty }.count
-        let totalCount     = completedByDay.reduce(0) { $0 + $1.count }
+        let activeDays = completedByDay.filter { !$0.isEmpty }.count
+        let totalCount = completedByDay.reduce(0) { $0 + $1.count }
 
         // 1 = exercised, 0 = did not exercise, -1 = future day
         let statusValues = dates.map { date -> Int in
@@ -122,7 +128,7 @@ struct HealthInsightBuilder {
         let todayCount: Int
         switch filter {
         case .currentWeek: todayCount = UserActivityStore.shared.completedExercises(on: Date()).count
-        case .week:        todayCount = 0
+        case .week: todayCount = 0
         }
 
         return HealthInsight(
@@ -138,12 +144,13 @@ struct HealthInsightBuilder {
     }
 
     // MARK: - Symptoms
+
     private func buildSymptomsInsight(
         from template: HealthInsight,
         filter: InsightDateFilter
     ) -> HealthInsight {
-        let dates       = resolveDates(for: filter)
-        let source      = SymptomDataSource.shared
+        let dates = resolveDates(for: filter)
+        let source = SymptomDataSource.shared
         let dailyValues = dates.map { date in
             source.getSymptomLogs(on: date).map(\.severity).max() ?? 0
         }
@@ -157,17 +164,19 @@ struct HealthInsightBuilder {
     }
 
     // MARK: - Date resolution
+
     func resolveDates(for filter: InsightDateFilter) -> [Date] {
         let anchorDate: Date
         switch filter {
-        case .currentWeek:      anchorDate = Date()
-        case .week(let picked): anchorDate = picked
+        case .currentWeek: anchorDate = Date()
+        case let .week(picked): anchorDate = picked
         }
         let (monday, _) = filter.weekBounds(for: anchorDate)
-        return (0..<7).compactMap { calendar.date(byAdding: .day, value: $0, to: monday) }
+        return (0 ..< 7).compactMap { calendar.date(byAdding: .day, value: $0, to: monday) }
     }
 
     // MARK: - Private helpers
+
     private func elapsed(_ dates: [Date]) -> [Date] {
         let today = calendar.startOfDay(for: Date())
         return dates.filter { $0 <= today }

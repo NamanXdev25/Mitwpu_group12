@@ -1,19 +1,17 @@
-
 import UIKit
 
 class NotificationGroupCell: UICollectionViewCell {
-
-    @IBOutlet weak var exerciseSwitch: UISwitch!
-    @IBOutlet weak var hydrationSwitch: UISwitch!
-    @IBOutlet weak var appointmentsSwitch: UISwitch!
-    @IBOutlet weak var medicationSwitch: UISwitch!
+    @IBOutlet var exerciseSwitch: UISwitch!
+    @IBOutlet var hydrationSwitch: UISwitch!
+    @IBOutlet var appointmentsSwitch: UISwitch!
+    @IBOutlet var medicationSwitch: UISwitch!
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+
         contentView.layer.cornerRadius = 18
         contentView.layer.masksToBounds = true
-        
+
         exerciseSwitch.isOn = UserDefaults.standard.bool(forKey: "exerciseNotification")
         hydrationSwitch.isOn = UserDefaults.standard.bool(forKey: "hydrationNotification")
         appointmentsSwitch.isOn = UserDefaults.standard.bool(forKey: "appointmentsNotification")
@@ -21,7 +19,6 @@ class NotificationGroupCell: UICollectionViewCell {
     }
 
     func configure(notifications: [NotificationItem]) {
-
         exerciseSwitch.isOn = notifications[0].isEnabled
         hydrationSwitch.isOn = notifications[1].isEnabled
         appointmentsSwitch.isOn = notifications[2].isEnabled

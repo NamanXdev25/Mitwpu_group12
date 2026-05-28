@@ -1,18 +1,11 @@
-
 import UIKit
 
 class ExerciseCollectionViewCell: UICollectionViewCell {
-
-    @IBOutlet weak var editPlanButton: UIButton!
-    @IBOutlet weak var exerciseGraphView: BarGraphView!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var subtitleLabel: UILabel!
-    @IBOutlet weak var barChartContainerView: UIView!
-    @IBOutlet weak var dayActiveValueLabel: UILabel!
-    @IBOutlet weak var totalMinutesValueLabel: UILabel!
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-
+    @IBOutlet var editPlanButton: UIButton!
+    @IBOutlet var exerciseGraphView: BarGraphView!
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var subtitleLabel: UILabel!
+    @IBOutlet var barChartContainerView: UIView!
+    @IBOutlet var dayActiveValueLabel: UILabel!
+    @IBOutlet var totalMinutesValueLabel: UILabel!
 }

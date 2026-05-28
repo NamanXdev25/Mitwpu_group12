@@ -1,10 +1,9 @@
 import UIKit
 
 final class MemoryImageCell: UICollectionViewCell {
-
     static let reuseIdentifier = "MemoryImageCell"
 
-    @IBOutlet private weak var imageView: UIImageView!
+    @IBOutlet private var imageView: UIImageView!
 
     var onTap: (() -> Void)?
 
@@ -30,8 +29,8 @@ final class MemoryImageCell: UICollectionViewCell {
 }
 
 // MARK: - Private Configuration
-private extension MemoryImageCell {
 
+private extension MemoryImageCell {
     func configureImageView() {
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true

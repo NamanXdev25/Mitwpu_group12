@@ -1,29 +1,31 @@
 import UIKit
 
 // MARK: - Delegate Protocol
+
 protocol CareSymptomsCellDelegate: AnyObject {
     func careSymptomsCellDidTapViewInsights(_ cell: CareSymptomsCell)
 }
 
 class CareSymptomsCell: UICollectionViewCell {
-
-    @IBOutlet weak var SymptomsContainer: UIView!
-    @IBOutlet weak var SymptomsLabel: UILabel!
-    @IBOutlet weak var InsightCellCollectionView: UICollectionView!
-    @IBOutlet weak var SeperatorView: UIView!
-    @IBOutlet weak var ViewInsightsButton: UIButton!
+    @IBOutlet var SymptomsContainer: UIView!
+    @IBOutlet var SymptomsLabel: UILabel!
+    @IBOutlet var InsightCellCollectionView: UICollectionView!
+    @IBOutlet var SeperatorView: UIView!
+    @IBOutlet var ViewInsightsButton: UIButton!
 
     weak var delegate: CareSymptomsCellDelegate?
 
     private var symptoms: [String] = []
 
     // MARK: - Lifecycle
+
     override func awakeFromNib() {
         super.awakeFromNib()
         setupInternalCollectionView()
     }
 
     // MARK: - Setup
+
     private func setupInternalCollectionView() {
         InsightCellCollectionView.delegate = self
         InsightCellCollectionView.dataSource = self
@@ -51,9 +53,10 @@ class CareSymptomsCell: UICollectionViewCell {
     }
 
     // MARK: - Public Configure
+
     func configure(title: String, loggedSymptoms: [String]) {
         SymptomsLabel.text = title
-        self.symptoms = loggedSymptoms
+        symptoms = loggedSymptoms
 
         if let layout = InsightCellCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             if loggedSymptoms.isEmpty {
@@ -69,33 +72,37 @@ class CareSymptomsCell: UICollectionViewCell {
     }
 
     // MARK: - IBAction
-    @IBAction func viewInsightsButtonTapped(_ sender: UIButton) {
+
+    @IBAction func viewInsightsButtonTapped(_: UIButton) {
         delegate?.careSymptomsCellDidTapViewInsights(self)
     }
 }
 
 // MARK: - UICollectionViewDataSource
-extension CareSymptomsCell: UICollectionViewDataSource {
 
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+extension CareSymptomsCell: UICollectionViewDataSource {
+    func collectionView(_: UICollectionView, numberOfItemsInSection _: Int) -> Int {
         return symptoms.isEmpty ? 1 : symptoms.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
         if symptoms.isEmpty {
-            let cell = collectionView.dequeueReusableCell(
+            guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "CareSymptomEmptyCell",
                 for: indexPath
-            ) as! CareSymptomEmptyCell
+            ) as? CareSymptomEmptyCell else {
+                fatalError("Expected CareSymptomEmptyCell for reuse identifier 'CareSymptomEmptyCell' at \(indexPath)")
+            }
             cell.Nosymptomsloggedcell.text = "No symptoms logged"
             return cell
         }
 
-        let cell = collectionView.dequeueReusableCell(
+        guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: "CareInsightCell",
             for: indexPath
-        ) as! CareInsightCell
+        ) as? CareInsightCell else {
+            fatalError("Expected CareInsightCell for reuse identifier 'CareInsightCell' at \(indexPath)")
+        }
 
         let label = symptoms[indexPath.item]
         cell.InsightLabel.text = label
@@ -109,14 +116,13 @@ extension CareSymptomsCell: UICollectionViewDataSource {
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
-extension CareSymptomsCell: UICollectionViewDelegateFlowLayout {
 
+extension CareSymptomsCell: UICollectionViewDelegateFlowLayout {
     func collectionView(
         _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
+        layout _: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-
         if symptoms.isEmpty {
             return CGSize(
                 width: collectionView.bounds.width,
@@ -133,4 +139,5 @@ extension CareSymptomsCell: UICollectionViewDelegateFlowLayout {
 }
 
 // MARK: - UICollectionViewDelegate (optional interactions)
-extension CareSymptomsCell: UICollectionViewDelegate { }
+
+extension CareSymptomsCell: UICollectionViewDelegate {}

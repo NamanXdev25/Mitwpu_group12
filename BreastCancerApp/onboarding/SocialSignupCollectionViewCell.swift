@@ -1,13 +1,12 @@
 import UIKit
 
 final class SocialSignupCollectionViewCell: UICollectionViewCell {
+    @IBOutlet var googleContainerView: UIView!
+    @IBOutlet var appleContainerView: UIView!
+    @IBOutlet var signupContainer: UIView!
+    @IBOutlet var signUpButton: UIButton!
+    @IBOutlet var donthaveAccountLabel: UILabel!
 
-    @IBOutlet weak var googleContainerView: UIView!
-    @IBOutlet weak var appleContainerView: UIView!
-    @IBOutlet weak var signupContainer: UIView!
-    @IBOutlet weak var signUpButton: UIButton!
-    @IBOutlet weak var donthaveAccountLabel: UILabel!
-    
     var onSignInTapped: (() -> Void)?
     var onGoogleTapped: (() -> Void)?
     var onAppleTapped: (() -> Void)?
@@ -61,16 +60,15 @@ final class SocialSignupCollectionViewCell: UICollectionViewCell {
         onAppleTapped?()
     }
 
-
-    @IBAction func didTapGoogle(_ sender: UIButton) {
+    @IBAction func didTapGoogle(_: UIButton) {
         onGoogleTapped?()
     }
 
-    @IBAction func didTapApple(_ sender: UIButton) {
+    @IBAction func didTapApple(_: UIButton) {
         onAppleTapped?()
     }
 
-    @IBAction func didTapSignUp(_ sender: UIButton) {
+    @IBAction func didTapSignUp(_: UIButton) {
         onSignInTapped?()
     }
 }

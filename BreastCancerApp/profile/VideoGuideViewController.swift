@@ -1,13 +1,12 @@
-import UIKit
 import AVFoundation
+import UIKit
 
 final class VideoGuideViewController: UIViewController {
-
-    @IBOutlet private weak var videoContainerView: UIView!
-    @IBOutlet private weak var actualVideoView: UIView!
-    @IBOutlet private weak var playPauseButton: UIButton!
-    @IBOutlet private weak var progressSlider: UISlider!
-    @IBOutlet private weak var logSelfExamButton: UIButton!
+    @IBOutlet private var videoContainerView: UIView!
+    @IBOutlet private var actualVideoView: UIView!
+    @IBOutlet private var playPauseButton: UIButton!
+    @IBOutlet private var progressSlider: UISlider!
+    @IBOutlet private var logSelfExamButton: UIButton!
 
     private var player: AVPlayer?
     private var playerLayer: AVPlayerLayer?
@@ -95,7 +94,7 @@ final class VideoGuideViewController: UIViewController {
 
     // MARK: - Play / Pause
 
-    @IBAction private func playPauseTapped(_ sender: UIButton) {
+    @IBAction private func playPauseTapped(_: UIButton) {
         guard let player else { return }
 
         if player.timeControlStatus == .playing {
@@ -115,7 +114,7 @@ final class VideoGuideViewController: UIViewController {
 
     // MARK: - Slider Scrubbing
 
-    @IBAction private func progressTouchDown(_ sender: UISlider) {
+    @IBAction private func progressTouchDown(_: UISlider) {
         isSeeking = true
         player?.pause()
     }

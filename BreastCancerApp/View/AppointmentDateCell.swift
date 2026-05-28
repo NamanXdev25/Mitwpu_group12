@@ -1,21 +1,19 @@
-
 import UIKit
 
 class AppointmentDateCell: UICollectionViewCell {
+    @IBOutlet var dayLabel: UILabel!
+    @IBOutlet var selectionLayer: UIView!
 
-    @IBOutlet weak var dayLabel: UILabel!
-    @IBOutlet weak var selectionLayer: UIView!
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         selectionLayer.layer.cornerRadius = selectionLayer.frame.width / 2
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
         selectionLayer.layer.cornerRadius = selectionLayer.frame.width / 2
     }
-    
+
     func configure(day: String, isSelected: Bool, hasAppointments: Bool, isToday: Bool) {
         dayLabel.text = day
         dayLabel.textColor = .black

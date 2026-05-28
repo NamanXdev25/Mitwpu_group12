@@ -1,9 +1,8 @@
 import UIKit
 
 class WelcomeViewController: UIViewController {
-
-    @IBOutlet weak var continueButton: UIButton!
-    @IBOutlet weak var introImageView: UIView!
+    @IBOutlet var continueButton: UIButton!
+    @IBOutlet var introImageView: UIView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,12 +18,12 @@ class WelcomeViewController: UIViewController {
         introImageView.layer.mask = mask
     }
 
-    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+    override func shouldPerformSegue(withIdentifier _: String, sender _: Any?) -> Bool {
         // Block the storyboard segue so we navigate to SignUp instead
         return false
     }
 
-    @IBAction func continueButtonTapped(_ sender: UIButton) {
+    @IBAction func continueButtonTapped(_: UIButton) {
         let signupSB = UIStoryboard(name: "signupMain", bundle: nil)
         if let signupVC = signupSB.instantiateViewController(withIdentifier: "SignUpViewController") as? SignUpViewController {
             navigationController?.pushViewController(signupVC, animated: true)

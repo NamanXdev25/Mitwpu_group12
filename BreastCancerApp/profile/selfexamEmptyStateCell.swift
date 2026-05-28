@@ -1,7 +1,6 @@
 import UIKit
 
 final class selfexamEmptyStateCell: UICollectionViewCell {
-
     static let reuseIdentifier = "EmptyStateCell"
 
     override func awakeFromNib() {

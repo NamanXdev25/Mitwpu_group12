@@ -1,9 +1,6 @@
-
-
 import Foundation
 
-struct ExerciseRecommendationEngine {
-
+enum ExerciseRecommendationEngine {
     static func recommendedCategories() -> [ExercisePlanCategory] {
         let ctx = AppContext.current(moodKey: "general")
         let scored = ExercisePlanCategory.allCategories.map { ($0, score($0, ctx: ctx)) }

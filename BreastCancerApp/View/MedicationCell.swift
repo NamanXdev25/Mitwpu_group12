@@ -1,13 +1,12 @@
 import UIKit
 
 class MedicationCell: UITableViewCell {
+    @IBOutlet var pillNameLabel: UILabel!
+    @IBOutlet var timeLabel: UILabel!
 
-    @IBOutlet weak var pillNameLabel: UILabel!
-    @IBOutlet weak var timeLabel: UILabel!
-    
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.selectionStyle = .none
+        selectionStyle = .none
         backgroundColor = .clear
     }
 

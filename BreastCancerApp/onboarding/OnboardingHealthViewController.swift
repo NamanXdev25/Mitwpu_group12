@@ -1,11 +1,10 @@
 import UIKit
 
 class OnboardingHealthViewController: UIViewController {
-
-    @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var nextButton: UIButton!
-    @IBOutlet weak var progressBar: UIView!
-    @IBOutlet weak var mindfulnessImage: UIView!
+    @IBOutlet var collectionView: UICollectionView!
+    @IBOutlet var nextButton: UIButton!
+    @IBOutlet var progressBar: UIView!
+    @IBOutlet var mindfulnessImage: UIView!
 
     private let features = OnboardingFeature.healthFeatures
 
@@ -62,18 +61,17 @@ class OnboardingHealthViewController: UIViewController {
         nextButton.layer.cornerRadius = nextButton.frame.height / 2
     }
 
-    @IBAction func nextButtonTapped(_ sender: UIButton) {
+    @IBAction func nextButtonTapped(_: UIButton) {
         performSegue(withIdentifier: "showGarden", sender: nil)
     }
 
-    @IBAction func skipButtonTapped(_ sender: UIButton) {
+    @IBAction func skipButtonTapped(_: UIButton) {
         performSegue(withIdentifier: "showGarden", sender: nil)
     }
 }
 
 extension OnboardingHealthViewController: UICollectionViewDataSource {
-
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_: UICollectionView, numberOfItemsInSection _: Int) -> Int {
         features.count
     }
 
@@ -87,15 +85,13 @@ extension OnboardingHealthViewController: UICollectionViewDataSource {
 }
 
 extension OnboardingHealthViewController: UICollectionViewDelegate {
-
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
     }
 }
 
 extension OnboardingHealthViewController: UICollectionViewDelegateFlowLayout {
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout _: UICollectionViewLayout, sizeForItemAt _: IndexPath) -> CGSize {
         CGSize(width: collectionView.frame.width - 32, height: 50)
     }
 }

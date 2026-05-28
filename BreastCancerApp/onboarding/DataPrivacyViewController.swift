@@ -1,9 +1,8 @@
 import UIKit
 
 class DataPrivacyViewController: UIViewController {
-
-    @IBOutlet weak var progressBar: ProgressBarView!
-    @IBOutlet weak var letsBeginButton: UIButton!
+    @IBOutlet var progressBar: ProgressBarView!
+    @IBOutlet var letsBeginButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -15,16 +14,16 @@ class DataPrivacyViewController: UIViewController {
         progressBar.setProgress(currentStep: 4, totalSteps: 9, animated: true)
     }
 
-    @IBAction func letsBeginButtonTapped(_ sender: UIButton) {
+    @IBAction func letsBeginButtonTapped(_: UIButton) {
         performSegue(withIdentifier: "showTreatmentStatus", sender: nil)
     }
 
-    @IBAction func skipButtonTapped(_ sender: UIButton) {
+    @IBAction func skipButtonTapped(_: UIButton) {
         UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
         if AppBackend.current == .supabase {
             SupabaseAuthService.shared.markCurrentUserOnboardingCompleted()
         }
-        
+
         let storyboard = UIStoryboard(name: "TabbarMain", bundle: nil)
         guard let tabBarController = storyboard.instantiateInitialViewController() as? UITabBarController else {
             fatalError("TabBarMain must have UITabBarController as initial VC")

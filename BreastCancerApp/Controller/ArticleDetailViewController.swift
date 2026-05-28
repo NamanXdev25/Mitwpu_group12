@@ -1,10 +1,11 @@
 import UIKit
 
 class ArticleDetailViewController: UIViewController {
+    @IBOutlet var collectionView: UICollectionView!
 
-    @IBOutlet weak var collectionView: UICollectionView!
-
+    // swiftlint:disable:next implicitly_unwrapped_optional
     var article: ArticleModel!
+    // swiftlint:disable:next implicitly_unwrapped_optional
     private var dataSource: ArticleDetailDataSource!
 
     override func viewDidLoad() {
@@ -37,8 +38,7 @@ class ArticleDetailViewController: UIViewController {
     }
 
     private func createLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
-
+        return UICollectionViewCompositionalLayout { sectionIndex, _ -> NSCollectionLayoutSection? in
             if sectionIndex == 0 {
                 let itemSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1.0),
@@ -55,8 +55,7 @@ class ArticleDetailViewController: UIViewController {
                     subitems: [item]
                 )
 
-                let section = NSCollectionLayoutSection(group: group)
-                return section
+                return NSCollectionLayoutSection(group: group)
 
             } else {
                 let itemSize = NSCollectionLayoutSize(
@@ -86,11 +85,9 @@ class ArticleDetailViewController: UIViewController {
                 return section
             }
         }
-
-        return layout
     }
 
-    @IBAction func closeTapped(_ sender: UIBarButtonItem) {
+    @IBAction func closeTapped(_: UIBarButtonItem) {
         dismiss(animated: true)
     }
 }

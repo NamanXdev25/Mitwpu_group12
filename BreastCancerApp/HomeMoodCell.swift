@@ -1,26 +1,23 @@
-
-
 import UIKit
 
 class HomeMoodCell: UICollectionViewCell {
+    @IBOutlet var MoodCellView: UIView!
+    @IBOutlet var MoodTitleLabel: UILabel!
 
-    @IBOutlet weak var MoodCellView: UIView!
-    @IBOutlet weak var MoodTitleLabel: UILabel!
+    @IBOutlet var ExcitedImageView: UIImageView!
+    @IBOutlet var ExcitedLabel: UILabel!
 
-    @IBOutlet weak var ExcitedImageView: UIImageView!
-    @IBOutlet weak var ExcitedLabel: UILabel!
+    @IBOutlet var HappyImageView: UIImageView!
+    @IBOutlet var HappyLabel: UILabel!
 
-    @IBOutlet weak var HappyImageView: UIImageView!
-    @IBOutlet weak var HappyLabel: UILabel!
+    @IBOutlet var SadImageView: UIImageView!
+    @IBOutlet var SadLabel: UILabel!
 
-    @IBOutlet weak var SadImageView: UIImageView!
-    @IBOutlet weak var SadLabel: UILabel!
+    @IBOutlet var TiredImageView: UIImageView!
+    @IBOutlet var TiredLabel: UILabel!
 
-    @IBOutlet weak var TiredImageView: UIImageView!
-    @IBOutlet weak var TiredLabel: UILabel!
-
-    @IBOutlet weak var AnxiousImageView: UIImageView!
-    @IBOutlet weak var AnxiousLabel: UILabel!
+    @IBOutlet var AnxiousImageView: UIImageView!
+    @IBOutlet var AnxiousLabel: UILabel!
 
     var onMoodTapped: ((Mood) -> Void)?
 
@@ -60,7 +57,7 @@ class HomeMoodCell: UICollectionViewCell {
             HappyImageView.superview,
             SadImageView.superview,
             TiredImageView.superview,
-            AnxiousImageView.superview
+            AnxiousImageView.superview,
         ]
 
         for (index, view) in tapTargets.enumerated() {
@@ -122,15 +119,15 @@ class HomeMoodCell: UICollectionViewCell {
 
     private func applySelectionState(animated: Bool) {
         let imageViews: [UIImageView] = [
-            ExcitedImageView, HappyImageView, SadImageView, TiredImageView, AnxiousImageView
+            ExcitedImageView, HappyImageView, SadImageView, TiredImageView, AnxiousImageView,
         ].compactMap { $0 }
 
         let labels: [UILabel] = [
-            ExcitedLabel, HappyLabel, SadLabel, TiredLabel, AnxiousLabel
+            ExcitedLabel, HappyLabel, SadLabel, TiredLabel, AnxiousLabel,
         ].compactMap { $0 }
 
         let updates = {
-            for index in 0..<min(imageViews.count, labels.count) {
+            for index in 0 ..< min(imageViews.count, labels.count) {
                 let isSelected = (self.selectedMoodIndex == index)
                 let shouldFadeOthers = (self.selectedMoodIndex != nil)
 

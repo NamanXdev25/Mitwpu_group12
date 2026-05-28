@@ -1,8 +1,7 @@
-import UIKit
 import AVFoundation
+import UIKit
 
 final class VideoPlayerContainerView: UIView {
-
     var playerLayer: AVPlayerLayer? {
         didSet {
             if let oldLayer = oldValue {
@@ -20,4 +19,3 @@ final class VideoPlayerContainerView: UIView {
         playerLayer?.frame = bounds
     }
 }
-

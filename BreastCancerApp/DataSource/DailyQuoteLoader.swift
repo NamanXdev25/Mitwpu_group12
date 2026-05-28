@@ -1,7 +1,6 @@
 import Foundation
 
 final class DailyQuoteLoader {
-
     static let shared = DailyQuoteLoader()
     private init() {}
 
@@ -14,9 +13,9 @@ final class DailyQuoteLoader {
         let text: String
     }
 
-    private let kShuffledQueue  = "dailyQuote_shuffledQueue"
-    private let kCurrentIndex   = "dailyQuote_currentIndex"
-    private let kLastShownDate  = "dailyQuote_lastShownDate"
+    private let kShuffledQueue = "dailyQuote_shuffledQueue"
+    private let kCurrentIndex = "dailyQuote_currentIndex"
+    private let kLastShownDate = "dailyQuote_lastShownDate"
 
     private var cachedQuote: String?
     private var cachedDate: String?
@@ -29,7 +28,7 @@ final class DailyQuoteLoader {
         }
 
         let quote = resolveQuote(for: today)
-        cachedDate  = today
+        cachedDate = today
         cachedQuote = quote
         return quote
     }
@@ -38,15 +37,15 @@ final class DailyQuoteLoader {
         let defaults = UserDefaults.standard
 
         var queue: [String] = defaults.stringArray(forKey: kShuffledQueue) ?? []
-        var index: Int      = defaults.integer(forKey: kCurrentIndex)
+        var index: Int = defaults.integer(forKey: kCurrentIndex)
         let lastDate: String = defaults.string(forKey: kLastShownDate) ?? ""
 
         if queue.isEmpty {
             queue = buildShuffledQueue()
             index = 0
             defaults.set(queue, forKey: kShuffledQueue)
-            defaults.set(index,  forKey: kCurrentIndex)
-            defaults.set(today,  forKey: kLastShownDate)
+            defaults.set(index, forKey: kCurrentIndex)
+            defaults.set(today, forKey: kLastShownDate)
             return queue.first ?? fallback
         }
 
@@ -77,7 +76,7 @@ final class DailyQuoteLoader {
 
     private func loadAllTexts() -> [String]? {
         guard
-            let url  = Bundle.main.url(forResource: "quotes", withExtension: "json"),
+            let url = Bundle.main.url(forResource: "quotes", withExtension: "json"),
             let data = try? Data(contentsOf: url),
             let file = try? JSONDecoder().decode(QuoteFile.self, from: data)
         else { return nil }

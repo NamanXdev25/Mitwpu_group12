@@ -1,12 +1,10 @@
-
 import UIKit
 
 class SymptomHeaderView: UICollectionReusableView {
-
     static let reuseIdentifier = "header_cell"
 
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var actionButton: UIButton!
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var actionButton: UIButton!
 
     var editTapped: (() -> Void)?
 
@@ -15,7 +13,7 @@ class SymptomHeaderView: UICollectionReusableView {
         actionButton.isHidden = true
     }
 
-    @IBAction func editButtonTapped(_ sender: UIButton) {
+    @IBAction func editButtonTapped(_: UIButton) {
         editTapped?()
     }
 

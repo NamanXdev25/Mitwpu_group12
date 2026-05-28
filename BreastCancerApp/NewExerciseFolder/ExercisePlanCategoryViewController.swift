@@ -1,16 +1,19 @@
 import UIKit
 
 class ExercisePlanCategoryViewController: UIViewController {
-
     // MARK: - IBOutlets
-    @IBOutlet weak var collectionView: UICollectionView!
+
+    @IBOutlet var collectionView: UICollectionView!
 
     // MARK: - Properties
+
+    // swiftlint:disable:next implicitly_unwrapped_optional
     private var dataSource: ExercisePlanCategoryDataSource!
     var onCategorySelected: ((ExercisePlanCategory) -> Void)?
     var onCategoryDeselected: (() -> Void)?
 
     // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
@@ -19,6 +22,7 @@ class ExercisePlanCategoryViewController: UIViewController {
     }
 
     // MARK: - Setup
+
     private func setupNavigationBar() {
         title = "Exercise Plans"
     }
@@ -103,6 +107,7 @@ class ExercisePlanCategoryViewController: UIViewController {
     }
 
     // MARK: - Navigation
+
     private func navigateToExerciseDetail(with category: ExercisePlanCategory) {
         let plan = convertCategoryToPlan(category)
         let storyboard = UIStoryboard(name: "NewExercise", bundle: nil)
@@ -150,6 +155,7 @@ class ExercisePlanCategoryViewController: UIViewController {
 }
 
 // MARK: - ExercisePlanCategorySelectionDelegate
+
 extension ExercisePlanCategoryViewController: ExercisePlanCategorySelectionDelegate {
     func didSelectCategory(_ category: ExercisePlanCategory) {
         navigateToExerciseDetail(with: category)

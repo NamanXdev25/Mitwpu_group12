@@ -1,10 +1,9 @@
-
 import UIKit
 
 class SlideContentViewController: UIViewController {
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var descriptionLabel: UILabel!
-    @IBOutlet weak var actionButton: UIButton!
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var descriptionLabel: UILabel!
+    @IBOutlet var actionButton: UIButton!
 
     var slide: MindfulnessSlide?
     var pageIndex: Int?
@@ -22,7 +21,7 @@ class SlideContentViewController: UIViewController {
         actionButton.setTitle(slide.buttonText, for: .normal)
     }
 
-    @IBAction func buttonPressed(_ sender: UIButton) {
+    @IBAction func buttonPressed(_: UIButton) {
         didTapButton?()
     }
 }

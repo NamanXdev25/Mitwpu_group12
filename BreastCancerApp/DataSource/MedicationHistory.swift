@@ -14,12 +14,12 @@ class MedicationHistory {
         "Allergy Medicine",
         "Omega-3",
         "Calcium Supplement",
-        "Vitamin B12"
+        "Vitamin B12",
     ]
 
     init(repository: MedicationHistoryRepository = RepositoryFactory.makeMedicationHistoryRepository()) {
         self.repository = repository
-        self.history = repository.loadHistory()
+        history = repository.loadHistory()
         var didMutate = false
 
         if normalizeStoredDailyCountsIfNeeded() {
@@ -29,7 +29,7 @@ class MedicationHistory {
             didMutate = true
         }
         let didInitializeToday = initializeTodayIfNeeded()
-        if didMutate && !didInitializeToday {
+        if didMutate, !didInitializeToday {
             persist()
         }
     }
@@ -185,29 +185,98 @@ class MedicationHistory {
         let calendar = Calendar.current
         let today = Date()
 
-        for daysAgo in 1...30 {
+        for daysAgo in 1 ... 30 {
             guard let pastDate = calendar.date(byAdding: .day, value: -daysAgo, to: today) else { continue }
             let weekday = calendar.component(.weekday, from: pastDate)
-            var dayMedications: [Medication] = []
-
-            dayMedications.append(Medication(name: "Aspirin", note: "Take with food", time: "8:00 AM", repeatOption: "Every Day", isTaken: Bool.random(), reminderEnabled: true))
-            dayMedications.append(Medication(name: "Vitamin D", note: "Morning supplement", time: "9:00 AM", repeatOption: "Every Day", isTaken: Bool.random(), reminderEnabled: true))
-            dayMedications.append(Medication(name: "Blood Pressure Med", note: "", time: "12:00 PM", repeatOption: "Every Day", isTaken: Bool.random(), reminderEnabled: true))
-            dayMedications.append(Medication(name: "Thyroid Medicine", note: "Take on empty stomach", time: "7:00 AM", repeatOption: "Every Day", isTaken: Bool.random(), reminderEnabled: true))
-            dayMedications.append(Medication(name: "Allergy Medicine", note: "Only if needed", time: "10:00 PM", repeatOption: "Every Day", isTaken: Bool.random(), reminderEnabled: true))
-
-            if weekday == 2 {
-                dayMedications.append(Medication(name: "Omega-3", note: "", time: "6:00 PM", repeatOption: "Every Mon", isTaken: Bool.random(), reminderEnabled: false))
-            }
-            if weekday == 4 {
-                dayMedications.append(Medication(name: "Calcium Supplement", note: "Take with meal", time: "1:00 PM", repeatOption: "Every Wed", isTaken: Bool.random(), reminderEnabled: true))
-            }
-            if weekday == 6 {
-                dayMedications.append(Medication(name: "Vitamin B12", note: "", time: "8:30 AM", repeatOption: "Every Fri", isTaken: Bool.random(), reminderEnabled: true))
-            }
-
+            let dayMedications = makeDummyMedications(weekday: weekday)
             saveMedications(dayMedications, for: pastDate)
         }
+    }
+
+    private func makeDummyMedications(weekday: Int) -> [Medication] {
+        var meds = makeDailyMedications()
+        meds += makeWeeklyMedications(weekday: weekday)
+        return meds
+    }
+
+    private func makeDailyMedications() -> [Medication] {
+        [
+            Medication(
+                name: "Aspirin",
+                note: "Take with food",
+                time: "8:00 AM",
+                repeatOption: "Every Day",
+                isTaken: Bool.random(),
+                reminderEnabled: true
+            ),
+            Medication(
+                name: "Vitamin D",
+                note: "Morning supplement",
+                time: "9:00 AM",
+                repeatOption: "Every Day",
+                isTaken: Bool.random(),
+                reminderEnabled: true
+            ),
+            Medication(
+                name: "Blood Pressure Med",
+                note: "",
+                time: "12:00 PM",
+                repeatOption: "Every Day",
+                isTaken: Bool.random(),
+                reminderEnabled: true
+            ),
+            Medication(
+                name: "Thyroid Medicine",
+                note: "Take on empty stomach",
+                time: "7:00 AM",
+                repeatOption: "Every Day",
+                isTaken: Bool.random(),
+                reminderEnabled: true
+            ),
+            Medication(
+                name: "Allergy Medicine",
+                note: "Only if needed",
+                time: "10:00 PM",
+                repeatOption: "Every Day",
+                isTaken: Bool.random(),
+                reminderEnabled: true
+            ),
+        ]
+    }
+
+    private func makeWeeklyMedications(weekday: Int) -> [Medication] {
+        var meds: [Medication] = []
+        if weekday == 2 {
+            meds.append(Medication(
+                name: "Omega-3",
+                note: "",
+                time: "6:00 PM",
+                repeatOption: "Every Mon",
+                isTaken: Bool.random(),
+                reminderEnabled: false
+            ))
+        }
+        if weekday == 4 {
+            meds.append(Medication(
+                name: "Calcium Supplement",
+                note: "Take with meal",
+                time: "1:00 PM",
+                repeatOption: "Every Wed",
+                isTaken: Bool.random(),
+                reminderEnabled: true
+            ))
+        }
+        if weekday == 6 {
+            meds.append(Medication(
+                name: "Vitamin B12",
+                note: "",
+                time: "8:30 AM",
+                repeatOption: "Every Fri",
+                isTaken: Bool.random(),
+                reminderEnabled: true
+            ))
+        }
+        return meds
     }
 
     func reloadDummyData() {

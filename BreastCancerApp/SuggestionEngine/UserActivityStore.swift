@@ -1,5 +1,3 @@
-
-
 import Foundation
 
 struct ExerciseCompletionRecord: Codable, Hashable {
@@ -20,7 +18,9 @@ struct ExerciseCompletionRecord: Codable, Hashable {
 
 final class UserActivityStore {
     static let shared = UserActivityStore()
-    private init() { load() }
+    private init() {
+        load()
+    }
 
     private let key = "uas_tapCounts"
     private var tapCounts: [String: Int] = [:]
@@ -119,9 +119,9 @@ final class UserActivityStore {
 
     private func weight(for k: String) -> Int {
         switch tapCounts[k] ?? 0 {
-        case 0:      return 1
-        case 1...2:  return 2
-        default:     return 3
+        case 0: return 1
+        case 1 ... 2: return 2
+        default: return 3
         }
     }
 

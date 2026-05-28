@@ -1,23 +1,15 @@
-
 import UIKit
 
 class SymptomCollectionViewCell: UICollectionViewCell {
-    
-    
-    @IBOutlet weak var logButton: UIButton!
-    
-    @IBOutlet weak var symptomsGraphView: LineGraphView!
-    
-    @IBOutlet weak var titleLabel: UILabel!
-    
-    @IBOutlet weak var subtitleLabel: UILabel!
-    
-    @IBOutlet weak var symptomsLineGraphView: UIView!
-    
-    @IBOutlet weak var footerLabel: UILabel!
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
+    @IBOutlet var logButton: UIButton!
 
+    @IBOutlet var symptomsGraphView: LineGraphView!
+
+    @IBOutlet var titleLabel: UILabel!
+
+    @IBOutlet var subtitleLabel: UILabel!
+
+    @IBOutlet var symptomsLineGraphView: UIView!
+
+    @IBOutlet var footerLabel: UILabel!
 }

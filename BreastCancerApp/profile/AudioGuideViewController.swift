@@ -1,15 +1,14 @@
-import UIKit
 import AVFoundation
+import UIKit
 
 final class AudioGuideViewController: UIViewController {
-
-    @IBOutlet private weak var artworkImageView: UIImageView!
-    @IBOutlet private weak var playPauseButton: UIButton!
-    @IBOutlet private weak var back5Button: UIButton!
-    @IBOutlet private weak var forward5Button: UIButton!
-    @IBOutlet private weak var progressSlider: UISlider!
-    @IBOutlet private weak var titleLabel: UILabel!
-    @IBOutlet private weak var logSelfExamButton: UIButton!
+    @IBOutlet private var artworkImageView: UIImageView!
+    @IBOutlet private var playPauseButton: UIButton!
+    @IBOutlet private var back5Button: UIButton!
+    @IBOutlet private var forward5Button: UIButton!
+    @IBOutlet private var progressSlider: UISlider!
+    @IBOutlet private var titleLabel: UILabel!
+    @IBOutlet private var logSelfExamButton: UIButton!
 
     private var player: AVAudioPlayer?
     private var progressTimer: Timer?
@@ -82,7 +81,7 @@ final class AudioGuideViewController: UIViewController {
 
     // MARK: - Actions
 
-    @IBAction private func playPauseTapped(_ sender: UIButton) {
+    @IBAction private func playPauseTapped(_: UIButton) {
         guard let player = player else { return }
 
         if player.isPlaying {
@@ -96,13 +95,13 @@ final class AudioGuideViewController: UIViewController {
         }
     }
 
-    @IBAction private func back5Tapped(_ sender: UIButton) {
+    @IBAction private func back5Tapped(_: UIButton) {
         guard let player = player else { return }
         player.currentTime = max(0, player.currentTime - seekInterval)
         updateProgress()
     }
 
-    @IBAction private func forward5Tapped(_ sender: UIButton) {
+    @IBAction private func forward5Tapped(_: UIButton) {
         guard let player = player else { return }
         player.currentTime = min(player.duration, player.currentTime + seekInterval)
         updateProgress()
@@ -121,7 +120,7 @@ final class AudioGuideViewController: UIViewController {
 // MARK: - AVAudioPlayerDelegate
 
 extension AudioGuideViewController: AVAudioPlayerDelegate {
-    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+    func audioPlayerDidFinishPlaying(_: AVAudioPlayer, successfully _: Bool) {
         progressTimer?.invalidate()
         progressSlider.value = 0
         configurePlayPauseButton(isPlaying: false)

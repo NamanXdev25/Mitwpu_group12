@@ -1,14 +1,8 @@
-
 import UIKit
 
 class NewExerciseNoteCell: UICollectionViewCell {
-    
-    @IBOutlet weak var noteLabel: UILabel!
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-    
+    @IBOutlet var noteLabel: UILabel!
+
     func configure(with note: String) {
         noteLabel.text = note
     }

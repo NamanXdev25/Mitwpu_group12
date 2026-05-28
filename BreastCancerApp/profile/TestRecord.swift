@@ -17,6 +17,7 @@ enum Persistence {
         let data = try JSONEncoder().encode(records)
         UserDefaults.standard.set(data, forKey: key)
     }
+
     static func load() -> [TestRecord] {
         guard let d = UserDefaults.standard.data(forKey: key) else { return [] }
         return (try? JSONDecoder().decode([TestRecord].self, from: d)) ?? []

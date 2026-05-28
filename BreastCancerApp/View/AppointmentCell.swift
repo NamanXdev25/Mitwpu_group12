@@ -1,27 +1,25 @@
-
 import UIKit
 
 class AppointmentCell: UITableViewCell {
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var noteLabel: UILabel!
+    @IBOutlet var timeLabel: UILabel!
 
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var noteLabel: UILabel!
-    @IBOutlet weak var timeLabel: UILabel!
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         setupUI()
     }
-    
+
     private func setupUI() {
-        self.backgroundColor = .clear
+        backgroundColor = .clear
         selectionStyle = .none
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
         contentView.frame = bounds
     }
-    
+
     func configure(with appointment: AppointmentItem) {
         titleLabel.text = appointment.title
         titleLabel.textColor = .black

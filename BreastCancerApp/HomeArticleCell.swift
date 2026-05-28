@@ -1,12 +1,11 @@
 import UIKit
 
 class HomeArticleCell: UICollectionViewCell {
-    
-    @IBOutlet weak var ArticleContainerView: UIView!
-    @IBOutlet weak var ArticleImageView: UIImageView!
-    @IBOutlet weak var ArticleTitleLable: UILabel!
-    @IBOutlet weak var ArticleSubheadLabel: UILabel!
-    
+    @IBOutlet var ArticleContainerView: UIView!
+    @IBOutlet var ArticleImageView: UIImageView!
+    @IBOutlet var ArticleTitleLable: UILabel!
+    @IBOutlet var ArticleSubheadLabel: UILabel!
+
     override func awakeFromNib() {
         super.awakeFromNib()
 

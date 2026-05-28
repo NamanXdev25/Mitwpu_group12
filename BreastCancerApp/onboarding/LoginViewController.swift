@@ -1,8 +1,7 @@
 import UIKit
 
 class LoginViewController: UIViewController {
-
-    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet var collectionView: UICollectionView!
     private let authService = SupabaseAuthService.shared
 
     private enum LoginSectionItem {
@@ -16,14 +15,14 @@ class LoginViewController: UIViewController {
         .welcome,
         .form,
         .or,
-        .social
+        .social,
     ]
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupCollectionView()
-        
+
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
@@ -38,12 +37,12 @@ class LoginViewController: UIViewController {
         let vc = storyboard.instantiateViewController(
             withIdentifier: "SignUpViewController"
         )
-        
+
         vc.modalPresentationStyle = .fullScreen
         vc.modalTransitionStyle = .crossDissolve
         present(vc, animated: true)
     }
-    
+
     func login(email: String, password: String) {
         let normalizedEmail = email.trimmingCharacters(in: .whitespacesAndNewlines)
         let trimmedPassword = password.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -77,9 +76,9 @@ class LoginViewController: UIViewController {
             DispatchQueue.main.async {
                 guard let self else { return }
                 switch result {
-                case .failure(let error):
+                case let .failure(error):
                     self.showAuthAlert(message: error.localizedDescription)
-                case .success(let user):
+                case let .success(user):
                     UserDefaults.standard.set(true, forKey: "isLoggedIn")
                     UserDefaults.standard.set(user.has_completed_onboarding, forKey: "hasCompletedOnboarding")
                     self.syncProfileAfterSupabaseLogin(user: user) {
@@ -104,10 +103,10 @@ class LoginViewController: UIViewController {
             DispatchQueue.main.async {
                 guard let self else { return }
                 switch result {
-                case .failure(let error):
+                case let .failure(error):
                     if case .oauthCancelled = error { return }
                     self.showAuthAlert(message: error.localizedDescription)
-                case .success(let user):
+                case let .success(user):
                     UserDefaults.standard.set(true, forKey: "isLoggedIn")
                     UserDefaults.standard.set(user.has_completed_onboarding, forKey: "hasCompletedOnboarding")
                     self.syncProfileAfterSupabaseLogin(user: user) {
@@ -155,23 +154,24 @@ class LoginViewController: UIViewController {
             }
         }
     }
-    
+
     // MARK: - Profile Conversion Helper
+
     private func convertAndSaveProfile(_ loginProfile: UserProfile) {
         let nameParts = loginProfile.name.split(separator: " ")
         let firstName = nameParts.first.map(String.init) ?? "User"
         let lastName = nameParts.count > 1 ? nameParts.dropFirst().joined(separator: " ") : ""
-        
+
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd MMM yyyy"
-        
+
         let diagnosisDateString = loginProfile.diagnosisDate.map { dateFormatter.string(from: $0) } ?? "NA"
         let treatmentCompletionDateString = loginProfile.treatmentCompletionDate.map { dateFormatter.string(from: $0) } ?? ""
-        
+
         let age = extractAge(from: loginProfile.currentAge)
-        
+
         let treatmentState = mapTreatmentStatus(loginProfile.treatmentStatus)
-        
+
         let profileUserProfile = ProfileUserProfile(
             firstName: firstName,
             lastName: lastName,
@@ -187,14 +187,13 @@ class LoginViewController: UIViewController {
             appointmentsNotificationsEnabled: false,
             medicationsNotificationsEnabled: false
         )
-        
+
         UserProfileDataSource.shared.updateProfile(profileUserProfile)
-        
     }
-    
+
     private func extractAge(from ageString: String?) -> Int {
         guard let ageString = ageString else { return 32 }
-        
+
         if ageString.contains("-") {
             let components = ageString.split(separator: "-")
             if components.count == 2,
@@ -203,7 +202,7 @@ class LoginViewController: UIViewController {
                 return (lowerBound + upperBound) / 2
             }
         }
-        
+
         if ageString.lowercased().contains("below 18") {
             return 16
         }
@@ -212,7 +211,7 @@ class LoginViewController: UIViewController {
         }
         return 32
     }
-    
+
     private func mapTreatmentStatus(_ status: String) -> String {
         switch status {
         case "Currently in treatment":
@@ -227,19 +226,19 @@ class LoginViewController: UIViewController {
             return "Unknown"
         }
     }
-    
+
     func navigateToHome() {
         let storyboard = UIStoryboard(name: "TabbarMain", bundle: nil)
 
         guard let tabBarController =
-                storyboard.instantiateInitialViewController()
-                as? UITabBarController else {
+            storyboard.instantiateInitialViewController()
+                as? UITabBarController
+        else {
             fatalError("TabBarMain must have UITabBarController as initial VC")
         }
 
         if let sceneDelegate =
             UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
-
             sceneDelegate.window?.rootViewController = tabBarController
             sceneDelegate.window?.makeKeyAndVisible()
         }
@@ -309,32 +308,38 @@ class LoginViewController: UIViewController {
 }
 
 // MARK: - DataSource
-extension LoginViewController: UICollectionViewDataSource {
 
-    func collectionView(_ collectionView: UICollectionView,
-                        numberOfItemsInSection section: Int) -> Int {
+extension LoginViewController: UICollectionViewDataSource {
+    func collectionView(
+        _: UICollectionView,
+        numberOfItemsInSection _: Int
+    ) -> Int {
         return items.count
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
         switch items[indexPath.item] {
-
         case .welcome:
-            let cell = collectionView.dequeueReusableCell(
+            guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "WelcomeHeaderCollectionViewCell",
                 for: indexPath
-            ) as! WelcomeHeaderCollectionViewCell
+            ) as? WelcomeHeaderCollectionViewCell else {
+                fatalError("Expected WelcomeHeaderCollectionViewCell for reuse identifier 'WelcomeHeaderCollectionViewCell' at \(indexPath)")
+            }
             cell.titleLabel.text = "Welcome Back"
             cell.subtitleLabel.text = "Login to your account"
             return cell
 
         case .form:
-            let cell = collectionView.dequeueReusableCell(
+            guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "FormCollectionViewCell",
                 for: indexPath
-            ) as! FormCollectionViewCell
+            ) as? FormCollectionViewCell else {
+                fatalError("Expected FormCollectionViewCell for reuse identifier 'FormCollectionViewCell' at \(indexPath)")
+            }
 
             cell.onLoginTapped = { [weak self] email, password in
                 self?.login(email: email, password: password)
@@ -343,40 +348,45 @@ extension LoginViewController: UICollectionViewDataSource {
             return cell
 
         case .or:
-            return collectionView.dequeueReusableCell(
+            guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "OrSeparatorCollectionViewCell",
                 for: indexPath
-            ) as! OrSeparatorCollectionViewCell
+            ) as? OrSeparatorCollectionViewCell else {
+                fatalError("Expected OrSeparatorCollectionViewCell for reuse identifier 'OrSeparatorCollectionViewCell' at \(indexPath)")
+            }
+            return cell
 
         case .social:
-            let cell = collectionView.dequeueReusableCell(
+            guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "SocialLoginCollectionViewCell",
                 for: indexPath
-            ) as! SocialLoginCollectionViewCell
-            
+            ) as? SocialLoginCollectionViewCell else {
+                fatalError("Expected SocialLoginCollectionViewCell for reuse identifier 'SocialLoginCollectionViewCell' at \(indexPath)")
+            }
+
             cell.onSignUpTapped = { [weak self] in
                 self?.goToSignUp()
             }
             cell.onGoogleTapped = { [weak self] in
                 self?.loginWithGoogle()
             }
-            
+
             return cell
         }
     }
 }
 
 // MARK: - Layout
+
 extension LoginViewController: UICollectionViewDelegateFlowLayout {
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout _: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
         let width = collectionView.frame.width
 
         switch items[indexPath.item] {
-
         case .welcome:
             return CGSize(width: width, height: 120)
 
@@ -391,9 +401,11 @@ extension LoginViewController: UICollectionViewDelegateFlowLayout {
         }
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+    func collectionView(
+        _: UICollectionView,
+        layout _: UICollectionViewLayout,
+        minimumLineSpacingForSectionAt _: Int
+    ) -> CGFloat {
         return 0
     }
 }

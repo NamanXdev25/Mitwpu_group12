@@ -1,54 +1,54 @@
 import UIKit
 
 class CircularTimerView: UIView {
-
     // MARK: - Properties
+
     private let glassContainer = UIView()
     private let blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
     private let timerLabel = UILabel()
     private let staticBorderView = UIView()
-    
+
     private var progress: CGFloat = 0.0 {
         didSet {
             setNeedsDisplay()
         }
     }
 
-    private let pinkColor = UIColor(red: 232/255, green: 106/255, blue: 146/255, alpha: 1.0)
-    
+    private let pinkColor = UIColor(red: 232 / 255, green: 106 / 255, blue: 146 / 255, alpha: 1.0)
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupView()
     }
-    
+
     private func setupView() {
-        self.backgroundColor = .clear
-        
+        backgroundColor = .clear
+
         glassContainer.clipsToBounds = true
         glassContainer.translatesAutoresizingMaskIntoConstraints = false
         addSubview(glassContainer)
-        
+
         blurEffectView.translatesAutoresizingMaskIntoConstraints = false
         glassContainer.addSubview(blurEffectView)
-        
+
         staticBorderView.backgroundColor = .clear
         staticBorderView.layer.borderWidth = 2.0
         staticBorderView.layer.borderColor = UIColor.white.withAlphaComponent(0.2).cgColor
         staticBorderView.translatesAutoresizingMaskIntoConstraints = false
         glassContainer.addSubview(staticBorderView)
-        
+
         timerLabel.font = UIFont.monospacedDigitSystemFont(ofSize: 28, weight: .bold)
         timerLabel.textColor = .white
         timerLabel.textAlignment = .center
         timerLabel.numberOfLines = 0
         timerLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(timerLabel)
-        
+
         setupConstraints()
     }
 
@@ -58,20 +58,20 @@ class CircularTimerView: UIView {
             glassContainer.centerYAnchor.constraint(equalTo: centerYAnchor),
             glassContainer.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.626),
             glassContainer.heightAnchor.constraint(equalTo: glassContainer.widthAnchor),
-            
+
             blurEffectView.topAnchor.constraint(equalTo: glassContainer.topAnchor),
             blurEffectView.leadingAnchor.constraint(equalTo: glassContainer.leadingAnchor),
             blurEffectView.trailingAnchor.constraint(equalTo: glassContainer.trailingAnchor),
             blurEffectView.bottomAnchor.constraint(equalTo: glassContainer.bottomAnchor),
-            
+
             staticBorderView.topAnchor.constraint(equalTo: glassContainer.topAnchor),
             staticBorderView.leadingAnchor.constraint(equalTo: glassContainer.leadingAnchor),
             staticBorderView.trailingAnchor.constraint(equalTo: glassContainer.trailingAnchor),
             staticBorderView.bottomAnchor.constraint(equalTo: glassContainer.bottomAnchor),
-            
+
             timerLabel.centerXAnchor.constraint(equalTo: glassContainer.centerXAnchor),
             timerLabel.centerYAnchor.constraint(equalTo: glassContainer.centerYAnchor),
-            timerLabel.widthAnchor.constraint(equalTo: glassContainer.widthAnchor, constant: -20)
+            timerLabel.widthAnchor.constraint(equalTo: glassContainer.widthAnchor, constant: -20),
         ])
     }
 
@@ -83,23 +83,25 @@ class CircularTimerView: UIView {
     }
 
     // MARK: - Custom Drawing (The Moving Border)
-    
+
     override func draw(_ rect: CGRect) {
         super.draw(rect)
-        
+
         guard progress > 0 else { return }
-        
+
         let center = CGPoint(x: bounds.midX, y: bounds.midY)
         let radius = (glassContainer.frame.width / 2)
         let startAngle = -CGFloat.pi / 2
         let endAngle = startAngle + (2 * CGFloat.pi * progress)
-        
-        let path = UIBezierPath(arcCenter: center,
-                                radius: radius,
-                                startAngle: startAngle,
-                                endAngle: endAngle,
-                                clockwise: true)
-        
+
+        let path = UIBezierPath(
+            arcCenter: center,
+            radius: radius,
+            startAngle: startAngle,
+            endAngle: endAngle,
+            clockwise: true
+        )
+
         pinkColor.setStroke()
         path.lineWidth = 10.0
         path.lineCapStyle = .round
@@ -113,17 +115,17 @@ class CircularTimerView: UIView {
             self.timerLabel.alpha = hidden ? 0 : 1
         }
     }
-    
+
     func setFullProgress() {
-        self.progress = 1.0
+        progress = 1.0
     }
 
     func updateProgress(secondsRemaining: Int, totalDuration: Int) {
         showTime(secondsRemaining)
-        
+
         if totalDuration > 0 {
             let elapsed = CGFloat(totalDuration - secondsRemaining)
-            self.progress = elapsed / CGFloat(totalDuration)
+            progress = elapsed / CGFloat(totalDuration)
         }
     }
 
@@ -140,9 +142,9 @@ class CircularTimerView: UIView {
         timerLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
         timerLabel.text = text
     }
-    
+
     func reset() {
-        self.progress = 0
+        progress = 0
         timerLabel.text = ""
         timerLabel.alpha = 1
     }

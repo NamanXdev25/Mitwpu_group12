@@ -1,21 +1,21 @@
-
 import UIKit
 
 class JournalViewController: UIViewController {
-    
-    @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var addButton: UIButton!
+    @IBOutlet var collectionView: UICollectionView!
+    @IBOutlet var addButton: UIButton!
 
     enum Section: Int, CaseIterable {
         case streak
         case actions
         case recents
     }
-    
+
+    // swiftlint:disable:next implicitly_unwrapped_optional
     private var journalDataSource: JournalDataSource!
     var entries: [JournalEntry] {
         JournalStore.shared.entries
     }
+
     private var streak: Int {
         JournalStore.shared.entries.streakCount
     }
@@ -23,14 +23,14 @@ class JournalViewController: UIViewController {
     private var thisWeekCount: Int {
         JournalStore.shared.entries.journalsThisWeek
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.backgroundColor = UIColor(named: "BackgroundColor")
         navigationItem.title = "Journal"
         collectionView.backgroundColor = UIColor(named: "BackgroundColor")
-        
+
         setupCollectionView()
 
         journalDataSource = JournalDataSource(
@@ -44,22 +44,22 @@ class JournalViewController: UIViewController {
         setupDataSourceCallbacks()
         journalDataSource.applySnapshot()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+
         refreshSnapshot()
     }
-    
+
     private func setupDataSourceCallbacks() {
         journalDataSource.didTapSeeAll = { [weak self] in
             self?.openAllJournals()
         }
-        
+
         journalDataSource.didTapBlankJournal = { [weak self] in
             self?.openBlankJournal()
         }
-        
+
         journalDataSource.didTapGuidedJournal = { [weak self] in
             self?.handleGuidedJournalTap()
         }
@@ -79,7 +79,7 @@ class JournalViewController: UIViewController {
             thisWeekCount: thisWeekCount
         )
     }
-        
+
     func handleGuidedJournalTap() {
         if let todayEntry = JournalStore.shared.entries.todayGuidedEntry() {
             openEntry(todayEntry)
@@ -87,31 +87,37 @@ class JournalViewController: UIViewController {
             openGuidedJournal()
         }
     }
-    
+
     func openBlankJournal() {
         let storyboard = UIStoryboard(name: "JournalMain", bundle: nil)
-        let vc = storyboard.instantiateViewController(
+        guard let vc = storyboard.instantiateViewController(
             withIdentifier: "BlankJournalViewController"
-        ) as! BlankJournalViewController
-        
+        ) as? BlankJournalViewController else {
+            fatalError("Expected BlankJournalViewController for identifier 'BlankJournalViewController'")
+        }
+
         navigationController?.pushViewController(vc, animated: true)
     }
-    
+
     func openGuidedJournal() {
         let storyboard = UIStoryboard(name: "JournalMain", bundle: nil)
-        let vc = storyboard.instantiateViewController(withIdentifier: "GuidedJournalViewController") as! GuidedJournalViewController
-        
+        guard let vc = storyboard.instantiateViewController(withIdentifier: "GuidedJournalViewController") as? GuidedJournalViewController else {
+            fatalError("Expected GuidedJournalViewController for identifier 'GuidedJournalViewController'")
+        }
+
         vc.categoryText = "MIND • SELF-AWARENESS"
         vc.questionText = "What thought has been taking up too much space in your mind lately?"
-        
+
         navigationController?.pushViewController(vc, animated: true)
     }
-    
+
     func openAllJournals() {
         let storyboard = UIStoryboard(name: "JournalMain", bundle: nil)
-        let vc = storyboard.instantiateViewController(
+        guard let vc = storyboard.instantiateViewController(
             withIdentifier: "AllJournalsViewController"
-        ) as! AllJournalsViewController
+        ) as? AllJournalsViewController else {
+            fatalError("Expected AllJournalsViewController for identifier 'AllJournalsViewController'")
+        }
         navigationController?.pushViewController(vc, animated: true)
     }
 
@@ -119,21 +125,25 @@ class JournalViewController: UIViewController {
         let storyboard = UIStoryboard(name: "JournalMain", bundle: nil)
         switch entry.type {
         case .regular:
-            let vc = storyboard.instantiateViewController(
+            guard let vc = storyboard.instantiateViewController(
                 withIdentifier: "BlankJournalViewController"
-            ) as! BlankJournalViewController
+            ) as? BlankJournalViewController else {
+                fatalError("Expected BlankJournalViewController for identifier 'BlankJournalViewController'")
+            }
             vc.existingEntry = entry
             navigationController?.pushViewController(vc, animated: true)
         case .guided:
-            let vc = storyboard.instantiateViewController(
+            guard let vc = storyboard.instantiateViewController(
                 withIdentifier: "GuidedJournalViewController"
-            ) as! GuidedJournalViewController
+            ) as? GuidedJournalViewController else {
+                fatalError("Expected GuidedJournalViewController for identifier 'GuidedJournalViewController'")
+            }
             vc.existingEntry = entry
             navigationController?.pushViewController(vc, animated: true)
         }
     }
-    
-    @IBAction func calendarTapped(_ sender: UIBarButtonItem) {
+
+    @IBAction func calendarTapped(_: UIBarButtonItem) {
         let storyboard = UIStoryboard(name: "JournalMain", bundle: nil)
         let nav = storyboard.instantiateViewController(
             withIdentifier: "CalendarNavController"
@@ -141,7 +151,7 @@ class JournalViewController: UIViewController {
         nav.modalPresentationStyle = .pageSheet
         present(nav, animated: true)
     }
-    
+
     @IBAction func addJournalTapped() {
         openBlankJournal()
     }
@@ -149,148 +159,84 @@ class JournalViewController: UIViewController {
 
 extension JournalViewController {
     private func setupCollectionView() {
-
-        let layout = UICollectionViewCompositionalLayout { sectionIndex, environment -> NSCollectionLayoutSection? in
-            guard let section = Section(rawValue: sectionIndex) else { return nil }
+        let layout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, _ -> NSCollectionLayoutSection? in
+            guard let self = self, let section = Section(rawValue: sectionIndex) else { return nil }
 
             switch section {
-            case .streak:
-                let item = NSCollectionLayoutItem(
-                    layoutSize: .init(
-                        widthDimension: .fractionalWidth(1),
-                        heightDimension: .fractionalHeight(1)
-                    )
-                )
-
-                let group = NSCollectionLayoutGroup.horizontal(
-                    layoutSize: .init(
-                        widthDimension: .fractionalWidth(1),
-                        heightDimension: .absolute(104)
-                    ),
-                    subitems: [item]
-                )
-
-                group.contentInsets = .init(top: 0, leading: 16, bottom: 0, trailing: 16)
-
-                let section = NSCollectionLayoutSection(group: group)
-                section.contentInsets = .init(top: 0, leading: 0, bottom: 16, trailing: 0)
-                
-                let headerSize = NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(1.0),
-                    heightDimension: .absolute(44)
-                )
-
-                let header = NSCollectionLayoutBoundarySupplementaryItem(
-                    layoutSize: headerSize,
-                    elementKind: UICollectionView.elementKindSectionHeader,
-                    alignment: .top
-                )
-
-                section.boundarySupplementaryItems = [header]
-                
-                return section
-
-            case .actions:
-                let item = NSCollectionLayoutItem(
-                    layoutSize: .init(
-                        widthDimension: .fractionalWidth(1),
-                        heightDimension: .absolute(92)
-                    )
-                )
-
-                let group = NSCollectionLayoutGroup.vertical(
-                    layoutSize: .init(
-                        widthDimension: .fractionalWidth(1),
-                        heightDimension: .estimated(200)
-                    ),
-                    subitems: [item]
-                )
-
-                group.interItemSpacing = .fixed(8)
-                group.contentInsets = .init(top: 0, leading: 16, bottom: 0, trailing: 16)
-
-                let section = NSCollectionLayoutSection(group: group)
-                section.interGroupSpacing = 8
-                section.contentInsets = .init(top: 4, leading: 0, bottom: 16, trailing: 0)
-
-
-                let headerSize = NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(1.0),
-                    heightDimension: .absolute(44)
-                )
-
-                let header = NSCollectionLayoutBoundarySupplementaryItem(
-                    layoutSize: headerSize,
-                    elementKind: UICollectionView.elementKindSectionHeader,
-                    alignment: .top
-                )
-
-                section.boundarySupplementaryItems = [header]
-
-                return section
-
-            case .recents:
-                let item = NSCollectionLayoutItem(
-                    layoutSize: .init(
-                        widthDimension: .fractionalWidth(1),
-                        heightDimension: .estimated(140)
-                    )
-                )
-
-                let group = NSCollectionLayoutGroup.vertical(
-                    layoutSize: .init(
-                        widthDimension: .fractionalWidth(1),
-                        heightDimension: .estimated(140)
-                    ),
-                    subitems: [item]
-                )
-
-                group.interItemSpacing = .fixed(8)
-                group.contentInsets = .init(top: 0, leading: 16, bottom: 8, trailing: 16)
-
-                let section = NSCollectionLayoutSection(group: group)
-                let headerSize = NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(1.0),
-                    heightDimension: .absolute(44)
-                )
-                let header = NSCollectionLayoutBoundarySupplementaryItem(
-                    layoutSize: headerSize,
-                    elementKind: UICollectionView.elementKindSectionHeader,
-                    alignment: .top
-                )
-                section.boundarySupplementaryItems = [header]
-                return section
+            case .streak: return self.createStreakSection()
+            case .actions: return self.createActionsSection()
+            case .recents: return self.createRecentsSection()
             }
         }
 
         collectionView.setCollectionViewLayout(layout, animated: false)
+        registerCells()
+    }
 
-        collectionView.register(
-            UINib(nibName: "JournalStreakCell", bundle: nil),
-            forCellWithReuseIdentifier: JournalStreakCell.reuseIdentifier
+    private func createStreakSection() -> NSCollectionLayoutSection {
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)))
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(104)), subitems: [item]
         )
-        collectionView.register(
-            UINib(nibName: "JournalStatsCell", bundle: nil),
-            forCellWithReuseIdentifier: JournalStatsCell.reuseIdentifier
+        group.contentInsets = .init(top: 0, leading: 16, bottom: 0, trailing: 16)
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = .init(top: 0, leading: 0, bottom: 16, trailing: 0)
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(44)),
+            elementKind: UICollectionView.elementKindSectionHeader, alignment: .top
         )
-        collectionView.register(
-            UINib(nibName: "JournalActionCell", bundle: nil),
-            forCellWithReuseIdentifier: JournalActionCell.reuseIdentifier
+        section.boundarySupplementaryItems = [header]
+        return section
+    }
+
+    private func createActionsSection() -> NSCollectionLayoutSection {
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(92)))
+        let group = NSCollectionLayoutGroup.vertical(
+            layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(200)), subitems: [item]
         )
-        collectionView.register(
-            UINib(nibName: "RecentJournalCell", bundle: nil),
-            forCellWithReuseIdentifier: RecentJournalCell.reuseIdentifier
+        group.interItemSpacing = .fixed(8)
+        group.contentInsets = .init(top: 0, leading: 16, bottom: 0, trailing: 16)
+        let section = NSCollectionLayoutSection(group: group)
+        section.interGroupSpacing = 8
+        section.contentInsets = .init(top: 4, leading: 0, bottom: 16, trailing: 0)
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(44)),
+            elementKind: UICollectionView.elementKindSectionHeader, alignment: .top
         )
+        section.boundarySupplementaryItems = [header]
+        return section
+    }
+
+    private func createRecentsSection() -> NSCollectionLayoutSection {
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(140)))
+        let group = NSCollectionLayoutGroup.vertical(
+            layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(140)), subitems: [item]
+        )
+        group.interItemSpacing = .fixed(8)
+        group.contentInsets = .init(top: 0, leading: 16, bottom: 8, trailing: 16)
+        let section = NSCollectionLayoutSection(group: group)
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(44)),
+            elementKind: UICollectionView.elementKindSectionHeader, alignment: .top
+        )
+        section.boundarySupplementaryItems = [header]
+        return section
+    }
+
+    private func registerCells() {
+        collectionView.register(UINib(nibName: "JournalStreakCell", bundle: nil), forCellWithReuseIdentifier: JournalStreakCell.reuseIdentifier)
+        collectionView.register(UINib(nibName: "JournalStatsCell", bundle: nil), forCellWithReuseIdentifier: JournalStatsCell.reuseIdentifier)
+        collectionView.register(UINib(nibName: "JournalActionCell", bundle: nil), forCellWithReuseIdentifier: JournalActionCell.reuseIdentifier)
+        collectionView.register(UINib(nibName: "RecentJournalCell", bundle: nil), forCellWithReuseIdentifier: RecentJournalCell.reuseIdentifier)
         collectionView.register(
             UINib(nibName: "JournalSectionHeaderView", bundle: nil),
-            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: "header_cell"
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header_cell"
         )
     }
 }
 
 extension JournalViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    func collectionView(_: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let entry = journalDataSource.item(for: indexPath),
            indexPath.section == Section.recents.rawValue {
             openEntry(entry)

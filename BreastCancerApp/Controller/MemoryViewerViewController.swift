@@ -1,13 +1,14 @@
 import UIKit
 
 final class MemoryViewerViewController: UIViewController {
-
     // MARK: - Outlets
-    @IBOutlet private weak var imageView: UIImageView!
-    @IBOutlet private weak var noteLabel: UILabel!
-    @IBOutlet private weak var dateLabel: UILabel!
+
+    @IBOutlet private var imageView: UIImageView!
+    @IBOutlet private var noteLabel: UILabel!
+    @IBOutlet private var dateLabel: UILabel!
 
     // MARK: - Data
+
     var image: UIImage?
     var note: String?
     var date: Date?
@@ -15,6 +16,7 @@ final class MemoryViewerViewController: UIViewController {
     private let calendar = Calendar.current
 
     // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
@@ -25,8 +27,8 @@ final class MemoryViewerViewController: UIViewController {
 }
 
 // MARK: - Configuration
-private extension MemoryViewerViewController {
 
+private extension MemoryViewerViewController {
     func configureView() {
         view.backgroundColor = .white
     }

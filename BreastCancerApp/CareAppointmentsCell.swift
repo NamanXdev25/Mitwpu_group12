@@ -1,15 +1,14 @@
 import UIKit
 
 class CareAppointmentsCell: UICollectionViewCell {
-
-    @IBOutlet weak var Appointmentconatiner: UIView!
-    @IBOutlet weak var AppointmentDateview: UIView!
-    @IBOutlet weak var Appointmentmonthlabel: UILabel!
-    @IBOutlet weak var AppointmentDatelabel: UILabel!
-    @IBOutlet weak var AppointmentTitleLabel: UILabel!
-    @IBOutlet weak var AppointmentDoctorLabel: UILabel!
-    @IBOutlet weak var AppointmentClockImage: UIImageView!
-    @IBOutlet weak var AppointmentTimeLabel: UILabel!
+    @IBOutlet var Appointmentconatiner: UIView!
+    @IBOutlet var AppointmentDateview: UIView!
+    @IBOutlet var Appointmentmonthlabel: UILabel!
+    @IBOutlet var AppointmentDatelabel: UILabel!
+    @IBOutlet var AppointmentTitleLabel: UILabel!
+    @IBOutlet var AppointmentDoctorLabel: UILabel!
+    @IBOutlet var AppointmentClockImage: UIImageView!
+    @IBOutlet var AppointmentTimeLabel: UILabel!
 
     private var emptyLabel: UILabel = {
         let label = UILabel()
@@ -31,7 +30,7 @@ class CareAppointmentsCell: UICollectionViewCell {
             emptyLabel.centerXAnchor.constraint(equalTo: Appointmentconatiner.centerXAnchor),
             emptyLabel.centerYAnchor.constraint(equalTo: Appointmentconatiner.centerYAnchor),
             emptyLabel.leadingAnchor.constraint(equalTo: Appointmentconatiner.leadingAnchor, constant: 16),
-            emptyLabel.trailingAnchor.constraint(equalTo: Appointmentconatiner.trailingAnchor, constant: -16)
+            emptyLabel.trailingAnchor.constraint(equalTo: Appointmentconatiner.trailingAnchor, constant: -16),
         ])
     }
 

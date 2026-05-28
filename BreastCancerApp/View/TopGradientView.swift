@@ -1,10 +1,6 @@
-
-import UIKit
-
 import UIKit
 
 final class TopGradientView: UIView {
-
     private let gradientLayer = CAGradientLayer()
 
     override init(frame: CGRect) {
@@ -26,4 +22,3 @@ final class TopGradientView: UIView {
         gradientLayer.frame = bounds
     }
 }
-

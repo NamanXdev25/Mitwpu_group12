@@ -1,8 +1,6 @@
-
 import Foundation
 
 final class BreathingSessionState {
-
     let totalDuration: Int
     private(set) var secondsRemaining: Int
 
@@ -13,8 +11,8 @@ final class BreathingSessionState {
     var onFinished: (() -> Void)?
 
     init(duration: Int) {
-        self.totalDuration = duration
-        self.secondsRemaining = duration
+        totalDuration = duration
+        secondsRemaining = duration
     }
 
     func start() {
@@ -51,4 +49,3 @@ final class BreathingSessionState {
         onFinished?()
     }
 }
-

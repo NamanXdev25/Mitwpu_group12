@@ -1,13 +1,12 @@
 import UIKit
 
 class FormCollectionViewCell: UICollectionViewCell {
+    @IBOutlet var emailTextField: UITextField!
+    @IBOutlet var passwordTextField: UITextField!
+    @IBOutlet var eyeButton: UIButton!
+    @IBOutlet var rememberMeButton: UIButton!
+    @IBOutlet var loginButton: UIButton!
 
-    @IBOutlet weak var emailTextField: UITextField!
-    @IBOutlet weak var passwordTextField: UITextField!
-    @IBOutlet weak var eyeButton: UIButton!
-    @IBOutlet weak var rememberMeButton: UIButton!
-    @IBOutlet weak var loginButton: UIButton!
-    
     var onLoginTapped: ((String, String) -> Void)?
 
     override func awakeFromNib() {
@@ -16,7 +15,6 @@ class FormCollectionViewCell: UICollectionViewCell {
     }
 
     private func setupUI() {
-
         contentView.isUserInteractionEnabled = true
         isUserInteractionEnabled = true
 
@@ -27,8 +25,6 @@ class FormCollectionViewCell: UICollectionViewCell {
         applyBorder(to: emailTextField.superview)
         applyBorder(to: passwordTextField.superview)
 
-
-        
         rememberMeButton.tintColor = UIColor(named: "Pink")
         rememberMeButton.setImage(
             UIImage(systemName: "square"),
@@ -66,11 +62,10 @@ class FormCollectionViewCell: UICollectionViewCell {
             for: .normal
         )
     }
-    
-    @IBAction func didTapLogin(_ sender: UIButton) {
+
+    @IBAction func didTapLogin(_: UIButton) {
         let email = emailTextField.text ?? ""
         let password = passwordTextField.text ?? ""
         onLoginTapped?(email, password)
     }
-
 }

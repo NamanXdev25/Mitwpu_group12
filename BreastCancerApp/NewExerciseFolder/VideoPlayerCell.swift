@@ -1,26 +1,29 @@
-import UIKit
 import AVKit
+import UIKit
 
 class VideoPlayerCell: UICollectionViewCell {
-
     // MARK: - IBOutlets
-    @IBOutlet weak var containerView: UIView!
-    @IBOutlet weak var videoImageView: UIImageView!
-    @IBOutlet weak var speakerButton: UIButton!
-    @IBOutlet weak var containerHeightConstraint: NSLayoutConstraint!
+
+    @IBOutlet var containerView: UIView!
+    @IBOutlet var videoImageView: UIImageView!
+    @IBOutlet var speakerButton: UIButton!
+    @IBOutlet var containerHeightConstraint: NSLayoutConstraint!
 
     // MARK: - Public State
+
     var player: AVPlayer?
     var playerLayer: AVPlayerLayer?
     var isMuted = false
 
     // MARK: - Target Duration
+
     var targetDuration: Double = 0
 
     var onDurationChanged: ((Double) -> Void)?
     var onPlaybackFinished: (() -> Void)?
 
     // MARK: - Private
+
     private var durationObserver: NSKeyValueObservation?
     private var targetTimer: Timer?
     private var elapsedSeconds: Double = 0
@@ -30,6 +33,7 @@ class VideoPlayerCell: UICollectionViewCell {
     static var videoHeight: CGFloat = 350
 
     // MARK: - Layout
+
     override func layoutSubviews() {
         super.layoutSubviews()
         containerView.layoutIfNeeded()
@@ -37,6 +41,7 @@ class VideoPlayerCell: UICollectionViewCell {
     }
 
     // MARK: - Reuse
+
     override func prepareForReuse() {
         super.prepareForReuse()
         stopTargetTimer()
@@ -53,6 +58,7 @@ class VideoPlayerCell: UICollectionViewCell {
     }
 
     // MARK: - Configure
+
     func configure(videoName: String, imageName: String) {
         if let img = UIImage(named: imageName) {
             videoImageView.image = img
@@ -83,15 +89,17 @@ class VideoPlayerCell: UICollectionViewCell {
         )
 
         playerLayer = AVPlayerLayer(player: player)
-        playerLayer?.videoGravity = .resizeAspect
-        containerView.layer.insertSublayer(playerLayer!, above: videoImageView.layer)
+        if let layer = playerLayer {
+            layer.videoGravity = .resizeAspect
+            containerView.layer.insertSublayer(layer, above: videoImageView.layer)
+        }
         containerView.layoutIfNeeded()
         playerLayer?.frame = containerView.bounds
 
         player?.isMuted = isMuted
         updateSpeakerIcon()
 
-        let target = self.targetDuration
+        let target = targetDuration
 
         durationObserver = playerItem.observe(\.duration, options: [.new, .initial]) { [weak self] item, _ in
             guard let self else { return }
@@ -141,7 +149,7 @@ class VideoPlayerCell: UICollectionViewCell {
         targetTimer = nil
     }
 
-    @objc private func playerItemDidReachEnd(notification: NSNotification) {
+    @objc private func playerItemDidReachEnd(notification _: NSNotification) {
         guard isLooping else { return }
         player?.seek(to: .zero)
         player?.play()
@@ -154,7 +162,7 @@ class VideoPlayerCell: UICollectionViewCell {
         player?.play()
         videoImageView.isHidden = true
         let remaining = targetDuration - elapsedSeconds
-        if targetDuration > 0 && remaining > 0 {
+        if targetDuration > 0, remaining > 0 {
             startTargetTimer(target: targetDuration)
         }
     }

@@ -1,11 +1,10 @@
 import UIKit
 
 class HomeSuggestionCell: UICollectionViewCell {
-
-    @IBOutlet weak var SuggestionView: UIView!
-    @IBOutlet weak var SuggestionImageView: UIImageView!
-    @IBOutlet weak var SuggestionTitleLabel: UILabel!
-    @IBOutlet weak var SuggestionSubheadLabel: UILabel!
+    @IBOutlet var SuggestionView: UIView!
+    @IBOutlet var SuggestionImageView: UIImageView!
+    @IBOutlet var SuggestionTitleLabel: UILabel!
+    @IBOutlet var SuggestionSubheadLabel: UILabel!
 
     private var tapGesture: UITapGestureRecognizer?
     var onTap: (() -> Void)? {
@@ -29,6 +28,7 @@ class HomeSuggestionCell: UICollectionViewCell {
     }
 
     // MARK: - Configure
+
     func configure(with suggestion: Suggestion) {
         SuggestionTitleLabel.text = suggestion.title
         SuggestionSubheadLabel.text = suggestion.subtitle
@@ -36,31 +36,44 @@ class HomeSuggestionCell: UICollectionViewCell {
     }
 
     // MARK: - Tap
+
     @objc private func handleTap() {
         guard let onTap else { return }
         animatePress { onTap() }
     }
 
     private func animatePress(completion: @escaping () -> Void) {
-        UIView.animate(withDuration: 0.1, animations: {
-            self.SuggestionView.alpha = 0.55
-            self.SuggestionView.transform = CGAffineTransform(scaleX: 0.97, y: 0.97)
-        }) { _ in
-            UIView.animate(withDuration: 0.1, animations: {
-                self.SuggestionView.alpha = 1.0
-                self.SuggestionView.transform = .identity
-            }) { _ in
-                completion()
+        UIView.animate(
+            withDuration: 0.1,
+            animations: {
+                self.SuggestionView.alpha = 0.55
+                self.SuggestionView.transform = CGAffineTransform(scaleX: 0.97, y: 0.97)
+            },
+            completion: { _ in
+                UIView.animate(
+                    withDuration: 0.1,
+                    animations: {
+                        self.SuggestionView.alpha = 1.0
+                        self.SuggestionView.transform = .identity
+                    },
+                    completion: { _ in
+                        completion()
+                    }
+                )
             }
-        }
+        )
     }
 
     // MARK: - Highlight feedback for breathing cell (no onTap)
+
     override var isHighlighted: Bool {
         didSet {
             guard onTap == nil else { return }
-            UIView.animate(withDuration: 0.12, delay: 0,
-                           options: [.allowUserInteraction, .beginFromCurrentState]) {
+            UIView.animate(
+                withDuration: 0.12,
+                delay: 0,
+                options: [.allowUserInteraction, .beginFromCurrentState]
+            ) {
                 self.SuggestionView.alpha = self.isHighlighted ? 0.55 : 1.0
                 self.SuggestionView.transform = self.isHighlighted
                     ? CGAffineTransform(scaleX: 0.97, y: 0.97) : .identity

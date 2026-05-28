@@ -5,10 +5,10 @@ protocol EditMemoryDelegate: AnyObject {
 }
 
 final class AddMemoryViewController: UIViewController {
+    @IBOutlet var cameraImageView: UIImageView!
+    @IBOutlet var noteTextView: UITextView!
 
-    @IBOutlet weak var cameraImageView: UIImageView!
-    @IBOutlet weak var noteTextView: UITextView!
-
+    // swiftlint:disable:next implicitly_unwrapped_optional
     var image: UIImage!
     weak var delegate: AddMemoryDelegate?
 
@@ -19,7 +19,9 @@ final class AddMemoryViewController: UIViewController {
     private let placeholderText = "Add Note"
     private let maxNoteCharacters = 80
 
-    private var isEditMode: Bool { memoryToEdit != nil }
+    private var isEditMode: Bool {
+        memoryToEdit != nil
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -111,7 +113,6 @@ final class AddMemoryViewController: UIViewController {
 }
 
 extension AddMemoryViewController: UITextViewDelegate {
-
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == .systemGray {
             textView.text = ""
@@ -136,7 +137,8 @@ extension AddMemoryViewController: UITextViewDelegate {
         replacementText text: String
     ) -> Bool {
         guard let currentText = textView.text,
-              let textRange = Range(range, in: currentText) else {
+              let textRange = Range(range, in: currentText)
+        else {
             return false
         }
 

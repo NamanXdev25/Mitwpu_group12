@@ -1,7 +1,6 @@
 import UIKit
 
 class MindfulnessDataSource: NSObject, UICollectionViewDataSource {
-
     weak var viewController: MindfulnessViewController?
     private(set) var memories: [Memory] = []
 
@@ -19,12 +18,12 @@ class MindfulnessDataSource: NSObject, UICollectionViewDataSource {
         memories = MemoryStore.load().sorted { $0.date > $1.date }
     }
 
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
+    func numberOfSections(in _: UICollectionView) -> Int {
         return MindfulnessViewController.Section.allCases.count
     }
 
     func collectionView(
-        _ collectionView: UICollectionView,
+        _: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
         let sec = MindfulnessViewController.Section(rawValue: section)!
@@ -49,78 +48,95 @@ class MindfulnessDataSource: NSObject, UICollectionViewDataSource {
 
         switch sec {
         case .positiveMomentsHeader:
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "PositiveMomentsHeaderCell",
-                for: indexPath
-            ) as! PositiveMomentsHeaderCell
-
-            cell.onManageTap = { [weak self] in
-                let storyboard = UIStoryboard(name: "memory", bundle: nil)
-                if let memoriesVC = storyboard.instantiateViewController(withIdentifier: "MemoriesViewController") as? MemoriesViewController {
-                    self?.viewController?.navigationController?.pushViewController(memoriesVC, animated: true)
-                }
-            }
-
-            return cell
-
+            return configurePositiveMomentsCell(collectionView: collectionView, indexPath: indexPath)
         case .memories:
-            if recentMemories.isEmpty {
-                return collectionView.dequeueReusableCell(
-                    withReuseIdentifier: "MemoryEmptyStateCell",
-                    for: indexPath
-                )
-            }
-
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "HomeMemoryCell",
-                for: indexPath
-            ) as! HomeMemoryCell
-
-            cell.configureWithMemory(recentMemories[indexPath.item])
-            return cell
-
+            return configureMemoriesCell(collectionView: collectionView, indexPath: indexPath)
         case .explore:
-            if indexPath.item == 0 {
-                return collectionView.dequeueReusableCell(
-                    withReuseIdentifier: "MindfulnessExploreLabelCell",
-                    for: indexPath
-                )
-            }
-
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "MindfulnessExploreCell",
-                for: indexPath
-            ) as! MindfulnessExploreCell
-
-            if indexPath.item == 1 {
-                cell.configure(
-                    title: "Breathing Sessions",
-                    subtitle: "Short guided sessions to help you relax and manage anxiety",
-                    icon: UIImage(named: "Breathing")!
-                )
-
-                cell.didTap = { [weak self] in
-                    let storyboard = UIStoryboard(name: "BreathingSessions", bundle: nil)
-                    if let breathingVC = storyboard.instantiateViewController(withIdentifier: "BreathingViewController") as? BreathingViewController {
-                        self?.viewController?.navigationController?.pushViewController(breathingVC, animated: true)
-                    }
-                }
-            } else {
-                cell.configure(
-                    title: "Journaling",
-                    subtitle: "A space to write, reflect, and understand your day",
-                    icon: UIImage(named: "Journal")!
-                )
-
-                cell.didTap = { [weak self] in
-                    let storyboard = UIStoryboard(name: "JournalMain", bundle: nil)
-                    if let journalVC = storyboard.instantiateViewController(withIdentifier: "JournalViewController") as? JournalViewController {
-                        self?.viewController?.navigationController?.pushViewController(journalVC, animated: true)
-                    }
-                }
-            }
-
-            return cell
+            return configureExploreCell(collectionView: collectionView, indexPath: indexPath)
         }
+    }
+
+    private func configurePositiveMomentsCell(
+        collectionView: UICollectionView,
+        indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: "PositiveMomentsHeaderCell",
+            for: indexPath
+        ) as? PositiveMomentsHeaderCell else {
+            fatalError("Expected PositiveMomentsHeaderCell for reuse identifier 'PositiveMomentsHeaderCell' at \(indexPath)")
+        }
+        cell.onManageTap = { [weak self] in
+            let storyboard = UIStoryboard(name: "memory", bundle: nil)
+            if let memoriesVC = storyboard.instantiateViewController(withIdentifier: "MemoriesViewController") as? MemoriesViewController {
+                self?.viewController?.navigationController?.pushViewController(memoriesVC, animated: true)
+            }
+        }
+        return cell
+    }
+
+    private func configureMemoriesCell(
+        collectionView: UICollectionView,
+        indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        if recentMemories.isEmpty {
+            return collectionView.dequeueReusableCell(
+                withReuseIdentifier: "MemoryEmptyStateCell",
+                for: indexPath
+            )
+        }
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: "HomeMemoryCell",
+            for: indexPath
+        ) as? HomeMemoryCell else {
+            fatalError("Expected HomeMemoryCell for reuse identifier 'HomeMemoryCell' at \(indexPath)")
+        }
+        cell.configureWithMemory(recentMemories[indexPath.item])
+        return cell
+    }
+
+    private func configureExploreCell(
+        collectionView: UICollectionView,
+        indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        if indexPath.item == 0 {
+            return collectionView.dequeueReusableCell(
+                withReuseIdentifier: "MindfulnessExploreLabelCell",
+                for: indexPath
+            )
+        }
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: "MindfulnessExploreCell",
+            for: indexPath
+        ) as? MindfulnessExploreCell else {
+            fatalError("Expected MindfulnessExploreCell for reuse identifier 'MindfulnessExploreCell' at \(indexPath)")
+        }
+
+        if indexPath.item == 1 {
+            cell.configure(
+                title: "Breathing Sessions",
+                subtitle: "Short guided sessions to help you relax and manage anxiety",
+                icon: UIImage(named: "Breathing") ?? UIImage()
+            )
+            cell.didTap = { [weak self] in
+                let storyboard = UIStoryboard(name: "BreathingSessions", bundle: nil)
+                if let breathingVC = storyboard.instantiateViewController(withIdentifier: "BreathingViewController") as? BreathingViewController {
+                    self?.viewController?.navigationController?.pushViewController(breathingVC, animated: true)
+                }
+            }
+        } else {
+            cell.configure(
+                title: "Journaling",
+                subtitle: "A space to write, reflect, and understand your day",
+                icon: UIImage(named: "Journal") ?? UIImage()
+            )
+            cell.didTap = { [weak self] in
+                let storyboard = UIStoryboard(name: "JournalMain", bundle: nil)
+                if let journalVC = storyboard.instantiateViewController(withIdentifier: "JournalViewController") as? JournalViewController {
+                    self?.viewController?.navigationController?.pushViewController(journalVC, animated: true)
+                }
+            }
+        }
+        return cell
     }
 }

@@ -1,9 +1,7 @@
-
 import UIKit
 
 class NewAppointmentTextFieldCell: UICollectionViewCell {
-
-    @IBOutlet weak var textField: UITextField!
+    @IBOutlet var textField: UITextField!
 
     var onTextChange: ((String) -> Void)?
 

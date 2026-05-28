@@ -1,9 +1,7 @@
-
 import UIKit
 
 class NewAppointmentNoteCell: UICollectionViewCell {
-
-    @IBOutlet weak var noteTextView: UITextView!
+    @IBOutlet var noteTextView: UITextView!
 
     var onTextChange: ((String) -> Void)?
     private let placeholder = "Add any additional notes or reminders..."
@@ -36,7 +34,6 @@ class NewAppointmentNoteCell: UICollectionViewCell {
 }
 
 extension NewAppointmentNoteCell: UITextViewDelegate {
-
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == .lightGray {
             textView.text = nil

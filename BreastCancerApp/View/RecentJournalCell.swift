@@ -1,19 +1,17 @@
-
 import UIKit
 
 class RecentJournalCell: UICollectionViewCell {
-    
     static let reuseIdentifier: String = "RecentJournalCell"
-    
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var descriptionLabel: UILabel!
-    @IBOutlet weak var dateLabel: UILabel!
-    @IBOutlet weak var moreButton: UIButton!
-    
+
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var descriptionLabel: UILabel!
+    @IBOutlet var dateLabel: UILabel!
+    @IBOutlet var moreButton: UIButton!
+
     private var onEdit: ((JournalEntry) -> Void)?
     private var onDelete: ((JournalEntry) -> Void)?
     private var currentEntry: JournalEntry?
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
         moreButton.showsMenuAsPrimaryAction = true
@@ -52,15 +50,15 @@ class RecentJournalCell: UICollectionViewCell {
         let edit = UIAction(title: "Edit", image: UIImage(systemName: "pencil")) { _ in
             onEdit?(entry)
         }
-        
-        let delete = UIAction(title: "Delete",
-                              image: UIImage(systemName: "trash"),
-                              attributes: .destructive) { _ in
+
+        let delete = UIAction(
+            title: "Delete",
+            image: UIImage(systemName: "trash"),
+            attributes: .destructive
+        ) { _ in
             onDelete?(entry)
         }
 
         moreButton.menu = UIMenu(children: [edit, delete])
     }
-
 }
-

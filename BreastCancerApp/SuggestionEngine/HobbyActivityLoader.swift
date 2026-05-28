@@ -1,54 +1,52 @@
-
-
 import Foundation
 
 // MARK: - Models
 
 struct HobbyActivity: Codable {
-    let id:           String
-    let category:     String
-    let title:        String
-    let subtitle:     String
-    let image:        String
-    let moodTags:     [String]
-    let phaseTags:    [String]
-    let symptomTags:  [String]
-    let ageRange:     [Int]
-    let weight:       Int
+    let id: String
+    let category: String
+    let title: String
+    let subtitle: String
+    let image: String
+    let moodTags: [String]
+    let phaseTags: [String]
+    let symptomTags: [String]
+    let ageRange: [Int]
+    let weight: Int
 }
 
 struct JournalPromptItem: Codable {
-    let id:           String
-    let title:        String
-    let moodTags:     [String]
-    let phaseTags:    [String]
-    let symptomTags:  [String]
-    let ageRange:     [Int]
+    let id: String
+    let title: String
+    let moodTags: [String]
+    let phaseTags: [String]
+    let symptomTags: [String]
+    let ageRange: [Int]
 }
 
-private struct HobbyActivityRoot: Codable  { let activities: [HobbyActivity]     }
-private struct JournalPromptRoot: Codable  { let prompts:    [JournalPromptItem]  }
+private struct HobbyActivityRoot: Codable { let activities: [HobbyActivity] }
+private struct JournalPromptRoot: Codable { let prompts: [JournalPromptItem] }
 
 // MARK: - Loader
 
 final class HobbyActivityLoader {
-
     static let shared = HobbyActivityLoader()
 
-    private(set) var activities:   [HobbyActivity]      = []
-    private(set) var journalPool:  [JournalPromptItem]   = []
+    private(set) var activities: [HobbyActivity] = []
+    private(set) var journalPool: [JournalPromptItem] = []
 
     private init() {
-        activities  = load(resource: "HobbyActivities", type: HobbyActivityRoot.self)?.activities ?? []
-        journalPool = load(resource: "JournalPrompts",  type: JournalPromptRoot.self)?.prompts    ?? []
-
+        activities = load(resource: "HobbyActivities", type: HobbyActivityRoot.self)?.activities ?? []
+        journalPool = load(resource: "JournalPrompts", type: JournalPromptRoot.self)?.prompts ?? []
     }
 
     // MARK: - JSON loader with comment stripping
-    private func load<T: Decodable>(resource: String, type: T.Type) -> T? {
-        guard let url     = Bundle.main.url(forResource: resource, withExtension: "json"),
+
+    private func load<T: Decodable>(resource: String, type _: T.Type) -> T? {
+        guard let url = Bundle.main.url(forResource: resource, withExtension: "json"),
               let rawData = try? Data(contentsOf: url),
-              let rawText = String(data: rawData, encoding: .utf8) else {
+              let rawText = String(data: rawData, encoding: .utf8)
+        else {
             return nil
         }
 
@@ -72,8 +70,8 @@ final class HobbyActivityLoader {
     // MARK: - Hobby selection
 
     func selectActivity(
-        category:    String? = nil,
-        ctx:         AppContext,
+        category: String? = nil,
+        ctx: AppContext,
         avoidingIDs: Set<String> = []
     ) -> HobbyActivity? {
         var pool = activities
@@ -93,9 +91,11 @@ final class HobbyActivityLoader {
         if scored.isEmpty {
             let genericPool = pool.filter { $0.phaseTags.isEmpty && $0.moodTags.isEmpty }
             let genericScored = genericPool.map { ($0, scoreActivity($0, ctx: ctx)) }
-            return weightedRandomActivity(from: genericScored.isEmpty
-                ? pool.map { ($0, 10) }
-                : genericScored)
+            return weightedRandomActivity(
+                from: genericScored.isEmpty
+                    ? pool.map { ($0, 10) }
+                    : genericScored
+            )
         }
 
         return weightedRandomActivity(from: scored)
@@ -104,11 +104,11 @@ final class HobbyActivityLoader {
     // MARK: - Journal prompt selection
 
     func selectJournalPrompt(
-        ctx:         AppContext,
+        ctx: AppContext,
         avoidingIDs: Set<String> = []
     ) -> JournalPromptItem? {
         let filtered = journalPool.filter { !avoidingIDs.contains($0.id) }
-        let pool     = filtered.isEmpty ? journalPool : filtered
+        let pool = filtered.isEmpty ? journalPool : filtered
 
         guard !pool.isEmpty else { return nil }
 
@@ -118,9 +118,11 @@ final class HobbyActivityLoader {
         if scored.isEmpty {
             let genericPool = pool.filter { $0.phaseTags.isEmpty && $0.moodTags.isEmpty && $0.symptomTags.isEmpty }
             let genericScored = genericPool.map { ($0, 10) }
-            return weightedRandomJournal(from: genericScored.isEmpty
-                ? pool.filter { $0.phaseTags.isEmpty && $0.symptomTags.isEmpty }.map { ($0, 10) }
-                : genericScored)
+            return weightedRandomJournal(
+                from: genericScored.isEmpty
+                    ? pool.filter { $0.phaseTags.isEmpty && $0.symptomTags.isEmpty }.map { ($0, 10) }
+                    : genericScored
+            )
         }
 
         return weightedRandomJournal(from: scored)
@@ -130,8 +132,8 @@ final class HobbyActivityLoader {
 
     private func scoreActivity(_ a: HobbyActivity, ctx: AppContext) -> Int {
         let phase = normalize(ctx.effectiveTreatmentType)
-        let mood  = normalize(ctx.moodKey)
-        let age   = ctx.age
+        let mood = normalize(ctx.moodKey)
+        let age = ctx.age
 
         let phaseIsKnown = phase != "general"
             || ctx.isPostTreatment
@@ -139,9 +141,13 @@ final class HobbyActivityLoader {
             || ctx.isInActiveTreatment
 
         let effectivePhaseKey: String
-        if ctx.isPostTreatment       { effectivePhaseKey = "posttreatment" }
-        else if ctx.isEarlyDiagnosis { effectivePhaseKey = "earlydiagnosis" }
-        else                         { effectivePhaseKey = phase }
+        if ctx.isPostTreatment {
+            effectivePhaseKey = "posttreatment"
+        } else if ctx.isEarlyDiagnosis {
+            effectivePhaseKey = "earlydiagnosis"
+        } else {
+            effectivePhaseKey = phase
+        }
 
         if !a.phaseTags.isEmpty {
             guard phaseIsKnown else { return 0 }
@@ -190,6 +196,7 @@ final class HobbyActivityLoader {
     }
 
     // MARK: - Phase → typical symptom inference
+
     private func phaseTypicallyProducesSymptom(_ symptom: String, for ctx: AppContext) -> Bool {
         let s = symptom
         switch normalize(ctx.effectiveTreatmentType) {
@@ -211,7 +218,7 @@ final class HobbyActivityLoader {
             return ["fatigue", "tiredness", "pain", "nausea", "anxiety",
                     "insomnia", "sleep", "brain fog", "fog"].contains(s)
         default:
-            if ctx.isPostTreatment  { return ["anxiety", "fear", "fatigue", "tiredness"].contains(s) }
+            if ctx.isPostTreatment { return ["anxiety", "fear", "fatigue", "tiredness"].contains(s) }
             if ctx.isEarlyDiagnosis { return ["anxiety", "fear", "insomnia", "sleep"].contains(s) }
             return false
         }
@@ -221,8 +228,8 @@ final class HobbyActivityLoader {
 
     private func scoreJournal(_ p: JournalPromptItem, ctx: AppContext) -> Int {
         let phase = normalize(ctx.effectiveTreatmentType)
-        let mood  = normalize(ctx.moodKey)
-        let age   = ctx.age
+        let mood = normalize(ctx.moodKey)
+        let age = ctx.age
 
         let phaseIsKnown = phase != "general"
             || ctx.isPostTreatment
@@ -230,9 +237,13 @@ final class HobbyActivityLoader {
             || ctx.isInActiveTreatment
 
         let effectivePhaseKey: String
-        if ctx.isPostTreatment       { effectivePhaseKey = "posttreatment" }
-        else if ctx.isEarlyDiagnosis { effectivePhaseKey = "earlydiagnosis" }
-        else                         { effectivePhaseKey = phase }
+        if ctx.isPostTreatment {
+            effectivePhaseKey = "posttreatment"
+        } else if ctx.isEarlyDiagnosis {
+            effectivePhaseKey = "earlydiagnosis"
+        } else {
+            effectivePhaseKey = phase
+        }
 
         if !p.phaseTags.isEmpty {
             guard phaseIsKnown else { return 0 }
@@ -240,9 +251,9 @@ final class HobbyActivityLoader {
             guard normTags.contains(effectivePhaseKey) else { return 0 }
         }
 
-        let conditionSpecificSymptoms: Set<String> = [
+        let conditionSpecificSymptoms: Set = [
             "lymphedema", "hot flashes", "hot flush",
-            "hair loss", "hair", "nausea", "brain fog", "fog", "insomnia", "sleep"
+            "hair loss", "hair", "nausea", "brain fog", "fog", "insomnia", "sleep",
         ]
         for tag in p.symptomTags {
             let t = normalize(tag)
@@ -281,7 +292,7 @@ final class HobbyActivityLoader {
     private func weightedRandomActivity(from scored: [(HobbyActivity, Int)]) -> HobbyActivity? {
         let total = scored.reduce(0) { $0 + $1.1 }
         guard total > 0 else { return scored.randomElement()?.0 }
-        var r = Int.random(in: 0..<total)
+        var r = Int.random(in: 0 ..< total)
         for (item, weight) in scored {
             r -= weight
             if r < 0 { return item }
@@ -292,7 +303,7 @@ final class HobbyActivityLoader {
     private func weightedRandomJournal(from scored: [(JournalPromptItem, Int)]) -> JournalPromptItem? {
         let total = scored.reduce(0) { $0 + $1.1 }
         guard total > 0 else { return scored.randomElement()?.0 }
-        var r = Int.random(in: 0..<total)
+        var r = Int.random(in: 0 ..< total)
         for (item, weight) in scored {
             r -= weight
             if r < 0 { return item }

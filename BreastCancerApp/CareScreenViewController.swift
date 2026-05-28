@@ -309,8 +309,8 @@ class CareScreenViewController: UIViewController {
 
         let allDateKeys = AppointmentManager.shared.getAllDatesWithAppointments()
 
-        var closestAppointment: AppointmentItem? = nil
-        var closestDateTime: Date? = nil
+        var closestAppointment: AppointmentItem?
+        var closestDateTime: Date?
 
         for key in allDateKeys {
             guard let date = keyFormatter.date(from: key) else { continue }
@@ -653,13 +653,13 @@ extension CareScreenViewController: UICollectionViewDelegate {
         case .hydration:
             isHydrationExpanded.toggle()
             applySnapshot(animatingDifferences: true)
-        case .medication(_, _, _):
+        case .medication:
             break
-        case .exercise(_, _, _):
+        case .exercise:
             break
         case .symptoms:
             break
-        case .appointment(_, _, _, _, _):
+        case .appointment:
             guard let appointment = closestUpcomingAppointment() else { return }
             let storyboard = UIStoryboard(name: "Appointments", bundle: nil)
             guard let navController = storyboard.instantiateViewController(withIdentifier: "NewAppointmentNavController") as? UINavigationController,

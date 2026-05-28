@@ -1,4 +1,3 @@
-
 import Foundation
 
 class MindfulnessDataLoader {
@@ -11,15 +10,15 @@ class MindfulnessDataLoader {
 
     private func load() {
         guard let url = Bundle.main.url(forResource: "moodSuggestion", withExtension: "json"),
-              let data = try? Data(contentsOf: url) else {
+              let data = try? Data(contentsOf: url)
+        else {
             return
         }
 
         do {
             let dec = JSONDecoder()
             root = try dec.decode(MindfulnessJSONRoot.self, from: data)
-        } catch {
-        }
+        } catch {}
     }
 
     func moodContent(for moodKey: String) -> MoodContent? {

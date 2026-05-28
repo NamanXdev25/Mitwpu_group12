@@ -1,24 +1,25 @@
-
 import UIKit
 
 class OnboardingFeatureCell: UICollectionViewCell {
-    
     // MARK: - IBOutlets
-    @IBOutlet weak var iconContainerView: UIView!
-    @IBOutlet weak var iconImageView: UIImageView!
-    @IBOutlet weak var featureLabel: UILabel!
-    
+
+    @IBOutlet var iconContainerView: UIView!
+    @IBOutlet var iconImageView: UIImageView!
+    @IBOutlet var featureLabel: UILabel!
+
     // MARK: - Lifecycle
+
     override func awakeFromNib() {
         super.awakeFromNib()
         setupUI()
     }
-    
+
     // MARK: - Setup
-    private func setupUI() {
-    }
-    
+
+    private func setupUI() {}
+
     // MARK: - Configuration
+
     func configure(with feature: OnboardingFeature) {
         featureLabel.text = feature.title
         iconImageView.image = UIImage(systemName: feature.iconName)
@@ -26,45 +27,46 @@ class OnboardingFeatureCell: UICollectionViewCell {
 }
 
 // MARK: - OnboardingFeature Content
+
 extension OnboardingFeature {
     static let mindfulnessFeatures: [OnboardingFeature] = [
         OnboardingFeature(
             title: "Get mood-based suggestions",
-            iconName: "face.smiling",
+            iconName: "face.smiling"
         ),
         OnboardingFeature(
             title: "Journal your thoughts",
-            iconName: "book.closed",
+            iconName: "book.closed"
         ),
         OnboardingFeature(
             title: "Breathing Exercises",
-            iconName: "wind",
-        )
+            iconName: "wind"
+        ),
     ]
-    
+
     static let healthFeatures: [OnboardingFeature] = [
         OnboardingFeature(
             title: "Manage appointments and medicines",
-            iconName: "calendar",
+            iconName: "calendar"
         ),
         OnboardingFeature(
             title: "Log exercise",
-            iconName: "figure.cooldown",
+            iconName: "figure.cooldown"
         ),
         OnboardingFeature(
             title: "Monitor hydration",
-            iconName: "drop",
-        )
+            iconName: "drop"
+        ),
     ]
-    
+
     static let gardenFeatures: [OnboardingFeature] = [
         OnboardingFeature(
             title: "Complete daily goals to earn coins",
-            iconName: "checkmark.circle",
+            iconName: "checkmark.circle"
         ),
         OnboardingFeature(
             title: "Grow your garden",
-            iconName: "camera.macro",
-        )
+            iconName: "camera.macro"
+        ),
     ]
 }

@@ -1,16 +1,10 @@
-
 import UIKit
 
 class NewAppointmentSwitchCell: UICollectionViewCell {
-
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var reminderSwitch: UISwitch!
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var reminderSwitch: UISwitch!
 
     var onToggle: ((Bool) -> Void)?
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
 
     func configure(isOn: Bool) {
         reminderSwitch.isOn = isOn

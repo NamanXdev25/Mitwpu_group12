@@ -1,8 +1,6 @@
-
 import Foundation
 
-struct BreathingFavoritesManager {
-
+enum BreathingFavoritesManager {
     static func toggleFavorite(
         session: BreathingSession,
         allSessions: inout [BreathingSession],
@@ -27,4 +25,3 @@ struct BreathingFavoritesManager {
         }
     }
 }
-

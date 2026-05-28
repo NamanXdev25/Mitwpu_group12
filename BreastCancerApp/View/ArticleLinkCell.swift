@@ -1,9 +1,8 @@
 import UIKit
 
 class ArticleLinkCell: UICollectionViewCell {
-
-    @IBOutlet weak var sourceLabel: UILabel!
-    @IBOutlet weak var linkButton: UIButton!
+    @IBOutlet var sourceLabel: UILabel!
+    @IBOutlet var linkButton: UIButton!
 
     private var urlString: String = ""
 
@@ -17,11 +16,12 @@ class ArticleLinkCell: UICollectionViewCell {
 
     func configure(urlString: String) {
         self.urlString = urlString
-        sourceLabel.text = "Content adapted from educational resources provided by leading cancer research and healthcare organizations, including the American Cancer Society, the National Cancer Institute, and the Susan G. Komen Foundation."
+        sourceLabel.text = "Content adapted from educational resources provided by leading cancer research and healthcare "
+            + "organizations, including the American Cancer Society, the National Cancer Institute, and the Susan G. Komen Foundation."
         linkButton.setTitle(urlString, for: .normal)
     }
 
-    @IBAction func linkTapped(_ sender: UIButton) {
+    @IBAction func linkTapped(_: UIButton) {
         guard let url = URL(string: urlString) else { return }
         UIApplication.shared.open(url)
     }

@@ -1,13 +1,11 @@
-
 import UIKit
 
 class EmotionPickerCell: UICollectionViewCell {
-
-    @IBOutlet weak var cardView: UIView!
-    @IBOutlet weak var happyStack: UIStackView!
-    @IBOutlet weak var sadStack: UIStackView!
-    @IBOutlet weak var anxiousStack: UIStackView!
-    @IBOutlet weak var tiredStack: UIStackView!
+    @IBOutlet var cardView: UIView!
+    @IBOutlet var happyStack: UIStackView!
+    @IBOutlet var sadStack: UIStackView!
+    @IBOutlet var anxiousStack: UIStackView!
+    @IBOutlet var tiredStack: UIStackView!
 
     var didSelectEmotion: ((Int) -> Void)?
 

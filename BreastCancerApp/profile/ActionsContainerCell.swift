@@ -6,9 +6,8 @@ protocol ActionsContainerCellDelegate: AnyObject {
 }
 
 final class ActionsContainerCell: UICollectionViewCell {
-
-    @IBOutlet private weak var logButton: UIButton!
-    @IBOutlet private weak var pastButton: UIButton!
+    @IBOutlet private var logButton: UIButton!
+    @IBOutlet private var pastButton: UIButton!
 
     weak var delegate: ActionsContainerCellDelegate?
 
@@ -30,11 +29,11 @@ final class ActionsContainerCell: UICollectionViewCell {
         pastButton.backgroundColor = .clear
     }
 
-    @IBAction private func logButtonTapped(_ sender: UIButton) {
+    @IBAction private func logButtonTapped(_: UIButton) {
         delegate?.didTapLogSelfExam(from: self)
     }
 
-    @IBAction private func pastButtonTapped(_ sender: UIButton) {
+    @IBAction private func pastButtonTapped(_: UIButton) {
         delegate?.didTapViewPastTests(from: self)
     }
 }

@@ -1,24 +1,22 @@
-
 import UIKit
 
 class EditSymptomCell: UITableViewCell {
-    
-    @IBOutlet weak var actionButton: UIButton!
-    @IBOutlet weak var symptomNameLabel: UILabel!
-    @IBOutlet weak var infoButton: UIButton!
-    
+    @IBOutlet var actionButton: UIButton!
+    @IBOutlet var symptomNameLabel: UILabel!
+    @IBOutlet var infoButton: UIButton!
+
     var onActionTapped: (() -> Void)?
     var onInfoTapped: (() -> Void)?
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
         selectionStyle = .none
         showsReorderControl = true
     }
-    
+
     func configure(with symptom: Symptom, isInUserList: Bool) {
         symptomNameLabel.text = symptom.name
-        
+
         if isInUserList {
             actionButton.setImage(UIImage(systemName: "minus.circle.fill"), for: .normal)
             actionButton.tintColor = .systemRed
@@ -27,12 +25,12 @@ class EditSymptomCell: UITableViewCell {
             actionButton.tintColor = .systemGreen
         }
     }
-    
-    @IBAction func actionButtonTapped(_ sender: UIButton) {
+
+    @IBAction func actionButtonTapped(_: UIButton) {
         onActionTapped?()
     }
-    
-    @IBAction func infoButtonTapped(_ sender: UIButton) {
+
+    @IBAction func infoButtonTapped(_: UIButton) {
         onInfoTapped?()
     }
 }

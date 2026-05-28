@@ -1,7 +1,6 @@
 import Foundation
 
 enum RepositoryFactory {
-
     // MARK: - Cached singletons (prevents duplicate cloud syncs)
 
     private static let _appointment: AppointmentRepository = SupabaseAppointmentRepository()
@@ -17,14 +16,43 @@ enum RepositoryFactory {
 
     // MARK: - Factory accessors
 
-    static func makeAppointmentRepository() -> AppointmentRepository { _appointment }
-    static func makeMedicationHistoryRepository() -> MedicationHistoryRepository { _medication }
-    static func makeMemoryRepository() -> MemoryRepository { _memory }
-    static func makeHydrationRepository() -> HydrationRepository { _hydration }
-    static func makeSymptomRepository() -> SymptomRepository { _symptom }
-    static func makeJournalRepository() -> JournalRepository { _journal }
-    static func makeBreathingRepository() -> BreathingRepository { _breathing }
-    static func makeProfileRepository() -> ProfileRepository { _profile }
-    static func makeExerciseRepository() -> ExerciseRepository { _exercise }
-    static func makeJourneyRepository() -> JourneyRepository { _journey }
+    static func makeAppointmentRepository() -> AppointmentRepository {
+        _appointment
+    }
+
+    static func makeMedicationHistoryRepository() -> MedicationHistoryRepository {
+        _medication
+    }
+
+    static func makeMemoryRepository() -> MemoryRepository {
+        _memory
+    }
+
+    static func makeHydrationRepository() -> HydrationRepository {
+        _hydration
+    }
+
+    static func makeSymptomRepository() -> SymptomRepository {
+        _symptom
+    }
+
+    static func makeJournalRepository() -> JournalRepository {
+        _journal
+    }
+
+    static func makeBreathingRepository() -> BreathingRepository {
+        _breathing
+    }
+
+    static func makeProfileRepository() -> ProfileRepository {
+        _profile
+    }
+
+    static func makeExerciseRepository() -> ExerciseRepository {
+        _exercise
+    }
+
+    static func makeJourneyRepository() -> JourneyRepository {
+        _journey
+    }
 }

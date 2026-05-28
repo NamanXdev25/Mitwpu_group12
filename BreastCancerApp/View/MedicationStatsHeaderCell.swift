@@ -1,14 +1,13 @@
 import UIKit
 
 class MedicationStatsHeaderCell: UICollectionViewCell {
-
-    @IBOutlet weak var totalScheduledLabel: UILabel!
-    @IBOutlet weak var totalScheduledValueLabel: UILabel!
-    @IBOutlet weak var takenLabel: UILabel!
-    @IBOutlet weak var takenValueLabel: UILabel!
-    @IBOutlet weak var missedLabel: UILabel!
-    @IBOutlet weak var missedValueLabel: UILabel!
-    @IBOutlet weak var containerView: UIView!
+    @IBOutlet var totalScheduledLabel: UILabel!
+    @IBOutlet var totalScheduledValueLabel: UILabel!
+    @IBOutlet var takenLabel: UILabel!
+    @IBOutlet var takenValueLabel: UILabel!
+    @IBOutlet var missedLabel: UILabel!
+    @IBOutlet var missedValueLabel: UILabel!
+    @IBOutlet var containerView: UIView!
 
     override func awakeFromNib() {
         super.awakeFromNib()

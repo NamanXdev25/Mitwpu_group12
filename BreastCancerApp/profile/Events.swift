@@ -6,7 +6,7 @@
 //
 
 import Foundation
+
 extension Notification.Name {
     static let testRecordAdded = Notification.Name("TestRecordAdded")
 }
-

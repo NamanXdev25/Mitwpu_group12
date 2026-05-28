@@ -1,11 +1,9 @@
-
 import UIKit
 
 class MedicationStatsCell: UICollectionViewCell {
-
-    @IBOutlet weak var containerView: UIView!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet var containerView: UIView!
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var timeLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -15,11 +13,11 @@ class MedicationStatsCell: UICollectionViewCell {
     func configure(with medication: Medication, isFirst: Bool, isLast: Bool) {
         titleLabel.text = medication.name
         timeLabel.text = medication.time
-        
+
         containerView.layer.cornerRadius = 0
         containerView.layer.maskedCorners = []
-        
-        if isFirst && isLast {
+
+        if isFirst, isLast {
             containerView.layer.cornerRadius = 12
             containerView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         } else if isFirst {

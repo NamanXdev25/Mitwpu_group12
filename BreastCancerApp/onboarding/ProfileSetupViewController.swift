@@ -1,15 +1,13 @@
-
 import UIKit
 
 class ProfileSetupViewController: UIViewController,
-                                  UICollectionViewDelegate,
-                                  UICollectionViewDataSource,
-                                  UICollectionViewDelegateFlowLayout,
-                                  UIImagePickerControllerDelegate,
-                                  UINavigationControllerDelegate,
-                                  ProfileSetupPhotoCellDelegate {
-
-    @IBOutlet weak var collectionView: UICollectionView!
+    UICollectionViewDelegate,
+    UICollectionViewDataSource,
+    UICollectionViewDelegateFlowLayout,
+    UIImagePickerControllerDelegate,
+    UINavigationControllerDelegate,
+    ProfileSetupPhotoCellDelegate {
+    @IBOutlet var collectionView: UICollectionView!
 
     private var selectedProfileImage: UIImage?
 
@@ -22,7 +20,7 @@ class ProfileSetupViewController: UIViewController,
         collectionView.contentInset = UIEdgeInsets(top: 40, left: 0, bottom: 0, right: 0)
         collectionView.scrollIndicatorInsets = collectionView.contentInset
         collectionView.contentInsetAdjustmentBehavior = .never
-        
+
         // Keyboard Support
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
@@ -31,7 +29,6 @@ class ProfileSetupViewController: UIViewController,
 
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-
 
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.sectionInset = .zero
@@ -65,7 +62,7 @@ class ProfileSetupViewController: UIViewController,
         super.viewDidLayoutSubviews()
         collectionView.collectionViewLayout.invalidateLayout()
     }
-    
+
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -82,25 +79,30 @@ class ProfileSetupViewController: UIViewController,
         }
     }
 
-    @objc private func keyboardWillHide(notification: NSNotification) {
+    @objc private func keyboardWillHide(notification _: NSNotification) {
         let contentInsets = UIEdgeInsets(top: 40, left: 0, bottom: 0, right: 0)
         collectionView.contentInset = contentInsets
         collectionView.scrollIndicatorInsets = contentInsets
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        numberOfItemsInSection section: Int) -> Int {
+    func collectionView(
+        _: UICollectionView,
+        numberOfItemsInSection _: Int
+    ) -> Int {
         return 4
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
         if indexPath.item == 0 {
-            let cell = collectionView.dequeueReusableCell(
+            guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "ProfileSetupWelcomeCollectionViewCell",
                 for: indexPath
-            ) as! ProfileSetupWelcomeCollectionViewCell
+            ) as? ProfileSetupWelcomeCollectionViewCell else {
+                fatalError("Expected ProfileSetupWelcomeCollectionViewCell for reuse identifier 'ProfileSetupWelcomeCollectionViewCell' at \(indexPath)")
+            }
 
             cell.titleLabel.text = "Welcome"
             cell.subtitleLabel.text = "Let’s set up your profile"
@@ -108,10 +110,12 @@ class ProfileSetupViewController: UIViewController,
         }
 
         if indexPath.item == 1 {
-            let cell = collectionView.dequeueReusableCell(
+            guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "ProfileSetupPhotoCollectionViewCell",
                 for: indexPath
-            ) as! ProfileSetupPhotoCollectionViewCell
+            ) as? ProfileSetupPhotoCollectionViewCell else {
+                fatalError("Expected ProfileSetupPhotoCollectionViewCell for reuse identifier 'ProfileSetupPhotoCollectionViewCell' at \(indexPath)")
+            }
 
             cell.titleLabel.text = "Profile Photo"
             cell.instructionLabel.text = "Click the camera to add a photo"
@@ -125,10 +129,12 @@ class ProfileSetupViewController: UIViewController,
         }
 
         if indexPath.item == 2 {
-            let cell = collectionView.dequeueReusableCell(
+            guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "ProfileSetupFormCollectionViewCell",
                 for: indexPath
-            ) as! ProfileSetupFormCollectionViewCell
+            ) as? ProfileSetupFormCollectionViewCell else {
+                fatalError("Expected ProfileSetupFormCollectionViewCell for reuse identifier 'ProfileSetupFormCollectionViewCell' at \(indexPath)")
+            }
 
             cell.firstNameLabel.text = "Your First Name"
             cell.lastNameLabel.text = "Your Last Name"
@@ -136,10 +142,12 @@ class ProfileSetupViewController: UIViewController,
             return cell
         }
 
-        let cell = collectionView.dequeueReusableCell(
+        guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: "ProfileSetupContinueCollectionViewCell",
             for: indexPath
-        ) as! ProfileSetupContinueCollectionViewCell
+        ) as? ProfileSetupContinueCollectionViewCell else {
+            fatalError("Expected ProfileSetupContinueCollectionViewCell for reuse identifier 'ProfileSetupContinueCollectionViewCell' at \(indexPath)")
+        }
 
         cell.footerLabel.text = "You’re not alone on this journey"
         cell.onContinueTapped = { [weak self] in
@@ -147,13 +155,13 @@ class ProfileSetupViewController: UIViewController,
         }
 
         return cell
-
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout _: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
         let width = collectionView.bounds.width
 
         switch indexPath.item {
@@ -197,9 +205,10 @@ class ProfileSetupViewController: UIViewController,
         present(picker, animated: true)
     }
 
-    func imagePickerController(_ picker: UIImagePickerController,
-                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-
+    func imagePickerController(
+        _ picker: UIImagePickerController,
+        didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]
+    ) {
         if let editedImage = info[.editedImage] as? UIImage {
             selectedProfileImage = editedImage
         } else if let originalImage = info[.originalImage] as? UIImage {
@@ -214,19 +223,17 @@ class ProfileSetupViewController: UIViewController,
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true)
     }
-    
+
     func navigateToWelcome() {
         if let formCell = collectionView.cellForItem(at: IndexPath(item: 2, section: 0))
             as? ProfileSetupFormCollectionViewCell {
-            
             let firstName = formCell.firstNameTextField.text ?? ""
             let lastName = formCell.lastNameTextField.text ?? ""
-            
+
             let fullName = "\(firstName) \(lastName)".trimmingCharacters(in: .whitespaces)
             OnboardingData.shared.userName = fullName.isEmpty ? "User" : fullName
-            
         }
-        
+
         let storyboard = UIStoryboard(name: "OnboardingMain", bundle: nil)
 
         guard let mindfulnessVC = storyboard.instantiateViewController(
@@ -240,5 +247,4 @@ class ProfileSetupViewController: UIViewController,
         navController.modalPresentationStyle = .fullScreen
         present(navController, animated: true)
     }
-
 }

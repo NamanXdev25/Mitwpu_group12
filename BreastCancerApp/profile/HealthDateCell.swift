@@ -1,24 +1,22 @@
-
 import UIKit
 
 class HealthDateCell: UICollectionViewCell {
-
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var datePicker: UIDatePicker!
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var datePicker: UIDatePicker!
     var onDateChanged: ((Date) -> Void)?
 
     private var brandPink: UIColor {
-        UIColor(named: "primary_pink") ?? UIColor(red: 215/255, green: 112/255, blue: 145/255, alpha: 1)
+        UIColor(named: "primary_pink") ?? UIColor(red: 215 / 255, green: 112 / 255, blue: 145 / 255, alpha: 1)
     }
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        backgroundColor             = .clear
+        backgroundColor = .clear
         contentView.backgroundColor = .clear
 
-        datePicker.datePickerMode           = .date
+        datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .compact
-        datePicker.tintColor                = brandPink
+        datePicker.tintColor = brandPink
         datePicker.translatesAutoresizingMaskIntoConstraints = false
         datePicker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
 
@@ -26,19 +24,19 @@ class HealthDateCell: UICollectionViewCell {
 
         NSLayoutConstraint.activate([
             datePicker.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            datePicker.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+            datePicker.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
         ])
     }
 
     func configure(title: String, date: Date, isEditing: Bool = false) {
-        backgroundColor             = .clear
+        backgroundColor = .clear
         contentView.backgroundColor = .clear
 
-        titleLabel.text      = title
-        titleLabel.font      = .systemFont(ofSize: 15, weight: .regular)
+        titleLabel.text = title
+        titleLabel.font = .systemFont(ofSize: 15, weight: .regular)
         titleLabel.textColor = .label
 
-        datePicker.date      = date
+        datePicker.date = date
         datePicker.isEnabled = isEditing
         datePicker.tintColor = isEditing ? brandPink : .secondaryLabel
 

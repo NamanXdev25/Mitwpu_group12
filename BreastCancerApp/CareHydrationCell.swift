@@ -7,31 +7,33 @@ protocol CareHydrationCellDelegate: AnyObject {
 }
 
 class CareHydrationCell: UICollectionViewCell {
-
     // MARK: - Outlets
-    @IBOutlet weak var headerView: UIView!
-    @IBOutlet weak var detailContainerView: UIView!
 
-    @IBOutlet weak var ViewStack: UIView!
-    @IBOutlet weak var CupsizeLabel: UILabel!
-    @IBOutlet weak var GoalLabel: UILabel!
+    @IBOutlet var headerView: UIView!
+    @IBOutlet var detailContainerView: UIView!
 
-    @IBOutlet weak var progressView: CircularProgressView!
-    @IBOutlet weak var hydrationLabel: UILabel!
-    @IBOutlet weak var currentProgressLabel: UILabel!
-    @IBOutlet weak var dropIconImageView: UIImageView!
+    @IBOutlet var ViewStack: UIView!
+    @IBOutlet var CupsizeLabel: UILabel!
+    @IBOutlet var GoalLabel: UILabel!
 
-    @IBOutlet weak var goalValueLabel: UILabel!
-    @IBOutlet weak var cupSizeValueLabel: UILabel!
+    @IBOutlet var progressView: CircularProgressView!
+    @IBOutlet var hydrationLabel: UILabel!
+    @IBOutlet var currentProgressLabel: UILabel!
+    @IBOutlet var dropIconImageView: UIImageView!
 
-    @IBOutlet weak var CupSizeChevronButton: UIButton!
-    @IBOutlet weak var GoalChevronButton: UIButton!
-    @IBOutlet weak var Hydrationstepper: UIStepper!
+    @IBOutlet var goalValueLabel: UILabel!
+    @IBOutlet var cupSizeValueLabel: UILabel!
+
+    @IBOutlet var CupSizeChevronButton: UIButton!
+    @IBOutlet var GoalChevronButton: UIButton!
+    @IBOutlet var Hydrationstepper: UIStepper!
 
     // MARK: - Delegate
+
     weak var delegate: CareHydrationCellDelegate?
 
     // MARK: - State
+
     private var currentAmountML: Int = 2000
     private var goalML: Int = 3000
     private var cupSizeML: Int = 200
@@ -120,9 +122,8 @@ class CareHydrationCell: UICollectionViewCell {
         return nil
     }
 
-
-
     // MARK: - Configure
+
     func configure(
         isExpanded: Bool,
         currentAmountML: Int,
@@ -163,8 +164,6 @@ class CareHydrationCell: UICollectionViewCell {
         Hydrationstepper.value = Double(min(max(currentTick, minTick), maxTick))
         lastStepperValue = Hydrationstepper.value
     }
-
-
 
     private func render() {
         goalValueLabel.text = formatGoal(goalML)

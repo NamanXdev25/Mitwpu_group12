@@ -1,29 +1,29 @@
 import UIKit
 
 // MARK: - Delegate Protocol
+
 protocol CareMedicationCellDelegate: AnyObject {
     func careMedicationCellDidTap(_ cell: CareMedicationCell)
 }
 
 class CareMedicationCell: UICollectionViewCell {
+    @IBOutlet var MedicationConatiner: UIView!
+    @IBOutlet var MedicationImage: UIImageView!
+    @IBOutlet var MedicationLabel: UILabel!
+    @IBOutlet var TakenLabel: UILabel!
+    @IBOutlet var MedicationInfoButton: UIButton!
 
-    @IBOutlet weak var MedicationConatiner: UIView!
-    @IBOutlet weak var MedicationImage: UIImageView!
-    @IBOutlet weak var MedicationLabel: UILabel!
-    @IBOutlet weak var TakenLabel: UILabel!
-    @IBOutlet weak var MedicationInfoButton: UIButton!
-    
     weak var delegate: CareMedicationCellDelegate?
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.contentView.layer.masksToBounds = true
-        
+        contentView.layer.masksToBounds = true
+
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(cellTapped))
-        self.contentView.addGestureRecognizer(tapGesture)
-        self.contentView.isUserInteractionEnabled = true
+        contentView.addGestureRecognizer(tapGesture)
+        contentView.isUserInteractionEnabled = true
     }
-    
+
     @objc private func cellTapped() {
         delegate?.careMedicationCellDidTap(self)
     }

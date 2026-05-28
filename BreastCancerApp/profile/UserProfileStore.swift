@@ -1,8 +1,6 @@
-
 import UIKit
 
 class UserProfileStore {
-
     static let shared = UserProfileStore()
     private init() {}
 
@@ -14,8 +12,8 @@ class UserProfileStore {
 
     func save(_ updated: HealthProfileModel) {
         UserProfileDataSource.shared.updateBasicInfo(
-            firstName:    updated.firstName,
-            lastName:     updated.lastName,
+            firstName: updated.firstName,
+            lastName: updated.lastName,
             profileImage: updated.profileImage
         )
 
@@ -28,9 +26,9 @@ class UserProfileStore {
         ).year ?? UserProfileDataSource.shared.userProfile.age
 
         UserProfileDataSource.shared.updateMedicalInfo(
-            diagnosisDate:  diagnosisString,
-            gender:         updated.gender.rawValue,
-            age:            age,
+            diagnosisDate: diagnosisString,
+            gender: updated.gender.rawValue,
+            age: age,
             treatmentState: updated.treatmentPhase.rawValue
         )
 

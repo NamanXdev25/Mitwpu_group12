@@ -1,16 +1,14 @@
-
 import UIKit
 
 final class SymptomSelectionCell: UICollectionViewCell {
-
-    @IBOutlet weak var checkboxButton: UIButton!
-    @IBOutlet weak var symptomNameLabel: UILabel!
-    @IBOutlet weak var infoButton: UIButton!
-    @IBOutlet weak var sliderContainerView: UIView!
-    @IBOutlet weak var severitySlider: UISlider!
-    @IBOutlet weak var mildLabel: UILabel!
-    @IBOutlet weak var severeLabel: UILabel!
-    @IBOutlet weak var noteTextView: UITextView!
+    @IBOutlet var checkboxButton: UIButton!
+    @IBOutlet var symptomNameLabel: UILabel!
+    @IBOutlet var infoButton: UIButton!
+    @IBOutlet var sliderContainerView: UIView!
+    @IBOutlet var severitySlider: UISlider!
+    @IBOutlet var mildLabel: UILabel!
+    @IBOutlet var severeLabel: UILabel!
+    @IBOutlet var noteTextView: UITextView!
 
     var onCheckboxTapped: (() -> Void)?
     var onInfoTapped: (() -> Void)?
@@ -36,14 +34,14 @@ final class SymptomSelectionCell: UICollectionViewCell {
     func configure(with symptom: Symptom, isSelected: Bool, severity: Int, note: String = "") {
         symptomNameLabel.text = symptom.name
         severitySlider.value = Float(severity)
-        
+
         if note.isEmpty {
             setPlaceholder()
         } else {
             noteTextView.text = note
             noteTextView.textColor = .label
         }
-        
+
         setSelected(isSelected)
     }
 
@@ -63,7 +61,7 @@ final class SymptomSelectionCell: UICollectionViewCell {
         infoButton.addTarget(self, action: #selector(infoTapped), for: .touchUpInside)
         severitySlider.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
     }
-    
+
     private func setPlaceholder() {
         noteTextView.text = placeholderText
         noteTextView.textColor = .systemGray
@@ -80,7 +78,7 @@ final class SymptomSelectionCell: UICollectionViewCell {
 
         sliderContainerView.isHidden = !selected
         noteTextView.isHidden = !selected
-        
+
         if !selected {
             setPlaceholder()
         }
@@ -102,6 +100,7 @@ final class SymptomSelectionCell: UICollectionViewCell {
 }
 
 // MARK: - UITextViewDelegate
+
 extension SymptomSelectionCell: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == placeholderText {
@@ -109,27 +108,27 @@ extension SymptomSelectionCell: UITextViewDelegate {
             textView.textColor = .label
         }
     }
-    
+
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
             setPlaceholder()
         }
     }
-    
+
     func textViewDidChange(_ textView: UITextView) {
         let text = textView.text == placeholderText ? "" : textView.text ?? ""
         onNoteChanged?(text)
     }
-    
+
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if text == "\n" {
             textView.resignFirstResponder()
             return false
         }
-        
+
         let currentText = textView.text ?? ""
         let prospectiveText = (currentText as NSString).replacingCharacters(in: range, with: text)
-        
+
         let textToCount = currentText == placeholderText ? "" : prospectiveText
         return textToCount.count <= 150
     }

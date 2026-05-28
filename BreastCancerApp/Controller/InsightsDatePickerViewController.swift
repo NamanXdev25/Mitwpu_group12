@@ -8,15 +8,17 @@
 import UIKit
 
 final class InsightDatePickerViewController: UIViewController {
-
     // MARK: - Outlets
-    @IBOutlet weak var datePicker: UIDatePicker!
+
+    @IBOutlet var datePicker: UIDatePicker!
 
     // MARK: - Callback
+
     var onApply: ((Date) -> Void)?
-    var initialDate: Date?              // ← ADD THIS LINE
+    var initialDate: Date? // ← ADD THIS LINE
 
     // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -24,23 +26,24 @@ final class InsightDatePickerViewController: UIViewController {
     }
 
     private func setupDatePicker() {
-        datePicker.datePickerMode           = .date
+        datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .inline
-        datePicker.maximumDate              = Date()
-        datePicker.tintColor                = UIColor(named: "primary_color")
+        datePicker.maximumDate = Date()
+        datePicker.tintColor = UIColor(named: "primary_color")
             ?? UIColor(named: "PrimaryColor")
             ?? .systemPink
-        if let initial = initialDate {     // ← ADD THIS BLOCK
+        if let initial = initialDate { // ← ADD THIS BLOCK
             datePicker.date = initial
         }
     }
 
     // MARK: - IBActions
-    @IBAction func cancelTapped(_ sender: UIBarButtonItem) {
+
+    @IBAction func cancelTapped(_: UIBarButtonItem) {
         dismiss(animated: true)
     }
 
-    @IBAction func applyTapped(_ sender: UIBarButtonItem) {
+    @IBAction func applyTapped(_: UIBarButtonItem) {
         onApply?(datePicker.date)
         dismiss(animated: true)
     }

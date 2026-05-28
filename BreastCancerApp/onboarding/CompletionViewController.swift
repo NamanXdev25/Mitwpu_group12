@@ -1,11 +1,9 @@
-
 import UIKit
 
 class CompletionViewController: UIViewController {
-
-    @IBOutlet weak var progressBar: ProgressBarView!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var homeButton: UIButton!
+    @IBOutlet var progressBar: ProgressBarView!
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var homeButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +20,7 @@ class CompletionViewController: UIViewController {
     }
 
     // MARK: - UI setup
+
     private func setupUI() {
         progressBar.setProgress(4, animated: false)
 
@@ -39,6 +38,7 @@ class CompletionViewController: UIViewController {
     }
 
     // MARK: - Seed JourneyState from onboarding answers
+
     private func seedJourneyStateFromOnboarding() {
         let data = OnboardingData.shared
         guard let status = data.treatmentStatus else { return }
@@ -48,7 +48,6 @@ class CompletionViewController: UIViewController {
         guard !js.isDiagnosisCompleted else { return }
 
         switch status {
-
         case "Currently in treatment":
             js.saveDiagnosisState(date: data.diagnosisDate)
             js.completeDiagnosis()
@@ -67,21 +66,20 @@ class CompletionViewController: UIViewController {
         }
     }
 
-    @IBAction func homeButtonTapped(_ sender: UIButton) {
+    @IBAction func homeButtonTapped(_: UIButton) {
         let storyboard = UIStoryboard(name: "TabbarMain", bundle: nil)
 
         guard let tabBarController =
-                storyboard.instantiateInitialViewController()
-                as? UITabBarController else {
+            storyboard.instantiateInitialViewController()
+                as? UITabBarController
+        else {
             fatalError("TabBarMain must have UITabBarController as initial VC")
         }
 
         if let sceneDelegate =
             UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
-
             sceneDelegate.window?.rootViewController = tabBarController
             sceneDelegate.window?.makeKeyAndVisible()
-
         }
     }
 

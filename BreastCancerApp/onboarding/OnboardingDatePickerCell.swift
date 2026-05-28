@@ -1,10 +1,9 @@
 import UIKit
 
 class OnboardingDatePickerCell: UICollectionViewCell {
-
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var placeholderLabel: UILabel!
-    @IBOutlet weak var datePicker: UIDatePicker!
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var placeholderLabel: UILabel!
+    @IBOutlet var datePicker: UIDatePicker!
 
     var onDateChanged: ((Date) -> Void)?
 
@@ -13,8 +12,8 @@ class OnboardingDatePickerCell: UICollectionViewCell {
         datePicker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
     }
 
-    func configure(title: String, fieldName: String, maximumDate: Date? = Date()) {
-        titleLabel.text        = title
+    func configure(title: String, fieldName _: String, maximumDate: Date? = Date()) {
+        titleLabel.text = title
         datePicker.maximumDate = maximumDate
     }
 

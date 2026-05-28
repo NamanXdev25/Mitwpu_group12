@@ -1,6 +1,7 @@
 import UIKit
 
 // MARK: - Phase Status
+
 enum PhaseStatus {
     case notStarted
     case inProgress
@@ -8,30 +9,32 @@ enum PhaseStatus {
 }
 
 class TreatmentPhaseView: UIView {
-
     // MARK: - IBOutlets
-    @IBOutlet weak var phaseTitleLabel: UILabel!
-    @IBOutlet weak var dropdownContainerView: UIView!
-    @IBOutlet weak var dropdownLabel: UILabel!
-    @IBOutlet weak var dropdownButton: UIButton!
-    @IBOutlet weak var startDateContainerView: UIView!
-    @IBOutlet weak var startDateLabel: UILabel!
-    @IBOutlet weak var startDateButton: UIButton!
-    @IBOutlet weak var durationTextField: UITextField!
-    @IBOutlet weak var saveButton: UIButton!
-    @IBOutlet weak var editButton: UIButton!
-    @IBOutlet weak var deleteButton: UIButton!
+
+    @IBOutlet var phaseTitleLabel: UILabel!
+    @IBOutlet var dropdownContainerView: UIView!
+    @IBOutlet var dropdownLabel: UILabel!
+    @IBOutlet var dropdownButton: UIButton!
+    @IBOutlet var startDateContainerView: UIView!
+    @IBOutlet var startDateLabel: UILabel!
+    @IBOutlet var startDateButton: UIButton!
+    @IBOutlet var durationTextField: UITextField!
+    @IBOutlet var saveButton: UIButton!
+    @IBOutlet var editButton: UIButton!
+    @IBOutlet var deleteButton: UIButton!
 
     // MARK: - Callbacks
+
     var onSaved: (() -> Void)?
     var onStatusChanged: ((PhaseStatus) -> Void)?
     var onDeleteTapped: (() -> Void)?
     var onFieldsChanged: ((TreatmentType, Date?, String) -> Void)?
 
     // MARK: - Properties
+
     private var phaseIndex: Int = 0
     private var phaseModel = TreatmentPhaseModel()
-    private var selectedDate: Date? = nil
+    private var selectedDate: Date?
     private var isSaved = false
     private var statusTimer: Timer?
 
@@ -39,14 +42,15 @@ class TreatmentPhaseView: UIView {
     private var overlayView: UIView?
     private var datePickerContainerView: UIView?
 
-    private let pink      = UIColor(named: "pink") ?? UIColor(red: 0.91, green: 0.39, blue: 0.54, alpha: 1.0)
-    private let lightPink = UIColor(red: 1.0,  green: 0.92, blue: 0.95, alpha: 1.0)
+    private let pink = UIColor(named: "pink") ?? UIColor(red: 0.91, green: 0.39, blue: 0.54, alpha: 1.0)
+    private let lightPink = UIColor(red: 1.0, green: 0.92, blue: 0.95, alpha: 1.0)
 
     private var fadableViews: [UIView] {
         [dropdownContainerView, startDateContainerView, durationTextField]
     }
 
     // MARK: - Lifecycle
+
     override func awakeFromNib() {
         super.awakeFromNib()
         setupView()
@@ -55,6 +59,7 @@ class TreatmentPhaseView: UIView {
     deinit { statusTimer?.invalidate() }
 
     // MARK: - Setup
+
     private func setupView() {
         backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.0)
         layer.cornerRadius = 14
@@ -86,7 +91,7 @@ class TreatmentPhaseView: UIView {
             "Save Phase Details",
             attributes: AttributeContainer([
                 .font: UIFont.boldSystemFont(ofSize: 16),
-                .foregroundColor: UIColor.white
+                .foregroundColor: UIColor.white,
             ])
         )
         saveButton.configuration = saveCfg
@@ -103,20 +108,41 @@ class TreatmentPhaseView: UIView {
     }
 
     // MARK: - Edit Button Style
+
     private func applyEditButtonStyle() {
         editButton.backgroundColor = lightPink
         editButton.setTitleColor(pink, for: .normal)
     }
 
     // MARK: - IBActions
-    @IBAction func dropdownTapped(_ sender: UIButton) { showTreatmentPicker() }
-    @IBAction func dateTapped(_ sender: UIButton)     { showDatePickerOverlay() }
-    @IBAction func saveTapped(_ sender: UIButton)     { commitSave() }
-    @IBAction func editTapped(_ sender: UIButton)     { revertToEditMode() }
-    @IBAction func deleteTapped(_ sender: UIButton)   { onDeleteTapped?() }
 
-    @objc private func editButtonTappedAction()   { revertToEditMode() }
-    @objc private func deleteButtonTappedAction() { onDeleteTapped?() }
+    @IBAction func dropdownTapped(_: UIButton) {
+        showTreatmentPicker()
+    }
+
+    @IBAction func dateTapped(_: UIButton) {
+        showDatePickerOverlay()
+    }
+
+    @IBAction func saveTapped(_: UIButton) {
+        commitSave()
+    }
+
+    @IBAction func editTapped(_: UIButton) {
+        revertToEditMode()
+    }
+
+    @IBAction func deleteTapped(_: UIButton) {
+        onDeleteTapped?()
+    }
+
+    @objc private func editButtonTappedAction() {
+        revertToEditMode()
+    }
+
+    @objc private func deleteButtonTappedAction() {
+        onDeleteTapped?()
+    }
 
     @objc private func textFieldChanged() {
         if isSaved { revertToEditMode() }
@@ -125,22 +151,24 @@ class TreatmentPhaseView: UIView {
     }
 
     // MARK: - Notify VC of field changes
+
     private func notifyFieldsChanged() {
         onFieldsChanged?(phaseModel.treatmentType, selectedDate, durationTextField.text ?? "")
     }
 
     // MARK: - Save → Enter saved state
+
     private func commitSave() {
         guard allFieldsFilled() else { return }
         isSaved = true
 
-        phaseModel.state         = .saved
+        phaseModel.state = .saved
         phaseModel.treatmentType = selectedTreatmentType()
-        phaseModel.startDate     = selectedDate
-        phaseModel.duration      = durationTextField.text ?? ""
+        phaseModel.startDate = selectedDate
+        phaseModel.duration = durationTextField.text ?? ""
 
-        dropdownButton.isUserInteractionEnabled    = false
-        startDateButton.isUserInteractionEnabled   = false
+        dropdownButton.isUserInteractionEnabled = false
+        startDateButton.isUserInteractionEnabled = false
         durationTextField.isUserInteractionEnabled = false
 
         saveButton.isHidden = true
@@ -159,12 +187,13 @@ class TreatmentPhaseView: UIView {
     }
 
     // MARK: - Edit → Revert to edit state
+
     private func revertToEditMode() {
         isSaved = false
         phaseModel.state = .editing
 
-        dropdownButton.isUserInteractionEnabled    = true
-        startDateButton.isUserInteractionEnabled   = true
+        dropdownButton.isUserInteractionEnabled = true
+        startDateButton.isUserInteractionEnabled = true
         durationTextField.isUserInteractionEnabled = true
 
         editButton.isHidden = true
@@ -181,6 +210,7 @@ class TreatmentPhaseView: UIView {
     }
 
     // MARK: - Save Button State
+
     private func updateSaveButtonState() {
         let allFilled = allFieldsFilled()
         saveButton.isEnabled = true
@@ -191,20 +221,19 @@ class TreatmentPhaseView: UIView {
     }
 
     // MARK: - Status Engine
+
     func currentStatus() -> PhaseStatus {
         guard isSaved,
               let startDate = selectedDate,
               let durationDays = Int(phaseModel.duration),
               durationDays > 0 else { return .notStarted }
 
-        let cal   = Calendar.current
+        let cal = Calendar.current
         let today = cal.startOfDay(for: Date())
         let start = cal.startOfDay(for: startDate)
         guard let endDate = cal.date(byAdding: .day, value: durationDays, to: start) else { return .notStarted }
 
-        if today < start        { return .notStarted }
-        else if today < endDate { return .inProgress }
-        else                    { return .completed  }
+        if today < start { return .notStarted } else if today < endDate { return .inProgress } else { return .completed }
     }
 
     private func startStatusTimer() {
@@ -223,64 +252,66 @@ class TreatmentPhaseView: UIView {
     }
 
     // MARK: - Configure
+
     func configure(index: Int) {
         phaseIndex = index
         phaseTitleLabel.text = "Phase \(index + 1)"
     }
 
     // MARK: - Restore (called by TreatmentCell after cell reuse)
+
     func restoreFields(treatmentType: TreatmentType, startDate: Date?, duration: String) {
         phaseModel.treatmentType = treatmentType
         if treatmentType != .none {
-            dropdownLabel.text      = treatmentType.rawValue
+            dropdownLabel.text = treatmentType.rawValue
             dropdownLabel.textColor = .black
         } else {
-            dropdownLabel.text      = "Select treatment"
+            dropdownLabel.text = "Select treatment"
             dropdownLabel.textColor = .placeholderText
         }
 
         selectedDate = startDate
         if let date = startDate {
-            startDateLabel.text      = formatDate(date)
+            startDateLabel.text = formatDate(date)
             startDateLabel.textColor = .black
         } else {
-            startDateLabel.text      = nil
+            startDateLabel.text = nil
             startDateLabel.textColor = .placeholderText
         }
 
         durationTextField.text = duration.isEmpty ? nil : duration
 
         isSaved = false
-        dropdownButton.isUserInteractionEnabled    = true
-        startDateButton.isUserInteractionEnabled   = true
+        dropdownButton.isUserInteractionEnabled = true
+        startDateButton.isUserInteractionEnabled = true
         durationTextField.isUserInteractionEnabled = true
-        saveButton.isHidden  = false
-        editButton.isHidden  = true
+        saveButton.isHidden = false
+        editButton.isHidden = true
         fadableViews.forEach { $0.alpha = 1.0 }
         updateSaveButtonState()
     }
 
     func restoreSavedModel(_ model: TreatmentPhaseModel) {
-        phaseModel   = model
+        phaseModel = model
         selectedDate = model.startDate
-        isSaved      = true
+        isSaved = true
 
         if model.treatmentType != .none {
-            dropdownLabel.text      = model.treatmentType.rawValue
+            dropdownLabel.text = model.treatmentType.rawValue
             dropdownLabel.textColor = .black
         }
         if let date = model.startDate {
-            startDateLabel.text      = formatDate(date)
+            startDateLabel.text = formatDate(date)
             startDateLabel.textColor = .black
         }
         durationTextField.text = model.duration
 
-        dropdownButton.isUserInteractionEnabled    = false
-        startDateButton.isUserInteractionEnabled   = false
+        dropdownButton.isUserInteractionEnabled = false
+        startDateButton.isUserInteractionEnabled = false
         durationTextField.isUserInteractionEnabled = false
         saveButton.isHidden = true
         editButton.isHidden = false
-        editButton.alpha    = 1.0
+        editButton.alpha = 1.0
         fadableViews.forEach { $0.alpha = 0.35 }
 
         startStatusTimer()
@@ -288,15 +319,25 @@ class TreatmentPhaseView: UIView {
     }
 
     // MARK: - Public accessors (used by TreatmentCell.onSaved to build TreatmentPhaseModel)
-    func currentTreatmentType() -> TreatmentType { phaseModel.treatmentType }
-    func currentStartDate() -> Date?             { selectedDate }
-    func currentDuration() -> String             { durationTextField.text ?? "" }
+
+    func currentTreatmentType() -> TreatmentType {
+        phaseModel.treatmentType
+    }
+
+    func currentStartDate() -> Date? {
+        selectedDate
+    }
+
+    func currentDuration() -> String {
+        durationTextField.text ?? ""
+    }
 
     // MARK: - Helpers
+
     private func allFieldsFilled() -> Bool {
         let treatmentSelected = phaseModel.treatmentType != .none
-        let dateSelected      = selectedDate != nil
-        let durationFilled    = !(durationTextField.text?.trimmingCharacters(in: .whitespaces).isEmpty ?? true)
+        let dateSelected = selectedDate != nil
+        let durationFilled = !(durationTextField.text?.trimmingCharacters(in: .whitespaces).isEmpty ?? true)
         return treatmentSelected && dateSelected && durationFilled
     }
 
@@ -313,20 +354,23 @@ class TreatmentPhaseView: UIView {
 }
 
 // MARK: - UITextFieldDelegate (numbers only)
+
 extension TreatmentPhaseView: UITextFieldDelegate {
-    func textField(_ textField: UITextField,
-                   shouldChangeCharactersIn range: NSRange,
-                   replacementString string: String) -> Bool {
+    func textField(
+        _: UITextField,
+        shouldChangeCharactersIn _: NSRange,
+        replacementString string: String
+    ) -> Bool {
         if string.isEmpty { return true }
         return string.unicodeScalars.allSatisfy { CharacterSet.decimalDigits.contains($0) }
     }
 }
 
 // MARK: - Treatment Picker Popup
-extension TreatmentPhaseView {
 
+extension TreatmentPhaseView {
     private func showTreatmentPicker() {
-        guard let window = self.window else { return }
+        guard let window = window else { return }
         let options = TreatmentType.allCases.filter { $0 != .none }
 
         let blurEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
@@ -350,7 +394,7 @@ extension TreatmentPhaseView {
             container.centerXAnchor.constraint(equalTo: dimView.centerXAnchor),
             container.centerYAnchor.constraint(equalTo: dimView.centerYAnchor),
             container.widthAnchor.constraint(equalToConstant: 300),
-            container.heightAnchor.constraint(equalToConstant: CGFloat(options.count + 1) * rowHeight)
+            container.heightAnchor.constraint(equalToConstant: CGFloat(options.count + 1) * rowHeight),
         ])
 
         let stack = UIStackView()
@@ -362,7 +406,7 @@ extension TreatmentPhaseView {
             stack.topAnchor.constraint(equalTo: container.topAnchor),
             stack.leadingAnchor.constraint(equalTo: container.leadingAnchor),
             stack.trailingAnchor.constraint(equalTo: container.trailingAnchor),
-            stack.bottomAnchor.constraint(equalTo: container.bottomAnchor)
+            stack.bottomAnchor.constraint(equalTo: container.bottomAnchor),
         ])
 
         let nothingSelected = phaseModel.treatmentType == .none
@@ -375,10 +419,13 @@ extension TreatmentPhaseView {
             stack.addArrangedSubview(row)
         }
 
-        UIView.animate(withDuration: 0.3, delay: 0,
-                       usingSpringWithDamping: 0.78,
-                       initialSpringVelocity: 0.4,
-                       options: .curveEaseOut) {
+        UIView.animate(
+            withDuration: 0.3,
+            delay: 0,
+            usingSpringWithDamping: 0.78,
+            initialSpringVelocity: 0.4,
+            options: .curveEaseOut
+        ) {
             dimView.alpha = 1
             container.alpha = 1
             container.transform = .identity
@@ -402,7 +449,7 @@ extension TreatmentPhaseView {
                 check.leadingAnchor.constraint(equalTo: row.leadingAnchor, constant: 18),
                 check.centerYAnchor.constraint(equalTo: row.centerYAnchor),
                 check.widthAnchor.constraint(equalToConstant: 16),
-                check.heightAnchor.constraint(equalToConstant: 16)
+                check.heightAnchor.constraint(equalToConstant: 16),
             ])
         }
 
@@ -415,7 +462,7 @@ extension TreatmentPhaseView {
         NSLayoutConstraint.activate([
             label.leadingAnchor.constraint(equalTo: row.leadingAnchor, constant: isSelected ? 46 : 18),
             label.trailingAnchor.constraint(equalTo: row.trailingAnchor, constant: -18),
-            label.centerYAnchor.constraint(equalTo: row.centerYAnchor)
+            label.centerYAnchor.constraint(equalTo: row.centerYAnchor),
         ])
 
         if !isLast {
@@ -427,7 +474,7 @@ extension TreatmentPhaseView {
                 sep.leadingAnchor.constraint(equalTo: row.leadingAnchor, constant: 18),
                 sep.trailingAnchor.constraint(equalTo: row.trailingAnchor, constant: -18),
                 sep.bottomAnchor.constraint(equalTo: row.bottomAnchor),
-                sep.heightAnchor.constraint(equalToConstant: 0.5)
+                sep.heightAnchor.constraint(equalToConstant: 0.5),
             ])
         }
         return row
@@ -437,7 +484,7 @@ extension TreatmentPhaseView {
         guard let row = gesture.view else { return }
         let options = TreatmentType.allCases.filter { $0 != .none }
         let index = row.tag
-        guard index >= 0 && index < options.count else { return }
+        guard index >= 0, index < options.count else { return }
         let selected = options[index]
         dropdownLabel.text = selected.rawValue
         dropdownLabel.textColor = .black
@@ -449,21 +496,21 @@ extension TreatmentPhaseView {
     }
 
     @objc private func dismissPicker() {
-        guard let window = self.window, let dimView = window.viewWithTag(8001) else { return }
+        guard let window = window, let dimView = window.viewWithTag(8001) else { return }
         UIView.animate(withDuration: 0.25, animations: {
             dimView.alpha = 0
-        }) { _ in dimView.removeFromSuperview() }
+        }, completion: { _ in dimView.removeFromSuperview() })
     }
 }
 
 // MARK: - Date Picker Overlay (mirrors DiagnosisCell exactly)
-extension TreatmentPhaseView {
 
+extension TreatmentPhaseView {
     private func showDatePickerOverlay() {
         // Use the active foreground window — same pattern as DiagnosisCell
         guard let windowScene = UIApplication.shared.connectedScenes
-                .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene,
-              let window = windowScene.windows.first(where: { $0.isKeyWindow }) else { return }
+            .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene,
+            let window = windowScene.windows.first(where: { $0.isKeyWindow }) else { return }
 
         // --- Dim overlay ---
         let dimView = UIView(frame: window.bounds)
@@ -474,32 +521,68 @@ extension TreatmentPhaseView {
         overlayView = dimView
 
         // --- White card container ---
+        let container = makePickerContainer()
+        datePickerContainerView = container
+
+        let picker = buildInlineDatePicker()
+        let buttonStack = buildPickerButtonStack()
+
+        container.addSubview(picker)
+        container.addSubview(buttonStack)
+        window.addSubview(dimView)
+        window.addSubview(container)
+
+        NSLayoutConstraint.activate([
+            container.centerXAnchor.constraint(equalTo: window.centerXAnchor),
+            container.centerYAnchor.constraint(equalTo: window.centerYAnchor),
+            container.widthAnchor.constraint(equalToConstant: 350),
+            picker.topAnchor.constraint(equalTo: container.topAnchor, constant: 20),
+            picker.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 10),
+            picker.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -10),
+            buttonStack.topAnchor.constraint(equalTo: picker.bottomAnchor, constant: 10),
+            buttonStack.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 24),
+            buttonStack.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -24),
+            buttonStack.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -20),
+            buttonStack.heightAnchor.constraint(equalToConstant: 44),
+        ])
+
+        // Spring-in animation (same as DiagnosisCell)
+        container.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+        container.alpha = 0
+        UIView.animate(
+            withDuration: 0.3,
+            delay: 0,
+            usingSpringWithDamping: 0.8,
+            initialSpringVelocity: 0,
+            options: .curveEaseOut
+        ) {
+            dimView.alpha = 1
+            container.alpha = 1
+            container.transform = .identity
+        }
+    }
+
+    private func makePickerContainer() -> UIView {
         let container = UIView()
         container.backgroundColor = .white
         container.layer.cornerRadius = 16
         container.translatesAutoresizingMaskIntoConstraints = false
-        datePickerContainerView = container
+        return container
+    }
 
-        // --- Inline date picker (same as DiagnosisCell) ---
+    private func buildInlineDatePicker() -> UIDatePicker {
         let picker = UIDatePicker()
-        picker.preferredDatePickerStyle = .inline   // ← This is the key: .inline allows year/month tap to switch to scroll wheel
+        picker.preferredDatePickerStyle = .inline
         picker.datePickerMode = .date
         picker.maximumDate = Date()
         picker.translatesAutoresizingMaskIntoConstraints = false
         picker.tintColor = pink
-        // Pre-select the already-chosen date if any
-        if let existing = selectedDate {
-            picker.date = existing
-        }
+        if let existing = selectedDate { picker.date = existing }
         picker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
+        return picker
+    }
 
-        // --- Reset / Done buttons ---
-        let buttonStack = UIStackView()
-        buttonStack.axis = .horizontal
-        buttonStack.distribution = .fillEqually
-        buttonStack.spacing = 12
-        buttonStack.translatesAutoresizingMaskIntoConstraints = false
-
+    private func buildPickerButtonStack() -> UIStackView {
         let resetButton = UIButton(type: .system)
         resetButton.setTitle("Reset", for: .normal)
         resetButton.setTitleColor(pink, for: .normal)
@@ -512,42 +595,12 @@ extension TreatmentPhaseView {
         doneButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
         doneButton.addTarget(self, action: #selector(dismissDatePickerOverlay), for: .touchUpInside)
 
-        buttonStack.addArrangedSubview(resetButton)
-        buttonStack.addArrangedSubview(doneButton)
-
-        container.addSubview(picker)
-        container.addSubview(buttonStack)
-
-        window.addSubview(dimView)
-        window.addSubview(container)
-
-        NSLayoutConstraint.activate([
-            container.centerXAnchor.constraint(equalTo: window.centerXAnchor),
-            container.centerYAnchor.constraint(equalTo: window.centerYAnchor),
-            container.widthAnchor.constraint(equalToConstant: 350),
-
-            picker.topAnchor.constraint(equalTo: container.topAnchor, constant: 20),
-            picker.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 10),
-            picker.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -10),
-
-            buttonStack.topAnchor.constraint(equalTo: picker.bottomAnchor, constant: 10),
-            buttonStack.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 24),
-            buttonStack.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -24),
-            buttonStack.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -20),
-            buttonStack.heightAnchor.constraint(equalToConstant: 44)
-        ])
-
-        // Spring-in animation (same as DiagnosisCell)
-        container.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
-        container.alpha = 0
-        UIView.animate(withDuration: 0.3, delay: 0,
-                       usingSpringWithDamping: 0.8,
-                       initialSpringVelocity: 0,
-                       options: .curveEaseOut) {
-            dimView.alpha = 1
-            container.alpha = 1
-            container.transform = .identity
-        }
+        let stack = UIStackView(arrangedSubviews: [resetButton, doneButton])
+        stack.axis = .horizontal
+        stack.distribution = .fillEqually
+        stack.spacing = 12
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
     }
 
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
@@ -573,12 +626,12 @@ extension TreatmentPhaseView {
             self.overlayView?.alpha = 0
             self.datePickerContainerView?.alpha = 0
             self.datePickerContainerView?.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
-        }) { _ in
+        }, completion: { _ in
             self.overlayView?.removeFromSuperview()
             self.datePickerContainerView?.removeFromSuperview()
             self.overlayView = nil
             self.datePickerContainerView = nil
-        }
+        })
 
         if isSaved { revertToEditMode() }
     }

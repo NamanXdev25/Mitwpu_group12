@@ -1,22 +1,24 @@
 import UIKit
 
 final class MemoriesViewController: UIViewController,
-                                    UIImagePickerControllerDelegate,
-                                    UINavigationControllerDelegate,
-                                    AddMemoryDelegate,
-                                    MemoryDeleteDelegate,
-                                    UICollectionViewDataSource,
-                                    UICollectionViewDelegateFlowLayout {
-
+    UIImagePickerControllerDelegate,
+    UINavigationControllerDelegate,
+    AddMemoryDelegate,
+    MemoryDeleteDelegate,
+    UICollectionViewDataSource,
+    UICollectionViewDelegateFlowLayout {
     // MARK: - Outlets
-    @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var addButton: UIButton!
+
+    @IBOutlet var collectionView: UICollectionView!
+    @IBOutlet var addButton: UIButton!
 
     // MARK: - Data
+
     private var memories: [Memory] = []
     private var groupedMemories: [(month: Int, year: Int, items: [Memory])] = []
 
     // MARK: - Filter State
+
     private var isFiltering = false
     private var filteredMemories: [Memory] = []
     private var selectedMonth: Int?
@@ -25,6 +27,7 @@ final class MemoriesViewController: UIViewController,
     private let calendar = Calendar.current
 
     // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -57,16 +60,23 @@ final class MemoriesViewController: UIViewController,
     }
 
     // MARK: - Filter
-    @IBAction func filterTapped(_ sender: UIBarButtonItem) {
-        isFiltering ? clearFilter() : presentFilterSheet()
+
+    @IBAction func filterTapped(_: UIBarButtonItem) {
+        if isFiltering {
+            clearFilter()
+        } else {
+            presentFilterSheet()
+        }
     }
 
     private func presentFilterSheet() {
         let storyboard = UIStoryboard(name: "memory", bundle: nil)
 
-        let pickerVC = storyboard.instantiateViewController(
+        guard let pickerVC = storyboard.instantiateViewController(
             withIdentifier: "MonthYearPickerViewController"
-        ) as! MonthYearPickerViewController
+        ) as? MonthYearPickerViewController else {
+            fatalError("Expected MonthYearPickerViewController for identifier 'MonthYearPickerViewController'")
+        }
 
         pickerVC.onApply = { [weak self] month, year in
             self?.applyFilter(month: month, year: year)
@@ -109,12 +119,15 @@ final class MemoriesViewController: UIViewController,
     }
 
     // MARK: - Add Memory
+
     @IBAction func addButtonTapped(_ sender: UIButton) {
         let storyboard = UIStoryboard(name: "memory", bundle: nil)
 
-        let popup = storyboard.instantiateViewController(
+        guard let popup = storyboard.instantiateViewController(
             withIdentifier: "AddMemoryPopupViewController"
-        ) as! AddMemoryPopupViewController
+        ) as? AddMemoryPopupViewController else {
+            fatalError("Expected AddMemoryPopupViewController for identifier 'AddMemoryPopupViewController'")
+        }
 
         popup.modalPresentationStyle = .popover
         popup.preferredContentSize = CGSize(width: 260, height: 150)
@@ -137,6 +150,7 @@ final class MemoriesViewController: UIViewController,
     }
 
     // MARK: - Image Picker
+
     private func presentImagePicker(sourceType: UIImagePickerController.SourceType) {
         guard UIImagePickerController.isSourceTypeAvailable(sourceType) else { return }
         let picker = UIImagePickerController()
@@ -162,9 +176,11 @@ final class MemoriesViewController: UIViewController,
     private func openAddMemoryScreen(with image: UIImage) {
         let storyboard = UIStoryboard(name: "memory", bundle: nil)
 
-        let addVC = storyboard.instantiateViewController(
+        guard let addVC = storyboard.instantiateViewController(
             withIdentifier: "AddMemoryViewController"
-        ) as! AddMemoryViewController
+        ) as? AddMemoryViewController else {
+            fatalError("Expected AddMemoryViewController for identifier 'AddMemoryViewController'")
+        }
 
         addVC.image = image
         addVC.delegate = self
@@ -173,6 +189,7 @@ final class MemoriesViewController: UIViewController,
     }
 
     // MARK: - Delegates
+
     func didAddMemory(_ memory: Memory) {
         memories.append(memory)
         MemoryStore.save(memories)
@@ -190,18 +207,22 @@ final class MemoriesViewController: UIViewController,
     }
 
     // MARK: - Grouping
+
     private func sortAndGroupMemories() {
         let source = isFiltering ? filteredMemories : memories
 
         let grouped = Dictionary(grouping: source) { memory -> String in
             let components = calendar.dateComponents([.month, .year], from: memory.date)
-            return "\(components.year!)-\(components.month!)"
+            let year = components.year ?? 2000
+            let month = components.month ?? 1
+            return "\(year)-\(month)"
         }
-        
-        groupedMemories = grouped.map { key, memories in
+
+        groupedMemories = grouped.compactMap { key, memories in
             let parts = key.split(separator: "-")
-            let year = Int(parts[0])!
-            let month = Int(parts[1])!
+            guard parts.count >= 2,
+                  let year = Int(parts[0]),
+                  let month = Int(parts[1]) else { return nil }
             return (month: month, year: year, items: memories.sorted { $0.date > $1.date })
         }
         .sorted { a, b in
@@ -211,20 +232,28 @@ final class MemoriesViewController: UIViewController,
     }
 
     // MARK: - CollectionView
-    func numberOfSections(in collectionView: UICollectionView) -> Int { 1 }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        numberOfItemsInSection section: Int) -> Int {
+    func numberOfSections(in _: UICollectionView) -> Int {
+        1
+    }
+
+    func collectionView(
+        _: UICollectionView,
+        numberOfItemsInSection _: Int
+    ) -> Int {
         groupedMemories.count
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
-        let cell = collectionView.dequeueReusableCell(
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: MemoryMonthGroupCell.reuseIdentifier,
             for: indexPath
-        ) as! MemoryMonthGroupCell
+        ) as? MemoryMonthGroupCell else {
+            fatalError("Expected MemoryMonthGroupCell for reuse identifier '\(MemoryMonthGroupCell.reuseIdentifier)'")
+        }
 
         let group = groupedMemories[indexPath.item]
         let isLast = indexPath.item == groupedMemories.count - 1
@@ -238,27 +267,34 @@ final class MemoriesViewController: UIViewController,
         return cell
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout _: UICollectionViewLayout,
+        sizeForItemAt _: IndexPath
+    ) -> CGSize {
         CGSize(width: collectionView.bounds.width, height: 280)
     }
 
     // MARK: - Viewer
+
     private func openViewer(groupIndex: Int) {
         let storyboard = UIStoryboard(name: "memory", bundle: nil)
-        
-        let navController = storyboard.instantiateViewController(
+
+        guard let navController = storyboard.instantiateViewController(
             withIdentifier: "MonthMemoriesNavigationController"
-        ) as! UINavigationController
-        
-        let monthVC = navController.viewControllers.first as! MonthMemoriesViewController
-        
+        ) as? UINavigationController else {
+            fatalError("Expected UINavigationController for identifier 'MonthMemoriesNavigationController'")
+        }
+
+        guard let monthVC = navController.viewControllers.first as? MonthMemoriesViewController else {
+            fatalError("Expected MonthMemoriesViewController as the root of navigation controller")
+        }
+
         let group = groupedMemories[groupIndex]
         monthVC.memories = group.items
         monthVC.month = group.month
         monthVC.year = group.year
-        
+
         monthVC.onMemoriesChanged = { [weak self] updatedMemories in
             guard let self else { return }
             self.memories.removeAll { memory in
@@ -270,13 +306,13 @@ final class MemoriesViewController: UIViewController,
             self.sortAndGroupMemories()
             self.collectionView.reloadData()
         }
-        
+
         navController.modalPresentationStyle = .pageSheet
         if let sheet = navController.sheetPresentationController {
             sheet.detents = [.large()]
             sheet.prefersGrabberVisible = false
         }
-        
+
         present(navController, animated: true)
     }
 }

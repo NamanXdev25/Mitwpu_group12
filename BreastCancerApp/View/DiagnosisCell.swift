@@ -1,22 +1,23 @@
 import UIKit
 
 class DiagnosisCell: UICollectionViewCell {
-
     // MARK: - IBOutlets
-    @IBOutlet weak var containerView: UIView!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var statusLabel: UILabel!
-    @IBOutlet weak var diagnosisDateLabel: UILabel!
-    @IBOutlet weak var dateTextField: UITextField!
-    @IBOutlet weak var calendarButton: UIButton!
-    @IBOutlet weak var datePicker: UIDatePicker!
-    @IBOutlet weak var datePickerHeightConstraint: NSLayoutConstraint!
-    @IBOutlet weak var saveButton: UIButton!
-    @IBOutlet weak var editButton: UIButton!
+
+    @IBOutlet var containerView: UIView!
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var statusLabel: UILabel!
+    @IBOutlet var diagnosisDateLabel: UILabel!
+    @IBOutlet var dateTextField: UITextField!
+    @IBOutlet var calendarButton: UIButton!
+    @IBOutlet var datePicker: UIDatePicker!
+    @IBOutlet var datePickerHeightConstraint: NSLayoutConstraint!
+    @IBOutlet var saveButton: UIButton!
+    @IBOutlet var editButton: UIButton!
 
     // MARK: - Properties
-    private let pink      = UIColor(named: "pink")      ?? UIColor(red: 0.91, green: 0.39, blue: 0.54, alpha: 1.0)
-    private let lightPink = UIColor(named: "lightPink") ?? UIColor(red: 1.0,  green: 0.92, blue: 0.95, alpha: 1.0)
+
+    private let pink = UIColor(named: "pink") ?? UIColor(red: 0.91, green: 0.39, blue: 0.54, alpha: 1.0)
+    private let lightPink = UIColor(named: "lightPink") ?? UIColor(red: 1.0, green: 0.92, blue: 0.95, alpha: 1.0)
     private var overlayView: UIView?
     private var datePickerContainerView: UIView?
     private var isSaved = false
@@ -24,7 +25,8 @@ class DiagnosisCell: UICollectionViewCell {
     private var lockOverlayView: UIView?
 
     // MARK: - Persistence
-    private let kDiagnosisDate   = "diagnosisCell_date"
+
+    private let kDiagnosisDate = "diagnosisCell_date"
     private let kDiagnosisStatus = "diagnosisCell_status"
 
     var onDateSelected: ((Date) -> Void)?
@@ -33,6 +35,7 @@ class DiagnosisCell: UICollectionViewCell {
     var onCellHeightChanged: (() -> Void)?
 
     // MARK: - Lifecycle
+
     override func awakeFromNib() {
         super.awakeFromNib()
         setupUI()
@@ -40,6 +43,7 @@ class DiagnosisCell: UICollectionViewCell {
     }
 
     // MARK: - Setup
+
     private func setupUI() {
         datePicker.isHidden = true
         datePickerHeightConstraint.constant = 0
@@ -71,6 +75,7 @@ class DiagnosisCell: UICollectionViewCell {
     }
 
     // MARK: - Lock Overlay
+
     func setLocked(_ locked: Bool) {
         if locked {
             showLockOverlay()
@@ -96,7 +101,7 @@ class DiagnosisCell: UICollectionViewCell {
             lockImage.centerXAnchor.constraint(equalTo: overlay.centerXAnchor),
             lockImage.centerYAnchor.constraint(equalTo: overlay.centerYAnchor),
             lockImage.widthAnchor.constraint(equalToConstant: 28),
-            lockImage.heightAnchor.constraint(equalToConstant: 28)
+            lockImage.heightAnchor.constraint(equalToConstant: 28),
         ])
 
         containerView.addSubview(overlay)
@@ -104,7 +109,7 @@ class DiagnosisCell: UICollectionViewCell {
             overlay.topAnchor.constraint(equalTo: containerView.topAnchor),
             overlay.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             overlay.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            overlay.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+            overlay.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
         ])
         lockOverlayView = overlay
     }
@@ -115,6 +120,7 @@ class DiagnosisCell: UICollectionViewCell {
     }
 
     // MARK: - Button Styles
+
     private func applySaveButtonStyle() {
         var config = UIButton.Configuration.plain()
         config.background.backgroundColor = pink
@@ -123,7 +129,7 @@ class DiagnosisCell: UICollectionViewCell {
             "Save",
             attributes: AttributeContainer([
                 .font: UIFont.boldSystemFont(ofSize: 16),
-                .foregroundColor: UIColor.white
+                .foregroundColor: UIColor.white,
             ])
         )
         saveButton.configuration = config
@@ -143,6 +149,7 @@ class DiagnosisCell: UICollectionViewCell {
     }
 
     // MARK: - Save
+
     @objc private func saveButtonTapped() {
         isSaved = true
         if let text = dateTextField.text, !text.isEmpty {
@@ -166,10 +173,15 @@ class DiagnosisCell: UICollectionViewCell {
             self.saveButton.isHidden = true
             self.editButton.isHidden = false
         }
-        animated ? UIView.animate(withDuration: 0.3, animations: block) : block()
+        if animated {
+            UIView.animate(withDuration: 0.3, animations: block)
+        } else {
+            block()
+        }
     }
 
     // MARK: - Edit
+
     @objc private func editButtonTapped() {
         UserDefaults.standard.removeObject(forKey: kDiagnosisDate)
         UserDefaults.standard.removeObject(forKey: kDiagnosisStatus)
@@ -189,7 +201,11 @@ class DiagnosisCell: UICollectionViewCell {
             self.saveButton.alpha = hasDate ? 1.0 : 0.4
             self.editButton.isHidden = true
         }
-        animated ? UIView.animate(withDuration: 0.3, animations: block) : block()
+        if animated {
+            UIView.animate(withDuration: 0.3, animations: block)
+        } else {
+            block()
+        }
         saveButton.isUserInteractionEnabled = hasDate
         statusLabel.text = "Not Started"
         statusLabel.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1.0)
@@ -197,7 +213,8 @@ class DiagnosisCell: UICollectionViewCell {
     }
 
     // MARK: - Calendar
-    @IBAction func calendarButtonTapped(_ sender: UIButton) {
+
+    @IBAction func calendarButtonTapped(_: UIButton) {
         showDatePickerOverlay()
     }
 
@@ -236,7 +253,6 @@ class DiagnosisCell: UICollectionViewCell {
         resetButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
         resetButton.addTarget(self, action: #selector(resetDateTapped), for: .touchUpInside)
 
-
         let doneButton = UIButton(type: .system)
         doneButton.setTitle("Done", for: .normal)
         doneButton.setTitleColor(pink, for: .normal)
@@ -262,7 +278,7 @@ class DiagnosisCell: UICollectionViewCell {
             buttonStack.leadingAnchor.constraint(equalTo: datePickerContainerView!.leadingAnchor, constant: 24),
             buttonStack.trailingAnchor.constraint(equalTo: datePickerContainerView!.trailingAnchor, constant: -24),
             buttonStack.bottomAnchor.constraint(equalTo: datePickerContainerView!.bottomAnchor, constant: -20),
-            buttonStack.heightAnchor.constraint(equalToConstant: 44)
+            buttonStack.heightAnchor.constraint(equalToConstant: 44),
         ])
 
         datePickerContainerView?.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
@@ -287,12 +303,12 @@ class DiagnosisCell: UICollectionViewCell {
             self.overlayView?.alpha = 0
             self.datePickerContainerView?.alpha = 0
             self.datePickerContainerView?.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
-        }) { _ in
+        }, completion: { _ in
             self.overlayView?.removeFromSuperview()
             self.datePickerContainerView?.removeFromSuperview()
             self.overlayView = nil
             self.datePickerContainerView = nil
-        }
+        })
     }
 
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
@@ -305,9 +321,13 @@ class DiagnosisCell: UICollectionViewCell {
     }
 
     // MARK: - Height
-    func getCellHeight() -> CGFloat { return 240 }
+
+    func getCellHeight() -> CGFloat {
+        return 240
+    }
 
     // MARK: - Configure
+
     func configure(with model: DiagnosisModel) {
         let savedStatus = UserDefaults.standard.string(forKey: kDiagnosisStatus)
         let savedDateString = UserDefaults.standard.string(forKey: kDiagnosisDate)

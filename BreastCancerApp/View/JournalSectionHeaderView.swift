@@ -1,12 +1,10 @@
-
 import UIKit
 
 class JournalSectionHeaderView: UICollectionReusableView {
-
     var seeAllTapped: (() -> Void)?
-    
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var actionButton: UIButton!
+
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var actionButton: UIButton!
 
     static let reuseIdentifier = "header_cell"
 
@@ -16,9 +14,10 @@ class JournalSectionHeaderView: UICollectionReusableView {
         actionButton.isHidden = true
     }
 
-    @IBAction func seeAllButtonTapped(_ sender: UIButton) {
+    @IBAction func seeAllButtonTapped(_: UIButton) {
         seeAllTapped?()
     }
+
     func configure(title: String, showButton: Bool, buttonTitle: String = "See All") {
         titleLabel.text = title
         actionButton.isHidden = !showButton

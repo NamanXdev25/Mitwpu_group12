@@ -1,10 +1,8 @@
-
 import UIKit
 
 class ProfileSetupContinueCollectionViewCell: UICollectionViewCell {
-
-    @IBOutlet weak var continueButton: UIButton!
-    @IBOutlet weak var footerLabel: UILabel!
+    @IBOutlet var continueButton: UIButton!
+    @IBOutlet var footerLabel: UILabel!
 
     var onContinueTapped: (() -> Void)?
 
@@ -20,7 +18,7 @@ class ProfileSetupContinueCollectionViewCell: UICollectionViewCell {
         footerLabel.textAlignment = .center
     }
 
-    @IBAction func continueTapped(_ sender: UIButton) {
+    @IBAction func continueTapped(_: UIButton) {
         onContinueTapped?()
     }
 }

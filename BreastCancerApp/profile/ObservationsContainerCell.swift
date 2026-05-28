@@ -1,13 +1,12 @@
 import UIKit
 
 final class ObservationsContainerCell: UICollectionViewCell {
-
-    @IBOutlet private weak var headerLabel: UILabel?
-    @IBOutlet private weak var lumpsSwitch: UISwitch!
-    @IBOutlet private weak var skinChangesButton: UIButton!
-    @IBOutlet private weak var nippleChangesButton: UIButton!
-    @IBOutlet private weak var painButton: UIButton!
-    @IBOutlet private weak var sizeSwitch: UISwitch!
+    @IBOutlet private var headerLabel: UILabel?
+    @IBOutlet private var lumpsSwitch: UISwitch!
+    @IBOutlet private var skinChangesButton: UIButton!
+    @IBOutlet private var nippleChangesButton: UIButton!
+    @IBOutlet private var painButton: UIButton!
+    @IBOutlet private var sizeSwitch: UISwitch!
 
     var selectedSkinChange: String?
     var selectedNippleChange: String?
@@ -20,21 +19,21 @@ final class ObservationsContainerCell: UICollectionViewCell {
         "Dimpling/puckering",
         "Redness/unusual warmth",
         "Rash, soreness, skin irritation",
-        "Changes in skin texture"
+        "Changes in skin texture",
     ]
 
     private let nippleOptions = [
         "None",
         "Inverted",
         "Discharge",
-        "Sores/ulcers"
+        "Sores/ulcers",
     ]
 
     private let painOptions = [
         "None",
         "Mild",
         "Moderate",
-        "Severe"
+        "Severe",
     ]
 
     override func awakeFromNib() {
@@ -71,19 +70,19 @@ final class ObservationsContainerCell: UICollectionViewCell {
         notifySelectionChange()
     }
 
-    @IBAction private func skinChangesTapped(_ sender: UIButton) {
+    @IBAction private func skinChangesTapped(_: UIButton) {
         presentActionSheet(title: "Skin Changes", options: skinOptions) { [weak self] value in
             self?.applySkinSelection(value)
         }
     }
 
-    @IBAction private func nippleChangesTapped(_ sender: UIButton) {
+    @IBAction private func nippleChangesTapped(_: UIButton) {
         presentActionSheet(title: "Nipple changes", options: nippleOptions) { [weak self] value in
             self?.applyNippleSelection(value)
         }
     }
 
-    @IBAction private func painTapped(_ sender: UIButton) {
+    @IBAction private func painTapped(_: UIButton) {
         presentActionSheet(title: "Pain / Tenderness", options: painOptions) { [weak self] value in
             self?.applyPainSelection(value)
         }
@@ -128,10 +127,10 @@ final class ObservationsContainerCell: UICollectionViewCell {
         let pain = selectedPainLevel ?? "None"
 
         return lumpsSwitch.isOn ||
-               sizeSwitch.isOn ||
-               skin != "None" ||
-               nipple != "None" ||
-               pain != "None"
+            sizeSwitch.isOn ||
+            skin != "None" ||
+            nipple != "None" ||
+            pain != "None"
     }
 
     private func notifySelectionChange() {
@@ -202,7 +201,7 @@ final class ObservationsContainerCell: UICollectionViewCell {
             preferredStyle: .actionSheet
         )
 
-        options.forEach { option in
+        for option in options {
             alert.addAction(
                 UIAlertAction(title: option, style: .default) { _ in
                     onSelect(option)
@@ -242,13 +241,12 @@ final class ObservationsContainerCell: UICollectionViewCell {
             "sizeChange": sizeSwitch.isOn,
             "pain": selectedPainLevel
                 ?? painButton.title(for: .normal)
-                ?? "None"
+                ?? "None",
         ]
     }
 }
 
 extension ObservationsContainerCell: ObservationsCollector {
-
     func collectObservations() -> [ObservationItem] {
         let snap = currentObservationSnapshot()
 
@@ -272,7 +270,7 @@ extension ObservationsContainerCell: ObservationsCollector {
             ObservationItem(
                 title: "Pain/Tenderness",
                 value: snap["pain"] as? String ?? "None"
-            )
+            ),
         ]
     }
 }

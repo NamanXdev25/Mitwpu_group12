@@ -1,4 +1,3 @@
-
 import UIKit
 
 enum ExercisePlanSection: Int, CaseIterable {
@@ -9,7 +8,7 @@ enum ExercisePlanSection: Int, CaseIterable {
     case radiation = 4
     case reconstruction = 5
     case recovery = 6
-    
+
     var title: String {
         switch self {
         case .recommended:
@@ -28,7 +27,7 @@ enum ExercisePlanSection: Int, CaseIterable {
             return "Recovery & Survivorship"
         }
     }
-    
+
     var categories: [ExercisePlanCategory] {
         switch self {
         case .recommended:
@@ -54,9 +53,8 @@ protocol ExercisePlanCategorySelectionDelegate: AnyObject {
 }
 
 class ExercisePlanCategoryDataSource: NSObject {
-    
     weak var delegate: ExercisePlanCategorySelectionDelegate?
-    
+
     private var sections: [ExercisePlanSection] {
         ExercisePlanSection.allCases.filter { section in
             if section == .recommended {
@@ -68,17 +66,17 @@ class ExercisePlanCategoryDataSource: NSObject {
 }
 
 // MARK: - UICollectionViewDataSource
+
 extension ExercisePlanCategoryDataSource: UICollectionViewDataSource {
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
+    func numberOfSections(in _: UICollectionView) -> Int {
         return sections.count
     }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+
+    func collectionView(_: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard section < sections.count else { return 0 }
         return sections[section].categories.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: "ExercisePlanCategoryCell",
@@ -86,16 +84,16 @@ extension ExercisePlanCategoryDataSource: UICollectionViewDataSource {
         ) as? ExercisePlanCategoryCell else {
             return UICollectionViewCell()
         }
-        
+
         let section = sections[indexPath.section]
         let category = section.categories[indexPath.item]
         cell.configure(with: category)
-        
+
         return cell
     }
-    
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        
+
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String,
+                        at indexPath: IndexPath) -> UICollectionReusableView {
         if kind == UICollectionView.elementKindSectionHeader {
             guard let headerView = collectionView.dequeueReusableSupplementaryView(
                 ofKind: kind,
@@ -104,23 +102,22 @@ extension ExercisePlanCategoryDataSource: UICollectionViewDataSource {
             ) as? ExercisePlanSectionHeader else {
                 return UICollectionReusableView()
             }
-            
+
             let section = sections[indexPath.section]
             headerView.configure(with: section.title)
             return headerView
         }
-        
+
         return UICollectionReusableView()
     }
 }
 
 // MARK: - UICollectionViewDelegate
+
 extension ExercisePlanCategoryDataSource: UICollectionViewDelegate {
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    func collectionView(_: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let section = sections[indexPath.section]
         let category = section.categories[indexPath.item]
         delegate?.didSelectCategory(category)
     }
 }
-

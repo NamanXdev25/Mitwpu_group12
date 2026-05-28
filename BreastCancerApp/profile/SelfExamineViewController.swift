@@ -1,8 +1,7 @@
 import UIKit
 
 final class SelfExamineViewController: UIViewController {
-
-    @IBOutlet private weak var collectionView: UICollectionView!
+    @IBOutlet private var collectionView: UICollectionView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -14,7 +13,7 @@ final class SelfExamineViewController: UIViewController {
             "GuidesCardCell",
             "SectionTitleCell",
             "SelfExamCardsContainerCell",
-            "ActionsContainerCell"
+            "ActionsContainerCell",
         ].forEach {
             collectionView.register(
                 UINib(nibName: $0, bundle: nil),
@@ -36,17 +35,17 @@ final class SelfExamineViewController: UIViewController {
         collectionView.setCollectionViewLayout(layout, animated: false)
     }
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    override func prepare(for _: UIStoryboardSegue, sender _: Any?) {
         // Segues preserved exactly as requested
     }
 }
 
 // MARK: - UICollectionViewDataSource
-extension SelfExamineViewController: UICollectionViewDataSource {
 
+extension SelfExamineViewController: UICollectionViewDataSource {
     func collectionView(
-        _ collectionView: UICollectionView,
-        numberOfItemsInSection section: Int
+        _: UICollectionView,
+        numberOfItemsInSection _: Int
     ) -> Int {
         3
     }
@@ -55,12 +54,10 @@ extension SelfExamineViewController: UICollectionViewDataSource {
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
-
         let identifiers = [
-            
             "SelfExamCardsContainerCell",
             "GuidesCardCell",
-            "ActionsContainerCell"
+            "ActionsContainerCell",
         ]
 
         let cell = collectionView.dequeueReusableCell(
@@ -69,11 +66,10 @@ extension SelfExamineViewController: UICollectionViewDataSource {
         )
 
         switch (indexPath.item, cell) {
-
-        case (1, let guidesCell as GuidesCardCell):
+        case let (1, guidesCell as GuidesCardCell):
             guidesCell.delegate = self
 
-        case (2, let actionsCell as ActionsContainerCell):
+        case let (2, actionsCell as ActionsContainerCell):
             actionsCell.delegate = self
 
         default:
@@ -85,14 +81,13 @@ extension SelfExamineViewController: UICollectionViewDataSource {
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
-extension SelfExamineViewController: UICollectionViewDelegateFlowLayout {
 
+extension SelfExamineViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(
         _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
+        layout _: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-
         let width = collectionView.frame.width - 32
 
         switch indexPath.item {
@@ -105,13 +100,12 @@ extension SelfExamineViewController: UICollectionViewDelegateFlowLayout {
         default:
             return CGSize(width: width, height: 60)
         }
-
     }
 }
 
 // MARK: - GuidesCardCellDelegate
-extension SelfExamineViewController: GuidesCardCellDelegate {
 
+extension SelfExamineViewController: GuidesCardCellDelegate {
     func guidesCardCellDidTapVideoGuide(_ cell: GuidesCardCell) {
         performSegue(withIdentifier: "ShowVideoGuide", sender: cell)
     }
@@ -122,8 +116,8 @@ extension SelfExamineViewController: GuidesCardCellDelegate {
 }
 
 // MARK: - ActionsContainerCellDelegate
-extension SelfExamineViewController: ActionsContainerCellDelegate {
 
+extension SelfExamineViewController: ActionsContainerCellDelegate {
     func didTapLogSelfExam(from cell: ActionsContainerCell) {
         performSegue(withIdentifier: "showObservations", sender: cell)
     }

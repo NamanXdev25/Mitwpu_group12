@@ -1,22 +1,26 @@
 import UIKit
 
 class NewExerciseViewController: UIViewController {
-
     // MARK: - IBOutlets
-    @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var bottomButtonContainer: UIView!
-    @IBOutlet weak var beginButton: UIButton!
-    @IBOutlet weak var defaultButton: UIButton!
+
+    @IBOutlet var collectionView: UICollectionView!
+    @IBOutlet var bottomButtonContainer: UIView!
+    @IBOutlet var beginButton: UIButton!
+    @IBOutlet var defaultButton: UIButton!
 
     // MARK: - Properties
+
+    // swiftlint:disable:next implicitly_unwrapped_optional
     var exercisePlan: NewExercisePlan!
     var exerciseCategoryID: Int?
     var onPlanStateChanged: ((Bool) -> Void)?
+    // swiftlint:disable:next implicitly_unwrapped_optional
     private var dataSource: NewExerciseDataSource!
 
     private var completedIndices: Set<Int> = []
 
     // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
@@ -27,6 +31,7 @@ class NewExerciseViewController: UIViewController {
     }
 
     // MARK: - Setup
+
     private func setupNavigationBar() {
         navigationController?.setNavigationBarHidden(false, animated: false)
         navigationItem.title = nil
@@ -36,8 +41,7 @@ class NewExerciseViewController: UIViewController {
     }
 
     private func setupData() {
-        if exercisePlan == nil {
-        }
+        if exercisePlan == nil {}
         loadCompletedIndices()
         dataSource = NewExerciseDataSource(exercisePlan: exercisePlan)
         dataSource.delegate = self
@@ -48,7 +52,8 @@ class NewExerciseViewController: UIViewController {
         collectionView.register(
             headerNib,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: "NewExerciseHeaderCell")
+            withReuseIdentifier: "NewExerciseHeaderCell"
+        )
 
         let noteNib = UINib(nibName: "NewExerciseNoteCell", bundle: nil)
         collectionView.register(noteNib, forCellWithReuseIdentifier: "NewExerciseNoteCell")
@@ -80,7 +85,7 @@ class NewExerciseViewController: UIViewController {
 
     private func nextExerciseIndex() -> Int {
         guard let plan = exercisePlan else { return 0 }
-        for i in 0..<plan.exercises.count {
+        for i in 0 ..< plan.exercises.count {
             if !completedIndices.contains(i) {
                 return i
             }
@@ -97,8 +102,8 @@ class NewExerciseViewController: UIViewController {
         ) as? ExercisePlayerViewController else { return }
 
         playerVC.exerciseModel = exercise
-        playerVC.exercisePlan  = exercisePlan
-        playerVC.currentIndex  = index
+        playerVC.exercisePlan = exercisePlan
+        playerVC.currentIndex = index
         playerVC.onExerciseMarkedDone = { [weak self] completedIndex in
             self?.markExerciseAsDone(at: completedIndex)
         }
@@ -159,14 +164,14 @@ class NewExerciseViewController: UIViewController {
             exercisePlan?.level ?? "exercise",
             exercise.title,
             exercise.category,
-            exercise.duration
+            exercise.duration,
         ]
         return parts.joined(separator: "|")
     }
 
     // MARK: - IBActions
 
-    @IBAction func beginButtonTapped(_ sender: UIButton) {
+    @IBAction func beginButtonTapped(_: UIButton) {
         guard let plan = exercisePlan, !plan.exercises.isEmpty else { return }
 
         let index = nextExerciseIndex()
@@ -174,7 +179,7 @@ class NewExerciseViewController: UIViewController {
         openExercisePlayer(for: exercise, at: index)
     }
 
-    @IBAction func defaultButtonTapped(_ sender: UIButton) {
+    @IBAction func defaultButtonTapped(_: UIButton) {
         guard let categoryID = exerciseCategoryID, categoryID > 0 else { return }
 
         let exerciseRepo: ExerciseRepository = RepositoryFactory.makeExerciseRepository()
@@ -194,21 +199,21 @@ class NewExerciseViewController: UIViewController {
         toastLabel.alpha = 1.0
         toastLabel.layer.cornerRadius = 18
         toastLabel.clipsToBounds = true
-        
+
         let maxWidth = view.frame.width - 60
         let expectedSize = toastLabel.sizeThatFits(CGSize(width: maxWidth, height: .greatestFiniteMagnitude))
         let width = min(expectedSize.width + 48, maxWidth)
         let height = max(expectedSize.height + 16, 36)
-        
+
         toastLabel.frame = CGRect(
             x: view.frame.width / 2 - width / 2,
             y: view.frame.height - bottomButtonContainer.frame.height - 40 - height,
             width: width,
             height: height
         )
-        
+
         view.addSubview(toastLabel)
-        
+
         UIView.animate(withDuration: 0.3, delay: 1.5, options: .curveEaseOut, animations: {
             toastLabel.alpha = 0.0
         }, completion: { _ in
@@ -218,8 +223,8 @@ class NewExerciseViewController: UIViewController {
 }
 
 // MARK: - DetailExerciseCellDelegate
-extension NewExerciseViewController: DetailExerciseCellDelegate {
 
+extension NewExerciseViewController: DetailExerciseCellDelegate {
     func didTapChevron(on cell: DetailExerciseCell) {
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
         guard indexPath.section == NewExerciseSectionType.exercises.rawValue else { return }

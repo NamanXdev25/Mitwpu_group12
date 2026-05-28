@@ -1,8 +1,7 @@
 import UIKit
 
 final class SignUpViewController: UIViewController {
-
-    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet var collectionView: UICollectionView!
     private let authService = SupabaseAuthService.shared
 
     enum SignUpItem {
@@ -16,7 +15,7 @@ final class SignUpViewController: UIViewController {
         .header,
         .form,
         .or,
-        .social
+        .social,
     ]
 
     override func viewDidLoad() {
@@ -24,7 +23,7 @@ final class SignUpViewController: UIViewController {
         view.backgroundColor = .systemBackground
         setupCollectionView()
         registerCells()
-        
+
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
@@ -76,17 +75,18 @@ final class SignUpViewController: UIViewController {
             forCellWithReuseIdentifier: "SocialSignupCollectionViewCell"
         )
     }
-    
+
     // MARK: - Navigation
+
     private func navigateToProfileSetup() {
         let storyboard = UIStoryboard(name: "Login", bundle: nil)
-        
+
         guard let profileSetupVC = storyboard.instantiateViewController(
             withIdentifier: "ProfileSetupViewController"
         ) as? ProfileSetupViewController else {
             return
         }
-        
+
         profileSetupVC.modalPresentationStyle = .fullScreen
         profileSetupVC.modalTransitionStyle = .crossDissolve
         present(profileSetupVC, animated: true)
@@ -94,18 +94,20 @@ final class SignUpViewController: UIViewController {
 }
 
 // MARK: - DataSource
-extension SignUpViewController: UICollectionViewDataSource {
 
-    func collectionView(_ collectionView: UICollectionView,
-                        numberOfItemsInSection section: Int) -> Int {
+extension SignUpViewController: UICollectionViewDataSource {
+    func collectionView(
+        _: UICollectionView,
+        numberOfItemsInSection _: Int
+    ) -> Int {
         items.count
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
         switch items[indexPath.item] {
-
         case .header:
             return collectionView.dequeueReusableCell(
                 withReuseIdentifier: "SignUpHeaderCell",
@@ -113,11 +115,13 @@ extension SignUpViewController: UICollectionViewDataSource {
             )
 
         case .form:
-            let cell = collectionView.dequeueReusableCell(
+            guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "SignUpFormCell",
                 for: indexPath
-            ) as! SignUpFormCell
-            
+            ) as? SignUpFormCell else {
+                fatalError("Expected SignUpFormCell for reuse identifier 'SignUpFormCell' at \(indexPath)")
+            }
+
             cell.delegate = self
             return cell
 
@@ -128,30 +132,33 @@ extension SignUpViewController: UICollectionViewDataSource {
             )
 
         case .social:
-            let cell = collectionView.dequeueReusableCell(
+            guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "SocialSignupCollectionViewCell",
                 for: indexPath
-            ) as! SocialSignupCollectionViewCell
-            
+            ) as? SocialSignupCollectionViewCell else {
+                fatalError("Expected SocialSignupCollectionViewCell for reuse identifier 'SocialSignupCollectionViewCell' at \(indexPath)")
+            }
+
             cell.onSignInTapped = { [weak self] in
                 self?.navigateToSignIn()
             }
             cell.onGoogleTapped = { [weak self] in
                 self?.signUpWithGoogle()
             }
-            
+
             return cell
         }
     }
 }
 
 // MARK: - Layout
+
 extension SignUpViewController: UICollectionViewDelegateFlowLayout {
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout _: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
         let width = collectionView.bounds.width
 
         switch items[indexPath.item] {
@@ -171,8 +178,7 @@ extension SignUpViewController: UICollectionViewDelegateFlowLayout {
 }
 
 extension SignUpViewController: SignUpFormCellDelegate {
-    
-    func signUpFormCellDidTapSignUp(_ cell: SignUpFormCell, email: String, password: String, reenterPassword: String, agreedToTerms: Bool) {
+    func signUpFormCellDidTapSignUp(_: SignUpFormCell, email: String, password: String, reenterPassword _: String, agreedToTerms: Bool) {
         guard agreedToTerms else {
             showAuthAlert(message: "Please agree to terms and conditions.")
             return
@@ -200,9 +206,9 @@ extension SignUpViewController: SignUpFormCellDelegate {
             DispatchQueue.main.async {
                 guard let self else { return }
                 switch result {
-                case .failure(let error):
+                case let .failure(error):
                     self.showAuthAlert(message: error.localizedDescription)
-                case .success(let user):
+                case let .success(user):
                     let firstName = user.email.split(separator: "@").first.map(String.init)?.capitalized ?? "User"
                     let newProfile = ProfileUserProfile(
                         firstName: firstName,
@@ -238,10 +244,10 @@ extension SignUpViewController: SignUpFormCellDelegate {
             DispatchQueue.main.async {
                 guard let self else { return }
                 switch result {
-                case .failure(let error):
+                case let .failure(error):
                     if case .oauthCancelled = error { return }
                     self.showAuthAlert(message: error.localizedDescription)
-                case .success(let user):
+                case let .success(user):
                     let firstName = user.email.split(separator: "@").first.map(String.init)?.capitalized ?? "User"
                     let profile = ProfileUserProfile(
                         firstName: firstName,
@@ -272,7 +278,7 @@ extension SignUpViewController: SignUpFormCellDelegate {
     }
 
     private func navigateToHome() {
-        let storyboard = UIStoryboard(name: "TabBarMain", bundle: nil)
+        let storyboard = UIStoryboard(name: "TabbarMain", bundle: nil)
         guard let tabBarController = storyboard.instantiateInitialViewController() as? UITabBarController else {
             showAuthAlert(message: "Could not open home.")
             return

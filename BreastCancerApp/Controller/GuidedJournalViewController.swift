@@ -1,19 +1,17 @@
-
 import UIKit
 
 class GuidedJournalViewController: UIViewController {
-    
-    @IBOutlet weak var categoryLabel: UILabel!
-    @IBOutlet weak var questionLabel: UILabel!
-    @IBOutlet weak var textView: UITextView!
-    
+    @IBOutlet var categoryLabel: UILabel!
+    @IBOutlet var questionLabel: UILabel!
+    @IBOutlet var textView: UITextView!
+
     var existingEntry: JournalEntry?
     private let placeholder = "Start Typing..."
     var categoryText: String = ""
     var questionText: String = ""
-    
+
     let datasource = GuidedReflectionDataSource.shared
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -21,26 +19,26 @@ class GuidedJournalViewController: UIViewController {
         textView.delegate = self
         categoryLabel.text = categoryText
         questionLabel.text = questionText
-        
+
         if let question = GuidedReflectionDataSource.shared.getTodaysQuestion() {
             updateUI(with: question)
         }
-        
+
         if let entry = existingEntry {
             navigationItem.title = entry.formattedDateTitle
             categoryLabel.text = entry.category?.uppercased()
             questionLabel.text = entry.question
             textView.text = entry.body
         }
-        
+
         setupPlaceholder()
     }
-    
+
     func updateUI(with question: GuidedReflectionQuestion) {
         questionLabel.text = question.question
         categoryLabel.text = formattedCategoryTags(for: question)
     }
-    
+
     func formattedCategoryTags(for question: GuidedReflectionQuestion) -> String {
         let categoryText = question.category.rawValue.replacingOccurrences(of: "_", with: " ").uppercased()
         guard let tags = question.tags, !tags.isEmpty else {
@@ -49,8 +47,8 @@ class GuidedJournalViewController: UIViewController {
         let tagsText = tags.map { $0.uppercased() }.joined(separator: ", ")
         return "\(categoryText) • \(tagsText)"
     }
-    
-    @IBAction func submitTapped(_ sender: UIBarButtonItem) {
+
+    @IBAction func submitTapped(_: UIBarButtonItem) {
         let body = textView.text.trimmingCharacters(in: .whitespacesAndNewlines)
         if let old = existingEntry {
             let updated = JournalEntry(
@@ -63,7 +61,7 @@ class GuidedJournalViewController: UIViewController {
                 category: old.category
             )
             JournalStore.shared.update(updated)
-            
+
         } else {
             let newEntry = JournalEntry(
                 title: questionLabel.text ?? "Guided Reflection",
@@ -81,13 +79,10 @@ class GuidedJournalViewController: UIViewController {
             )
         }
         navigationController?.popViewController(animated: true)
-
-
     }
 }
 
 extension GuidedJournalViewController: UITextViewDelegate {
-
     func setupPlaceholder() {
         guard existingEntry == nil else { return }
         textView.text = placeholder
@@ -95,23 +90,24 @@ extension GuidedJournalViewController: UITextViewDelegate {
     }
 
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if existingEntry == nil && textView.text == placeholder {
+        if existingEntry == nil, textView.text == placeholder {
             textView.text = ""
             textView.textColor = .label
         }
     }
 
     func textViewDidEndEditing(_ textView: UITextView) {
-        if existingEntry == nil &&
-            textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-
+        if existingEntry == nil,
+           textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             setupPlaceholder()
         }
     }
 
-    func textView(_ textView: UITextView,
-                  shouldChangeTextIn range: NSRange,
-                  replacementText text: String) -> Bool {
+    func textView(
+        _ textView: UITextView,
+        shouldChangeTextIn range: NSRange,
+        replacementText text: String
+    ) -> Bool {
         let maxBodyLength = 1500
         let current = textView.text ?? ""
         let newLength = current.count + text.count - range.length

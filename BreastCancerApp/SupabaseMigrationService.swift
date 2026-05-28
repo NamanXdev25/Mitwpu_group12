@@ -141,7 +141,7 @@ final class SupabaseMigrationService {
             SeedSignature(symptomId: "appetite_loss", severity: 4, dayOffset: 26),
             SeedSignature(symptomId: "fatigue", severity: 2, dayOffset: 28),
             SeedSignature(symptomId: "headache", severity: 3, dayOffset: 30),
-            SeedSignature(symptomId: "pain", severity: 2, dayOffset: 30)
+            SeedSignature(symptomId: "pain", severity: 2, dayOffset: 30),
         ]
 
         var removalIndices = Set<Int>()

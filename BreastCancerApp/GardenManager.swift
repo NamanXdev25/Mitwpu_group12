@@ -1,4 +1,3 @@
-
 import Foundation
 
 // MARK: - Notification names
@@ -236,9 +235,9 @@ final class GardenManager {
 
     private func loadBases() {
         allBases = [
-            GardenBase(id: "classic",  name: "Classic Garden",  imageName: "garden_base",
+            GardenBase(id: "classic", name: "Classic Garden", imageName: "garden_base",
                        unlockLevel: 1, isUnlocked: true),
-            GardenBase(id: "zen",      name: "Zen Garden",      imageName: "garden_base_zen",
+            GardenBase(id: "zen", name: "Zen Garden", imageName: "garden_base_zen",
                        unlockLevel: 2, isUnlocked: false),
             GardenBase(id: "tropical", name: "Tropical Garden", imageName: "garden_base_tropical",
                        unlockLevel: 3, isUnlocked: false),
@@ -268,7 +267,7 @@ final class GardenManager {
     private func loadCatalog() {
         let payload      = loadPayloadFromJSON() ?? Self.fallbackPayload
         yourItemsCatalog = payload.yourItems.enumerated().map { makeYourItem(from: $1, index: $0) }
-        let nature       = payload.nature.enumerated().map   { makeShopItem(from: $1, category: .nature,   index: $0) }
+        let nature       = payload.nature.enumerated().map { makeShopItem(from: $1, category: .nature, index: $0) }
         let wellness     = payload.wellness.enumerated().map { makeShopItem(from: $1, category: .wellness, index: $0) }
         shopCatalog      = nature + wellness
         allItemsOrdered  = yourItemsCatalog + shopCatalog
@@ -292,8 +291,8 @@ final class GardenManager {
 
     private func persistState() {
         let d = UserDefaults.standard
-        d.set(coins,                    forKey: StorageKeys.coins)
-        d.set(Array(unlockedItemIds),   forKey: StorageKeys.unlockedIds)
+        d.set(coins, forKey: StorageKeys.coins)
+        d.set(Array(unlockedItemIds), forKey: StorageKeys.unlockedIds)
         persistBases()
         persistLevelProgress()
         syncSnapshotToCloudIfNeeded()
@@ -544,13 +543,13 @@ final class GardenManager {
         nature: [
             ShopItemDTO(id: "nature_hydrangea", name: "Hydrangea", imageName: "hydrangea",
                         price: 3000, baseId: "classic"),
-            ShopItemDTO(id: "nature_tulips",    name: "Tulips",    imageName: "tulips",
+            ShopItemDTO(id: "nature_tulips", name: "Tulips", imageName: "tulips",
                         price: 2300, baseId: "classic")
         ],
         wellness: [
             ShopItemDTO(id: "wellness_bird_bath", name: "Bird Bath", imageName: "bird_bath",
                         price: 1500, baseId: "classic"),
-            ShopItemDTO(id: "wellness_fountain",  name: "Fountain",  imageName: "fountain",
+            ShopItemDTO(id: "wellness_fountain", name: "Fountain", imageName: "fountain",
                         price: 3000, baseId: "classic")
         ]
     )
@@ -560,8 +559,8 @@ final class GardenManager {
 
 private struct GardenCatalogPayload: Decodable {
     let yourItems: [UnlockedItemDTO]
-    let nature:    [ShopItemDTO]
-    let wellness:  [ShopItemDTO]
+    let nature: [ShopItemDTO]
+    let wellness: [ShopItemDTO]
 
     enum CodingKeys: String, CodingKey {
         case yourItemsSnake = "your_items"

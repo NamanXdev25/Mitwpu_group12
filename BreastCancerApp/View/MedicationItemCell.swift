@@ -1,12 +1,11 @@
 import UIKit
 
 class MedicationItemCell: UICollectionViewCell {
+    @IBOutlet var checkButton: UIButton!
+    @IBOutlet var pillNameLabel: UILabel!
+    @IBOutlet var subtitleLabel: UILabel!
+    @IBOutlet var timeLabel: UILabel!
 
-    @IBOutlet weak var checkButton: UIButton!
-    @IBOutlet weak var pillNameLabel: UILabel!
-    @IBOutlet weak var subtitleLabel: UILabel!
-    @IBOutlet weak var timeLabel: UILabel!
-    
     var onCircleTapped: (() -> Void)?
 
     override func awakeFromNib() {
@@ -16,13 +15,13 @@ class MedicationItemCell: UICollectionViewCell {
         checkButton.layer.cornerRadius = checkButton.frame.width / 2
         checkButton.clipsToBounds = true
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
         checkButton.layer.cornerRadius = checkButton.frame.width / 2
     }
 
-    @IBAction func checkButtonTapped(_ sender: UIButton) {
+    @IBAction func checkButtonTapped(_: UIButton) {
         onCircleTapped?()
     }
 
@@ -32,7 +31,7 @@ class MedicationItemCell: UICollectionViewCell {
         timeLabel.text = med.time
 
         let checkColor = UIColor(named: "TabBarcolour") ?? .systemBlue
-        
+
         if med.isTaken {
             checkButton.backgroundColor = .white
             checkButton.layer.borderWidth = 0

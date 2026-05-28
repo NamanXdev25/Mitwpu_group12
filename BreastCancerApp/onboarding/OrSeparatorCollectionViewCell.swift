@@ -1,8 +1,6 @@
-
 import UIKit
 
 class OrSeparatorCollectionViewCell: UICollectionViewCell {
-
     override func awakeFromNib() {
         super.awakeFromNib()
         contentView.isUserInteractionEnabled = true
@@ -12,4 +10,3 @@ class OrSeparatorCollectionViewCell: UICollectionViewCell {
         contentView.backgroundColor = .white
     }
 }
-

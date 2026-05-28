@@ -1,12 +1,10 @@
-
 import UIKit
 
 class SocialLoginCollectionViewCell: UICollectionViewCell {
+    @IBOutlet var googleContainerView: UIView!
+    @IBOutlet var appleContainerView: UIView!
+    @IBOutlet var signUpButton: UIButton!
 
-    @IBOutlet weak var googleContainerView: UIView!
-    @IBOutlet weak var appleContainerView: UIView!
-    @IBOutlet weak var signUpButton: UIButton!
-    
     var onSignUpTapped: (() -> Void)?
     var onGoogleTapped: (() -> Void)?
     var onAppleTapped: (() -> Void)?
@@ -18,7 +16,6 @@ class SocialLoginCollectionViewCell: UICollectionViewCell {
     }
 
     private func setupUI() {
-
         contentView.isUserInteractionEnabled = true
         isUserInteractionEnabled = true
         stylePillView(googleContainerView)
@@ -55,7 +52,7 @@ class SocialLoginCollectionViewCell: UICollectionViewCell {
         onAppleTapped?()
     }
 
-    @IBAction func didTapSignUp(_ sender: UIButton) {
+    @IBAction func didTapSignUp(_: UIButton) {
         onSignUpTapped?()
     }
 }

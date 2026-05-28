@@ -1,11 +1,9 @@
-
 import UIKit
 
 class MenuOptionCell: UICollectionViewCell {
-
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var arrowImageView: UIImageView!
-    @IBOutlet weak var containerView: UIView!
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var arrowImageView: UIImageView!
+    @IBOutlet var containerView: UIView!
 
     override func awakeFromNib() {
         super.awakeFromNib()

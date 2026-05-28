@@ -1,46 +1,46 @@
-
 import UIKit
 
 class AllJournalsViewController: UIViewController {
+    @IBOutlet var collectionView: UICollectionView!
 
-    @IBOutlet weak var collectionView: UICollectionView!
-    
     enum Section: Int, CaseIterable {
         case all
     }
-    
+
+    // swiftlint:disable:next implicitly_unwrapped_optional
     private var dataSource: JournalDataSource!
+    // swiftlint:disable:next implicitly_unwrapped_optional
     private var layout: UICollectionViewLayout!
     var entries: [JournalEntry] {
         JournalStore.shared.entries
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         navigationItem.title = "All Journals"
-        
+
         configureCollectionView()
         configureDataSource()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureDataSource()
     }
-    
+
     private func refreshList() {
         dataSource.entries = JournalStore.shared.entries
         dataSource.applySnapshot()
     }
-  
+
     private func configureDataSource() {
         dataSource = JournalDataSource(
             collectionView: collectionView,
             mode: .allJournals,
             entries: JournalStore.shared.entries
         )
-        
+
         dataSource.didTapEdit = { [weak self] entry in
             self?.openEntry(entry)
         }
@@ -51,9 +51,8 @@ class AllJournalsViewController: UIViewController {
         }
         dataSource.applySnapshot()
     }
-    
+
     private func configureCollectionView() {
-        
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .estimated(120)
@@ -78,7 +77,7 @@ class AllJournalsViewController: UIViewController {
             UICollectionViewCompositionalLayout(section: section)
 
         collectionView.delegate = self
-        
+
         collectionView.register(
             UINib(nibName: "RecentJournalCell", bundle: nil),
             forCellWithReuseIdentifier: RecentJournalCell.reuseIdentifier
@@ -92,31 +91,33 @@ class AllJournalsViewController: UIViewController {
 }
 
 extension AllJournalsViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    func collectionView(_: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let entry = dataSource.item(for: indexPath) else { return }
         openEntry(entry)
     }
-    
+
     private func openEntry(_ entry: JournalEntry) {
         let storyboard = UIStoryboard(name: "JournalMain", bundle: nil)
         switch entry.type {
-            
         case .regular:
-            let vc = storyboard.instantiateViewController(
+            guard let vc = storyboard.instantiateViewController(
                 withIdentifier: "BlankJournalViewController"
-            ) as! BlankJournalViewController
+            ) as? BlankJournalViewController else {
+                fatalError("Expected BlankJournalViewController for storyboard identifier 'BlankJournalViewController'")
+            }
 
             vc.existingEntry = entry
             navigationController?.pushViewController(vc, animated: true)
 
         case .guided:
-            let vc = storyboard.instantiateViewController(
+            guard let vc = storyboard.instantiateViewController(
                 withIdentifier: "GuidedJournalViewController"
-            ) as! GuidedJournalViewController
+            ) as? GuidedJournalViewController else {
+                fatalError("Expected GuidedJournalViewController for storyboard identifier 'GuidedJournalViewController'")
+            }
 
             vc.existingEntry = entry
             navigationController?.pushViewController(vc, animated: true)
-            
         }
     }
 }

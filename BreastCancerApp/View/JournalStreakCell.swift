@@ -1,22 +1,15 @@
-
 import UIKit
 
 class JournalStreakCell: UICollectionViewCell {
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var countLabel: UILabel!
+    @IBOutlet var daysLabel: UILabel!
+    @IBOutlet var flameImageView: UIImageView!
+    @IBOutlet var containerView: UIView!
+    @IBOutlet var inactiveLabel: UILabel!
 
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var countLabel: UILabel!
-    @IBOutlet weak var daysLabel: UILabel!
-    @IBOutlet weak var flameImageView: UIImageView!
-    @IBOutlet weak var containerView: UIView!
-    @IBOutlet weak var inactiveLabel: UILabel!
-    
-    
     static let reuseIdentifier = "JournalStreakCell"
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-    
+
     func configure(streak: Int) {
         if streak == 0 {
             titleLabel.isHidden = true
@@ -33,6 +26,4 @@ class JournalStreakCell: UICollectionViewCell {
             inactiveLabel.isHidden = true
         }
     }
-
-
 }

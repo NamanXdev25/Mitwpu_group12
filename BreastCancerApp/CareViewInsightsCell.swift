@@ -5,12 +5,11 @@ protocol CareViewInsightsCellDelegate: AnyObject {
 }
 
 class CareViewInsightsCell: UICollectionViewCell {
+    @IBOutlet var InsightsContainer: UIView!
+    @IBOutlet var InsightCellImage: UIImageView!
+    @IBOutlet var InsightCellChevronButton: UIButton!
+    @IBOutlet var InsightCellLabel: UILabel!
 
-    @IBOutlet weak var InsightsContainer: UIView!
-    @IBOutlet weak var InsightCellImage: UIImageView!
-    @IBOutlet weak var InsightCellChevronButton: UIButton!
-    @IBOutlet weak var InsightCellLabel: UILabel!
-    
     weak var delegate: CareViewInsightsCellDelegate?
 
     override func awakeFromNib() {
@@ -22,5 +21,4 @@ class CareViewInsightsCell: UICollectionViewCell {
     @objc private func handleTap() {
         delegate?.careViewInsightsCellDidTap(self)
     }
-    
 }

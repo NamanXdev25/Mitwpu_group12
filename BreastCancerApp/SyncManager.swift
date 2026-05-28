@@ -1,7 +1,6 @@
 import Foundation
 
 final class SyncManager {
-
     static let shared = SyncManager()
 
     // MARK: - Dirty tracking
@@ -38,7 +37,7 @@ final class SyncManager {
         guard !isPulling else { return }
         isPulling = true
 
-        let jitter = Double.random(in: 0...20)
+        let jitter = Double.random(in: 0 ... 20)
 
         DispatchQueue.global(qos: .utility).asyncAfter(deadline: .now() + jitter) { [weak self] in
             self?.pullAll()
@@ -110,16 +109,16 @@ final class SyncManager {
 
         for domain in domainsToSync {
             switch domain {
-            case .appointments:      repos.appointments.pushToCloud()
+            case .appointments: repos.appointments.pushToCloud()
             case .medicationHistory: repos.medication.pushToCloud()
-            case .memories:          repos.memory.pushToCloud()
-            case .hydration:         repos.hydration.pushToCloud()
-            case .symptoms:          repos.symptoms.pushToCloud()
-            case .journal:           repos.journal.pushToCloud()
-            case .breathing:         repos.breathing.pushToCloud()
-            case .profile:           repos.profile.pushToCloud()
-            case .exercise:          repos.exercise.pushToCloud()
-            case .journey:           repos.journey.pushToCloud()
+            case .memories: repos.memory.pushToCloud()
+            case .hydration: repos.hydration.pushToCloud()
+            case .symptoms: repos.symptoms.pushToCloud()
+            case .journal: repos.journal.pushToCloud()
+            case .breathing: repos.breathing.pushToCloud()
+            case .profile: repos.profile.pushToCloud()
+            case .exercise: repos.exercise.pushToCloud()
+            case .journey: repos.journey.pushToCloud()
             }
         }
     }
@@ -156,18 +155,29 @@ final class SyncManager {
     }
 
     private func resolveRepositories() -> Repos {
-    
-        Repos(
-            appointments: RepositoryFactory.makeAppointmentRepository() as! SupabaseAppointmentRepository,
-            medication: RepositoryFactory.makeMedicationHistoryRepository() as! SupabaseMedicationHistoryRepository,
-            memory: RepositoryFactory.makeMemoryRepository() as! SupabaseMemoryRepository,
-            hydration: RepositoryFactory.makeHydrationRepository() as! SupabaseHydrationRepository,
-            symptoms: RepositoryFactory.makeSymptomRepository() as! SupabaseSymptomRepository,
-            journal: RepositoryFactory.makeJournalRepository() as! SupabaseJournalRepository,
-            breathing: RepositoryFactory.makeBreathingRepository() as! SupabaseBreathingRepository,
-            profile: RepositoryFactory.makeProfileRepository() as! SupabaseProfileRepository,
-            exercise: RepositoryFactory.makeExerciseRepository() as! SupabaseExerciseRepository,
-            journey: RepositoryFactory.makeJourneyRepository() as! SupabaseJourneyRepository
+        guard let appointments = RepositoryFactory.makeAppointmentRepository() as? SupabaseAppointmentRepository,
+              let medication = RepositoryFactory.makeMedicationHistoryRepository() as? SupabaseMedicationHistoryRepository,
+              let memory = RepositoryFactory.makeMemoryRepository() as? SupabaseMemoryRepository,
+              let hydration = RepositoryFactory.makeHydrationRepository() as? SupabaseHydrationRepository,
+              let symptoms = RepositoryFactory.makeSymptomRepository() as? SupabaseSymptomRepository,
+              let journal = RepositoryFactory.makeJournalRepository() as? SupabaseJournalRepository,
+              let breathing = RepositoryFactory.makeBreathingRepository() as? SupabaseBreathingRepository,
+              let profile = RepositoryFactory.makeProfileRepository() as? SupabaseProfileRepository,
+              let exercise = RepositoryFactory.makeExerciseRepository() as? SupabaseExerciseRepository,
+              let journey = RepositoryFactory.makeJourneyRepository() as? SupabaseJourneyRepository else {
+            fatalError("Failed to cast repositories to Supabase implementations in SyncManager")
+        }
+        return Repos(
+            appointments: appointments,
+            medication: medication,
+            memory: memory,
+            hydration: hydration,
+            symptoms: symptoms,
+            journal: journal,
+            breathing: breathing,
+            profile: profile,
+            exercise: exercise,
+            journey: journey
         )
     }
 }

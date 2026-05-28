@@ -1,23 +1,19 @@
-
 import UIKit
 
 class OnboardingSelectionPickerCell: UICollectionViewCell {
-
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var placeholderLabel: UILabel!
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var placeholderLabel: UILabel!
 
     var onOptionSelected: ((String) -> Void)?
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-
-    func configure(title: String, fieldName: String, options: [String], selectedValue: String?) {
-        titleLabel.text       = title
+    func configure(title: String, fieldName _: String, options: [String], selectedValue: String?) {
+        titleLabel.text = title
 
         let actions = options.map { option in
-            UIAction(title: option,
-                     state: option == selectedValue ? .on : .off) { [weak self] _ in
+            UIAction(
+                title: option,
+                state: option == selectedValue ? .on : .off
+            ) { [weak self] _ in
                 self?.onOptionSelected?(option)
             }
         }

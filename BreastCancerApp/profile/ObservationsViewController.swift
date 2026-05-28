@@ -5,9 +5,8 @@ protocol ObservationsCollector {
 }
 
 final class ObservationsViewController: UIViewController {
-
-    @IBOutlet private weak var collectionView: UICollectionView!
-    @IBOutlet private weak var doneBarButton: UIBarButtonItem!
+    @IBOutlet private var collectionView: UICollectionView!
+    @IBOutlet private var doneBarButton: UIBarButtonItem!
 
     private var shouldShowDisclaimer = false
 
@@ -31,7 +30,7 @@ final class ObservationsViewController: UIViewController {
         collectionView.delegate = self
     }
 
-    @IBAction private func doneBarButtonTapped(_ sender: UIBarButtonItem) {
+    @IBAction private func doneBarButtonTapped(_: UIBarButtonItem) {
         doneTapped()
     }
 
@@ -48,7 +47,7 @@ final class ObservationsViewController: UIViewController {
                 ObservationItem(title: "Size/Shape changes", value: "No"),
                 ObservationItem(title: "Skin changes", value: "None"),
                 ObservationItem(title: "Nipple changes", value: "None"),
-                ObservationItem(title: "Pain/Tenderness", value: "None")
+                ObservationItem(title: "Pain/Tenderness", value: "None"),
             ]
         }
 
@@ -63,10 +62,9 @@ final class ObservationsViewController: UIViewController {
 }
 
 extension ObservationsViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-
     func collectionView(
-        _ collectionView: UICollectionView,
-        numberOfItemsInSection section: Int
+        _: UICollectionView,
+        numberOfItemsInSection _: Int
     ) -> Int {
         shouldShowDisclaimer ? 2 : 1
     }
@@ -75,12 +73,13 @@ extension ObservationsViewController: UICollectionViewDataSource, UICollectionVi
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
-
         if indexPath.item == 0 {
-            let cell = collectionView.dequeueReusableCell(
+            guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "ObservationsContainerCell",
                 for: indexPath
-            ) as! ObservationsContainerCell
+            ) as? ObservationsContainerCell else {
+                fatalError("Expected ObservationsContainerCell for reuse identifier 'ObservationsContainerCell' at \(indexPath)")
+            }
 
             cell.onSelectionChanged = { [weak self] shouldShow in
                 guard let self else { return }
@@ -105,8 +104,9 @@ extension ObservationsViewController: UICollectionViewDataSource, UICollectionVi
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-
-        let layout = collectionViewLayout as! UICollectionViewFlowLayout
+        guard let layout = collectionViewLayout as? UICollectionViewFlowLayout else {
+            return .zero
+        }
         let horizontalInsets = layout.sectionInset.left + layout.sectionInset.right
         let width = collectionView.bounds.width - horizontalInsets
 

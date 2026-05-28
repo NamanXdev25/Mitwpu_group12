@@ -7,30 +7,29 @@ enum NewExerciseSectionType: Int, CaseIterable {
 }
 
 class NewExerciseDataSource: NSObject {
-    
     var exercisePlan: NewExercisePlan
     weak var delegate: DetailExerciseCellDelegate?
-    
+
     init(exercisePlan: NewExercisePlan) {
         self.exercisePlan = exercisePlan
         super.init()
     }
-    
+
     private func hasNote() -> Bool {
         return exercisePlan.note != nil
     }
 }
 
 // MARK: - UICollectionViewDataSource
+
 extension NewExerciseDataSource: UICollectionViewDataSource {
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
+    func numberOfSections(in _: UICollectionView) -> Int {
         return 3
     }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+
+    func collectionView(_: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard let sectionType = NewExerciseSectionType(rawValue: section) else { return 0 }
-        
+
         switch sectionType {
         case .header:
             return 0
@@ -40,16 +39,16 @@ extension NewExerciseDataSource: UICollectionViewDataSource {
             return exercisePlan.exercises.count
         }
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let sectionType = NewExerciseSectionType(rawValue: indexPath.section) else {
             return UICollectionViewCell()
         }
-        
+
         switch sectionType {
         case .header:
             return UICollectionViewCell()
-            
+
         case .note:
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "NewExerciseNoteCell",
@@ -57,12 +56,12 @@ extension NewExerciseDataSource: UICollectionViewDataSource {
             ) as? NewExerciseNoteCell else {
                 return UICollectionViewCell()
             }
-            
+
             if let note = exercisePlan.note {
                 cell.configure(with: note)
             }
             return cell
-            
+
         case .exercises:
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "DetailExerciseCell",
@@ -70,7 +69,7 @@ extension NewExerciseDataSource: UICollectionViewDataSource {
             ) as? DetailExerciseCell else {
                 return UICollectionViewCell()
             }
-            
+
             let exercise = exercisePlan.exercises[indexPath.item]
 
             let isCompleted = (delegate as? NewExerciseViewController)?
@@ -87,9 +86,9 @@ extension NewExerciseDataSource: UICollectionViewDataSource {
             return cell
         }
     }
-    
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        
+
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String,
+                        at indexPath: IndexPath) -> UICollectionReusableView {
         if kind == UICollectionView.elementKindSectionHeader && indexPath.section == 0 {
             guard let headerView = collectionView.dequeueReusableSupplementaryView(
                 ofKind: kind,
@@ -98,18 +97,18 @@ extension NewExerciseDataSource: UICollectionViewDataSource {
             ) as? NewExerciseHeaderCell else {
                 return UICollectionReusableView()
             }
-            
+
             headerView.configure(with: exercisePlan)
             return headerView
         }
-        
+
         return UICollectionReusableView()
     }
 }
 
 // MARK: - UICollectionViewDelegate
-extension NewExerciseDataSource: UICollectionViewDelegate {
 
+extension NewExerciseDataSource: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard indexPath.section == NewExerciseSectionType.exercises.rawValue else { return }
         guard let cell = collectionView.cellForItem(at: indexPath) as? DetailExerciseCell else { return }
@@ -118,9 +117,9 @@ extension NewExerciseDataSource: UICollectionViewDelegate {
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
+
 extension NewExerciseDataSource: UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout _: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         if section == 0 {
             let titleFont = UIFont.boldSystemFont(ofSize: 28)
             let maxWidth = collectionView.bounds.width - 40
@@ -135,22 +134,23 @@ extension NewExerciseDataSource: UICollectionViewDelegateFlowLayout {
         }
         return .zero
     }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+
+    func collectionView(_ collectionView: UICollectionView, layout _: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = collectionView.bounds.width
-        
+
         guard let sectionType = NewExerciseSectionType(rawValue: indexPath.section) else {
             return .zero
         }
-        
+
         switch sectionType {
         case .header:
             return .zero
+
         case .note:
             let noteText = exercisePlan.note ?? ""
             let padding: CGFloat = 32 + 24
             let maxWidth = width - 32 - 32
-            
+
             let font = UIFont.systemFont(ofSize: 17)
             let boundingRect = noteText.boundingRect(
                 with: CGSize(width: maxWidth, height: .greatestFiniteMagnitude),
@@ -158,24 +158,24 @@ extension NewExerciseDataSource: UICollectionViewDelegateFlowLayout {
                 attributes: [.font: font],
                 context: nil
             )
-            
+
             let height = ceil(boundingRect.height) + padding
             return CGSize(width: width, height: max(height, 60))
-            
+
         case .exercises:
             return CGSize(width: width - 32, height: 80)
         }
     }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+
+    func collectionView(_: UICollectionView, layout _: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return section == NewExerciseSectionType.exercises.rawValue ? 12 : 0
     }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+
+    func collectionView(_: UICollectionView, layout _: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         guard let sectionType = NewExerciseSectionType(rawValue: section) else {
             return .zero
         }
-        
+
         switch sectionType {
         case .header:
             return .zero

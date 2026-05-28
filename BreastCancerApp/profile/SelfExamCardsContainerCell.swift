@@ -1,11 +1,10 @@
 import UIKit
 
 final class SelfExamCardsContainerCell: UICollectionViewCell,
-                                        UICollectionViewDataSource,
-                                        UICollectionViewDelegate,
-                                        UICollectionViewDelegateFlowLayout {
-
-    @IBOutlet private weak var innerCollectionView: UICollectionView!
+    UICollectionViewDataSource,
+    UICollectionViewDelegate,
+    UICollectionViewDelegateFlowLayout {
+    @IBOutlet private var innerCollectionView: UICollectionView!
 
     private let steps: [SelfExamStep] = [
         SelfExamStep(
@@ -15,14 +14,15 @@ final class SelfExamCardsContainerCell: UICollectionViewCell,
         ),
         SelfExamStep(
             title: "In the shower",
-            description: "Raise your right arm. Use the finger pads of your left hand to touch every part of your right breast. Feel gently for lumps or changes.",
+            description: "Raise your right arm. Use the finger pads of your left hand to touch every part of your right breast. "
+                + "Feel gently for lumps or changes.",
             imageName: "in_shower"
         ),
         SelfExamStep(
             title: "Before a mirror",
             description: "Place your arms at sides. Check for discharge, puckering, dimpling or changes in skin texture. Look for changes in breast shape.",
             imageName: "before_mirror"
-        )
+        ),
     ]
 
     override func awakeFromNib() {
@@ -54,8 +54,8 @@ final class SelfExamCardsContainerCell: UICollectionViewCell,
     }
 
     func collectionView(
-        _ collectionView: UICollectionView,
-        numberOfItemsInSection section: Int
+        _: UICollectionView,
+        numberOfItemsInSection _: Int
     ) -> Int {
         steps.count
     }
@@ -64,11 +64,12 @@ final class SelfExamCardsContainerCell: UICollectionViewCell,
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
-
-        let cell = collectionView.dequeueReusableCell(
+        guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: "SelfExamCardCell",
             for: indexPath
-        ) as! SelfExamCardCell
+        ) as? SelfExamCardCell else {
+            fatalError("Expected SelfExamCardCell for reuse identifier 'SelfExamCardCell' at \(indexPath)")
+        }
 
         let step = steps[indexPath.item]
         cell.titleLabel.text = step.title
@@ -86,10 +87,9 @@ final class SelfExamCardsContainerCell: UICollectionViewCell,
 
     func collectionView(
         _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        sizeForItemAt indexPath: IndexPath
+        layout _: UICollectionViewLayout,
+        sizeForItemAt _: IndexPath
     ) -> CGSize {
-
         let width = collectionView.frame.width - 32
         let height = collectionView.frame.height
         return CGSize(width: width, height: height)

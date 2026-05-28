@@ -1,9 +1,8 @@
 import UIKit
 
 final class AddMemoryOptionCell: UICollectionViewCell {
-
-    @IBOutlet private weak var iconImageView: UIImageView!
-    @IBOutlet private weak var titleLabel: UILabel!
+    @IBOutlet private var iconImageView: UIImageView!
+    @IBOutlet private var titleLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -25,7 +24,6 @@ final class AddMemoryOptionCell: UICollectionViewCell {
 }
 
 private extension AddMemoryOptionCell {
-
     func configureIconImageView() {
         iconImageView.contentMode = .scaleAspectFit
         iconImageView.tintColor = .label
@@ -45,9 +43,9 @@ private extension AddMemoryOptionCell {
             let firstItem = constraint.firstItem as AnyObject?
             let secondItem = constraint.secondItem as AnyObject?
             return firstItem === iconImageView ||
-                   secondItem === iconImageView ||
-                   firstItem === titleLabel ||
-                   secondItem === titleLabel
+                secondItem === iconImageView ||
+                firstItem === titleLabel ||
+                secondItem === titleLabel
         }
 
         NSLayoutConstraint.deactivate(removableConstraints)
@@ -60,7 +58,7 @@ private extension AddMemoryOptionCell {
 
             titleLabel.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor, constant: 12),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
         ])
     }
 }

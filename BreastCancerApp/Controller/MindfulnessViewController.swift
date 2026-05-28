@@ -1,13 +1,15 @@
 import UIKit
 
 class MindfulnessViewController: UIViewController {
-
     // MARK: - IBOutlet
-    @IBOutlet weak var collectionView: UICollectionView!
 
+    @IBOutlet var collectionView: UICollectionView!
+
+    // swiftlint:disable:next implicitly_unwrapped_optional
     var dataSource: MindfulnessDataSource!
 
     // MARK: - Sections
+
     enum Section: Int, CaseIterable {
         case positiveMomentsHeader
         case memories
@@ -32,8 +34,8 @@ class MindfulnessViewController: UIViewController {
     }
 
     // MARK: - Cell Registration
-    private func registerCells() {
 
+    private func registerCells() {
         collectionView.register(
             UINib(nibName: "PositiveMomentsHeaderCell", bundle: nil),
             forCellWithReuseIdentifier: "PositiveMomentsHeaderCell"
@@ -61,104 +63,107 @@ class MindfulnessViewController: UIViewController {
     }
 
     // MARK: - Layout
-    func createCompositionalLayout() -> UICollectionViewCompositionalLayout {
 
+    func createCompositionalLayout() -> UICollectionViewCompositionalLayout {
         let hasMemories = !dataSource.memories.isEmpty
 
-        return UICollectionViewCompositionalLayout { sectionIndex, _ in
-            guard let section = Section(rawValue: sectionIndex) else { return nil }
+        return UICollectionViewCompositionalLayout { [weak self] sectionIndex, _ in
+            guard let self, let section = Section(rawValue: sectionIndex) else { return nil }
 
             switch section {
-
-            case .positiveMomentsHeader:
-                let item = NSCollectionLayoutItem(
-                    layoutSize: NSCollectionLayoutSize(
-                        widthDimension: .fractionalWidth(1),
-                        heightDimension: .absolute(44)
-                    )
-                )
-                let group = NSCollectionLayoutGroup.vertical(
-                    layoutSize: NSCollectionLayoutSize(
-                        widthDimension: .fractionalWidth(1),
-                        heightDimension: .absolute(44)
-                    ),
-                    subitems: [item]
-                )
-                let section = NSCollectionLayoutSection(group: group)
-                section.contentInsets = NSDirectionalEdgeInsets(
-                    top: 16, leading: 16, bottom: 8, trailing: 8
-                )
-                return section
-
-            case .memories:
-                if !hasMemories {
-                    let item = NSCollectionLayoutItem(
-                        layoutSize: NSCollectionLayoutSize(
-                            widthDimension: .fractionalWidth(1),
-                            heightDimension: .absolute(160)
-                        )
-                    )
-                    let group = NSCollectionLayoutGroup.vertical(
-                        layoutSize: NSCollectionLayoutSize(
-                            widthDimension: .fractionalWidth(1),
-                            heightDimension: .absolute(160)
-                        ),
-                        subitems: [item]
-                    )
-                    let section = NSCollectionLayoutSection(group: group)
-                    section.contentInsets = .init(top: 0, leading: 16, bottom: 24, trailing: 16)
-                    return section
-                }
-
-                let item = NSCollectionLayoutItem(
-                    layoutSize: .init(
-                        widthDimension: .absolute(220),
-                        heightDimension: .estimated(260)
-                    )
-                )
-                let group = NSCollectionLayoutGroup.horizontal(
-                    layoutSize: .init(
-                        widthDimension: .absolute(220),
-                        heightDimension: .estimated(260)
-                    ),
-                    subitems: [item]
-                )
-                let section = NSCollectionLayoutSection(group: group)
-                section.orthogonalScrollingBehavior = .continuous
-                section.contentInsets = .init(top: 0, leading: 8, bottom: 24, trailing: 8)
-                return section
-
-            case .explore:
-                let labelItem = NSCollectionLayoutItem(
-                    layoutSize: NSCollectionLayoutSize(
-                        widthDimension: .fractionalWidth(1),
-                        heightDimension: .absolute(40)
-                    )
-                )
-                let cardItem = NSCollectionLayoutItem(
-                    layoutSize: NSCollectionLayoutSize(
-                        widthDimension: .fractionalWidth(1),
-                        heightDimension: .absolute(116)
-                    )
-                )
-                let group = NSCollectionLayoutGroup.vertical(
-                    layoutSize: NSCollectionLayoutSize(
-                        widthDimension: .fractionalWidth(1),
-                        heightDimension: .estimated(300)
-                    ),
-                    subitems: [labelItem, cardItem, cardItem]
-                )
-                let section = NSCollectionLayoutSection(group: group)
-                section.interGroupSpacing = 12
-                section.contentInsets = NSDirectionalEdgeInsets(
-                    top: 0, leading: 0, bottom: 12, trailing: 0
-                )
-                return section
+            case .positiveMomentsHeader: return self.createPositiveMomentsHeaderSection()
+            case .memories: return self.createMemoriesSection(hasMemories: hasMemories)
+            case .explore: return self.createExploreSection()
             }
         }
     }
 
+    private func createPositiveMomentsHeaderSection() -> NSCollectionLayoutSection {
+        let item = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .absolute(44)
+            )
+        )
+        let group = NSCollectionLayoutGroup.vertical(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .absolute(44)
+            ),
+            subitems: [item]
+        )
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 16, bottom: 8, trailing: 8)
+        return section
+    }
+
+    private func createMemoriesSection(hasMemories: Bool) -> NSCollectionLayoutSection {
+        if !hasMemories {
+            let item = NSCollectionLayoutItem(
+                layoutSize: NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1),
+                    heightDimension: .absolute(160)
+                )
+            )
+            let group = NSCollectionLayoutGroup.vertical(
+                layoutSize: NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1),
+                    heightDimension: .absolute(160)
+                ),
+                subitems: [item]
+            )
+            let section = NSCollectionLayoutSection(group: group)
+            section.contentInsets = .init(top: 0, leading: 16, bottom: 24, trailing: 16)
+            return section
+        }
+
+        let item = NSCollectionLayoutItem(
+            layoutSize: .init(
+                widthDimension: .absolute(220),
+                heightDimension: .estimated(260)
+            )
+        )
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: .init(
+                widthDimension: .absolute(220),
+                heightDimension: .estimated(260)
+            ),
+            subitems: [item]
+        )
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .continuous
+        section.contentInsets = .init(top: 0, leading: 8, bottom: 24, trailing: 8)
+        return section
+    }
+
+    private func createExploreSection() -> NSCollectionLayoutSection {
+        let labelItem = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .absolute(40)
+            )
+        )
+        let cardItem = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .absolute(116)
+            )
+        )
+        let group = NSCollectionLayoutGroup.vertical(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .estimated(300)
+            ),
+            subitems: [labelItem, cardItem, cardItem]
+        )
+        let section = NSCollectionLayoutSection(group: group)
+        section.interGroupSpacing = 12
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 12, trailing: 0)
+        return section
+    }
+
     // MARK: - Navigation Helper
+
     func navigateToBreathingViewController() {
         let storyboard = UIStoryboard(name: "BreathingSessions", bundle: nil)
         if let breathingVC = storyboard.instantiateViewController(withIdentifier: "BreathingViewController") as? BreathingViewController {

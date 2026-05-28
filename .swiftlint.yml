@@ -1,0 +1,216 @@
+# =============================================================================
+# SwiftLint Configuration — BreastCancerApp (Bloomora)
+# =============================================================================
+# Tailored for a Swift iOS project that uses Supabase, where DTO structs
+# intentionally use snake_case property names matching database column names.
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Excluded Paths
+# -----------------------------------------------------------------------------
+# Skip auto-generated files, dependency managers, and build artifacts.
+excluded:
+  - Pods
+  - Carthage
+  - DerivedData
+  - build
+  - .build
+  - .swiftpm
+  - "*.xcodeproj"
+  - "*.xcworkspace"
+  - BreastCancerApp.xcodeproj
+
+# -----------------------------------------------------------------------------
+# Disabled Rules
+# -----------------------------------------------------------------------------
+# Rules that conflict with Supabase snake_case conventions or are overly strict
+# for this project's patterns.
+disabled_rules:
+  # Identifier naming — disabled because Supabase DTO properties are snake_case
+  # (e.g. user_id, created_at, is_logged_in) and CodingKeys mirror them.
+  - identifier_name
+
+  # Nesting — the codebase uses nested structs inside extensions
+  # (e.g. SeedSignature inside removeLegacySeedLogsIfNeeded).
+  - nesting
+
+  # Large tuple — some Supabase mapping functions return multi-element tuples.
+  - large_tuple
+
+  # Type name — some short/legacy type names exist across the project.
+  - type_name
+
+  # Trailing comma — stylistic preference; not enforced.
+  - trailing_comma
+
+  # Todo — allow TODO/FIXME comments without warnings during development.
+  - todo
+
+  # Cyclomatic complexity — several view controllers have complex setup methods;
+  # this is warned via function_body_length instead.
+  - cyclomatic_complexity
+
+
+# -----------------------------------------------------------------------------
+# Opt-In Rules
+# -----------------------------------------------------------------------------
+# Additional rules enabled for better code quality.
+opt_in_rules:
+  # Prefer isEmpty over comparing count to zero.
+  - empty_count
+
+  # Prefer .first over subscripting [0] where possible.
+  - first_where
+
+  # Closure end should have the same indentation as the line with opening.
+  - closure_end_indentation
+
+  # Closure params should be on the same line as the opening brace.
+  - closure_spacing
+
+  # Trailing closures should not be used with a single-line statement.
+  - unneeded_parentheses_in_closure_argument
+
+  # Encourages returning Void rather than ().
+  - redundant_void_return
+
+  # Prefer contains over first(where:) != nil.
+  - contains_over_first_not_nil
+
+  # Prefer last over reversed().first.
+  - last_where
+
+  # Detect unneeded break in switch cases.
+  - unneeded_break_in_switch
+
+  # Discourage usage of implicitly unwrapped optionals (except @IBOutlet).
+  - implicitly_unwrapped_optional
+
+  # Discourage force unwrapping.
+  - force_unwrapping
+
+  # Multiline arguments should have their surrounding brackets on separate lines.
+  - multiline_arguments_brackets
+
+  # Prefer using .allSatisfy() or .contains() over reduce(true/false).
+  - reduce_boolean
+
+# -----------------------------------------------------------------------------
+# Analyzer Rules
+# -----------------------------------------------------------------------------
+# These rules require `swiftlint analyze` (not standard `swiftlint lint`).
+# Note: unused_declaration may flag @IBOutlet/@IBAction/@objc members as false
+# positives in storyboard-heavy projects. Review results carefully.
+analyzer_rules:
+  # Detect unused imports.
+  - unused_import
+
+  # Detect unused declarations.
+  - unused_declaration
+
+# -----------------------------------------------------------------------------
+# Rule Configuration
+# -----------------------------------------------------------------------------
+
+# Line length: warn at 160, error at 250.
+# Long lines are common in Supabase filter/fetch calls.
+line_length:
+  warning: 160
+  error: 250
+  ignores_urls: true
+  ignores_comments: true
+  ignores_interpolated_strings: true
+
+# File length: warn at 600, error at 1200.
+# Some view controllers and DTO files are large by necessity.
+file_length:
+  warning: 600
+  error: 1200
+  ignore_comment_only_lines: true
+
+# Type body length: warn at 400, error at 800.
+type_body_length:
+  warning: 400
+  error: 800
+
+# Function body length: warn at 60, error at 150.
+function_body_length:
+  warning: 60
+  error: 150
+
+# Function parameter count: warn at 6, error at 10.
+# Supabase row initializers often have many parameters.
+function_parameter_count:
+  warning: 6
+  error: 10
+  ignores_default_parameters: true
+
+# Implicit getter: enabled (prefer read-only computed properties).
+implicit_getter:
+  severity: warning
+
+# Implicitly unwrapped optional: warning severity.
+implicitly_unwrapped_optional:
+  severity: warning
+  mode: all_except_iboutlets
+
+# Trailing whitespace: ignore empty lines.
+trailing_whitespace:
+  ignores_empty_lines: true
+  ignores_comments: true
+
+# Vertical whitespace: allow up to 2 consecutive blank lines.
+vertical_whitespace:
+  max_empty_lines: 2
+
+# Shorthand operator: warn when += / -= etc. could be used.
+shorthand_operator:
+  severity: warning
+
+# Statement position: default (else/catch on same line as closing brace).
+statement_position:
+  statement_mode: default
+
+# Colon: enforce spacing (no space before, one space after).
+colon:
+  flexible_right_spacing: false
+  apply_to_dictionaries: true
+
+# Comma: enforce single space after comma.
+comma:
+  severity: warning
+
+# Return arrow spacing.
+return_arrow_whitespace:
+  severity: warning
+
+# Control statement: no parentheses around conditions.
+control_statement:
+  severity: warning
+
+# Opening brace: should be preceded by a single space.
+opening_brace:
+  severity: warning
+
+# Void return: prefer -> Void over -> ().
+void_return:
+  severity: warning
+
+# Implicit optional initialization: warn on `var x: Type? = nil`.
+implicit_optional_initialization:
+  severity: warning
+
+# Switch case alignment.
+switch_case_alignment:
+  severity: warning
+
+# Mark comment format.
+mark:
+  severity: warning
+
+# Unused closure parameter: warn when using _ in closures unnecessarily.
+unused_closure_parameter:
+  severity: warning
+
+# Reporter: Xcode-compatible output.
+reporter: xcode

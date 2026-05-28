@@ -1,33 +1,27 @@
-
 import UIKit
 
 class JournalCalendarDateCell: UICollectionViewCell {
-    
-    @IBOutlet weak var dayLabel: UILabel!
-    @IBOutlet weak var selectionLayer: UIView!
-    @IBOutlet weak var dotView: UIView!
-    
+    @IBOutlet var dayLabel: UILabel!
+    @IBOutlet var selectionLayer: UIView!
+    @IBOutlet var dotView: UIView!
+
     private let primaryColor = UIColor(named: "PrimaryColor") ?? .label
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
 
         selectionLayer.layer.cornerRadius = selectionLayer.frame.height / 2
         selectionLayer.layer.masksToBounds = true
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
-        
+
         selectionLayer.backgroundColor = .clear
         dotView.isHidden = true
         dayLabel.textColor = .black
     }
-    
+
     func configure(
         day: String,
         hasJournal: Bool,
@@ -36,17 +30,17 @@ class JournalCalendarDateCell: UICollectionViewCell {
         isFuture: Bool
     ) {
         dayLabel.text = day
-        
+
         selectionLayer.backgroundColor = .clear
         dotView.isHidden = true
-        
+
         guard !day.isEmpty else { return }
-        
+
         if hasJournal {
             dotView.isHidden = false
             dotView.backgroundColor = UIColor(named: "PrimaryColor")
         }
-        
+
         if isFuture {
             dayLabel.textColor = .tertiaryLabel
             contentView.alpha = 0.4
@@ -59,16 +53,16 @@ class JournalCalendarDateCell: UICollectionViewCell {
 
         if isToday {
             selectionLayer.backgroundColor =
-            UIColor(named: "PrimaryColor")?.withAlphaComponent(1.0)
-            
+                UIColor(named: "PrimaryColor")?.withAlphaComponent(1.0)
+
             dayLabel.textColor = .white
             dotView.backgroundColor = .white
         }
-        
+
         if isSelected {
             selectionLayer.backgroundColor =
-            UIColor(named: "PrimaryColor")?.withAlphaComponent(0.2)
-            
+                UIColor(named: "PrimaryColor")?.withAlphaComponent(0.2)
+
             dayLabel.textColor = UIColor(named: "PrimaryColor")
         }
     }

@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct BloomSplashView: View {
-
     @State private var bgOpacity: Double = 0
     @State private var logoOffsetY: CGFloat = -500
     @State private var logoOpacity: Double = 0
@@ -28,13 +27,12 @@ struct BloomSplashView: View {
 
     var body: some View {
         ZStack {
-
             // Background
             LinearGradient(
                 gradient: Gradient(stops: [
                     .init(color: Color(red: 0.98, green: 0.78, blue: 0.85), location: 0.0),
                     .init(color: Color(red: 0.95, green: 0.45, blue: 0.62), location: 0.55),
-                    .init(color: Color(red: 0.90, green: 0.35, blue: 0.52), location: 1.0)
+                    .init(color: Color(red: 0.90, green: 0.35, blue: 0.52), location: 1.0),
                 ]),
                 startPoint: .top,
                 endPoint: .bottom
@@ -54,7 +52,6 @@ struct BloomSplashView: View {
             // ── Single centered group ──
             // Logo + name sit flush, whole block is centered by ZStack
             VStack(spacing: 0) {
-
                 // Logo — big, no bottom padding
                 Image("AppLogo")
                     .resizable()

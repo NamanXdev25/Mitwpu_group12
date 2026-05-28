@@ -6,25 +6,26 @@ protocol GuidesCardCellDelegate: AnyObject {
 }
 
 final class GuidesCardCell: UICollectionViewCell {
-
     // MARK: - Card
-    @IBOutlet private weak var cardView: UIView!
-    @IBOutlet private weak var titleLabel: UILabel!
-    @IBOutlet private weak var divider1: UIView!
-    @IBOutlet private weak var divider2: UIView!
+
+    @IBOutlet private var cardView: UIView!
+    @IBOutlet private var titleLabel: UILabel!
+    @IBOutlet private var divider1: UIView!
+    @IBOutlet private var divider2: UIView!
 
     // MARK: - Video Guide Row
-    @IBOutlet private weak var videoRowView: UIView!
-    @IBOutlet private weak var videoGuideLabel: UILabel!
-    @IBOutlet private weak var videoChevronButton: UIButton!
+
+    @IBOutlet private var videoRowView: UIView!
+    @IBOutlet private var videoGuideLabel: UILabel!
+    @IBOutlet private var videoChevronButton: UIButton!
 
     // MARK: - Audio Guide Row
-    @IBOutlet private weak var audioRowView: UIView!
-    
-    @IBOutlet private weak var audioGuideLabel: UILabel!
 
-    
-    @IBOutlet private weak var audioChevronButton: UIButton!
+    @IBOutlet private var audioRowView: UIView!
+
+    @IBOutlet private var audioGuideLabel: UILabel!
+
+    @IBOutlet private var audioChevronButton: UIButton!
 
     weak var delegate: GuidesCardCellDelegate?
 

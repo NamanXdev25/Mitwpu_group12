@@ -58,7 +58,7 @@ extension Collection where Element == JournalEntry {
         var streak = 1
         var prev = dates[0]
 
-        for i in 1..<dates.count {
+        for i in 1 ..< dates.count {
             let current = dates[i]
             if calendar.dateComponents([.day], from: current, to: prev).day == 1 {
                 streak += 1
@@ -75,7 +75,7 @@ extension Collection where Element == JournalEntry {
         let calendar = Calendar.current
         let now = Date()
 
-        return self.filter {
+        return filter {
             calendar.isDate($0.date, equalTo: now, toGranularity: .weekOfYear)
         }.count
     }
@@ -83,7 +83,7 @@ extension Collection where Element == JournalEntry {
     var journalDays: Set<Date> {
         let calendar = Calendar.current
         return Set(
-            self.map {
+            map {
                 calendar.startOfDay(for: $0.date)
             }
         )
@@ -92,7 +92,7 @@ extension Collection where Element == JournalEntry {
     func journals(on date: Date) -> [JournalEntry] {
         let calendar = Calendar.current
         let target = calendar.startOfDay(for: date)
-        return self.filter {
+        return filter {
             calendar.startOfDay(for: $0.date) == target
         }
     }
@@ -101,7 +101,7 @@ extension Collection where Element == JournalEntry {
 extension Array where Element == JournalEntry {
     func todayGuidedEntry() -> JournalEntry? {
         let calendar = Calendar.current
-        return self.first {
+        return first {
             $0.type == .guided && calendar.isDateInToday($0.date)
         }
     }

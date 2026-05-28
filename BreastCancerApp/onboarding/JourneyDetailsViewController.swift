@@ -1,16 +1,15 @@
 import UIKit
 
 class JourneyDetailsViewController: UIViewController {
+    @IBOutlet var progressBar: ProgressBarView!
+    @IBOutlet var nextButton: UIButton!
+    @IBOutlet var collectionView: UICollectionView!
 
-    @IBOutlet weak var progressBar: ProgressBarView!
-    @IBOutlet weak var nextButton: UIButton!
-    @IBOutlet weak var collectionView: UICollectionView!
-
-    private var diagnosisDate: Date = Date()
+    private var diagnosisDate: Date = .init()
     private var selectedTreatmentPhase: String?
 
     private let treatmentPhaseOptions = OnboardingDataSource.treatmentPhases
-    private let dateCellID      = "OnboardingDatePickerCell"
+    private let dateCellID = "OnboardingDatePickerCell"
     private let selectionCellID = "OnboardingSelectionPickerCell"
 
     override func viewDidLoad() {
@@ -31,10 +30,14 @@ class JourneyDetailsViewController: UIViewController {
     }
 
     private func setupCollectionView() {
-        collectionView.register(UINib(nibName: dateCellID, bundle: nil),
-                                forCellWithReuseIdentifier: dateCellID)
-        collectionView.register(UINib(nibName: selectionCellID, bundle: nil),
-                                forCellWithReuseIdentifier: selectionCellID)
+        collectionView.register(
+            UINib(nibName: dateCellID, bundle: nil),
+            forCellWithReuseIdentifier: dateCellID
+        )
+        collectionView.register(
+            UINib(nibName: selectionCellID, bundle: nil),
+            forCellWithReuseIdentifier: selectionCellID
+        )
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.collectionViewLayout = makeLayout()
@@ -44,11 +47,15 @@ class JourneyDetailsViewController: UIViewController {
 
     private func makeLayout() -> UICollectionViewCompositionalLayout {
         UICollectionViewCompositionalLayout { _, _ in
-            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                  heightDimension: .estimated(90))
+            let itemSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .estimated(90)
+            )
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                   heightDimension: .estimated(90))
+            let groupSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .estimated(90)
+            )
             let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
             let section = NSCollectionLayoutSection(group: group)
             section.interGroupSpacing = 24
@@ -63,41 +70,54 @@ class JourneyDetailsViewController: UIViewController {
         nextButton.alpha = isValid ? 1.0 : 0.5
     }
 
-    @IBAction func nextButtonTapped(_ sender: UIButton) {
+    @IBAction func nextButtonTapped(_: UIButton) {
         OnboardingData.shared.diagnosisDate = diagnosisDate
         OnboardingData.shared.currentTreatmentPhase = selectedTreatmentPhase
         performSegue(withIdentifier: "showFocus", sender: nil)
     }
 
-    @IBAction func skipButtonTapped(_ sender: UIButton) {
+    @IBAction func skipButtonTapped(_: UIButton) {
         performSegue(withIdentifier: "showFocus", sender: nil)
     }
 }
 
 extension JourneyDetailsViewController: UICollectionViewDataSource {
+    func numberOfSections(in _: UICollectionView) -> Int {
+        1
+    }
 
-    func numberOfSections(in collectionView: UICollectionView) -> Int { 1 }
+    func collectionView(
+        _: UICollectionView,
+        numberOfItemsInSection _: Int
+    ) -> Int {
+        2
+    }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        numberOfItemsInSection section: Int) -> Int { 2 }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
         if indexPath.item == 0 {
-            let cell = collectionView.dequeueReusableCell(
+            guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: dateCellID, for: indexPath
-            ) as! OnboardingDatePickerCell
+            ) as? OnboardingDatePickerCell else {
+                fatalError("Expected OnboardingDatePickerCell for reuse identifier '\(dateCellID)' at \(indexPath)")
+            }
             cell.configure(title: "When were you diagnosed?", fieldName: "Diagnosis Date", maximumDate: Date())
             cell.onDateChanged = { [weak self] date in self?.diagnosisDate = date }
             return cell
         } else {
-            let cell = collectionView.dequeueReusableCell(
+            guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: selectionCellID, for: indexPath
-            ) as! OnboardingSelectionPickerCell
-            cell.configure(title: "What treatment are you currently undergoing?",
-                           fieldName: "Treatment Phase",
-                           options: treatmentPhaseOptions,
-                           selectedValue: selectedTreatmentPhase)
+            ) as? OnboardingSelectionPickerCell else {
+                fatalError("Expected OnboardingSelectionPickerCell for reuse identifier '\(selectionCellID)' at \(indexPath)")
+            }
+            cell.configure(
+                title: "What treatment are you currently undergoing?",
+                fieldName: "Treatment Phase",
+                options: treatmentPhaseOptions,
+                selectedValue: selectedTreatmentPhase
+            )
             cell.onOptionSelected = { [weak self] phase in
                 guard let self else { return }
                 self.selectedTreatmentPhase = phase

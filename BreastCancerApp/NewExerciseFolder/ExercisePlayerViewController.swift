@@ -1,19 +1,24 @@
-import UIKit
-import AVKit
 import AVFoundation
+import AVKit
+import UIKit
 
 class ExercisePlayerViewController: UIViewController {
-
     // MARK: - IBOutlets
-    @IBOutlet weak var collectionView: UICollectionView!
+
+    @IBOutlet var collectionView: UICollectionView!
 
     // MARK: - Public Properties (set by the presenting VC before pushing)
+
+    // swiftlint:disable:next implicitly_unwrapped_optional
     var exerciseModel: NewExerciseModel!
+    // swiftlint:disable:next implicitly_unwrapped_optional
     var exercisePlan: NewExercisePlan!
     var currentIndex: Int = 0
     var onExerciseMarkedDone: ((Int) -> Void)?
 
     // MARK: - Private Properties
+
+    // swiftlint:disable:next implicitly_unwrapped_optional
     private var dataSource: ExercisePlayerDataSource!
     weak var activeVideoCell: VideoPlayerCell?
     private var totalDuration: Double = 1.0
@@ -30,6 +35,7 @@ class ExercisePlayerViewController: UIViewController {
     private var popoverArrow: CAShapeLayer?
 
     // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(red: 0.96, green: 0.95, blue: 0.94, alpha: 1.0)
@@ -51,6 +57,7 @@ class ExercisePlayerViewController: UIViewController {
     }
 
     // MARK: - Setup
+
     private func setupDataSource() {
         dataSource = ExercisePlayerDataSource(
             exercise: exerciseModel,
@@ -68,19 +75,24 @@ class ExercisePlayerViewController: UIViewController {
 
         collectionView.register(
             UINib(nibName: "VideoPlayerCell", bundle: nil),
-            forCellWithReuseIdentifier: "VideoPlayerCell")
+            forCellWithReuseIdentifier: "VideoPlayerCell"
+        )
         collectionView.register(
             UINib(nibName: "ExerciseInfoCell", bundle: nil),
-            forCellWithReuseIdentifier: "ExerciseInfoCell")
+            forCellWithReuseIdentifier: "ExerciseInfoCell"
+        )
         collectionView.register(
             UINib(nibName: "VideoControlsCell", bundle: nil),
-            forCellWithReuseIdentifier: "VideoControlsCell")
+            forCellWithReuseIdentifier: "VideoControlsCell"
+        )
         collectionView.register(
             UINib(nibName: "ActionButtonsCell", bundle: nil),
-            forCellWithReuseIdentifier: "ActionButtonsCell")
+            forCellWithReuseIdentifier: "ActionButtonsCell"
+        )
     }
 
     // MARK: - Compositional Layout
+
     private func createLayout() -> UICollectionViewLayout {
         UICollectionViewCompositionalLayout { [weak self] sectionIndex, _ in
             guard let self else { return nil }
@@ -120,22 +132,25 @@ class ExercisePlayerViewController: UIViewController {
     }
 
     // MARK: - Navigation
+
     private func pushNextExercise() {
         let nextIndex = currentIndex + 1
         guard nextIndex < exercisePlan.exercises.count else { return }
 
         let storyboard = UIStoryboard(name: "NewExercise", bundle: nil)
         guard let nextVC = storyboard.instantiateViewController(
-            withIdentifier: "ExercisePlayerViewController") as? ExercisePlayerViewController
+            withIdentifier: "ExercisePlayerViewController"
+        ) as? ExercisePlayerViewController
         else { return }
 
-        nextVC.exercisePlan  = exercisePlan
+        nextVC.exercisePlan = exercisePlan
         nextVC.exerciseModel = exercisePlan.exercises[nextIndex]
-        nextVC.currentIndex  = nextIndex
+        nextVC.currentIndex = nextIndex
         navigationController?.pushViewController(nextVC, animated: true)
     }
 
     // MARK: - Toast
+
     func showToast(message: String, duration: TimeInterval = 1.2) {
         let label = UILabel()
         label.text = message
@@ -151,9 +166,12 @@ class ExercisePlayerViewController: UIViewController {
         var size = label.sizeThatFits(CGSize(width: view.bounds.width - 60 - padding * 2, height: .greatestFiniteMagnitude))
         size.width += padding * 2
         size.height += 12
-        label.frame = CGRect(x: (view.bounds.width - size.width) / 2,
-                             y: view.bounds.height - size.height - 140,
-                             width: size.width, height: size.height)
+        label.frame = CGRect(
+            x: (view.bounds.width - size.width) / 2,
+            y: view.bounds.height - size.height - 140,
+            width: size.width,
+            height: size.height
+        )
         label.alpha = 0
         view.addSubview(label)
 
@@ -165,32 +183,21 @@ class ExercisePlayerViewController: UIViewController {
     }
 
     // MARK: - Benefits / Precautions Popover
+
     func showBenefitsPopover(from anchorButton: UIButton, benefits: [String], precautions: [String]) {
         dismissPopover(animated: false)
         guard let window = view.window else { return }
 
-        let bg = UIView(frame: window.bounds)
-        bg.backgroundColor = UIColor(white: 0, alpha: 0.18)
-        bg.alpha = 0
-        window.addSubview(bg)
-        popoverBackgroundView = bg
-        bg.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(backgroundTapped)))
-
-        let card = UIView()
-        card.backgroundColor = .white
-        card.layer.cornerRadius = 14
-        card.layer.masksToBounds = true
-        card.translatesAutoresizingMaskIntoConstraints = false
-        window.addSubview(card)
-        popoverCardView = card
-
-        let scroll = UIScrollView()
-        scroll.translatesAutoresizingMaskIntoConstraints = false
-        card.addSubview(scroll)
+        setupPopoverBackground(in: window)
+        let card = setupPopoverCard(in: window)
 
         let stack = UIStackView()
         stack.axis = .vertical; stack.spacing = 12; stack.alignment = .fill
         stack.translatesAutoresizingMaskIntoConstraints = false
+
+        let scroll = UIScrollView()
+        scroll.translatesAutoresizingMaskIntoConstraints = false
+        card.addSubview(scroll)
         scroll.addSubview(stack)
 
         NSLayoutConstraint.activate([
@@ -202,29 +209,36 @@ class ExercisePlayerViewController: UIViewController {
             stack.leadingAnchor.constraint(equalTo: scroll.leadingAnchor),
             stack.trailingAnchor.constraint(equalTo: scroll.trailingAnchor),
             stack.bottomAnchor.constraint(equalTo: scroll.bottomAnchor),
-            stack.widthAnchor.constraint(equalTo: scroll.widthAnchor)
+            stack.widthAnchor.constraint(equalTo: scroll.widthAnchor),
         ])
 
-        func makeHeader(_ text: String) -> UILabel {
-            let l = UILabel(); l.text = text
-            l.font = .systemFont(ofSize: 18, weight: .semibold); l.textColor = .black
-            return l
-        }
-        func makeRow(systemIcon: String, text: String) -> UIView {
-            let h = UIStackView(); h.axis = .horizontal; h.spacing = 10; h.alignment = .center
-            let iv = UIImageView(image: UIImage(systemName: systemIcon))
-            iv.tintColor = .systemGray; iv.contentMode = .scaleAspectFit
-            iv.translatesAutoresizingMaskIntoConstraints = false
-            iv.widthAnchor.constraint(equalToConstant: 26).isActive = true
-            iv.heightAnchor.constraint(equalToConstant: 26).isActive = true
-            iv.layer.cornerRadius = 13; iv.clipsToBounds = true
-            iv.backgroundColor = UIColor.systemGray4.withAlphaComponent(0.25)
-            let l = UILabel(); l.text = text; l.font = .systemFont(ofSize: 15)
-            l.textColor = .darkGray; l.numberOfLines = 0
-            h.addArrangedSubview(iv); h.addArrangedSubview(l)
-            return h
-        }
+        populatePopoverStack(stack, benefits: benefits, precautions: precautions)
 
+        layoutPopover(card: card, anchorButton: anchorButton, in: window, itemCount: benefits.count + precautions.count)
+        animatePopoverEntry()
+    }
+
+    private func setupPopoverBackground(in window: UIWindow) {
+        let bg = UIView(frame: window.bounds)
+        bg.backgroundColor = UIColor(white: 0, alpha: 0.18)
+        bg.alpha = 0
+        window.addSubview(bg)
+        popoverBackgroundView = bg
+        bg.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(backgroundTapped)))
+    }
+
+    private func setupPopoverCard(in window: UIWindow) -> UIView {
+        let card = UIView()
+        card.backgroundColor = .white
+        card.layer.cornerRadius = 14
+        card.layer.masksToBounds = true
+        card.translatesAutoresizingMaskIntoConstraints = false
+        window.addSubview(card)
+        popoverCardView = card
+        return card
+    }
+
+    private func populatePopoverStack(_ stack: UIStackView, benefits: [String], precautions: [String]) {
         stack.addArrangedSubview(makeHeader("View Benefits"))
         benefits.forEach { stack.addArrangedSubview(makeRow(systemIcon: "checkmark", text: $0)) }
         let spacer = UIView()
@@ -232,8 +246,31 @@ class ExercisePlayerViewController: UIViewController {
         stack.addArrangedSubview(spacer)
         stack.addArrangedSubview(makeHeader("View Precautions"))
         precautions.forEach { stack.addArrangedSubview(makeRow(systemIcon: "exclamationmark", text: $0)) }
+    }
 
-        let targetHeight = min(420, CGFloat(benefits.count + precautions.count) * 50 + 120)
+    private func makeHeader(_ text: String) -> UILabel {
+        let l = UILabel(); l.text = text
+        l.font = .systemFont(ofSize: 18, weight: .semibold); l.textColor = .black
+        return l
+    }
+
+    private func makeRow(systemIcon: String, text: String) -> UIView {
+        let h = UIStackView(); h.axis = .horizontal; h.spacing = 10; h.alignment = .center
+        let iv = UIImageView(image: UIImage(systemName: systemIcon))
+        iv.tintColor = .systemGray; iv.contentMode = .scaleAspectFit
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.widthAnchor.constraint(equalToConstant: 26).isActive = true
+        iv.heightAnchor.constraint(equalToConstant: 26).isActive = true
+        iv.layer.cornerRadius = 13; iv.clipsToBounds = true
+        iv.backgroundColor = UIColor.systemGray4.withAlphaComponent(0.25)
+        let l = UILabel(); l.text = text; l.font = .systemFont(ofSize: 15)
+        l.textColor = .darkGray; l.numberOfLines = 0
+        h.addArrangedSubview(iv); h.addArrangedSubview(l)
+        return h
+    }
+
+    private func layoutPopover(card: UIView, anchorButton: UIButton, in window: UIWindow, itemCount: Int) {
+        let targetHeight = min(420, CGFloat(itemCount) * 50 + 120)
         let anchorRect = anchorButton.convert(anchorButton.bounds, to: window)
         let cardWidth: CGFloat = min(290, window.bounds.width - 40)
         let leadingX = max(20, anchorRect.minX - 10 - cardWidth)
@@ -243,7 +280,7 @@ class ExercisePlayerViewController: UIViewController {
             card.widthAnchor.constraint(equalToConstant: cardWidth),
             card.heightAnchor.constraint(equalToConstant: targetHeight),
             card.leadingAnchor.constraint(equalTo: window.leadingAnchor, constant: leadingX),
-            card.centerYAnchor.constraint(equalTo: window.topAnchor, constant: centerY)
+            card.centerYAnchor.constraint(equalTo: window.topAnchor, constant: centerY),
         ])
 
         DispatchQueue.main.async { [weak self] in
@@ -262,7 +299,10 @@ class ExercisePlayerViewController: UIViewController {
             card.layer.superlayer?.insertSublayer(arrow, below: card.layer)
             self.popoverArrow = arrow
         }
+    }
 
+    private func animatePopoverEntry() {
+        guard let card = popoverCardView, let bg = popoverBackgroundView else { return }
         card.transform = CGAffineTransform(scaleX: 0.96, y: 0.96).translatedBy(x: 0, y: -8)
         card.alpha = 0
         UIView.animate(withDuration: 0.18, delay: 0, options: .curveEaseOut) {
@@ -270,7 +310,9 @@ class ExercisePlayerViewController: UIViewController {
         }
     }
 
-    @objc private func backgroundTapped() { dismissPopover() }
+    @objc private func backgroundTapped() {
+        dismissPopover()
+    }
 
     private func dismissPopover(animated: Bool = true) {
         popoverArrow?.removeFromSuperlayer(); popoverArrow = nil
@@ -291,8 +333,8 @@ class ExercisePlayerViewController: UIViewController {
 }
 
 // MARK: - ExercisePlayerDataSourceDelegate
-extension ExercisePlayerViewController: ExercisePlayerDataSourceDelegate {
 
+extension ExercisePlayerViewController: ExercisePlayerDataSourceDelegate {
     func didConfigureVideoCell(_ cell: VideoPlayerCell) {
         activeVideoCell = cell
         // Sync controls to reflect that video starts playing automatically
@@ -326,10 +368,10 @@ extension ExercisePlayerViewController: ExercisePlayerDataSourceDelegate {
     }
 
     func didTapInfo(from button: UIButton) {
-        let benefits    = ["Improves shoulder flexibility", "Reduces stiffness",
-                           "Enhances range of motion",     "Promotes lymphatic drainage"]
-        let precautions = ["Stop if you feel sharp pain",  "Keep breathing steadily",
-                           "Move slowly and controlled",   "Stay within your comfort zone"]
+        let benefits = ["Improves shoulder flexibility", "Reduces stiffness",
+                        "Enhances range of motion", "Promotes lymphatic drainage"]
+        let precautions = ["Stop if you feel sharp pain", "Keep breathing steadily",
+                           "Move slowly and controlled", "Stay within your comfort zone"]
         showBenefitsPopover(from: button, benefits: benefits, precautions: precautions)
     }
 
@@ -374,8 +416,7 @@ extension ExercisePlayerViewController: ExercisePlayerDataSourceDelegate {
         }
     }
 
-    func didToggleLoop(enabled: Bool) {
-    }
+    func didToggleLoop(enabled _: Bool) {}
 
     func didSeek(toProgress progress: Float) {
         activeVideoCell?.seek(to: Double(progress) * totalDuration)
@@ -390,7 +431,6 @@ extension ExercisePlayerViewController: ExercisePlayerDataSourceDelegate {
             }
         }
     }
-
 
     func didTapNext() {
         pushNextExercise()
