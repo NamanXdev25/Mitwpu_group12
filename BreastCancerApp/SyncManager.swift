@@ -48,6 +48,25 @@ final class SyncManager {
         }
     }
 
+    /// Pulls all data immediately without jitter, and calls the completion handler when done.
+    /// Useful for the login flow to ensure data is downloaded before navigating to the home screen.
+    func pullAllImmediately(completion: @escaping () -> Void) {
+        guard !isPulling else { 
+            completion()
+            return 
+        }
+        isPulling = true
+
+        DispatchQueue.global(qos: .utility).async { [weak self] in
+            self?.pullAll()
+            DispatchQueue.main.async {
+                self?.isPulling = false
+                self?.startTimer()
+                completion()
+            }
+        }
+    }
+
     func pushDirtyAndStopTimer() {
         stopTimer()
         pushDirty()

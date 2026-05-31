@@ -302,6 +302,7 @@ final class UserDefaultsExerciseRepository: ExerciseRepository {
 final class UserDefaultsJourneyRepository: JourneyRepository {
     private let userDefaults: UserDefaults
     private let key: String
+    private let isIsolated: Bool
 
     private let kDiagnosisCompleted = "js_diagnosisCompleted"
     private let kWaitCompleted = "js_waitCompleted"
@@ -312,9 +313,10 @@ final class UserDefaultsJourneyRepository: JourneyRepository {
     private let kTreatmentBadge = "js_treatmentBadge"
     private let kPostTreatment = "js_postTreatment"
 
-    init(userDefaults: UserDefaults = .standard, key: String = "js_journey_snapshot") {
+    init(userDefaults: UserDefaults = .standard, key: String = "js_journey_snapshot", isIsolated: Bool = false) {
         self.userDefaults = userDefaults
         self.key = key
+        self.isIsolated = isIsolated
     }
 
     func loadState() -> PersistedJourneySnapshot? {
@@ -325,6 +327,10 @@ final class UserDefaultsJourneyRepository: JourneyRepository {
            let decoded = try? JSONDecoder().decode(PersistedJourneySnapshot.self, from: data) {
             return decoded
         }
+
+        // If this repo is user-isolated, do not fall back to shared legacy keys
+        // to prevent leaking data from a previous user on the same device.
+        guard !isIsolated else { return nil }
 
         // Fall back to legacy per-key format
         guard d.object(forKey: kDiagnosisCompleted) != nil else { return nil }
@@ -361,6 +367,9 @@ final class UserDefaultsJourneyRepository: JourneyRepository {
         if let data = try? JSONEncoder().encode(state) {
             userDefaults.set(data, forKey: key)
         }
+
+        // If isolated, don't overwrite the shared legacy keys to prevent data leakage
+        guard !isIsolated else { return }
 
         // Also write legacy keys so existing code continues to work
         let d = userDefaults

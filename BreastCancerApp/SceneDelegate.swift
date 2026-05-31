@@ -94,7 +94,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func sceneDidBecomeActive(_: UIScene) {
         ReminderResyncService.syncAll()
-        SyncManager.shared.pullAllAndStartTimer()
+        if UserDefaults.standard.bool(forKey: "isLoggedIn") {
+            SyncManager.shared.pullAllAndStartTimer()
+        }
     }
 
     func sceneWillResignActive(_: UIScene) {}

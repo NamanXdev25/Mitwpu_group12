@@ -13,11 +13,11 @@ final class SupabaseAppointmentRepository: AppointmentRepository {
     private let client: SupabaseRESTClient
 
     init(
-        local: AppointmentRepository = UserDefaultsAppointmentRepository(),
+        local: AppointmentRepository? = nil,
         userId: UUID = SupabaseUserContext.userId,
         client: SupabaseRESTClient = .shared
     ) {
-        self.local = local
+        self.local = local ?? UserDefaultsAppointmentRepository(key: "SavedAppointments_\(userId.uuidString)")
         self.userId = userId
         self.client = client
     }
@@ -192,11 +192,11 @@ final class SupabaseMemoryRepository: MemoryRepository {
     private let client: SupabaseRESTClient
 
     init(
-        local: MemoryRepository = UserDefaultsMemoryRepository(),
+        local: MemoryRepository? = nil,
         userId: UUID = SupabaseUserContext.userId,
         client: SupabaseRESTClient = .shared
     ) {
-        self.local = local
+        self.local = local ?? UserDefaultsMemoryRepository(key: "saved_memories_\(userId.uuidString)")
         self.userId = userId
         self.client = client
     }
@@ -239,11 +239,11 @@ final class SupabaseHydrationRepository: HydrationRepository {
     private let hydrationGoalKey = "care_hydration_goal_ml"
 
     init(
-        local: HydrationRepository = UserDefaultsHydrationRepository(),
+        local: HydrationRepository? = nil,
         userId: UUID = SupabaseUserContext.userId,
         client: SupabaseRESTClient = .shared
     ) {
-        self.local = local
+        self.local = local ?? UserDefaultsHydrationRepository(key: "hydrationEntries_\(userId.uuidString)")
         self.userId = userId
         self.client = client
     }
@@ -497,11 +497,11 @@ final class SupabaseJournalRepository: JournalRepository {
     private var latestSyncGeneration: Int = 0
 
     init(
-        local: JournalRepository = UserDefaultsJournalRepository(),
+        local: JournalRepository? = nil,
         userId: UUID = SupabaseUserContext.userId,
         client: SupabaseRESTClient = .shared
     ) {
-        self.local = local
+        self.local = local ?? UserDefaultsJournalRepository(key: "journal_entries_v1_\(userId.uuidString)")
         self.userId = userId
         self.client = client
     }
@@ -619,11 +619,11 @@ final class SupabaseBreathingRepository: BreathingRepository {
     private let client: SupabaseRESTClient
 
     init(
-        local: BreathingRepository = UserDefaultsBreathingRepository(),
+        local: BreathingRepository? = nil,
         userId: UUID = SupabaseUserContext.userId,
         client: SupabaseRESTClient = .shared
     ) {
-        self.local = local
+        self.local = local ?? UserDefaultsBreathingRepository(key: "breathing_favorites_v1_\(userId.uuidString)")
         self.userId = userId
         self.client = client
     }
@@ -724,11 +724,11 @@ final class SupabaseExerciseRepository: ExerciseRepository {
     private let client: SupabaseRESTClient
 
     init(
-        local: ExerciseRepository = UserDefaultsExerciseRepository(),
+        local: ExerciseRepository? = nil,
         userId: UUID = SupabaseUserContext.userId,
         client: SupabaseRESTClient = .shared
     ) {
-        self.local = local
+        self.local = local ?? UserDefaultsExerciseRepository(completionsKey: "uas_exerciseCompletions_\(userId.uuidString)")
         self.userId = userId
         self.client = client
     }
@@ -814,11 +814,11 @@ final class SupabaseJourneyRepository: JourneyRepository {
     private let client: SupabaseRESTClient
 
     init(
-        local: JourneyRepository = UserDefaultsJourneyRepository(),
+        local: JourneyRepository? = nil,
         userId: UUID = SupabaseUserContext.userId,
         client: SupabaseRESTClient = .shared
     ) {
-        self.local = local
+        self.local = local ?? UserDefaultsJourneyRepository(key: "js_journey_snapshot_\(userId.uuidString)", isIsolated: true)
         self.userId = userId
         self.client = client
     }

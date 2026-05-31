@@ -3,56 +3,102 @@ import Foundation
 enum RepositoryFactory {
     // MARK: - Cached singletons (prevents duplicate cloud syncs)
 
-    private static let _appointment: AppointmentRepository = SupabaseAppointmentRepository()
-    private static let _medication: MedicationHistoryRepository = SupabaseMedicationHistoryRepository()
-    private static let _memory: MemoryRepository = SupabaseMemoryRepository()
-    private static let _hydration: HydrationRepository = SupabaseHydrationRepository()
-    private static let _symptom: SymptomRepository = SupabaseSymptomRepository()
-    private static let _journal: JournalRepository = SupabaseJournalRepository()
-    private static let _breathing: BreathingRepository = SupabaseBreathingRepository()
-    private static let _profile: ProfileRepository = SupabaseProfileRepository()
-    private static let _exercise: ExerciseRepository = SupabaseExerciseRepository()
-    private static let _journey: JourneyRepository = SupabaseJourneyRepository()
+    private static var _appointment: AppointmentRepository?
+    private static var _medication: MedicationHistoryRepository?
+    private static var _memory: MemoryRepository?
+    private static var _hydration: HydrationRepository?
+    private static var _symptom: SymptomRepository?
+    private static var _journal: JournalRepository?
+    private static var _breathing: BreathingRepository?
+    private static var _profile: ProfileRepository?
+    private static var _exercise: ExerciseRepository?
+    private static var _journey: JourneyRepository?
+
+    /// Discards all cached repositories. 
+    /// Call this when the underlying SupabaseUserContext.userId changes (e.g. after login/logout)
+    /// so the next access gets a fresh instance with the correct user ID.
+    static func reset() {
+        _appointment = nil
+        _medication = nil
+        _memory = nil
+        _hydration = nil
+        _symptom = nil
+        _journal = nil
+        _breathing = nil
+        _profile = nil
+        _exercise = nil
+        _journey = nil
+    }
 
     // MARK: - Factory accessors
 
     static func makeAppointmentRepository() -> AppointmentRepository {
-        _appointment
+        if let repo = _appointment { return repo }
+        let repo = SupabaseAppointmentRepository()
+        _appointment = repo
+        return repo
     }
 
     static func makeMedicationHistoryRepository() -> MedicationHistoryRepository {
-        _medication
+        if let repo = _medication { return repo }
+        let repo = SupabaseMedicationHistoryRepository()
+        _medication = repo
+        return repo
     }
 
     static func makeMemoryRepository() -> MemoryRepository {
-        _memory
+        if let repo = _memory { return repo }
+        let repo = SupabaseMemoryRepository()
+        _memory = repo
+        return repo
     }
 
     static func makeHydrationRepository() -> HydrationRepository {
-        _hydration
+        if let repo = _hydration { return repo }
+        let repo = SupabaseHydrationRepository()
+        _hydration = repo
+        return repo
     }
 
     static func makeSymptomRepository() -> SymptomRepository {
-        _symptom
+        if let repo = _symptom { return repo }
+        let repo = SupabaseSymptomRepository()
+        _symptom = repo
+        return repo
     }
 
     static func makeJournalRepository() -> JournalRepository {
-        _journal
+        if let repo = _journal { return repo }
+        let repo = SupabaseJournalRepository()
+        _journal = repo
+        return repo
     }
 
     static func makeBreathingRepository() -> BreathingRepository {
-        _breathing
+        if let repo = _breathing { return repo }
+        let repo = SupabaseBreathingRepository()
+        _breathing = repo
+        return repo
     }
 
     static func makeProfileRepository() -> ProfileRepository {
-        _profile
+        if let repo = _profile { return repo }
+        let repo = SupabaseProfileRepository()
+        _profile = repo
+        return repo
     }
 
     static func makeExerciseRepository() -> ExerciseRepository {
-        _exercise
+        if let repo = _exercise { return repo }
+        let repo = SupabaseExerciseRepository()
+        _exercise = repo
+        return repo
     }
 
     static func makeJourneyRepository() -> JourneyRepository {
-        _journey
+        if let repo = _journey { return repo }
+        let repo = SupabaseJourneyRepository()
+        _journey = repo
+        return repo
     }
 }

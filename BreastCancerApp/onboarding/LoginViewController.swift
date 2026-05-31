@@ -81,11 +81,16 @@ class LoginViewController: UIViewController {
                 case let .success(user):
                     UserDefaults.standard.set(true, forKey: "isLoggedIn")
                     UserDefaults.standard.set(user.has_completed_onboarding, forKey: "hasCompletedOnboarding")
+                    
+                    RepositoryFactory.reset()
+                    
                     self.syncProfileAfterSupabaseLogin(user: user) {
-                        if user.has_completed_onboarding {
-                            self.navigateToHome()
-                        } else {
-                            self.navigateToProfileSetup()
+                        SyncManager.shared.pullAllImmediately {
+                            if user.has_completed_onboarding {
+                                self.navigateToHome()
+                            } else {
+                                self.navigateToProfileSetup()
+                            }
                         }
                     }
                 }
@@ -109,11 +114,16 @@ class LoginViewController: UIViewController {
                 case let .success(user):
                     UserDefaults.standard.set(true, forKey: "isLoggedIn")
                     UserDefaults.standard.set(user.has_completed_onboarding, forKey: "hasCompletedOnboarding")
+                    
+                    RepositoryFactory.reset()
+                    
                     self.syncProfileAfterSupabaseLogin(user: user) {
-                        if user.has_completed_onboarding {
-                            self.navigateToHome()
-                        } else {
-                            self.navigateToProfileSetup()
+                        SyncManager.shared.pullAllImmediately {
+                            if user.has_completed_onboarding {
+                                self.navigateToHome()
+                            } else {
+                                self.navigateToProfileSetup()
+                            }
                         }
                     }
                 }

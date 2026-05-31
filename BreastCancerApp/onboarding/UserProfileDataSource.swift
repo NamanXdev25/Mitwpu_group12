@@ -21,6 +21,17 @@ class UserProfileDataSource {
         }
     }
 
+    // MARK: - Reloading
+
+    /// Reloads the profile from the underlying repository.
+    /// Useful after the user logs in and the repository singleton is reset.
+    func reloadFromRepository() {
+        if let savedProfile = repository.loadProfile() {
+            userProfile = savedProfile
+            notifyProfileUpdate()
+        }
+    }
+
     // MARK: - Update Profile
 
     func updateProfile(_ profile: ProfileUserProfile) {
