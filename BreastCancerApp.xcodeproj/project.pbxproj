@@ -167,7 +167,7 @@
 				DEVELOPMENT_TEAM = A8WRG5GB9D;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BreastCancerApp/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = BreastCancer;
+				INFOPLIST_KEY_CFBundleDisplayName = Bloomera;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app uses the camera to add memories";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -198,7 +198,7 @@
 				DEVELOPMENT_TEAM = A8WRG5GB9D;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BreastCancerApp/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = BreastCancer;
+				INFOPLIST_KEY_CFBundleDisplayName = Bloomera;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app uses the camera to add memories";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
