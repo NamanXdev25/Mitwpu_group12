@@ -1,5 +1,5 @@
 //
-//  Bloomora_SplashScreen.swift
+//  Bloomera_SplashScreen.swift
 //  BreastCancerApp
 //
 //  Created by Shloka on 22/03/26.
@@ -22,7 +22,7 @@ struct BloomSplashView: View {
     @State private var cursorVisible: Bool = true
     @State private var showCursor: Bool = false
 
-    private let fullTitle = "bloomora"
+    private let fullTitle = "bloomera"
     private let fullTagline = "YOUR COMPANION THROUGH EVERY STEP"
 
     var body: some View {
@@ -66,7 +66,7 @@ struct BloomSplashView: View {
                     .offset(y: logoOffsetY)
                     .opacity(logoOpacity)
 
-                // "bloomora" — flush under logo
+                // "bloomera" — flush under logo
                 ZStack {
                     Text(fullTitle)
                         .font(.custom("Georgia", size: 48))
